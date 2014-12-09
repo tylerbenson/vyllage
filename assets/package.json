@@ -1,0 +1,19 @@
+{
+  "name": "project-assets",
+  "version": "0.0.0",
+  "description": "Static assets for project, bundled into a WebJar format by gradle.",
+  "main": "index.js",
+  "dependencies": {
+    "http-server": "~0.7.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ".git"
+  },
+  "author": "",
+  "license": "Commercial"
+}

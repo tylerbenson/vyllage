@@ -1,0 +1,49 @@
+// https://github.com/spring-io/sagan/blob/master/sagan-client/build.gradle
+
+import org.gradle.api.tasks.Exec
+import org.apache.tools.ant.taskdefs.condition.Os
+
+apply plugin: 'java'
+
+jar {
+    //from 'dist'
+    from 'src'
+    eachFile { details ->
+        if(details.path.startsWith('META-INF')) {
+            // ignore
+        } else if(details.path.endsWith('.html')) {
+            details.path = 'templates/' + details.path
+        } else {
+            details.path = 'static/' + details.path
+        }
+    }
+    // Jar contains duplicate empty folders, see Gradle issue:
+    // http://issues.gradle.org/browse/GRADLE-1830
+    // so we need to set includeEmptyDirs to false
+    includeEmptyDirs = false
+}
+
+task npmInstall(type:Exec) {
+    // be Gradle-like and suppress boilerplate logging
+    logging.captureStandardOutput LogLevel.INFO
+    // but we do always want to see downloads in the log
+    logging.captureStandardError LogLevel.LIFECYCLE
+    inputs.files "package.json", "bower.json"
+    outputs.dir "node_modules"
+    commandLine 'npm', 'install'
+}
+
+//task npmBuild(dependsOn: npmInstall, type:Exec) {
+//    logging.captureStandardOutput LogLevel.INFO
+//    logging.captureStandardError LogLevel.INFO
+//    inputs.dir "src"
+//    inputs.file "gulpfile.js"
+//    outputs.dir "dist"
+//    commandLine 'npm', 'run', 'build'
+//}
+
+//jar.dependsOn npmBuild
+
+task httpd(dependsOn: npmInstall, type:Exec) {
+    commandLine './node_modules/.bin/http-server', 'src', '-o', '-c-1'
+}

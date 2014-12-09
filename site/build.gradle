@@ -1,0 +1,16 @@
+springBoot {
+    mainClass = 'site.Application'
+}
+
+jar {
+    baseName = 'site'
+    version = '0.0.1-SNAPSHOT'
+}
+
+dependencies {
+	compile parent.javascriptProjects.findAll { it != project}
+	compile parent.bootProjects.findAll { it != project}
+
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}

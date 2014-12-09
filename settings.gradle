@@ -1,0 +1,7 @@
+rootProject.name = 'vyllage'
+
+include 'assets'
+include 'connections'
+include 'login'
+include 'profile'
+include 'site'
