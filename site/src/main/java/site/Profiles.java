@@ -20,7 +20,7 @@ public final class Profiles {
      * profile, and is mutually exclusive with {@link #PRODUCTION} and {@link #STANDALONE}
      * profiles.
      */
-    public static final String STAGING = "staging";
+//    public static final String STAGING = "staging";
 
     /**
      * When active, indicates that the application is being deployed to the "production"
@@ -28,7 +28,7 @@ public final class Profiles {
      * profile, and is mutually exclusive with {@link #STAGING} and {@link #STANDALONE}
      * profiles.
      */
-    public static final String PRODUCTION = "production";
+//    public static final String PRODUCTION = "production";
 
     /**
      * Implicitly activated when either {@link #PRODUCTION} or {@link #STAGING} profiles
@@ -38,7 +38,7 @@ public final class Profiles {
      *
      * @see sagan.util.service.db.CloudFoundryDatabaseConfig
      */
-    public static final String CLOUDFOUNDRY = "cloudfoundry";
+//    public static final String CLOUDFOUNDRY = "cloudfoundry";
 
     /**
      * The default profile for any {@link SaganApplication}. Indicates that the
@@ -55,4 +55,6 @@ public final class Profiles {
      * @see org.springframework.core.env.AbstractEnvironment#RESERVED_DEFAULT_PROFILE_NAME
      */
     public static final String STANDALONE = "default";
+    
+    public static final String DEBUG = "debug";
 }
