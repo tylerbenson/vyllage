@@ -1,0 +1,10 @@
+@mixin border-radius-vendor($radius) {
+	-webkit-border-bottom-right-radius: $radius;
+	-webkit-border-bottom-left-radius: $radius;
+	-moz-border-bottom-right-radius: $radius;
+	-moz-border-bottom-left-radius: $radius;
+	-ms-border-bottom-right-radius: $radius;
+	-ms-border-bottom-left-radius: $radius;
+	border-bottom-right-radius: $radius;
+	border-bottom-left-radius: $radius;
+}
