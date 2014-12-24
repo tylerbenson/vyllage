@@ -8,3 +8,8 @@
 	border-bottom-right-radius: $radius;
 	border-bottom-left-radius: $radius;
 }
+
+@mixin bottom-control($height) {
+	height: $height;
+	@include border-radius-vendor(10px);
+}

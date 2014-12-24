@@ -44,4 +44,4 @@ build
 
 # WEB
 /assets/.sass-cache
-/assets/dist/
+/assets/dist/css

@@ -2,3 +2,8 @@
 @import '_mixins.scss';
 
 
+body {
+	height: 18px;
+	background-color: red;
+	@include bottom-control(500px);
+}
