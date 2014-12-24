@@ -40,3 +40,8 @@ out
 .gradle
 build
 /build
+
+
+# WEB
+ assets/.sass-cache
+ assets/dist/
