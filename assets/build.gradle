@@ -45,5 +45,5 @@ task npmInstall(type:Exec) {
 //jar.dependsOn npmBuild
 
 task httpd(dependsOn: npmInstall, type:Exec) {
-    commandLine './node_modules/.bin/http-server', 'src', '-o', '-c-1'
+    commandLine 'npm', 'run-script', 'httpd'
 }

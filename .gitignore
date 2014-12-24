@@ -8,11 +8,11 @@ tmp/
 *.sw[op]
 classes/
 .new-relic/
-test.log
 logs/
 work/
 .bower-*
 node_modules
+*.log
 
 # Eclipse
 # > the following should be created by `./gradlew eclipse`
