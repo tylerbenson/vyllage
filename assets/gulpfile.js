@@ -13,9 +13,9 @@ gulp.task('styles', function() {
 
 gulp.task('minify-css', function() {
    return gulp.src('dist/css/*.css')
-    .pipe(minifyCSS({keepBreaks:true}))
+    .pipe(minifyCSS({keepBreaks:false}))
     .pipe(rename('main.min.css'))
-    .pipe(gulp.dest('dist/css/min'))
+    .pipe(gulp.dest('dist/min'))
 });
 
 gulp.task('watch', function() {

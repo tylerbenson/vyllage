@@ -1,9 +1,24 @@
 @import '_variables.scss';
 @import '_mixins.scss';
 
+@import '_header.scss';
+@import '_profile.scss';
+@import '_career-goal.scss';
+@import '_experience.scss';
+@import '_education.scss';
 
-body {
-	height: 18px;
-	background-color: red;
-	@include bottom-control(500px);
+section {
+	max-width: $content-width;
+
+	article {
+		width: 100%;
+	}
+}
+
+.uk-grid>* {
+	padding-left: 0px;
+}
+
+div, section , article {
+	border: 1px solid blue;
 }
