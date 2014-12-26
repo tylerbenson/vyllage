@@ -1,25 +1,29 @@
 @import '_variables.scss';
 @import '_mixins.scss';
 
-@import 'sections/_header.scss';
-@import 'sections/_profile.scss';
-@import 'sections/_career-goal.scss';
-@import 'sections/_experience.scss';
-@import 'sections/_education.scss';
+body {
+	background-color: $body-bkg-color;
 
-section {
-	max-width: $content-width;
+	section {
+		max-width: $content-width;
 
-	article {
-		width: 100%;
-		min-height: 200px; // will be removed
+		article {
+			width: 100%;
+			min-height: 200px; // will be removed
+		}
+	}
+
+	.uk-grid>* {
+		padding-left: 0px;
+	}
+
+	div, section , article {
+		border: 1px solid blue;
 	}
 }
 
-.uk-grid>* {
-	padding-left: 0px;
-}
-
-div, section , article {
-	border: 1px solid blue;
-}
+@import '_header.scss';
+@import '_profile.scss';
+@import '_career-goal.scss';
+@import '_experience.scss';
+@import '_education.scss';
