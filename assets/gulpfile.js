@@ -12,10 +12,15 @@ gulp.task('styles', function() {
 });
 
 gulp.task('minify-css', function() {
-   return gulp.src('dist/css/*.css')
+    gulp.src('dist/css/main.css')
     .pipe(minifyCSS({keepBreaks:false}))
     .pipe(rename('main.min.css'))
-    .pipe(gulp.dest('dist/min'))
+    .pipe(gulp.dest('dist/min'));
+
+    gulp.src('dist/css/register.css')
+    .pipe(minifyCSS({keepBreaks:false}))
+    .pipe(rename('register.min.css'))
+    .pipe(gulp.dest('dist/min'));
 });
 
 gulp.task('watch', function() {

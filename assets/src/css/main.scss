@@ -5,20 +5,11 @@ body {
 	background-color: $body-bkg-color;
 
 	section {
-		max-width: $content-width;
+		margin-top: 30px;
 
 		article {
-			width: 100%;
-			min-height: 200px; // will be removed
+			@include article-style();
 		}
-	}
-
-	.uk-grid>* {
-		padding-left: 0px;
-	}
-
-	div, section , article {
-		border: 1px solid blue;
 	}
 }
 

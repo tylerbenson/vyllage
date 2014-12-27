@@ -1,21 +1,20 @@
 @import '_variables.scss';
 @import '_mixins.scss';
 
-section {
-	max-width: $content-width;
+body {
+	background-color: $body-bkg-color;
 
-	article {
-		width: 100%;
-		min-height: 200px; // will be removed
+	section {
+
+		article {
+			min-height: 200px; // will be removed
+			background-color: $white;
+		}
 	}
-}
 
-.uk-grid>* {
-	padding-left: 0px;
-}
-
-div, section , article {
-	border: 1px solid blue;
+	div, section , article {
+		border: 1px solid blue;
+	}
 }
 
 @import '_profile.scss';

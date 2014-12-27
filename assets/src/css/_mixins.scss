@@ -1,0 +1,6 @@
+@mixin article-style(){
+	background-color: $white;
+	border: 1px solid $article-border-color;
+	margin-bottom: 7px;
+	border-radius: 3px;
+}
