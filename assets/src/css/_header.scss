@@ -1,0 +1,33 @@
+header {
+	@include header-grid();
+
+	.container {
+		height: $header-height;
+		max-width: $header-width;
+		
+		.header-logo {
+			@include header-logo();
+		}
+
+		.header-profile {
+			margin-top: 12px;
+
+			.header-profile-photo {
+				width: 30px;
+				height: 30px;
+				margin: 5px;
+			}
+
+			.header-username {
+				font-size: 18px;
+				line-height: 28px;
+				margin-top: 5px;
+			}
+
+			.ask-advice-btn {
+				@include ask-advice-btn();
+				margin-left: 30px;
+			}
+		}
+	}
+}

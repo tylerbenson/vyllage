@@ -1,15 +1,27 @@
-@mixin border-radius-vendor($radius) {
-	-webkit-border-bottom-right-radius: $radius;
-	-webkit-border-bottom-left-radius: $radius;
-	-moz-border-bottom-right-radius: $radius;
-	-moz-border-bottom-left-radius: $radius;
-	-ms-border-bottom-right-radius: $radius;
-	-ms-border-bottom-left-radius: $radius;
-	border-bottom-right-radius: $radius;
-	border-bottom-left-radius: $radius;
+@mixin article-grid() {
+	background-color: $white;
+	border: 1px solid $article-border-color;
+	margin-bottom: 7px;
+	border-radius: 3px;
 }
 
-@mixin bottom-control($height) {
-	height: $height;
-	@include border-radius-vendor(10px);
+@mixin header-grid() {
+	background-color: $white;
+	border-top: 1px solid $article-border-color;
+	border-bottom: 3px solid $article-border-color;
+}
+
+@mixin header-logo() {
+	width: $header-logo-width;
+	height: $header-height;
+	background: url('../../src/images/header-logo.png') no-repeat;
+}
+
+@mixin ask-advice-btn() {
+	padding-left: 10px;
+	padding-right: 10px;
+	background-color: #5a6b4b;
+	font-size: 15px;
+	font-weight: bold;
+	color: $white;
 }

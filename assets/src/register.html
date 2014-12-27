@@ -1,19 +1,61 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Register</title>
+	<title>Home</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link rel="stylesheet" href="../dist/min/register.min.css">
+	<link rel="stylesheet" href="../dist/libs/css/skeleton.css">
+	<link rel="stylesheet" href="../dist/libs/css/normalize.css"/>
 </head>
 <body>
-	<p th:text="'Hello, ' + ${name} + '!'" />
-	<ul>
-		<li><a href="/">Home</a></li>
-		<li><a href="/advice">Advice</a></li>
-		<li><a href="/connections">Connections</a></li>
-		<li><a href="/login">Login</a></li>
-		<li><a href="/profile">Profile</a></li>
-		<li><a href="/profile-edit">Profile Edit</a></li>
-		<li><a href="/register">Register</a></li>
-	</ul>
+
+	<section class="container">
+
+		<article class="profile">
+			<div class="row">
+				<div class="four columns">
+					<img src=""/>
+				</div>
+				<div class="four columns">
+					<p>Nathan Benson</p>
+					<p>Technology Enthusiast analyzing, building, and expanding solutions</p>
+				</div>
+				<div class="four columns">
+					<button class="u-pull-left">share</button>
+					<button class="u-pull-left">contact</button>
+				</div>
+			</div>
+		</article>
+
+		<article class="career-goal">
+			<div class="row">
+				<div class="twelve columns">
+					<b>Career Goal</b>
+					
+				</div>
+			</div>
+		</article>
+
+		<article class="experience">
+			<div class="row">
+				<div class="twelve columns">
+					<b>Experience</b>
+				
+				</div>
+			</div>
+		</article>
+		
+		<article class="education">
+			<div class="row">
+				<div class="twelve columns">
+					<b>Education</b>
+					
+				</div>
+			</div>
+		</article>
+	</section>
+
 </body>
 </html>
