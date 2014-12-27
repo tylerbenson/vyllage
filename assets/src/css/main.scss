@@ -4,11 +4,11 @@
 body {
 	background-color: $body-bkg-color;
 
-	section {
+	section.container {
 		margin-top: 30px;
 
 		article {
-			@include article-style();
+			@include article-grid();
 		}
 	}
 }

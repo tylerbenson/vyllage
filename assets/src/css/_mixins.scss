@@ -1,6 +1,26 @@
-@mixin article-style(){
+@mixin article-grid() {
 	background-color: $white;
 	border: 1px solid $article-border-color;
 	margin-bottom: 7px;
 	border-radius: 3px;
+}
+
+@mixin header-grid() {
+	background-color: $white;
+	border-top: 1px solid $article-border-color;
+	border-bottom: 3px solid $article-border-color;
+}
+
+@mixin header-logo() {
+	width: $header-logo-width;
+	height: $header-height;
+	background: url('../../src/images/header-logo.png') no-repeat;
+}
+
+@mixin ask-advice-btn() {
+	padding-left: 10px;
+	padding-right: 10px;
+	background-color: #5a6b4b;
+	color: $white;
+	font-weight: bold;
 }

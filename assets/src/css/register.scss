@@ -5,15 +5,11 @@ body {
 	background-color: $body-bkg-color;
 
 	section {
+		margin-top: 30px;
 
 		article {
-			min-height: 200px; // will be removed
-			background-color: $white;
+			@include article-grid();
 		}
-	}
-
-	div, section , article {
-		border: 1px solid blue;
 	}
 }
 
