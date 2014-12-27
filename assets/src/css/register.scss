@@ -2,7 +2,7 @@
 @import '_mixins.scss';
 
 body {
-	background-color: $body-bkg-color;
+	background: url('../../src/images/background.jpg');
 
 	section {
 		margin-top: 30px;
