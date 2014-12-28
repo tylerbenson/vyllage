@@ -62,3 +62,16 @@
 	margin-left: 15px;
 	font-weight: bold;
 }
+
+@mixin countBtn() {
+	background-color: $count-btn-bkg-color;
+	cursor: pointer;
+	font-size: 10px;
+	padding: 4px 6px;
+	color: $white;
+}
+
+@mixin editParagraph () {
+	background-color: $paragraph-edit-bkg-color;
+	border: 1px solid $paragraph-edit-border-color;
+}

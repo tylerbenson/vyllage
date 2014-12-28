@@ -22,12 +22,47 @@ body {
 
 			.article-controll-btns {
 				float: right;
-				margin-right: 40px;
+				margin: 0 40px 6px 0;
 
 				a {
 					@include article-controll-links();
 				}
+
+				.count {
+					@include countBtn();
+
+				}
 			}
+
+			.edit {
+				display: none;
+			}
+
+			.main {
+				display: block;
+				padding-right: 20px;
+
+				> p {
+					display: inline;
+					border: 1px solid transparent;
+				}
+
+				 > ul {
+				 	border: 1px solid transparent;
+				 }
+			}
+
+			.article-content:hover {
+
+				.main { 
+					background: url(../../src/images/edit.png) no-repeat top right;
+
+					> p, > ul {
+						@include editParagraph();
+
+					}
+				}
+			} 
 		}
 	}
 }
