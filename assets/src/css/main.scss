@@ -10,12 +10,30 @@ body {
 
 		article {
 			@include article-grid();
+
+			.article-btn {
+				@include article-btn();
+				margin-bottom: 20px;
+			}
+
+			.article-content {
+				padding: 0 40px; 
+			}
+
+			.article-controll-btns {
+				float: right;
+				margin-right: 40px;
+
+				a {
+					@include article-controll-links();
+				}
+			}
 		}
 	}
 }
 
-@import '_header.scss';
-@import '_profile.scss';
-@import '_career-goal.scss';
-@import '_experience.scss';
-@import '_education.scss';
+@import 'header';
+@import 'profile';
+@import 'career-goal';
+@import 'experience';
+@import 'education';
