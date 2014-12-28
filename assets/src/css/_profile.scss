@@ -1,3 +1,39 @@
-.profile {
+article.profile {
 	height: $profile-height;
+
+	.profile-photo {
+		@include profile-photo();
+	}
+
+	.headline-container {
+		font-family: Arimo,sans-serif;
+
+		.headline {
+			font-size: 32px;
+			line-height: 34px;
+			margin: 25px 0 20px 0;
+			padding-left: 35px;
+		}
+
+		.tagline {
+			font-size: 16px;
+			margin: 0;
+			padding-left: 25px;
+		}
+	}
+
+	.share-contact-btns-container {
+		float: right;
+		margin-top: 118px;
+		margin-right: -1px;
+
+		.share {
+			@include share-contact-btn();
+		}
+
+		.contact {
+			@include share-contact-btn();
+		}
+	}
+
 }

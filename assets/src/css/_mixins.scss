@@ -21,7 +21,31 @@
 	padding-left: 10px;
 	padding-right: 10px;
 	background-color: #5a6b4b;
+	font-family: 'Arimo', sans-serif;
 	font-size: 15px;
 	font-weight: bold;
 	color: $white;
+}
+
+@mixin profile-photo(){
+	width: 115px;
+	height: 115px;
+	margin: 16px;
+	border-radius: 3px;
+	border: 1px solid #202223;
+}
+
+@mixin share-contact-btn(){
+	font-family: 'Arimo', sans-serif;
+	font-size: 15px;
+	padding: 0 11px;
+	height: 29px;
+	background-color: #f2ecde;
+	color: #a5a3a2;
+	border-top: 1px dotted #878887;
+	border-left: 1px dotted #878887;
+	border-right: 0;
+	border-bottom: 0;
+	border-radius: 0;
+
 }
