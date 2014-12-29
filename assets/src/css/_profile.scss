@@ -5,20 +5,20 @@ article.profile {
 		@include profile-photo();
 	}
 
-	.headline-container {
-		font-family: Arimo,sans-serif;
+	.article-content.headline-col {
+		padding: 0px;
 
-		.headline {
-			font-size: 32px;
-			line-height: 34px;
-			margin: 25px 0 20px 0;
-			padding-left: 35px;
-		}
+		.headline-container {
+			font-family: Arimo,sans-serif;
 
-		.tagline {
-			font-size: 16px;
-			margin: 0;
-			padding-left: 25px;
+			.headline {
+				font-size: 32px;
+				line-height: 34px;
+			}
+
+			.tagline {
+				font-size: 16px;
+			}
 		}
 	}
 
@@ -35,5 +35,4 @@ article.profile {
 			@include share-contact-btn();
 		}
 	}
-
 }
