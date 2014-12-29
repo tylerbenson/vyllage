@@ -25,7 +25,7 @@ body {
 				margin: 0 40px 6px 0;
 
 				a {
-					@include article-controll-links();
+					@include article-control-links();
 				}
 
 				.count {
