@@ -47,7 +47,7 @@ body {
 					border: 1px solid transparent;
 				}
 
-				 > ul {
+				 > ul, > div.paragraph {
 				 	border: 1px solid transparent;
 				 }
 			}
@@ -57,7 +57,7 @@ body {
 				.main { 
 					background: url(../../src/images/edit.png) no-repeat top right;
 
-					> p, > ul {
+					> p, > ul , > div.paragraph {
 						@include editParagraph();
 
 					}
