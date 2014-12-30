@@ -17,11 +17,61 @@
 	background: url('../../src/images/header-logo.png') no-repeat;
 }
 
-@mixin ask-advice-btn() {
-	padding-left: 10px;
-	padding-right: 10px;
-	background-color: #5a6b4b;
+@mixin profile-photo(){
+	width: 115px;
+	height: 115px;
+	margin: 16px;
+	border-radius: 3px;
+	border: 1px solid #202223;
+}
+
+@mixin button($backgroundColor, $color){
 	font-size: 15px;
+	font-family: 'Arimo', sans-serif;
+	color: $color;
+	background-color: $backgroundColor;
+	padding: 0 10px;
+}
+
+@mixin ask-advice-btn() {
+	@include button($ask-advice-btn-bkg-color, $white);
 	font-weight: bold;
+}
+
+@mixin share-contact-btn() {
+	@include button($share-contact-btn-bkg-color, #a5a3a2);
+	height: 29px;
+	border-top: 1px dotted #878887;
+	border-left: 1px dotted #878887;
+	border-right: 0;
+	border-bottom: 0;
+	border-radius: 0;
+}
+
+@mixin article-btn() {
+	@include button($article-btn-bkg-color, $white);
+	cursor: initial;
+	border-radius: 2px;
+	border: 0;
+	height: 32px;
+}
+
+@mixin article-control-links() {
+	color: $article-controll-link-color;
+	text-decoration: none;
+	margin-left: 15px;
+	font-weight: bold;
+}
+
+@mixin countBtn() {
+	background-color: $count-btn-bkg-color;
+	cursor: pointer;
+	font-size: 10px;
+	padding: 4px 6px;
 	color: $white;
+}
+
+@mixin editParagraph () {
+	background-color: $paragraph-edit-bkg-color;
+	border: 1px solid $paragraph-edit-border-color;
 }
