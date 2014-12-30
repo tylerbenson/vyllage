@@ -20,6 +20,13 @@ body {
 				padding: 0 40px; 
 			}
 
+			.article-divider {
+				width: 100%;
+				clear: both;
+				margin-bottom: 25px;
+				border-top: 1px solid #c5c3c2;
+			}
+
 			.article-controll-btns {
 				float: right;
 				margin: 0 40px 6px 0;
@@ -47,7 +54,7 @@ body {
 					border: 1px solid transparent;
 				}
 
-				 > ul {
+				 > ul, > div.paragraph {
 				 	border: 1px solid transparent;
 				 }
 			}
@@ -57,7 +64,7 @@ body {
 				.main { 
 					background: url(../../src/images/edit.png) no-repeat top right;
 
-					> p, > ul {
+					> p, > ul , > div.paragraph {
 						@include editParagraph();
 
 					}
