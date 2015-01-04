@@ -8,6 +8,20 @@ body {
 		article {
 			@include article-grid();
 
+			.main {
+				display: block;
+				padding-right: 20px;
+
+				> p {
+					display: inline;
+					border: 1px solid transparent;
+				}
+
+				 > ul, > div.paragraph {
+				 	border: 1px solid transparent;
+				 }
+			}
+
 			.article-btn {
 				@include article-btn();
 				margin-bottom: 20px;
