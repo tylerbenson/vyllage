@@ -6,21 +6,28 @@ var gulp = require('gulp'),
 	watch = require('gulp-watch');
 
 gulp.task('styles', function() {
+    
   return gulp.src('src/css/*.scss')
     .pipe(sass({ style: 'expanded' }))
     .pipe(gulp.dest('dist/css'));
 });
 
 gulp.task('minify-css', function() {
+
     gulp.src('dist/css/main.css')
-    .pipe(minifyCSS({keepBreaks:false}))
-    .pipe(rename('main.min.css'))
-    .pipe(gulp.dest('dist/min'));
+        .pipe(minifyCSS({keepBreaks:false}))
+        .pipe(rename('main.min.css'))
+        .pipe(gulp.dest('dist/min'));
 
     gulp.src('dist/css/register.css')
-    .pipe(minifyCSS({keepBreaks:false}))
-    .pipe(rename('register.min.css'))
-    .pipe(gulp.dest('dist/min'));
+        .pipe(minifyCSS({keepBreaks:false}))
+        .pipe(rename('register.min.css'))
+        .pipe(gulp.dest('dist/min'));
+
+    gulp.src('dist/css/guestView.css')
+        .pipe(minifyCSS({keepBreaks:false}))
+        .pipe(rename('guestView.min.css'))
+        .pipe(gulp.dest('dist/min'));
 });
 
 gulp.task('watch', function() {

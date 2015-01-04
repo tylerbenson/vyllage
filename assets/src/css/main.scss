@@ -2,78 +2,41 @@
 @import '_mixins.scss';
 
 body {
-	background: url('../../src/images/background.jpg');
-	font-family: 'PT Sans', sans-serif;
 
-	section.container {
-		margin-top: 30px;
+	article {
 
-		article {
-			@include article-grid();
-
-			.article-btn {
-				@include article-btn();
-				margin-bottom: 20px;
-			}
-
-			.article-content {
-				padding: 0 40px; 
-			}
-
-			.article-divider {
-				width: 100%;
-				clear: both;
-				margin-bottom: 25px;
-				border-top: 1px solid #c5c3c2;
-			}
-
-			.article-controll-btns {
-				float: right;
-				margin: 0 40px 6px 0;
-
-				a {
-					@include article-control-links();
-				}
-
-				.count {
-					@include countBtn();
-
-				}
-			}
-
-			.edit {
-				display: none;
-			}
-
-			.main {
-				display: block;
-				padding-right: 20px;
-
-				> p {
-					display: inline;
-					border: 1px solid transparent;
-				}
-
-				 > ul, > div.paragraph {
-				 	border: 1px solid transparent;
-				 }
-			}
-
-			.article-content:hover {
-
-				.main { 
-					background: url(../../src/images/edit.png) no-repeat top right;
-
-					> p, > ul , > div.paragraph {
-						@include editParagraph();
-
-					}
-				}
-			} 
+		.edit {
+			display: none;
 		}
+
+		.main {
+			display: block;
+			padding-right: 20px;
+
+			> p {
+				display: inline;
+				border: 1px solid transparent;
+			}
+
+			 > ul, > div.paragraph {
+			 	border: 1px solid transparent;
+			 }
+		}
+
+		.article-content:hover {
+
+			.main { 
+				background: url(../../src/images/edit.png) no-repeat top right;
+
+				> p, > ul , > div.paragraph {
+					@include editParagraph();
+				}
+			}
+		} 
 	}
 }
 
+@import 'common';
 @import 'header';
 @import 'profile';
 @import 'career-goal';

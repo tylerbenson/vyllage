@@ -1,11 +1,102 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Connections</title>
+	<title>Guest View</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<link rel="stylesheet" href="../dist/libs/css/skeleton.css"/>
+	<link rel="stylesheet" href="../dist/libs/css/normalize.css"/>
+	<link rel="stylesheet" href="../dist/min/guestView.min.css"/>
+	
+	<link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
 </head>
 <body>
-	
-	
+
+	<header>
+		<div class="container">
+			<div class="row">
+				<div class="twelve columns">
+					<div class="u-pull-left header-logo"></div>
+					<div class="u-pull-right header-profile">
+						<img class="u-pull-left header-profile-photo" src="images/empty-profile-icon.png" width="30" height=""30/>
+						<span class="u-pull-left header-username">guest</span>
+						<button class="u-pull-left ask-advice-btn">ask advice</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<section class="container">
+
+		<article class="profile">
+			<div class="row">
+				<div class="four columns">
+					<img class="profile-photo" src="images/profile-photo.png" width="115" height="115"/>
+				</div>
+				<div class="four columns article-content headline-col">
+					<div>
+						<div class="headline-container main">
+							<p class="headline">Nathan Benson</p>
+							<div class="paragraph">
+								<p class="tagline">Technology Enthusiast analyzing, building, and expanding solutions</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="four columns">
+					<div class="share-contact-btns-container">
+						<button class="u-pull-left share">share</button>
+						<button class="u-pull-left contact">contact</button>
+					</div>
+				</div>
+			</div>
+
+		</article>
+
+		<article class="career-goal">
+			<div class="row">
+				<div class="twelve columns">
+
+					<div><button class="article-btn"> career goal </button></div>
+
+					<div class="article-content career-goal">
+						<div class="goal main">
+							<div class="paragraph">
+								<p class="goal-description">
+									I am a fervid promoter of creating solutions. The rush of working with a team to launch a project that solves critical 
+									problems and intersects with technology is extremely satisfying. I have a successful track record, in leading projects,
+									growing new markets, and expanding existing opportunities. I’m an advocate for agile methodologies beyond the reach
+									of traditional project management settings, but into building and forming teams as well. I have experience in starting
+									businesses, helping others start theirs, and successfully building new territories and opportunities.
+								</p>
+							</div>
+							
+						</div>
+					</div>
+					<div class="article-controll">
+						<div class="article-controll-btns">
+							<div class="article-controll-btns-wrapper">
+								<a href="" class="comments">comments</a>
+								<span class="suggestions-count count">1</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="comment-divider"></div>
+
+					<div class="comments-content">
+						<textarea class="add-comment"></textarea>
+						<button class="u-pull-right share-advice-btn">share advice</button>
+					</div>
+
+				</div>
+			</div>   
+
+		</article>
+
+
+	</section>
 </body>
 </html>

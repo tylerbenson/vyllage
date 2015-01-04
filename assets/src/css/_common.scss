@@ -1,0 +1,56 @@
+body {
+	background: url('../../src/images/background.jpg');
+	font-family: 'PT Sans', sans-serif;
+
+	section.container {
+		margin-top: 30px;
+
+		article {
+			@include article-grid();
+
+			.article-btn {
+				@include article-btn();
+				margin-bottom: 20px;
+			}
+
+			.article-content {
+				padding: 0 40px; 
+			}
+
+			.article-divider {
+				width: 100%;
+				clear: both;
+				margin-bottom: 25px;
+				border-top: 1px solid #c5c3c2;
+			}
+
+			.comment-divider {
+				clear: both;
+				margin: 0 40px 40px 40px;
+				border-top: 1px solid #c5c3c2;
+			}
+
+			.article-controll-btns {
+				float: right;
+				margin: 0 40px 6px 0;
+
+				a {
+					@include article-control-links();
+				}
+
+				.count {
+					@include countBtn();
+				}
+			}
+
+			.article-controll-btns-wrapper {
+				@include article-controll-btns-wrapper();
+			}
+
+			.comments-content {
+				padding: 0 60px;
+			}
+			
+		}
+	}
+}
