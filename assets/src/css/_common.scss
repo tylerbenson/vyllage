@@ -43,8 +43,8 @@ body {
 				}
 			}
 
-			.article-controll-btns-wrapper {
-				@include article-controll-btns-wrapper();
+			.article-controll-btn-wrapper {
+				@include article-controll-btn-wrapper();
 			}
 
 			.comments-content {
