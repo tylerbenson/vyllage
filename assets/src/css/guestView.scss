@@ -15,7 +15,54 @@ article {
 
 	.share-advice-btn {
 		@include ask-advice-btn();
-		margin: 20px;
+		margin: 20px 20px 30px 20px;
+	}
+
+	.comment-list-block {
+
+		margin: 0 40px 40px;
+
+		> div {
+			float: left;
+			width: 100%;
+		}
+
+		.comment-person-info {
+
+			img {
+				border-radius: 3px;
+				border: 1px solid;
+			}
+
+			.name {
+				font-size: 16px;
+				font-weight: bold;
+				margin: 7px 40px 0 10px;
+				color: #56322B;
+			}
+
+			.date {
+				font-size: 13px;
+				color: #A09FA1;
+				margin: 10px;
+			}
+		}
+
+		.comment-body {
+
+			p {
+				margin: 20px 40px 20px 100px;
+			}
+		}
+
+		.comment-ctrl {
+
+			a {
+				text-decoration: none;
+				color: #A09FA1;
+				font-size: 15px;
+			}
+		}
 	}
 }
 
