@@ -26,7 +26,7 @@
 }
 
 @mixin button($backgroundColor, $color){
-	font-size: 15px;
+	font-size: 17px;
 	font-family: 'Arimo', sans-serif;
 	color: $color;
 	background-color: $backgroundColor;
@@ -60,7 +60,13 @@
 	color: $article-controll-link-color;
 	text-decoration: none;
 	margin-left: 15px;
-	font-weight: bold;
+	font-size: 16px;
+}
+
+@mixin article-controll-btn-wrapper {
+	border: 3px solid #e5e5e5;
+	background-color: #f1f1f1;
+	padding: 4px;
 }
 
 @mixin countBtn() {

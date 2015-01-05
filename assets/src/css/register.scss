@@ -1,5 +1,5 @@
-@import '_variables.scss';
-@import '_mixins.scss';
+@import 'variables';
+@import 'mixins';
 
 body {
 	background: url('../../src/images/background.jpg');
@@ -13,7 +13,7 @@ body {
 	}
 }
 
-@import '_profile.scss';
-@import '_career-goal.scss';
-@import '_experience.scss';
-@import '_education.scss';
+@import 'profile';
+@import 'career-goal';
+@import 'experience';
+@import 'education';
