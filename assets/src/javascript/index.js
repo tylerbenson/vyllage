@@ -11,6 +11,11 @@
 			}
 			for(var i = 0; i < editElements.length; i++){
 				editElements[i].style.display = edit ? "block" : "none";
+				if(edit){
+					this.className = this.className + " editMode";
+				} else {
+					this.classList.remove("editMode");
+				}
 			}
 		};
 
@@ -43,10 +48,5 @@
 			}
 		}
 	}
-
-
-
-
-
 
 })();
