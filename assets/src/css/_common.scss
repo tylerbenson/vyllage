@@ -17,9 +17,37 @@ body {
 					border: 1px solid transparent;
 				}
 
-				 > ul, > div.paragraph {
+				> ul, > div.paragraph {
 				 	border: 1px solid transparent;
-				 }
+				}
+
+				> p.company-name, p.industry, p.title {
+					font-weight: bold;
+					line-height: 4;
+				}
+
+				> p.start-date {
+
+					opacity: 0.5;
+					margin: 0 0 0 125px;
+				}
+
+				> p.end-date {
+
+					opacity: 0.5;
+				}
+
+				> p.location {
+
+					opacity: 0.5;
+					margin: 0 0 0 270px;
+				}
+
+				> p.establishment {
+
+				  font-weight: bold;
+				  line-height: 4;
+				}
 			}
 
 			.article-btn {

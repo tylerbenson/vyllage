@@ -26,9 +26,12 @@ body {
 	}
 }
 
-@import 'common';
+
 @import 'header';
 @import 'profile';
+@import 'common';
+@import 'edit';
+
 @import 'career-goal';
 @import 'experience';
 @import 'education';
