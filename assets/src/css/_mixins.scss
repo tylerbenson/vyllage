@@ -81,3 +81,16 @@
 	background-color: $paragraph-edit-bkg-color;
 	border: 1px solid $paragraph-edit-border-color;
 }
+
+@mixin shareInfo () {
+	background-color: $share-info-bkg-color;
+	font-family: 'pt-sans';
+	color: $share-info-txt-color;
+}
+
+@mixin shareContct () {
+	border: 1px solid $share-info-border-color;
+	padding: 0px 16px 20px 20px;
+	height: 114px;
+}
+
