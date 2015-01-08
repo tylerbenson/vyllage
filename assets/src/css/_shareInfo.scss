@@ -1,0 +1,310 @@
+@import '_variables.scss';
+@import '_mixins.scss';
+
+article {
+
+	.contact-info {
+		display: none;
+	}
+
+	.share-info, .contact-info {
+
+		.bold-head {
+			font-weight: bold;
+			font-family: 'sans';
+			padding-top: 13px;
+			font-size: 16px;
+			margin-bottom: 0px;
+		}
+
+		.private-link {
+			@include shareInfo();
+			@include shareContct();
+			margin-right: -42px;
+
+			.locatn-cont {
+				padding: 0px;
+				float: right;
+				width: 80%;
+				margin-bottom: 0px;
+			}
+
+			.bold-head {
+				margin-left: 29px;
+			}
+
+			.priv-link-hrf {
+				padding-top: 18px;
+				margin-left: 26px;
+
+				a {
+					color: #000;
+				}
+			}
+
+			.pr-link-exp {
+				margin-top: -22px;
+				margin-left: 46px;
+
+				.share-contact-slct {
+					margin-left: 21px;
+					padding: 0px;
+					width: 132px;
+					height: 33px;
+					border-radius: 0px;
+					border: 1px solid #74615D;
+					color:  #70584E;
+					font-size: 18px;
+				}
+			}
+		}
+
+		.public-link {
+			@include shareInfo();
+			@include shareContct();
+			margin-right: -48px;
+
+			.bold-head {
+				margin-left: 34px;
+			}
+
+			.locatn-cont {
+				padding: 0px;
+				float: right;
+				width: 80%;
+				margin-bottom: 0px;
+			}
+
+			.pb-link-hrf {
+				padding-top: 20px;
+				padding-left: 52px; 
+
+				a {
+					color: #000;
+				}
+			}
+
+			.pb-link-vsbl {
+				margin-top: -20px;
+				margin-left: 50px; 
+
+				.share-contact-slct {
+					padding: 0px;
+					margin-top: -2px;
+					margin-left: 20px;
+					width: 131px;
+					height: 33px;
+					border-radius: 0px;
+					border: 1px solid #74615D;
+					color:  #70584E;
+					font-size: 18px;
+				}
+			}
+		}
+
+		.export {
+			@include shareInfo();
+			@include shareContct();
+			margin-left: 8px;
+
+			.bold-head {
+				margin-left: 27px;
+			}
+
+			.share-contact-slct {
+				padding: 0px;
+				margin-top: -2px;
+				margin-left: 20px;
+				width: 131px;
+				height: 33px;
+				border-radius: 0px;
+				border: 1px solid #74615D;
+				color:  #70584E;
+				font-size: 18px;
+			}
+
+			.locatn-cont {
+				padding: 0px;
+				float: right;
+				width: 80%;
+				margin-bottom: 0px;
+			}
+		}
+
+		.about {
+			@include shareInfo();
+			@include shareContct();
+			margin-right: -40px;
+			padding-bottom: 23px;
+
+			.edit-btn-cont {
+
+				.edit-btn {
+					background: url('../../src/images/edit.png') no-repeat;
+					padding:20px 0px 0px 0px;
+					margin-top: 5px;
+					margin-left: 0px;
+					float:left;
+					width: 21px;
+					height: 21px;
+				}
+			}
+
+			.bold-head {
+				font-weight: bold;
+				font-family: 'sans';
+				padding-top: 15px;
+				font-size: 16px;
+				margin-bottom: 0px;
+				padding-left: 50px;
+			}
+
+			.share-contact-slct {
+				padding: 0px;
+				margin-top: -2px;
+				margin-left: 20px;
+				width: 131px;
+				height: 33px;
+				border-radius: 0px;
+				border: 1px solid #74615D;
+				color:  #70584E;
+				font-size: 18px;
+			}
+
+			.locatn-cont-bd {
+				padding: 0px;
+				float: right;
+				width: 80%;
+				margin-bottom: 0px;
+				margin-top: 4px;
+				margin-right: 10px;
+			}
+
+			.locatn-cont-gr {
+				padding: 0px;
+				float: right;
+				width: 80%;
+				margin-bottom: 0px;
+				margin-top: -4px;
+				margin-right: 10px;
+			}
+
+			.locatn-cont-vsb {
+				padding: 0px;
+				float: right;
+				width: 80%;
+				margin-bottom: 0px;
+				margin-top: 14px;
+				margin-right:11px;
+			}
+
+			.share-contact-slct {
+				padding: 0px;
+				margin-left: 24px;
+				width: 131px;
+				height: 33px;
+				border-radius: 0px;
+				border: 1px solid #74615D;
+				color:  #70584E;
+				font-size: 18px;
+			}
+		}
+
+		.contact {
+			@include shareInfo();
+			@include shareContct();
+			margin-right: -20px;
+
+			.share-contact-slct {
+				padding: 0px;
+				margin-top: -2px;
+				margin-left: 20px;
+				width: 131px;
+				height: 33px;
+				border-radius: 0px;
+				border: 1px solid #74615D;
+				color:  #70584E;
+				font-size: 18px;
+			}
+
+			.bold-head {
+				font-weight: bold;
+				margin-bottom: 0px;
+			}
+
+			.locatn-cont {
+				display: inline;
+				padding: 0px;
+				float: right;
+				width: 80%;
+				margin-bottom: 0px;
+				a {
+					color:  $share-info-txt-color; 
+				}
+			}
+		}
+
+		.location {
+			@include shareInfo();
+			@include shareContct();
+			margin-left: -20px;
+
+			.share-contact-slct {
+				padding: 0px;
+				margin-top: -2px;
+				margin-left: 20px;
+				width: 131px;
+				height: 33px;
+				border-radius: 0px;
+				border: 1px solid #74615D;
+				color:  #70584E;
+				font-size: 18px;
+			}
+
+			.locatn-cont {
+				padding: 0px;
+				float: right;
+				width: 80%;
+				margin-bottom: 0px;
+			}
+		}
+
+		.exp-buttons {
+			@include shareInfo ();
+			width: 149px;
+			margin-left: 45px;
+			margin-right: 23px;
+			margin-top: 20px; 
+
+			.exp-button {
+				border: 1px solid $share-info-border-color;
+				font-family: 'Arimo';
+				background-color: #fff;
+				font-size: 110%;
+				float: left;
+				width:30%;
+				height: 31px;
+				text-align: center;
+				cursor: pointer;
+				line-height: 30px;
+			}
+		}
+
+		.edit-btn-cont, .vsbl-cont-txt, .vsbl-cont {
+			@include shareInfo ();
+
+			.edit-btn {
+				background: url('../../src/images/edit.png') no-repeat;
+				padding:20px 0px 0px 0px;
+				margin-top: 18px;
+				margin-left: 20px;
+				float:left;
+				width: 21px;
+				height: 21px;
+			}
+		}
+	}
+}
+
+
+

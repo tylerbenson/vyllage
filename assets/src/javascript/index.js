@@ -20,6 +20,9 @@
 		};
 
 	window.onload = function(){
+
+		// articles hover state implementation
+
 		var elem = document.getElementsByClassName('article-content'),
 		    saveBtn, cancelBtn, currentElem;
 
@@ -47,6 +50,42 @@
 			    }
 			}
 		}
+
+		// Contact info sections implementation
+		var shareBtn = document.getElementById('shareInfoBtn'),
+		    contactBtn = document.getElementById('contactInfoBtn');
+
+		    if (shareBtn.addEventListener) {  
+
+			    shareBtn.addEventListener("click", function () {
+
+			    	document.getElementById('share-info').style.display =  "block" ;
+		    		document.getElementById('contact-info').style.display =  "none";
+
+			    } , true );
+			    
+			} else if (shareBtn.attachEvent) {  
+
+			   shareBtn.attachEvent("onclick", function () {
+			    	document.getElementById('share-info').style.display =  "block" ;
+		    		document.getElementById('contact-info').style.display =  "none";
+			    } , false );
+			}
+
+			if (contactBtn.addEventListener) {  
+
+			    contactBtn.addEventListener("click", function () {
+			    	document.getElementById('share-info').style.display =  "none" ;
+		    		document.getElementById('contact-info').style.display =  "block";
+			    } , true );
+			    
+			} else if (contactBtn.attachEvent) {  
+
+			   contactBtn.attachEvent("onclick", function () {
+			    	document.getElementById('share-info').style.display =  "none" ;
+		    		document.getElementById(' contact-info').style.display =  "block";
+			    } , false );
+			}
 	}
 
 })();
