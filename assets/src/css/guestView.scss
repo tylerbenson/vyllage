@@ -17,6 +17,9 @@ article {
 		@include ask-advice-btn();
 		margin: 20px 20px 30px 20px;
 	}
+	.article-content.experience {
+	    background-color:#ece7e4;
+	}
 
 	.comment-list-block {
 
@@ -55,20 +58,24 @@ article {
 				font-size: 15px;
 			}
 		}
-
-		.comment-ctrl {
+        
+        .comment-ctrl {
 
 			a {
 				text-decoration: none;
 				color: #A09FA1;
 				font-size: 15px;
 			}
-		}
-	}
-}
+		}    	
+    }
 
+    p.company-name {
+			font-weight:bold;
+	}	
+}
 
 @import 'common';
 @import 'header';
 @import 'profile';
-@import 'shareInfo';
+@import 'edit';
+
