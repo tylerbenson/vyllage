@@ -29,6 +29,7 @@ article.profile {
 
 		.share {
 			@include share-contact-btn();
+			background-color: rgb(236, 231, 228);
 		}
 
 		.contact {

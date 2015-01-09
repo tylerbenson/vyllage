@@ -9,6 +9,10 @@ section.container {
 			margin-bottom: 30px;
 		}
 
+		.row.editMode {
+			margin-bottom: 20px;
+		}
+
 		.edit {
 
 			input[type = "text"] {
@@ -103,7 +107,10 @@ section.container {
 			.establishment {
 				width:268px;
 				margin: 10px 10px 20px 0px;
+			}
 
+			.description_edu {
+				margin-bottom: 20px;
 			}
 
 			.gpa {
