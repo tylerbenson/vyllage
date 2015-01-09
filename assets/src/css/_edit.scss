@@ -1,116 +1,123 @@
-article {
+section.container {
 
-    .article-content.editMode {
-   		background-color:#ece7e4;
-    }
+	article {
 
-	.edit {
-
-		input[type = "text"] {
-			border: 4px solid #a89892;
-			border-color: #a89892;
-			height: 30px;
+		.article-content.editMode {
+			background-color:#ece7e4;
+			padding-bottom: 30px;
+			padding-top: 15px;
+			margin-bottom: 30px;
 		}
 
-		textarea {
-			border: 4px solid #a89892;
-			border-color: #a89892;
-			width: 100%;
-			height: 60px;
-			resize: none;
+		.edit {
+
+			input[type = "text"] {
+				border: 4px solid #a89892;
+				border-color: #a89892;
+				height: 30px;
+			}
+
+			textarea {
+				border: 4px solid #a89892;
+				border-color: #a89892;
+				width: 100%;
+				height: 60px;
+				resize: none;
+			}
+
+			.goal-description {
+				height: 165px;
+				margin: 25px 0 8px;
+			}
+
+			/* Button Style */
+			.save-btn {
+				background-color: #4f619c;
+				border: 1px solid #4f619c;
+				border-radius: 5px;
+				-webkit-border-radius: 5px;
+				-moz-border-radius: 5px;
+				-ms-border-radius: 5px;
+				-o-border-radius: 5px;
+				color: white;
+				height:30px;
+				width:60px;
+				padding: 0;
+				margin: 0;
+				font-weight: bold;
+			 }
+
+			.cancel-btn {
+				background-color: #d4d4d4;
+				border-radius: 5px;
+				-webkit-border-radius: 5px;
+				-moz-border-radius: 5px;
+				-ms-border-radius: 5px;
+				-o-border-radius: 5px;
+				font-weight: bold;
+				color: black;
+				height:30px;
+				width:60px;
+				padding: 0;
+				margin: 0 0 0 13px;
+			}	
+
+			.responsibilities {
+				height: 150px;
+				margin: 15px 0 25px 0;
+			}
+
+			.description {
+				height:70px;
+			}
+
+			.company-name {
+				width:268px;
+			}
+			
+			.industry {
+				width:140px;
+				margin: 10px 10px 20px 55px;
+			}
+
+			.title {
+				width:240px;
+				margin: 10px 10px 20px 0px;   
+			}
+
+			.start-date {
+				width:95px;
+				margin: 10px 0px 20px 120px;
+			 }
+
+			 .end-date {
+			   width:95px;
+			   margin: 10px 10px 20px 17px;
+			}
+
+			.location {
+			   width:165px;
+			   margin: 10px 0 20px 114px;
+			}
+
+			.establishment {
+				width:268px;
+				margin: 10px 10px 20px 0px;
+
+			}
+
+			.gpa {
+				margin: 0px 0px 15px 0px;
+			}
+
+			.responsibilities_guest {
+				height:200px;
+			}
+
+			.description_guest {
+				height:30px;
+			}
 		}
+	}
 
-		.goal-description {
-            height: 125px;
-            margin: 15px 0 25px 0;
-		}
-
-        /* Button Style */
-     	.save-btn {
-  			background-color: #4f619c;
-  			border: 1px solid #4f619c;
-  	        border-radius: 5px;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            -ms-border-radius: 5px;
-            -o-border-radius: 5px;
-  			color: white;
-  			height:30px;
-  			width:60px;
-  			padding: 0;
-  			margin: 0;
-            font-weight: bold;
-         }
-
-        .cancel-btn {
-        	background-color: #d4d4d4;
-			border-radius: 5px;
-		    -webkit-border-radius: 5px;
-			-moz-border-radius: 5px;
-			-ms-border-radius: 5px;
-			-o-border-radius: 5px;
-			font-weight: bold;
-			color: black;
-			height:30px;
-  			width:60px;
-  			padding: 0;
-  			margin: 0 0 0 13px;
-        }	
-
-        .responsibilities {
-        	height: 150px;
-        	margin: 15px 0 25px 0;
-		}
-
-		.description {
-        	height:70px;
-		}
-
-		.company-name {
-            width:268px;
-        }
-        
-        .industry {
-            width:140px;
-            margin: 10px 10px 20px 55px;
-        }
-
-		.title {
-            width:240px;
-            margin: 10px 10px 20px 0px;   
-        }
-
-        .start-date {
-            width:95px;
-            margin: 10px 0px 20px 120px;
-         }
-
-         .end-date {
-           width:95px;
-           margin: 10px 10px 20px 17px;
-        }
-
-        .location {
-           width:165px;
-           margin: 10px 0 20px 114px;
-        }
-
-        .establishment {
-        	width:268px;
-        	margin: 10px 10px 20px 0px;
-
-        }
-
-        .gpa {
-        	margin: 0px 0px 15px 0px;
-        }
-
-        .responsibilities_guest {
-       		height:200px;
-    	}
-
-    	.description_guest {
-       		height:30px;
-    	}
-    }
 }
