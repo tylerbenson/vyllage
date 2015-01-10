@@ -22,25 +22,19 @@ body {
 	   			margin-top: -30px;
 	  		}
 	  		
-	  		.edit-icon-wrapper {
+	  		.icon-wrapper {
 				cursor:pointer;
 
-	  			.edit-icon {
+	  			.icon {
 		  			float:right;
 		  			margin-top: -25px;
-					margin-right: -40px;
+		  		}
+
+		  		.icon.edit {
+		  			margin-right: -40px;
 		  		}
 	  		}
 	  		
-	  		.add-icon-wrapper {
-	  			cursor:pointer;
-
-	  			.add-icon {
-		  			float:right;
-		  			margin-top: -33px;
-		  		}
-	  		}
-
 	  		.ask-advice {
 	  			height: 75px;
 
