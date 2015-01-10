@@ -13,10 +13,14 @@
 				editElements[i].style.display = edit ? "block" : "none";
 				if(edit){
 					this.className = this.className + " editMode";
+					this.parentNode.parentNode.className = this.parentNode.parentNode.className + " editMode";
 				} else {
 					this.classList.remove("editMode");
+					this.parentNode.parentNode.classList.remove("editMode");
 				}
 			}
+
+			return false;
 		};
 
 	window.onload = function(){
