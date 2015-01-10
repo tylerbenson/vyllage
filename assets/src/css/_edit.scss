@@ -34,34 +34,16 @@ section.container {
 				margin: 15px 0 10px 0;
 			}
 
-			/* Button Style */
+			.save-btn, .cancel-btn {
+				@include saveCancelBtn();
+			}
+
 			.save-btn {
-				background-color: #4f619c;
-				border: 1px solid #4f619c;
-				border-radius: 5px;
-				-webkit-border-radius: 5px;
-				-moz-border-radius: 5px;
-				-ms-border-radius: 5px;
-				-o-border-radius: 5px;
-				color: white;
-				height:30px;
-				width:60px;
 				padding: 0;
 				margin: 0 0 0 20px;
-				font-weight: bold;
-			 }
+			}
 
 			.cancel-btn {
-				background-color: #d4d4d4;
-				border-radius: 5px;
-				-webkit-border-radius: 5px;
-				-moz-border-radius: 5px;
-				-ms-border-radius: 5px;
-				-o-border-radius: 5px;
-				font-weight: bold;
-				color: black;
-				height:30px;
-				width:60px;
 				padding: 0;
 				margin: 0 15px 15px 10px;
 			}	
