@@ -39,7 +39,7 @@ body {
 	  			margin-top: -33px;
 	  		}
 
-	  		.edit-photo {
+	  		.edit-photo-1 {
 	  			float:right;
 	  			margin-top: -25px;
 				margin-right: -40px;
@@ -61,38 +61,13 @@ body {
 	  			cursor:pointer;
 	  		}
 
-	  		.name {
-	  			font-size:38px;
-	  			padding:25px 0 0 0;
-	  			margin:0 0 10px;
-	  		}
-	  		.head_edit {
-	  			padding-left: 5px;
-	  			cursor:pointer;
-	  		}
-
-	  		.head_edit_tag {
-	  			padding-left: 5px;
-	  			cursor:pointer;
-	  		}
-
-	  		.tagline {
-	  			font-size:18px;
-	  			margin:0 20 0 0;
-	  		}
-	  		.add_logo {
-	  			margin:-30px;
-	  		}
-
 	  	}
 	}
 }
 
-@import 'profile';
-@import 'career-goal';
-@import 'experience';
-@import 'education';
-@import 'edit';
-@import 'common';
 @import 'header';
-@import 'guestView';
+@import 'profile';
+@import 'common';
+@import 'edit';
+
+

@@ -3,9 +3,29 @@ article.profile {
 
 	.profile-photo {
 		@include profile-photo();
+		float: left;
 	}
 
-	.article-content.headline-col {
+	.edit-profile-photo {
+		margin-left: -156px;
+		margin-top: 131px;
+		float: left;
+
+		.edit-photo-btn {
+			float: left;
+			cursor: pointer;
+		}
+
+		.edit-photo-lbl {
+			float: left;
+			padding-left: 10px;
+			font-size: 12px;
+			line-height: 24px;
+		}
+	}
+	
+
+	.article-content.profile {
 		padding: 0px;
 
 		.headline-container {
@@ -16,16 +36,23 @@ article.profile {
 				line-height: 34px;
 			}
 
+			.edit-headline {
+
+			}
+
 			.tagline {
 				font-size: 16px;
+			}
+
+			.edit-tagline {
+
 			}
 		}
 	}
 
 	.share-contact-btns-container {
 		float: right;
-		margin-top: 126px;
-		margin-right: -1px;
+		margin-top: 145px;
 
 		.share {
 			@include share-contact-btn();

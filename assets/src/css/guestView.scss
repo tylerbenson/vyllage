@@ -3,10 +3,6 @@
 
 section.container {
 
-	article.profile {
-		height: 155px;
-	}
-
 	article { 
 
 		.add-comment {
@@ -76,8 +72,9 @@ section.container {
 	}
 }
 
-@import 'common';
+
 @import 'header';
 @import 'profile';
+@import 'common';
 @import 'edit';
 
