@@ -19,47 +19,66 @@ article.profile {
 		.edit-photo-lbl {
 			float: left;
 			padding-left: 10px;
-			font-size: 12px;
+			font-family: "pt-sans";
+			font-size: 14px;
 			line-height: 24px;
 		}
 	}
-	
 
 	.article-content.profile {
 		padding: 0px;
+		margin-left: 0;
+		width: 38.5%;
 
 		.headline-container {
-			font-family: Arimo,sans-serif;
+			font-family: "pt-sans";
+			margin-top: 20px;
+
+			.paragraph {
+				width: 100%;
+				float: left;
+			}
 
 			.headline {
-				font-size: 32px;
+				font-size: 42px;
 				line-height: 34px;
+				letter-spacing: 1px;
+				text-align: center;
 			}
 
 			.edit-headline {
-
+				float: right;
 			}
 
 			.tagline {
-				font-size: 16px;
+				font-size: 20px;
+				line-height: 22px;
+				padding: 0 10px;
+				text-align: center;
 			}
 
 			.edit-tagline {
-
+				float: right;
 			}
 		}
 	}
 
-	.share-contact-btns-container {
-		float: right;
-		margin-top: 145px;
+	.btns-grid {
+		margin-left: 0px;
 
-		.share {
-			@include share-contact-btn();
-		}
+		.share-contact-btns-container {
+			float: right;
+			margin-top: 145px;
 
-		.contact {
-			@include share-contact-btn();
+			.share {
+				@include share-contact-btn();
+			}
+
+			.contact {
+				@include share-contact-btn();
+			}
 		}
 	}
+
+
 }
