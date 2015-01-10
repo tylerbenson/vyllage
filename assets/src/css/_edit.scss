@@ -30,8 +30,8 @@ section.container {
 			}
 
 			.goal-description {
-				height: 165px;
-				margin: 25px 0 8px;
+				height: 125px;
+				margin: 15px 0 10px 0;
 			}
 
 			/* Button Style */
@@ -47,7 +47,7 @@ section.container {
 				height:30px;
 				width:60px;
 				padding: 0;
-				margin: 0;
+				margin: 0 0 0 20px;
 				font-weight: bold;
 			 }
 
@@ -63,12 +63,12 @@ section.container {
 				height:30px;
 				width:60px;
 				padding: 0;
-				margin: 0 0 0 13px;
+				margin: 0 15px 15px 10px;
 			}	
 
 			.responsibilities {
 				height: 150px;
-				margin: 15px 0 25px 0;
+				margin: 15px 0 10px 0;
 			}
 
 			.description {
@@ -79,6 +79,10 @@ section.container {
 				width:268px;
 			}
 			
+			.experience {
+		        padding:0 0 0 20px;
+		    }
+
 			.industry {
 				width:140px;
 				margin: 10px 10px 20px 55px;
