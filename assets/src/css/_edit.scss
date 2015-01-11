@@ -30,45 +30,27 @@ section.container {
 			}
 
 			.goal-description {
-				height: 165px;
-				margin: 25px 0 8px;
+				height: 125px;
+				margin: 15px 0 10px 0;
 			}
 
-			/* Button Style */
+			.save-btn, .cancel-btn {
+				@include saveCancelBtn();
+			}
+
 			.save-btn {
-				background-color: #4f619c;
-				border: 1px solid #4f619c;
-				border-radius: 5px;
-				-webkit-border-radius: 5px;
-				-moz-border-radius: 5px;
-				-ms-border-radius: 5px;
-				-o-border-radius: 5px;
-				color: white;
-				height:30px;
-				width:60px;
 				padding: 0;
-				margin: 0;
-				font-weight: bold;
-			 }
+				margin: 0 0 0 20px;
+			}
 
 			.cancel-btn {
-				background-color: #d4d4d4;
-				border-radius: 5px;
-				-webkit-border-radius: 5px;
-				-moz-border-radius: 5px;
-				-ms-border-radius: 5px;
-				-o-border-radius: 5px;
-				font-weight: bold;
-				color: black;
-				height:30px;
-				width:60px;
 				padding: 0;
-				margin: 0 0 0 13px;
+				margin: 0 15px 15px 10px;
 			}	
 
 			.responsibilities {
 				height: 150px;
-				margin: 15px 0 25px 0;
+				margin: 15px 0 10px 0;
 			}
 
 			.description {
@@ -79,6 +61,10 @@ section.container {
 				width:268px;
 			}
 			
+			.experience {
+		        padding:0 0 0 20px;
+		    }
+
 			.industry {
 				width:140px;
 				margin: 10px 10px 20px 55px;
