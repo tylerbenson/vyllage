@@ -1,355 +1,75 @@
 @import '_variables.scss';
 @import '_mixins.scss';
 
+#contact-info {
+	display: none;
+}
+
 article {
 
-	.contact-info {
-		display: none;
-	}
+	.info-blog-wrapper {
 
-	.share-info, .contact-info {
+		.info-blog {
+			@include shareInfo();
+			@include shareContct();
+			margin-right: -48px;
+		}
 
-		.bold-head {
+		.info-title {
 			font-weight: bold;
 			font-family: 'sans';
 			padding-top: 13px;
 			font-size: 16px;
 			margin-bottom: 0px;
+			margin-left: 30px;
 		}
 
-		.private-link {
-			@include shareInfo();
-			@include shareContct();
-			margin-right: -42px;
+		.info-link {
+			padding-top: 18px;
+			margin-left: 26px;
 
-			.locatn-cont {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-			}
-
-			.bold-head {
-				margin-left: 29px;
-			}
-
-			.priv-link-hrf {
-				padding-top: 18px;
-				margin-left: 26px;
-
-				a {
-					color: #000;
-				}
-			}
-
-			.pr-link-exp {
-				margin-top: -22px;
-				margin-left: 46px;
-
-				.share-contact-slct {
-					margin-left: 21px;
-					padding: 0px;
-					width: 132px;
-					height: 33px;
-					border-radius: 0px;
-					border: 1px solid #74615D;
-					color:  #70584E;
-					font-size: 18px;
-				}
+			a {
+				color: #000;
 			}
 		}
 
-		.public-link {
-			@include shareInfo();
-			@include shareContct();
-			margin-right: -48px;
-
-			.bold-head {
-				margin-left: 34px;
-			}
-
-			.locatn-cont {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-			}
-
-			.pb-link-hrf {
-				padding-top: 20px;
-				padding-left: 52px; 
-
-				a {
-					color: #000;
-				}
-			}
-
-			.pb-link-vsbl {
-				margin-top: -20px;
-				margin-left: 50px; 
-
-				.share-contact-slct {
-					padding: 0px;
-					margin-top: -2px;
-					margin-left: 20px;
-					width: 131px;
-					height: 33px;
-					border-radius: 0px;
-					border: 1px solid #74615D;
-					color:  #70584E;
-					font-size: 18px;
-				}
-			}
+		.info-privacy {
+			margin-top: -22px;
+			margin-left: 46px;
 		}
 
-		.export {
-			@include shareInfo();
-			@include shareContct();
-			margin-left: 8px;
-
-			.bold-head {
-				margin-left: 27px;
-			}
-
-			.share-contact-slct {
-				padding: 0px;
-				margin-top: -2px;
-				margin-left: 20px;
-				width: 131px;
-				height: 33px;
-				border-radius: 0px;
-				border: 1px solid #74615D;
-				color:  #70584E;
-				font-size: 18px;
-			}
-
-			.locatn-cont {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-			}
+		.export, .location {
+			margin-right: -2px;
 		}
 
-		.social {
-			@include shareInfo();
-			@include shareContct();
-			margin-right: -40px;
-			padding-bottom: 20px;
-
-			.edit-btn-cont {
-
-				.edit-btn {
-					background: url('../../src/images/edit.png') no-repeat;
-					padding:20px 0px 0px 0px;
-					margin-top: 10px;
-					margin-left: 0px;
-					float:left;
-					width: 21px;
-					height: 21px;
-				}
-			}
-
-			.bold-head {
-				font-weight: bold;
-				font-family: 'sans';
-				padding-top: 15px;
-				font-size: 16px;
-				margin-bottom: 0px;
-				padding-left: 36px;
-			}
-
-			.share-contact-slct {
-				padding: 0px;
-				margin-top: -2px;
-				margin-left: 20px;
-				width: 131px;
-				height: 33px;
-				border-radius: 0px;
-				border: 1px solid #74615D;
-				color:  #70584E;
-				font-size: 18px;
-			}
-
-
-			.locatn-cont-tw {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-				margin-top: 2px;
-				margin-right: 14px;
-			}
-
-			.locatn-cont-addr {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-				margin-top: -4px;
-				margin-right: 15px;
-				
-				a {
-					color:  $share-info-txt-color; 
-				}
-			}
-
-			.locatn-cont-vsb {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-				margin-top: 17px;
-				margin-right:15px;
-			}
-
-			.share-contact-slct {
-				padding: 0px;
-				margin-top: -4px;
-				margin-left: 28px;
-				width: 131px;
-				height: 32px;
-				border-radius: 0px;
-				border: 1px solid #74615D;
-				color:  #70584E;
-				font-size: 18px;
-			}
+		.privacy-select {
+			width: 132px;
+			height: 33px;
+			border-radius: 0px;
+			border: 1px solid #74615D;
+			color:  #70584E;
+			font-size: 18px;
 		}
 
-		.contact {
-			@include shareInfo();
-			@include shareContct();
-			margin-right: -20px;
-			padding-right: 8px;
-
-			.share-contact-slct {
-				padding: 0px;
-				margin-top: -3px;
-				margin-left: 28px;
-				width: 131px;
-				height: 33px;
-				border-radius: 0px;
-				border: 1px solid #74615D;
-				color:  #70584E;
-				font-size: 18px;
-			}
-
-			.edit-btn-cont {
-
-				.edit-btn {
-					background: url('../../src/images/edit.png') no-repeat;
-					padding:20px 0px 0px 0px;
-					margin-top: 12px;
-					margin-left: 0px;
-					float:left;
-					width: 21px;
-					height: 21px;
-				}
-			}
-
-			.bold-head {
-				font-weight: bold;
-				margin-bottom: 0px;
-				padding-left: 36px;
-
-			}
-
-			.locatn-cont-em {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-				margin-top: 5px;
-				margin-right: 14px;
-
-				a {
-					color:  $share-info-txt-color; 
-				}
-			}
-
-			.locatn-cont-cell {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-				margin-top: -4px;
-				margin-right: 13px;
-			}
-
-			.locatn-cont-vsb {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-				margin-top: 14px;
-				margin-right:11px;
-			}
+		.address {
+			padding: 0px;
+			float: right;
+			width: 80%;
+			margin-bottom: 0px;
+			margin-top: -4px;
+			margin-right: 13px;
 		}
-		
-		.location {
-			@include shareInfo();
-			@include shareContct();
-			margin-left: -20px;
-			padding-right: 8px;
 
+		.edit-btn-cont {
 
-			.bold-head {
-				font-weight: bold;
-				margin-bottom: 0px;
-				padding-left: 36px;
-
-			}
-
-			.share-contact-slct {
-				padding: 0px;
-				margin-top: -3px;
-				margin-left: 28px;
-				width: 131px;
-				height: 33px;
-				border-radius: 0px;
-				border: 1px solid #74615D;
-				color:  #70584E;
-				font-size: 18px;
-			}
-
-			.locatn-cont-tw {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-				margin-top: 5px;
-				margin-right: 12px;
-			}
-
-			.locatn-cont-cell {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-				margin-top: -4px;
-				margin-right: 13px;
-			}
-
-			.locatn-cont-vsb {
-				padding: 0px;
-				float: right;
-				width: 80%;
-				margin-bottom: 0px;
-				margin-top: 14px;
-				margin-right:11px;
-			}
-
-			.edit-btn-cont {
-
-				.edit-btn {
-					background: url('../../src/images/edit.png') no-repeat;
-					padding:20px 0px 0px 0px;
-					margin-top: 12px;
-					margin-left: 0px;
-					float:left;
-					width: 21px;
-					height: 21px;
-				}
+			.edit-btn {
+				background: url('../../src/images/edit.png') no-repeat;
+				padding:20px 0px 0px 0px;
+				margin-top: 10px;
+				margin-left: 0px;
+				float:left;
+				width: 21px;
+				height: 21px;
 			}
 		}
 
@@ -371,20 +91,6 @@ article {
 				text-align: center;
 				cursor: pointer;
 				line-height: 30px;
-			}
-		}
-
-		.edit-btn-cont, .vsbl-cont-txt, .vsbl-cont {
-			@include shareInfo ();
-
-			.edit-btn {
-				background: url('../../src/images/edit.png') no-repeat;
-				padding:20px 0px 0px 0px;
-				margin-top: 18px;
-				margin-left: 20px;
-				float:left;
-				width: 21px;
-				height: 21px;
 			}
 		}
 	}
