@@ -33,6 +33,11 @@ gulp.task('minify-css', function() {
         .pipe(minifyCSS({keepBreaks:false}))
         .pipe(rename('login.min.css'))
         .pipe(gulp.dest('dist/min'));
+
+     gulp.src('dist/css/expire.css')
+        .pipe(minifyCSS({keepBreaks:false}))
+        .pipe(rename('expire.min.css'))
+        .pipe(gulp.dest('dist/min'));
 });
 
 gulp.task('watch', function() {
