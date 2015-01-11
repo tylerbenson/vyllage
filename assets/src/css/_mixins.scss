@@ -108,3 +108,13 @@
 	height: 114px;
 }
 
+@mixin loginInputFields() {
+	font-size: 28px;
+	font-family: 'sans-serif';
+	height: 66px;
+	padding-left: 32px;
+	width: 372px;
+	border-radius: 0px;
+	color: $share-info-txt-color;
+	border: 1px solid $share-info-txt-color;
+}
