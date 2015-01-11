@@ -3,17 +3,44 @@
 <head>
 	<title>Login</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	
+	<link rel="stylesheet" href="../dist/libs/css/skeleton.css"/>
+	<link rel="stylesheet" href="../dist/libs/css/normalize.css"/>
+	<link rel="stylesheet" href="../dist/min/login.min.css"/>
+	
+	<link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
 </head>
 <body>
-	<p th:text="'Hello, ' + ${name} + '!'" />
-	<ul>
-		<li><a href="/">Home</a></li>
-		<li><a href="/advice">Advice</a></li>
-		<li><a href="/connections">Connections</a></li>
-		<li><a href="/login">Login</a></li>
-		<li><a href="/profile">Profile</a></li>
-		<li><a href="/profile-edit">Profile Edit</a></li>
-		<li><a href="/register">Register</a></li>
-	</ul>
+
+	<section class="container">
+
+		<article>
+			<div class="row">
+				<div class="twelve column">
+					<button class="request-btn" >request invitation</button>
+
+					<div class="login-content">
+						<div class="vyllage-img"></div>
+						<input type="text" class="input email" name="email" placeholder="email">
+						<input type="password" class="input password" name="password" placeholder="Password">
+						<button class="login-btn">login</button>
+					</div>
+					
+				</div>
+			</div>
+		</article>
+	
+		<article>
+			<div class="row divider-part">
+				<div class="twelve column">
+					<p class="what-vyllage">what is vyllage?</p>
+				</div>
+			</div>
+		</article>
+
+	</section>
+
 </body>
 </html>
