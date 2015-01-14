@@ -115,7 +115,7 @@
 
 			    		event.preventDefault();
 						event.stopPropagation();
-
+						this.parentNode.className = this.parentNode.className + " article-controll-btn-wrapper";
 						this.parentNode.parentNode.parentNode.nextElementSibling.style.display="block";
 				    } , true );
 				    
@@ -125,6 +125,7 @@
 					event.stopPropagation();
 
 				   commentsButtons[i].attachEvent("onclick", function () {	
+				   		this.parentNode.className = this.parentNode.className + " article-controll-btn-wrapper";
 				   		this.parentNode.parentNode.parentNode.nextElementSibling.style.display="block";
 				    } , true );
 				}

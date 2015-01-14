@@ -87,11 +87,12 @@ body {
 
 			.article-controll-btns.edit {
 				margin-bottom: 0px;
-
-				.article-controll-btn-wrapper {
-					@include article-controll-btn-wrapper();
-				}
 			}
+
+			.article-controll-btn-wrapper {
+				@include article-controll-btn-wrapper();
+			}
+			
 			.comments-content {
 				padding: 0 60px;
 			}
