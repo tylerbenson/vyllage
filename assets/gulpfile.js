@@ -1,5 +1,5 @@
 var gulp = require('gulp'),
-	sass = require('gulp-ruby-sass'),
+    sass = require('gulp-sass'),
 	prefix = require('gulp-autoprefixer'),
 	minifyCSS = require('gulp-minify-css'),
 	rename = require('gulp-rename'),
@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 gulp.task('styles', function() {
 
   return gulp.src('src/sass/*.scss')
-    .pipe(sass({ style: 'expanded' }))
+    .pipe(sass({ includePaths: ['./src/sass'], errLogToConsole: true, outputStyle: 'expanded' }))
     .pipe(gulp.dest('src/css'));
 });
 
