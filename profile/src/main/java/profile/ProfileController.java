@@ -10,9 +10,9 @@ public class ProfileController {
 
 	// http://localhost:8080/profile
     @RequestMapping("/profile")
-    public String greeting(@RequestParam(value="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
-        return "profile";
+    public String profile(){ //@RequestParam(value="name", required=false, defaultValue="World") String name, Model model) {
+//        model.addAttribute("name", name);
+        return "main";
     }
 
 }

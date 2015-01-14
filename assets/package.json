@@ -26,7 +26,7 @@
   },
   "scripts": {
     "httpd": "./node_modules/.bin/http-server src -o -c-1",
-    "prepublish": "bower install --config.interactive=false",
+    "xprepublish": "bower install --config.interactive=false",
     "build": "gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

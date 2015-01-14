@@ -8,6 +8,10 @@ apply plugin: 'java'
 jar {
     //from 'dist'
     from 'src'
+
+    exclude '**/*.scss'
+    exclude '**/*.css.map'
+
     eachFile { details ->
         if(details.path.startsWith('META-INF')) {
             // ignore
@@ -22,6 +26,8 @@ jar {
     // so we need to set includeEmptyDirs to false
     includeEmptyDirs = false
 }
+jar.shouldRunAfter clean
+
 
 task npmInstall(type:Exec) {
     // be Gradle-like and suppress boilerplate logging
