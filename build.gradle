@@ -1,8 +1,8 @@
 def vJavaLang = '1.8'
 def gradleDir = "${rootProject.rootDir}/gradle"
 ext.javascriptProjects = [ project(':assets') ]
-ext.javaProjects = [ project(':connections'), project(':login'), project(':profile'),  project(':site') ]
-ext.bootProjects = [ project(':connections'), project(':login'), project(':profile'),  project(':site') ]
+ext.javaProjects = [ project(':login'), project(':profile'),  project(':site') ]
+ext.bootProjects = [ project(':login'), project(':profile'),  project(':site') ]
 
 wrapper.gradleVersion = '2.1'
 
@@ -82,3 +82,5 @@ configure(bootProjects) {
             "-DPROJECT_HOME=${rootProject.rootDir}"
     ]
 }
+
+task stage(dependsOn: [':site:build'])
