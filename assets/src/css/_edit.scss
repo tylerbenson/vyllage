@@ -69,18 +69,29 @@ section.container {
 				width:140px;
 				margin: 10px 10px 20px 55px;
 			}
+			.industry-reg {
+				width:140px;
+				margin-top: 3px;
+			}
 
 			.title {
 				width:240px;
 				margin: 10px 10px 20px 0px;   
 			}
+			.title-reg {
+				margin:3px 5px 0px 0px; 
+				border: 2px solid #a89892;
+				width:230px;  
+			}
 
 			.start-date {
 				width:95px;
 				margin: 10px 0px 20px 120px;
-			 }
-
-			 .end-date {
+			}
+			.start-date-reg {
+				width:87px;
+			}
+			.end-date {
 			   width:95px;
 			   margin: 10px 10px 20px 17px;
 			}
