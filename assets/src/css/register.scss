@@ -12,7 +12,6 @@ body {
 		}
 
 		article {
-			@include article-grid();
 
 			.article-content {
 	  			background-color:#ece7e4;
