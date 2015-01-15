@@ -60,14 +60,12 @@
 @mixin article-control-links() {
 	color: $article-controll-link-color;
 	text-decoration: none;
-	margin-left: 15px;
 	font-size: 16px;
 }
 
 @mixin article-controll-btn-wrapper {
 	border: 3px solid #e5e5e5;
 	background-color: #f1f1f1;
-	padding: 4px;
 }
 
 @mixin countBtn() {

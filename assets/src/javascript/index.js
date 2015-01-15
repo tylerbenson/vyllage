@@ -102,6 +102,35 @@
 		    		shareBtn.style.backgroundColor =  "#ffffff";
 			    } , false );
 			}
+
+			// show comments implementation
+
+			var commentsButtons = document.getElementsByClassName('comments');
+
+			for(var i = 0; i < commentsButtons.length; i++) {
+
+			    if (commentsButtons[i].addEventListener) {  
+
+				    commentsButtons[i].addEventListener("click", function (event) {
+
+			    		event.preventDefault();
+						event.stopPropagation();
+						this.parentNode.className = this.parentNode.className + " article-controll-btn-wrapper";
+						this.parentNode.parentNode.parentNode.nextElementSibling.style.display="block";
+				    } , true );
+				    
+				} else if (commentsButtons[i].attachEvent) {  
+
+					event.preventDefault();
+					event.stopPropagation();
+
+				   commentsButtons[i].attachEvent("onclick", function () {	
+				   		this.parentNode.className = this.parentNode.className + " article-controll-btn-wrapper";
+				   		this.parentNode.parentNode.parentNode.nextElementSibling.style.display="block";
+				    } , true );
+				}
+			}
+
 	}
 
 })();

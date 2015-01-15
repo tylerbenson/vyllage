@@ -23,6 +23,10 @@ body {
 				}
 			}
 		} 
+
+		.comments-content {
+			display: none;
+		}
 	}
 }
 
@@ -32,5 +36,6 @@ body {
 @import 'common';
 @import 'edit';
 @import 'shareInfo';
+@import 'comments';
 
 
