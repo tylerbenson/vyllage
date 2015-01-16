@@ -7,10 +7,6 @@ body {
 	section {
 		margin-top: 30px;
 
-		#contact-info-reg {
-			border-style:dotted;
-		}
-
 		article {
 
 			.article-content {
@@ -46,12 +42,6 @@ body {
 	  			margin:43px 25px 0;
 	  		} 
 	  	
-	  		.info-title-reg {
-	  		   margin:12px;
-	  		   text-align:center;
-	  		   font-weight:bold;
-            }
-
             .contact .info-blog-reg {
             	margin:5px;
             }
@@ -90,6 +80,14 @@ body {
 			.headline-edit {
 				float: left;
 			}
+	  	}
+
+	  	article.info-sections {
+
+	  		.info-link {
+	  			padding-top: 8px;
+				margin-bottom: 8px;
+	  		}
 	  	}
 	}
 }

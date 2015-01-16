@@ -103,6 +103,34 @@
 			    } , false );
 			}
 
+
+			// Share & Info sections editable functionality
+				var infoEditbuttons = document.getElementsByClassName('edit-btn-cont');
+
+				for(var i = 0; i < infoEditbuttons.length; i++) {
+				    if (infoEditbuttons[i].addEventListener) {  
+
+					    infoEditbuttons[i].addEventListener("click", function (event) {
+				    		event.preventDefault();
+							event.stopPropagation();
+							this.parentNode.style.display="none";
+							this.parentNode.nextElementSibling.style.display="block";
+					    } , true );
+					    
+					} else if (infoEditbuttons[i].attachEvent) {  
+
+						infoEditbuttons[i].attachEvent("onclick", function () {	
+
+					   		event.preventDefault();
+							event.stopPropagation();
+							this.parentNode.style.display="none";
+							this.parentNode.nextElementSibling.style.display="block";
+					   
+					    } , true );
+
+					}
+				}
+
 			// show comments implementation
 
 			var commentsButtons = document.getElementsByClassName('comments');

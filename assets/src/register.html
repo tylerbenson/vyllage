@@ -54,17 +54,17 @@
 				</div>
 				<div class="four columns btns-grid">
 					<div class="share-contact-btns-container">
-						<button class="u-pull-left share">share</button>
-						<button class="u-pull-left contact">contact</button>
+						<button class="u-pull-left share" id="shareInfoBtn">share</button>
+						<button class="u-pull-left contact" id ="contactInfoBtn">contact</button>
 					</div>
 				</div>
 			</div>
 		</article>
 
-		<article id="contact-info-reg">
+		<article id="contact-info" class="info-sections">
 			<div class="row info-blog-wrapper">
 				<div class="four columns">
-					<div class="social info-blog">
+					<div class="social info-blog edit">
 						<p class="info-title-reg">social</p>
 						<div class="icon-wrapper-reg">
 							<img class="icon add" src="images/add.png" width="25" height="25"/>
@@ -79,22 +79,22 @@
 					</div>
 				</div>
 				<div class="four columns">
-					<div class="contact info-blog">	
+					<div class="contact info-blog edit">	
 						<p class="info-title">contact</p>
-						<div class="job edit"> 
+						<div class=""> 
 							<input type="text" class="title-reg" name="email" placeholder="nathan@vyllage.com"/>
 							<input type="text" class="title-reg" name="phone" placeholder="phone number"/>
 						</div>
 					</div>
 				</div>
 				<div class="four columns">
-					<div class="location info-blog">
+					<div class="location info-blog edit">
 						<p class="info-title">location</p>
-						<div class="job edit"> 
+						<div class=""> 
 							<input type="text" class="title-reg" name="address" placeholder="street address"/>
 							<input type="text" class="industry-reg" name="zip" placeholder="zip code"/>
 							<input type="text" class="start-date-reg" name="state" placeholder="state"/>
-							<div class="icon-wrapper edit">
+							<div class="icon-wrapper">
 								<img class="icon edit-reg" src="images/edit.png" width="25" height="25"/> 
                             </div>
 						</div>
@@ -102,6 +102,48 @@
 				</div>
 			</div>
 		</article>
+
+		<article id="share-info" class="info-sections">
+			<div class="row info-blog-wrapper" >
+				<div class="four columns">
+					<div class="private-link info-blog edit">
+						<p class="info-title">private link</p>
+						<div class="info-link"> 
+							<input type="text" class="info-input-edit" name="email" placeholder="https://vyllage.com/nathanbenson123"/>
+						</div>
+						<p class="info-privacy-share">expires after: 
+							<select class="privacy-select">
+								<option>30 days</option>
+							</select>
+						</p> 								
+					</div>
+				</div>
+				<div class="four columns">
+					<div class="public-link info-blog edit">	
+						<p class="info-title">public link</p>
+						<div class="info-link"> 
+							<input type="text" class="info-input-edit" name="email" placeholder="https://vyllage.com/nathanbenson123"/>
+						</div>
+						<p class="info-privacy-public">visible to: 
+							<select class="privacy-select">
+								<option>no one</option>
+							</select>
+						</p> 			
+					</div>
+				</div>
+				<div class="four columns">
+					<div class="export info-blog edit">
+						<p class="info-title">export</p>
+						<div class="exp-buttons">
+							<div class="exp-button">word</div>
+							<div class="exp-button">PDF</div>
+							<div class="exp-button">print</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+
 		<article class="career-goal">
 			<div class="row">
 				<div class="twelve columns">
@@ -211,6 +253,8 @@
 			</div>
 		</article>
 	</section>
+
+	<script type="text/javascript" src ="javascript/register.js"></script>
 
 </body>
 </html>
