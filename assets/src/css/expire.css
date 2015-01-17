@@ -2,29 +2,33 @@ body {
   background: url("../../src/images/background.jpg");
   font-family: 'pt-sans', sans-serif;
 }
-body article .expire {
+body section.container {
+  width: 850px;
+  min-width: 850px;
+}
+body section.container .expire {
   height: 442px;
   background-color: #fff;
   border: 1px solid #c5c3c2;
   margin: 39px 0 50px 0;
   border-radius: 3px;
 }
-body article .link {
+body section.container .link {
   margin: 35px 0 0 0;
   font-size: 70px;
   text-align: center;
 }
-body article .second-link {
+body section.container .second-link {
   margin: 0px 0 0 0;
   font-size: 70px;
   text-align: center;
 }
-body article .third-link {
+body section.container .third-link {
   margin: 35px 0 0 0;
   font-size: 35px;
   text-align: center;
 }
-body article .share-advice-btn {
+body section.container .share-advice-btn {
   font-size: 17px;
   font-family: 'Arimo', sans-serif;
   color: #ffffff;
