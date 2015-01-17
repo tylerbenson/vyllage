@@ -43,6 +43,6 @@ build
 
 
 # WEB
-/assets/.sass-cache
-/assets/dist/css
-/assets/dist/min
+assets/.sass-cache
+assets/src/css
+assets/src/min
