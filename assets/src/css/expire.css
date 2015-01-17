@@ -1,0 +1,75 @@
+body {
+  background: url("../../src/images/background.jpg");
+  font-family: 'pt-sans', sans-serif;
+}
+body article .expire {
+  height: 442px;
+  background-color: #fff;
+  border: 1px solid #c5c3c2;
+  margin: 39px 0 50px 0;
+  border-radius: 3px;
+}
+body article .link {
+  margin: 35px 0 0 0;
+  font-size: 70px;
+  text-align: center;
+}
+body article .second-link {
+  margin: 0px 0 0 0;
+  font-size: 70px;
+  text-align: center;
+}
+body article .third-link {
+  margin: 35px 0 0 0;
+  font-size: 35px;
+  text-align: center;
+}
+body article .share-advice-btn {
+  font-size: 17px;
+  font-family: 'Arimo', sans-serif;
+  color: #ffffff;
+  background-color: #5a6b4b;
+  padding: 0 10px;
+  font-weight: bold;
+  margin: 0 400px 0 0;
+}
+
+header {
+  background-color: #ffffff;
+  border-top: 1px solid #c5c3c2;
+  border-bottom: 3px solid #c5c3c2;
+}
+header .container {
+  height: 63px;
+  max-width: 1040px;
+}
+header .container .header-logo {
+  width: 163px;
+  height: 63px;
+  background: url("../../src/images/header-logo.png") no-repeat;
+}
+header .container .header-profile {
+  margin-top: 12px;
+}
+header .container .header-profile .header-profile-photo {
+  width: 30px;
+  height: 30px;
+  margin: 5px 3px;
+}
+header .container .header-profile .header-username {
+  font-size: 20px;
+  line-height: 28px;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+header .container .header-profile .ask-advice-btn {
+  font-size: 17px;
+  font-family: 'Arimo', sans-serif;
+  color: #ffffff;
+  background-color: #5a6b4b;
+  padding: 0 10px;
+  font-weight: bold;
+  margin-left: 30px;
+}
+
+/*# sourceMappingURL=expire.css.map */
