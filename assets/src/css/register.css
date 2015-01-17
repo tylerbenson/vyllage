@@ -206,6 +206,8 @@ body {
 }
 body section.container {
   margin-top: 30px;
+  width: 850px;
+  min-width: 850px;
 }
 body section.container article {
   background-color: #ffffff;

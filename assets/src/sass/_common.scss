@@ -4,6 +4,8 @@ body {
 
 	section.container {
 		margin-top: 30px;
+		width: $main-container-width;
+		min-width: $main-container-width;
 
 		article {
 			@include article-grid();
