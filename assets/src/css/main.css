@@ -397,6 +397,9 @@ section.container article.profile .headline-container.edit .tagline {
 
 #contact-info, #share-info {
   display: none;
+  position: relative;
+  top: -9px;
+  margin-bottom: 0px;
 }
 
 article .info-blog-wrapper .info-blog {
