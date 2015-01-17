@@ -22,7 +22,12 @@ header {
 				font-size: 20px;
 				line-height: 28px;
 				margin-top: 5px;
-				margin-left: 10px;
+				margin-left: 5px;
+				cursor: pointer;
+			}
+
+			.header-username:hover {
+				color: #8B8987;
 			}
 
 			.ask-advice-btn {
