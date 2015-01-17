@@ -5,7 +5,10 @@ body {
 	background: url('../../src/images/background.jpg');
 	font-family: 'pt-sans', sans-serif;
 
-   	article {
+   	section.container {
+
+   		width: $main-container-width;
+		min-width: $main-container-width;
 
 		.expire {
 			height: 442px;
