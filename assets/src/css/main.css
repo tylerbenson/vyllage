@@ -174,7 +174,7 @@ body section.container article .main > ul, body section.container article .main 
 }
 body section.container article .main > p.company-name, body section.container article .main p.industry, body section.container article .main p.title {
   font-weight: bold;
-  line-height: 4;
+  line-height: 40px;
 }
 body section.container article .main > p.start-date {
   opacity: 0.5;
