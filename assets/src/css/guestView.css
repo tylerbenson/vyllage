@@ -189,7 +189,7 @@ body section.container article .main > p.end-date {
 }
 body section.container article .main > p.location {
   opacity: 0.5;
-  margin: 0 0 0 240px;
+  margin: 0 0 0 130px;
 }
 body section.container article .main > p.establishment {
   font-weight: bold;
@@ -371,7 +371,6 @@ section.container article .edit .end-date {
 }
 section.container article .edit .location {
   width: 165px;
-  margin: 10px 0 20px 114px;
 }
 section.container article .edit .establishment {
   width: 268px;
