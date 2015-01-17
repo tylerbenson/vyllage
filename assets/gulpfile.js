@@ -7,41 +7,41 @@ var gulp = require('gulp'),
 
 gulp.task('styles', function() {
     
-  return gulp.src('src/css/*.scss')
+  return gulp.src('src/sass/*.scss')
     .pipe(sass({ style: 'expanded' }))
-    .pipe(gulp.dest('dist/css'));
+    .pipe(gulp.dest('src/css'));
 });
 
 gulp.task('minify-css', function() {
 
-    gulp.src('dist/css/main.css')
+    gulp.src('src/css/main.css')
         .pipe(minifyCSS({keepBreaks:false}))
         .pipe(rename('main.min.css'))
-        .pipe(gulp.dest('dist/min'));
+        .pipe(gulp.dest('src/min'));
 
-    gulp.src('dist/css/register.css')
+    gulp.src('src/css/register.css')
         .pipe(minifyCSS({keepBreaks:false}))
         .pipe(rename('register.min.css'))
-        .pipe(gulp.dest('dist/min'));
+        .pipe(gulp.dest('src/min'));
 
-    gulp.src('dist/css/guestView.css')
+    gulp.src('src/css/guestView.css')
         .pipe(minifyCSS({keepBreaks:false}))
         .pipe(rename('guestView.min.css'))
-        .pipe(gulp.dest('dist/min'));
+        .pipe(gulp.dest('src/min'));
 
-    gulp.src('dist/css/login.css')
+    gulp.src('src/css/login.css')
         .pipe(minifyCSS({keepBreaks:false}))
         .pipe(rename('login.min.css'))
-        .pipe(gulp.dest('dist/min'));
+        .pipe(gulp.dest('src/min'));
 
-     gulp.src('dist/css/expire.css')
+     gulp.src('src/css/expire.css')
         .pipe(minifyCSS({keepBreaks:false}))
         .pipe(rename('expire.min.css'))
-        .pipe(gulp.dest('dist/min'));
+        .pipe(gulp.dest('src/min'));
 });
 
 gulp.task('watch', function() {
-    gulp.watch('src/css/*.scss', ['styles', 'minify-css']);
+    gulp.watch('src/sass/*.scss', ['styles', 'minify-css']);
 });
 
 gulp.task('default', ['watch']);
