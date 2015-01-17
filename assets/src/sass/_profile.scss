@@ -69,7 +69,8 @@ article.profile {
 
 		.share-contact-btns-container {
 			float: right;
-			margin-top: 145px;
+			margin-top: 146px;
+			margin-right: -2px;
 
 			.share {
 				@include share-contact-btn();
