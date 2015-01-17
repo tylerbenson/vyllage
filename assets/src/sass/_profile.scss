@@ -1,4 +1,4 @@
-article.profile {
+article#profile {
 	height: $profile-height;
 
 	.profile-photo {
@@ -25,10 +25,34 @@ article.profile {
 		}
 	}
 
+	.article-content.editMode {
+		padding-bottom: 0px;
+		margin-bottom: 0px;
+
+		.headline-container.edit {
+
+			.headline {
+				width: 300px;
+				font-size: 18px;
+				line-height: 18px;
+				margin-bottom: 10px;
+				text-align: left;
+			}
+
+			.tagline {
+				width: 300px;
+				font-size: 18px;
+				line-height: 18px;
+				margin-bottom: 10px;
+				text-align: left;
+			}
+		}
+	}
+
 	.article-content.profile {
 		padding: 0px;
 		margin-left: 0;
-		width: 38.5%;
+		width: 385px;
 
 		.headline-container {
 			font-family: "pt-sans";
@@ -66,6 +90,7 @@ article.profile {
 
 	.btns-grid {
 		margin-left: 0px;
+		width: 200px;
 
 		.share-contact-btns-container {
 			float: right;
@@ -82,3 +107,4 @@ article.profile {
 		}
 	}
 }
+
