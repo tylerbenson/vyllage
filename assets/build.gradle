@@ -35,6 +35,20 @@ clean {
     delete 'src/css/min'
 }
 
+task checkNPM {
+    try {
+        def result = project.exec {
+            executable = "npm"
+            ignoreExitValue = true
+            args = ["-v"]
+        }
+        System.setProperty("hasNPM", Boolean.toString(result.exitValue == 0))
+    } catch (org.gradle.process.internal.ExecException e) {
+        System.setProperty("hasNPM", Boolean.toString(false))
+    }
+    println "hasNPM = " + System.getProperty("hasNPM")
+}
+
 task npmInstall(type:Exec) {
     // be Gradle-like and suppress boilerplate logging
     logging.captureStandardOutput LogLevel.INFO
@@ -45,6 +59,8 @@ task npmInstall(type:Exec) {
     commandLine 'npm', 'install'
 }
 npmInstall.shouldRunAfter clean
+npmInstall.dependsOn checkNPM
+npmInstall.onlyIf { "true".equals(System.getProperty('hasNPM')) }
 
 task npmBuild(dependsOn: npmInstall, type:Exec) {
     logging.captureStandardOutput LogLevel.INFO
@@ -54,9 +70,13 @@ task npmBuild(dependsOn: npmInstall, type:Exec) {
     //outputs.dir "dist"
     commandLine 'npm', 'run', 'build'
 }
-npmBuild.shouldRunAfter clean
 jar.dependsOn npmBuild
+npmBuild.shouldRunAfter clean
+npmBuild.dependsOn checkNPM
+npmBuild.onlyIf { "true".equals(System.getProperty('hasNPM')) }
 
 task httpd(dependsOn: npmInstall, type:Exec) {
     commandLine 'npm', 'run', 'httpd'
 }
+httpd.dependsOn checkNPM
+httpd.onlyIf { "true".equals(System.getProperty('hasNPM')) }
