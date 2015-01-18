@@ -59,6 +59,10 @@ body {
 		  			@include ask-advice-btn();
 		  			margin: 20px;
 		  		}
+
+		  		.ask-advice-btn:hover {
+					border: 1px solid #A36A3B;
+				}
 	  		}
 
 	  		.add-section  {
@@ -70,15 +74,23 @@ body {
 
   			.article-content {
 	  			background-color: $white;
-	  		}
 
-	  		.tagline-edit {
-				color: #a5a3a2;
-				float: left;
-			}
+		  		.tagline-edit {
+					color: #a5a3a2;
+					float: left;
+				}
 
-			.headline-edit {
-				float: left;
+				.headline-edit {
+					float: left;
+				}
+
+				.edit-icon {
+					cursor: pointer;
+				}
+
+				.edit {
+					display: none;
+				}
 			}
 	  	}
 

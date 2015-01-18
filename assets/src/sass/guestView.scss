@@ -18,6 +18,11 @@ section.container {
 			@include ask-advice-btn();
 			margin: 20px 20px 30px 20px;
 		}
+
+		.share-advice-btn:hover {
+			border: 1px solid #A36A3B;
+		}
+
 		.article-content.experience {
 		    background-color:#ece7e4;
 		}

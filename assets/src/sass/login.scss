@@ -2,8 +2,10 @@
 @import '_mixins.scss';
 
 .container {
-	background: url('../../images/login_bg.jpg') no-repeat;
+	background: url('../../images/login_bg.JPG') no-repeat;
 	min-height: 550px;
+	width: 100%;
+	max-width: inherit;
 
 	.request-btn {
 		color: #fff;
@@ -12,10 +14,9 @@
 		float: right;
 		margin-right: 28px;
 		margin-top: 28px;
-		width: 244px;
 		height: 44px;
 		line-height: 42px;
-		padding-left: 14px;
+		padding: 0px 14px;
 		font-size: 28px;
 		font-family: 'sans-serif';
 	}
