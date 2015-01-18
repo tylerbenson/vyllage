@@ -39,17 +39,16 @@ task npmInstall(type:Exec) {
     commandLine 'npm', 'install'
 }
 
-//task npmBuild(dependsOn: npmInstall, type:Exec) {
-//    logging.captureStandardOutput LogLevel.INFO
-//    logging.captureStandardError LogLevel.INFO
-//    inputs.dir "src"
-//    inputs.file "gulpfile.js"
-//    outputs.dir "dist"
-//    commandLine 'npm', 'run', 'build'
-//}
-
-//jar.dependsOn npmBuild
+task npmBuild(dependsOn: npmInstall, type:Exec) {
+    logging.captureStandardOutput LogLevel.INFO
+    logging.captureStandardError LogLevel.INFO
+    inputs.dir "src"
+    inputs.file "gulpfile.js"
+    //outputs.dir "dist"
+    commandLine 'npm', 'run', 'build'
+}
+jar.dependsOn npmBuild
 
 task httpd(dependsOn: npmInstall, type:Exec) {
-    commandLine 'npm', 'run-script', 'httpd'
+    commandLine 'npm', 'run', 'httpd'
 }

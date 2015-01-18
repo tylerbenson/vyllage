@@ -45,6 +45,7 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', ['watch']);
+gulp.task('build', ['styles', 'minify-css']);
 
 
 // from https://github.com/spring-io/sagan/blob/master/sagan-client/gulpfile.js
