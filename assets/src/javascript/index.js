@@ -61,7 +61,9 @@
 
 		    if (shareBtn.addEventListener) {  
 
-			    shareBtn.addEventListener("click", function () {
+			    shareBtn.addEventListener("click", function (event) {
+		    		event.preventDefault();
+					event.stopPropagation();
 
 			    	document.getElementById('share-info').style.display =  "block" ;
 		    		document.getElementById('contact-info').style.display =  "none";
@@ -73,7 +75,10 @@
 			    
 			} else if (shareBtn.attachEvent) {  
 
-			   shareBtn.attachEvent("onclick", function () {
+			   shareBtn.attachEvent("onclick", function (event) {
+			   		event.preventDefault();
+					event.stopPropagation();
+
 			    	document.getElementById('share-info').style.display =  "block" ;
 		    		document.getElementById('contact-info').style.display =  "none";
 
@@ -84,7 +89,10 @@
 
 			if (contactBtn.addEventListener) {  
 
-			    contactBtn.addEventListener("click", function () {
+			    contactBtn.addEventListener("click", function (event) {
+			    	event.preventDefault();
+					event.stopPropagation();
+
 			    	document.getElementById('share-info').style.display =  "none" ;
 		    		document.getElementById('contact-info').style.display =  "block";
 
@@ -94,7 +102,10 @@
 			    
 			} else if (contactBtn.attachEvent) {  
 
-			   contactBtn.attachEvent("onclick", function () {
+			   contactBtn.attachEvent("onclick", function (event) {
+			   		event.preventDefault();
+					event.stopPropagation();
+
 			    	document.getElementById('share-info').style.display =  "none" ;
 		    		document.getElementById(' contact-info').style.display =  "block";
 
