@@ -44,5 +44,5 @@ build
 
 # WEB
 assets/.sass-cache
-assets/src/css
-assets/src/min
+assets/src/css/*
+!assets/src/css/min
