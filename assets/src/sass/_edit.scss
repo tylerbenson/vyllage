@@ -1,3 +1,4 @@
+
 section.container {
 
 	article {
@@ -34,8 +35,20 @@ section.container {
 				margin: 15px 0 10px 0;
 			}
 
-			.save-btn, .cancel-btn {
-				@include saveCancelBtn();
+			.save-btn {
+				@include saveBtn();
+			}
+
+			.save-btn:hover {
+				border-color: rgb(1, 0, 55);
+			}
+			
+			.cancel-btn {
+				@include cancelBtn();
+			}
+
+			.cancel-btn:hover {
+				border-color: #030303;
 			}
 
 			.save-btn {
