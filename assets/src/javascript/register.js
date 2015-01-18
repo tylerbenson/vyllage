@@ -91,7 +91,7 @@
 
 				 saveButtons[i].addEventListener("click", function () {
 
-				 	window.location.href = "main.html";
+				 	//window.location.href = "main.html";
 
 			    }, true);
 
@@ -99,7 +99,7 @@
 
 				saveButtons[i].attachEvent("onclick", function (){
 					
-					window.location.href = "main.html";
+					//window.location.href = "main.html";
 
 		    	}, false);
 			}

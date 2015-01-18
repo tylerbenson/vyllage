@@ -22,6 +22,10 @@ section.container {
 				height: 30px;
 			}
 
+			input[type = "submit"] {
+				text-transform: lowercase;
+			}
+
 			textarea {
 				border: 2px solid #a89892;
 				border-color: #a89892;
