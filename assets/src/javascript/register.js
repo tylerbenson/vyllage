@@ -2,53 +2,84 @@
 
 	window.onload = function(){
 
-	// Contact info sections implementation
-	var shareBtn = document.getElementById('shareInfoBtn'),
-	    contactBtn = document.getElementById('contactInfoBtn');
+	// ---------------------------- Contact info sections implementation -----------------
 
-    if (shareBtn.addEventListener) {  
+		var shareBtn = document.getElementById('shareInfoBtn'),
+		    contactBtn = document.getElementById('contactInfoBtn');
 
-	    shareBtn.addEventListener("click", function () {
+	    if (shareBtn.addEventListener) {  
 
-	    	document.getElementById('share-info').style.display =  "block" ;
-    		document.getElementById('contact-info').style.display =  "none";
+		    shareBtn.addEventListener("click", function () {
 
-    		this.style.backgroundColor =  "#ece7e4";
-    		contactBtn.style.backgroundColor =  "#ffffff";
+		    	document.getElementById('share-info').style.display =  "block" ;
+	    		document.getElementById('contact-info').style.display =  "none";
 
-	    } , true );
-	    
-	} else if (shareBtn.attachEvent) {  
+	    		this.style.backgroundColor =  "#ece7e4";
+	    		contactBtn.style.backgroundColor =  "#ffffff";
 
-	   shareBtn.attachEvent("onclick", function () {
-	    	document.getElementById('share-info').style.display =  "block" ;
-    		document.getElementById('contact-info').style.display =  "none";
+		    } , true );
+		    
+		} else if (shareBtn.attachEvent) {  
 
-    		this.style.backgroundColor =  "#ece7e4";
-    		contactBtn.style.backgroundColor =  "#ffffff";
-	    } , false );
+		   shareBtn.attachEvent("onclick", function () {
+		    	document.getElementById('share-info').style.display =  "block" ;
+	    		document.getElementById('contact-info').style.display =  "none";
+
+	    		this.style.backgroundColor =  "#ece7e4";
+	    		contactBtn.style.backgroundColor =  "#ffffff";
+		    } , false );
+		}
+
+		if (contactBtn.addEventListener) {  
+
+		    contactBtn.addEventListener("click", function () {
+		    	document.getElementById('share-info').style.display =  "none" ;
+	    		document.getElementById('contact-info').style.display =  "block";
+
+	    		this.style.backgroundColor =  "#ece7e4";
+	    		shareBtn.style.backgroundColor =  "#ffffff";
+		    } , true );
+		    
+		} else if (contactBtn.attachEvent) {  
+
+		   contactBtn.attachEvent("onclick", function () {
+		    	document.getElementById('share-info').style.display =  "none" ;
+	    		document.getElementById(' contact-info').style.display =  "block";
+
+	    		this.style.backgroundColor =  "#ece7e4";
+	    		shareBtn.style.backgroundColor =  "#ffffff";
+		    } , false );
+		}
+
+	// ---------------------------- End Contact info sections implementation -----------------
+
+	// ---------------------------- Profile edit buttons implementation -----------------
+
+		var editButtons = document.getElementsByClassName('edit-icon');
+
+		for(var i = 0; i < editButtons.length; i++) {
+
+			if (editButtons[i].addEventListener) {
+
+			    editButtons[i].addEventListener("click", function (){
+
+			    	document.getElementsByClassName('headline-container main')[0].style.display =  "none";
+			    	document.getElementsByClassName('headline-container edit')[0].style.display =  "block";
+			    	document.getElementsByClassName('headline-container edit')[0].getElementsByClassName('edit')[0].style.display =  "block";
+			    }, true);
+
+			} else if (editButtons[i].attachEvent) { 
+
+				editButtons[i].attachEvent("onclick", function (){
+					
+					document.getElementsByClassName('headline-container main').style.display =  "none";
+			    	document.getElementsByClassName('headline-container edit').style.display =  "block";
+
+		    	}, false);
+			}
+		}
+	// ---------------------------- End Profile edit buttons implementation -----------------
+
 	}
-
-	if (contactBtn.addEventListener) {  
-
-	    contactBtn.addEventListener("click", function () {
-	    	document.getElementById('share-info').style.display =  "none" ;
-    		document.getElementById('contact-info').style.display =  "block";
-
-    		this.style.backgroundColor =  "#ece7e4";
-    		shareBtn.style.backgroundColor =  "#ffffff";
-	    } , true );
-	    
-	} else if (contactBtn.attachEvent) {  
-
-	   contactBtn.attachEvent("onclick", function () {
-	    	document.getElementById('share-info').style.display =  "none" ;
-    		document.getElementById(' contact-info').style.display =  "block";
-
-    		this.style.backgroundColor =  "#ece7e4";
-    		shareBtn.style.backgroundColor =  "#ffffff";
-	    } , false );
-	}
-}
 
 })();
