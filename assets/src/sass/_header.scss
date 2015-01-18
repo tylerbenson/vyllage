@@ -34,6 +34,10 @@ header {
 				@include ask-advice-btn();
 				margin-left: 30px;
 			}
+
+			.ask-advice-btn:hover {
+				border: 1px solid #A36A3B;
+			}
 		}
 	}
 }
