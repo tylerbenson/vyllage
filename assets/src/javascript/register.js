@@ -80,6 +80,31 @@
 		}
 	// ---------------------------- End Profile edit buttons implementation -----------------
 
-	}
 
+	// ---------------------------- Save buttons click handler ------------------------------
+
+		var saveButtons = document.getElementsByClassName('save-btn');
+
+		for(var i = 0; i < saveButtons.length; i++) {
+
+			if (saveButtons[i].addEventListener) {
+
+				 saveButtons[i].addEventListener("click", function () {
+
+				 	window.location.href = "main.html";
+
+			    }, true);
+
+			} else if (saveButtons[i].attachEvent) { 
+
+				saveButtons[i].attachEvent("onclick", function (){
+					
+					window.location.href = "main.html";
+
+		    	}, false);
+			}
+		}
+
+	// ---------------------------- End Save buttons click handler --------------------------
+	}
 })();
