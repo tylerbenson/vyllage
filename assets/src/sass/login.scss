@@ -2,9 +2,9 @@
 @import '_mixins.scss';
 
 .container {
-	background: url('../../src/images/login_bg.jpg') no-repeat;
+	background: url('../../images/login_bg.jpg') no-repeat;
 	min-height: 550px;
-	
+
 	.request-btn {
 		color: #fff;
 		border-radius: 0px;
@@ -26,7 +26,7 @@
 		margin-top: 120px;
 
 		.vyllage-img {
-			background: url('../../src/images/header-logo.png');
+			background: url('../../images/header-logo.png');
 			background-size: contain;
 			height: 138px;
 		}
@@ -41,7 +41,7 @@
 			width: 372px;
 			height: 62px;
 			border-radius: 0px;
-			border: 1px solid #393D2E;	
+			border: 1px solid #393D2E;
 			color: #fff;
 			background-color: #5B6C4C;
 			font-family: 'sans-serif';

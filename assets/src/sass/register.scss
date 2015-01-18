@@ -2,7 +2,7 @@
 @import 'mixins';
 
 body {
-	background: url('../../src/images/background.jpg');
+	background: url('../../images/background.jpg');
 
 	section {
 		margin-top: 30px;
@@ -12,7 +12,7 @@ body {
 			.article-content {
 	  			background-color:#ece7e4;
 	  		}
-	  		
+
 	  	  	.add-more {
 	  			text-align:center;
 	   			font-size:20px;
@@ -20,7 +20,7 @@ body {
 	   			font-weight:bold;
 	   			margin-top: -30px;
 	  		}
-	  		
+
 	  		.icon-wrapper {
 				cursor:pointer;
 
@@ -40,8 +40,8 @@ body {
 	  		.icon-wrapper-reg {
 	  			float:left;
 	  			margin:43px 25px 0;
-	  		} 
-	  	
+	  		}
+
             .contact .info-blog-reg {
             	margin:5px;
             }
@@ -70,9 +70,9 @@ body {
 
   			.article-content {
 	  			background-color: $white;
-	  		}	
+	  		}
 
-	  		.tagline-edit { 
+	  		.tagline-edit {
 				color: #a5a3a2;
 				float: left;
 			}

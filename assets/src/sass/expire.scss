@@ -2,7 +2,7 @@
 @import '_mixins.scss';
 
 body {
-	background: url('../../src/images/background.jpg');
+	background: url('../../images/background.jpg');
 	font-family: 'pt-sans', sans-serif;
 
    	section.container {
@@ -29,7 +29,7 @@ body {
 			font-size:70px;
 			text-align:center;
 		}
-		
+
 		.third-link {
 			margin:35px 0 0 0;
 			font-size:35px;

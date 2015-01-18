@@ -10,19 +10,19 @@ body {
 		}
 
 		.main {
-			
+
 		}
 
 		.article-content:hover {
 
-			.main { 
-				background: url(../../src/images/edit.png) no-repeat top right;
+			.main {
+				background: url(../../images/edit.png) no-repeat top right;
 
 				> p, > ul , > div.paragraph {
 					@include editParagraph();
 				}
 			}
-		} 
+		}
 
 		.comments-content {
 			display: none;
@@ -30,7 +30,7 @@ body {
 	}
 
 	article.info-sections {
-		
+
   		.info-blog.edit {
   			display: none;
   		}
