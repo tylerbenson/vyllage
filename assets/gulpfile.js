@@ -6,38 +6,20 @@ var gulp = require('gulp'),
 	watch = require('gulp-watch');
 
 gulp.task('styles', function() {
-    
+
   return gulp.src('src/sass/*.scss')
     .pipe(sass({ style: 'expanded' }))
     .pipe(gulp.dest('src/css'));
 });
 
-gulp.task('minify-css', function() {
+gulp.task('minify-css', ['styles'], function() {
 
-    gulp.src('src/css/main.css')
+    gulp.src('src/css/*.css')
         .pipe(minifyCSS({keepBreaks:false}))
-        .pipe(rename('main.min.css'))
-        .pipe(gulp.dest('src/min'));
-
-    gulp.src('src/css/register.css')
-        .pipe(minifyCSS({keepBreaks:false}))
-        .pipe(rename('register.min.css'))
-        .pipe(gulp.dest('src/min'));
-
-    gulp.src('src/css/guestView.css')
-        .pipe(minifyCSS({keepBreaks:false}))
-        .pipe(rename('guestView.min.css'))
-        .pipe(gulp.dest('src/min'));
-
-    gulp.src('src/css/login.css')
-        .pipe(minifyCSS({keepBreaks:false}))
-        .pipe(rename('login.min.css'))
-        .pipe(gulp.dest('src/min'));
-
-     gulp.src('src/css/expire.css')
-        .pipe(minifyCSS({keepBreaks:false}))
-        .pipe(rename('expire.min.css'))
-        .pipe(gulp.dest('src/min'));
+        .pipe(rename(function (path) {
+            path.extname = ".min.css"
+        }))
+        .pipe(gulp.dest('src/css/min'));
 });
 
 gulp.task('watch', function() {

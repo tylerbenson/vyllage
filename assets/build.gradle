@@ -11,6 +11,7 @@ jar {
 
     exclude '**/*.scss'
     exclude '**/*.css.map'
+    exclude 'css/*.css'
 
     eachFile { details ->
         if(details.path.startsWith('META-INF')) {
@@ -28,6 +29,11 @@ jar {
 }
 jar.shouldRunAfter clean
 
+clean {
+    inputs.dir "src/css"
+    delete fileTree(dir: "src/css", exclude: "libs/**")
+    delete 'src/css/min'
+}
 
 task npmInstall(type:Exec) {
     // be Gradle-like and suppress boilerplate logging
@@ -38,6 +44,7 @@ task npmInstall(type:Exec) {
     outputs.dir "node_modules"
     commandLine 'npm', 'install'
 }
+npmInstall.shouldRunAfter clean
 
 task npmBuild(dependsOn: npmInstall, type:Exec) {
     logging.captureStandardOutput LogLevel.INFO
@@ -47,6 +54,7 @@ task npmBuild(dependsOn: npmInstall, type:Exec) {
     //outputs.dir "dist"
     commandLine 'npm', 'run', 'build'
 }
+npmBuild.shouldRunAfter clean
 jar.dependsOn npmBuild
 
 task httpd(dependsOn: npmInstall, type:Exec) {
