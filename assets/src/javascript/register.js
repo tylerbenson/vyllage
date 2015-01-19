@@ -81,5 +81,4 @@
 	// ---------------------------- End Profile edit buttons implementation -----------------
 
 	}
-
 })();

@@ -40,6 +40,11 @@ body {
 			@include ask-advice-btn();
 			margin:0 400px 0 0;
 	   	}
+
+	   	.share-advice-btn:hover {
+			border: 1px solid #050404;
+			background-color: #414D36;
+	   	}
 	}
 }
 
