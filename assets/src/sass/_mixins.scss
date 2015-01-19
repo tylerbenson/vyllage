@@ -125,3 +125,82 @@
 	color: $share-info-txt-color;
 	border: 1px solid $share-info-txt-color;
 }
+
+
+@mixin adviceRequestContainer() {
+	font-family: 'pt-sans sans-serif';
+	width: 750px;
+	margin-top: 36px;
+
+}
+
+@mixin topPart() {
+	background-color: $top-bkg-color;
+	border-bottom: 1px solid $cancel-btn-bkg-color;
+}
+
+@mixin contentPart() {
+	background-color: $white;
+	height: 480px;
+	margin-bottom: 10px;
+	border: 0px;
+}
+
+@mixin rqstKeyWord() {
+	color: $share-info-txt-color;
+	font-family: 'Arimo';
+	font-size: 24px;
+	float: left;
+}
+
+@mixin recipient() {
+	float: left;
+	font-size: 17px;
+	background-color: $cancel-btn-bkg-color;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+@mixin fbButton() {
+	margin: 0px;
+	font-family: 'Arimo';
+	font-weight: bold;
+	border-radius: 2px;
+	padding: 4px 0px 2px 0px;
+	text-align: center;
+}
+
+@mixin smallText() {
+	font-size: 15px;
+	line-height: 8px;
+}
+
+@mixin bigText() {
+	padding:0px;
+	font-size: 20px;
+}
+
+@mixin submitBtn($backgroundColor, $color) {
+	font-size: 15px;
+	font-weight: bold;
+	line-height: 26px;
+	font-family: 'Arimo';
+	color: $color;
+	background-color: $backgroundColor;
+	padding: 0 7px;
+	height: 28px;
+	width: 62px;
+	border-radius: 2px;
+} 
+
+@mixin msgText {
+	margin-bottom: 0px;
+	margin-top: 29px;
+	padding-left: 60px;
+	font-size: 20px;
+
+}
+
+@mixin sbjText() {
+	font-size: 17px;
+}
