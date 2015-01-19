@@ -10,9 +10,13 @@ public class LoginController {
 
 	// http://localhost:8080/login
     @RequestMapping("/login")
-    public String greeting(@RequestParam(value="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
+    public String login() {
         return "login";
     }
 
+	// http://localhost:8080/expire
+    @RequestMapping("/expire")
+    public String expire() {
+        return "expire";
+    }
 }
