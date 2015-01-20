@@ -125,18 +125,12 @@
 	border: 1px solid $share-info-txt-color;
 }
 
-@mixin adviceRequestContainer() {
-	font-family: 'pt-sans sans-serif';
-	width: 750px;
-	margin-top: 36px;
-}
-
 @mixin topper() {
 	background-color: $top-bkg-color;
 	border-bottom: 1px solid $cancel-btn-bkg-color;
 	height: 44px;
 	font-size: 21px;
-	padding-left:52px;
+	padding-left: 25px;
 	line-height: 44px;
 }
 
