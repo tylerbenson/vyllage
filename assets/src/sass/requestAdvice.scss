@@ -1,128 +1,106 @@
 @import '_variables';
 @import '_mixins';
 
-section#contr {
-@include adviceRequestContainer();	
+section#container {
+	@include adviceRequestContainer();	
 
-article{
-	@include article-grid();
+	article {
+		@include article-grid();
 
-	.top-part {
-		@include topPart();
-	}
-
-	.first-head {
-		height: 44px;
-		font-size: 21px;
-		padding-left:52px;
-		line-height: 44px;
-	}
-
-	.content-part {
-		@include contentPart();
-
-		.rqst-key-word {
-			@include  rqstKeyWord();
-			margin-left: 37px; 
-			margin-top: 45px;
+		.topper {
+			@include topper();
 		}
 
-		.email-to {
-			margin-left: 37px;
+		p {
+			padding: 0px;
+			margin: 0px;
 		}
 
-		.rcpent-list {
-			height: 88px;
-			margin: 40px 15px 0px 40px;
-			width: 500px;
-			float: left;
+		.content-part {
+			height: 480px;
+			margin-bottom: 10px;
 
-			.rcpent {
-				@include recipient();
-				margin: 7px 5px 7px 5px;
+			.rqst-key-word {
+				@include  rqstKeyWord();
+				margin-left: 37px; 
+				margin-top: 45px;
 			}
-		}
 
-		.fb-button {
-			@include button($fb-btn-bkg-color,$white);
-			@include fbButton();
-			width:109px;
-			height: 69px;
-			border: 1px solid  $fb-btn-bord-color;
-			margin-top: 30px;
-			float:left;
-			cursor: pointer;
+			.rcpent-list {
+				margin: 40px 15px 0px 40px;
+				width: 500px;
+				float: left;
 
-			.small-text {
+				.rcpent {
+					@include recipient();
+				}
+			}
+
+			.fb-button {
 				@include fbButton();
-				@include smallText();
+				float:left;
+				margin-top: 30px;
+
+				.small-text {
+					font-size: 15px;
+					line-height: 15px;
+				}
+
+				.big-text {
+					font-size: 20px;
+					line-height: 26px;
+				}
 			}
 
-			.big-text {
-				@include fbButton();
-				@include bigText();
-			}
-		}
+			.subject {
+				width: 610px;
+				height: 99px;
+				margin-top: 16px;
+				border-top: 1px solid $cancel-btn-bkg-color;
+				float:left;
 
-		.subject {
-			width: 610px;
-			height: 99px;
-			margin-top: 16px;
-			border-top: 1px solid $cancel-btn-bkg-color;
-			float:left;
-
-			.subject-of {
-				margin-left: -40px;
-				margin-top: 27px;
+				.subject-text {
+					margin-bottom: 0px;
+					margin-top: 29px;
+					padding-left: 60px;
+					font-size: 20px;
+				}
 			}
 
-			.msg-text {
-				@include msgText();
-			}
-		}
+			.message {
+				float:left;
+				padding: 47px 60px 0px 55px;
+				border-top: 1px solid $cancel-btn-bkg-color;
 
-		.message {
-			float:left;
-			padding: 47px 60px 0px 55px;
-			border-top: 1px solid $cancel-btn-bkg-color;
+				.messageContent {
+					margin-bottom: 20px;
 
-			.messageContent {
-				margin-bottom: 20px;
-			}
+					.message-text {
+						font-size: 18px;
+						line-height: 28px;
+					}
+				}
 			
-			.sbj-text {
-				@include sbjText();
-			}
+				.send-btn {
+					@include saveBtn();
+				}
 
-			.signature {
-				margin-top: 22px;
-			}
+				.send-btn:hover {
+					border-color: rgb(47, 52, 92);
+					background-color: rgb(66, 81, 130);
+				}
+				
+				.cancel-btn {
+					@include cancelBtn();
+				}
 
-			p {
-				margin-bottom: 0px;
+				.cancel-btn:hover {
+					border-color: #030303;
+					background-color: #C0BFBF;
+				}
 			}
-			
-			.send-btn {
-				@include saveBtn();
-			}
-
-			.send-btn:hover {
-				border-color: rgb(47, 52, 92);
-				background-color: rgb(66, 81, 130);
-			}
-			
-			.cancel-btn {
-				@include cancelBtn();
-			}
-
-			.cancel-btn:hover {
-				border-color: #030303;
-				background-color: #C0BFBF;
-			}
-
 		}
 	}
-}
 }
 
 @import 'header';
