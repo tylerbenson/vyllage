@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>Login</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -13,7 +13,7 @@
 	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'/>
 </head>
 <body>
-<form action="/register" method="post">
+<form th:action="@{/login}" method="post">
 	<section class="container">
 
 		<article>
@@ -23,6 +23,13 @@
 
 					<div class="login-content">
 						<div class="vyllage-img"></div>
+						<!-- These need to be styled properly -->
+				        <div th:if="${param.error}" style="background: white">
+				            Invalid email and password.
+				        </div>
+				        <div th:if="${param.logout}" style="background: white">
+				            You have been logged out.
+				        </div>
 						<input type="text" class="input email" name="email" placeholder="email"/>
 						<input type="password" class="input password" name="password" placeholder="Password"/>
 						<input type="submit" class="login-btn" value="login"/>

@@ -9,24 +9,19 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 
 @Configuration
 @EnableWebMvcSecurity
-// @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().anyRequest().permitAll();
-		// http.authorizeRequests().antMatchers("/", "/home").permitAll()
-		// .anyRequest().authenticated().and().formLogin()
-		// .loginPage("/login").permitAll().and().logout().permitAll();
-		// http.authorizeRequests().anyRequest().fullyAuthenticated().and().formLogin()
-		// .loginPage("/login").failureUrl("/login?error").permitAll();
+		http.authorizeRequests()
+				.antMatchers("/", "/css/**", "/images/**", "/javascript/**")
+				.permitAll().anyRequest().authenticated().and().formLogin()
+				.defaultSuccessUrl("/register").usernameParameter("email")
+				.loginPage("/login").permitAll().and().logout().permitAll();
 	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth)
 			throws Exception {
-		// auth.inMemoryAuthentication().withUser("admin").password("admin")
-		// .roles("ADMIN", "USER").and().withUser("user").password("user")
-		// .roles("USER");
 		auth.inMemoryAuthentication().withUser("user").password("password")
 				.roles("USER");
 	}
