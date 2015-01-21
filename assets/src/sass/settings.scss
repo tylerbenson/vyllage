@@ -1,0 +1,140 @@
+
+@import 'variables';
+@import 'mixins';
+
+body {
+	background: url('../../images/background.jpg');
+
+ 		section#container {
+			margin-top: 36px;
+			font-family: "pt-sans";
+
+			article {
+
+				.topper {
+					@include topper();
+				}
+
+				.settings-row {
+					width: 89%;
+					float: left;
+					padding: 14px 20px;
+				}
+
+				.profile-row {
+					width: 100%;
+					float: left;
+				}
+
+				p {
+					padding: 0px;
+					margin: 0px;
+				}
+
+				.greyed-background {
+					background-color: #EEEEEE;
+				}
+
+				.info-label {
+					font-size: 18px;
+					line-height: 18px;
+					float: left;
+				}
+
+				.label-value {
+					font-size: 18px;
+					line-height: 18px;
+					float: left;
+					padding-left: 20px;
+				}
+
+			 	.update-label {
+	            	color:#50619E;
+			        cursor:pointer;
+			        float: right;
+			        font-size: 14px;
+					line-height: 14px;
+			    }
+
+		   		.settings {
+				    border:1px solid #c5c3c2;
+				    background-color: $white;
+				    float: left;
+
+				    .photo-set {
+				    	margin: 5px;
+				    }
+			
+				    .profile-info-set {
+
+				    	.name {
+					    	font-size: 24px;
+							line-height: 42px;
+					    }
+
+					    .member-set {
+					    	color: #93908F;
+					    	font-size: 12px;
+					    	line-height: 14px;
+					    }
+				    }
+				}   
+
+		       	.settings-notif {
+				    border:1px solid #c5c3c2;
+				    background-color: $white;
+				   	    
+			    	.set-not {
+			    		border:1px solid #c5c3c2;
+				    	height:44px;
+				    	background-color:#ece7e4;
+				    	font-size:24px;
+				    	padding: 0 0 0 20px;
+				    }
+
+				    .ntfcation {
+				    	font-size:20px;
+				    	margin:12px 0 12px 50px;
+				    }
+
+				    .time {
+				    	float:right;
+				    	font-size:18px;
+				    	opacity:0.7;
+				    	margin:-45px 90px;
+				    }
+
+				    .view {
+				    	float:right;
+				    	font-size:18px;
+				    	color:#50619E;
+				    	margin:-35px 32px;
+				    	cursor:pointer;
+				    }
+
+				    .divider {
+				    	clear: both;
+						margin: 0 17px 0px;
+						border-top: 1px dashed #c5c3c2;
+				    }
+
+				    .more {
+				    	height:32px;
+				    	border:1px solid #c5c3c2;
+				    	background-color:#EEEEEE;
+				    	margin:15px 25px 34px 20px
+				    }
+				    
+				    .view-more {
+				    	font-size:19px;
+				    	color:#93908F;
+				    	text-align:center;
+				    	cursor:pointer;
+				    }
+				}
+			}
+		}
+	}
+
+
+@import 'header';
