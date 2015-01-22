@@ -1,0 +1,49 @@
+@import 'variables';
+@import 'mixins';
+
+body {
+   background: url('../../images/background.jpg');
+
+    article {
+    	font-family:"pt-sans";
+    	height:715px;
+    	margin:50px 110px 0 210px;   
+
+        table {
+            background-color: $white;
+
+            th, td {
+                height:37px;
+                border: 1px solid #c5c3c2;
+                border-collapse: collapse;
+                font-size:18px;
+                padding:0 45px 0 5px;
+                color:#000000;
+            }
+
+            .tbl-name {
+                background-color: #CED0E5;
+            }
+
+            .names {
+                padding-left:10px;
+            }
+            
+            .bottom {
+                border: 1px solid #c5c3c2;
+                background-color:  #EEEEEE;
+                
+                p {
+                    font-size: 19px;
+                    opacity:0.5;
+                    cursor: pointer;
+                    text-align:center;
+                    margin: 0px;
+                    padding: 5px;
+                }
+            }
+        }
+    }
+} 
+
+@import 'header';
