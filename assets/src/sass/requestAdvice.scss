@@ -6,6 +6,11 @@ body {
 	background: url('../../images/background.jpg');
 	font-family: 'pt-sans', sans-serif;
 
+	p {
+		padding: 0px;
+		margin: 0px;
+	}
+
 	section#container {
 		margin-top: 36px;
 		width: 750px;
@@ -16,11 +21,6 @@ body {
 			.topper {
 				@include topper();
 				padding-left: 50px;
-			}
-
-			p {
-				padding: 0px;
-				margin: 0px;
 			}
 
 			.content-part {
@@ -105,6 +105,50 @@ body {
 						background-color: #C0BFBF;
 					}
 				}
+			}
+		}
+	}
+
+	// suggested users list style
+	ul.suggested-users-list {
+		width: 300px;
+		background-color: $white;
+		box-shadow: 0px 0px 5px 3px  rgba(126, 121, 113, 1);
+
+		li.topper {
+			background-color: #E5E4E2;
+			font-size: 16px;
+			line-height: 40px;
+
+			p.topper-text {
+				text-align: center;
+			}
+		}
+
+		li {
+			height: 35px;
+			padding: 5px;
+			margin: 0px;
+			font-size: 16px;
+			line-height: 34px;
+			list-style-type: none;
+			border-bottom: 1px solid $cancel-btn-bkg-color;
+			
+			p.item-text {
+				float: left;
+				padding-left: 15px
+			}
+
+			img.prof-pic {
+				width:35px;
+				height: 35px;
+				float: left;
+			}
+
+			img.social {
+				width: 30px;
+				height: 30px;
+				float: right;
 			}
 		}
 	}
