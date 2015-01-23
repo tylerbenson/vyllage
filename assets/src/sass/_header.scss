@@ -4,6 +4,7 @@ header {
 	.container {
 		height: $header-height;
 		max-width: $header-width;
+		min-width: 960px;
 		
 		.header-logo {
 			@include header-logo();
