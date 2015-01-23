@@ -8,6 +8,7 @@ body {
  		section#container {
 			margin-top: 36px;
 			font-family: "pt-sans";
+			width: 960px;
 
 			article {
 
@@ -79,6 +80,10 @@ body {
 					    }
 				    }
 				}   
+
+				.notif-grid {
+					margin-left: 10px;
+				}
 
 		       	.settings-notif {
 				    border:1px solid #c5c3c2;
