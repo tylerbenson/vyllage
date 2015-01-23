@@ -3,7 +3,7 @@
 	margin: 0 40px 40px;
 
 	> div {
-		float: left;
+		float: right;
 		width: 100%;
 	}
 
@@ -38,10 +38,26 @@
     
     .comment-ctrl {
 
+    	.comment-ctrl-list {
+    		width: 190px;
+    		list-style-type: circle;
+
+    		.comment-ctrl-btn {
+	    		float: left;
+	    		padding-left: 10px;
+				list-style-type: circle;
+				width: 50px;
+	    	}
+    	}
+
 		a {
 			text-decoration: none;
 			color: #A09FA1;
 			font-size: 15px;
+		}
+
+		a:hover {
+			text-decoration: underline;
 		}
 	}    	
 }
