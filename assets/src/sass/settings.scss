@@ -22,6 +22,35 @@ body {
 					padding: 14px 20px;
 				}
 
+				.last-update {
+					color:#B6B6B6;
+					float:left;
+					font-size: 16px;
+					margin-right:15px;
+				}
+
+				.update {
+					float:left;
+					padding-left: 30px;
+					
+				}
+
+				.change {
+					color:#50619E;
+			        cursor:pointer;
+			        font-size: 16px;
+					line-height: 14px;
+					padding:3px 0px 0 120px;
+				}
+
+				.add {
+					padding:5px 0px 0 15px;
+				}
+
+				.add-change {
+					padding: 5px 0 0 90px;
+				}
+
 				.profile-row {
 					width: 100%;
 					float: left;
@@ -37,7 +66,7 @@ body {
 				}
 
 				.info-label {
-					font-size: 18px;
+					font-size: 20px;
 					line-height: 18px;
 					float: left;
 				}
@@ -89,33 +118,29 @@ body {
 				    border:1px solid #c5c3c2;
 				    background-color: $white;
 				   	    
-			    	.set-not {
-			    		border:1px solid #c5c3c2;
-				    	height:44px;
-				    	background-color:#ece7e4;
-				    	font-size:24px;
-				    	padding: 0 0 0 20px;
-				    }
+			    	.notification-row {
+			    		padding:10px 35px 47.5px;
 
-				    .ntfcation {
-				    	font-size:20px;
-				    	margin:12px 0 12px 50px;
-				    }
+					    .ntfcation {
+					    	font-size:20px;
+					    	float:left;
+					    }
 
-				    .time {
-				    	float:right;
-				    	font-size:18px;
-				    	opacity:0.7;
-				    	margin:-45px 90px;
-				    }
+					    .time {
+					    	float:right;
+					    	font-size:18px;
+					    	color:#B6B6B6;
+					    	
+					    }
 
-				    .view {
-				    	float:right;
-				    	font-size:18px;
-				    	color:#50619E;
-				    	margin:-35px 32px;
-				    	cursor:pointer;
-				    }
+					    .view {
+					    	float:right;
+					    	font-size:16px;
+					    	color:#50619E;
+					    	cursor:pointer;
+					    	padding:10px 0 0 20px;
+					    }
+					}    
 
 				    .divider {
 				    	clear: both;
@@ -127,7 +152,7 @@ body {
 				    	height:32px;
 				    	border:1px solid #c5c3c2;
 				    	background-color:#EEEEEE;
-				    	margin:15px 25px 34px 20px
+				    	margin:0px 25px 30px 20px;
 				    }
 				    
 				    .view-more {
