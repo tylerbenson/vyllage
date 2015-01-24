@@ -65,12 +65,16 @@
 		    		event.preventDefault();
 					event.stopPropagation();
 
-			    	document.getElementById('share-info').style.display =  "block" ;
-		    		document.getElementById('contact-info').style.display =  "none";
+					if (document.getElementById('share-info').style.display=="block" ) {
+						document.getElementById('share-info').style.display =  "none" ;
+		    			document.getElementById('contact-info').style.display =  "none";
+					} else {
+						document.getElementById('share-info').style.display =  "block" ;
+			    		document.getElementById('contact-info').style.display =  "none";
 
-		    		this.style.backgroundColor =  "#ece7e4";
-		    		contactBtn.style.backgroundColor =  "#ffffff";
-
+			    		this.style.backgroundColor =  "#ece7e4";
+			    		contactBtn.style.backgroundColor =  "#ffffff";
+					}
 			    } , true );
 			    
 			} else if (shareBtn.attachEvent) {  
@@ -79,11 +83,17 @@
 			   		event.preventDefault();
 					event.stopPropagation();
 
-			    	document.getElementById('share-info').style.display =  "block" ;
-		    		document.getElementById('contact-info').style.display =  "none";
+					if (document.getElementById('share-info').style.display=="block" ) {
+						document.getElementById('share-info').style.display =  "none" ;
+		    			document.getElementById('contact-info').style.display =  "none";
+					} else {
+						document.getElementById('share-info').style.display =  "block" ;
+			    		document.getElementById('contact-info').style.display =  "none";
 
-		    		this.style.backgroundColor =  "#ece7e4";
-		    		contactBtn.style.backgroundColor =  "#ffffff";
+			    		this.style.backgroundColor =  "#ece7e4";
+			    		contactBtn.style.backgroundColor =  "#ffffff";
+					}
+					
 			    } , false );
 			}
 
@@ -93,11 +103,17 @@
 			    	event.preventDefault();
 					event.stopPropagation();
 
-			    	document.getElementById('share-info').style.display =  "none" ;
-		    		document.getElementById('contact-info').style.display =  "block";
+					if (document.getElementById('contact-info').style.display=="block" ) {
 
-		    		this.style.backgroundColor =  "#ece7e4";
-		    		shareBtn.style.backgroundColor =  "#ffffff";
+						document.getElementById('share-info').style.display =  "none" ;
+		    			document.getElementById('contact-info').style.display =  "none";
+					} else {
+				    	document.getElementById('share-info').style.display =  "none" ;
+			    		document.getElementById('contact-info').style.display =  "block";
+
+			    		this.style.backgroundColor =  "#ece7e4";
+			    		shareBtn.style.backgroundColor =  "#ffffff";
+			    	}
 			    } , true );
 			    
 			} else if (contactBtn.attachEvent) {  

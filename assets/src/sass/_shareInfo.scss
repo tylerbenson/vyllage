@@ -34,15 +34,24 @@ article {
 			a {
 				color: #000;
 			}
+
+			.soc-link {
+				color: $share-info-txt-color;
+				padding-left: 13px;
+			}
 		}
 
 		.info-privacy {
 			margin-top: -22px;
-			margin-left: 46px;
+			margin-left: 26px;
 		}
 
 		.export, .location {
 			margin-right: -2px;
+
+			a {
+				color: $share-info-txt-color;
+			}
 		}
 
 		.privacy-select {
@@ -61,6 +70,11 @@ article {
 			margin-bottom: 0px;
 			margin-top: -4px;
 			margin-right: 13px;
+		}
+
+		.cell {
+			margin-top: 0px;
+			margin-bottom: 3px;
 		}
 
 		.edit-btn-cont {
