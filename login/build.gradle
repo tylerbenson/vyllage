@@ -10,8 +10,9 @@ jar {
 dependencies {
 	compile parent.javascriptProjects.findAll { it != project}
 
-	compile("org.flywaydb:flyway-core")
-	compile("org.hsqldb:hsqldb")
+//	compile("org.flywaydb:flyway-core")
+//	compile("org.hsqldb:hsqldb")
+	compile('com.h2database:h2')
 
     compile("org.springframework.boot:spring-boot-starter-security")
 //    compile("org.springframework.boot:spring-boot-starter-aop")
