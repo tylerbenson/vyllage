@@ -2,15 +2,38 @@
 @import 'mixins';
 
 body {
-   background: url('../../images/background.jpg');
+ background: url('../../images/background.jpg');
+
+     .search-area {
+        margin: 0 40px 0 0;
+        float: right;
+        
+        form {
+            margin: 0px;
+            float: right;
+
+            .search { 
+                margin:10px; 
+                padding-left: 52px;
+                width: 220px;
+                height: 45px;
+                border: 2px solid $cancel-btn-bord-color;
+                border-radius: 18px;
+                background: url('../../images/search.png') no-repeat 10px 6px; 
+                background-color: #FAFAFA;
+            }
+        }
+    }
 
     article {
-    	font-family:"pt-sans";
-    	height:715px;
-    	margin:50px 110px 0 210px;   
+        font-family:"pt-sans";
+        height:715px;
+        margin:50px 110px 0 210px;   
+        width: 640px;
 
         table {
             background-color: $white;
+            margin-top: -50px;
 
             th, td {
                 height:37px;
