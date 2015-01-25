@@ -36,7 +36,8 @@ public class AuthenticationSecurity extends
 		auth.userDetailsService(userDetailsService).passwordEncoder(
 				new BCryptPasswordEncoder());
 		// auth.jdbcAuthentication().dataSource(dataSource);
-		auth.inMemoryAuthentication().withUser("user").password("password")
+		auth.inMemoryAuthentication().withUser("email")
+				.password(new BCryptPasswordEncoder().encode("password"))
 				.roles("USER");
 	}
 
