@@ -46,3 +46,5 @@ build
 assets/.sass-cache
 assets/src/css/*
 !assets/src/css/min
+assets/src/javascript/.module-cache/
+
