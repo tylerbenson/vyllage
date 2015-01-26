@@ -5,10 +5,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
+@PropertySource("classpath:/login/application.properties")
 public class Application implements CommandLineRunner {
 
 	// @Autowired
