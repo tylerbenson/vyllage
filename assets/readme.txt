@@ -19,9 +19,6 @@ DEV ENVIROMENT SET UP INSTRUCTIONS
 	- npm install  - this will install all the required packages
 	- run: gulp    - START THE DEVELOPMENT ..
 
-3. for compiling react.js files
-   - jsx --watch src/javascript/scripts src/javascript
-
 Don't to this
 	- within the project:
 	- gulp: npm install gulp --save-dev

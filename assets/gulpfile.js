@@ -3,7 +3,8 @@ var gulp = require('gulp'),
 	prefix = require('gulp-autoprefixer'),
 	minifyCSS = require('gulp-minify-css'),
 	rename = require('gulp-rename'),
-	watch = require('gulp-watch');
+	watch = require('gulp-watch'),
+    react = require('gulp-react');
 
 gulp.task('styles', function() {
 
@@ -22,8 +23,14 @@ gulp.task('minify-css', ['styles'], function() {
         .pipe(gulp.dest('src/css/min'));
 });
 
+gulp.task('react', function () {
+    return gulp.src('src/jsx/account-menu.jsx')
+        .pipe(react())
+        .pipe(gulp.dest('src/javascript'));
+});
+
 gulp.task('watch', function() {
-    gulp.watch('src/sass/*.scss', ['styles', 'minify-css']);
+    gulp.watch(['src/sass/*.scss', 'src/jsx/*.jsx'], ['styles', 'minify-css', 'react']);
 });
 
 gulp.task('default', ['watch']);
