@@ -9,7 +9,9 @@
 
 	    if (shareBtn.addEventListener) {  
 
-		    shareBtn.addEventListener("click", function () {
+		    shareBtn.addEventListener("click", function (event) {
+		    	event.preventDefault();
+				event.stopPropagation();
 
 		    	document.getElementById('share-info').style.display =  "block" ;
 	    		document.getElementById('contact-info').style.display =  "none";
@@ -21,7 +23,10 @@
 		    
 		} else if (shareBtn.attachEvent) {  
 
-		   shareBtn.attachEvent("onclick", function () {
+		   shareBtn.attachEvent("onclick", function (event) {
+		   		event.preventDefault();
+				event.stopPropagation();
+
 		    	document.getElementById('share-info').style.display =  "block" ;
 	    		document.getElementById('contact-info').style.display =  "none";
 
@@ -32,7 +37,10 @@
 
 		if (contactBtn.addEventListener) {  
 
-		    contactBtn.addEventListener("click", function () {
+		    contactBtn.addEventListener("click", function (event) {
+		    	event.preventDefault();
+				event.stopPropagation();
+
 		    	document.getElementById('share-info').style.display =  "none" ;
 	    		document.getElementById('contact-info').style.display =  "block";
 
@@ -42,7 +50,10 @@
 		    
 		} else if (contactBtn.attachEvent) {  
 
-		   contactBtn.attachEvent("onclick", function () {
+		   contactBtn.attachEvent("onclick", function (event) {
+		   		event.preventDefault();
+				event.stopPropagation();
+
 		    	document.getElementById('share-info').style.display =  "none" ;
 	    		document.getElementById(' contact-info').style.display =  "block";
 
@@ -61,7 +72,9 @@
 
 			if (editButtons[i].addEventListener) {
 
-			    editButtons[i].addEventListener("click", function (){
+			    editButtons[i].addEventListener("click", function (event){
+			    	event.preventDefault();
+					event.stopPropagation();
 
 			    	document.getElementsByClassName('headline-container main')[0].style.display =  "none";
 			    	document.getElementsByClassName('headline-container edit')[0].style.display =  "block";
@@ -70,7 +83,9 @@
 
 			} else if (editButtons[i].attachEvent) { 
 
-				editButtons[i].attachEvent("onclick", function (){
+				editButtons[i].attachEvent("onclick", function (event){
+					event.preventDefault();
+					event.stopPropagation();
 					
 					document.getElementsByClassName('headline-container main').style.display =  "none";
 			    	document.getElementsByClassName('headline-container edit').style.display =  "block";
