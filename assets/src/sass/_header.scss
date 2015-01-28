@@ -43,3 +43,42 @@ header {
 		}
 	}
 }
+
+#menu-container {
+	position: absolute;
+	z-index: 10;
+	right: 105px;
+	top: 64px;
+	display: none;
+
+	#triangle-up {
+	    width: 0;
+	    height: 0;
+	    border-left: 15px solid transparent;
+	    border-right: 15px solid transparent;
+	    border-bottom: 10px solid $white;
+	    position: relative;
+		left: 80px;
+		top: 2px;
+	}
+
+	ul {
+		background-color: $white;
+		width: 170px;
+		list-style-type: none;
+		box-shadow: 1px 0px 2px 1px #ADABA8;
+		border: 1px solid #ADABA8;
+		font-family: 'pt-sans', sans-serif;
+			
+		li {
+			border-bottom: 1px solid #D3CFC9;
+			height: 30px;
+			margin-bottom: 0;
+			font-size: 18px;
+			line-height: 24px;
+			padding-top: 10px;
+			padding-left: 15px;
+			cursor: pointer;
+		}
+	}
+}

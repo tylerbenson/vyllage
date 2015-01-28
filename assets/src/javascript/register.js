@@ -10,7 +10,11 @@
 	    if (shareBtn.addEventListener) {  
 
 		    shareBtn.addEventListener("click", function (event) {
+<<<<<<< HEAD
 		    	event.preventDefault();
+=======
+	    		event.preventDefault();
+>>>>>>> master
 				event.stopPropagation();
 
 		    	document.getElementById('share-info').style.display =  "block" ;
