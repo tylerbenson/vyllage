@@ -13,8 +13,6 @@ DEV ENVIROMENT SET UP INSTRUCTIONS
 	- sass: http://sass-lang.com/install (gem install sass)
 	- gulp: npm install gulp -g
 
-	- install react: npm install -g react-tools
-
 2.  ithin the project run:
 	- npm install  - this will install all the required packages
 	- run: gulp    - START THE DEVELOPMENT ..

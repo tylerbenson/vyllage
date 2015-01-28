@@ -24,7 +24,7 @@ gulp.task('minify-css', ['styles'], function() {
 });
 
 gulp.task('react', function () {
-    return gulp.src('src/jsx/account-menu.jsx')
+    return gulp.src('src/jsx/*.jsx')
         .pipe(react())
         .pipe(gulp.dest('src/javascript'));
 });
