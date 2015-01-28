@@ -4,7 +4,10 @@ var gulp = require('gulp'),
 	minifyCSS = require('gulp-minify-css'),
 	rename = require('gulp-rename'),
 	watch = require('gulp-watch'),
-    react = require('gulp-react');
+    react = require('gulp-react'),
+    prettify = require('gulp-jsbeautifier'),
+    jshint = require('gulp-jshint'),
+    uglify = require('gulp-uglify');
 
 gulp.task('styles', function() {
 
@@ -23,14 +26,38 @@ gulp.task('minify-css', ['styles'], function() {
         .pipe(gulp.dest('src/css/min'));
 });
 
+
+gulp.task('prettify-html', function() {
+  return gulp.src('src/*.html')
+    .pipe(prettify({indentSize: 4}))
+    .pipe(gulp.dest('src/'))
+});
+
+// gulp.task('git-pre-js', function() {
+//   gulp.src('./src/foo.js', './src/bar.json')
+//     .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_ONLY'}))
+// });
+
+// gulp.task('format-js', function() {
+//    gulp.src('./src/foo.js', './src/bar.json')
+//      .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_AND_WRITE'}))
+//      .pipe(gulp.dest('./dist'))
+//  });
+
 gulp.task('react', function () {
     return gulp.src('src/jsx/*.jsx')
         .pipe(react())
         .pipe(gulp.dest('src/javascript'));
 });
 
+gulp.task('lint', function() {
+  return gulp.src('src/javascript/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'));
+});
+
 gulp.task('watch', function() {
-    gulp.watch(['src/sass/*.scss', 'src/jsx/*.jsx'], ['styles', 'minify-css', 'react']);
+    gulp.watch(['src/sass/*.scss', 'src/jsx/*.jsx', 'src/*.html', 'src/javascript/*.js'], ['styles', 'minify-css', 'react', 'prettify-html', 'lint']);
 });
 
 gulp.task('default', ['watch']);
