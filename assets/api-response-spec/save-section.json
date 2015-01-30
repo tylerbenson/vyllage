@@ -1,0 +1,41 @@
+[ "NOTE: Only send one section per api call.  No wrapping array needed. Enumerated to show different types",
+{
+	"type": "freeform",
+	"title": "career goal",
+	"sectionPosition": 1,
+	"goalDescription": "this is my goal statement."
+},
+{
+	"type": "experience",
+	"sectionPosition": 2,
+	"companyName": "DeVry",
+	"industry": "Education Group",
+	"companyDescription": "Blah Blah Blah.",
+	"jobTitle": "Manager, Local Accounts",
+	"startDate": "September 2010",
+	"endDate": "",
+	"isCurrent": true,
+	"location": "Portland, Oregon",
+	"jobDescription": "Blah Blah Blah",
+	"responsibilities": "I was in charge of..."
+},
+{
+	"type": "education",
+	"sectionPosition": 3,
+	"schoolName": "Keller Graduate School of Management",
+	"schoolDescription": "Blah Blah Blah.",
+	"degree": "Masters of Project Management",
+	"startDate": "September 2010",
+	"endDate": "",
+	"isCurrent": true,
+	"location": "Portland, Oregon",
+	"highlights": "GPA 3.84, "
+},
+{
+	"type": "freeform",
+	"title": "skills",
+	"sectionPosition": 4,
+	"description": "basket weaving, spear fishing, dominion"
+}
+]
+
