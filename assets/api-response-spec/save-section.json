@@ -3,7 +3,7 @@
 	"type": "freeform",
 	"title": "career goal",
 	"sectionPosition": 1,
-	"goalDescription": "this is my goal statement."
+	"description": "this is my goal statement."
 },
 {
 	"type": "experience",
@@ -26,10 +26,10 @@
 	"schoolDescription": "Blah Blah Blah.",
 	"degree": "Masters of Project Management",
 	"startDate": "September 2010",
-	"endDate": "",
-	"isCurrent": true,
+	"endDate": "September 2012",
+	"isCurrent": false,
 	"location": "Portland, Oregon",
-	"highlights": "GPA 3.84, "
+	"highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
 },
 {
 	"type": "freeform",
