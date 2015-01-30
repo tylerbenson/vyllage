@@ -1,656 +1,686 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<title>Home</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Home</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-	<link rel="stylesheet" href="css/libs/skeleton.css"/>
-	<link rel="stylesheet" href="css/libs/normalize.css"/>
-	<link rel="stylesheet" href="css/min/main.min.css"/>
+    <link rel="stylesheet" href="css/libs/skeleton.css" />
+    <link rel="stylesheet" href="css/libs/normalize.css" />
+    <link rel="stylesheet" href="css/min/main.min.css" />
 
-	<link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'/>
-	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'/>
+    <link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css' />
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
 
 </head>
+
 <body>
-<form action="" method="post">
-	<header>
-		<div class="container">
-			<div class="row">
-				<div class="twelve columns">
-					<div class="u-pull-left header-logo"></div>
-					<div class="u-pull-right header-profile">
-						<img class="u-pull-left header-profile-photo" alt="" src="images/profile-photo.png" width="30" height="30"/>
-						<span class="u-pull-left header-username">nathan</span>
-						<button class="u-pull-left ask-advice-btn">ask advice</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</header>
-
-	<section class="container">
-
-		<article class="profile" id="profile">
-			<div class="row">
-				<div class="four columns">
-					<img class="profile-photo" src="images/profile-photo.png" width="115" height="115"/>
-				</div>
-				<div class="four columns article-content profile">
-					<div>
-						<div class="headline-container main">
-							<div class="paragraph">
-								<p class="headline">Nathan Benson</p>
-							</div>
-							<div class="paragraph">
-								<p class="tagline">Technology Enthusiast analyzing, building, and expanding solutions</p>
-							</div>
-						</div>
-						<div class="headline-container edit">
-							<input type="text" class="headline" name="headlin" placeholder="name, surname"/>
-							<input type="text" class="tagline" name="tagline" placeholder="add a professional tagline"/>
-						</div>
-					</div>
-					<div class="edit">
-						<button class="save-btn">save</button>
-						<button class="cancel-btn">cancel</button>
-					</div>
-				</div>
-				<div class="four columns  btns-grid">
-					<div class="share-contact-btns-container">
-						<button class="u-pull-left share" id="shareInfoBtn">share</button>
-						<button class="u-pull-left contact" id ="contactInfoBtn">contact</button>
-					</div>
-				</div>
-			</div>
-		</article>
-
-		<article id="share-info" class="info-sections">
-			<div class="row info-blog-wrapper">
-				<div class="four columns">
-
-					<div class="private-link info-blog main-info">
-						<p class="info-title">private link</p>
-						<div class="edit-btn-cont"><button class="edit-btn"></button></div>
-						<p class="info-link">
-							<a href="https://vyllage.com/nathanbenson123">https://vyllage.com/nathanbenson123</a>
-						</p>
-						<p class="info-privacy">expires after:
-							<select class="privacy-select">
-								<option>30 days</option>
-							</select>
-						</p>
-					</div>
-
-					<div class="private-link info-blog edit">
-						<p class="info-title">private link</p>
-						<div class="info-link">
-							<input type="text" class="info-input-edit" name="email" placeholder="https://vyllage.com/nathanbenson123"/>
-						</div>
-						<p class="info-privacy-share">expires after:
-							<select class="privacy-select">
-								<option>30 days</option>
-							</select>
-						</p>
-					</div>
-
-				</div>
-				<div class="four columns">
-					<div class="public-link info-blog main-info">
-						<p class="info-title">public link</p>
-						<div class="edit-btn-cont"><button class="edit-btn"></button></div>
-						<p class="info-link">
-							<a href="https://vyllage.com/nathanbenson">https://vyllage.com/nathanbenson</a>
-						</p>
-						<p class="info-privacy">visible to:
-							<select class="privacy-select">
-								<option>no one</option>
-							</select>
-						</p>
-					</div>
-
-					<div class="public-link info-blog edit">
-						<p class="info-title">public link</p>
-						<div class="info-link">
-							<input type="text" class="info-input-edit" name="email" placeholder="https://vyllage.com/nathanbenson123"/>
-						</div>
-						<p class="info-privacy-public">visible to:
-							<select class="privacy-select">
-								<option>no one</option>
-							</select>
-						</p>
-					</div>
-
-				</div>
-				<div class="four columns">
-					<div class="export info-blog">
-						<p class="info-title">export</p>
-						<div class="exp-buttons">
-							<div class="exp-button">word</div>
-							<div class="exp-button">PDF</div>
-							<div class="exp-button">print</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</article>
-
-		<article id="contact-info" class="info-sections">
-			<div class="row info-blog-wrapper" >
-				<div class="four columns">
-
-					<div class="social info-blog">
-						<p class="info-title">social</p>
-						<div class="edit-btn-cont"><button class="edit-btn"></button></div>
-						<p class="address">twitter: @nben888</p>
-						<p class="info-link"><a href="www.vyllage.com/nathanbenson"  class="soc-link">www.vyllage.com/nathanbenson</a></p>
-						<p class="info-privacy">visible to:
-							<select class="privacy-select">
-								<option>no one</option>
-							</select>
-						</p>
-					</div>
-
-					<div class="social info-blog edit">
-						<p class="info-title-reg">social</p>
-						<div class="icon-wrapper-reg">
-							<img class="icon add" src="images/add.png" width="25" height="25"/>
+    <form action="" method="post">
+        <header>
+            <div class="container">
+                <div class="row">
+                    <div class="twelve columns">
+                        <div class="u-pull-left header-logo"></div>
+                        <div class="u-pull-right header-profile">
+                            <img class="u-pull-left header-profile-photo" alt="" src="images/profile-photo.png" width="30" height="30" />
+                            <span class="u-pull-left header-username">nathan</span>
+                            <button class="u-pull-left ask-advice-btn">ask advice</button>
                         </div>
-						<select class="privacy-select">
-							<option>website</option>
-						</select>
-						<select class="privacy-select">
-							<option>add a site</option>
-						</select>
-					</div>
-				</div>
-				<div class="four columns">
+                    </div>
+                </div>
+            </div>
+        </header>
 
-					<div class="contact info-blog">
-						<p class="info-title">contact</p>
-						<div class="edit-btn-cont"><button class="edit-btn"></button></div>
-						<p class="address">email: <a href="nben888@gmail.com">nben888@gmail.com</a> </p>
-						<p class="address cell">cell: 971.678.1565</p>
-						<p class="info-privacy">visible to:
-							<select class="privacy-select">
-								<option>no one</option>
-							</select>
-						</p>
-					</div>
+        <section class="container">
 
-					<div class="contact info-blog edit">
-						<p class="info-title">contact</p>
-						<div class="">
-							<input type="text" class="title-reg" name="email" placeholder="nathan@vyllage.com"/>
-							<input type="text" class="title-reg" name="phone" placeholder="phone number"/>
-						</div>
-					</div>
+            <article class="profile" id="profile">
+                <div class="row">
+                    <div class="four columns">
+                        <img class="profile-photo" src="images/profile-photo.png" width="115" height="115" />
+                    </div>
+                    <div class="four columns article-content profile">
+                        <div>
+                            <div class="headline-container main" id="headline-container-main">
 
-				</div>
-				<div class="four columns">
-
-					<div class="location info-blog">
-						<p class="info-title">location</p>
-						<div class="edit-btn-cont"><button class="edit-btn"></button></div>
-						<p class="address">1906 NE 151st Circle</p>
-						<p class="address cell">Vancouver, WA 98686</p>
-						<p class="info-privacy">visible to:
-							<select class="privacy-select">
-								<option>no one</option>
-							</select>
-						</p>
-					</div>
-
-					<div class="location info-blog edit">
-						<p class="info-title">location</p>
-						<div class="">
-							<input type="text" class="title-reg" name="address" placeholder="street address"/>
-							<input type="text" class="industry-reg" name="zip" placeholder="zip code"/>
-							<input type="text" class="start-date-reg" name="state" placeholder="state"/>
-							<div class="icon-wrapper">
-								<img class="icon edit-reg" src="images/edit.png" width="25" height="25"/>
                             </div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</article>
+                            <div class="headline-container edit">
+                                <input type="text" class="headline" name="headlin" placeholder="name, surname" />
+                                <input type="text" class="tagline" name="tagline" placeholder="add a professional tagline" />
+                            </div>
+                        </div>
+                        <div class="edit">
+                            <button class="save-btn">save</button>
+                            <button class="cancel-btn">cancel</button>
+                        </div>
+                    </div>
+                    <div class="four columns  btns-grid">
+                        <div class="share-contact-btns-container">
+                            <button class="u-pull-left share" id="shareInfoBtn">share</button>
+                            <button class="u-pull-left contact" id="contactInfoBtn">contact</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
 
-		<article class="career-goal">
-			<div class="row">
-				<div class="twelve columns">
+            <article id="share-info" class="info-sections">
+                <div class="row info-blog-wrapper">
+                    <div class="four columns">
 
-					<div><button class="article-btn"> career goal </button></div>
+                        <div class="private-link info-blog main-info">
+                            <p class="info-title">private link</p>
+                            <div class="edit-btn-cont">
+                                <button class="edit-btn"></button>
+                            </div>
+                            <p class="info-link">
+                                <a href="https://vyllage.com/nathanbenson123">https://vyllage.com/nathanbenson123</a>
+                            </p>
+                            <p class="info-privacy">expires after:
+                                <select class="privacy-select">
+                                    <option>30 days</option>
+                                </select>
+                            </p>
+                        </div>
 
-					<div class="article-content career-goal">
-						<div>
-							<div class="goal main">
-								<div class="paragraph">
-									<p class="goal-description">
-										I am a fervid promoter of creating solutions. The rush of working with a team to launch a project that solves critical
-										problems and intersects with technology is extremely satisfying. I have a successful track record, in leading projects,
-										growing new markets, and expanding existing opportunities. I’m an advocate for agile methodologies beyond the reach
-										of traditional project management settings, but into building and forming teams as well. I have experience in starting
-										businesses, helping others start theirs, and successfully building new territories and opportunities.
-									</p>
-								</div>
+                        <div class="private-link info-blog edit">
+                            <p class="info-title">private link</p>
+                            <div class="info-link">
+                                <input type="text" class="info-input-edit" name="email" placeholder="https://vyllage.com/nathanbenson123" />
+                            </div>
+                            <p class="info-privacy-share">expires after:
+                                <select class="privacy-select">
+                                    <option>30 days</option>
+                                </select>
+                            </p>
+                        </div>
 
-							</div>
-							<div class="goal edit">
-								<textarea class="goal-description" name="description" placeholder="tell us about your career goal..." cols="40" rows="6">I am a fervid promoter of creating solutions. The rush of working with a team to launch a project that solves critical problems and intersects with technology is extremely satisfying. I have a successful track record, in leading projects, growing new markets, and expanding existing opportunities. I’m an advocate for agile methodologies beyond the reach of traditional project management settings, but into building and forming teams as well. I have experience in starting businesses, helping others start theirs, and successfully building new territories and opportunities.</textarea>
-							</div>
-						</div>
-						<div class="edit">
-							<button class="save-btn">save</button>
-							<button class="cancel-btn">cancel</button>
-						</div>
-					</div>
-					<div class="article-controll">
-						<div class="article-controll-btns">
-							<div class="u-pull-left">
-								<a href="" class="suggestions">suggestions</a>
-								<span class="suggestions-count count">2</span>
-							</div>
-							<div class=" u-pull-left">
-								<a href="" class="comments">comments</a>
-								<span class="suggestions-count count">3</span>
-							</div>
-						</div>
-					</div>
+                    </div>
+                    <div class="four columns">
+                        <div class="public-link info-blog main-info">
+                            <p class="info-title">public link</p>
+                            <div class="edit-btn-cont">
+                                <button class="edit-btn"></button>
+                            </div>
+                            <p class="info-link">
+                                <a href="https://vyllage.com/nathanbenson">https://vyllage.com/nathanbenson</a>
+                            </p>
+                            <p class="info-privacy">visible to:
+                                <select class="privacy-select">
+                                    <option>no one</option>
+                                </select>
+                            </p>
+                        </div>
 
-					<div class="comments-content">
+                        <div class="public-link info-blog edit">
+                            <p class="info-title">public link</p>
+                            <div class="info-link">
+                                <input type="text" class="info-input-edit" name="email" placeholder="https://vyllage.com/nathanbenson123" />
+                            </div>
+                            <p class="info-privacy-public">visible to:
+                                <select class="privacy-select">
+                                    <option>no one</option>
+                                </select>
+                            </p>
+                        </div>
 
-						<div class="comment-list-block">
-							<div class="comment-person-info">
-								<img class="u-pull-left" src="images/comment-person.png" width="40" height="40"/>
-								<p class="u-pull-left name">Richard Zielke</p>
-								<p class="u-pull-left date">2 hrs ago</p>
-							</div>
-							<div class="comment-body">
-								<p class="">
-									I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
-								</p>
-							</div>
-							<div class="comment-ctrl">
-								<div class="u-pull-right">
-									<ul class="comment-ctrl-list">
-										<li class="comment-ctrl-btn"><a href="#">thank</a></li>
-										<li class="comment-ctrl-btn"><a href="#">hide</a></li>
-										<li class="comment-ctrl-btn"><a href="#">reply</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
+                    </div>
+                    <div class="four columns">
+                        <div class="export info-blog">
+                            <p class="info-title">export</p>
+                            <div class="exp-buttons">
+                                <div class="exp-button">word</div>
+                                <div class="exp-button">PDF</div>
+                                <div class="exp-button">print</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
 
-						<div class="comment-divider"></div>
-					</div>
+            <article id="contact-info" class="info-sections">
+                <div class="row info-blog-wrapper">
+                    <div class="four columns">
 
-				</div>
-			</div>
-		</article>
+                        <div class="social info-blog">
+                            <p class="info-title">social</p>
+                            <div class="edit-btn-cont">
+                                <button class="edit-btn"></button>
+                            </div>
+                            <p class="address">twitter: @nben888</p>
+                            <p class="info-link"><a href="www.vyllage.com/nathanbenson" class="soc-link">www.vyllage.com/nathanbenson</a>
+                            </p>
+                            <p class="info-privacy">visible to:
+                                <select class="privacy-select">
+                                    <option>no one</option>
+                                </select>
+                            </p>
+                        </div>
 
-		<article class="experience">
-			<div class="row">
-				<div class="twelve columns">
+                        <div class="social info-blog edit">
+                            <p class="info-title-reg">social</p>
+                            <div class="icon-wrapper-reg">
+                                <img class="icon add" src="images/add.png" width="25" height="25" />
+                            </div>
+                            <select class="privacy-select">
+                                <option>website</option>
+                            </select>
+                            <select class="privacy-select">
+                                <option>add a site</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="four columns">
 
-					<div><button class="article-btn"> experience </button></div>
+                        <div class="contact info-blog">
+                            <p class="info-title">contact</p>
+                            <div class="edit-btn-cont">
+                                <button class="edit-btn"></button>
+                            </div>
+                            <p class="address">email: <a href="nben888@gmail.com">nben888@gmail.com</a> </p>
+                            <p class="address cell">cell: 971.678.1565</p>
+                            <p class="info-privacy">visible to:
+                                <select class="privacy-select">
+                                    <option>no one</option>
+                                </select>
+                            </p>
+                        </div>
 
-					<div class="article-content experience">
-						<div>
-							<div class="company main">
-								<p class="company-name">DeVry Education Group</p>
-							</div>
-							<div class="company edit">
-								<input type="text" class="company-name" name="company-name" value="DeVry"/>
-								<input type="text" class="industry" name="industry" value="Education Group"/>
-							</div>
-						</div>
-						<div>
-							<div class="company main">
-								<p class="description">
-									As a fortune 1000 company, DeVry Education Group is and a leadderser in technology and e-learning solutions.
-								</p>
-							</div>
-							<div class="company edit">
-								<textarea class="description" name="description" cols="20" rows="3">As a fortune 1000 company, DeVry Education Group is and a leadderser in technology and e-learning solutions.</textarea>
-							</div>
-						</div>
-						<div>
-							<div class="job main">
-								<p class="title">
-									Manager, Local Accounts
-								</p>
-								<p class="start-date">
-									September 2010 -
-								</p>
-								<p class="end-date">
-									current
-								</p>
-								<p class="location">
-									Portland, Oregon
-								</p>
-							</div>
-							<div class="job edit">
-								<input type="text" class="title" name="job-title" value="Manager, Local Accounts"/>
-								<input type="text" class="start-date" name="start-date" value="September 2010 -"/>
-								<input type="text" class="end-date" name="end-date" value="current"/>
-								<input type="text" class="location" name="location" value="Portland, Oregon"/>
-							</div>
-						</div>
-						<div>
-							<div class="job main">
-								<div class="paragraph">
-									<p class="description">
-										In opening the Oregon &amp; SW Washington territory, I was tasked with being the chief relationship builder at a local
-										level, as well as project lead, to deploy DeVry’s corporate e-learning solutions for regional leaders and Fortune 1000
-										companies.
-									</p>
-								</div>
-							</div>
-							<div class="job edit">
-								<textarea class="description" name="description"  cols="40" rows="6" >In opening the Oregon &amp; SW Washington territory, I was tasked with being the chief relationship builder at a local level, as well as project lead, to deploy DeVry’s corporate e-learning solutions for regional leaders and Fortune 1000 companies.</textarea>
-							</div>
-						</div>
-						<div>
-							<div class="job main">
-								<ul class="responsibilities">
-									<li>
-										Responsible for project implementation through working with C-level decision makers to diagnose employee
-										development needs through the utilization of a needs assessment, and coordinated tailored e-learning solutions
-									</li>
-									<li>
-										Regularly conducted training workshops on topics such as time management and goal settings for managers and
-										employees, for small and large audiences.
-									</li>
-									<li>
-										Successfully opened the new role, and built it to a revenue generating position, cited as a primary channel for
-										revenue growth for the Portland metro market.
-									</li>
-								</ul>
-							</div>
-							<div class="job edit">
-								<textarea class="responsibilities"  cols="40" rows="6" >Responsible for project implementation through working with C-level decision makers to diagnose employee development needs through the utilization of a needs assessment, and coordinated tailored e-learning solutions.Regularly conducted training workshops on topics such as time management and goal settings for managers and employees, for small and large audiences.Successfully opened the new role, and built it to a revenue generating position, cited as a primary channel for revenue growth for the Portland metro market.</textarea>
-							</div>
-						</div>
-						<div class="edit">
-							<button class="save-btn">save</button>
-							<button class="cancel-btn">cancel</button>
-						</div>
-					</div>
-					<div class="article-controll">
-						<div class="article-controll-btns">
-							<div class="u-pull-left">
-								<a href="" class="suggestions">suggestions</a>
-								<span class="suggestions-count count">2</span>
-							</div>
-							<div class="u-pull-left">
-								<a href="" class="comments">comments</a>
-								<span class="suggestions-count count">3</span>
-							</div>
-						</div>
-					</div>
+                        <div class="contact info-blog edit">
+                            <p class="info-title">contact</p>
+                            <div class="">
+                                <input type="text" class="title-reg" name="email" placeholder="nathan@vyllage.com" />
+                                <input type="text" class="title-reg" name="phone" placeholder="phone number" />
+                            </div>
+                        </div>
 
-					<div class="comments-content">
+                    </div>
+                    <div class="four columns">
 
-						<div class="comment-list-block">
-							<div class="comment-person-info">
-								<img class="u-pull-left" src="images/comment-person.png" width="40" height="40"/>
-								<p class="u-pull-left name">Richard Zielke</p>
-								<p class="u-pull-left date">2 hrs ago</p>
-							</div>
-							<div class="comment-body">
-								<p class="">
-									I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
-								</p>
-							</div>
-							<div class="comment-ctrl">
-								<div class="u-pull-right">
-									<ul class="comment-ctrl-list">
-										<li class="comment-ctrl-btn"><a href="#">thank</a></li>
-										<li class="comment-ctrl-btn"><a href="#">hide</a></li>
-										<li class="comment-ctrl-btn"><a href="#">reply</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
+                        <div class="location info-blog">
+                            <p class="info-title">location</p>
+                            <div class="edit-btn-cont">
+                                <button class="edit-btn"></button>
+                            </div>
+                            <p class="address">1906 NE 151st Circle</p>
+                            <p class="address cell">Vancouver, WA 98686</p>
+                            <p class="info-privacy">visible to:
+                                <select class="privacy-select">
+                                    <option>no one</option>
+                                </select>
+                            </p>
+                        </div>
 
-						<div class="comment-divider"></div>
-					</div>
+                        <div class="location info-blog edit">
+                            <p class="info-title">location</p>
+                            <div class="">
+                                <input type="text" class="title-reg" name="address" placeholder="street address" />
+                                <input type="text" class="industry-reg" name="zip" placeholder="zip code" />
+                                <input type="text" class="start-date-reg" name="state" placeholder="state" />
+                                <div class="icon-wrapper">
+                                    <img class="icon edit-reg" src="images/edit.png" width="25" height="25" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
 
-					<div class="article-divider"></div>
+            <article class="career-goal">
+                <div class="row">
+                    <div class="twelve columns">
 
-					<div class="article-content experience">
-						<div>
-							<div class="company main">
-								<p class="company-name">Marianasliving.com</p>
-								<p class="industry"> Education Group</p>
-							</div>
-							<div class="company edit">
-								<input type="text" class="company-name" name="company-name" value="Marianasliving.com"/>
-								<input type="text" class="industry" name="industry" value="Education Group"/>
-							</div>
-						</div>
-						<div>
-							<div class="company main">
-								<p class="description">
-									As a firm focused on real estate and investment consulting helping business manage the process of establishing and identifying investment opportunities to take advantage of the lowest US Tax Jurisdiction.
-								</p>
-							</div>
-							<div class="company edit">
-								<textarea class="description" name="description"  cols="40" rows="6">As a firm focused on real estate and investment consulting helping business manage the process of establishing and identifying investment opportunities to take advantage of the lowest US Tax Jurisdiction.</textarea>
-							</div>
-						</div>
-						<div>
-							<div class="job main">
-								<p class="title">
-									Partner
-								</p>
-								<p class="start-date">
-									January 2008-
-								</p>
-								<p class="end-date">
-									August 2010
-								</p>
-								<p class="location">
-									Saipan, MP
-								</p>
-							</div>
-							<div class="job edit">
-								<input type="text" class="title" name="job-title" value="Partner"/>
-								<input type="text" class="start-date" name="start-date" value="January 2008-"/>
-								<input type="text" class="end-date" name="end-date" value="August 2010"/>
-								<input type="text" class="location" name="location" value="Saipan, MP"/>
-							</div>
-						</div>
-						<div>
-							<div class="job main">
-								<div class="paragraph">
-									<p class="description">
-										As on of the founding partners, I was responsible for managing 3 full-time and 3 part-time associates, and consulting for clients on projects in the $150,000+ range for establishing business activities in the CNMI.
-									</p>
-								</div>
-							</div>
-							<div class="job edit">
-								<textarea class="description" name="description" cols="40" rows="6" >As on of the founding partners, I was responsible for managing 3 full-time and 3 part-time associates, and consulting for clients on projects in the $150,000+ range for establishing business activities in the CNMI.</textarea>
-							</div>
-						</div>
-						<div>
-							<div class="job main">
-								<ul class="responsibilities">
-									<li>
-										Consulted as the main on the ground project lead for a two-year project $4.5 million called Xanadu Club, that represented a group of 30 high net worth individuals from China establishing legal tax presence in the CNMI, while establishing a hospitality firm.
-									</li>
-									<li>
-										Consulted for 27 investors from China, Russia, and Japan on business startups in the CNMI Worked directly the Department of Commerce to promote material to market Saipan as a low-tax location for U.S.Citizens and corporations.
-									</li>
-									<li>
-										Invited by the Secretary of Commerce to participate in business climate improvement discussions with government officials.
-									</li>
-								</ul>
-							</div>
-							<div class="job edit">
-								<textarea class="responsibilities" cols="40" rows="6" > Consulted as the main on the ground project lead for a two-year project $4.5 million called Xanadu Club, that represented a group of 30 high net worth individuals from China establishing legal tax presence in the CNMI, while establishing a hospitality firm. Consulted for 27 investors from China, Russia, and Japan on business startups in the CNMI Worked directly the Department of Commerce to promote material to market Saipan as a low-tax location for U.S.Citizens and corporations Invited by the Secretary of Commerce to participate in business climate improvement discussions with government officials </textarea>
-							</div>
-						</div>
-						<div class="edit">
-							<button class="save-btn">save</button>
-							<button class="cancel-btn">cancel</button>
-						</div>
-					</div>
-					<div class="article-controll">
-						<div class="article-controll-btns">
-							<div class="u-pull-left">
-								<a href="" class="suggestions">suggestions</a>
-								<span class="suggestions-count count">2</span>
-							</div>
-							<div class="u-pull-left">
-								<a href="" class="comments">comments</a>
-								<span class="suggestions-count count">3</span>
-							</div>
-						</div>
-					</div>
+                        <div>
+                            <button class="article-btn"> career goal </button>
+                        </div>
 
-					<div class="comments-content">
+                        <div class="article-content career-goal">
+                            <div>
+                                <div class="goal main">
+                                    <div class="paragraph">
+                                        <p class="goal-description">
+                                            I am a fervid promoter of creating solutions. The rush of working with a team to launch a project that solves critical problems and intersects with technology is extremely satisfying. I have a successful track record, in leading projects, growing new
+                                            markets, and expanding existing opportunities. I’m an advocate for agile methodologies beyond the reach of traditional project management settings, but into building and forming teams as well. I have experience
+                                            in starting businesses, helping others start theirs, and successfully building new territories and opportunities.
+                                        </p>
+                                    </div>
 
-						<div class="comment-list-block">
-							<div class="comment-person-info">
-								<img class="u-pull-left" src="images/comment-person.png" width="40" height="40"/>
-								<p class="u-pull-left name">Richard Zielke</p>
-								<p class="u-pull-left date">2 hrs ago</p>
-							</div>
-							<div class="comment-body">
-								<p class="">
-									I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
-								</p>
-							</div>
-							<div class="comment-ctrl">
-								<div class="u-pull-right">
-									<ul class="comment-ctrl-list">
-										<li class="comment-ctrl-btn"><a href="#">thank</a></li>
-										<li class="comment-ctrl-btn"><a href="#">hide</a></li>
-										<li class="comment-ctrl-btn"><a href="#">reply</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
+                                </div>
+                                <div class="goal edit">
+                                    <textarea class="goal-description" name="description" placeholder="tell us about your career goal..." cols="40" rows="6">I am a fervid promoter of creating solutions. The rush of working with a team to launch a project that solves critical problems and intersects with technology is extremely satisfying. I have a successful track record,
+                                        in leading projects, growing new markets, and expanding existing opportunities. I’m an advocate for agile methodologies beyond the reach of traditional project management settings, but into building and forming
+                                        teams as well. I have experience in starting businesses, helping others start theirs, and successfully building new territories and opportunities.</textarea>
+                                </div>
+                            </div>
+                            <div class="edit">
+                                <button class="save-btn">save</button>
+                                <button class="cancel-btn">cancel</button>
+                            </div>
+                        </div>
+                        <div class="article-controll">
+                            <div class="article-controll-btns">
+                                <div class="u-pull-left">
+                                    <a href="" class="suggestions">suggestions</a>
+                                    <span class="suggestions-count count">2</span>
+                                </div>
+                                <div class=" u-pull-left">
+                                    <a href="" class="comments">comments</a>
+                                    <span class="suggestions-count count">3</span>
+                                </div>
+                            </div>
+                        </div>
 
-						<div class="comment-divider"></div>
-					</div>
-				</div>
-			</div>
-		</article>
+                        <div class="comments-content">
 
-		<article class="education">
-			<div class="row">
-				<div class="twelve columns">
-					<div><button class="article-btn"> education </button></div>
-					<div class="article-content education">
-						<div>
-							<div class="education main">
-								<p class="establishment">
-									Keller Graduate School of Management
-								</p>
-							</div>
-							<div class="education edit">
-								<input type="text" class="description_edu" name="job-title" value="Keller Graduate School of Management"/>
-							</div>
-						</div>
-						<div>
-							<div class="education main">
-								<div class="paragraph">
-									<p class="description">
-										The graduate school for Chicago-based DeVry University, founded in 1931, now a leader in technology &amp;
-										professional education for working professionals.
-									</p>
-								</div>
-							</div>
-							<div class="education edit">
-								<textarea class="description" name="description">The graduate school for Chicago-based DeVry University, founded in 1931, now a leader in technology &amp; professional education for working professionals.</textarea>
-							</div>
-						</div>
-						<div>
-							<div class="education main">
-								<p class="title">
-									Masters of Project Management
-								</p>
-								<p class="start-date">
-									2012 -
-								</p>
-								<p class="end-date">
-									2013
-								</p>
-								<p class="location">
-									Portland, Oregon
-								</p>
-							</div>
-							<div class="education edit">
-								<input type="text" class="title" name="title" value="Masters of Project Management"/>
-								<input type="text" class="start-date" name="start-date" value="2012-"/>
-								<input type="text" class="end-date" name="end-date" value="2013"/>
-								<input type="text" class="location" name="location" value="Portland, OR"/>
-							</div>
-						</div>
-						<div>
-							<div class="education main">
-								<p class="gpa"> GPA 3.84 </p>
-							</div>
-							<div class="education edit">
-								<input type="text" class="gpa" name="gpa" value="GPA 3.84"/>
-							</div>
-						</div>
-						<div class="edit">
-							<button class="save-btn">save</button>
-							<button class="cancel-btn">cancel</button>
-						</div>
-					</div>
-					<div class="article-controll">
-						<div class="article-controll-btns">
-							<div class="u-pull-left">
-								<a href="" class="suggestions">suggestions</a>
-								<span class="suggestions-count count">2</span>
-							</div>
-							<div class="u-pull-left">
-								<a href="" class="comments">comments</a>
-								<span class="suggestions-count count">3</span>
-							</div>
-						</div>
-					</div>
+                            <div class="comment-list-block">
+                                <div class="comment-person-info">
+                                    <img class="u-pull-left" src="images/comment-person.png" width="40" height="40" />
+                                    <p class="u-pull-left name">Richard Zielke</p>
+                                    <p class="u-pull-left date">2 hrs ago</p>
+                                </div>
+                                <div class="comment-body">
+                                    <p class="">
+                                        I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
+                                    </p>
+                                </div>
+                                <div class="comment-ctrl">
+                                    <div class="u-pull-right">
+                                        <ul class="comment-ctrl-list">
+                                            <li class="comment-ctrl-btn"><a href="#">thank</a>
+                                            </li>
+                                            <li class="comment-ctrl-btn"><a href="#">hide</a>
+                                            </li>
+                                            <li class="comment-ctrl-btn"><a href="#">reply</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="comment-divider"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </article>
+
+            <article class="experience">
+                <div class="row">
+                    <div class="twelve columns">
+
+                        <div>
+                            <button class="article-btn"> experience </button>
+                        </div>
+
+                        <div class="article-content experience">
+                            <div>
+                                <div class="company main">
+                                    <p class="company-name">DeVry Education Group</p>
+                                </div>
+                                <div class="company edit">
+                                    <input type="text" class="company-name" name="company-name" value="DeVry" />
+                                    <input type="text" class="industry" name="industry" value="Education Group" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="company main">
+                                    <p class="description">
+                                        As a fortune 1000 company, DeVry Education Group is and a leadderser in technology and e-learning solutions.
+                                    </p>
+                                </div>
+                                <div class="company edit">
+                                    <textarea class="description" name="description" cols="20" rows="3">As a fortune 1000 company, DeVry Education Group is and a leadderser in technology and e-learning solutions.</textarea>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="job main">
+                                    <p class="title">
+                                        Manager, Local Accounts
+                                    </p>
+                                    <p class="start-date">
+                                        September 2010 -
+                                    </p>
+                                    <p class="end-date">
+                                        current
+                                    </p>
+                                    <p class="location">
+                                        Portland, Oregon
+                                    </p>
+                                </div>
+                                <div class="job edit">
+                                    <input type="text" class="title" name="job-title" value="Manager, Local Accounts" />
+                                    <input type="text" class="start-date" name="start-date" value="September 2010 -" />
+                                    <input type="text" class="end-date" name="end-date" value="current" />
+                                    <input type="text" class="location" name="location" value="Portland, Oregon" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="job main">
+                                    <div class="paragraph">
+                                        <p class="description">
+                                            In opening the Oregon &amp; SW Washington territory, I was tasked with being the chief relationship builder at a local level, as well as project lead, to deploy DeVry’s corporate e-learning solutions for regional leaders and Fortune 1000 companies.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="job edit">
+                                    <textarea class="description" name="description" cols="40" rows="6">In opening the Oregon &amp; SW Washington territory, I was tasked with being the chief relationship builder at a local level, as well as project lead, to deploy DeVry’s corporate e-learning solutions for regional leaders
+                                        and Fortune 1000 companies.</textarea>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="job main">
+                                    <ul class="responsibilities">
+                                        <li>
+                                            Responsible for project implementation through working with C-level decision makers to diagnose employee development needs through the utilization of a needs assessment, and coordinated tailored e-learning solutions
+                                        </li>
+                                        <li>
+                                            Regularly conducted training workshops on topics such as time management and goal settings for managers and employees, for small and large audiences.
+                                        </li>
+                                        <li>
+                                            Successfully opened the new role, and built it to a revenue generating position, cited as a primary channel for revenue growth for the Portland metro market.
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="job edit">
+                                    <textarea class="responsibilities" cols="40" rows="6">Responsible for project implementation through working with C-level decision makers to diagnose employee development needs through the utilization of a needs assessment, and coordinated tailored e-learning solutions.Regularly
+                                        conducted training workshops on topics such as time management and goal settings for managers and employees, for small and large audiences.Successfully opened the new role, and built it to a revenue generating position,
+                                        cited as a primary channel for revenue growth for the Portland metro market.</textarea>
+                                </div>
+                            </div>
+                            <div class="edit">
+                                <button class="save-btn">save</button>
+                                <button class="cancel-btn">cancel</button>
+                            </div>
+                        </div>
+                        <div class="article-controll">
+                            <div class="article-controll-btns">
+                                <div class="u-pull-left">
+                                    <a href="" class="suggestions">suggestions</a>
+                                    <span class="suggestions-count count">2</span>
+                                </div>
+                                <div class="u-pull-left">
+                                    <a href="" class="comments">comments</a>
+                                    <span class="suggestions-count count">3</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comments-content">
+
+                            <div class="comment-list-block">
+                                <div class="comment-person-info">
+                                    <img class="u-pull-left" src="images/comment-person.png" width="40" height="40" />
+                                    <p class="u-pull-left name">Richard Zielke</p>
+                                    <p class="u-pull-left date">2 hrs ago</p>
+                                </div>
+                                <div class="comment-body">
+                                    <p class="">
+                                        I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
+                                    </p>
+                                </div>
+                                <div class="comment-ctrl">
+                                    <div class="u-pull-right">
+                                        <ul class="comment-ctrl-list">
+                                            <li class="comment-ctrl-btn"><a href="#">thank</a>
+                                            </li>
+                                            <li class="comment-ctrl-btn"><a href="#">hide</a>
+                                            </li>
+                                            <li class="comment-ctrl-btn"><a href="#">reply</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="comment-divider"></div>
+                        </div>
+
+                        <div class="article-divider"></div>
+
+                        <div class="article-content experience">
+                            <div>
+                                <div class="company main">
+                                    <p class="company-name">Marianasliving.com</p>
+                                    <p class="industry"> Education Group</p>
+                                </div>
+                                <div class="company edit">
+                                    <input type="text" class="company-name" name="company-name" value="Marianasliving.com" />
+                                    <input type="text" class="industry" name="industry" value="Education Group" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="company main">
+                                    <p class="description">
+                                        As a firm focused on real estate and investment consulting helping business manage the process of establishing and identifying investment opportunities to take advantage of the lowest US Tax Jurisdiction.
+                                    </p>
+                                </div>
+                                <div class="company edit">
+                                    <textarea class="description" name="description" cols="40" rows="6">As a firm focused on real estate and investment consulting helping business manage the process of establishing and identifying investment opportunities to take advantage of the lowest US Tax Jurisdiction.</textarea>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="job main">
+                                    <p class="title">
+                                        Partner
+                                    </p>
+                                    <p class="start-date">
+                                        January 2008-
+                                    </p>
+                                    <p class="end-date">
+                                        August 2010
+                                    </p>
+                                    <p class="location">
+                                        Saipan, MP
+                                    </p>
+                                </div>
+                                <div class="job edit">
+                                    <input type="text" class="title" name="job-title" value="Partner" />
+                                    <input type="text" class="start-date" name="start-date" value="January 2008-" />
+                                    <input type="text" class="end-date" name="end-date" value="August 2010" />
+                                    <input type="text" class="location" name="location" value="Saipan, MP" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="job main">
+                                    <div class="paragraph">
+                                        <p class="description">
+                                            As on of the founding partners, I was responsible for managing 3 full-time and 3 part-time associates, and consulting for clients on projects in the $150,000+ range for establishing business activities in the CNMI.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="job edit">
+                                    <textarea class="description" name="description" cols="40" rows="6">As on of the founding partners, I was responsible for managing 3 full-time and 3 part-time associates, and consulting for clients on projects in the $150,000+ range for establishing business activities in the CNMI.</textarea>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="job main">
+                                    <ul class="responsibilities">
+                                        <li>
+                                            Consulted as the main on the ground project lead for a two-year project $4.5 million called Xanadu Club, that represented a group of 30 high net worth individuals from China establishing legal tax presence in the CNMI, while establishing a hospitality
+                                            firm.
+                                        </li>
+                                        <li>
+                                            Consulted for 27 investors from China, Russia, and Japan on business startups in the CNMI Worked directly the Department of Commerce to promote material to market Saipan as a low-tax location for U.S.Citizens and corporations.
+                                        </li>
+                                        <li>
+                                            Invited by the Secretary of Commerce to participate in business climate improvement discussions with government officials.
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="job edit">
+                                    <textarea class="responsibilities" cols="40" rows="6"> Consulted as the main on the ground project lead for a two-year project $4.5 million called Xanadu Club, that represented a group of 30 high net worth individuals from China establishing legal tax presence in the CNMI,
+                                        while establishing a hospitality firm. Consulted for 27 investors from China, Russia, and Japan on business startups in the CNMI Worked directly the Department of Commerce to promote material to market Saipan as
+                                        a low-tax location for U.S.Citizens and corporations Invited by the Secretary of Commerce to participate in business climate improvement discussions with government officials </textarea>
+                                </div>
+                            </div>
+                            <div class="edit">
+                                <button class="save-btn">save</button>
+                                <button class="cancel-btn">cancel</button>
+                            </div>
+                        </div>
+                        <div class="article-controll">
+                            <div class="article-controll-btns">
+                                <div class="u-pull-left">
+                                    <a href="" class="suggestions">suggestions</a>
+                                    <span class="suggestions-count count">2</span>
+                                </div>
+                                <div class="u-pull-left">
+                                    <a href="" class="comments">comments</a>
+                                    <span class="suggestions-count count">3</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comments-content">
+
+                            <div class="comment-list-block">
+                                <div class="comment-person-info">
+                                    <img class="u-pull-left" src="images/comment-person.png" width="40" height="40" />
+                                    <p class="u-pull-left name">Richard Zielke</p>
+                                    <p class="u-pull-left date">2 hrs ago</p>
+                                </div>
+                                <div class="comment-body">
+                                    <p class="">
+                                        I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
+                                    </p>
+                                </div>
+                                <div class="comment-ctrl">
+                                    <div class="u-pull-right">
+                                        <ul class="comment-ctrl-list">
+                                            <li class="comment-ctrl-btn"><a href="#">thank</a>
+                                            </li>
+                                            <li class="comment-ctrl-btn"><a href="#">hide</a>
+                                            </li>
+                                            <li class="comment-ctrl-btn"><a href="#">reply</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="comment-divider"></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="education">
+                <div class="row">
+                    <div class="twelve columns">
+                        <div>
+                            <button class="article-btn"> education </button>
+                        </div>
+                        <div class="article-content education">
+                            <div>
+                                <div class="education main">
+                                    <p class="establishment">
+                                        Keller Graduate School of Management
+                                    </p>
+                                </div>
+                                <div class="education edit">
+                                    <input type="text" class="description_edu" name="job-title" value="Keller Graduate School of Management" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="education main">
+                                    <div class="paragraph">
+                                        <p class="description">
+                                            The graduate school for Chicago-based DeVry University, founded in 1931, now a leader in technology &amp; professional education for working professionals.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="education edit">
+                                    <textarea class="description" name="description">The graduate school for Chicago-based DeVry University, founded in 1931, now a leader in technology &amp; professional education for working professionals.</textarea>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="education main">
+                                    <p class="title">
+                                        Masters of Project Management
+                                    </p>
+                                    <p class="start-date">
+                                        2012 -
+                                    </p>
+                                    <p class="end-date">
+                                        2013
+                                    </p>
+                                    <p class="location">
+                                        Portland, Oregon
+                                    </p>
+                                </div>
+                                <div class="education edit">
+                                    <input type="text" class="title" name="title" value="Masters of Project Management" />
+                                    <input type="text" class="start-date" name="start-date" value="2012-" />
+                                    <input type="text" class="end-date" name="end-date" value="2013" />
+                                    <input type="text" class="location" name="location" value="Portland, OR" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="education main">
+                                    <p class="gpa"> GPA 3.84 </p>
+                                </div>
+                                <div class="education edit">
+                                    <input type="text" class="gpa" name="gpa" value="GPA 3.84" />
+                                </div>
+                            </div>
+                            <div class="edit">
+                                <button class="save-btn">save</button>
+                                <button class="cancel-btn">cancel</button>
+                            </div>
+                        </div>
+                        <div class="article-controll">
+                            <div class="article-controll-btns">
+                                <div class="u-pull-left">
+                                    <a href="" class="suggestions">suggestions</a>
+                                    <span class="suggestions-count count">2</span>
+                                </div>
+                                <div class="u-pull-left">
+                                    <a href="" class="comments">comments</a>
+                                    <span class="suggestions-count count">3</span>
+                                </div>
+                            </div>
+                        </div>
 
 
-					<div class="comments-content">
+                        <div class="comments-content">
 
-						<div class="comment-list-block">
-							<div class="comment-person-info">
-								<img class="u-pull-left" src="images/comment-person.png" width="40" height="40"/>
-								<p class="u-pull-left name">Richard Zielke</p>
-								<p class="u-pull-left date">2 hrs ago</p>
-							</div>
-							<div class="comment-body">
-								<p class="">
-									I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
-								</p>
-							</div>
-							<div class="comment-ctrl">
-								<div class="u-pull-right">
-									<ul class="comment-ctrl-list">
-										<li class="comment-ctrl-btn"><a href="#">thank</a></li>
-										<li class="comment-ctrl-btn"><a href="#">hide</a></li>
-										<li class="comment-ctrl-btn"><a href="#">reply</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
+                            <div class="comment-list-block">
+                                <div class="comment-person-info">
+                                    <img class="u-pull-left" src="images/comment-person.png" width="40" height="40" />
+                                    <p class="u-pull-left name">Richard Zielke</p>
+                                    <p class="u-pull-left date">2 hrs ago</p>
+                                </div>
+                                <div class="comment-body">
+                                    <p class="">
+                                        I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
+                                    </p>
+                                </div>
+                                <div class="comment-ctrl">
+                                    <div class="u-pull-right">
+                                        <ul class="comment-ctrl-list">
+                                            <li class="comment-ctrl-btn"><a href="#">thank</a>
+                                            </li>
+                                            <li class="comment-ctrl-btn"><a href="#">hide</a>
+                                            </li>
+                                            <li class="comment-ctrl-btn"><a href="#">reply</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
 
-						<div class="comment-divider"></div>
-					</div>
-				</div>
-			</div>
-		</article>
-	</section>
-</form>
-	
-	<script type="text/javascript" src="javascript/index.js"></script>
-	<script type="text/javascript" src="javascript/utility.js"></script>
+                            <div class="comment-divider"></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </form>
+
+    <script type="text/javascript" src="javascript/index.js"></script>
+    <script type="text/javascript" src="javascript/utility.js"></script>
+
+    <script type="text/javascript" src="javascript/lib/react.min.js"></script>
+    <script type="text/javascript" src="javascript/profile.js"></script>
 </body>
+
 </html>
