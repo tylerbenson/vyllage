@@ -26,23 +26,11 @@ gulp.task('minify-css', ['styles'], function() {
         .pipe(gulp.dest('src/css/min'));
 });
 
-
 gulp.task('prettify-html', function() {
   return gulp.src('src/*.html')
     .pipe(prettify({indentSize: 4}))
     .pipe(gulp.dest('src/'))
 });
-
-// gulp.task('git-pre-js', function() {
-//   gulp.src('./src/foo.js', './src/bar.json')
-//     .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_ONLY'}))
-// });
-
-// gulp.task('format-js', function() {
-//    gulp.src('./src/foo.js', './src/bar.json')
-//      .pipe(prettify({config: '.jsbeautifyrc', mode: 'VERIFY_AND_WRITE'}))
-//      .pipe(gulp.dest('./dist'))
-//  });
 
 gulp.task('react', function () {
     return gulp.src('src/jsx/*.jsx')
@@ -57,7 +45,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['src/sass/*.scss', 'src/jsx/*.jsx', 'src/*.html', 'src/javascript/*.js'], ['styles', 'minify-css', 'react', 'prettify-html', 'lint']);
+    gulp.watch(['src/sass/*.scss', 'src/jsx/*.jsx'], ['styles', 'minify-css', 'react']);
 });
 
 gulp.task('default', ['watch']);
