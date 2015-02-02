@@ -2,6 +2,7 @@
 {
 	"type": "freeform",
 	"title": "career goal",
+	"sectionId": 123,
 	"sectionPosition": 1,
 	"state": "shown",
 	"description": "this is my goal statement."
@@ -9,6 +10,7 @@
 {
 	"type": "experience",
 	"title": "job experience",
+	"sectionId": 124,
 	"sectionPosition": 2,
 	"state": "shown",
 	"organizationName": "DeVry Education Group",
@@ -24,6 +26,7 @@
 {
 	"type": "experience",
 	"title": "education",
+	"sectionId": 125,
 	"sectionPosition": 3,
 	"state": "hidden",
 	"organizationName": "Keller Graduate School of Management",
@@ -39,6 +42,7 @@
 {
 	"type": "freeform",
 	"title": "skills",
+	"sectionId": 126,
 	"sectionPosition": 4,
 	"description": "basket weaving, spear fishing, dominion"
 }
