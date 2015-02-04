@@ -1,57 +1,59 @@
 // ----------------------- PROFILE SECTION --------------------------
 
-// -------------------------- main mode -------------------------- 
 
-var Headline = React.createClass({	
+// -------------------------- profile photo container -------------------------- 
 
-    render: function() {
-		return (
-            <div className="paragraph">
-                <p className="headline">
-                    { this.props.profileData.firstName + " "
-                      + this.props.profileData.middleName + " "
-                      + this.props.profileData.lastName
-                    }
-                </p>
-            </div>
-		);
-    }
-});
-
-var Tagline = React.createClass({ 
+var ProfilePhotoContainer = React.createClass({
 
     render: function() {
         return (
-            <div className="paragraph">
-                <p className="tagline">{this.props.profileData.tagline}</p>
+            <div className="four columns">
+                <img className="profile-photo" src="images/profile-photo.png" width="115" height="115" />
             </div>
         );
     }
 });
 
+// ---------------------------------- end ----------------------------------------------------
+
+// --------------------------headline, tagline container, main mode -------------------------- 
 var HeadlineContainerMain = React.createClass({
 
     render: function() {
         return (
             <div className="headline-container main">
-                <Headline profileData={this.props.profileData}/>
-                <Tagline profileData={this.props.profileData} />
+                <div className="paragraph">
+                    <p className="headline">
+                        { this.props.profileData.firstName + " "
+                          + this.props.profileData.middleName + " "
+                          + this.props.profileData.lastName
+                        }
+                    </p>
+                </div>
+                <div className="paragraph">
+                    <p className="tagline">{this.props.profileData.tagline}</p>
+                </div>
             </div>
         );
     }
 });
 
+// ---------------------------------- end ----------------------------------------------------
 
-// -------------------------- edit mode -------------------------- 
+// ---------------------------headline, tagline container, edit mode -------------------------- 
 
 var HeadlineEdit = React.createClass({  
 
     getInitialState: function() {
-        return {value:'Nathan M Benson'}; // this will be changed to get data from props: TBD
+        return {headlineData:''}; 
+    },
+
+    componentDidUpdate: function () {
+        this.setState({headlineData: this.props.profileData.firstName});
     },
 
     handleChange: function(event) {
-        this.setState({value: event.target.value});
+        this.setState({headlineData: event.target.value});
 
         if (this.props.onChange) {
             this.props.onChange( event.target.value, true);
@@ -59,11 +61,11 @@ var HeadlineEdit = React.createClass({
     },
 
     render: function() {
-        var value = this.state.value;
+        var headlineData = this.state.headlineData; 
 
         return (
             <input type="text" className="headline" placeholder="name, surname" 
-                value= {value} onChange={this.handleChange} />         
+                value= {headlineData} onChange={this.handleChange} />         
         );
     }
 });
@@ -71,11 +73,15 @@ var HeadlineEdit = React.createClass({
 var TaglineEdit = React.createClass({ 
 
     getInitialState: function() {
-        return {value: 'Technology Enthusiast analyzing, building, and expanding solutions'}; // this will be changed to get data from props: TBD
+        return {taglineData: ''}; 
+    },
+
+    componentDidUpdate: function () {
+        this.setState({taglineData: this.props.profileData.tagline});
     },
 
     handleChange: function(event) {
-        this.setState({value: event.target.value});
+        this.setState({taglineData: event.target.value});
 
         if (this.props.onChange) {
             this.props.onChange(event.target.value, false);
@@ -83,12 +89,12 @@ var TaglineEdit = React.createClass({
     },
 
     render: function() {
-        var value = this.state.value;
+        var taglineData = this.state.taglineData;
 
         return (
             <input type="text" className="tagline"
                 placeholder="add a professional tagline" 
-                value = {value} 
+                value = {taglineData} 
                 onChange={this.handleChange} />
         );
     }
@@ -112,10 +118,92 @@ var HeadlineContainerEdit = React.createClass({
     }
 });
 
+// --------------------------------------------- end --------------------------------------------
 
-// -------------------------- main container for both modes -------------------------- 
 
-var HeadlineContainer = React.createClass({ 
+// ---------------------------------- save, cancel buttons container ----------------------------
+
+var ButtonsContainer = React.createClass({  
+
+    saveHandler: function(event) {
+       if (this.props.saveHandler) {
+            this.props.saveHandler(true);
+        }
+    },    
+
+    cancelHandler: function(event) {
+        if (this.props.saveHandler) {
+            this.props.saveHandler(false);
+        }
+    },    
+
+    render: function() {
+        return (
+            <div className="edit">
+                <button className="save-btn" onClick={this.saveHandler}>save</button>
+                <button className="cancel-btn" onClick={this.cancelHandler}>cancel</button>
+            </div>
+        );
+    }
+});
+
+// --------------------------------------------- end --------------------------------------------
+
+
+// -------------------------------------- Article container  ------------------------------------
+
+var ArticleContent = React.createClass({ 
+
+    getInitialState: function() {
+        return { mainMode: true };
+    },
+
+    saveHandler: function (save) {
+        this.setState({mainMode: true});
+       
+        this.refs.mainContainer.getDOMNode().style.display="block";
+        this.refs.editContainer.getDOMNode().style.display="none";
+
+        this.refs.buttonContainer.getDOMNode().style.display="none";
+    },
+
+    changeMode: function() {
+
+        if(this.state.mainMode) {
+
+            this.refs.mainContainer.getDOMNode().style.display="none";
+            this.refs.editContainer.getDOMNode().style.display="block";
+
+            this.refs.buttonContainer.getDOMNode().style.display="block";
+
+            this.setState({mainMode: false});
+        }
+
+        return;
+    },
+
+    render: function() {
+        return (
+            <div className="four columns article-content profile" onClick={this.changeMode}>
+                <div>
+                    <div>
+                        <HeadlineContainerMain ref="mainContainer" profileData={this.props.profileData} />
+                        <HeadlineContainerEdit ref="editContainer" profileData={this.props.profileData} onChange={this.handleChange}/>
+                    </div>
+
+                    <ButtonsContainer ref="buttonContainer"  saveHandler={this.saveHandler }/>
+                </div>
+            </div>
+        );
+    }
+
+});
+
+// --------------------------------------------- end --------------------------------------------
+
+// -------------------------- Profile Container for both modes ----------------------------------
+
+var ProfileContainer = React.createClass({ 
 
     getInitialState: function() {
         return {profileData: []};
@@ -151,24 +239,37 @@ var HeadlineContainer = React.createClass({
 
     render: function() {
         return (
-            <div>
-                <HeadlineContainerMain profileData={this.state.profileData} />
-                <HeadlineContainerEdit profileData={this.state.profileData} onChange={this.handleChange}/>
+           <div className="row">
+
+                <ProfilePhotoContainer />
+
+                <ArticleContent profileData={this.state.profileData}/>
+
+                <div className="four columns btns-grid">
+                    <div className="share-contact-btns-container">
+                        <button className="u-pull-left share" id="shareInfoBtn">share</button>
+                        <button className="u-pull-left contact" id="contactInfoBtn">contact</button>
+                    </div>
+                </div>
+
             </div>
         );
     }
 
 });
 
-//   ---------------------------------- render --------------------------------
+// --------------------------------------------- end --------------------------------------------
+
+
+//   ----------------------------------------- render --------------------------------------------
 
 var Data = { 
-    firstName: 'Nathan',
-    middleName: 'M',
-    lastName: 'Benson',
+    firstName: 'Nathan ',
+    middleName: 'M ',
+    lastName: 'Benson ',
     tagline: 'Technology Enthusiast analyzing, building, and expanding solutions'
 };
 
-React.render(<HeadlineContainer />, document.getElementById('headline-container'));
+React.render(<ProfileContainer />, document.getElementById('profile'));
 
 
