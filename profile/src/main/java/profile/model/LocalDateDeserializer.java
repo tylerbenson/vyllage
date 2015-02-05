@@ -12,13 +12,14 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class LocalDateDeserializer extends JsonDeserializer<LocalDate>  {
 	
-	Logger logger = Logger.getLogger(LocalDateDeserializer.class.getName());
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger.getLogger(LocalDateDeserializer.class.getName());
 	
 	@Override
 	public LocalDate deserialize(JsonParser jp, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 		
-		logger.info("Parsing date " + jp.getText());
+		//logger.info("Parsing date " + jp.getText());
 		
         String dateString = jp.getText();
         
@@ -26,7 +27,7 @@ public class LocalDateDeserializer extends JsonDeserializer<LocalDate>  {
         	return null;
         dateString += " 01"; //TODO: without the dd part it cannot be parsed into a valid date.
         
-        logger.info(dateString);
+        //logger.info(dateString);
         
         LocalDate date = LocalDate.parse(dateString,
 				DateTimeFormatter.ofPattern("MMMM yyyy dd"));

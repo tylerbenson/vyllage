@@ -24,7 +24,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 @Controller
 public class ResumeController {
-	Logger logger = Logger.getLogger(ResumeController.class.getName());
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger.getLogger(ResumeController.class.getName());
 
 	@RequestMapping(value = "resume", method = RequestMethod.GET)
 	public String resume() {
@@ -79,17 +80,17 @@ public class ResumeController {
 	
 	//TODO: Replace string with the actual object later
 	@RequestMapping(value = "resume/{resumeId}/section", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody String receiveSection(@RequestBody final String body) { 
-		logger.info(body);
+	public @ResponseBody String receiveSection(@RequestBody final ResumeSection body) { 
+		//logger.info(body.toString());
 		
-		return body;
+		return body.toString();
 	}
 	
 	//TODO: Replace string with the actual object later
 	@RequestMapping(value = "resume/{resumeId}/header", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody String receiveHeader(@RequestBody final String body) { 
-		logger.info(body);
+	public @ResponseBody String receiveHeader(@RequestBody final ResumeHeader body) { 
+		//logger.info(body.toString());
 			
-		return body;
+		return body.toString();
 	}
 }

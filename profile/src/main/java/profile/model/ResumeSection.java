@@ -41,7 +41,7 @@ public class ResumeSection {
 	public void setType(SectionType type) {
 		this.type = type;
 	}
-
+	
 	public String getTitle() {
 		return title;
 	}
@@ -153,5 +153,20 @@ public class ResumeSection {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		return "ResumeSection [type=" + type + ", title=" + title
+				+ ", sectionId=" + sectionId + ", sectionPosition="
+				+ sectionPosition + ", state=" + state + ", organizationName="
+				+ organizationName + ", organizationDescription="
+				+ organizationDescription + ", role=" + role + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", isCurrent="
+				+ isCurrent + ", location=" + location + ", roleDescription="
+				+ roleDescription + ", highlights=" + highlights
+				+ ", description=" + description + "]";
+	}
+	
+	
 	
 }
