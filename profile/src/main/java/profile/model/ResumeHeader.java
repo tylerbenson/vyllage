@@ -34,6 +34,13 @@ public class ResumeHeader {
 	public void setTagline(String tagline) {
 		this.tagline = tagline;
 	}
+
+	@Override
+	public String toString() {
+		return "ResumeHeader [firstName=" + firstName + ", middleName="
+				+ middleName + ", lastName=" + lastName + ", tagline="
+				+ tagline + "]";
+	}
 	
 	
 	
