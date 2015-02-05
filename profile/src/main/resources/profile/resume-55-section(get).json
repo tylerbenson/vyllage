@@ -1,4 +1,4 @@
-[ "NOTE: Only send one section per api call.  No wrapping array needed. Enumerated to show different types",
+[
 {
 	"type": "freeform",
 	"title": "career goal",
