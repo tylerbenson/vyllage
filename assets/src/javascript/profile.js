@@ -272,6 +272,8 @@ var ProfileContainer = React.createClass({displayName: "ProfileContainer",
 
     saveChanges: function (data) {
         this.setState({profileData: data});
+
+        // here ajax call will go to the server, and update the data
     },
 
     render: function() {
