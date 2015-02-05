@@ -1,57 +1,59 @@
 // ----------------------- PROFILE SECTION --------------------------
 
-// -------------------------- main mode -------------------------- 
 
-var Headline = React.createClass({displayName: "Headline",	
+// -------------------------- profile photo container -------------------------- 
 
-    render: function() {
-		return (
-            React.createElement("div", {className: "paragraph"}, 
-                React.createElement("p", {className: "headline"}, 
-                     this.props.profileData.firstName + " "
-                      + this.props.profileData.middleName + " "
-                      + this.props.profileData.lastName
-                    
-                )
-            )
-		);
-    }
-});
-
-var Tagline = React.createClass({displayName: "Tagline", 
+var ProfilePhotoContainer = React.createClass({displayName: "ProfilePhotoContainer",
 
     render: function() {
         return (
-            React.createElement("div", {className: "paragraph"}, 
-                React.createElement("p", {className: "tagline"}, this.props.profileData.tagline)
+            React.createElement("div", {className: "four columns"}, 
+                React.createElement("img", {className: "profile-photo", src: "images/profile-photo.png", width: "115", height: "115"})
             )
         );
     }
 });
 
+// ---------------------------------- end ----------------------------------------------------
+
+// --------------------------headline, tagline container, main mode -------------------------- 
 var HeadlineContainerMain = React.createClass({displayName: "HeadlineContainerMain",
 
     render: function() {
         return (
             React.createElement("div", {className: "headline-container main"}, 
-                React.createElement(Headline, {profileData: this.props.profileData}), 
-                React.createElement(Tagline, {profileData: this.props.profileData})
+                React.createElement("div", {className: "paragraph"}, 
+                    React.createElement("p", {className: "headline"}, 
+                         this.props.profileData.firstName + " "
+                          + this.props.profileData.middleName + " "
+                          + this.props.profileData.lastName
+                        
+                    )
+                ), 
+                React.createElement("div", {className: "paragraph"}, 
+                    React.createElement("p", {className: "tagline"}, this.props.profileData.tagline)
+                )
             )
         );
     }
 });
 
+// ---------------------------------- end ----------------------------------------------------
 
-// -------------------------- edit mode -------------------------- 
+// ---------------------------headline, tagline container, edit mode -------------------------- 
 
 var HeadlineEdit = React.createClass({displayName: "HeadlineEdit",  
 
     getInitialState: function() {
-        return {value:'Nathan M Benson'}; // this will be changed to get data from props: TBD
+        return {headlineData:''}; 
+    },
+
+    componentDidUpdate: function () {
+        this.setState({headlineData: this.props.profileData.firstName});
     },
 
     handleChange: function(event) {
-        this.setState({value: event.target.value});
+        this.setState({headlineData: event.target.value});
 
         if (this.props.onChange) {
             this.props.onChange( event.target.value, true);
@@ -59,11 +61,11 @@ var HeadlineEdit = React.createClass({displayName: "HeadlineEdit",
     },
 
     render: function() {
-        var value = this.state.value;
+        var headlineData = this.state.headlineData; 
 
         return (
             React.createElement("input", {type: "text", className: "headline", placeholder: "name, surname", 
-                value: value, onChange: this.handleChange})         
+                value: headlineData, onChange: this.handleChange})         
         );
     }
 });
@@ -71,11 +73,15 @@ var HeadlineEdit = React.createClass({displayName: "HeadlineEdit",
 var TaglineEdit = React.createClass({displayName: "TaglineEdit", 
 
     getInitialState: function() {
-        return {value: 'Technology Enthusiast analyzing, building, and expanding solutions'}; // this will be changed to get data from props: TBD
+        return {taglineData: ''}; 
+    },
+
+    componentDidUpdate: function () {
+        this.setState({taglineData: this.props.profileData.tagline});
     },
 
     handleChange: function(event) {
-        this.setState({value: event.target.value});
+        this.setState({taglineData: event.target.value});
 
         if (this.props.onChange) {
             this.props.onChange(event.target.value, false);
@@ -83,12 +89,12 @@ var TaglineEdit = React.createClass({displayName: "TaglineEdit",
     },
 
     render: function() {
-        var value = this.state.value;
+        var taglineData = this.state.taglineData;
 
         return (
             React.createElement("input", {type: "text", className: "tagline", 
                 placeholder: "add a professional tagline", 
-                value: value, 
+                value: taglineData, 
                 onChange: this.handleChange})
         );
     }
@@ -112,10 +118,92 @@ var HeadlineContainerEdit = React.createClass({displayName: "HeadlineContainerEd
     }
 });
 
+// --------------------------------------------- end --------------------------------------------
 
-// -------------------------- main container for both modes -------------------------- 
 
-var HeadlineContainer = React.createClass({displayName: "HeadlineContainer", 
+// ---------------------------------- save, cancel buttons container ----------------------------
+
+var ButtonsContainer = React.createClass({displayName: "ButtonsContainer",  
+
+    saveHandler: function(event) {
+       if (this.props.saveHandler) {
+            this.props.saveHandler(true);
+        }
+    },    
+
+    cancelHandler: function(event) {
+        if (this.props.saveHandler) {
+            this.props.saveHandler(false);
+        }
+    },    
+
+    render: function() {
+        return (
+            React.createElement("div", {className: "edit"}, 
+                React.createElement("button", {className: "save-btn", onClick: this.saveHandler}, "save"), 
+                React.createElement("button", {className: "cancel-btn", onClick: this.cancelHandler}, "cancel")
+            )
+        );
+    }
+});
+
+// --------------------------------------------- end --------------------------------------------
+
+
+// -------------------------------------- Article container  ------------------------------------
+
+var ArticleContent = React.createClass({displayName: "ArticleContent", 
+
+    getInitialState: function() {
+        return { mainMode: true };
+    },
+
+    saveHandler: function (save) {
+        this.setState({mainMode: true});
+       
+        this.refs.mainContainer.getDOMNode().style.display="block";
+        this.refs.editContainer.getDOMNode().style.display="none";
+
+        this.refs.buttonContainer.getDOMNode().style.display="none";
+    },
+
+    changeMode: function() {
+
+        if(this.state.mainMode) {
+
+            this.refs.mainContainer.getDOMNode().style.display="none";
+            this.refs.editContainer.getDOMNode().style.display="block";
+
+            this.refs.buttonContainer.getDOMNode().style.display="block";
+
+            this.setState({mainMode: false});
+        }
+
+        return;
+    },
+
+    render: function() {
+        return (
+            React.createElement("div", {className: "four columns article-content profile", onClick: this.changeMode}, 
+                React.createElement("div", null, 
+                    React.createElement("div", null, 
+                        React.createElement(HeadlineContainerMain, {ref: "mainContainer", profileData: this.props.profileData}), 
+                        React.createElement(HeadlineContainerEdit, {ref: "editContainer", profileData: this.props.profileData, onChange: this.handleChange})
+                    ), 
+
+                    React.createElement(ButtonsContainer, {ref: "buttonContainer", saveHandler: this.saveHandler})
+                )
+            )
+        );
+    }
+
+});
+
+// --------------------------------------------- end --------------------------------------------
+
+// -------------------------- Profile Container for both modes ----------------------------------
+
+var ProfileContainer = React.createClass({displayName: "ProfileContainer", 
 
     getInitialState: function() {
         return {profileData: []};
@@ -151,24 +239,37 @@ var HeadlineContainer = React.createClass({displayName: "HeadlineContainer",
 
     render: function() {
         return (
-            React.createElement("div", null, 
-                React.createElement(HeadlineContainerMain, {profileData: this.state.profileData}), 
-                React.createElement(HeadlineContainerEdit, {profileData: this.state.profileData, onChange: this.handleChange})
+           React.createElement("div", {className: "row"}, 
+
+                React.createElement(ProfilePhotoContainer, null), 
+
+                React.createElement(ArticleContent, {profileData: this.state.profileData}), 
+
+                React.createElement("div", {className: "four columns btns-grid"}, 
+                    React.createElement("div", {className: "share-contact-btns-container"}, 
+                        React.createElement("button", {className: "u-pull-left share", id: "shareInfoBtn"}, "share"), 
+                        React.createElement("button", {className: "u-pull-left contact", id: "contactInfoBtn"}, "contact")
+                    )
+                )
+
             )
         );
     }
 
 });
 
-//   ---------------------------------- render --------------------------------
+// --------------------------------------------- end --------------------------------------------
+
+
+//   ----------------------------------------- render --------------------------------------------
 
 var Data = { 
-    firstName: 'Nathan',
-    middleName: 'M',
-    lastName: 'Benson',
+    firstName: 'Nathan ',
+    middleName: 'M ',
+    lastName: 'Benson ',
     tagline: 'Technology Enthusiast analyzing, building, and expanding solutions'
 };
 
-React.render(React.createElement(HeadlineContainer, null), document.getElementById('headline-container'));
+React.render(React.createElement(ProfileContainer, null), document.getElementById('profile'));
 
 
