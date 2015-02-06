@@ -9,8 +9,9 @@ jar {
 
 dependencies {
 	compile parent.javascriptProjects.findAll { it != project}
-
-//    compile("org.springframework.boot:spring-boot-starter-security")
+//	compile 'com.h2database:h2'
+	compile 'org.jooq:jooq:3.5.0'
+	//    compile("org.springframework.boot:spring-boot-starter-security")
 //    compile("org.springframework.boot:spring-boot-starter-aop")
 //    compile("org.springframework.boot:spring-boot-starter-jdbc")
 //    compile("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -25,3 +26,32 @@ dependencies {
 //    compile("org.springframework.boot:spring-boot-starter-remote-shell")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
+
+// Use your favourite XML builder to construct the code generation configuration file
+// ----------------------------------------------------------------------------------
+def writer = new StringWriter()
+def xml = new groovy.xml.MarkupBuilder(writer)
+.configuration('xmlns': 'http://www.jooq.org/xsd/jooq-codegen-3.5.0.xsd') {
+	jdbc() {
+		driver('org.h2.Driver')
+		url('jdbc:h2:~/test')
+		user('sa')
+		password('')
+	}
+	generator() {
+		database() {
+		}
+		generate() {
+		}
+		target() {
+			packageName('editor.domain')
+			directory('editor/src/main/java')
+		}
+	}
+}
+
+// Run the code generator
+// ----------------------
+org.jooq.util.GenerationTool.main(
+	javax.xml.bind.JAXB.unmarshal(new StringReader(writer.toString()), org.jooq.util.jaxb.Configuration.class)
+)

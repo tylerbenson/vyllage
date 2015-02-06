@@ -1,0 +1,1 @@
+insert into accounts(username) values('username');
