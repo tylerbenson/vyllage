@@ -8,9 +8,9 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ComponentScan(basePackageClasses = { login.Application.class,
-		profile.Application.class, Application.class })
+		editor.Application.class, Application.class })
 @PropertySource("classpath:/login/application.properties")
-@PropertySource("classpath:/profile/application.properties")
+@PropertySource("classpath:/editor/application.properties")
 @EnableAutoConfiguration
 public class Application {
 

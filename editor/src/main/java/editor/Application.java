@@ -1,4 +1,4 @@
-package profile;
+package editor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
-@PropertySource("classpath:/profile/application.properties")
+@PropertySource("classpath:/editor/application.properties")
 public class Application {
 
 	public static void main(String[] args) {

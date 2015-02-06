@@ -1,9 +1,9 @@
 springBoot {
-    mainClass = 'profile.Application'
+    mainClass = 'editor.Application'
 }
 
 jar {
-    baseName = 'profile'
+    baseName = 'editor'
     version = '0.0.1-SNAPSHOT'
 }
 
