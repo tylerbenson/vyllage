@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class ResumeSection {
+public class DocumentSection {
 	
 	private SectionType type;
 	private String title;
@@ -31,7 +31,7 @@ public class ResumeSection {
 	
 	private String description;
 	
-	public ResumeSection() {
+	public DocumentSection() {
 	}
 
 	public SectionType getType() {

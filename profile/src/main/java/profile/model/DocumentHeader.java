@@ -1,13 +1,13 @@
 package profile.model;
 
-public class ResumeHeader {
+public class DocumentHeader {
 	
 	private String firstName;
 	private String middleName;
 	private String lastName;
 	private String tagline;
 	
-	public ResumeHeader() {
+	public DocumentHeader() {
 	}
 	
 	public String getFirstName() {
