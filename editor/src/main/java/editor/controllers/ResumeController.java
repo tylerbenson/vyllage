@@ -2,10 +2,9 @@ package editor.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,18 +14,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import editor.model.DocumentHeader;
-import editor.model.DocumentSection;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
+
+import editor.model.DocumentHeader;
+import editor.model.DocumentSection;
+import editor.services.DocumentService;
 
 @Controller
 @RequestMapping("resume/")
 public class ResumeController {
+
+	@Autowired
+	private DocumentService documentService;
+
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
@@ -44,32 +47,26 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{resumeId}/section", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<DocumentSection> getResumeSection(
-			@PathVariable final Integer resumeId)
+	public @ResponseBody DocumentSection getResumeSection(
+			@PathVariable final Long documentId)
 			throws JsonProcessingException, IOException {
 
-		List<DocumentSection> sections = new ArrayList<>();
+		return documentService.getDocumentSections(documentId);
+	}
 
-		// TODO: once we load the actual data from a database all this will be
-		// replaced.
-		ObjectMapper mapper = new ObjectMapper();
-		JsonFactory jfactory = new JsonFactory();
+	@RequestMapping(value = "{resumeId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody DocumentSection getResumeSection(
+			@PathVariable(value = "resumeId") final Long documentId,
+			@PathVariable final Long sectionId) throws JsonProcessingException,
+			IOException {
 
-		InputStream in = getClass().getResourceAsStream(
-				"resume-55-section(get).json");
-		JsonParser jParser = jfactory.createParser(in);
-		// mapper.readTree(jParser).toString();
-
-		sections = mapper.readValue(jParser, TypeFactory.defaultInstance()
-				.constructCollectionType(List.class, DocumentSection.class));
-
-		return sections;
+		return documentService.getDocument(documentId, sectionId);
 	}
 
 	@RequestMapping(value = "{resumeId}/header", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody DocumentHeader getResumeHeader(
-			@PathVariable final Integer resumeId)
-			throws JsonProcessingException, IOException {
+			@PathVariable final Long resumeId) throws JsonProcessingException,
+			IOException {
 
 		// TODO: once we load the actual data from a database all this will be
 		// replaced.
@@ -87,14 +84,21 @@ public class ResumeController {
 
 	@RequestMapping(value = "{resumeId}/section", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void saveSection(@RequestBody final DocumentSection body) {
+	public void saveSection(
+			@PathVariable(value = "resumeId") final Long documentId,
+			@RequestBody final DocumentSection body)
+			throws JsonProcessingException {
+
 		// logger.info(body.toString());
+
+		documentService.saveDocumentSection(documentId, body);
 
 	}
 
 	@RequestMapping(value = "{resumeId}/header", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void saveHeader(@RequestBody final DocumentHeader body) {
+	public void saveHeader(@PathVariable final Long resumeId,
+			@RequestBody final DocumentHeader body) {
 		// logger.info(body.toString());
 
 	}

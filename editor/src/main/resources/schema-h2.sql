@@ -15,7 +15,7 @@ create table if not exists document_sections(
 	sectionVersion bigint not null,
 	documentId bigint not null,
   	sortOrder varchar(3) not null,
-  	jsonDocument varchar(1024) not null,
+  	jsonDocument varchar(4096) not null,
   	dateCreated datetime not null,
   	lastModified timestamp not null,
   	PRIMARY KEY (id, sectionVersion),
