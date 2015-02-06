@@ -1,4 +1,4 @@
-package profile;
+package editor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import profile.model.DocumentHeader;
-import profile.model.DocumentSection;
+import editor.model.DocumentHeader;
+import editor.model.DocumentSection;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;

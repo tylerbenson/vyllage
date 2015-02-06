@@ -1,4 +1,4 @@
-package profile.model;
+package editor.model;
 
 import java.io.IOException;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package profile.model;
+package editor.model;
 
 import java.time.LocalDate;
 

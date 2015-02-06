@@ -28,5 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.usernameParameter("email").loginPage("/login").permitAll();
 
 		http.logout().permitAll();
+
+		http.csrf().disable();
+
 	}
 }
