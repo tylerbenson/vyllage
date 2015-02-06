@@ -1,0 +1,50 @@
+[
+{
+	"type": "freeform",
+	"title": "career goal",
+	"sectionId": 123,
+	"sectionPosition": 1,
+	"state": "shown",
+	"description": "this is my goal statement."
+},
+{
+	"type": "experience",
+	"title": "job experience",
+	"sectionId": 124,
+	"sectionPosition": 2,
+	"state": "shown",
+	"organizationName": "DeVry Education Group",
+	"organizationDescription": "Blah Blah Blah.",
+	"role": "Manager, Local Accounts",
+	"startDate": "September 2010",
+	"endDate": "",
+	"isCurrent": true,
+	"location": "Portland, Oregon",
+	"roleDescription": "Blah Blah Blah",
+	"highlights": "I was in charge of..."
+},
+{
+	"type": "experience",
+	"title": "education",
+	"sectionId": 125,
+	"sectionPosition": 3,
+	"state": "hidden",
+	"organizationName": "Keller Graduate School of Management",
+	"organizationDescription": "Blah Blah Blah.",
+	"role": "Masters of Project Management",
+	"startDate": "September 2010",
+	"endDate": "September 2012",
+	"isCurrent": false,
+	"location": "Portland, Oregon",
+	"roleDescription": "",
+	"highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
+},
+{
+	"type": "freeform",
+	"title": "skills",
+	"sectionId": 126,
+	"sectionPosition": 4,
+	"description": "basket weaving, spear fishing, dominion"
+}
+]
+

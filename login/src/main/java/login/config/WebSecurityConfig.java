@@ -24,9 +24,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/", "/css/**", "/images/**", "/javascript/**")
 				.permitAll().anyRequest().authenticated();
 
-		http.formLogin().defaultSuccessUrl("/register")
+		http.formLogin().defaultSuccessUrl("/resume/")
 				.usernameParameter("email").loginPage("/login").permitAll();
 
 		http.logout().permitAll();
+
 	}
 }
