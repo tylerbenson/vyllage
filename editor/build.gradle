@@ -1,57 +1,78 @@
-springBoot {
-    mainClass = 'editor.Application'
-}
+
+springBoot { mainClass = 'editor.Application' }
 
 jar {
-    baseName = 'editor'
-    version = '0.0.1-SNAPSHOT'
+	baseName = 'editor'
+	version = '0.0.1-SNAPSHOT'
 }
 
 dependencies {
 	compile parent.javascriptProjects.findAll { it != project}
 	compile 'com.h2database:h2'
+	compile("org.flywaydb:flyway-core")
 	compile 'org.jooq:jooq:3.5.0'
 	//    compile("org.springframework.boot:spring-boot-starter-security")
-//    compile("org.springframework.boot:spring-boot-starter-aop")
-    compile("org.springframework.boot:spring-boot-starter-jdbc")
-//    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-//    compile("org.springframework.boot:spring-boot-starter-web")
-//    compile("org.springframework.boot:spring-boot-starter-mobile")
-//    compile("org.springframework.boot:spring-boot-starter-groovy-templates")
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-//    compile("org.springframework.boot:spring-boot-starter-social-facebook")
-//    compile("org.springframework.boot:spring-boot-starter-social-linkedin")
-//    compile("org.springframework.boot:spring-boot-starter-social-twitter")
-//    compile("org.springframework.boot:spring-boot-starter-actuator")
-//    compile("org.springframework.boot:spring-boot-starter-remote-shell")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+	//    compile("org.springframework.boot:spring-boot-starter-aop")
+	compile("org.springframework.boot:spring-boot-starter-jdbc")
+	//    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	//    compile("org.springframework.boot:spring-boot-starter-web")
+	//    compile("org.springframework.boot:spring-boot-starter-mobile")
+	//    compile("org.springframework.boot:spring-boot-starter-groovy-templates")
+	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+	//    compile("org.springframework.boot:spring-boot-starter-social-facebook")
+	//    compile("org.springframework.boot:spring-boot-starter-social-linkedin")
+	//    compile("org.springframework.boot:spring-boot-starter-social-twitter")
+	//    compile("org.springframework.boot:spring-boot-starter-actuator")
+	//    compile("org.springframework.boot:spring-boot-starter-remote-shell")
+	testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
-// Use your favourite XML builder to construct the code generation configuration file
-// ----------------------------------------------------------------------------------
-def writer = new StringWriter()
-def xml = new groovy.xml.MarkupBuilder(writer)
-.configuration('xmlns': 'http://www.jooq.org/xsd/jooq-codegen-3.5.0.xsd') {
-	jdbc() {
-		driver('org.h2.Driver')
-		url('jdbc:h2:~/test')
-		user('sa')
-		password('')
+
+buildscript {
+	repositories {
+		jcenter()
+		mavenCentral()
 	}
-	generator() {
-		database() {
+	dependencies {
+		classpath 'nu.studer:gradle-jooq-plugin:1.0.5'
+		classpath 'org.flywaydb:flyway-gradle-plugin:3.1'
+		classpath 'com.h2database:h2:1.4.177'
+		classpath 'org.jooq:jooq-codegen:3.5.0'
+	}
+}
+apply plugin: 'flyway'
+
+flyway {
+	url = "jdbc:h2:$buildDir/db/local"
+	user = 'sa'
+	password = ''
+}
+
+flywayMigrate.inputs.dir 'src/main/resources/db/migrate'
+flywayMigrate.outputs.dir "$buildDir/db"
+
+project.afterEvaluate {
+	flywayClean.dependsOn -= testClasses
+	flywayMigrate.dependsOn = [
+		processResources,
+		processTestResources
+	]
+}
+
+apply plugin: 'nu.studer.jooq'
+
+jooq {
+	h2(sourceSets.main) {
+		jdbc {
+			driver = 'org.h2.Driver'
+			url = "jdbc:h2:$buildDir/db/local"
+			user = 'sa'
+			password = ''
 		}
-		generate() {
-		}
-		target() {
-			packageName('editor.domain')
-			directory('editor/src/main/java')
-		}
+		generator { target { packageName = 'editor.domain' } }
 	}
 }
 
-// Run the code generator
-// ----------------------
-org.jooq.util.GenerationTool.main(
-	javax.xml.bind.JAXB.unmarshal(new StringReader(writer.toString()), org.jooq.util.jaxb.Configuration.class)
-)
+generateH2JooqSchemaSource.inputs.dir "$buildDir/db"
+generateH2JooqSchemaSource.outputs.dir "$buildDir/generated-src"
+generateH2JooqSchemaSource.dependsOn flywayMigrate

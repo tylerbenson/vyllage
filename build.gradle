@@ -14,9 +14,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-		classpath 'org.jooq:jooq-codegen:3.5.0'
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath 'com.h2database:h2:1.4.177'
     }
 }
 
