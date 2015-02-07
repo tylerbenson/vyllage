@@ -24,7 +24,7 @@ import editor.model.DocumentSection;
 import editor.services.DocumentService;
 
 @Controller
-@RequestMapping("resume/")
+@RequestMapping("resume")
 public class ResumeController {
 
 	@Autowired
