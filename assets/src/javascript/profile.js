@@ -99,7 +99,6 @@ var TaglineEdit = React.createClass({displayName: "TaglineEdit",
 
 var HeadlineContainerEdit = React.createClass({displayName: "HeadlineContainerEdit",
 
-
     changeHeadline: function (value){
         if (this.props.updateHeadline) {
             this.props.updateHeadline(value);
@@ -137,7 +136,6 @@ var ButtonsContainer = React.createClass({displayName: "ButtonsContainer",
 
         event.preventDefault();
         event.stopPropagation();
-
     },    
 
     cancelHandler: function(event) {
@@ -152,7 +150,7 @@ var ButtonsContainer = React.createClass({displayName: "ButtonsContainer",
 
     render: function() {
         return (
-            React.createElement("div", {className: "edit"}, 
+            React.createElement("div", {className: "edit buttons-container"}, 
                 React.createElement("button", {className: "save-btn", onClick: this.saveHandler}, "save"), 
                 React.createElement("button", {className: "cancel-btn", onClick: this.cancelHandler}, "cancel")
             )

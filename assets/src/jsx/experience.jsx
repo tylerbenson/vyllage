@@ -1,21 +1,55 @@
-var CompanyMain = React.createClass({	
-
-    render: function() {
-		return (
-            <div className="company main">
-                <p className="company-name">{this.props.experienceData.companyName}</p>
-            </div>
-		);
-    }
-});
-
-var CompanyEdit = React.createClass({   
+var ExperienceMain = React.createClass({   
 
     render: function() {
         return (
-            <div className="company edit">
-                <input type="text" className="company-name" name="company-name" value={this.props.experienceData.companyName} />
-                <input type="text" className="industry" name="industry" value={this.props.experienceData.industry} />
+            <div className="nonEditable">
+
+                <div className="main">
+                    <p className="company-name">
+                        {this.props.experienceData.companyName} 
+                        {this.props.experienceData.industry} 
+                    </p>
+                </div>
+
+                <div className="main">
+                    <div className="paragraph">
+                        <p className="company-description">
+                            {this.props.experienceData.companyDescription}
+                        </p>
+                    </div>
+                </div>
+
+                <div className="main">
+                    <p className="title">
+                        {this.props.experienceData.jobTitle}
+                    </p>
+                    <p className="start-date">
+                        {this.props.experienceData.startDate}
+                    </p>
+                    <p className="end-date">
+                        {this.props.experienceData.endDate}
+                    </p>
+                    <p className="location">
+                        {this.props.experienceData.location}
+                    </p>
+                </div>
+
+                <div className="main">
+                    <div className="paragraph">
+                        <p className="job-description">
+                            {this.props.experienceData.jobDescription}
+                        </p>
+                    </div>
+                </div>
+
+                <div className="main">
+                    <div className="paragraph">
+                        <p className="responsibilities">
+                            {this.props.experienceData.responsibilities}
+                        </p>
+                    </div>
+                </div>
+
             </div>
         );
     }
@@ -26,33 +60,9 @@ var CompanyName = React.createClass({
 
     render: function() {
         return (
-            <div>
-                <CompanyMain experienceData={this.props.experienceData}/>
-                <CompanyEdit experienceData={this.props.experienceData} />
-            </div>
-        );
-    }
-});
-
-var CompanyMainDescription = React.createClass({   
-
-    render: function() {
-        return (
-            <div className="company main">
-                <p className="description">
-                    {this.props.experienceData.companyDescription}
-                </p>
-            </div>
-        );
-    }
-});
-
-var CompanyEditDescription = React.createClass({   
-
-    render: function() {
-        return (
-            <div className="company edit">
-                <textarea className="description" name="description" cols="20" rows="3">{this.props.experienceData.companyDescription}</textarea>
+            <div className="edit">
+                <input type="text" className="company-name" value={this.props.experienceData.companyName} />
+                <input type="text" className="industry" value={this.props.experienceData.industry} />
             </div>
         );
     }
@@ -62,41 +72,18 @@ var CompanyDescription = React.createClass({
 
     render: function() {
         return (
-            <div>
-                <CompanyMainDescription experienceData={this.props.experienceData}/>
-                <CompanyEditDescription experienceData={this.props.experienceData} />
+            <div className="edit">
+                <textarea className="company-description">{this.props.experienceData.companyDescription}</textarea>
             </div>
         );
     }
 });
 
-var JobMain = React.createClass({   
+var Job = React.createClass({   
 
     render: function() {
         return (
-            <div className="job main">
-                <p className="title">
-                    {this.props.experienceData.jobTitle}
-                </p>
-                <p className="start-date">
-                    {this.props.experienceData.startDate}
-                </p>
-                <p className="end-date">
-                    {this.props.experienceData.endDate}
-                </p>
-                <p className="location">
-                    {this.props.experienceData.location}
-                </p>
-            </div>
-        );
-    }
-});
-
-var JobEdit = React.createClass({   
-
-    render: function() {
-        return (
-             <div className="job edit">
+             <div className="edit">
                 <input type="text" className="title" value={this.props.experienceData.jobTitle} />
                 <input type="text" className="start-date" value= {this.props.experienceData.startDate} />
                 <input type="text" className="end-date" value={this.props.experienceData.endDate} />
@@ -106,76 +93,12 @@ var JobEdit = React.createClass({
     }
 });
 
-
-var Title = React.createClass({   
-
-    render: function() {
-        return (
-            <div>
-                <JobMain experienceData={this.props.experienceData}/>
-                <JobEdit experienceData={this.props.experienceData}/>
-            </div>
-        );
-    }
-});
-
-var DescriptionMain = React.createClass({   
+var JobDescription = React.createClass({   
 
     render: function() {
         return (
-            <div className="job main">
-                <div className="paragraph">
-                    <p className="description">
-                        {this.props.experienceData.jobDescription}
-                    </p>
-                </div>
-            </div>
-        );
-    }
-});
-
-var DescriptionEdit = React.createClass({   
-
-    render: function() {
-        return (
-            <div className="job edit">
-                <textarea className="description" name="description" cols="40" rows="6">{this.props.experienceData.jobDescription}</textarea>
-            </div>
-        );
-    }
-});
-
-var Description = React.createClass({   
-
-    render: function() {
-        return (
-            <div>
-                <DescriptionMain experienceData={this.props.experienceData}/>
-                <DescriptionEdit experienceData={this.props.experienceData}/>
-            </div>
-        );
-    }
-});
-
-var ResponsibilitiesMain = React.createClass({   
-
-    render: function() {
-        return (
-            <div className="job main">
-                <div className="responsibilities">
-                    {this.props.experienceData.responsibilities}
-                </div>
-            </div>
-        );
-    }
-});
-
-var ResponsibilitiesEdit = React.createClass({   
-
-    render: function() {
-        return (
-             <div className="job edit">
-                <textarea className="responsibilities" cols="40" rows="6">{this.props.experienceData.responsibilities}</textarea>
+            <div className="edit">
+                <textarea className="job-description">{this.props.experienceData.jobDescription}</textarea>
             </div>
         );
     }
@@ -185,37 +108,123 @@ var Responsibilities = React.createClass({
 
     render: function() {
         return (
-            <div>
-                <ResponsibilitiesMain experienceData={this.props.experienceData}/>
-                <ResponsibilitiesEdit experienceData={this.props.experienceData}/>
+             <div className="edit">
+                <textarea className="responsibilities">{this.props.experienceData.responsibilities}</textarea>
             </div>
         );
     }
 });
 
+
 var Buttons = React.createClass({   
+
+    saveHandler: function(event) {
+
+        if (this.props.save) {
+            this.props.save();
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+    },    
+
+    cancelHandler: function(event) {
+
+        if (this.props.cancel) {
+            this.props.cancel();
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+    },
 
     render: function() {
         return (
             <div className="edit">
-                <button className="save-btn">save</button>
-                <button className="cancel-btn">cancel</button>
+                <button className="save-btn" onClick={this.saveHandler}>save</button>
+                <button className="cancel-btn" onClick={this.cancelHandler}>cancel</button>
             </div>
         );
     }
 });
 
-var ArticleContentExperience = React.createClass({   
+var ExperienceEdit = React.createClass({   
 
     render: function() {
         return (
-            <div className="article-content experience">
-                <CompanyName experienceData={this.props.experienceData}/>
-                <CompanyDescription experienceData={this.props.experienceData}/>
-                <Title experienceData={this.props.experienceData}/>
-                <Description experienceData={this.props.experienceData}/>
-                <Responsibilities experienceData={this.props.experienceData}/>
-                <Buttons experienceData={this.props.experienceData}/>
+            <div className="editable">
+                <CompanyName experienceData={this.props.experienceData} />
+                <CompanyDescription experienceData={this.props.experienceData} />
+                <Job experienceData={this.props.experienceData} />
+                <JobDescription experienceData={this.props.experienceData} />
+                <Responsibilities experienceData={this.props.experienceData} />
+                
+              
+            </div>
+        );
+    }
+});
+
+var ArticleContentExperience = React.createClass({  
+
+    getInitialState: function() {
+        return {
+                isMain: true,
+                experienceData: ''
+            };
+    }, 
+
+    save: function () {
+        if(this.props.saveChanges){
+            this.props.saveChanges(this.state.experienceData);
+        }
+        this.handleModeChange();
+    },
+
+    cancel: function () {
+        this.handleModeChange();
+    },
+
+    handleModeChange: function () {
+
+        if(!this.state.isMain) {
+            var data = JSON.parse( JSON.stringify( this.props.experienceData ));
+            this.setState({ experienceData :data,
+                            isMain: true });
+
+            this.refs.mainContainer.getDOMNode().style.display="block";
+            this.refs.editContainer.getDOMNode().style.display="none";
+
+            this.refs.buttonContainer.getDOMNode().style.display="none";
+
+            this.state.isMain=true ;
+        }
+
+        return false;
+    },
+
+     goToEditMode: function() {
+
+        if(this.state.isMain) {
+             var data = JSON.parse( JSON.stringify( this.props.experienceData ));
+             this.setState({ experienceData :data,
+                        isMain: false });
+
+            this.refs.mainContainer.getDOMNode().style.display="none";
+            this.refs.editContainer.getDOMNode().style.display="block";
+            this.refs.buttonContainer.getDOMNode().style.display="block";
+
+            this.state.isMain=false;
+        }
+    },
+
+    render: function() {
+        return (
+            <div className="article-content experience" onClick={this.goToEditMode}>
+
+                <ExperienceMain ref="mainContainer" experienceData={this.props.experienceData}/>
+                <ExperienceEdit ref="editContainer" experienceData={this.props.experienceData}/>
+                <Buttons ref="buttonContainer" experienceData={this.props.experienceData} save={this.save} cancel={this.cancel}/>
             </div>
         );
     }
@@ -274,6 +283,7 @@ var CommentsBlog = React.createClass({
         );
     }
 });
+
 var ExperienceCantainer = React.createClass({   
 
     render: function() {
@@ -297,14 +307,29 @@ var DATA = {
     "sectionPosition": 2,
     "companyName": "DeVry1",
     "industry": "Education Group",
-    "companyDescription": "Blah Blah Blah.",
+    "companyDescription": "Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah.",
     "jobTitle": "Manager, Local Accounts",
     "startDate": "September 2010",
     "endDate": "",
     "isCurrent": true,
     "location": "Portland, Oregon",
-    "jobDescription": "Blah Blah Blah",
+    "jobDescription": "Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah",
     "responsibilities": "I was in charge of..."
+
+    // "type": "experience",
+    // "title": "job experience",
+    // "sectionId": 124,
+    // "sectionPosition": 2,
+    // "state": "shown",
+    // "organizationName": "DeVry Education Group",
+    // "organizationDescription": "Blah Blah Blah.",
+    // "role": "Manager, Local Accounts",
+    // "startDate": "September 2010",
+    // "endDate": "",
+    // "isCurrent": true,
+    // "location": "Portland, Oregon",
+    // "roleDescription": "Blah Blah Blah",
+    // "highlights": "I was in charge of..."
 };
 
 React.render(<ExperienceCantainer experienceData={DATA} />, document.getElementById('experience-container'));

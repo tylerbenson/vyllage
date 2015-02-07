@@ -32,7 +32,12 @@ article#profile {
 
 	.article-content.profile {
 
+		.buttons-container {
+			display: none;
+		}
+
 		.headline-container.edit {
+			display: none;
 
 			.headline {
 				width: 300px;
