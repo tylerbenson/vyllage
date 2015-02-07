@@ -172,12 +172,6 @@ var ArticleContent = React.createClass({displayName: "ArticleContent",
                  profileData: ''};
     },
 
-    componentDidUpdate: function () {
-        var data = JSON.parse( JSON.stringify( this.props.profileData ));
-        this.setState({ profileData :data,
-                        isMain: true });
-    },
-
     updateHeadline: function (value) {
         this.state.profileData.headline = value;
     },
@@ -194,15 +188,15 @@ var ArticleContent = React.createClass({displayName: "ArticleContent",
     },
 
     cancel: function () {
-          var data = JSON.parse( JSON.stringify( this.props.profileData ));
-        this.setState({ profileData :data,
-                        isMain: false });
         this.handleModeChange();
     },
 
     handleModeChange: function () {
 
         if(!this.state.isMain) {
+            var data = JSON.parse( JSON.stringify( this.props.profileData ));
+            this.setState({ profileData :data,
+                            isMain: true });
 
             this.refs.mainContainer.getDOMNode().style.display="block";
             this.refs.editContainer.getDOMNode().style.display="none";
@@ -218,6 +212,9 @@ var ArticleContent = React.createClass({displayName: "ArticleContent",
     goToEditMode: function() {
 
         if(this.state.isMain) {
+             var data = JSON.parse( JSON.stringify( this.props.profileData ));
+             this.setState({ profileData :data,
+                        isMain: false });
 
             this.refs.mainContainer.getDOMNode().style.display="none";
             this.refs.editContainer.getDOMNode().style.display="block";
