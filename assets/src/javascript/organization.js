@@ -310,7 +310,7 @@ var Buttons = React.createClass({displayName: "Buttons",
 
     render: function() {
         return (
-            React.createElement("div", {className: "edit"}, 
+            React.createElement("div", {className: "buttons-container"}, 
                 React.createElement("button", {className: "save-btn", onClick: this.saveHandler}, "save"), 
                 React.createElement("button", {className: "cancel-btn", onClick: this.cancelHandler}, "cancel")
             )
@@ -434,7 +434,7 @@ var ArticleContent = React.createClass({displayName: "ArticleContent",
 
     render: function() {
         return (
-            React.createElement("div", {className: "article-content experience", onClick: this.goToEditMode}, 
+            React.createElement("div", {className: "article-content", onClick: this.goToEditMode}, 
 
                 React.createElement(OrganizationMain, {ref: "mainContainer", organizationData: this.props.organizationData}), 
                 React.createElement(OrganizationEdit, {ref: "editContainer", organizationData: this.props.organizationData, updateOrganizationName: this.updateOrganizationName}), 

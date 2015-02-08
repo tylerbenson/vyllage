@@ -113,7 +113,7 @@ var HeadlineContainerEdit = React.createClass({
 
     render: function() {
         return (
-            <div className="headline-container edit">
+            <div className="headline-container editable">
                 <HeadlineEdit profileData={this.props.profileData} changeHeadline={this.changeHeadline}/>
                 <TaglineEdit profileData={this.props.profileData} changeTagline={this.changeTagline} />
             </div>
@@ -150,7 +150,7 @@ var ButtonsContainer = React.createClass({
 
     render: function() {
         return (
-            <div className="edit buttons-container">
+            <div className="buttons-container">
                 <button className="save-btn" onClick={this.saveHandler}>save</button>
                 <button className="cancel-btn" onClick={this.cancelHandler}>cancel</button>
             </div>
@@ -216,7 +216,7 @@ var ArticleContent = React.createClass({
 
             this.refs.mainContainer.getDOMNode().style.display="none";
             this.refs.editContainer.getDOMNode().style.display="block";
-            this.refs.buttonContainer.getDOMNode().style.display="block";
+            this.refs.buttonContainer.getDOMNode().style.display="block" ;
 
             this.state.isMain=false;
         }
@@ -225,14 +225,10 @@ var ArticleContent = React.createClass({
     render: function() {
         return (
             <div className="four columns article-content profile" onClick={this.goToEditMode}>
-                <div>
-                    <div>
-                        <HeadlineContainerMain ref="mainContainer" profileData={this.props.profileData} />
-                        <HeadlineContainerEdit ref="editContainer" profileData={this.props.profileData} updateHeadline={this.updateHeadline} updateTagline={this.updateTagline} />
-                    </div>
+                <HeadlineContainerMain ref="mainContainer" profileData={this.props.profileData} />
+                <HeadlineContainerEdit ref="editContainer" profileData={this.props.profileData} updateHeadline={this.updateHeadline} updateTagline={this.updateTagline} />
 
-                    <ButtonsContainer ref="buttonContainer"  save={this.save} cancel={this.cancel}/>
-                </div>
+                <ButtonsContainer ref="buttonContainer"  save={this.save} cancel={this.cancel}/>
             </div>
         );
     }

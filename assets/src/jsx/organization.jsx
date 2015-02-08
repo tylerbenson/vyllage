@@ -310,7 +310,7 @@ var Buttons = React.createClass({
 
     render: function() {
         return (
-            <div className="edit">
+            <div className="buttons-container">
                 <button className="save-btn" onClick={this.saveHandler}>save</button>
                 <button className="cancel-btn" onClick={this.cancelHandler}>cancel</button>
             </div>
@@ -434,7 +434,7 @@ var ArticleContent = React.createClass({
 
     render: function() {
         return (
-            <div className="article-content experience" onClick={this.goToEditMode}>
+            <div className="article-content" onClick={this.goToEditMode}>
 
                 <OrganizationMain ref="mainContainer" organizationData={this.props.organizationData}/>
                 <OrganizationEdit ref="editContainer" organizationData={this.props.organizationData} updateOrganizationName={this.updateOrganizationName}/>
