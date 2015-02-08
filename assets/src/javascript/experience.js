@@ -1,51 +1,50 @@
-var ExperienceMain = React.createClass({displayName: "ExperienceMain",   
+var OrganisationMain = React.createClass({displayName: "OrganisationMain",   
 
     render: function() {
         return (
             React.createElement("div", {className: "nonEditable"}, 
 
                 React.createElement("div", {className: "main"}, 
-                    React.createElement("p", {className: "company-name"}, 
-                        this.props.experienceData.companyName, 
-                        this.props.experienceData.industry
+                    React.createElement("p", {className: "organization-name"}, 
+                        this.props.organisationData.organizationName
                     )
                 ), 
 
                 React.createElement("div", {className: "main"}, 
                     React.createElement("div", {className: "paragraph"}, 
-                        React.createElement("p", {className: "company-description"}, 
-                            this.props.experienceData.companyDescription
+                        React.createElement("p", {className: "organization-description"}, 
+                            this.props.organisationData.organizationDescription
                         )
                     )
                 ), 
 
                 React.createElement("div", {className: "main"}, 
-                    React.createElement("p", {className: "title"}, 
-                        this.props.experienceData.jobTitle
+                    React.createElement("p", {className: "role"}, 
+                        this.props.organisationData.role
                     ), 
                     React.createElement("p", {className: "start-date"}, 
-                        this.props.experienceData.startDate
+                        this.props.organisationData.startDate
                     ), 
                     React.createElement("p", {className: "end-date"}, 
-                        this.props.experienceData.endDate
+                        this.props.organisationData.endDate
                     ), 
                     React.createElement("p", {className: "location"}, 
-                        this.props.experienceData.location
+                        this.props.organisationData.location
                     )
                 ), 
 
                 React.createElement("div", {className: "main"}, 
                     React.createElement("div", {className: "paragraph"}, 
-                        React.createElement("p", {className: "job-description"}, 
-                            this.props.experienceData.jobDescription
+                        React.createElement("p", {className: "role-description"}, 
+                            this.props.organisationData.roleDescription
                         )
                     )
                 ), 
 
                 React.createElement("div", {className: "main"}, 
                     React.createElement("div", {className: "paragraph"}, 
-                        React.createElement("p", {className: "responsibilities"}, 
-                            this.props.experienceData.responsibilities
+                        React.createElement("p", {className: "highlights"}, 
+                            this.props.organisationData.highlights
                         )
                     )
                 )
@@ -55,61 +54,59 @@ var ExperienceMain = React.createClass({displayName: "ExperienceMain",
     }
 });
 
-
-var CompanyName = React.createClass({displayName: "CompanyName",   
+var OrganizationName = React.createClass({displayName: "OrganizationName",   
 
     render: function() {
         return (
             React.createElement("div", {className: "edit"}, 
-                React.createElement("input", {type: "text", className: "company-name", value: this.props.experienceData.companyName}), 
-                React.createElement("input", {type: "text", className: "industry", value: this.props.experienceData.industry})
+                React.createElement("input", {type: "text", className: "organization-name", value: this.props.organizationName})
             )
         );
     }
 });
 
-var CompanyDescription = React.createClass({displayName: "CompanyDescription",   
+var OrganizationDescription = React.createClass({displayName: "OrganizationDescription",   
 
     render: function() {
         return (
             React.createElement("div", {className: "edit"}, 
-                React.createElement("textarea", {className: "company-description"}, this.props.experienceData.companyDescription)
+                React.createElement("textarea", {className: "organization-description", value: this.props.organizationDescription})
             )
         );
     }
 });
 
-var Job = React.createClass({displayName: "Job",   
+var Role = React.createClass({displayName: "Role",   
 
     render: function() {
         return (
              React.createElement("div", {className: "edit"}, 
-                React.createElement("input", {type: "text", className: "title", value: this.props.experienceData.jobTitle}), 
-                React.createElement("input", {type: "text", className: "start-date", value: this.props.experienceData.startDate}), 
-                React.createElement("input", {type: "text", className: "end-date", value: this.props.experienceData.endDate}), 
-                React.createElement("input", {type: "text", className: "location", value: this.props.experienceData.location})
+                React.createElement("input", {type: "text", className: "title", value: this.props.organisationData.role}), 
+                React.createElement("input", {type: "text", className: "start-date", value: this.props.organisationData.startDate}), 
+                React.createElement("input", {type: "text", className: "end-date", value: this.props.organisationData.endDate}), 
+                React.createElement("input", {type: "text", className: "location", value: this.props.organisationData.location})
             )
         );
     }
 });
 
-var JobDescription = React.createClass({displayName: "JobDescription",   
+var RoleDescription = React.createClass({displayName: "RoleDescription",   
 
     render: function() {
         return (
             React.createElement("div", {className: "edit"}, 
-                React.createElement("textarea", {className: "job-description"}, this.props.experienceData.jobDescription)
+                React.createElement("textarea", {className: "role-description", value: this.props.roleDescription})
             )
         );
     }
 });
 
-var Responsibilities = React.createClass({displayName: "Responsibilities",   
+var Highlights = React.createClass({displayName: "Highlights",   
 
     render: function() {
         return (
              React.createElement("div", {className: "edit"}, 
-                React.createElement("textarea", {className: "responsibilities"}, this.props.experienceData.responsibilities)
+                React.createElement("textarea", {className: "highlights", value: this.props.highlights})
             )
         );
     }
@@ -119,23 +116,21 @@ var Responsibilities = React.createClass({displayName: "Responsibilities",
 var Buttons = React.createClass({displayName: "Buttons",   
 
     saveHandler: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
 
         if (this.props.save) {
             this.props.save();
         }
-
-        event.preventDefault();
-        event.stopPropagation();
     },    
 
     cancelHandler: function(event) {
+        event.preventDefault();
+        event.stopPropagation();
 
         if (this.props.cancel) {
             this.props.cancel();
         }
-
-        event.preventDefault();
-        event.stopPropagation();
     },
 
     render: function() {
@@ -148,24 +143,22 @@ var Buttons = React.createClass({displayName: "Buttons",
     }
 });
 
-var ExperienceEdit = React.createClass({displayName: "ExperienceEdit",   
+var OrganisationEdit = React.createClass({displayName: "OrganisationEdit",   
 
     render: function() {
         return (
             React.createElement("div", {className: "editable"}, 
-                React.createElement(CompanyName, {experienceData: this.props.experienceData}), 
-                React.createElement(CompanyDescription, {experienceData: this.props.experienceData}), 
-                React.createElement(Job, {experienceData: this.props.experienceData}), 
-                React.createElement(JobDescription, {experienceData: this.props.experienceData}), 
-                React.createElement(Responsibilities, {experienceData: this.props.experienceData})
-                
-              
+                React.createElement(OrganizationName, {organizationName: this.props.organisationData.organizationName}), 
+                React.createElement(OrganizationDescription, {organizationDescription: this.props.organisationData.organizationDescription}), 
+                React.createElement(Role, {organisationData: this.props.organisationData}), 
+                React.createElement(RoleDescription, {roleDescription: this.props.organisationData.roleDescription}), 
+                React.createElement(Highlights, {highlights: this.props.organisationData.highlights})
             )
         );
     }
 });
 
-var ArticleContentExperience = React.createClass({displayName: "ArticleContentExperience",  
+var ArticleContent = React.createClass({displayName: "ArticleContent",  
 
     getInitialState: function() {
         return {
@@ -188,9 +181,11 @@ var ArticleContentExperience = React.createClass({displayName: "ArticleContentEx
     handleModeChange: function () {
 
         if(!this.state.isMain) {
-            var data = JSON.parse( JSON.stringify( this.props.experienceData ));
-            this.setState({ experienceData :data,
-                            isMain: true });
+            var data = JSON.parse(JSON.stringify(this.props.organisationData));
+            this.setState({ 
+                organisationData :data,
+                isMain: true
+            });
 
             this.refs.mainContainer.getDOMNode().style.display="block";
             this.refs.editContainer.getDOMNode().style.display="none";
@@ -206,9 +201,11 @@ var ArticleContentExperience = React.createClass({displayName: "ArticleContentEx
      goToEditMode: function() {
 
         if(this.state.isMain) {
-             var data = JSON.parse( JSON.stringify( this.props.experienceData ));
-             this.setState({ experienceData :data,
-                        isMain: false });
+            var data = JSON.parse(JSON.stringify(this.props.organisationData));
+            this.setState({
+                organisationData :data,
+                isMain: false
+             });
 
             this.refs.mainContainer.getDOMNode().style.display="none";
             this.refs.editContainer.getDOMNode().style.display="block";
@@ -222,9 +219,9 @@ var ArticleContentExperience = React.createClass({displayName: "ArticleContentEx
         return (
             React.createElement("div", {className: "article-content experience", onClick: this.goToEditMode}, 
 
-                React.createElement(ExperienceMain, {ref: "mainContainer", experienceData: this.props.experienceData}), 
-                React.createElement(ExperienceEdit, {ref: "editContainer", experienceData: this.props.experienceData}), 
-                React.createElement(Buttons, {ref: "buttonContainer", experienceData: this.props.experienceData, save: this.save, cancel: this.cancel})
+                React.createElement(OrganisationMain, {ref: "mainContainer", organisationData: this.props.organisationData}), 
+                React.createElement(OrganisationEdit, {ref: "editContainer", organisationData: this.props.organisationData}), 
+                React.createElement(Buttons, {ref: "buttonContainer", save: this.save, cancel: this.cancel})
             )
         );
     }
@@ -284,15 +281,29 @@ var CommentsBlog = React.createClass({displayName: "CommentsBlog",
     }
 });
 
-var ExperienceCantainer = React.createClass({displayName: "ExperienceCantainer",   
+var OrganisationCantainer = React.createClass({displayName: "OrganisationCantainer",
+
+     getInitialState: function() {
+        return {organisationData: []};
+    },
+
+    componentDidMount : function() {
+        // ajax call will go here and fetch the profileData
+        this.setState({organisationData: OrganisationData});
+    },
+
+    saveChanges: function (data) {
+        this.setState({organisationData: data});
+        // here ajax call will go to the server, and update the data
+    },
 
     render: function() {
         return (
             React.createElement("div", {className: "twelve columns"}, 
                 React.createElement("div", null, 
-                    React.createElement("button", {className: "article-btn"}, " experience ")
+                    React.createElement("button", {className: "article-btn"}, " ", this.state.organisationData.type, " ")
                 ), 
-                React.createElement(ArticleContentExperience, {experienceData: this.props.experienceData}), 
+                React.createElement(ArticleContent, {organisationData: this.state.organisationData}), 
 
                 React.createElement(ArticleControlls, null), 
 
@@ -302,36 +313,23 @@ var ExperienceCantainer = React.createClass({displayName: "ExperienceCantainer",
     }
 });
 
-var DATA = {
-    "type": "experience",
+var OrganisationData = {
+   "type": "experience",
+    "title": "job experience",
+    "sectionId": 124,
     "sectionPosition": 2,
-    "companyName": "DeVry1",
-    "industry": "Education Group",
-    "companyDescription": "Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah.",
-    "jobTitle": "Manager, Local Accounts",
+    "state": "shown",
+    "organizationName": "DeVry Education Group",
+    "organizationDescription": "Blah Blah Blah. Blah Blah Blah ...",
+    "role": "Manager, Local Accounts",
     "startDate": "September 2010",
-    "endDate": "",
+    "endDate": "July 2012",
     "isCurrent": true,
     "location": "Portland, Oregon",
-    "jobDescription": "Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah",
-    "responsibilities": "I was in charge of..."
-
-    // "type": "experience",
-    // "title": "job experience",
-    // "sectionId": 124,
-    // "sectionPosition": 2,
-    // "state": "shown",
-    // "organizationName": "DeVry Education Group",
-    // "organizationDescription": "Blah Blah Blah.",
-    // "role": "Manager, Local Accounts",
-    // "startDate": "September 2010",
-    // "endDate": "",
-    // "isCurrent": true,
-    // "location": "Portland, Oregon",
-    // "roleDescription": "Blah Blah Blah",
-    // "highlights": "I was in charge of..."
+    "roleDescription": "Blah Blah Blah ... Blah Blah Blah ...",
+    "highlights": "I was in charge of..."
 };
 
-React.render(React.createElement(ExperienceCantainer, {experienceData: DATA}), document.getElementById('experience-container'));
+React.render(React.createElement(OrganisationCantainer, null), document.getElementById('experience-container'));
 
 
