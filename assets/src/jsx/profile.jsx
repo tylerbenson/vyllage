@@ -273,7 +273,7 @@ var ProfileContainer = React.createClass({
 
     render: function() {
         return (
-           <div className="row">
+            <div className="row">
                 <ProfilePhotoContainer />
 
                 <ArticleContent profileData={this.state.profileData} saveChanges={this.saveChanges}/>

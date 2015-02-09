@@ -273,7 +273,7 @@ var ProfileContainer = React.createClass({displayName: "ProfileContainer",
 
     render: function() {
         return (
-           React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "row"}, 
                 React.createElement(ProfilePhotoContainer, null), 
 
                 React.createElement(ArticleContent, {profileData: this.state.profileData, saveChanges: this.saveChanges}), 
