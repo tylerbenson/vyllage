@@ -113,7 +113,7 @@ var HeadlineContainerEdit = React.createClass({displayName: "HeadlineContainerEd
 
     render: function() {
         return (
-            React.createElement("div", {className: "headline-container edit"}, 
+            React.createElement("div", {className: "headline-container editable"}, 
                 React.createElement(HeadlineEdit, {profileData: this.props.profileData, changeHeadline: this.changeHeadline}), 
                 React.createElement(TaglineEdit, {profileData: this.props.profileData, changeTagline: this.changeTagline})
             )
@@ -150,7 +150,7 @@ var ButtonsContainer = React.createClass({displayName: "ButtonsContainer",
 
     render: function() {
         return (
-            React.createElement("div", {className: "edit buttons-container"}, 
+            React.createElement("div", {className: "buttons-container"}, 
                 React.createElement("button", {className: "save-btn", onClick: this.saveHandler}, "save"), 
                 React.createElement("button", {className: "cancel-btn", onClick: this.cancelHandler}, "cancel")
             )
@@ -216,7 +216,7 @@ var ArticleContent = React.createClass({displayName: "ArticleContent",
 
             this.refs.mainContainer.getDOMNode().style.display="none";
             this.refs.editContainer.getDOMNode().style.display="block";
-            this.refs.buttonContainer.getDOMNode().style.display="block";
+            this.refs.buttonContainer.getDOMNode().style.display="block" ;
 
             this.state.isMain=false;
         }
@@ -225,14 +225,10 @@ var ArticleContent = React.createClass({displayName: "ArticleContent",
     render: function() {
         return (
             React.createElement("div", {className: "four columns article-content profile", onClick: this.goToEditMode}, 
-                React.createElement("div", null, 
-                    React.createElement("div", null, 
-                        React.createElement(HeadlineContainerMain, {ref: "mainContainer", profileData: this.props.profileData}), 
-                        React.createElement(HeadlineContainerEdit, {ref: "editContainer", profileData: this.props.profileData, updateHeadline: this.updateHeadline, updateTagline: this.updateTagline})
-                    ), 
+                React.createElement(HeadlineContainerMain, {ref: "mainContainer", profileData: this.props.profileData}), 
+                React.createElement(HeadlineContainerEdit, {ref: "editContainer", profileData: this.props.profileData, updateHeadline: this.updateHeadline, updateTagline: this.updateTagline})
 
-                    React.createElement(ButtonsContainer, {ref: "buttonContainer", save: this.save, cancel: this.cancel})
-                )
+              
             )
         );
     }
