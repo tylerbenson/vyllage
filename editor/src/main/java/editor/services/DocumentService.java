@@ -1,20 +1,17 @@
 package editor.services;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import org.jooq.Record;
-import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import editor.model.DocumentSection;
 import editor.repository.DocumentRepository;
+import editor.repository.DocumentSectionNotFoundException;
 import editor.repository.DocumentSectionRepository;
 
 /**
@@ -33,10 +30,10 @@ public class DocumentService {
 	private DocumentRepository documentRepository;
 
 	@Autowired
-	DocumentSectionRepository documentSectionRepository;
+	private DocumentSectionRepository documentSectionRepository;
 
 	/**
-	 * Saves the json documentSection, if the record is already present it will
+	 * Saves the DocumentSection, if the record is already present it will
 	 * update instead.
 	 * 
 	 * @param body
@@ -46,8 +43,8 @@ public class DocumentService {
 			throws JsonProcessingException {
 
 		// TODO: replace id with document?
-		Result<Record> documentSections = documentSectionRepository
-				.getDocumentSections(documentId, body);
+		List<String> documentSections = documentSectionRepository
+				.getDocumentSections(documentId);
 
 		logger.info("Saving document: " + body.getSectionId());
 
@@ -71,17 +68,15 @@ public class DocumentService {
 	}
 
 	/**
+	 * Retrieves a single DocumentSection related to a Document.
+	 * 
 	 * @param id
 	 * @param sectionId
 	 * @return DocumentSection
-	 * @throws JsonParseException
-	 * @throws JsonMappingException
-	 * @throws IOException
+	 * @throws DocumentSectionNotFoundException
 	 */
 	public DocumentSection getDocumentSection(Long documentId, Long sectionId)
-			throws JsonParseException, JsonMappingException, IOException {
-
-		// TODO: handle exceptions, not found, etc
+			throws DocumentSectionNotFoundException {
 
 		String json = documentSectionRepository.getSection(documentId,
 				sectionId);
@@ -89,8 +84,16 @@ public class DocumentService {
 		return DocumentSection.fromJSON(json);
 	}
 
+	/**
+	 * Retrieves all the sections related to a Document.
+	 * 
+	 * @param documentId
+	 * @return
+	 */
 	public List<DocumentSection> getDocumentSections(Long documentId) {
-		return documentSectionRepository.getSections(documentId);
+		return documentSectionRepository.getDocumentSections(documentId)
+				.stream().map(DocumentSection::fromJSON)
+				.collect(Collectors.toList());
 	}
 
 }

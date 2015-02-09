@@ -2,12 +2,15 @@ package editor.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import editor.model.DocumentHeader;
 import editor.model.DocumentSection;
+import editor.repository.DocumentSectionNotFoundException;
 import editor.services.DocumentService;
 
 @Controller
@@ -58,16 +62,11 @@ public class ResumeController {
 	@RequestMapping(value = "{resumeId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody DocumentSection getResumeSection(
 			@PathVariable(value = "resumeId") final Long documentId,
-			@PathVariable final Long sectionId) {
+			@PathVariable final Long sectionId)
+			throws DocumentSectionNotFoundException {
 
-		try {
-			return documentService.getDocumentSection(documentId, sectionId);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return documentService.getDocumentSection(documentId, sectionId);
 
-		return null;
 	}
 
 	@RequestMapping(value = "{resumeId}/header", method = RequestMethod.GET, produces = "application/json")
@@ -108,5 +107,18 @@ public class ResumeController {
 			@RequestBody final DocumentHeader body) {
 		// logger.info(body.toString());
 
+	}
+
+	@ExceptionHandler(DocumentSectionNotFoundException.class)
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	public @ResponseBody Map<String, Object> handleDocumentNotFoundException(
+			Exception ex) {
+		Map<String, Object> map = new HashMap<>();
+		if (ex.getCause() != null) {
+			map.put("cause", ex.getCause().getMessage());
+		} else {
+			map.put("cause", ex.getMessage());
+		}
+		return map;
 	}
 }

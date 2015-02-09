@@ -3,9 +3,7 @@ package editor.model;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -180,12 +178,18 @@ public class DocumentSection {
 		return mapper.writeValueAsString(this);
 	}
 
-	public static DocumentSection fromJSON(String json)
-			throws JsonParseException, JsonMappingException, IOException {
+	public static DocumentSection fromJSON(String json) {
 
 		ObjectMapper mapper = new ObjectMapper();
 
-		return mapper.readValue(json, DocumentSection.class);
+		try {
+			return mapper.readValue(json, DocumentSection.class);
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 }

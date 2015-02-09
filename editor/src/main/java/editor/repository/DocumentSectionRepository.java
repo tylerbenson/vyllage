@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -26,12 +27,13 @@ public class DocumentSectionRepository {
 	@Autowired
 	private DSLContext sql;
 
-	public Result<Record> getDocumentSections(Long documentId,
-			DocumentSection body) {
+	public List<String> getDocumentSections(Long documentId) {
 		Result<Record> documentSections = sql.select().from(DOCUMENT_SECTIONS)
-				.where(DOCUMENT_SECTIONS.ID.equal(body.getSectionId()))
-				.and(DOCUMENT_SECTIONS.DOCUMENTID.eq(documentId)).fetch();
-		return documentSections;
+				.where(DOCUMENT_SECTIONS.DOCUMENTID.eq(documentId)).fetch();
+
+		return documentSections.stream()
+				.map(r -> r.getValue(DOCUMENT_SECTIONS.JSONDOCUMENT))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -73,7 +75,8 @@ public class DocumentSectionRepository {
 				.execute();
 	}
 
-	public String getSection(Long documentId, Long sectionId) {
+	public String getSection(Long documentId, Long sectionId)
+			throws DocumentSectionNotFoundException {
 		Result<Record> records = sql
 				.select()
 				.from(DOCUMENT_SECTIONS)
@@ -83,10 +86,17 @@ public class DocumentSectionRepository {
 
 		logger.info("Records found: " + records.size());
 
-		return records.get(0).getValue(DOCUMENT_SECTIONS.JSONDOCUMENT);
+		String value;
+
+		try {
+			value = records.get(0).getValue(DOCUMENT_SECTIONS.JSONDOCUMENT);
+
+		} catch (IndexOutOfBoundsException e) {
+			throw new DocumentSectionNotFoundException("Section " + sectionId
+					+ " from document " + documentId + " not found.");
+		}
+
+		return value;
 	}
 
-	public List<DocumentSection> getSections(Long documentId) {
-		return null;
-	}
 }
