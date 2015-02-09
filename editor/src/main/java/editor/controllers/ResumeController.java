@@ -53,8 +53,7 @@ public class ResumeController {
 
 	@RequestMapping(value = "{resumeId}/section", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<DocumentSection> getResumeSection(
-			@PathVariable final Long documentId)
-			throws JsonProcessingException, IOException {
+			@PathVariable final Long documentId) throws JsonProcessingException {
 
 		return documentService.getDocumentSections(documentId);
 	}
@@ -109,7 +108,8 @@ public class ResumeController {
 
 	}
 
-	@ExceptionHandler(DocumentSectionNotFoundException.class)
+	@ExceptionHandler(value = { DocumentSectionNotFoundException.class,
+			JsonProcessingException.class, IOException.class })
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	public @ResponseBody Map<String, Object> handleDocumentNotFoundException(
 			Exception ex) {
