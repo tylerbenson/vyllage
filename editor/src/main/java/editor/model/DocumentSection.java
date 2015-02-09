@@ -1,12 +1,15 @@
 package editor.model;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class DocumentSection {
-	
+
 	private SectionType type;
 	private String title;
 	private long sectionId;
@@ -15,22 +18,22 @@ public class DocumentSection {
 	private String organizationName;
 	private String organizationDescription;
 	private String role;
-	
+
 	@JsonSerialize(using = LocalDateSerializer.class)
-	@JsonDeserialize(using = LocalDateDeserializer.class) 
+	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate startDate;
-	
+
 	@JsonSerialize(using = LocalDateSerializer.class)
-	@JsonDeserialize(using = LocalDateDeserializer.class) 
+	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate endDate;
-	
+
 	private boolean isCurrent;
 	private String location;
 	private String roleDescription;
 	private String highlights;
-	
+
 	private String description;
-	
+
 	public DocumentSection() {
 	}
 
@@ -41,7 +44,7 @@ public class DocumentSection {
 	public void setType(SectionType type) {
 		this.type = type;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
@@ -166,7 +169,27 @@ public class DocumentSection {
 				+ roleDescription + ", highlights=" + highlights
 				+ ", description=" + description + "]";
 	}
-	
-	
-	
+
+	// TODO: the following methods are here for convenience, will move them
+	// later.
+
+	public String asJSON() throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(this);
+	}
+
+	public static DocumentSection fromJSON(String json) {
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		try {
+			return mapper.readValue(json, DocumentSection.class);
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 }
