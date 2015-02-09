@@ -25,7 +25,7 @@ public class DocumentServiceTest {
 	DocumentService service;
 
 	@Mock
-	DocumentSectionRepository dsrepository;
+	DocumentSectionRepository dsRepository;
 
 	@Before
 	public void initMocks() {
@@ -50,7 +50,7 @@ public class DocumentServiceTest {
 				+ "\"roleDescription\": \"Blah Blah Blah\","
 				+ "\"highlights\": \"I was in charge of...\"" + "}";
 
-		Mockito.doReturn(json).when(dsrepository)
+		Mockito.doReturn(json).when(dsRepository)
 				.getSection(documentId, sectionId);
 
 		DocumentSection documentSection = service.getDocumentSection(
@@ -88,7 +88,7 @@ public class DocumentServiceTest {
 				+ "\"roleDescription\": \"Blah Blah Blah\","
 				+ "\"highlights\": \"I was in charge of...\"" + "}";
 
-		Mockito.doReturn(Arrays.asList(json1, json2)).when(dsrepository)
+		Mockito.doReturn(Arrays.asList(json1, json2)).when(dsRepository)
 				.getDocumentSections(documentId);
 
 		List<DocumentSection> documentSection = service
