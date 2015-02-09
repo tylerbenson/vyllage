@@ -1,1 +1,1 @@
-insert into accounts(username) values('username');
+insert into editor.accounts(username) values('username');
