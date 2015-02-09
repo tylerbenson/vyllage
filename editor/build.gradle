@@ -73,7 +73,7 @@ jooq {
 		generator { 
 			target { 
 				packageName = 'editor.domain'
-				directory = 'src/main/java' 
+//				directory = 'src/main/java' 
 			}
 		}
 	}
