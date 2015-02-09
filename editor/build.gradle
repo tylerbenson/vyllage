@@ -68,7 +68,7 @@ jooq {
 			url = "jdbc:h2:$buildDir/db/local"
 			user = 'sa'
 			password = ''
-			schema = 'editor'
+//			schema = 'editor'
 		}
 		generator { 
 			target { 
