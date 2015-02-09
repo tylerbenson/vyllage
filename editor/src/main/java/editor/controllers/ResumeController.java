@@ -108,9 +108,22 @@ public class ResumeController {
 
 	}
 
-	@ExceptionHandler(value = { DocumentSectionNotFoundException.class,
-			JsonProcessingException.class, IOException.class })
+	@ExceptionHandler(value = { JsonProcessingException.class,
+			IOException.class })
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	public @ResponseBody Map<String, Object> handleInternalServerErrorException(
+			Exception ex) {
+		Map<String, Object> map = new HashMap<>();
+		if (ex.getCause() != null) {
+			map.put("cause", ex.getCause().getMessage());
+		} else {
+			map.put("cause", ex.getMessage());
+		}
+		return map;
+	}
+
+	@ExceptionHandler(value = { DocumentSectionNotFoundException.class })
+	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public @ResponseBody Map<String, Object> handleDocumentNotFoundException(
 			Exception ex) {
 		Map<String, Object> map = new HashMap<>();
