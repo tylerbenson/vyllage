@@ -2,6 +2,7 @@ package editor.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{resumeId}/section", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody DocumentSection getResumeSection(
+	public @ResponseBody List<DocumentSection> getResumeSection(
 			@PathVariable final Long documentId)
 			throws JsonProcessingException, IOException {
 
@@ -57,10 +58,16 @@ public class ResumeController {
 	@RequestMapping(value = "{resumeId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody DocumentSection getResumeSection(
 			@PathVariable(value = "resumeId") final Long documentId,
-			@PathVariable final Long sectionId) throws JsonProcessingException,
-			IOException {
+			@PathVariable final Long sectionId) {
 
-		return documentService.getDocument(documentId, sectionId);
+		try {
+			return documentService.getDocumentSection(documentId, sectionId);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	@RequestMapping(value = "{resumeId}/header", method = RequestMethod.GET, produces = "application/json")
