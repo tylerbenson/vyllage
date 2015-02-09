@@ -45,22 +45,22 @@ public class ResumeController {
 		return "redirect:/resume/1";
 	}
 
-	@RequestMapping(value = "{resumeId}", method = RequestMethod.GET)
-	public String getResume(@PathVariable final Integer resumeId) {
+	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)
+	public String getResume(@PathVariable final Long documentId) {
 
 		return "main";
 	}
 
-	@RequestMapping(value = "{resumeId}/section", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<DocumentSection> getResumeSection(
 			@PathVariable final Long documentId) throws JsonProcessingException {
 
 		return documentService.getDocumentSections(documentId);
 	}
 
-	@RequestMapping(value = "{resumeId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody DocumentSection getResumeSection(
-			@PathVariable(value = "resumeId") final Long documentId,
+			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId)
 			throws DocumentSectionNotFoundException {
 
@@ -87,10 +87,9 @@ public class ResumeController {
 		return header;
 	}
 
-	@RequestMapping(value = "{resumeId}/section", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void saveSection(
-			@PathVariable(value = "resumeId") final Long documentId,
+	public void saveSection(@PathVariable final Long documentId,
 			@RequestBody final DocumentSection body)
 			throws JsonProcessingException {
 
