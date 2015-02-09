@@ -68,12 +68,10 @@ jooq {
 			url = "jdbc:h2:$buildDir/db/local"
 			user = 'sa'
 			password = ''
-//			schema = 'editor'
 		}
 		generator { 
 			target { 
 				packageName = 'editor.domain'
-//				directory = 'src/main/java' 
 			}
 		}
 	}
