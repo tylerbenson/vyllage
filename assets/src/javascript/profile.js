@@ -226,9 +226,9 @@ var ArticleContent = React.createClass({displayName: "ArticleContent",
         return (
             React.createElement("div", {className: "four columns article-content profile", onClick: this.goToEditMode}, 
                 React.createElement(HeadlineContainerMain, {ref: "mainContainer", profileData: this.props.profileData}), 
-                React.createElement(HeadlineContainerEdit, {ref: "editContainer", profileData: this.props.profileData, updateHeadline: this.updateHeadline, updateTagline: this.updateTagline})
+                React.createElement(HeadlineContainerEdit, {ref: "editContainer", profileData: this.props.profileData, updateHeadline: this.updateHeadline, updateTagline: this.updateTagline}), 
 
-              
+                React.createElement(ButtonsContainer, {ref: "buttonContainer", save: this.save, cancel: this.cancel})
             )
         );
     }
