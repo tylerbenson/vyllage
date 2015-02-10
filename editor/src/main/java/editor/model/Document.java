@@ -48,4 +48,12 @@ public class Document {
 	public LocalDateTime getLastModified() {
 		return this.lastModified;
 	}
+
+	@Override
+	public String toString() {
+		return "Document [id=" + id + ", account=" + account + ", visibility="
+				+ visibility + ", dateCreated=" + dateCreated
+				+ ", lastModified=" + lastModified + "]";
+	}
+
 }

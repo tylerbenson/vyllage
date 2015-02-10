@@ -103,8 +103,12 @@ public class DocumentRepository {
 	}
 
 	public void delete(Document document) {
+		this.delete(document.getId());
+	}
+
+	public void delete(long documentId) {
 		DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
-				DOCUMENTS.ID.eq(document.getId()));
+				DOCUMENTS.ID.eq(documentId));
 		existingRecord.delete(); // TODO: will this work with sections, etc?
 	}
 

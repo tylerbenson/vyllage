@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import editor.model.DocumentSection;
+import editor.repository.DocumentRepository;
 import editor.repository.DocumentSectionNotFoundException;
 import editor.repository.DocumentSectionRepository;
 import editor.services.DocumentService;
@@ -21,11 +22,25 @@ import editor.services.DocumentService;
 @RunWith(MockitoJUnitRunner.class)
 public class DocumentServiceTest {
 
+	private static final String JSON = "{" + "\"type\": \"experience\","
+			+ "\"title\": \"job experience\"," + "\"sectionId\": 124,"
+			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
+			+ "\"organizationName\": \"DeVry Education Group\","
+			+ "\"organizationDescription\": \"Blah Blah Blah.\","
+			+ "\"role\": \"Manager, Local Accounts\","
+			+ "\"startDate\": \"September 2010\"," + "\"endDate\": \"\","
+			+ "\"isCurrent\": true," + "\"location\": \"Portland, Oregon\","
+			+ "\"roleDescription\": \"Blah Blah Blah\","
+			+ "\"highlights\": \"I was in charge of...\"" + "}";
+
 	@InjectMocks
-	DocumentService service;
+	private DocumentService service;
 
 	@Mock
-	DocumentSectionRepository dsRepository;
+	private DocumentSectionRepository dsRepository;
+
+	@Mock
+	private DocumentRepository dRepository;
 
 	@Before
 	public void initMocks() {
@@ -37,17 +52,7 @@ public class DocumentServiceTest {
 			throws DocumentSectionNotFoundException {
 		long sectionId = 1;
 
-		String json = "{" + "\"type\": \"experience\","
-				+ "\"title\": \"job experience\"," + "\"sectionId\": 124,"
-				+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
-				+ "\"organizationName\": \"DeVry Education Group\","
-				+ "\"organizationDescription\": \"Blah Blah Blah.\","
-				+ "\"role\": \"Manager, Local Accounts\","
-				+ "\"startDate\": \"September 2010\"," + "\"endDate\": \"\","
-				+ "\"isCurrent\": true,"
-				+ "\"location\": \"Portland, Oregon\","
-				+ "\"roleDescription\": \"Blah Blah Blah\","
-				+ "\"highlights\": \"I was in charge of...\"" + "}";
+		String json = JSON;
 
 		Mockito.doReturn(DocumentSection.fromJSON(json)).when(dsRepository)
 				.get(sectionId);
@@ -62,29 +67,9 @@ public class DocumentServiceTest {
 			throws DocumentSectionNotFoundException {
 		long documentId = 1;
 
-		String json1 = "{" + "\"type\": \"experience\","
-				+ "\"title\": \"job experience\"," + "\"sectionId\": 124,"
-				+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
-				+ "\"organizationName\": \"DeVry Education Group\","
-				+ "\"organizationDescription\": \"Blah Blah Blah.\","
-				+ "\"role\": \"Manager, Local Accounts\","
-				+ "\"startDate\": \"September 2010\"," + "\"endDate\": \"\","
-				+ "\"isCurrent\": true,"
-				+ "\"location\": \"Portland, Oregon\","
-				+ "\"roleDescription\": \"Blah Blah Blah\","
-				+ "\"highlights\": \"I was in charge of...\"" + "}";
+		String json1 = JSON;
 
-		String json2 = "{" + "\"type\": \"experience\","
-				+ "\"title\": \"job experience\"," + "\"sectionId\": 124,"
-				+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
-				+ "\"organizationName\": \"DeVry Education Group\","
-				+ "\"organizationDescription\": \"Blah Blah Blah.\","
-				+ "\"role\": \"Manager, Local Accounts\","
-				+ "\"startDate\": \"September 2010\"," + "\"endDate\": \"\","
-				+ "\"isCurrent\": true,"
-				+ "\"location\": \"Portland, Oregon\","
-				+ "\"roleDescription\": \"Blah Blah Blah\","
-				+ "\"highlights\": \"I was in charge of...\"" + "}";
+		String json2 = JSON;
 
 		Mockito.doReturn(
 				Arrays.asList(DocumentSection.fromJSON(json1),

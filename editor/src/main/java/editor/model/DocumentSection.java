@@ -159,7 +159,7 @@ public class DocumentSection {
 
 	@Override
 	public String toString() {
-		return "ResumeSection [type=" + type + ", title=" + title
+		return "DocumentSection [type=" + type + ", title=" + title
 				+ ", sectionId=" + sectionId + ", sectionPosition="
 				+ sectionPosition + ", state=" + state + ", organizationName="
 				+ organizationName + ", organizationDescription="

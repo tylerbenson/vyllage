@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import editor.domain.editor.tables.DocumentSections;
 import editor.domain.editor.tables.records.DocumentSectionsRecord;
 import editor.model.Document;
 import editor.model.DocumentSection;
@@ -33,14 +34,30 @@ public class DocumentSectionRepository {
 	private DocumentRepository documentRepository;
 
 	public DocumentSection get(Long id) throws DocumentSectionNotFoundException {
-		DocumentSectionsRecord existingRecord = sql.fetchOne(DOCUMENT_SECTIONS,
-				DOCUMENT_SECTIONS.ID.eq(id));
+		// Result<DocumentSectionsRecord> existingRecords = sql.fetch(
+		// DOCUMENT_SECTIONS, DOCUMENT_SECTIONS.ID.eq(id));
 
-		if (existingRecord == null)
+		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
+		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
+
+		List<String> existingRecords = sql.select(s1.fields()) //
+				.from(s1) //
+				.join(s2) //
+				.on(s1.ID.eq(s2.ID)) //
+				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)) //
+				.where(s1.ID.eq(id)).fetch(DOCUMENT_SECTIONS.JSONDOCUMENT);
+
+		// select d1.*
+		// from docs d1
+		// left outer join docs d2
+		// on (d1.id = d2.id and d1.rev < d2.rev)
+		// where d2.id is null
+		// order by id;
+
+		if (existingRecords == null || existingRecords.isEmpty())
 			throw new DocumentSectionNotFoundException(
 					"DocumentSection with id '" + id + "' not found.");
-
-		return DocumentSection.fromJSON(existingRecord.getJsondocument());
+		return DocumentSection.fromJSON(existingRecords.get(0));
 	}
 
 	/**
@@ -105,6 +122,13 @@ public class DocumentSectionRepository {
 			documentSection.setSectionId(newRecord.getId());
 
 		} else {
+
+			logger.info(String
+					.format("Updating existing document section '%1$s' version '%2$s' to version '%3$s' ",
+							existingRecord.getId(),
+							existingRecord.getSectionversion(),
+							existingRecord.getSectionversion() + 1));
+
 			existingRecord
 					.setSectionversion(existingRecord.getSectionversion() + 1);
 
@@ -116,11 +140,11 @@ public class DocumentSectionRepository {
 			existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
 					.now()));
 
-			existingRecord.store();
+			existingRecord.update();
 
 		}
 
-		logger.info("Saving document section " + documentSection);
+		logger.info("Saved document section " + documentSection);
 
 		return documentSection;
 	}

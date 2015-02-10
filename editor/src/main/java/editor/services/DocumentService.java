@@ -32,6 +32,11 @@ public class DocumentService {
 	@Autowired
 	private DocumentSectionRepository documentSectionRepository;
 
+	public Document saveDocument(Document document) {
+		logger.info("Saving document " + document);
+		return documentRepository.save(document);
+	}
+
 	/**
 	 * Saves the DocumentSection, if the record is already present it will
 	 * update instead.
