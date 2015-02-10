@@ -12,8 +12,8 @@ public class DocumentSection {
 
 	private SectionType type;
 	private String title;
-	private long sectionId;
-	private long sectionPosition;
+	private Long sectionId;
+	private Long sectionPosition;
 	private Visibility state;
 	private String organizationName;
 	private String organizationDescription;
@@ -53,19 +53,19 @@ public class DocumentSection {
 		this.title = title;
 	}
 
-	public long getSectionId() {
+	public Long getSectionId() {
 		return sectionId;
 	}
 
-	public void setSectionId(long sectionId) {
+	public void setSectionId(Long sectionId) {
 		this.sectionId = sectionId;
 	}
 
-	public long getSectionPosition() {
+	public Long getSectionPosition() {
 		return sectionPosition;
 	}
 
-	public void setSectionPosition(long sectionPosition) {
+	public void setSectionPosition(Long sectionPosition) {
 		this.sectionPosition = sectionPosition;
 	}
 

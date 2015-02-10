@@ -2,13 +2,13 @@ package editor.services;
 
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import editor.model.Document;
 import editor.model.DocumentSection;
 import editor.repository.DocumentRepository;
 import editor.repository.DocumentSectionNotFoundException;
@@ -37,51 +37,31 @@ public class DocumentService {
 	 * update instead.
 	 * 
 	 * @param body
+	 * @return the saved document
 	 * @throws JsonProcessingException
+	 * @throws
 	 */
-	public void saveDocumentSection(Long documentId, DocumentSection body)
-			throws JsonProcessingException {
+	public DocumentSection saveDocumentSection(Document document,
+			DocumentSection body) throws JsonProcessingException {
 
-		// TODO: replace id with document?
-		List<String> documentSections = documentSectionRepository
-				.getDocumentSections(documentId);
+		logger.info("Saving document section: " + body.getSectionId()
+				+ " from document " + document.getId());
 
-		logger.info("Saving document: " + body.getSectionId());
-
-		// TODO: handle version instead of updating the same document, link to
-		// an actual document, obtain sort order from somewhere, etc.
-		// Refactor to save a list of sections?
-
-		if (documentSections.isEmpty()) {
-			// TODO: get account id
-
-			documentRepository.insertDocument(documentId);
-
-			documentSectionRepository.insertDocumentSection(documentId, body);
-		} else {
-			logger.info("Records found: " + documentSections.size());
-
-			documentSectionRepository.updateDocumentSection(body);
-
-		}
+		return documentSectionRepository.save(document, body);
 
 	}
 
 	/**
-	 * Retrieves a single DocumentSection related to a Document.
+	 * Retrieves a single DocumentSection.
 	 * 
 	 * @param id
 	 * @param sectionId
 	 * @return DocumentSection
 	 * @throws DocumentSectionNotFoundException
 	 */
-	public DocumentSection getDocumentSection(Long documentId, Long sectionId)
+	public DocumentSection getDocumentSection(Long sectionId)
 			throws DocumentSectionNotFoundException {
-
-		String json = documentSectionRepository.getSection(documentId,
-				sectionId);
-
-		return DocumentSection.fromJSON(json);
+		return documentSectionRepository.get(sectionId);
 	}
 
 	/**
@@ -89,11 +69,27 @@ public class DocumentService {
 	 * 
 	 * @param documentId
 	 * @return
+	 * @throws DocumentSectionNotFoundException
 	 */
-	public List<DocumentSection> getDocumentSections(Long documentId) {
-		return documentSectionRepository.getDocumentSections(documentId)
-				.stream().map(DocumentSection::fromJSON)
-				.collect(Collectors.toList());
+	public List<DocumentSection> getDocumentSections(Document document)
+			throws DocumentSectionNotFoundException {
+		return getDocumentSections(document.getId());
+	}
+
+	/**
+	 * Retrieves all the sections related to a Document.
+	 * 
+	 * @param documentId
+	 * @return
+	 * @throws DocumentSectionNotFoundException
+	 */
+	public List<DocumentSection> getDocumentSections(Long documentId)
+			throws DocumentSectionNotFoundException {
+		return documentSectionRepository.getDocumentSections(documentId);
+	}
+
+	public Document getDocument(Long documentId) {
+		return documentRepository.get(documentId);
 	}
 
 }

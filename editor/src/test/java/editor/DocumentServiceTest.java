@@ -35,7 +35,6 @@ public class DocumentServiceTest {
 	@Test
 	public void loadSingleDocumentSectionTest()
 			throws DocumentSectionNotFoundException {
-		long documentId = 1;
 		long sectionId = 1;
 
 		String json = "{" + "\"type\": \"experience\","
@@ -50,11 +49,10 @@ public class DocumentServiceTest {
 				+ "\"roleDescription\": \"Blah Blah Blah\","
 				+ "\"highlights\": \"I was in charge of...\"" + "}";
 
-		Mockito.doReturn(json).when(dsRepository)
-				.getSection(documentId, sectionId);
+		Mockito.doReturn(DocumentSection.fromJSON(json)).when(dsRepository)
+				.get(sectionId);
 
-		DocumentSection documentSection = service.getDocumentSection(
-				documentId, sectionId);
+		DocumentSection documentSection = service.getDocumentSection(sectionId);
 
 		Assert.assertNotNull(documentSection);
 	}
@@ -88,7 +86,9 @@ public class DocumentServiceTest {
 				+ "\"roleDescription\": \"Blah Blah Blah\","
 				+ "\"highlights\": \"I was in charge of...\"" + "}";
 
-		Mockito.doReturn(Arrays.asList(json1, json2)).when(dsRepository)
+		Mockito.doReturn(
+				Arrays.asList(DocumentSection.fromJSON(json1),
+						DocumentSection.fromJSON(json2))).when(dsRepository)
 				.getDocumentSections(documentId);
 
 		List<DocumentSection> documentSection = service
