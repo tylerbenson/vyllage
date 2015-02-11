@@ -9,6 +9,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import editor.model.constants.SectionType;
+import editor.model.constants.Visibility;
+import editor.model.customDeserializer.LocalDateDeserializer;
+import editor.model.customDeserializer.LocalDateSerializer;
+
 @JsonIgnoreProperties(value = { "documentId" })
 public class DocumentSection {
 

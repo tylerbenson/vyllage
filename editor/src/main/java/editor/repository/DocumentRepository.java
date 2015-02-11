@@ -110,7 +110,6 @@ public class DocumentRepository implements IRepository<Document> {
 		return document;
 	}
 
-	@Override
 	public void delete(Document document) {
 		this.delete(document.getId());
 	}

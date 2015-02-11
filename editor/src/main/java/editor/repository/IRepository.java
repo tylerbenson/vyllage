@@ -10,8 +10,6 @@ public interface IRepository<T> {
 
 	public abstract T save(T t);
 
-	public abstract void delete(T t);
-
 	public abstract void delete(Long id);
 
 }

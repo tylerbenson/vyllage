@@ -169,30 +169,6 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		return documentSection;
 	}
 
-	// public DocumentSection save(Document document,
-	// DocumentSection documentSection) throws JsonProcessingException {
-	//
-	// try {
-	// documentRepository.get(document.getId());
-	//
-	// } catch (ElementNotFoundException e) {
-	// logger.info("Document with id" + document.getId()
-	// + "not found, saving document first.");
-	// document = documentRepository.save(document);
-	// }
-	//
-	// documentSection.setDocumentId(document.getId());
-	//
-	// this.save(documentSection);
-	//
-	// return documentSection;
-	// }
-
-	@Override
-	public void delete(DocumentSection documentSection) {
-		this.delete(documentSection.getSectionId());
-	}
-
 	@Override
 	public void delete(Long sectionId) {
 		DocumentSectionsRecord existingRecord = sql.fetchOne(DOCUMENT_SECTIONS,

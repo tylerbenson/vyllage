@@ -78,7 +78,6 @@ public class AccountRepository implements IRepository<Account> {
 		return account;
 	}
 
-	@Override
 	public void delete(Account account) {
 		this.delete(account.getId());
 	}

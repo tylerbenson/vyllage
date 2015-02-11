@@ -53,7 +53,7 @@ public class DocumentRepositoryTest {
 		document = repository.save(document);
 		Long id = document.getId();
 
-		repository.delete(document);
+		repository.delete(document.getId());
 
 		document = repository.get(id);
 

@@ -1,4 +1,4 @@
-package editor.model;
+package editor.model.constants;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
