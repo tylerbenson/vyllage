@@ -22,7 +22,7 @@ import editor.model.Document;
 import editor.model.DocumentSection;
 
 @Repository
-public class DocumentSectionRepository {
+public class DocumentSectionRepository implements IRepository<DocumentSection> {
 
 	private final Logger logger = Logger
 			.getLogger(DocumentSectionRepository.class.getName());
@@ -31,9 +31,10 @@ public class DocumentSectionRepository {
 	private DSLContext sql;
 
 	@Autowired
-	private DocumentRepository documentRepository;
+	private IRepository<Document> documentRepository;
 
-	public DocumentSection get(Long id) throws DocumentSectionNotFoundException {
+	@Override
+	public DocumentSection get(Long id) throws ElementNotFoundException {
 		// Result<DocumentSectionsRecord> existingRecords = sql.fetch(
 		// DOCUMENT_SECTIONS, DOCUMENT_SECTIONS.ID.eq(id));
 
@@ -55,9 +56,25 @@ public class DocumentSectionRepository {
 		// order by id;
 
 		if (existingRecords == null || existingRecords.isEmpty())
-			throw new DocumentSectionNotFoundException(
-					"DocumentSection with id '" + id + "' not found.");
+			throw new ElementNotFoundException("DocumentSection with id '" + id
+					+ "' not found.");
 		return DocumentSection.fromJSON(existingRecords.get(0));
+	}
+
+	@Override
+	public List<DocumentSection> getAll() {
+		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
+		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
+
+		List<String> existingRecords = sql.select(s1.fields()) //
+				.from(s1) //
+				.join(s2) //
+				.on(s1.ID.eq(s2.ID)) //
+				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)) //
+				.fetch(DOCUMENT_SECTIONS.JSONDOCUMENT);
+
+		return existingRecords.stream().map(DocumentSection::fromJSON)
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -68,13 +85,13 @@ public class DocumentSectionRepository {
 	 * @throws DocumentSectionNotFoundException
 	 */
 	public List<DocumentSection> getDocumentSections(Long documentId)
-			throws DocumentSectionNotFoundException {
+			throws ElementNotFoundException {
 
 		Result<Record> documentSections = sql.select().from(DOCUMENT_SECTIONS)
 				.where(DOCUMENT_SECTIONS.DOCUMENTID.eq(documentId)).fetch();
 
 		if (documentSections == null)
-			throw new DocumentSectionNotFoundException(
+			throw new ElementNotFoundException(
 					"DocumentSection from Document id '" + documentId
 							+ "' not found.");
 
@@ -91,31 +108,29 @@ public class DocumentSectionRepository {
 	 * @throws DocumentSectionNotFoundException
 	 */
 	public List<DocumentSection> getDocumentSections(Document document)
-			throws DocumentSectionNotFoundException {
+			throws ElementNotFoundException {
 
 		return this.getDocumentSections(document.getId());
 	}
 
-	public DocumentSection save(Document document,
-			DocumentSection documentSection) throws JsonProcessingException {
-
-		try {
-			documentRepository.get(document.getId());
-
-		} catch (DocumentNotFoundException e) {
-			logger.info("Document not found, saving document first.");
-			document = documentRepository.save(document);
-		}
+	@Override
+	public DocumentSection save(DocumentSection documentSection) {
 
 		DocumentSectionsRecord existingRecord = sql.fetchOne(DOCUMENT_SECTIONS,
 				DOCUMENT_SECTIONS.ID.eq(documentSection.getSectionId()));
 
 		if (existingRecord == null) {
+			logger.info("Saving documentSection: " + documentSection);
+
 			DocumentSectionsRecord newRecord = sql.newRecord(DOCUMENT_SECTIONS);
 			newRecord.setSectionversion(0L);
+			newRecord.setDocumentid(documentSection.getDocumentId());
 
-			newRecord.setDocumentid(document.getId());
-			newRecord.setJsondocument(documentSection.asJSON());
+			try {
+				newRecord.setJsondocument(documentSection.asJSON());
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
 			newRecord.setPosition(documentSection.getSectionPosition());
 			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
 			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
@@ -135,8 +150,11 @@ public class DocumentSectionRepository {
 			existingRecord
 					.setSectionversion(existingRecord.getSectionversion() + 1);
 
-			existingRecord.setDocumentid(document.getId());
-			existingRecord.setJsondocument(documentSection.asJSON());
+			try {
+				existingRecord.setJsondocument(documentSection.asJSON());
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
 			existingRecord.setPosition(documentSection.getSectionPosition());
 			existingRecord
 					.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
@@ -148,14 +166,34 @@ public class DocumentSectionRepository {
 		}
 
 		logger.info("Saved document section " + documentSection);
-
 		return documentSection;
 	}
 
+	// public DocumentSection save(Document document,
+	// DocumentSection documentSection) throws JsonProcessingException {
+	//
+	// try {
+	// documentRepository.get(document.getId());
+	//
+	// } catch (ElementNotFoundException e) {
+	// logger.info("Document with id" + document.getId()
+	// + "not found, saving document first.");
+	// document = documentRepository.save(document);
+	// }
+	//
+	// documentSection.setDocumentId(document.getId());
+	//
+	// this.save(documentSection);
+	//
+	// return documentSection;
+	// }
+
+	@Override
 	public void delete(DocumentSection documentSection) {
 		this.delete(documentSection.getSectionId());
 	}
 
+	@Override
 	public void delete(Long sectionId) {
 		DocumentSectionsRecord existingRecord = sql.fetchOne(DOCUMENT_SECTIONS,
 				DOCUMENT_SECTIONS.ID.eq(sectionId));

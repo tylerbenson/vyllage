@@ -26,8 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import editor.model.Document;
 import editor.model.DocumentHeader;
 import editor.model.DocumentSection;
-import editor.repository.DocumentNotFoundException;
-import editor.repository.DocumentSectionNotFoundException;
+import editor.repository.ElementNotFoundException;
 import editor.services.DocumentService;
 
 @Controller
@@ -55,7 +54,7 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<DocumentSection> getResumeSection(
 			@PathVariable final Long documentId)
-			throws JsonProcessingException, DocumentSectionNotFoundException {
+			throws JsonProcessingException, ElementNotFoundException {
 
 		return documentService.getDocumentSections(documentId);
 	}
@@ -63,8 +62,7 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody DocumentSection getResumeSection(
 			@PathVariable final Long documentId,
-			@PathVariable final Long sectionId)
-			throws DocumentSectionNotFoundException {
+			@PathVariable final Long sectionId) throws ElementNotFoundException {
 
 		return documentService.getDocumentSection(sectionId);
 
@@ -94,7 +92,7 @@ public class ResumeController {
 	public @ResponseBody DocumentSection saveSection(
 			@PathVariable final Long documentId,
 			@RequestBody final DocumentSection body)
-			throws JsonProcessingException, DocumentNotFoundException {
+			throws JsonProcessingException, ElementNotFoundException {
 
 		// logger.info(body.toString());
 		Document document = documentService.getDocument(documentId);
@@ -126,8 +124,7 @@ public class ResumeController {
 		return map;
 	}
 
-	@ExceptionHandler(value = { DocumentNotFoundException.class,
-			DocumentSectionNotFoundException.class })
+	@ExceptionHandler(value = { ElementNotFoundException.class })
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public @ResponseBody Map<String, Object> handleDocumentNotFoundException(
 			Exception ex) {

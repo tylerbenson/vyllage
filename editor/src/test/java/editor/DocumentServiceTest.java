@@ -13,10 +13,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import editor.model.Document;
 import editor.model.DocumentSection;
-import editor.repository.DocumentRepository;
-import editor.repository.DocumentSectionNotFoundException;
 import editor.repository.DocumentSectionRepository;
+import editor.repository.ElementNotFoundException;
+import editor.repository.IRepository;
 import editor.services.DocumentService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,7 +41,7 @@ public class DocumentServiceTest {
 	private DocumentSectionRepository dsRepository;
 
 	@Mock
-	private DocumentRepository dRepository;
+	private IRepository<Document> dRepository;
 
 	@Before
 	public void initMocks() {
@@ -48,8 +49,7 @@ public class DocumentServiceTest {
 	}
 
 	@Test
-	public void loadSingleDocumentSectionTest()
-			throws DocumentSectionNotFoundException {
+	public void loadSingleDocumentSectionTest() throws ElementNotFoundException {
 		long sectionId = 1;
 
 		String json = JSON;
@@ -64,7 +64,7 @@ public class DocumentServiceTest {
 
 	@Test
 	public void loadSeveralDocumentSectionsTest()
-			throws DocumentSectionNotFoundException {
+			throws ElementNotFoundException {
 		long documentId = 1;
 
 		String json1 = JSON;

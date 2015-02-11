@@ -10,8 +10,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import editor.model.Account;
 import editor.model.Document;
-import editor.repository.DocumentNotFoundException;
-import editor.repository.DocumentRepository;
+import editor.repository.ElementNotFoundException;
+import editor.repository.IRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -20,10 +20,10 @@ import editor.repository.DocumentRepository;
 public class DocumentRepositoryTest {
 
 	@Autowired
-	private DocumentRepository repository;
+	private IRepository<Document> repository;
 
 	@Test
-	public void testRetrieveExistingDocument() throws DocumentNotFoundException {
+	public void testRetrieveExistingDocument() throws ElementNotFoundException {
 		// TODO: this is retrieving the document inserted in V2__init.sql...
 		Document document = repository.get(0L);
 
@@ -45,8 +45,8 @@ public class DocumentRepositoryTest {
 		Assert.assertTrue(doc2.getId().equals(2L));
 	}
 
-	@Test(expected = DocumentNotFoundException.class)
-	public void testDeleteDocument() throws DocumentNotFoundException {
+	@Test(expected = ElementNotFoundException.class)
+	public void testDeleteDocument() throws ElementNotFoundException {
 		// TODO: this is retrieving the document inserted in V2__init.sql...
 		Document document = generateDocument();
 

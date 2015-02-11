@@ -17,7 +17,7 @@ import editor.domain.editor.tables.records.DocumentsRecord;
 import editor.model.Document;
 
 @Repository
-public class DocumentRepository {
+public class DocumentRepository implements IRepository<Document> {
 
 	private final Logger logger = Logger.getLogger(DocumentRepository.class
 			.getName());
@@ -28,17 +28,19 @@ public class DocumentRepository {
 	@Autowired
 	private AccountRepository accountRepository;
 
-	public Document get(Long id) throws DocumentNotFoundException {
+	@Override
+	public Document get(Long id) throws ElementNotFoundException {
 		DocumentsRecord record = sql.fetchOne(DOCUMENTS, DOCUMENTS.ID.eq(id));
 		logger.info("Searching document with id " + id);
 
 		if (record == null)
-			throw new DocumentNotFoundException("Document with id " + id
+			throw new ElementNotFoundException("Document with id " + id
 					+ " could not be found.");
 
 		return recordToDocument(record);
 	}
 
+	@Override
 	public List<Document> getAll() {
 		Result<DocumentsRecord> all = sql.fetch(DOCUMENTS);
 		List<Document> allDocs = new ArrayList<>();
@@ -70,6 +72,7 @@ public class DocumentRepository {
 		return document;
 	}
 
+	@Override
 	public Document save(Document document) {
 
 		DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
@@ -107,14 +110,18 @@ public class DocumentRepository {
 		return document;
 	}
 
+	@Override
 	public void delete(Document document) {
 		this.delete(document.getId());
 	}
 
-	public void delete(long documentId) {
-		DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
-				DOCUMENTS.ID.eq(documentId));
-		existingRecord.delete();
+	@Override
+	public void delete(Long documentId) {
+		if (documentId != null) {
+			DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
+					DOCUMENTS.ID.eq(documentId));
+			existingRecord.delete();
+		}
 	}
 
 	// sql.insertInto(DOCUMENTS, DOCUMENTS.ID, //

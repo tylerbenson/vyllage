@@ -1,13 +1,13 @@
 package editor.repository;
 
-public class DocumentNotFoundException extends Exception {
+public class ElementNotFoundException extends Exception {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4052672308416010337L;
 
-	public DocumentNotFoundException(String msg) {
+	public ElementNotFoundException(String msg) {
 		super(msg);
 	}
 

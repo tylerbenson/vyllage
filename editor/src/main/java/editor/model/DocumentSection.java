@@ -3,11 +3,13 @@ package editor.model;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+@JsonIgnoreProperties(value = { "documentId" })
 public class DocumentSection {
 
 	private SectionType type;
@@ -33,6 +35,7 @@ public class DocumentSection {
 	private String highlights;
 
 	private String description;
+	private Long documentId;
 
 	public DocumentSection() {
 	}
@@ -190,6 +193,14 @@ public class DocumentSection {
 		}
 
 		return null;
+	}
+
+	public void setDocumentId(Long documentId) {
+		this.documentId = documentId;
+	}
+
+	public Long getDocumentId() {
+		return this.documentId;
 	}
 
 }
