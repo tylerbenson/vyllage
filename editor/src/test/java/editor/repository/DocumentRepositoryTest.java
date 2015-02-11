@@ -1,4 +1,4 @@
-package editor;
+package editor.repository;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -8,10 +8,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import editor.Application;
 import editor.model.Account;
 import editor.model.Document;
-import editor.repository.ElementNotFoundException;
-import editor.repository.IRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -40,7 +39,7 @@ public class DocumentRepositoryTest {
 		doc2 = repository.save(doc2);
 
 		Assert.assertNotNull("Document1 is null.", doc1);
-		Assert.assertNotNull("Document1 is null.", doc2);
+		Assert.assertNotNull("Document2 is null.", doc2);
 		Assert.assertTrue(doc1.getId().equals(1L));
 		Assert.assertTrue(doc2.getId().equals(2L));
 	}

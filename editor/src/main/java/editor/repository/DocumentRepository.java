@@ -100,7 +100,7 @@ public class DocumentRepository implements IRepository<Document> {
 					.now()));
 			existingRecord.setVisibility(document.getVisibility());
 
-			existingRecord.store();
+			existingRecord.update();
 			document.setLastModified(existingRecord.getLastmodified()
 					.toLocalDateTime());
 		}

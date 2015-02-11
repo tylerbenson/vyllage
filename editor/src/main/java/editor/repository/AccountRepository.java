@@ -28,12 +28,7 @@ public class AccountRepository implements IRepository<Account> {
 		AccountsRecord record = sql.fetchOne(ACCOUNTS,
 				ACCOUNTS.ID.eq(accountid));
 
-		if (record != null)
-			logger.info("Found account.");
-
-		Account account = new Account();
-		account.setId(accountid);
-		account.setUserName(record.getUsername());
+		Account account = recordToAccount(record);
 		return account;
 	}
 
@@ -45,13 +40,6 @@ public class AccountRepository implements IRepository<Account> {
 		for (AccountsRecord accountsRecord : all)
 			allAccounts.add(recordToAccount(accountsRecord));
 		return allAccounts;
-	}
-
-	private Account recordToAccount(AccountsRecord accountsRecord) {
-		Account account = new Account();
-		account.setId(accountsRecord.getId());
-		account.setUserName(accountsRecord.getUsername());
-		return account;
 	}
 
 	@Override
@@ -70,7 +58,7 @@ public class AccountRepository implements IRepository<Account> {
 		} else {
 
 			existingRecord.setUsername(account.getUserName());
-			existingRecord.store();
+			existingRecord.update();
 		}
 
 		logger.info("Saved account: " + account);
@@ -87,6 +75,13 @@ public class AccountRepository implements IRepository<Account> {
 		AccountsRecord existingRecord = sql.fetchOne(ACCOUNTS,
 				ACCOUNTS.ID.eq(accountId));
 		existingRecord.delete();
+	}
+
+	private Account recordToAccount(AccountsRecord accountsRecord) {
+		Account account = new Account();
+		account.setId(accountsRecord.getId());
+		account.setUserName(accountsRecord.getUsername());
+		return account;
 	}
 
 }

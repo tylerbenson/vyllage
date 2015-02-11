@@ -1,4 +1,4 @@
-package editor;
+package editor.repository;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,6 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import editor.Application;
 import editor.model.DocumentSection;
 import editor.repository.DocumentSectionRepository;
 import editor.repository.ElementNotFoundException;
