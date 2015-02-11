@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Record3;
 import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -41,12 +42,13 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
 
-		List<String> existingRecords = sql.select(s1.fields()) //
+		Result<Record3<String, Long, Long>> existingRecords = sql
+				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION) //
 				.from(s1) //
 				.join(s2) //
 				.on(s1.ID.eq(s2.ID)) //
 				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)) //
-				.where(s1.ID.eq(id)).fetch(DOCUMENT_SECTIONS.JSONDOCUMENT);
+				.where(s1.ID.eq(id)).fetch();
 
 		// select d1.*
 		// from docs d1
@@ -58,7 +60,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		if (existingRecords == null || existingRecords.isEmpty())
 			throw new ElementNotFoundException("DocumentSection with id '" + id
 					+ "' not found.");
-		return DocumentSection.fromJSON(existingRecords.get(0));
+		return generateDocumentSection(existingRecords.get(0));
 	}
 
 	@Override
@@ -66,19 +68,31 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
 
-		List<String> existingRecords = sql.select(s1.fields()) //
+		Result<Record3<String, Long, Long>> existingRecords = sql
+				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION) //
 				.from(s1) //
 				.join(s2) //
 				.on(s1.ID.eq(s2.ID)) //
 				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)) //
-				.fetch(DOCUMENT_SECTIONS.JSONDOCUMENT);
+				.fetch();
 
-		return existingRecords.stream().map(DocumentSection::fromJSON)
+		return existingRecords.stream()
+				.map(DocumentSectionRepository::generateDocumentSection)
 				.collect(Collectors.toList());
 	}
 
+	private static DocumentSection generateDocumentSection(
+			Record3<String, Long, Long> existingRecord) {
+		DocumentSection fromJSON = DocumentSection.fromJSON(existingRecord
+				.value1());
+		fromJSON.setDocumentId(existingRecord.value2());
+		fromJSON.setSectionVersion(existingRecord.value3());
+		return fromJSON;
+	}
+
+	// TODO> change to get latest version.
 	/**
-	 * 
+	 *
 	 * @param documentId
 	 *            the id of the related document
 	 * @return
@@ -102,7 +116,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 
 	/**
 	 * Returns all the sections of the document
-	 * 
+	 *
 	 * @param document
 	 * @return DocumentSection
 	 * @throws DocumentSectionNotFoundException
@@ -123,7 +137,9 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 			logger.info("Saving documentSection: " + documentSection);
 
 			DocumentSectionsRecord newRecord = sql.newRecord(DOCUMENT_SECTIONS);
-			newRecord.setSectionversion(0L);
+			long newSectionVersion = 0L;
+
+			newRecord.setSectionversion(newSectionVersion);
 			newRecord.setDocumentid(documentSection.getDocumentId());
 
 			try {
@@ -138,17 +154,18 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 			newRecord.store();
 
 			documentSection.setSectionId(newRecord.getId());
+			documentSection.setSectionVersion(newSectionVersion);
 
 		} else {
+
+			long nextVersion = existingRecord.getSectionversion() + 1;
 
 			logger.info(String
 					.format("Updating existing document section '%1$s' version '%2$s' to version '%3$s' ",
 							existingRecord.getId(),
-							existingRecord.getSectionversion(),
-							existingRecord.getSectionversion() + 1));
+							existingRecord.getSectionversion(), nextVersion));
 
-			existingRecord
-					.setSectionversion(existingRecord.getSectionversion() + 1);
+			existingRecord.setSectionversion(nextVersion);
 
 			try {
 				existingRecord.setJsondocument(documentSection.asJSON());
@@ -161,7 +178,8 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 			existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
 					.now()));
 
-			existingRecord.update();
+			existingRecord.store();
+			documentSection.setSectionVersion(nextVersion);
 
 		}
 

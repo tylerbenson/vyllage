@@ -45,11 +45,4 @@ public class DocumentHeader {
 		this.tagline = tagline;
 	}
 
-	@Override
-	public String toString() {
-		return "ResumeHeader [firstName=" + firstName + ", middleName="
-				+ middleName + ", lastName=" + lastName + ", tagline="
-				+ tagline + "]";
-	}
-
 }

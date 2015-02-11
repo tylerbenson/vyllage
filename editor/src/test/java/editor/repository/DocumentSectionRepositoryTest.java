@@ -12,8 +12,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import editor.Application;
 import editor.model.DocumentSection;
-import editor.repository.DocumentSectionRepository;
-import editor.repository.ElementNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -55,6 +53,10 @@ public class DocumentSectionRepositoryTest {
 		Assert.assertTrue(
 				"Expected id 127, got " + savedDocumentSection.getSectionId(),
 				new Long(127L).equals(savedDocumentSection.getSectionId()));
+		Assert.assertTrue(
+				"Expected version 0, got "
+						+ savedDocumentSection.getSectionVersion(),
+				new Long(0L).equals(savedDocumentSection.getSectionVersion()));
 	}
 
 	@Test
@@ -72,6 +74,10 @@ public class DocumentSectionRepositoryTest {
 
 		Assert.assertNotNull(documentSection);
 		Assert.assertEquals(highlights, savedDocumentSection.getHighlights());
+		Assert.assertTrue(
+				"Expected version 2, got "
+						+ savedDocumentSection.getSectionVersion(),
+				new Long(2L).equals(savedDocumentSection.getSectionVersion()));
 	}
 
 }

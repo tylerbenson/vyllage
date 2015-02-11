@@ -16,13 +16,15 @@ import editor.model.constants.Visibility;
 import editor.model.customDeserializer.LocalDateDeserializer;
 import editor.model.customDeserializer.LocalDateSerializer;
 
-@JsonIgnoreProperties(value = { "documentId" })
+@JsonIgnoreProperties(value = { "documentId", "sectionVersion" })
 @ToString
 public class DocumentSection {
+	private Long sectionId;
+	private Long documentId;
+	private Long sectionVersion;
 
 	private SectionType type;
 	private String title;
-	private Long sectionId;
 	private Long sectionPosition;
 	private Visibility state;
 	private String organizationName;
@@ -43,7 +45,6 @@ public class DocumentSection {
 	private String highlights;
 
 	private String description;
-	private Long documentId;
 
 	public DocumentSection() {
 	}
@@ -196,6 +197,14 @@ public class DocumentSection {
 
 	public Long getDocumentId() {
 		return this.documentId;
+	}
+
+	public Long getSectionVersion() {
+		return sectionVersion;
+	}
+
+	public void setSectionVersion(Long sectionVersion) {
+		this.sectionVersion = sectionVersion;
 	}
 
 }
