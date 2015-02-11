@@ -15,9 +15,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import editor.model.Document;
 import editor.model.DocumentSection;
-import editor.repository.DocumentSectionRepository;
-import editor.repository.ElementNotFoundException;
-import editor.repository.IRepository;
 import editor.services.DocumentService;
 
 @RunWith(MockitoJUnitRunner.class)
