@@ -99,13 +99,36 @@ public class ResumeControllerTest {
 				.statusCode(200).body("sectionId", equalTo(124));
 	}
 
+	// resume/0/section/1000
+	@SuppressWarnings("unchecked")
+	// @Test(expected = ElementNotFoundException.class)
+	@Test
+	public void getSectionFromResumeNotFoundTest()
+			throws ElementNotFoundException {
+
+		long documentSectionId = -1;
+
+		Mockito.when(documentService.getDocumentSection(documentSectionId))
+				.thenThrow(ElementNotFoundException.class);
+
+		given().standaloneSetup(controller).when()
+				.get("/resume/0/section/" + documentSectionId).then()
+				.assertThat().statusCode(404);
+
+	}
+
 	// resume/0/header
+	// once we retrieve information for this from the DB we can create this
+	// test.
 	// @Test
 	// public void getHeaderFromResumeTest() throws ElementNotFoundException {
+	// ObjectMapper mapper = Mockito.mock(ObjectMapper.class);
+	//
+	// Mockito.when(mapper.readValue(Mockito.any(JsonParser.class),
+	// DocumentHeader.class)).thenReturn(value);
 	//
 	// given().standaloneSetup(controller).when().get("/resume/0/header/")
 	// .then().statusCode(200).body("firstName", equalTo("Nathan"));
-	//
-	//
+
 	// }
 }
