@@ -3,6 +3,8 @@ package editor.model;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import lombok.ToString;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +17,7 @@ import editor.model.customDeserializer.LocalDateDeserializer;
 import editor.model.customDeserializer.LocalDateSerializer;
 
 @JsonIgnoreProperties(value = { "documentId" })
+@ToString
 public class DocumentSection {
 
 	private SectionType type;
@@ -163,19 +166,6 @@ public class DocumentSection {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	@Override
-	public String toString() {
-		return "DocumentSection [type=" + type + ", title=" + title
-				+ ", sectionId=" + sectionId + ", sectionPosition="
-				+ sectionPosition + ", state=" + state + ", organizationName="
-				+ organizationName + ", organizationDescription="
-				+ organizationDescription + ", role=" + role + ", startDate="
-				+ startDate + ", endDate=" + endDate + ", isCurrent="
-				+ isCurrent + ", location=" + location + ", roleDescription="
-				+ roleDescription + ", highlights=" + highlights
-				+ ", description=" + description + "]";
 	}
 
 	// TODO: the following methods are here for convenience, will move them

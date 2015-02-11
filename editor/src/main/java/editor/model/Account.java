@@ -1,5 +1,8 @@
 package editor.model;
 
+import lombok.ToString;
+
+@ToString
 public class Account {
 	private long id;
 

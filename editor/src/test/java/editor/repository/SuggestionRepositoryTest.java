@@ -18,7 +18,7 @@ import editor.model.Suggestion;
 public class SuggestionRepositoryTest {
 
 	@Autowired
-	IRepository<Suggestion> repository;
+	private IRepository<Suggestion> repository;
 
 	private static final String JSON = "{" + "\"type\": \"experience\","
 			+ "\"title\": \"job experience\"," + "\"sectionId\": 124,"
@@ -30,6 +30,15 @@ public class SuggestionRepositoryTest {
 			+ "\"isCurrent\": true," + "\"location\": \"Portland, Oregon\","
 			+ "\"roleDescription\": \"Blah Blah Blah\","
 			+ "\"highlights\": \"I was in charge of...\"" + "}";
+
+	@Test
+	public void testRetrieveExistingDocument() throws ElementNotFoundException {
+		// TODO: this is retrieving the stuff inserted in V2__init.sql...
+		Suggestion suggestion = repository.get(0L);
+
+		Assert.assertNotNull("Suggestion is null.", suggestion);
+		Assert.assertTrue(suggestion.getId().equals(0L));
+	}
 
 	@Test
 	public void suggestionSaveTest() {
@@ -44,6 +53,21 @@ public class SuggestionRepositoryTest {
 		Assert.assertNotNull("Suggestion2 is null.", suggestion2);
 		Assert.assertTrue(suggestion1.getId().equals(1L));
 		Assert.assertTrue(suggestion2.getId().equals(2L));
+	}
+
+	@Test(expected = ElementNotFoundException.class)
+	public void testDeleteDocument() throws ElementNotFoundException {
+		// TODO: this is retrieving the suggestion inserted in V2__init.sql...
+		Suggestion suggestion = generateSuggestion();
+
+		suggestion = repository.save(suggestion);
+		Long id = suggestion.getId();
+
+		repository.delete(suggestion.getId());
+
+		suggestion = repository.get(id);
+
+		Assert.assertNull("Suggestion is not null.", suggestion);
 	}
 
 	private Suggestion generateSuggestion() {

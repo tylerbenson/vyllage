@@ -2,6 +2,9 @@ package editor.model;
 
 import java.time.LocalDateTime;
 
+import lombok.ToString;
+
+@ToString
 public class Comment {
 	private Long id;
 	private Long commentId;

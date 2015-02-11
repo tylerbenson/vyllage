@@ -2,6 +2,9 @@ package editor.model;
 
 import java.time.LocalDateTime;
 
+import lombok.ToString;
+
+@ToString
 public class Document {
 	private Long id;
 	private Account account;
@@ -47,13 +50,6 @@ public class Document {
 
 	public LocalDateTime getLastModified() {
 		return this.lastModified;
-	}
-
-	@Override
-	public String toString() {
-		return "Document [id=" + id + ", account=" + account + ", visibility="
-				+ visibility + ", dateCreated=" + dateCreated
-				+ ", lastModified=" + lastModified + "]";
 	}
 
 }

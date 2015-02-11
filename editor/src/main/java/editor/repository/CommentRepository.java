@@ -17,7 +17,7 @@ import editor.domain.editor.tables.records.CommentsRecord;
 import editor.model.Comment;
 
 @Repository
-public class CommentsRepository implements IRepository<Comment> {
+public class CommentRepository implements IRepository<Comment> {
 
 	private final Logger logger = Logger.getLogger(AccountRepository.class
 			.getName());
@@ -30,7 +30,8 @@ public class CommentsRepository implements IRepository<Comment> {
 		CommentsRecord record = sql.fetchOne(COMMENTS,
 				COMMENTS.ID.eq(commentId));
 		if (record == null)
-			throw new ElementNotFoundException("Comment with id " + commentId);
+			throw new ElementNotFoundException("Comment with id '" + commentId
+					+ "' not found.");
 
 		Comment comment = recordToComment(record);
 		return comment;
@@ -40,7 +41,7 @@ public class CommentsRepository implements IRepository<Comment> {
 	public List<Comment> getAll() {
 		Result<CommentsRecord> all = sql.fetch(COMMENTS);
 
-		return all.stream().map(CommentsRepository::recordToComment)
+		return all.stream().map(CommentRepository::recordToComment)
 				.collect(Collectors.toList());
 	}
 

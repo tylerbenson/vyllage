@@ -34,8 +34,8 @@ public class DocumentRepository implements IRepository<Document> {
 		logger.info("Searching document with id " + id);
 
 		if (record == null)
-			throw new ElementNotFoundException("Document with id " + id
-					+ " could not be found.");
+			throw new ElementNotFoundException("Document with id '" + id
+					+ "' could not be found.");
 
 		return recordToDocument(record);
 	}
@@ -51,12 +51,8 @@ public class DocumentRepository implements IRepository<Document> {
 		return allDocs;
 	}
 
-	// TODO: move this code
 	private Document recordToDocument(DocumentsRecord documentsRecord) {
 		Document document = new Document();
-
-		logger.info("document is null? " + (document == null));
-		logger.info("documentsRecord is null? " + (documentsRecord == null));
 
 		logger.info("Looking for account with id "
 				+ documentsRecord.getAccountid());

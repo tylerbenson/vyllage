@@ -32,6 +32,10 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 	public Suggestion get(Long suggestionId) throws ElementNotFoundException {
 		SuggestionsRecord record = sql.fetchOne(SUGGESTIONS,
 				SUGGESTIONS.ID.eq(suggestionId));
+		if (record == null)
+			throw new ElementNotFoundException("Suggestion with id '"
+					+ suggestionId + "' was not found.");
+
 		Suggestion suggestion = recordToSuggestion(record);
 		return suggestion;
 	}
