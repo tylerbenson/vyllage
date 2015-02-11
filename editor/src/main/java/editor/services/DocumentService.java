@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import editor.model.Document;
 import editor.model.DocumentSection;
+import editor.repository.DocumentNotFoundException;
 import editor.repository.DocumentRepository;
 import editor.repository.DocumentSectionNotFoundException;
 import editor.repository.DocumentSectionRepository;
@@ -93,7 +94,8 @@ public class DocumentService {
 		return documentSectionRepository.getDocumentSections(documentId);
 	}
 
-	public Document getDocument(Long documentId) {
+	public Document getDocument(Long documentId)
+			throws DocumentNotFoundException {
 		return documentRepository.get(documentId);
 	}
 

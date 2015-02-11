@@ -19,6 +19,7 @@ import editor.repository.DocumentSectionRepository;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+// @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class DocumentSectionRepositoryTest {
 
 	private static final String JSON = "{" + "\"type\": \"experience\","
@@ -46,15 +47,16 @@ public class DocumentSectionRepositoryTest {
 	@Test
 	public void saveDocumentSectionTest() throws JsonProcessingException {
 		Document document = generateDocument();
-		document.setId(0L);
+		document.setId(1L);
 
 		DocumentSection documentSection = DocumentSection.fromJSON(JSON);
 		DocumentSection savedDocumentSection = dsRepository.save(document,
 				documentSection);
 
 		Assert.assertNotNull(documentSection);
-		Assert.assertTrue(new Long(124L).equals(savedDocumentSection
-				.getSectionId()));
+		Assert.assertTrue(
+				"Expected id 124, got " + savedDocumentSection.getSectionId(),
+				new Long(124L).equals(savedDocumentSection.getSectionId()));
 	}
 
 	private Document generateDocument() {

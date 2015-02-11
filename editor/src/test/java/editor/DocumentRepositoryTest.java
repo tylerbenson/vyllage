@@ -10,18 +10,20 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import editor.model.Account;
 import editor.model.Document;
+import editor.repository.DocumentNotFoundException;
 import editor.repository.DocumentRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+// @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class DocumentRepositoryTest {
 
 	@Autowired
 	private DocumentRepository repository;
 
 	@Test
-	public void testRetrieveExistingDocument() {
+	public void testRetrieveExistingDocument() throws DocumentNotFoundException {
 		// TODO: this is retrieving the document inserted in V2__init.sql...
 		Document document = repository.get(0L);
 
@@ -37,28 +39,26 @@ public class DocumentRepositoryTest {
 		doc1 = repository.save(doc1);
 		doc2 = repository.save(doc2);
 
-		// repository.delete(0L);
-
 		Assert.assertNotNull("Document1 is null.", doc1);
 		Assert.assertNotNull("Document1 is null.", doc2);
 		Assert.assertTrue(doc1.getId().equals(1L));
 		Assert.assertTrue(doc2.getId().equals(2L));
 	}
 
-	// TODO: ask if it's possible to delete a document, if it it's we need to
-	// change the FK to "ON DELETE CASCADE"
+	@Test(expected = DocumentNotFoundException.class)
+	public void testDeleteDocument() throws DocumentNotFoundException {
+		// TODO: this is retrieving the document inserted in V2__init.sql...
+		Document document = generateDocument();
 
-	// @Test
-	// public void testDeleteDocument() {
-	// // TODO: this is retrieving the document inserted in V2__init.sql...
-	// Document document = repository.get(0L);
-	//
-	// repository.delete(document);
-	//
-	// document = repository.get(0L);
-	//
-	// Assert.assertNull("Document is not null.", document);
-	// }
+		document = repository.save(document);
+		Long id = document.getId();
+
+		repository.delete(document);
+
+		document = repository.get(id);
+
+		Assert.assertNull("Document is not null.", document);
+	}
 
 	private Document generateDocument() {
 		Document doc1 = new Document();

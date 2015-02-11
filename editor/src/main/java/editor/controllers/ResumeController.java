@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import editor.model.Document;
 import editor.model.DocumentHeader;
 import editor.model.DocumentSection;
+import editor.repository.DocumentNotFoundException;
 import editor.repository.DocumentSectionNotFoundException;
 import editor.services.DocumentService;
 
@@ -93,7 +94,7 @@ public class ResumeController {
 	public @ResponseBody DocumentSection saveSection(
 			@PathVariable final Long documentId,
 			@RequestBody final DocumentSection body)
-			throws JsonProcessingException {
+			throws JsonProcessingException, DocumentNotFoundException {
 
 		// logger.info(body.toString());
 		Document document = documentService.getDocument(documentId);
@@ -125,7 +126,8 @@ public class ResumeController {
 		return map;
 	}
 
-	@ExceptionHandler(value = { DocumentSectionNotFoundException.class })
+	@ExceptionHandler(value = { DocumentNotFoundException.class,
+			DocumentSectionNotFoundException.class })
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public @ResponseBody Map<String, Object> handleDocumentNotFoundException(
 			Exception ex) {

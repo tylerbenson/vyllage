@@ -28,9 +28,14 @@ public class DocumentRepository {
 	@Autowired
 	private AccountRepository accountRepository;
 
-	public Document get(Long id) {
+	public Document get(Long id) throws DocumentNotFoundException {
 		DocumentsRecord record = sql.fetchOne(DOCUMENTS, DOCUMENTS.ID.eq(id));
 		logger.info("Searching document with id " + id);
+
+		if (record == null)
+			throw new DocumentNotFoundException("Document with id " + id
+					+ " could not be found.");
+
 		return recordToDocument(record);
 	}
 
@@ -109,7 +114,7 @@ public class DocumentRepository {
 	public void delete(long documentId) {
 		DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
 				DOCUMENTS.ID.eq(documentId));
-		existingRecord.delete(); // TODO: will this work with sections, etc?
+		existingRecord.delete();
 	}
 
 	// sql.insertInto(DOCUMENTS, DOCUMENTS.ID, //

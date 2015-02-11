@@ -99,7 +99,10 @@ public class DocumentSectionRepository {
 	public DocumentSection save(Document document,
 			DocumentSection documentSection) throws JsonProcessingException {
 
-		if (documentRepository.get(document.getId()) == null) {
+		try {
+			documentRepository.get(document.getId());
+
+		} catch (DocumentNotFoundException e) {
 			logger.info("Document not found, saving document first.");
 			document = documentRepository.save(document);
 		}
