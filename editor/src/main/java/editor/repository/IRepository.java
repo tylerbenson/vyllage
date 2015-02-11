@@ -8,10 +8,10 @@ public interface IRepository<T> {
 
 	public abstract List<T> getAll();
 
-	public abstract T save(T document);
+	public abstract T save(T t);
 
-	public abstract void delete(T document);
+	public abstract void delete(T t);
 
-	public abstract void delete(Long documentId);
+	public abstract void delete(Long id);
 
 }
