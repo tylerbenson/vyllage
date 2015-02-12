@@ -7,7 +7,7 @@ var FreeformMain = React.createClass({
                 <div className="main">
                     <div className="paragraph">
                         <p className="freeform-description">
-                           {this.props.freeformData.description};
+                           {this.props.description};
                         </p>
                     </div>
                 </div>
@@ -19,15 +19,15 @@ var FreeformMain = React.createClass({
 var  FreeformEdit = React.createClass({ 
 
     getInitialState: function() {
-        return {descriptionData:''}; 
+        return {description:this.props.description}; 
     },
 
     componentDidUpdate: function () {
-        this.state.descriptionData = this.props.freeformData.description;
+        this.state.description = this.props.description;
     },
 
     handleChange: function(event) {
-        this.setState({descriptionData: event.target.value});
+        this.setState({description: event.target.value});
 
         if (this.props.updateDescription) {
             this.props.updateDescription(event.target.value);
@@ -36,14 +36,14 @@ var  FreeformEdit = React.createClass({
 
     render: function() {
 
-        var descriptionData = this.state.descriptionData;
+        var description = this.state.description;
 
         return (
             <div className="editable">
                 <div className="edit">
                     <textarea className="freeform-description" 
                         placeholder="tell us about your career goal..." 
-                        onChange={this.handleChange} value ={descriptionData} >
+                        onChange={this.handleChange} value ={description} >
                     </textarea>
                 </div>
             </div>
@@ -144,8 +144,8 @@ var FreeformContainer = React.createClass({
         return (
             <div className="article-content" onClick={this.goToEditMode}>
 
-                <FreeformMain ref="goalMain" freeformData={this.props.freeformData}/>
-                <FreeformEdit ref="goalEdit" freeformData={this.props.freeformData} updateDescription={this.updateDescription} />
+                <FreeformMain ref="goalMain" description={this.props.freeformData.description}/>
+                <FreeformEdit ref="goalEdit" description={this.props.freeformData.description} updateDescription={this.updateDescription} />
 
                 <ButtonsContainer ref="buttonContainer" save={this.save} cancel={this.cancel}/>
             </div>

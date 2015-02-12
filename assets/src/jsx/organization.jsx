@@ -57,7 +57,7 @@ var OrganizationMain = React.createClass({
 var OrganizationName = React.createClass({
 
     getInitialState: function() {
-        return {organizationName:''}; 
+        return {organizationName: this.props.organizationName}; 
     },
 
     componentDidUpdate: function () {
@@ -87,7 +87,7 @@ var OrganizationName = React.createClass({
 var OrganizationDescription = React.createClass({  
 
    getInitialState: function() {
-        return {organizationDescription:''}; 
+        return {organizationDescription: this.props.organizationDescription}; 
     },
 
     componentDidUpdate: function () {
@@ -117,7 +117,7 @@ var OrganizationDescription = React.createClass({
 var Role = React.createClass({
 
     getInitialState: function() {
-        return {role:''}; 
+        return {role: this.props.role}; 
     },
 
     componentDidUpdate: function () {
@@ -145,7 +145,7 @@ var Role = React.createClass({
 var StartDate = React.createClass({
 
     getInitialState: function() {
-        return {startDate:''}; 
+        return {startDate: this.props.startDate}; 
     },
 
     componentDidUpdate: function () {
@@ -173,7 +173,7 @@ var StartDate = React.createClass({
 var EndDate = React.createClass({
 
     getInitialState: function() {
-        return {endDate:''}; 
+        return {endDate: this.props.endDate}; 
     },
 
     componentDidUpdate: function () {
@@ -201,7 +201,7 @@ var EndDate = React.createClass({
 var Location = React.createClass({
 
     getInitialState: function() {
-        return {location:''}; 
+        return {location:this.props.location}; 
     },
 
     componentDidUpdate: function () {
@@ -230,7 +230,7 @@ var Location = React.createClass({
 var RoleDescription = React.createClass({
 
     getInitialState: function() {
-        return {roleDescription:''}; 
+        return {roleDescription:this.props.roleDescription}; 
     },
 
     componentDidUpdate: function () {
@@ -260,7 +260,7 @@ var RoleDescription = React.createClass({
 var Highlights = React.createClass({
 
     getInitialState: function() {
-        return {highlights:''}; 
+        return {highlights: this.props.highlights}; 
     },
 
     componentDidUpdate: function () {
@@ -321,7 +321,7 @@ var Buttons = React.createClass({
 var OrganizationEdit = React.createClass({   
 
     getInitialState: function() {
-        return {organizationData: ''};
+        return {organizationData: this.props.organizationData};
     }, 
 
     componentDidUpdate: function () {
