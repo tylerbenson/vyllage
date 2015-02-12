@@ -1,23 +1,33 @@
 var MainContainer = React.createClass({  
     
     getInitialState: function() {
-        return {organizationData: []};
+        return {mainData: []};
     },
 
     componentDidMount : function() {
         // ajax call will go here and fetch the whoole data
-       // this.setState({organizationData: OrganizationData});
+        MainData.sort(compare);
+        this.setState({mainData: MainData});
     },
 
     saveChanges: function (data) {
-        this.setState({organizationData: data});
-        // here ajax call will go to the server, and update the data
+
+        for(i = 0; i < this.state.mainData.length; i++){
+
+            if(this.state.mainData[i].sectionId == data.sectionId){
+
+                this.state.mainData[i] = data;
+                this.setState({mainData:   this.state.mainData});
+                return;
+            }
+        }
     },
 
     render: function() {
-        var results = this.props.mainData;
+        var results = this.state.mainData,
+            that = this;
         return (
-            <div >
+            <div>
                 {
                     results.map(function(result) {
                     if(result.type =="freeform")
@@ -30,7 +40,7 @@ var MainContainer = React.createClass({
                                         <button className="article-btn"> {result.title} </button>
                                     </div>
 
-                                    <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
+                                    <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
 
                                     <ArticleControlls/>
 
@@ -48,7 +58,7 @@ var MainContainer = React.createClass({
                                     <div>
                                         <button className="article-btn"> {result.type} </button>
                                     </div>
-                                    <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
+                                    <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
 
                                     <ArticleControlls />
 
@@ -114,7 +124,7 @@ var MainData =[
     "endDate": "September 2012",
     "isCurrent": false,
     "location": "Portland, Oregon",
-    "roleDescription": "",
+    "roleDescription": "tryrty",
     "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
 },
 {
@@ -127,21 +137,21 @@ var MainData =[
 {
     "type": "freeform",
     "title": "skills",
-    "sectionId": 126,
+    "sectionId": 127,
     "sectionPosition": 7,
     "description": "basket weaving, spear fishing, dominion"
 },
 {
     "type": "freeform",
     "title": "skills",
-    "sectionId": 126,
+    "sectionId": 128,
     "sectionPosition": 5,
     "description": "basket weaving, spear fishing, dominion"
 },
 {
     "type": "experience",
     "title": "education",
-    "sectionId": 125,
+    "sectionId": 129,
     "sectionPosition": 2,
     "state": "hidden",
     "organizationName": "Pisik",
@@ -151,14 +161,12 @@ var MainData =[
     "endDate": "September 2012",
     "isCurrent": false,
     "location": "Portland, Oregon",
-    "roleDescription": "",
+    "roleDescription": "tyrty",
     "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
 },
 ];
 
-MainData.sort(compare);
-
-React.render(<MainContainer mainData={MainData} />, document.getElementById('main-container'));
+React.render(<MainContainer />, document.getElementById('main-container'));
 
 
 

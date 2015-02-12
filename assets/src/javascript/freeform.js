@@ -7,7 +7,7 @@ var FreeformMain = React.createClass({displayName: "FreeformMain",
                 React.createElement("div", {className: "main"}, 
                     React.createElement("div", {className: "paragraph"}, 
                         React.createElement("p", {className: "freeform-description"}, 
-                           this.props.freeformData.description, ";"
+                           this.props.description, ";"
                         )
                     )
                 )
@@ -19,15 +19,15 @@ var FreeformMain = React.createClass({displayName: "FreeformMain",
 var  FreeformEdit = React.createClass({displayName: "FreeformEdit", 
 
     getInitialState: function() {
-        return {descriptionData:''}; 
+        return {description:this.props.description}; 
     },
 
     componentDidUpdate: function () {
-        this.state.descriptionData = this.props.freeformData.description;
+        this.state.description = this.props.description;
     },
 
     handleChange: function(event) {
-        this.setState({descriptionData: event.target.value});
+        this.setState({description: event.target.value});
 
         if (this.props.updateDescription) {
             this.props.updateDescription(event.target.value);
@@ -36,14 +36,14 @@ var  FreeformEdit = React.createClass({displayName: "FreeformEdit",
 
     render: function() {
 
-        var descriptionData = this.state.descriptionData;
+        var description = this.state.description;
 
         return (
             React.createElement("div", {className: "editable"}, 
                 React.createElement("div", {className: "edit"}, 
                     React.createElement("textarea", {className: "freeform-description", 
                         placeholder: "tell us about your career goal...", 
-                        onChange: this.handleChange, value: descriptionData}
+                        onChange: this.handleChange, value: description}
                     )
                 )
             )
@@ -144,8 +144,8 @@ var FreeformContainer = React.createClass({displayName: "FreeformContainer",
         return (
             React.createElement("div", {className: "article-content", onClick: this.goToEditMode}, 
 
-                React.createElement(FreeformMain, {ref: "goalMain", freeformData: this.props.freeformData}), 
-                React.createElement(FreeformEdit, {ref: "goalEdit", freeformData: this.props.freeformData, updateDescription: this.updateDescription}), 
+                React.createElement(FreeformMain, {ref: "goalMain", description: this.props.freeformData.description}), 
+                React.createElement(FreeformEdit, {ref: "goalEdit", description: this.props.freeformData.description, updateDescription: this.updateDescription}), 
 
                 React.createElement(ButtonsContainer, {ref: "buttonContainer", save: this.save, cancel: this.cancel})
             )
