@@ -3,17 +3,29 @@ package editor.model;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import lombok.ToString;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import editor.model.constants.SectionType;
+import editor.model.constants.Visibility;
+import editor.model.customDeserializer.LocalDateDeserializer;
+import editor.model.customDeserializer.LocalDateSerializer;
+
+@JsonIgnoreProperties(value = { "documentId", "sectionVersion" })
+@ToString
 public class DocumentSection {
+	private Long sectionId;
+	private Long documentId;
+	private Long sectionVersion;
 
 	private SectionType type;
 	private String title;
-	private long sectionId;
-	private long sectionPosition;
+	private Long sectionPosition;
 	private Visibility state;
 	private String organizationName;
 	private String organizationDescription;
@@ -53,19 +65,19 @@ public class DocumentSection {
 		this.title = title;
 	}
 
-	public long getSectionId() {
+	public Long getSectionId() {
 		return sectionId;
 	}
 
-	public void setSectionId(long sectionId) {
+	public void setSectionId(Long sectionId) {
 		this.sectionId = sectionId;
 	}
 
-	public long getSectionPosition() {
+	public Long getSectionPosition() {
 		return sectionPosition;
 	}
 
-	public void setSectionPosition(long sectionPosition) {
+	public void setSectionPosition(Long sectionPosition) {
 		this.sectionPosition = sectionPosition;
 	}
 
@@ -157,19 +169,6 @@ public class DocumentSection {
 		this.description = description;
 	}
 
-	@Override
-	public String toString() {
-		return "ResumeSection [type=" + type + ", title=" + title
-				+ ", sectionId=" + sectionId + ", sectionPosition="
-				+ sectionPosition + ", state=" + state + ", organizationName="
-				+ organizationName + ", organizationDescription="
-				+ organizationDescription + ", role=" + role + ", startDate="
-				+ startDate + ", endDate=" + endDate + ", isCurrent="
-				+ isCurrent + ", location=" + location + ", roleDescription="
-				+ roleDescription + ", highlights=" + highlights
-				+ ", description=" + description + "]";
-	}
-
 	// TODO: the following methods are here for convenience, will move them
 	// later.
 
@@ -190,6 +189,22 @@ public class DocumentSection {
 		}
 
 		return null;
+	}
+
+	public void setDocumentId(Long documentId) {
+		this.documentId = documentId;
+	}
+
+	public Long getDocumentId() {
+		return this.documentId;
+	}
+
+	public Long getSectionVersion() {
+		return sectionVersion;
+	}
+
+	public void setSectionVersion(Long sectionVersion) {
+		this.sectionVersion = sectionVersion;
 	}
 
 }

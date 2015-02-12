@@ -2,17 +2,15 @@ package editor.services;
 
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
+import editor.model.Document;
 import editor.model.DocumentSection;
-import editor.repository.DocumentRepository;
-import editor.repository.DocumentSectionNotFoundException;
 import editor.repository.DocumentSectionRepository;
+import editor.repository.ElementNotFoundException;
+import editor.repository.IRepository;
 
 /**
  * This service takes care of saving, retrieving and manipulating documents.
@@ -27,61 +25,57 @@ public class DocumentService {
 			.getName());
 
 	@Autowired
-	private DocumentRepository documentRepository;
+	private IRepository<Document> documentRepository;
 
 	@Autowired
 	private DocumentSectionRepository documentSectionRepository;
+
+	public Document saveDocument(Document document) {
+		logger.info("Saving document " + document);
+		return documentRepository.save(document);
+	}
 
 	/**
 	 * Saves the DocumentSection, if the record is already present it will
 	 * update instead.
 	 * 
 	 * @param body
-	 * @throws JsonProcessingException
+	 * @return the saved document
+	 * @throws
 	 */
-	public void saveDocumentSection(Long documentId, DocumentSection body)
-			throws JsonProcessingException {
+	public DocumentSection saveDocumentSection(Document document,
+			DocumentSection documentSection) {
 
-		// TODO: replace id with document?
-		List<String> documentSections = documentSectionRepository
-				.getDocumentSections(documentId);
+		logger.info("Saving document section: "
+				+ documentSection.getSectionId() + " from document "
+				+ document.getId());
 
-		logger.info("Saving document: " + body.getSectionId());
+		try {
+			documentRepository.get(document.getId());
 
-		// TODO: handle version instead of updating the same document, link to
-		// an actual document, obtain sort order from somewhere, etc.
-		// Refactor to save a list of sections?
-
-		if (documentSections.isEmpty()) {
-			// TODO: get account id
-
-			documentRepository.insertDocument(documentId);
-
-			documentSectionRepository.insertDocumentSection(documentId, body);
-		} else {
-			logger.info("Records found: " + documentSections.size());
-
-			documentSectionRepository.updateDocumentSection(body);
-
+		} catch (ElementNotFoundException e) {
+			logger.info("Document with id" + document.getId()
+					+ "not found, saving document first.");
+			document = documentRepository.save(document);
 		}
+
+		documentSection.setDocumentId(document.getId());
+
+		return documentSectionRepository.save(documentSection);
 
 	}
 
 	/**
-	 * Retrieves a single DocumentSection related to a Document.
+	 * Retrieves a single DocumentSection.
 	 * 
 	 * @param id
 	 * @param sectionId
 	 * @return DocumentSection
-	 * @throws DocumentSectionNotFoundException
+	 * @throws ElementNotFoundException
 	 */
-	public DocumentSection getDocumentSection(Long documentId, Long sectionId)
-			throws DocumentSectionNotFoundException {
-
-		String json = documentSectionRepository.getSection(documentId,
-				sectionId);
-
-		return DocumentSection.fromJSON(json);
+	public DocumentSection getDocumentSection(Long sectionId)
+			throws ElementNotFoundException {
+		return documentSectionRepository.get(sectionId);
 	}
 
 	/**
@@ -89,11 +83,28 @@ public class DocumentService {
 	 * 
 	 * @param documentId
 	 * @return
+	 * @throws ElementNotFoundException
 	 */
-	public List<DocumentSection> getDocumentSections(Long documentId) {
-		return documentSectionRepository.getDocumentSections(documentId)
-				.stream().map(DocumentSection::fromJSON)
-				.collect(Collectors.toList());
+	public List<DocumentSection> getDocumentSections(Document document)
+			throws ElementNotFoundException {
+		return getDocumentSections(document.getId());
+	}
+
+	/**
+	 * Retrieves all the sections related to a Document.
+	 * 
+	 * @param documentId
+	 * @return
+	 * @throws ElementNotFoundException
+	 */
+	public List<DocumentSection> getDocumentSections(Long documentId)
+			throws ElementNotFoundException {
+		return documentSectionRepository.getDocumentSections(documentId);
+	}
+
+	public Document getDocument(Long documentId)
+			throws ElementNotFoundException {
+		return documentRepository.get(documentId);
 	}
 
 }

@@ -23,9 +23,10 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import editor.model.Document;
 import editor.model.DocumentHeader;
 import editor.model.DocumentSection;
-import editor.repository.DocumentSectionNotFoundException;
+import editor.repository.ElementNotFoundException;
 import editor.services.DocumentService;
 
 @Controller
@@ -35,7 +36,6 @@ public class ResumeController {
 	@Autowired
 	private DocumentService documentService;
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
 
@@ -53,7 +53,8 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<DocumentSection> getResumeSection(
-			@PathVariable final Long documentId) throws JsonProcessingException {
+			@PathVariable final Long documentId)
+			throws JsonProcessingException, ElementNotFoundException {
 
 		return documentService.getDocumentSections(documentId);
 	}
@@ -61,10 +62,9 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody DocumentSection getResumeSection(
 			@PathVariable final Long documentId,
-			@PathVariable final Long sectionId)
-			throws DocumentSectionNotFoundException {
+			@PathVariable final Long sectionId) throws ElementNotFoundException {
 
-		return documentService.getDocumentSection(documentId, sectionId);
+		return documentService.getDocumentSection(sectionId);
 
 	}
 
@@ -89,13 +89,16 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void saveSection(@PathVariable final Long documentId,
+	public @ResponseBody DocumentSection saveSection(
+			@PathVariable final Long documentId,
 			@RequestBody final DocumentSection body)
-			throws JsonProcessingException {
+			throws JsonProcessingException, ElementNotFoundException {
 
 		// logger.info(body.toString());
+		Document document = documentService.getDocument(documentId);
+		logger.info("document is null? " + (document == null));
 
-		documentService.saveDocumentSection(documentId, body);
+		return documentService.saveDocumentSection(document, body);
 
 	}
 
@@ -121,7 +124,7 @@ public class ResumeController {
 		return map;
 	}
 
-	@ExceptionHandler(value = { DocumentSectionNotFoundException.class })
+	@ExceptionHandler(value = { ElementNotFoundException.class })
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public @ResponseBody Map<String, Object> handleDocumentNotFoundException(
 			Exception ex) {
