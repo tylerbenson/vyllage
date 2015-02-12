@@ -1,6 +1,6 @@
 package editor.repository;
 
-import static editor.domain.editor.tables.DocumentSections.DOCUMENT_SECTIONS;
+import static editor.domain.tables.DocumentSections.DOCUMENT_SECTIONS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import editor.domain.editor.tables.DocumentSections;
-import editor.domain.editor.tables.records.DocumentSectionsRecord;
+import editor.domain.tables.DocumentSections;
+import editor.domain.tables.records.DocumentSectionsRecord;
 import editor.model.Document;
 import editor.model.DocumentSection;
 

@@ -1,6 +1,6 @@
 package editor;
 
-import static editor.domain.editor.tables.Accounts.ACCOUNTS;
+import static editor.domain.tables.Accounts.ACCOUNTS;
 import static org.junit.Assert.assertEquals;
 
 import org.jooq.DSLContext;

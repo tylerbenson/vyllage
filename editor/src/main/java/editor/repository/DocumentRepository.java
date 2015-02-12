@@ -1,6 +1,6 @@
 package editor.repository;
 
-import static editor.domain.editor.tables.Documents.DOCUMENTS;
+import static editor.domain.tables.Documents.DOCUMENTS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import editor.domain.editor.tables.records.DocumentsRecord;
+import editor.domain.tables.records.DocumentsRecord;
 import editor.model.Document;
 
 @Repository
