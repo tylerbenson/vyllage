@@ -2,15 +2,15 @@ package login.config;
 
 import javax.sql.DataSource;
 
+import login.repository.UserDetailRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
@@ -19,6 +19,9 @@ public class AuthenticationSecurity extends
 
 	@Autowired
 	private DataSource dataSource;
+
+	@Autowired
+	private UserDetailRepository userDetailRepository;
 
 	// @Override
 	// public void init(AuthenticationManagerBuilder auth) throws Exception {
@@ -32,21 +35,11 @@ public class AuthenticationSecurity extends
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth)
 			throws Exception {
-		JdbcUserDetailsManager userDetailsService = jdbcUserService();
-		auth.userDetailsService(userDetailsService).passwordEncoder(
+		auth.userDetailsService(userDetailRepository).passwordEncoder(
 				new BCryptPasswordEncoder());
-		// auth.jdbcAuthentication().dataSource(dataSource);
-		auth.inMemoryAuthentication().withUser("email")
-				.password(new BCryptPasswordEncoder().encode("password"))
-				.roles("USER");
+		// auth.inMemoryAuthentication().withUser("email")
+		// .password(new BCryptPasswordEncoder().encode("password"))
+		// .roles("USER");
 	}
 
-	@Bean
-	public org.springframework.security.provisioning.JdbcUserDetailsManager jdbcUserService()
-			throws Exception {
-		JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
-		jdbcUserDetailsManager.setDataSource(dataSource);
-		// jdbcUserDetailsManager.setAuthenticationManager(authenticationManagerBean());
-		return jdbcUserDetailsManager;
-	}
 }

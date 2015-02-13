@@ -1,6 +1,6 @@
 package editor.repository;
 
-import static editor.domain.editor.tables.Suggestions.SUGGESTIONS;
+import static editor.domain.tables.Suggestions.SUGGESTIONS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import editor.domain.editor.tables.records.SuggestionsRecord;
+import editor.domain.tables.records.SuggestionsRecord;
 import editor.model.DocumentSection;
 import editor.model.Suggestion;
 

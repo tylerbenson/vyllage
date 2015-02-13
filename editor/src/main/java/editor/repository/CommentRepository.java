@@ -1,6 +1,6 @@
 package editor.repository;
 
-import static editor.domain.editor.tables.Comments.COMMENTS;
+import static editor.domain.tables.Comments.COMMENTS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import editor.domain.editor.tables.records.CommentsRecord;
+import editor.domain.tables.records.CommentsRecord;
 import editor.model.Comment;
 
 @Repository

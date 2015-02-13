@@ -1,6 +1,6 @@
 package editor.repository;
 
-import static editor.domain.editor.tables.Accounts.ACCOUNTS;
+import static editor.domain.tables.Accounts.ACCOUNTS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import editor.domain.editor.tables.records.AccountsRecord;
+import editor.domain.tables.records.AccountsRecord;
 import editor.model.Account;
 
 @Repository
