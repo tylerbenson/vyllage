@@ -10,6 +10,20 @@ var MainContainer = React.createClass({
         this.setState({mainData: MainData});
     },
 
+    componentDidUpdate: function() {
+
+        var resizingTextareas = [].slice.call(document.querySelectorAll('textarea'));
+
+        resizingTextareas.forEach(function(textarea) {
+          textarea.addEventListener('input', autoresize, false);
+        });
+
+        function autoresize() {
+            this.style.height = 0;
+            this.style.height = this.scrollHeight  +'px';
+        }
+    },
+
     saveChanges: function (data) {
 
         for(i = 0; i < this.state.mainData.length; i++){
