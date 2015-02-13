@@ -2,6 +2,8 @@ package login.config;
 
 import javax.sql.DataSource;
 
+import login.repository.UserDetailRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,9 @@ public class AuthenticationSecurity extends
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private UserDetailRepository userDetailRepository;
+
 	// @Override
 	// public void init(AuthenticationManagerBuilder auth) throws Exception {
 	// // auth.jdbcAuthentication().dataSource(dataSource);
@@ -32,13 +37,13 @@ public class AuthenticationSecurity extends
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth)
 			throws Exception {
-		JdbcUserDetailsManager userDetailsService = jdbcUserService();
-		auth.userDetailsService(userDetailsService).passwordEncoder(
+		// JdbcUserDetailsManager userDetailsService = jdbcUserService();
+		auth.userDetailsService(userDetailRepository).passwordEncoder(
 				new BCryptPasswordEncoder());
 		// auth.jdbcAuthentication().dataSource(dataSource);
 		auth.inMemoryAuthentication().withUser("email")
 				.password(new BCryptPasswordEncoder().encode("password"))
-				.roles("USER");
+				.roles("ADMIN");
 	}
 
 	@Bean

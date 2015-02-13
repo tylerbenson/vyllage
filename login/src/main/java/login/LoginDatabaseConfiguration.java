@@ -1,6 +1,9 @@
-package editor;
+package login;
 
 import javax.sql.DataSource;
+
+import login.config.database.ExceptionTranslator;
+import login.config.database.SpringTransactionProvider;
 
 import org.jooq.ConnectionProvider;
 import org.jooq.DSLContext;
@@ -17,11 +20,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
-import editor.database.ExceptionTranslator;
-import editor.database.SpringTransactionProvider;
-
 @Configuration
-public class DatabaseConfiguration {
+public class LoginDatabaseConfiguration {
 
 	@Autowired
 	private DataSource dataSource;
