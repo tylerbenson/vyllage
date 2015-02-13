@@ -21,7 +21,7 @@ import connections.database.ExceptionTranslator;
 import connections.database.SpringTransactionProvider;
 
 @Configuration
-public class DatabaseConfiguration {
+public class ConnectionsDatabaseConfiguration {
 
 	@Autowired
 	private DataSource dataSource;
