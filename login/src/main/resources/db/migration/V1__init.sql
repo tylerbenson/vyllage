@@ -33,8 +33,8 @@ create table if not exists LOGIN.group_members (
   group_id bigint not null,
   constraint fk_group_members_group foreign key(group_id) references groups(id));
 
-create table if not exists LOGIN.persistent_LOGINs (
---create table if not exists persistent_LOGINs (
+create table if not exists LOGIN.persistent_logins (
+--create table if not exists persistent_logins (
   username varchar(64) not null,
   series varchar(64) primary key,
   token varchar(64) not null,
