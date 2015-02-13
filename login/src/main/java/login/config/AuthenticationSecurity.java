@@ -35,7 +35,6 @@ public class AuthenticationSecurity extends
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth)
 			throws Exception {
-		// JdbcUserDetailsManager userDetailsService = jdbcUserService();
 		auth.userDetailsService(userDetailRepository).passwordEncoder(
 				new BCryptPasswordEncoder());
 		// auth.inMemoryAuthentication().withUser("email")
