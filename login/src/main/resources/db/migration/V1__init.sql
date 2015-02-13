@@ -54,6 +54,7 @@ insert into LOGIN.users ( username, password, enabled ) values ( 'testuser@vylla
 --  constraint fk_authorities_users foreign key(username) references users(username));
 --  create unique index ix_auth_username on authorities (username,authority);
 insert into LOGIN.authorities ( username, authority ) values ( 'email', 'ADMIN' );
+insert into LOGIN.authorities ( username, authority ) values ( 'email', 'USER' );
 insert into LOGIN.authorities ( username, authority ) values ( 'testuser@vyllage.com', 'ADMIN' );
 
 --create table groups (
