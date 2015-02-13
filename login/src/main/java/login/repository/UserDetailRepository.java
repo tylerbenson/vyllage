@@ -13,12 +13,12 @@ import login.model.UserDetail;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserDetailRepository implements UserDetailsService {
+public class UserDetailRepository implements UserDetailsManager {
 
 	private final Logger logger = Logger.getLogger(UserDetailRepository.class
 			.getName());
@@ -39,7 +39,7 @@ public class UserDetailRepository implements UserDetailsService {
 					+ " not found.");
 
 		Authority auth = new Authority();
-		auth.setSetAuthority("USER");
+		auth.setSetAuthority("ADMIN");
 
 		List<Authority> authorities = new ArrayList<>();
 		authorities.add(auth);
@@ -49,6 +49,37 @@ public class UserDetailRepository implements UserDetailsService {
 		detail.setPassword(record.getPassword());
 		detail.setEnabled(record.getEnabled());
 		detail.setAuthorities(authorities);
+		logger.info(detail.toString());
 		return detail;
+	}
+
+	@Override
+	public void createUser(UserDetails user) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void updateUser(UserDetails user) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteUser(String username) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void changePassword(String oldPassword, String newPassword) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean userExists(String username) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

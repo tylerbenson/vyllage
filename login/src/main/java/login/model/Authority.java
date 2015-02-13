@@ -1,7 +1,10 @@
 package login.model;
 
+import lombok.ToString;
+
 import org.springframework.security.core.GrantedAuthority;
 
+@ToString
 public class Authority implements GrantedAuthority {
 
 	/**
