@@ -118,13 +118,20 @@
 
 	    		    <div  class="seven columns notif-grid"> 
 	    				<div  class="settings-notif">
-			    			<div th:each="not, ${accountSettings.notifications}" class="topper"><p>notifications</p>
-			    				<div class="notification-row">
-				    				<p th:text="{not.userName}" class="ntfcation"> John Smith requests your advice</p>
+			    			<div  class="topper"><p>notifications</p></div>
+			    			<th:block th:each="notif : ${accountSettings.notifications}">
+			    				<div th:if="${notif.userName != null}" class="notification-row">
+				    				<p th:text="${notif.userName} + ' gaves you a suggestion'" class="ntfcation"> John Smith requests your advice</p>
 				    				<p class="view"> view</p>
 				    				<p class="time">1 hour ago</p> 
 			    				</div>
-			    			</div>
+			    				<div th:if="${notif.userName == null}" class="notification-row">
+				    				<p th:text="'you have ' + ${notif.suggestions.size()} + ' pending suggestions'" class="ntfcation"> you have 3 pending suggestions</p>
+				    				<p class="view"> view</p>
+				    				<p class="time">1 hour ago</p> 
+			    				</div>
+			    			</th:block>
+			    			<th:block th:remove="all"> 
 			    			<div class="notification-row">
 			    				<p class="ntfcation"> you have 3 pending suggestions</p>
 			    				<p class="view"> view</p>
@@ -169,6 +176,7 @@
 			    			<div class="more">
 			    			<p class="view-more"> view more</p>
 			    			</div>
+			    			</th:block>
 			    		</div>
 	    			</div>  			
 	    		</div>

@@ -3,6 +3,7 @@ package editor.controllers;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -45,11 +46,21 @@ public class AccountSettingsController {
 		notification1.setUserName("Juan Perez");
 
 		Notification notification2 = new Notification();
-		notification2.setCreated(LocalDateTime.now());
+		notification2.setCreated(LocalDateTime.now().minusDays(5));
 		notification2.setSuggestions(Arrays.asList(new Suggestion(),
 				new Suggestion()));
 
-		return null;
+		List<Notification> notifications = sortSuggestions(Arrays.asList(
+				notification1, notification2));
+
+		return notifications;
+	}
+
+	private List<Notification> sortSuggestions(List<Notification> notifications) {
+		Comparator<Notification> comparator = (n1, n2) -> n1.getCreated()
+				.compareTo(n2.getCreated());
+		notifications.sort(comparator);
+		return notifications;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
