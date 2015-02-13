@@ -38,21 +38,9 @@ public class AuthenticationSecurity extends
 		// JdbcUserDetailsManager userDetailsService = jdbcUserService();
 		auth.userDetailsService(userDetailRepository).passwordEncoder(
 				new BCryptPasswordEncoder());
-		// auth.jdbcAuthentication().dataSource(dataSource);
 		// auth.inMemoryAuthentication().withUser("email")
 		// .password(new BCryptPasswordEncoder().encode("password"))
 		// .roles("USER");
 	}
 
-	// @Bean
-	// public org.springframework.security.provisioning.JdbcUserDetailsManager
-	// jdbcUserService()
-	// throws Exception {
-	// JdbcUserDetailsManager jdbcUserDetailsManager = new
-	// JdbcUserDetailsManager();
-	// jdbcUserDetailsManager.setDataSource(dataSource);
-	// //
-	// jdbcUserDetailsManager.setAuthenticationManager(authenticationManagerBean());
-	// return jdbcUserDetailsManager;
-	// }
 }
