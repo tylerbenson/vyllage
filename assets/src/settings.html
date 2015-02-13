@@ -49,7 +49,8 @@
 			    				</div>
 			    				<div class="u-pull-left profile-info-set">	
 			    					<p th:text="*{name}" class="name"> Static Nathan Benson </p>
-			    					<p th:text="*{memberSince}" class="member-set"> Member since: Jan. 1, 2014</p>
+			    					<p th:text="'Member since: ' +  *{#strings.capitalize(#strings.toLowerCase(memberSince.getMonth()))} + '. ' + *{memberSince.getDayOfMonth()} + ', ' + *{memberSince.getYear()}" class="member-set"> Member since: Jan. 1, 2014</p>
+<!-- 			    					<p th:text="'Member since: ' ${#dates.format(accountSettings.memberSince, 'dd/MMM/yyyy')}" class="member-set"> Member since: Jan. 1, 2014</p> -->
 			    				</div>
 	    					</div>
 
@@ -108,7 +109,7 @@
 	    					<div class="settings-row">
 	    						<div class="graduation-info u-pull-left last-update">
 									<p class="last-update">last update: </p>
-									<p th:text="*{lastUpdate}" class="last-update"> Jan. 1, 2014 </p>
+									<p th:text="*{#strings.capitalize(#strings.toLowerCase(lastUpdate.getMonth()))} + '. ' + *{lastUpdate.getDayOfMonth()} + ', ' + *{lastUpdate.getYear()}" class="last-update"> Jan. 1, 2014 </p>
 								</div>
 								<p class="update last-update">delete account</p>
 	    					</div>
