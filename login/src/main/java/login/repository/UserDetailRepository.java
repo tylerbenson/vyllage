@@ -120,7 +120,7 @@ public class UserDetailRepository implements UserDetailsManager {
 		logger.info("Changing password for user '" + username + "'");
 
 		sql.update(USERS).set(USERS.PASSWORD, newPassword)
-				.where(USERS.USERNAME.eq(username));
+				.where(USERS.USERNAME.eq(username)).execute();
 
 		SecurityContextHolder.getContext().setAuthentication(
 				createNewAuthentication(currentUser, newPassword));

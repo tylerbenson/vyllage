@@ -41,7 +41,7 @@ public class AuthenticationSecurity extends
 		// auth.jdbcAuthentication().dataSource(dataSource);
 		// auth.inMemoryAuthentication().withUser("email")
 		// .password(new BCryptPasswordEncoder().encode("password"))
-		// .roles("ADMIN");
+		// .roles("USER");
 	}
 
 	// @Bean

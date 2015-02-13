@@ -14,7 +14,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -43,6 +45,27 @@ public class LoginTest {
 	@Test(expected = UsernameNotFoundException.class)
 	public void testUserNotFound() {
 		repository.loadUserByUsername("invalidUser");
+	}
+
+	@Test
+	public void userChangesPassword() {
+		User user = new User("changePassword", "password",
+				Arrays.asList(new SimpleGrantedAuthority("TEST")));
+
+		repository.createUser(user);
+
+		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
+				user, null, user.getAuthorities());
+
+		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+
+		repository.changePassword("password", "newPassword");
+
+		User loadedUser = repository.loadUserByUsername("changePassword");
+
+		Assert.assertNotNull(loadedUser);
+		Assert.assertNotNull(loadedUser.getPassword());
+		Assert.assertEquals("newPassword", loadedUser.getPassword());
 	}
 
 	@Test
