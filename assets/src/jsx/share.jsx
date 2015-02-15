@@ -1,18 +1,73 @@
-var PrivateLinkMain = React.createClass({	
+var PrivateLinkEdit = React.createClass({
+
+    getInitialState: function() {
+        return {link: this.props.data.link}; 
+    },
+
+    componentDidUpdate: function () {
+        this.state.link = this.props.data.link;
+    },
+
+    handleChange: function(event) {
+        this.setState({link: event.target.value});
+
+        if (this.props.updatePrivateLink) {
+            this.props.updatePrivateLink(event.target.value);
+        }
+    },
+
+    render: function() {
+        var link = this.state.link;
+
+        return (
+            <div className="info-link edit">
+                <input type="text" className="info-input-edit" value={link}  onChange={this.handleChange}/>
+            </div>
+        );
+    }
+});
+
+var PrivateLink = React.createClass({
+
+    getInitialState: function() {
+        return {data: this.props.data,
+                editMode: false}; 
+    },
+
+    editPrivateLink: function() {
+        if(!this.state.editMode){
+            this.refs.privateLinkEdit.getDOMNode().style.display="block" ;
+            this.refs.privateLinkMain.getDOMNode().style.display="none" ;
+        } else {
+            this.refs.privateLinkEdit.getDOMNode().style.display="none";
+            this.refs.privateLinkMain.getDOMNode().style.display="block";
+
+            if(this.props.updatePrivateLink){
+                this.props.updatePrivateLink(this.state.data.link);
+            }
+        }
+
+        this.state.editMode = !this.state.editMode;
+    },
+
+    updatePrivateLink: function (link) {
+        this.state.data.link=link;
+    },
 
     render: function() {
 		return (
             <div className="private-link info-blog main-info">
                 <p className="info-title">private link</p>
                 <div className="edit-btn-cont">
-                    <button className="edit-btn"></button>
+                    <button className="edit-btn" onClick={this.editPrivateLink}></button>
                 </div>
-                <p className="info-link">
-                    <a href={this.props.shareData.privateLink.link}>{this.props.shareData.privateLink.link}</a>
+                <p className="info-link" ref="privateLinkMain">
+                    <a href={this.props.data.link}>{this.props.data.link}</a>
                 </p>
+                <PrivateLinkEdit ref="privateLinkEdit" data={this.props.data} updatePrivateLink={this.updatePrivateLink}/>
                 <p className="info-privacy">expires after:
                     <select className="privacy-select">
-                        <option>{this.props.shareData.privateLink.expiresAfter}</option>
+                        <option>{this.props.data.expiresAfter}</option>
                     </select>
                 </p>
             </div>
@@ -20,100 +75,114 @@ var PrivateLinkMain = React.createClass({
     }
 });
 
-var PrivateLinkEdit = React.createClass({    
+var PublicLinkEdit = React.createClass({
+
+    getInitialState: function() {
+        return {link: this.props.data.link}; 
+    },
+
+    componentDidUpdate: function () {
+        this.state.link = this.props.data.link;
+    },
+
+    handleChange: function(event) {
+        this.setState({link: event.target.value});
+
+        if (this.props.updatePublicLink) {
+            this.props.updatePublicLink(event.target.value);
+        }
+    },
 
     render: function() {
+        var link = this.state.link;
+
         return (
-            <div className="private-link info-blog edit">
-                <p className="info-title">private link</p>
-                <div className="info-link">
-                    <input type="text" className="info-input-edit" placeholder={this.props.shareData.privateLink.link} value= {this.props.shareData.privateLink.link} />
-                </div>
-                <p className="info-privacy-share">expires after:
-                    <select className="privacy-select">
-                        <option>{this.props.shareData.privateLink.expiresAfter}</option>
-                    </select>
-                </p>
+            <div className="info-link edit">
+                <input type="text" className="info-input-edit" value={link} onChange={this.handleChange} />
             </div>
         );
     }
 });
 
-var PrivateLink = React.createClass({   
-    render: function() {
-        return (
-            <div>
-                <PrivateLinkMain shareData={this.props.shareData}/>
-                <PrivateLinkEdit shareData={this.props.shareData} />
-            </div>
-        );
-    }
-});
+var PublicLink = React.createClass({  
 
-var PublicLinkMain = React.createClass({    
+    getInitialState: function() {
+        return {data: this.props.data,
+                editMode: false}; 
+    },  
+
+    editPublicLink: function() {
+        if(!this.state.editMode) {
+            this.refs.publicLinkEdit.getDOMNode().style.display="block";
+            this.refs.publicLinkMain.getDOMNode().style.display="none" ;
+         } else {
+            this.refs.publicLinkEdit.getDOMNode().style.display="none";
+            this.refs.publicLinkMain.getDOMNode().style.display="block" ;
+
+            if(this.props.updatePublicLink) {
+                this.props.updatePublicLink(this.state.data.link);
+            }
+        }
+
+        this.state.editMode = !this.state.editMode;
+    },
+
+    updatePublicLink: function (link) {
+       this.state.data.link=link;
+    },
 
     render: function() {
         return (
             <div className="public-link info-blog main-info">
                 <p className="info-title">public link</p>
                 <div className="edit-btn-cont">
-                    <button className="edit-btn"></button>
+                    <button className="edit-btn" onClick={this.editPublicLink}></button>
                 </div>
-                <p className="info-link">
-                    <a href={this.props.shareData.publicLink.link}>{this.props.shareData.publicLink.link}</a>
+                <p className="info-link" ref="publicLinkMain">
+                    <a href={this.props.data.link}>{this.props.data.link}</a>
                 </p>
+
+                <PublicLinkEdit ref="publicLinkEdit" data={this.props.data} updatePublicLink={this.updatePublicLink}/>
                 <p className="info-privacy">visible to:
                     <select className="privacy-select">
-                        <option>{this.props.shareData.publicLink.visibleTo}</option>
+                        <option>{this.props.data.visibleTo}</option>
                     </select>
                 </p>
             </div>
         );
     }
 });
-
-
-var PublicLinkEdit = React.createClass({    
-
-    render: function() {
-        return (
-            <div className="public-link info-blog edit">
-                <p className="info-title">public link</p>
-                <div className="info-link">
-                    <input type="text" className="info-input-edit" name="email" placeholder="https://vyllage.com/nathanbenson123" value = {this.props.shareData.publicLink.link}/>
-                </div>
-                <p className="info-privacy-public">visible to:
-                    <select className="privacy-select">
-                        <option>{this.props.shareData.publicLink.visibleTo}</option>
-                    </select>
-                </p>
-            </div>
-        );
-    }
-});
-
-var PublicLink = React.createClass({   
-    render: function() {
-        return (
-            <div>
-                <PublicLinkMain shareData={this.props.shareData}/>
-                <PublicLinkEdit shareData={this.props.shareData}/>
-            </div>
-        );
-    }
-});
-
 
 var LinkCantainer = React.createClass({   
+
+    getInitialState: function() {
+        return {ShareData: []};
+    },
+
+    componentDidMount: function() {
+        // ajax call will go here and fetch the profileData
+
+        this.setState({ShareData: ShareData});
+    },
+
+    updatePrivateLink: function (link) {
+        this.state.ShareData.privateLink.link=link;
+        this.setState({ShareData:  this.state.ShareData});
+    },
+
+    updatePublicLink: function (link) {
+        this.state.ShareData.publicLink.link=link;
+        this.setState({ShareData:  this.state.ShareData});
+    },
 
     render: function() {
         return (
              <div className="row info-blog-wrapper">
                 <div className="four columns" >
-                    <PrivateLink shareData={this.props.shareData}/>                
+                    <PrivateLink data={this.props.shareData.privateLink} updatePrivateLink={this.updatePrivateLink}/>                
                 </div> 
                  <div className="four columns" >
-                    <PublicLink shareData={this.props.shareData}/>                
+                    <PublicLink data={this.props.shareData.publicLink} updatePublicLink={this.updatePublicLink} />                
                 </div>      
                 <div className="four columns">
                     <div className="export info-blog">

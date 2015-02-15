@@ -236,6 +236,34 @@ var ArticleContent = React.createClass({displayName: "ArticleContent",
 
 // --------------------------------------------- end --------------------------------------------
 
+
+var ShareContactButtons = React.createClass({displayName: "ShareContactButtons", 
+
+    showShare: function() {
+        document.getElementById('share-info').style.display = 'block';
+        document.getElementById('contact-info').style.display = 'none';
+    },
+
+    showContact: function() {
+        // document.getElementById('contact-info').style.display = 'block';
+        // document.getElementById('share-info').style.display = 'none';
+    },
+
+    render: function() {
+        return ( 
+            React.createElement("div", {className: "four columns btns-grid"}, 
+                React.createElement("div", {className: "share-contact-btns-container"}, 
+                    React.createElement("button", {className: "u-pull-left share", onClick: this.showShare}, "share"), 
+                    React.createElement("button", {className: "u-pull-left contact", onClick: this.showContact}, "contact")
+                )
+            )
+        );
+    }
+
+});
+
+
+
 // -------------------------- Profile Container for both modes ----------------------------------
 
 var ProfileContainer = React.createClass({displayName: "ProfileContainer", 
@@ -274,12 +302,7 @@ var ProfileContainer = React.createClass({displayName: "ProfileContainer",
 
                 React.createElement(ArticleContent, {profileData: this.state.profileData, saveChanges: this.saveChanges}), 
 
-                React.createElement("div", {className: "four columns btns-grid"}, 
-                    React.createElement("div", {className: "share-contact-btns-container"}, 
-                        React.createElement("button", {className: "u-pull-left share", id: "shareInfoBtn"}, "share"), 
-                        React.createElement("button", {className: "u-pull-left contact", id: "contactInfoBtn"}, "contact")
-                    )
-                )
+                React.createElement(ShareContactButtons, null)
             )
         );
     }

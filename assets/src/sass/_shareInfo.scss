@@ -27,9 +27,15 @@ article {
 			margin-left: 30px;
 		}
 
+		.info-link.edit {
+			display: none;
+			text-decoration: underline;
+		}
+
 		.info-link {
-			padding-top: 18px;
-			margin-left: 26px;
+			padding-top: 10px;
+			margin: 0 0 25px 25px;
+
 
 			a {
 				color: #000;
