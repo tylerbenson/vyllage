@@ -1,18 +1,73 @@
-var PrivateLinkMain = React.createClass({displayName: "PrivateLinkMain",	
+var PrivateLinkEdit = React.createClass({displayName: "PrivateLinkEdit",
+
+    getInitialState: function() {
+        return {link: this.props.data.link}; 
+    },
+
+    componentDidUpdate: function () {
+        this.state.link = this.props.data.link;
+    },
+
+    handleChange: function(event) {
+        this.setState({link: event.target.value});
+
+        if (this.props.updatePrivateLink) {
+            this.props.updatePrivateLink(event.target.value);
+        }
+    },
+
+    render: function() {
+        var link = this.state.link;
+
+        return (
+            React.createElement("div", {className: "info-link edit"}, 
+                React.createElement("input", {type: "text", className: "info-input-edit", value: link, onChange: this.handleChange})
+            )
+        );
+    }
+});
+
+var PrivateLink = React.createClass({displayName: "PrivateLink",
+
+    getInitialState: function() {
+        return {data: this.props.data,
+                editMode: false}; 
+    },
+
+    editPrivateLink: function() {
+        if(!this.state.editMode){
+            this.refs.privateLinkEdit.getDOMNode().style.display="block" ;
+            this.refs.privateLinkMain.getDOMNode().style.display="none" ;
+        } else {
+            this.refs.privateLinkEdit.getDOMNode().style.display="none";
+            this.refs.privateLinkMain.getDOMNode().style.display="block";
+
+            if(this.props.updatePrivateLink){
+                this.props.updatePrivateLink(this.state.data.link);
+            }
+        }
+
+        this.state.editMode = !this.state.editMode;
+    },
+
+    updatePrivateLink: function (link) {
+        this.state.data.link=link;
+    },
 
     render: function() {
 		return (
             React.createElement("div", {className: "private-link info-blog main-info"}, 
                 React.createElement("p", {className: "info-title"}, "private link"), 
                 React.createElement("div", {className: "edit-btn-cont"}, 
-                    React.createElement("button", {className: "edit-btn"})
+                    React.createElement("button", {className: "edit-btn", onClick: this.editPrivateLink})
                 ), 
-                React.createElement("p", {className: "info-link"}, 
-                    React.createElement("a", {href: this.props.shareData.privateLink.link}, this.props.shareData.privateLink.link)
+                React.createElement("p", {className: "info-link", ref: "privateLinkMain"}, 
+                    React.createElement("a", {href: this.props.data.link}, this.props.data.link)
                 ), 
+                React.createElement(PrivateLinkEdit, {ref: "privateLinkEdit", data: this.props.data, updatePrivateLink: this.updatePrivateLink}), 
                 React.createElement("p", {className: "info-privacy"}, "expires after:", 
                     React.createElement("select", {className: "privacy-select"}, 
-                        React.createElement("option", null, this.props.shareData.privateLink.expiresAfter)
+                        React.createElement("option", null, this.props.data.expiresAfter)
                     )
                 )
             )
@@ -20,100 +75,114 @@ var PrivateLinkMain = React.createClass({displayName: "PrivateLinkMain",
     }
 });
 
-var PrivateLinkEdit = React.createClass({displayName: "PrivateLinkEdit",    
+var PublicLinkEdit = React.createClass({displayName: "PublicLinkEdit",
+
+    getInitialState: function() {
+        return {link: this.props.data.link}; 
+    },
+
+    componentDidUpdate: function () {
+        this.state.link = this.props.data.link;
+    },
+
+    handleChange: function(event) {
+        this.setState({link: event.target.value});
+
+        if (this.props.updatePublicLink) {
+            this.props.updatePublicLink(event.target.value);
+        }
+    },
 
     render: function() {
+        var link = this.state.link;
+
         return (
-            React.createElement("div", {className: "private-link info-blog edit"}, 
-                React.createElement("p", {className: "info-title"}, "private link"), 
-                React.createElement("div", {className: "info-link"}, 
-                    React.createElement("input", {type: "text", className: "info-input-edit", placeholder: this.props.shareData.privateLink.link, value: this.props.shareData.privateLink.link})
-                ), 
-                React.createElement("p", {className: "info-privacy-share"}, "expires after:", 
-                    React.createElement("select", {className: "privacy-select"}, 
-                        React.createElement("option", null, this.props.shareData.privateLink.expiresAfter)
-                    )
-                )
+            React.createElement("div", {className: "info-link edit"}, 
+                React.createElement("input", {type: "text", className: "info-input-edit", value: link, onChange: this.handleChange})
             )
         );
     }
 });
 
-var PrivateLink = React.createClass({displayName: "PrivateLink",   
-    render: function() {
-        return (
-            React.createElement("div", null, 
-                React.createElement(PrivateLinkMain, {shareData: this.props.shareData}), 
-                React.createElement(PrivateLinkEdit, {shareData: this.props.shareData})
-            )
-        );
-    }
-});
+var PublicLink = React.createClass({displayName: "PublicLink",  
 
-var PublicLinkMain = React.createClass({displayName: "PublicLinkMain",    
+    getInitialState: function() {
+        return {data: this.props.data,
+                editMode: false}; 
+    },  
+
+    editPublicLink: function() {
+        if(!this.state.editMode) {
+            this.refs.publicLinkEdit.getDOMNode().style.display="block";
+            this.refs.publicLinkMain.getDOMNode().style.display="none" ;
+         } else {
+            this.refs.publicLinkEdit.getDOMNode().style.display="none";
+            this.refs.publicLinkMain.getDOMNode().style.display="block" ;
+
+            if(this.props.updatePublicLink) {
+                this.props.updatePublicLink(this.state.data.link);
+            }
+        }
+
+        this.state.editMode = !this.state.editMode;
+    },
+
+    updatePublicLink: function (link) {
+       this.state.data.link=link;
+    },
 
     render: function() {
         return (
             React.createElement("div", {className: "public-link info-blog main-info"}, 
                 React.createElement("p", {className: "info-title"}, "public link"), 
                 React.createElement("div", {className: "edit-btn-cont"}, 
-                    React.createElement("button", {className: "edit-btn"})
+                    React.createElement("button", {className: "edit-btn", onClick: this.editPublicLink})
                 ), 
-                React.createElement("p", {className: "info-link"}, 
-                    React.createElement("a", {href: this.props.shareData.publicLink.link}, this.props.shareData.publicLink.link)
+                React.createElement("p", {className: "info-link", ref: "publicLinkMain"}, 
+                    React.createElement("a", {href: this.props.data.link}, this.props.data.link)
                 ), 
+
+                React.createElement(PublicLinkEdit, {ref: "publicLinkEdit", data: this.props.data, updatePublicLink: this.updatePublicLink}), 
                 React.createElement("p", {className: "info-privacy"}, "visible to:", 
                     React.createElement("select", {className: "privacy-select"}, 
-                        React.createElement("option", null, this.props.shareData.publicLink.visibleTo)
+                        React.createElement("option", null, this.props.data.visibleTo)
                     )
                 )
             )
         );
     }
 });
-
-
-var PublicLinkEdit = React.createClass({displayName: "PublicLinkEdit",    
-
-    render: function() {
-        return (
-            React.createElement("div", {className: "public-link info-blog edit"}, 
-                React.createElement("p", {className: "info-title"}, "public link"), 
-                React.createElement("div", {className: "info-link"}, 
-                    React.createElement("input", {type: "text", className: "info-input-edit", name: "email", placeholder: "https://vyllage.com/nathanbenson123", value: this.props.shareData.publicLink.link})
-                ), 
-                React.createElement("p", {className: "info-privacy-public"}, "visible to:", 
-                    React.createElement("select", {className: "privacy-select"}, 
-                        React.createElement("option", null, this.props.shareData.publicLink.visibleTo)
-                    )
-                )
-            )
-        );
-    }
-});
-
-var PublicLink = React.createClass({displayName: "PublicLink",   
-    render: function() {
-        return (
-            React.createElement("div", null, 
-                React.createElement(PublicLinkMain, {shareData: this.props.shareData}), 
-                React.createElement(PublicLinkEdit, {shareData: this.props.shareData})
-            )
-        );
-    }
-});
-
 
 var LinkCantainer = React.createClass({displayName: "LinkCantainer",   
+
+    getInitialState: function() {
+        return {ShareData: []};
+    },
+
+    componentDidMount: function() {
+        // ajax call will go here and fetch the profileData
+
+        this.setState({ShareData: ShareData});
+    },
+
+    updatePrivateLink: function (link) {
+        this.state.ShareData.privateLink.link=link;
+        this.setState({ShareData:  this.state.ShareData});
+    },
+
+    updatePublicLink: function (link) {
+        this.state.ShareData.publicLink.link=link;
+        this.setState({ShareData:  this.state.ShareData});
+    },
 
     render: function() {
         return (
              React.createElement("div", {className: "row info-blog-wrapper"}, 
                 React.createElement("div", {className: "four columns"}, 
-                    React.createElement(PrivateLink, {shareData: this.props.shareData})
+                    React.createElement(PrivateLink, {data: this.props.shareData.privateLink, updatePrivateLink: this.updatePrivateLink})
                 ), 
                  React.createElement("div", {className: "four columns"}, 
-                    React.createElement(PublicLink, {shareData: this.props.shareData})
+                    React.createElement(PublicLink, {data: this.props.shareData.publicLink, updatePublicLink: this.updatePublicLink})
                 ), 
                 React.createElement("div", {className: "four columns"}, 
                     React.createElement("div", {className: "export info-blog"}, 
