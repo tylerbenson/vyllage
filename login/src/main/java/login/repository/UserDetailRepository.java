@@ -36,7 +36,6 @@ public class UserDetailRepository implements UserDetailsManager {
 	private AuthorityRepository authorityRepository;
 
 	public UserDetailRepository() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
