@@ -117,9 +117,9 @@ public class ResumeController {
 			Exception ex) {
 		Map<String, Object> map = new HashMap<>();
 		if (ex.getCause() != null) {
-			map.put("cause", ex.getCause().getMessage());
+			map.put("error", ex.getCause().getMessage());
 		} else {
-			map.put("cause", ex.getMessage());
+			map.put("error", ex.getMessage());
 		}
 		return map;
 	}
@@ -130,9 +130,9 @@ public class ResumeController {
 			Exception ex) {
 		Map<String, Object> map = new HashMap<>();
 		if (ex.getCause() != null) {
-			map.put("cause", ex.getCause().getMessage());
+			map.put("error", ex.getCause().getMessage());
 		} else {
-			map.put("cause", ex.getMessage());
+			map.put("error", ex.getMessage());
 		}
 		return map;
 	}
