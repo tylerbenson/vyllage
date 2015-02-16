@@ -20,7 +20,7 @@ var PrivateLinkEdit = React.createClass({displayName: "PrivateLinkEdit",
         var link = this.state.link;
 
         return (
-            React.createElement("div", {className: "info-link edit"}, 
+            React.createElement("div", {className: "share-link edit"}, 
                 React.createElement("input", {type: "text", className: "info-input-edit", value: link, onChange: this.handleChange})
             )
         );
@@ -61,7 +61,7 @@ var PrivateLink = React.createClass({displayName: "PrivateLink",
                 React.createElement("div", {className: "edit-btn-cont"}, 
                     React.createElement("button", {className: "edit-btn", onClick: this.editPrivateLink})
                 ), 
-                React.createElement("p", {className: "info-link", ref: "privateLinkMain"}, 
+                React.createElement("p", {className: "share-link", ref: "privateLinkMain"}, 
                     React.createElement("a", {href: this.props.data.link}, this.props.data.link)
                 ), 
                 React.createElement(PrivateLinkEdit, {ref: "privateLinkEdit", data: this.props.data, updatePrivateLink: this.updatePrivateLink}), 
@@ -97,7 +97,7 @@ var PublicLinkEdit = React.createClass({displayName: "PublicLinkEdit",
         var link = this.state.link;
 
         return (
-            React.createElement("div", {className: "info-link edit"}, 
+            React.createElement("div", {className: "share-link edit"}, 
                 React.createElement("input", {type: "text", className: "info-input-edit", value: link, onChange: this.handleChange})
             )
         );
@@ -138,7 +138,7 @@ var PublicLink = React.createClass({displayName: "PublicLink",
                 React.createElement("div", {className: "edit-btn-cont"}, 
                     React.createElement("button", {className: "edit-btn", onClick: this.editPublicLink})
                 ), 
-                React.createElement("p", {className: "info-link", ref: "publicLinkMain"}, 
+                React.createElement("p", {className: "share-link", ref: "publicLinkMain"}, 
                     React.createElement("a", {href: this.props.data.link}, this.props.data.link)
                 ), 
 

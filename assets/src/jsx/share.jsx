@@ -20,7 +20,7 @@ var PrivateLinkEdit = React.createClass({
         var link = this.state.link;
 
         return (
-            <div className="info-link edit">
+            <div className="share-link edit">
                 <input type="text" className="info-input-edit" value={link}  onChange={this.handleChange}/>
             </div>
         );
@@ -61,7 +61,7 @@ var PrivateLink = React.createClass({
                 <div className="edit-btn-cont">
                     <button className="edit-btn" onClick={this.editPrivateLink}></button>
                 </div>
-                <p className="info-link" ref="privateLinkMain">
+                <p className="share-link" ref="privateLinkMain">
                     <a href={this.props.data.link}>{this.props.data.link}</a>
                 </p>
                 <PrivateLinkEdit ref="privateLinkEdit" data={this.props.data} updatePrivateLink={this.updatePrivateLink}/>
@@ -97,7 +97,7 @@ var PublicLinkEdit = React.createClass({
         var link = this.state.link;
 
         return (
-            <div className="info-link edit">
+            <div className="share-link edit">
                 <input type="text" className="info-input-edit" value={link} onChange={this.handleChange} />
             </div>
         );
@@ -138,7 +138,7 @@ var PublicLink = React.createClass({
                 <div className="edit-btn-cont">
                     <button className="edit-btn" onClick={this.editPublicLink}></button>
                 </div>
-                <p className="info-link" ref="publicLinkMain">
+                <p className="share-link" ref="publicLinkMain">
                     <a href={this.props.data.link}>{this.props.data.link}</a>
                 </p>
 

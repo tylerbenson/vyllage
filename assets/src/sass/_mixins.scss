@@ -110,8 +110,8 @@
 
 @mixin shareContct () {
 	border: 1px dotted $share-info-border-color;
-	padding: 0px 16px 20px 20px;
-	height: 114px;
+	padding: 0px 16px 0px 20px;
+	height: 134px;
 }
 
 @mixin loginInputFields() {
