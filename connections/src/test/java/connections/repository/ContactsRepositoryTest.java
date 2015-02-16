@@ -1,4 +1,4 @@
-package connections;
+package connections.repository;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import connections.Application;
 import connections.model.Contact;
 import connections.repository.ElementNotFoundException;
 import connections.repository.IRepository;
