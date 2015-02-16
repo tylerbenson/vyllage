@@ -5,22 +5,22 @@ import lombok.ToString;
 @ToString
 public class BatchAccount {
 
-	private String accounts;
-	private String group;
+	private String emails;
+	private Long group;
 
-	public String getAccounts() {
-		return accounts;
+	public String getEmails() {
+		return emails;
 	}
 
-	public void setAccounts(String accounts) {
-		this.accounts = accounts;
+	public void setEmails(String emails) {
+		this.emails = emails;
 	}
 
-	public String getGroup() {
+	public Long getGroup() {
 		return group;
 	}
 
-	public void setGroup(String group) {
+	public void setGroup(Long group) {
 		this.group = group;
 	}
 }

@@ -1,9 +1,11 @@
 package login.repository;
 
+import static login.domain.tables.Authorities.AUTHORITIES;
 import static login.domain.tables.Users.USERS;
 
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import login.domain.tables.records.UsersRecord;
 import login.model.Authority;
@@ -14,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -72,7 +75,6 @@ public class UserDetailRepository implements UserDetailsManager {
 		newRecord.setPassword(user.getPassword());
 		newRecord.setEnabled(user.isEnabled());
 		newRecord.store();
-
 	}
 
 	@Override
@@ -125,6 +127,62 @@ public class UserDetailRepository implements UserDetailsManager {
 				createNewAuthentication(currentUser, newPassword));
 	}
 
+	@Override
+	public boolean userExists(String username) {
+		return sql.fetchExists(sql.select().from(USERS)
+				.where(USERS.USERNAME.eq(username)));
+	}
+
+	public List<User> getAll() {
+
+		final boolean accountNonExpired = true;
+		final boolean credentialsNonExpired = true;
+		final boolean accountNonLocked = true;
+
+		return sql
+				.fetch(USERS)
+				.stream()
+				.map((UsersRecord ur) -> new User(ur.getUsername(), ur
+						.getPassword(), ur.getEnabled(), accountNonExpired,
+						credentialsNonExpired, accountNonLocked,
+						authorityRepository.getByUserName(ur.getUsername())))
+				.collect(Collectors.toList());
+	}
+
+	@SuppressWarnings("unchecked")
+	public void saveUsers(List<User> users) {
+		final boolean enabled = true;
+
+		// logger.info("Generating records... ");
+		// List<UsersRecord> userRecords = users.stream()
+		// .map(u -> sql.newRecord(USERS, u)).collect(Collectors.toList());
+		//
+		// logger.info("Generated " + userRecords.size() +
+		// " records to insert.");
+
+		List collect = users
+				.stream()
+				.map(u -> sql.insertInto(USERS, USERS.USERNAME, USERS.PASSWORD,
+						USERS.ENABLED).values(u.getUsername(), u.getPassword(),
+						enabled)
+
+				).collect(Collectors.toList());
+
+		for (User user : users) {
+			for (GrantedAuthority authority : user.getAuthorities()) {
+				collect.add(sql.insertInto(AUTHORITIES, AUTHORITIES.USERNAME,
+						AUTHORITIES.AUTHORITY).values(user.getUsername(),
+						authority.getAuthority()));
+			}
+		}
+
+		sql.batch(collect).execute();
+
+		// sql.batchStore(userRecords).execute();
+		// logger.info("Stored all records.");
+		// this.getAll().forEach(System.out::println);
+	}
+
 	protected Authentication createNewAuthentication(
 			Authentication currentAuth, String newPassword) {
 		UserDetails user = loadUserByUsername(currentAuth.getName());
@@ -134,11 +192,5 @@ public class UserDetailRepository implements UserDetailsManager {
 		newAuthentication.setDetails(currentAuth.getDetails());
 
 		return newAuthentication;
-	}
-
-	@Override
-	public boolean userExists(String username) {
-		return sql.fetchExists(sql.select().from(USERS)
-				.where(USERS.USERNAME.eq(username)));
 	}
 }

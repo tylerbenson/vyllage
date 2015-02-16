@@ -16,32 +16,30 @@
 </head>
 <body>
 	<section class="container">
-		<form action="#" th:action="@{/createBatch}" th:object="${batchAccount}" method="post">
-			<article class="advice-request">
-				<div class="row">
-					<select th:field="*{group}">
-					  <option th:each="grp : ${groups}" 
-					          th:value="${grp}" 
-					          th:text="${grp}">Some group</option>
-					</select>
-				</div>
-			</article>
-			<article class="advice-request">
-				<div class="row">
+		<form action="#" th:action="@{/admin/account/createBatch}" th:object="${batchAccount}" method="post">
+					<div class="two columns">
+						<select th:field="*{group}">
+						  <option th:each="grp : ${groups}" 
+						          th:value="${grp.id}" 
+						          th:text="${grp.groupName}">Some group</option>
+						</select>
+					</div>
 					<div class="two columns">
 						<div class="content-part">
-							<input type="text" th:field="*{accounts}" style="height: 50px" />
+<!-- 							<input type="text" /> -->
+							<textarea rows="20" cols="80" th:field="*{emails}">
+							</textarea>
 						</div>
+						<br></br>
 						<div class="content-part">
 							<button name="batchAccounts" type="submit" class="send-btn">Submit</button>							
 						</div>
 					</div>
-				</div>
-			</article>
 			
 		</form>
 	
 	</section>
+
 	
 </body>
 </html>
