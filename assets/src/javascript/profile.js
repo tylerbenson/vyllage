@@ -245,8 +245,8 @@ var ShareContactButtons = React.createClass({displayName: "ShareContactButtons",
     },
 
     showContact: function() {
-        // document.getElementById('contact-info').style.display = 'block';
-        // document.getElementById('share-info').style.display = 'none';
+        document.getElementById('contact-info').style.display = 'block';
+        document.getElementById('share-info').style.display = 'none';
     },
 
     render: function() {
