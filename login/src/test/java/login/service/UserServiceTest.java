@@ -3,7 +3,9 @@ package login.service;
 import login.Application;
 import login.model.BatchAccount;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -17,6 +19,9 @@ import org.springframework.util.Assert;
 public class UserServiceTest {
 	@Autowired
 	private UserService service;
+
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	@Test
 	public void createUserBatchTest() {
@@ -48,17 +53,32 @@ public class UserServiceTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void createUserBatchEmptyUserNameTest() {
+	public void createUserBatchEmptyUserNameTest()
+			throws IllegalArgumentException {
 		BatchAccount batchAccount = new BatchAccount();
 
-		batchAccount.setEmails("uno@gmail.com, , tres@yahoo.com");
+		batchAccount.setEmails("siet@gmail.com, , nueve@yahoo.com");
 		batchAccount.setGroup(1L);
 
 		service.batchCreateUsers(batchAccount);
 
-		Assert.isTrue(!service.userExists("uno@gmail.com"));
-		Assert.isTrue(!service.userExists("dos@test.com"));
-		Assert.isTrue(!service.userExists("tres@yahoo.com"));
+		Assert.isTrue(!service.userExists("siet@gmail.com"));
+		Assert.isTrue(!service.userExists(" "));
+		Assert.isTrue(!service.userExists("nueve@yahoo.com"));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void createUserBatchBadEmailTest() throws IllegalArgumentException {
+		BatchAccount batchAccount = new BatchAccount();
+
+		batchAccount.setEmails("diez@gmail.com, once.@, doce@yahoo.com");
+		batchAccount.setGroup(1L);
+
+		service.batchCreateUsers(batchAccount);
+
+		Assert.isTrue(!service.userExists("diez@gmail.com"));
+		Assert.isTrue(!service.userExists("once.@"));
+		Assert.isTrue(!service.userExists("doce@yahoo.com"));
 	}
 
 }

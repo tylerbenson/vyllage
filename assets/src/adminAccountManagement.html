@@ -17,14 +17,12 @@
 <body>
 	<section class="container">
 		<form action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post">
-					<div class="two columns">
+					<div class="four columns">
 						<select th:field="*{group}">
 						  <option th:each="grp : ${groups}" 
 						          th:value="${grp.id}" 
 						          th:text="${grp.groupName}">Some group</option>
 						</select>
-					</div>
-					<div class="two columns">
 						<div class="content-part">
 <!-- 							<input type="text" /> -->
 							<textarea rows="20" cols="80" th:field="*{emails}">
@@ -33,6 +31,10 @@
 						<br></br>
 						<div class="content-part">
 							<button name="batchAccounts" type="submit" class="send-btn">Submit</button>							
+						</div>
+					<br></br>
+						<div class="content-part">
+							<label th:if="${error != null}" th:text="${error}" style="color: red;"></label>
 						</div>
 					</div>
 			

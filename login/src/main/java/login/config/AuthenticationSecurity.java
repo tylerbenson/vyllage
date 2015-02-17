@@ -39,7 +39,7 @@ public class AuthenticationSecurity extends
 				new BCryptPasswordEncoder());
 		// auth.inMemoryAuthentication().withUser("email")
 		// .password(new BCryptPasswordEncoder().encode("password"))
-		// .roles("USER");
+		// .roles("ADMIN", "USER");
 	}
 
 }

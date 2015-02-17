@@ -37,7 +37,8 @@ public class UserService {
 		return this.userRepository.userExists(userName);
 	}
 
-	public void batchCreateUsers(BatchAccount batchAccount) {
+	public void batchCreateUsers(BatchAccount batchAccount)
+			throws IllegalArgumentException {
 
 		final boolean enabled = true;
 		final boolean accountNonExpired = true;
@@ -50,12 +51,19 @@ public class UserService {
 		final List<Authority> authority = authorityRepository
 				.getAuthorityFromGroup(batchAccount.getGroup());
 
-		String[] emailSplit = batchAccount.getEmails().replace(";", ",")
+		String[] emailSplit = batchAccount.getEmails().replace(";", ",").trim()
 				.split(",");
+
+		boolean invalid = Arrays.stream(emailSplit).map(String::trim)
+				.map(EmailValidator::validate).collect(Collectors.toList())
+				.stream().anyMatch(p -> p.booleanValue() != true);
+
+		if (invalid)
+			throw new IllegalArgumentException("Not a valid email address.");
 
 		List<User> users = Arrays
 				.stream(emailSplit)
-				.map(s -> s.trim())
+				.map(String::trim)
 				.map(s -> new User(s, s, enabled, accountNonExpired,
 						credentialsNonExpired, accountNonLocked, authority))
 				.collect(Collectors.toList());

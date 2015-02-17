@@ -21,7 +21,7 @@ public class AdminUserController {
 	private GroupRepository groupRepository;
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String admin(Model model) {
 
 		prepareBatch(model);
@@ -29,12 +29,14 @@ public class AdminUserController {
 	}
 
 	@RequestMapping(value = "/user/createBatch", method = RequestMethod.POST)
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String batchAccountCreation(BatchAccount batch, Model model) {
 
 		if (batch.hasErrors()) {
-			model.addAttribute("groups", groupRepository.getAll());
-			model.addAttribute("batchAccount", batch);
+			prepareBatchError(
+					batch,
+					model,
+					"Please provide ',' separated emails and select the Group the users will belong to.");
 			return "adminAccountManagement";
 		}
 
@@ -44,8 +46,15 @@ public class AdminUserController {
 		return "adminAccountManagement";
 	}
 
+	private void prepareBatchError(BatchAccount batch, Model model, String msg) {
+		model.addAttribute("groups", groupRepository.getAll());
+		model.addAttribute("batchAccount", batch);
+		model.addAttribute("error", msg);
+	}
+
 	private void prepareBatch(Model model) {
 		model.addAttribute("groups", groupRepository.getAll());
 		model.addAttribute("batchAccount", new BatchAccount());
 	}
+
 }
