@@ -1,11 +1,16 @@
 var Social = React.createClass({displayName: "Social",
 
     getInitialState: function() {
-        return {data: this.props.data,
+        return {data: '',
                 editMode: false}; 
     },
 
-    editPrivateLink: function() {
+    componentWillMount : function() {
+        this.setState({data: this.props.data,
+                editMode: false});
+    },
+
+    edit: function() {
         if(!this.state.editMode){
             this.refs.twitterEdit.getDOMNode().style.display="block" ;
             this.refs.twitterMain.getDOMNode().style.display="none" ;
@@ -19,45 +24,45 @@ var Social = React.createClass({displayName: "Social",
             this.refs.linkedinEdit.getDOMNode().style.display="none" ;
             this.refs.linkedinMain.getDOMNode().style.display="block" ;
 
-            if(this.props.updatePrivateLink){
-                this.props.updatePrivateLink(this.state.data.link);
+            if(this.props.updateSocialData){
+                this.props.updateSocialData(this.state.data);
             }
         }
 
         this.state.editMode = !this.state.editMode;
     },
 
-    updateTwitter: function (link) {
-        this.state.data.link=link;
-    },
-
-    updatelinkedin: function (link) {
-        this.state.data.link=link;
+    updateValue: function (type, data) {
+        if(type=="twitter"){
+            this.state.data.twitter = data;
+        } else if(type=="linkedin"){
+            this.state.data.linkedin = data;
+        }
     },
 
     render: function() {
 		return (
             React.createElement("div", {className: "social info-blog"}, 
                 React.createElement("p", {className: "info-title"}, "Social"), 
-                React.createElement("div", {className: "edit-btn-cont u-pull-left", onClick: this.editPrivateLink}, 
+                React.createElement("div", {className: "edit-btn-cont u-pull-left", onClick: this.edit}, 
                     React.createElement("button", {className: "edit-btn"})
                 ), 
                 React.createElement("div", {className: "contact-data-cont u-pull-left"}, 
                     React.createElement("p", {className: "contact-link", ref: "twitterMain"}, 
                         "twitter: ", React.createElement("a", {href: "", className: "soc-link"}, 
-                             this.props.data.twitter
+                             this.state.data.twitter
                         )
                     ), 
-                    React.createElement(SocialEditField, {ref: "twitterEdit", data: this.props.data, updateTwitter: this.updateTwitter}), 
+                    React.createElement(EditField, {ref: "twitterEdit", type: 'twitter', data: this.props.data.twitter, updateValue: this.updateValue}), 
                     React.createElement("p", {className: "contact-link", ref: "linkedinMain"}, 
                         "linkedin: ", React.createElement("a", {href: "", className: "soc-link"}, 
-                            this.props.data.linkedin
+                            this.state.data.linkedin
                         )
                     ), 
-                    React.createElement(SocialEditField, {ref: "linkedinEdit", data: this.props.data, updatelinkedin: this.updatelinkedin}), 
+                    React.createElement(EditField, {ref: "linkedinEdit", type: 'linkedin', data: this.props.data.linkedin, updateValue: this.updateValue}), 
                     React.createElement("p", {className: "info-privacy"}, "visible to:", 
                         React.createElement("select", {className: "privacy-select"}, 
-                            React.createElement("option", null, this.props.data.visibility)
+                            React.createElement("option", null, this.state.data.visibility)
                         )
                     )
                 )
@@ -66,30 +71,30 @@ var Social = React.createClass({displayName: "Social",
     }
 });
 
-var SocialEditField = React.createClass({displayName: "SocialEditField",    
+var EditField = React.createClass({displayName: "EditField",    
 
     getInitialState: function() {
-        return {link: this.props.data.link}; 
+        return {value: this.props.data}; 
     },
 
-    componentDidUpdate: function () {
-        this.state.link = this.props.data.link;
+    componentWillMount: function () {
+        this.state.value = this.props.data;
     },
 
     handleChange: function(event) {
-        this.setState({link: event.target.value});
+        this.setState({value: event.target.value});
 
-        if (this.props.updatePrivateLink) {
-            this.props.updatePrivateLink(event.target.value);
+        if (this.props.updateValue) {
+            this.props.updateValue(this.props.type, event.target.value);
         }
     },
 
     render: function() {
-        var link = this.state.link;
+        var value = this.state.value;
 
         return (
             React.createElement("div", {className: "contact-link edit"}, 
-                React.createElement("input", {type: "text", className: "soc-link edit", value: link, onChange: this.handleChange})
+                React.createElement("input", {type: "text", className: "soc-link edit", value: value, onChange: this.handleChange})
             )
         );
     }
@@ -98,8 +103,13 @@ var SocialEditField = React.createClass({displayName: "SocialEditField",
 var Contact = React.createClass({displayName: "Contact",
 
     getInitialState: function() {
-        return {data: this.props.data,
+        return {data: '',
                 editMode: false}; 
+    },
+
+    componentWillMount : function() {
+        this.setState({data: this.props.data,
+                editMode: false});
     },
 
     edit: function() {
@@ -116,20 +126,20 @@ var Contact = React.createClass({displayName: "Contact",
             this.refs.cellEdit.getDOMNode().style.display="none" ;
             this.refs.cellMain.getDOMNode().style.display="block" ;
 
-            if(this.props.updatePrivateLink){
-                this.props.updatePrivateLink(this.state.data.link);
+            if(this.props.updateContactData){
+                this.props.updateContactData(this.state.data);
             }
         }
 
         this.state.editMode = !this.state.editMode;
     },
 
-    updateEmail: function (link) {
-        this.state.data.link=link;
-    },
-
-    updateCell: function (link) {
-        this.state.data.link=link;
+    updateValue: function (type, data) {
+        if(type=="email"){
+            this.state.data.email = data;
+        } else if(type=="cell"){
+            this.state.data.cell = data;
+        }
     },
 
     render: function() {
@@ -142,17 +152,17 @@ var Contact = React.createClass({displayName: "Contact",
                 React.createElement("div", {className: "contact-data-cont u-pull-left"}, 
                     React.createElement("p", {className: "contact-link", ref: "emailMain"}, 
                         "email: ", React.createElement("a", {href: "", className: "soc-link"}, 
-                             this.props.data.email)
+                             this.state.data.email)
                     ), 
-                    React.createElement(SocialEditField, {ref: "emailEdit", data: this.props.data, updateEmail: this.updateEmail}), 
+                    React.createElement(EditField, {ref: "emailEdit", type: 'email', data: this.props.data.email, updateValue: this.updateValue}), 
                     React.createElement("p", {className: "contact-link", ref: "cellMain"}, 
                         "cell: ", React.createElement("a", {href: "", className: "soc-link"}, 
-                            this.props.data.cell)
+                            this.state.data.cell)
                     ), 
-                    React.createElement(SocialEditField, {ref: "cellEdit", data: this.props.data, updateCell: this.updateCell}), 
+                    React.createElement(EditField, {ref: "cellEdit", type: 'cell', data: this.props.data.cell, updateValue: this.updateValue}), 
                     React.createElement("p", {className: "info-privacy"}, "visible to:", 
                         React.createElement("select", {className: "privacy-select"}, 
-                            React.createElement("option", null, this.props.data.visibility)
+                            React.createElement("option", null, this.state.data.visibility)
                         )
                     )
                 )
@@ -161,22 +171,69 @@ var Contact = React.createClass({displayName: "Contact",
     }
 });
 
-var LocationMain = React.createClass({displayName: "LocationMain",    
+var LocationMain = React.createClass({displayName: "LocationMain",
+
+     getInitialState: function() {
+        return {data: '',
+                editMode: false}; 
+    },
+
+    componentWillMount : function() {
+        this.setState({data: this.props.data,
+                editMode: false});
+    },
+
+    edit: function() {
+        if(!this.state.editMode){
+            this.refs.addressOneEdit.getDOMNode().style.display="block" ;
+            this.refs.addressOneMain.getDOMNode().style.display="none" ;
+
+            this.refs.addressTwoEdit.getDOMNode().style.display="block" ;
+            this.refs.addressTwoMain.getDOMNode().style.display="none" ;
+        } else {
+            this.refs.addressOneEdit.getDOMNode().style.display="none";
+            this.refs.addressOneMain.getDOMNode().style.display="";
+
+            this.refs.addressTwoEdit.getDOMNode().style.display="none" ;
+            this.refs.addressTwoMain.getDOMNode().style.display="block" ;
+
+            if(this.props.updateLocationData){
+                this.props.updateLocationData(this.state.data);
+            }
+        }
+
+        this.state.editMode = !this.state.editMode;
+    },
+
+    updateValue: function (type, data) {
+        if(type=="addressOne"){
+            this.state.data.values[0] = data;
+        } else if(type=="addressTwo"){
+            this.state.data.values[1] = data;
+        }
+    },
 
     render: function() {
         return (
             React.createElement("div", {className: "info-blog location-blog"}, 
                 React.createElement("p", {className: "info-title"}, "Location"), 
-                React.createElement("div", {className: "edit-btn-cont u-pull-left"}, 
+                React.createElement("div", {className: "edit-btn-cont u-pull-left", onClick: this.edit}, 
                     React.createElement("button", {className: "edit-btn"})
                 ), 
                 React.createElement("div", {className: "contact-data-cont location-contact-data-cont u-pull-left"}, 
-                    React.createElement("p", {className: "contact-link"}, 
-                       this.props.contactData.location.values[0]
+                    React.createElement("p", {className: "contact-link", ref: "addressOneMain"}, 
+                       this.state.data.values[0]
                     ), 
+                    React.createElement(EditField, {ref: "addressOneEdit", type: 'addressOne', data: this.state.data.values[0], updateValue: this.updateValue}), 
+                    
+                    React.createElement("p", {className: "contact-link", ref: "addressTwoMain"}, 
+                       this.state.data.values[1]
+                    ), 
+                    React.createElement(EditField, {ref: "addressTwoEdit", type: 'addressTwo', data: this.state.data.values[1], updateValue: this.updateValue}), 
+                 
                     React.createElement("p", {className: "info-privacy"}, "visible to:", 
                         React.createElement("select", {className: "privacy-select"}, 
-                            React.createElement("option", null, this.props.contactData.location.visibility)
+                            React.createElement("option", null, this.state.data.visibility)
                         )
                     )
                 )
@@ -185,49 +242,47 @@ var LocationMain = React.createClass({displayName: "LocationMain",
     }
 });
 
-var LocationEdit = React.createClass({displayName: "LocationEdit",    
+var ContactCantainer = React.createClass({displayName: "ContactCantainer",
 
-    render: function() {
-        return (
-            React.createElement("div", {className: "location info-blog edit"}, 
-                React.createElement("p", {className: "info-title"}, "location"), 
-                React.createElement("div", {className: ""}, 
-                    React.createElement("input", {type: "text", className: "title-reg", name: "address", placeholder: "street address", value: this.props.contactData.location.values[0]}), 
-                    React.createElement("input", {type: "text", className: "industry-reg", name: "zip", placeholder: "zip code", value: this.props.contactData.location.values[0]}), 
-                    React.createElement("input", {type: "text", className: "start-date-reg", name: "state", placeholder: "state", value: this.props.contactData.location.values[0]}), 
-                    React.createElement("div", {className: "icon-wrapper"}, 
-                        React.createElement("img", {className: "icon edit-reg", src: "images/edit.png", width: "25", height: "25"})
-                    )
-                )
-            )
-        );
-    }
-});
+   getInitialState: function() {
+        return {
+            isMain: true,
+            contactData: ''
+        };
+    },
 
-var Location = React.createClass({displayName: "Location",   
-    render: function() {
-        return (
-            React.createElement("div", null, 
-                React.createElement(LocationMain, {contactData: this.props.contactData}), 
-                React.createElement(LocationEdit, {contactData: this.props.contactData})
-            )
-        );
-    }
-});
+   componentWillMount: function() {
+        // ajax call will go here and fetch the whoole data
+        this.setState({contactData: ContactData,
+                        isMain: true});
+    },
 
-var ContactCantainer = React.createClass({displayName: "ContactCantainer",   
+    updateSocialData: function(socialData){
+        this.state.contactData.social = socialData;
+        this.setState({contactData: this.state.contactData});
+    },
+
+    updateContactData: function(contactData){
+        this.state.contactData.contact = contactData;
+        this.setState({contactData: this.state.contactData});
+    },
+
+    updateLocationData: function(locationData){
+        this.state.contactData.location = locationData;
+        this.setState({contactData: this.state.contactData});
+    },
 
     render: function() {
         return (
             React.createElement("div", {className: "row info-blog-wrapper"}, 
                 React.createElement("div", {className: "four columns"}, 
-                    React.createElement(Social, {data: this.props.contactData.social})
+                    React.createElement(Social, {data: this.state.contactData.social, updateSocialData: this.updateSocialData})
                 ), 
                  React.createElement("div", {className: "four columns"}, 
-                    React.createElement(Contact, {data: this.props.contactData.contact})
+                    React.createElement(Contact, {data: this.state.contactData.contact, updateContactData: this.updateContactData})
                 ), 
                 React.createElement("div", {className: "four columns"}, 
-                    React.createElement(Location, {contactData: this.props.contactData})
+                    React.createElement(LocationMain, {data: this.state.contactData.location, updateLocationData: this.updateLocationData})
                 )
             )      
         );
@@ -257,4 +312,4 @@ var ContactData = {
     }
 }
 
-React.render(React.createElement(ContactCantainer, {contactData: ContactData}), document.getElementById('contact-info'));
+React.render(React.createElement(ContactCantainer, null), document.getElementById('contact-info'));
