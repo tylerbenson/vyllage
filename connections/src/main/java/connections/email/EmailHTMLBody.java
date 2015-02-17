@@ -1,8 +1,5 @@
 package connections.email;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.thymeleaf.TemplateEngine;
-
 /**
  * Html email body, using the specified html template and key value context
  * generates the html email body.
@@ -12,15 +9,12 @@ import org.thymeleaf.TemplateEngine;
  */
 public class EmailHTMLBody extends EmailBody {
 
-	@Autowired
-	private TemplateEngine templateEngine;
-
-	public final String html;
+	public final EmailContext ctx;
 
 	/**
 	 * 
 	 * @param txt
-	 *            text body in case client does't support html.
+	 *            text body in case client doesn't support html.
 	 * @param ctx
 	 *            key value map with the template that's going to be used to
 	 *            generate the html body.
@@ -28,7 +22,7 @@ public class EmailHTMLBody extends EmailBody {
 	public EmailHTMLBody(String txt, EmailContext ctx) {
 		super(txt);
 
-		this.html = templateEngine.process(ctx.templateName, ctx);
+		this.ctx = ctx;
 	}
 
 }

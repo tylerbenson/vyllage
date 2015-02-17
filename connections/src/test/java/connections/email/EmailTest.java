@@ -16,17 +16,34 @@ import connections.Application;
 public class EmailTest {
 
 	@Autowired
-	MailService service;
+	private MailService service;
+
+	// Replace this with your account to see the email.
+	private String to = "no-reply@vyllage.com";
 
 	@Test
-	public void test() throws EmailException {
-		String from = "carlos.uh@gmail.com";
+	public void simpleTextTest() throws EmailException {
+		String from = "no-reply@vyllage.com";
 		String subject = "TestMail";
 		String msg = "This is a test mail ... :-)";
-		String to = "carlos.uh@gmail.com";
-		EmailParameters parameters = new EmailParameters(from, subject, msg, to);
+		EmailParameters parameters = new EmailParameters(from, subject, to);
 
 		EmailBody emailBody = new EmailBody(msg);
+
+		service.sendEmail(parameters, emailBody);
+	}
+
+	@Test
+	public void htmlTest() throws EmailException {
+		String from = "no-reply@vyllage.com";
+		String subject = "TestMail";
+		String msg = "This is a test mail ... :-)";
+		EmailParameters parameters = new EmailParameters(from, subject, to);
+
+		EmailContext ctx = new EmailContext("email");
+		ctx.setVariable("text", "World!");
+
+		EmailHTMLBody emailBody = new EmailHTMLBody(msg, ctx);
 
 		service.sendEmail(parameters, emailBody);
 	}
