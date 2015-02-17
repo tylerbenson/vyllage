@@ -12,6 +12,8 @@ dependencies {
 	compile 'com.h2database:h2'
 	compile 'org.flywaydb:flyway-core'
 	compile 'org.jooq:jooq:3.5.0'
+	compile 'org.apache.commons:commons-email:1.3.3'
+
 	
 //    compile("org.springframework.boot:spring-boot-starter-security")
 //    compile("org.springframework.boot:spring-boot-starter-aop")
@@ -20,7 +22,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
 //    compile("org.springframework.boot:spring-boot-starter-mobile")
 //    compile("org.springframework.boot:spring-boot-starter-groovy-templates")
-//    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 //    compile("org.springframework.boot:spring-boot-starter-social-facebook")
 //    compile("org.springframework.boot:spring-boot-starter-social-linkedin")
 //    compile("org.springframework.boot:spring-boot-starter-social-twitter")
