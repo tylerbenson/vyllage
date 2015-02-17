@@ -15,8 +15,11 @@ public class GroupRepository {
 	@Autowired
 	private DSLContext sql;
 
-	public List<Group> getAll() {
+	public Group get(Long id) {
+		return sql.fetchOne(GROUPS, GROUPS.ID.eq(id)).into(Group.class);
+	}
 
+	public List<Group> getAll() {
 		return sql.select().from(GROUPS).fetch().into(Group.class);
 	}
 }

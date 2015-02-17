@@ -149,7 +149,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				.collect(Collectors.toList());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void saveUsers(List<User> users) {
 		final boolean enabled = true;
 

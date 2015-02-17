@@ -16,7 +16,7 @@
 </head>
 <body>
 	<section class="container">
-		<form action="#" th:action="@{/admin/account/createBatch}" th:object="${batchAccount}" method="post">
+		<form action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post">
 					<div class="two columns">
 						<select th:field="*{group}">
 						  <option th:each="grp : ${groups}" 

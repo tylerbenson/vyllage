@@ -23,4 +23,8 @@ public class BatchAccount {
 	public void setGroup(Long group) {
 		this.group = group;
 	}
+
+	public boolean hasErrors() {
+		return emails == null || emails.isEmpty() || group == null;
+	}
 }
