@@ -1,11 +1,13 @@
 package login.model;
 
 import login.domain.tables.records.AuthoritiesRecord;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import org.springframework.security.core.GrantedAuthority;
 
 @ToString
+@EqualsAndHashCode
 public class Authority implements GrantedAuthority {
 
 	/**
@@ -16,6 +18,12 @@ public class Authority implements GrantedAuthority {
 	private String userName;
 
 	public Authority() {
+	}
+
+	public Authority(String authority, String userName) {
+		this.authority = authority;
+		this.userName = userName;
+
 	}
 
 	public Authority(AuthoritiesRecord record) {
