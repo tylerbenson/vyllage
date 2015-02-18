@@ -1,5 +1,6 @@
-@import '_variables';
-@import '_mixins';
+@import '../_common/_variables';
+@import '../_common/_mixins';
+
 
 body {
 	background: url('../../images/background.jpg');
@@ -48,5 +49,4 @@ body {
 	}
 }
 
-
-@import 'header';
+@import '_header/header';

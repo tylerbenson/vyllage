@@ -1,5 +1,6 @@
-@import '_variables';
-@import '_mixins';
+@import '../_common/_variables';
+@import '../_common/_mixins';
+
 
 .container {
 	background: url('../../images/login_bg.jpg') no-repeat;

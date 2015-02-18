@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@import '../_common/_variables';
+@import '../_common/_mixins';
 
 body {
 
@@ -33,12 +33,11 @@ body {
 	}
 }
 
-
-@import 'header';
-@import 'profile';
-@import 'common';
-@import 'edit';
-@import 'shareInfo';
-@import 'comments';
+@import '_header/header';
+@import '_profile/profile';
+@import '_common/common';
+@import '_common/edit';
+@import '_contact/shareInfo';
+@import '_comments/comments';
 
 

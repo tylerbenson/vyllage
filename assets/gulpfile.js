@@ -7,23 +7,27 @@ var gulp = require('gulp'),
     react = require('gulp-react'),
     prettify = require('gulp-jsbeautifier'),
     jshint = require('gulp-jshint'),
-    uglify = require('gulp-uglify');
+    livereload = require('gulp-livereload'),
+    uglify = require('gulp-uglify'),
+    flatten = require('gulp-flatten');
 
 gulp.task('styles', function() {
 
-  return gulp.src('src/sass/*.scss')
-    .pipe(sass({ includePaths: ['./src/sass'], errLogToConsole: true, outputStyle: 'expanded' }))
+  return gulp.src('src/components/**/*.scss')
+    .pipe(sass({ includePaths: ['./src/components'], errLogToConsole: true, outputStyle: 'expanded' }))
+    .pipe(flatten())
     .pipe(gulp.dest('src/css'));
 });
 
 gulp.task('minify-css', ['styles'], function() {
 
-    gulp.src('src/css/*.css')
+    return gulp.src(['src/css/*.css', '!src/css/libs/*.css'])
         .pipe(minifyCSS({keepBreaks:false}))
         .pipe(rename(function (path) {
             path.extname = ".min.css"
-        }))
-        .pipe(gulp.dest('src/css/min'));
+        })).pipe(flatten())
+        .pipe(gulp.dest('src/css/min'))
+        .pipe(livereload());
 });
 
 gulp.task('prettify-html', function() {
@@ -33,8 +37,9 @@ gulp.task('prettify-html', function() {
 });
 
 gulp.task('react', function () {
-    return gulp.src('src/jsx/*.jsx')
+    return gulp.src('src/components/**/*.jsx')
         .pipe(react())
+        .pipe(flatten())
         .pipe(gulp.dest('src/javascript'));
 });
 
@@ -45,7 +50,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['src/sass/*.scss', 'src/jsx/*.jsx'], ['styles', 'minify-css', 'react']);
+    gulp.watch(['src/components/**/*.scss', 'src/components/**/*.jsx'], ['styles', 'minify-css', 'react']);
 });
 
 gulp.task('default', ['watch']);
