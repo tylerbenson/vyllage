@@ -12,6 +12,7 @@ import login.model.Authority;
 
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,8 +22,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.util.Assert;
 
 @Repository
 public class UserDetailRepository implements UserDetailsManager {
@@ -37,6 +42,9 @@ public class UserDetailRepository implements UserDetailsManager {
 
 	@Autowired
 	private AuthorityRepository authorityRepository;
+
+	@Autowired
+	private DataSourceTransactionManager txManager;
 
 	public UserDetailRepository() {
 	}
@@ -68,34 +76,99 @@ public class UserDetailRepository implements UserDetailsManager {
 	}
 
 	@Override
+	// @Transactional
 	public void createUser(UserDetails user) {
+		Assert.notNull(user.getAuthorities());
+		Assert.isTrue(!user.getAuthorities().isEmpty());
 
-		UsersRecord newRecord = sql.newRecord(USERS);
-		newRecord.setUsername(user.getUsername());
-		newRecord.setPassword(user.getPassword());
-		newRecord.setEnabled(user.isEnabled());
-		newRecord.store();
+		TransactionStatus transaction = txManager
+				.getTransaction(new DefaultTransactionDefinition());
+
+		Object savepoint = transaction.createSavepoint();
+
+		try {
+
+			UsersRecord newRecord = sql.newRecord(USERS);
+			newRecord.setUsername(user.getUsername());
+			newRecord.setPassword(getEncodedPassword(user));
+			newRecord.setEnabled(user.isEnabled());
+			newRecord.store();
+
+			for (GrantedAuthority grantedAuthority : user.getAuthorities())
+				authorityRepository.create((Authority) grantedAuthority);
+
+		} catch (Exception e) {
+			logger.fine(e.toString());
+			transaction.rollbackToSavepoint(savepoint);
+		} finally {
+			transaction.releaseSavepoint(savepoint);
+		}
+
 	}
 
 	@Override
+	// @Transactional
 	public void updateUser(UserDetails user) {
-		UsersRecord record = sql.fetchOne(USERS,
-				USERS.USERNAME.eq(user.getUsername()));
+		Assert.notNull(user.getAuthorities());
+		Assert.isTrue(!user.getAuthorities().isEmpty());
 
-		record.setPassword(user.getPassword());
-		record.setEnabled(user.isEnabled());
+		TransactionStatus transaction = txManager
+				.getTransaction(new DefaultTransactionDefinition());
+
+		Object savepoint = transaction.createSavepoint();
+
+		try {
+			UsersRecord record = sql.fetchOne(USERS,
+					USERS.USERNAME.eq(user.getUsername()));
+
+			record.setPassword(getEncodedPassword(user));
+			record.setEnabled(user.isEnabled());
+			record.update();
+
+			authorityRepository.deleteByUserName(user.getUsername());
+
+			for (GrantedAuthority grantedAuthority : user.getAuthorities())
+				authorityRepository.create((Authority) grantedAuthority);
+
+		} catch (Exception e) {
+			logger.fine(e.toString());
+			transaction.rollbackToSavepoint(savepoint);
+		} finally {
+			transaction.releaseSavepoint(savepoint);
+		}
+
 	}
 
 	@Override
+	// @Transactional
 	public void deleteUser(String username) {
-		UsersRecord record = sql.fetchOne(USERS, USERS.USERNAME.eq(username));
-		record.delete();
+		TransactionStatus transaction = txManager
+				.getTransaction(new DefaultTransactionDefinition());
+
+		Object savepoint = transaction.createSavepoint();
+
+		try {
+			authorityRepository.deleteByUserName(username);
+
+			UsersRecord record = sql.fetchOne(USERS,
+					USERS.USERNAME.eq(username));
+			record.delete();
+
+		} catch (Exception e) {
+			logger.fine(e.toString());
+			transaction.rollbackToSavepoint(savepoint);
+		} finally {
+			transaction.releaseSavepoint(savepoint);
+		}
+
 	}
 
 	@Override
 	public void changePassword(String oldPassword, String newPassword) {
 		Authentication currentUser = SecurityContextHolder.getContext()
 				.getAuthentication();
+		String encodedNewPassword = new BCryptPasswordEncoder()
+				.encode(newPassword);
 
 		if (currentUser == null) {
 			// This would indicate bad coding somewhere
@@ -120,7 +193,7 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		logger.info("Changing password for user '" + username + "'");
 
-		sql.update(USERS).set(USERS.PASSWORD, newPassword)
+		sql.update(USERS).set(USERS.PASSWORD, encodedNewPassword)
 				.where(USERS.USERNAME.eq(username)).execute();
 
 		SecurityContextHolder.getContext().setAuthentication(
@@ -150,21 +223,20 @@ public class UserDetailRepository implements UserDetailsManager {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+	// @Transactional
 	public void saveUsers(List<User> users) {
 		final boolean enabled = true;
 
-		// logger.info("Generating records... ");
-		// List<UsersRecord> userRecords = users.stream()
-		// .map(u -> sql.newRecord(USERS, u)).collect(Collectors.toList());
-		//
-		// logger.info("Generated " + userRecords.size() +
-		// " records to insert.");
+		TransactionStatus transaction = txManager
+				.getTransaction(new DefaultTransactionDefinition());
+
+		Object savepoint = transaction.createSavepoint();
 
 		List collect = users
 				.stream()
 				.map(u -> sql.insertInto(USERS, USERS.USERNAME, USERS.PASSWORD,
-						USERS.ENABLED).values(u.getUsername(), u.getPassword(),
-						enabled)
+						USERS.ENABLED).values(u.getUsername(),
+						getEncodedPassword(u), enabled)
 
 				).collect(Collectors.toList());
 
@@ -175,9 +247,16 @@ public class UserDetailRepository implements UserDetailsManager {
 						authority.getAuthority()));
 			}
 		}
+		
+		try {
+			sql.batch(collect).execute();
 
-		sql.batch(collect).execute();
-
+		} catch (Exception e) {
+			logger.fine(e.toString());
+			transaction.rollbackToSavepoint(savepoint);
+		} finally {
+			transaction.releaseSavepoint(savepoint);
+		}
 		// sql.batchStore(userRecords).execute();
 		// logger.info("Stored all records.");
 		// this.getAll().forEach(System.out::println);
@@ -188,9 +267,13 @@ public class UserDetailRepository implements UserDetailsManager {
 		UserDetails user = loadUserByUsername(currentAuth.getName());
 
 		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
-				user, null, user.getAuthorities());
+				user, user.getPassword(), user.getAuthorities());
 		newAuthentication.setDetails(currentAuth.getDetails());
 
 		return newAuthentication;
+	}
+
+	private String getEncodedPassword(UserDetails user) {
+		return new BCryptPasswordEncoder().encode(user.getPassword());
 	}
 }

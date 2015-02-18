@@ -3,6 +3,7 @@ package login.service;
 import login.Application;
 import login.model.BatchAccount;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.util.Assert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -32,9 +32,9 @@ public class UserServiceTest {
 
 		service.batchCreateUsers(batchAccount);
 
-		Assert.isTrue(service.userExists("uno@gmail.com"));
-		Assert.isTrue(service.userExists("dos@test.com"));
-		Assert.isTrue(service.userExists("tres@yahoo.com"));
+		Assert.assertTrue(service.userExists("uno@gmail.com"));
+		Assert.assertTrue(service.userExists("dos@test.com"));
+		Assert.assertTrue(service.userExists("tres@yahoo.com"));
 	}
 
 	@Test
@@ -47,9 +47,9 @@ public class UserServiceTest {
 
 		service.batchCreateUsers(batchAccount);
 
-		Assert.isTrue(service.userExists("cuatro@gmail.com"));
-		Assert.isTrue(service.userExists("cinco@test.com"));
-		Assert.isTrue(service.userExists("seis@yahoo.com"));
+		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
+		Assert.assertTrue(service.userExists("cinco@test.com"));
+		Assert.assertTrue(service.userExists("seis@yahoo.com"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -62,9 +62,9 @@ public class UserServiceTest {
 
 		service.batchCreateUsers(batchAccount);
 
-		Assert.isTrue(!service.userExists("siet@gmail.com"));
-		Assert.isTrue(!service.userExists(" "));
-		Assert.isTrue(!service.userExists("nueve@yahoo.com"));
+		Assert.assertFalse(service.userExists("siet@gmail.com"));
+		Assert.assertFalse(service.userExists(" "));
+		Assert.assertFalse(service.userExists("nueve@yahoo.com"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -76,9 +76,9 @@ public class UserServiceTest {
 
 		service.batchCreateUsers(batchAccount);
 
-		Assert.isTrue(!service.userExists("diez@gmail.com"));
-		Assert.isTrue(!service.userExists("once.@"));
-		Assert.isTrue(!service.userExists("doce@yahoo.com"));
+		Assert.assertFalse(service.userExists("diez@gmail.com"));
+		Assert.assertFalse(service.userExists("once.@"));
+		Assert.assertFalse(service.userExists("doce@yahoo.com"));
 	}
 
 }

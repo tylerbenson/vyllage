@@ -2,6 +2,8 @@ package login.service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+//'Borrowed' from:
+//http://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/
 
 public class EmailValidator {
 

@@ -32,6 +32,13 @@ public class AuthorityRepository {
 				.collect(Collectors.toList());
 	}
 
+	public void create(Authority authority) {
+		AuthoritiesRecord auth = sql.newRecord(AUTHORITIES);
+		auth.setUsername(authority.getUserName());
+		auth.setAuthority(authority.getAuthority());
+		auth.insert();
+	}
+
 	public List<Authority> getAll() {
 		Result<AuthoritiesRecord> records = sql.fetch(AUTHORITIES);
 
@@ -58,6 +65,11 @@ public class AuthorityRepository {
 		 */
 
 		return authorities;
+	}
+
+	public void deleteByUserName(String userName) {
+		sql.delete(AUTHORITIES).where(AUTHORITIES.USERNAME.eq(userName))
+				.execute();
 	}
 
 }

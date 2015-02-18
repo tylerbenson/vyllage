@@ -51,15 +51,18 @@ public class UserService {
 		final List<Authority> authority = authorityRepository
 				.getAuthorityFromGroup(batchAccount.getGroup());
 
-		String[] emailSplit = batchAccount.getEmails().replace(";", ",").trim()
-				.split(",");
+		String[] emailSplit = batchAccount.getEmails()
+				.replace(";", System.lineSeparator())
+				.replace(",", System.lineSeparator()).trim()
+				.split(System.lineSeparator());
 
 		boolean invalid = Arrays.stream(emailSplit).map(String::trim)
 				.map(EmailValidator::validate).collect(Collectors.toList())
 				.stream().anyMatch(p -> p.booleanValue() != true);
 
 		if (invalid)
-			throw new IllegalArgumentException("Not a valid email address.");
+			throw new IllegalArgumentException(
+					"Contains invalid email addresses.");
 
 		List<User> users = Arrays
 				.stream(emailSplit)
