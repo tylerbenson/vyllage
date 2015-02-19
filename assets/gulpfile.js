@@ -43,6 +43,10 @@ gulp.task('react', function () {
         .pipe(gulp.dest('src/javascript'));
 });
 
+gulp.task('js-build', function () {
+
+});
+
 gulp.task('lint', function() {
   return gulp.src('src/javascript/*.js')
     .pipe(jshint())
