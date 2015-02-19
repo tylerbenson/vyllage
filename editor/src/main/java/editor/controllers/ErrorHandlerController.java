@@ -23,8 +23,9 @@ public class ErrorHandlerController implements ErrorController {
 
 	private final String PATH = "/error";
 
-	@Value("${display.weberror}")
-	private boolean displayWebError;
+	//TODO: defaulting to true for now, profiles are not working 
+	//@Value("${display.weberror}")
+	private boolean displayWebError = true;
 
 	// @RequestMapping(value = PATH, produces = "text/html")
 	// @ExceptionHandler(value = { JsonProcessingException.class,
