@@ -9,14 +9,29 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint'),
     livereload = require('gulp-livereload'),
     uglify = require('gulp-uglify'),
-    flatten = require('gulp-flatten');
+    flatten = require('gulp-flatten'),
+    del = require('del');
+
+gulp.task('clean', function () {
+    del(['./build/*'], function (err) {
+        console.log('cleaned build directory')
+    })
+});
+
+gulp.task('copy', function () {
+    gulp.src(['src/images/*'])
+        .pipe(gulp.dest('build/images'))
+    return gulp.src(['src/*.html'])
+        .pipe(gulp.dest('build'));
+});   
 
 gulp.task('styles', function() {
 
-  return gulp.src('src/components/**/*.scss')
-    .pipe(sass({ includePaths: ['./src/components'], errLogToConsole: true, outputStyle: 'expanded' }))
+  return gulp.src(['src/components/**/*.scss', 'src/base.scss'])
+    .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
     .pipe(flatten())
-    .pipe(gulp.dest('src/css'));
+    .pipe(gulp.dest('build'))
+    .pipe(livereload());
 });
 
 gulp.task('minify-css', ['styles'], function() {
@@ -40,7 +55,7 @@ gulp.task('react', function () {
     return gulp.src('src/components/**/*.jsx')
         .pipe(react())
         .pipe(flatten())
-        .pipe(gulp.dest('src/javascript'));
+        .pipe(gulp.dest('build/javascript'));
 });
 
 gulp.task('lint', function() {
@@ -50,7 +65,9 @@ gulp.task('lint', function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['src/components/**/*.scss', 'src/components/**/*.jsx'], ['styles', 'minify-css', 'react']);
+    gulp.watch(['src/**/*.scss'], ['styles']);
+    gulp.watch(['src/**/*.scss'], ['styles']);
+    gulp.watch(['src/*.html', 'src/images/*'], ['copy']);
 });
 
 gulp.task('default', ['watch']);
