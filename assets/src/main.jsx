@@ -1,4 +1,8 @@
 var React = require('react');
+var Header = require('./components/header');
+var Profile = require('./components/profile');
+var ContactInfo = require('./components/contact/contact');
+var ShareInfo = require('./components/contat/share');
 
 var MainContainer = React.createClass({  
     
@@ -181,6 +185,37 @@ var MainData =[
     "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
 },
 ];
+
+var Main = React.createClass({
+  render: function () {
+    return (
+      <div>
+        <header>
+            <div class="container">
+                <Header />
+            </div>
+        </header>
+
+       <section class="container">
+
+            <article class="profile">
+                <Profile />
+            </article>
+
+            <article id="share-info" class="info-sections">
+               
+            </article>
+
+            <article id="contact-info" class="info-sections">
+
+            </article>
+
+            <MainContainer />
+        </section>
+      </div>
+    );
+  }
+});
 
 React.render(<MainContainer />, document.getElementById('main-container'));
 

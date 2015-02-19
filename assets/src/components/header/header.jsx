@@ -53,8 +53,8 @@ var HeaderContainer = React.createClass({
 });
 
 
-React.render(<HeaderContainer />, document.getElementById('header-container'));
+// React.render(<HeaderContainer />, document.getElementById('header-container'));
 
-
+module.exports = HeaderContainer;
 
 

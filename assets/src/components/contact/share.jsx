@@ -155,7 +155,7 @@ var PublicLink = React.createClass({
     }
 });
 
-var LinkCantainer = React.createClass({   
+var LinkContainer = React.createClass({   
 
     getInitialState: function() {
         return {ShareData: []};
@@ -181,10 +181,10 @@ var LinkCantainer = React.createClass({
         return (
              <div className="row info-blog-wrapper">
                 <div className="four columns" >
-                    <PrivateLink data={this.props.shareData.privateLink} updatePrivateLink={this.updatePrivateLink}/>                
+                    <PrivateLink data={this.state.shareData.privateLink} updatePrivateLink={this.updatePrivateLink}/>                
                 </div> 
                  <div className="four columns" >
-                    <PublicLink data={this.props.shareData.publicLink} updatePublicLink={this.updatePublicLink} />                
+                    <PublicLink data={this.state.shareData.publicLink} updatePublicLink={this.updatePublicLink} />                
                 </div>      
                 <div className="four columns">
                     <div className="export info-blog">
@@ -212,4 +212,6 @@ var ShareData = {
     }
 };
 
-React.render(<LinkCantainer shareData={ShareData} />, document.getElementById('share-info'));
+// React.render(<LinkContainer shareData={ShareData} />, document.getElementById('share-info'));
+
+module.exports = LinkContainer;

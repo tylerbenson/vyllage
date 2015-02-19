@@ -1,9 +1,10 @@
 var webpack = require('webpack');
+var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var path = require('path');
 
 module.exports = {
     entry: {
-        'main.js': './src/components/main/main.jsx'
+        'main.js': './src/main.jsx'
     },
     output: {
         path: path.join(__dirname, 'public'),
@@ -18,5 +19,7 @@ module.exports = {
         alias: {},
         extensions: ['', '.js', '.jsx']
     },
-    plugins: []
+    plugins: [
+        new CommonsChunkPlugin('base.js'),
+    ]
 };

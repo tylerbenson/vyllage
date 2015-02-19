@@ -314,4 +314,5 @@ var ContactData = {
     }
 }
 
-React.render(<ContactCantainer />, document.getElementById('contact-info'));
+// React.render(<ContactCantainer />, document.getElementById('contact-info'));
+module.exports = ContactCantainer;

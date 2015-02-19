@@ -1,15 +1,17 @@
-var gulp = require('gulp'),
-    sass = require('gulp-sass'),
-    prefix = require('gulp-autoprefixer'),
-    minifyCSS = require('gulp-minify-css'),
-    rename = require('gulp-rename'),
-    watch = require('gulp-watch'),
-    react = require('gulp-react'),
-    prettify = require('gulp-jsbeautifier'),
-    jshint = require('gulp-jshint'),
-    livereload = require('gulp-livereload'),
-    uglify = require('gulp-uglify'),
-    flatten = require('gulp-flatten');
+var gulp = require('gulp');
+var sass = require('gulp-sass');
+var prefix = require('gulp-autoprefixer');
+var minifyCSS = require('gulp-minify-css');
+var rename = require('gulp-rename');
+var watch = require('gulp-watch');
+var react = require('gulp-react');
+var prettify = require('gulp-jsbeautifier');
+var jshint = require('gulp-jshint');
+var livereload = require('gulp-livereload');
+var uglify = require('gulp-uglify');
+var flatten = require('gulp-flatten');
+var webpack = require('webpack');
+
 
 gulp.task('styles', function() {
 
@@ -37,14 +39,20 @@ gulp.task('prettify-html', function() {
 });
 
 gulp.task('react', function () {
-    return gulp.src('src/components/**/*.jsx')
+    return gulp.src('src/**/*.jsx')
         .pipe(react())
         .pipe(flatten())
         .pipe(gulp.dest('src/javascript'));
 });
 
-gulp.task('js-build', function () {
-
+gulp.task('js-build', function (callback) {
+    return webpack(require('./webpack.config.js'), function () {
+        if(err) throw new gutil.PluginError("webpack:build", err);
+        gutil.log("[webpack:build]", stats.toString({
+          colors: true
+        }));
+        callback();
+    })
 });
 
 gulp.task('lint', function() {
