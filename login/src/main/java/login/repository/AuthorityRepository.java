@@ -4,6 +4,7 @@ import static login.domain.tables.Authorities.AUTHORITIES;
 import static login.domain.tables.GroupAuthorities.GROUP_AUTHORITIES;
 import static login.domain.tables.Groups.GROUPS;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,6 +71,11 @@ public class AuthorityRepository {
 	public void deleteByUserName(String userName) {
 		sql.delete(AUTHORITIES).where(AUTHORITIES.USERNAME.eq(userName))
 				.execute();
+	}
+
+	public List<Authority> getDefaultAuthoritiesForNewUser(String userName) {
+		Authority auth = new Authority("USER", userName);
+		return Arrays.asList(auth);
 	}
 
 }

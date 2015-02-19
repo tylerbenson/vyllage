@@ -73,4 +73,20 @@ public class UserService {
 
 		userRepository.saveUsers(users);
 	}
+
+	public void createUser(String username) {
+		boolean invalid = false;
+
+		if (EmailValidator.validate(username) == invalid)
+			throw new IllegalArgumentException(
+					"Contains invalid email addresses.");
+
+		User user = new User(username, getRandomPassword(),
+				authorityRepository.getDefaultAuthoritiesForNewUser(username));
+	}
+
+	private String getRandomPassword() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

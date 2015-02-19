@@ -3,6 +3,7 @@ package login.repository;
 import static login.domain.tables.Authorities.AUTHORITIES;
 import static login.domain.tables.Users.USERS;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -78,8 +79,14 @@ public class UserDetailRepository implements UserDetailsManager {
 	@Override
 	// @Transactional
 	public void createUser(UserDetails user) {
-		Assert.notNull(user.getAuthorities());
-		Assert.isTrue(!user.getAuthorities().isEmpty());
+
+		Collection<? extends GrantedAuthority> authorities;
+
+		if (user.getAuthorities() != null || user.getAuthorities().size() > 0)
+			authorities = user.getAuthorities();
+		else
+			authorities = authorityRepository
+					.getDefaultAuthoritiesForNewUser(user.getUsername());
 
 		TransactionStatus transaction = txManager
 				.getTransaction(new DefaultTransactionDefinition());
@@ -94,7 +101,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			newRecord.setEnabled(user.isEnabled());
 			newRecord.store();
 
-			for (GrantedAuthority grantedAuthority : user.getAuthorities())
+			for (GrantedAuthority grantedAuthority : authorities)
 				authorityRepository.create((Authority) grantedAuthority);
 
 		} catch (Exception e) {
@@ -247,7 +254,7 @@ public class UserDetailRepository implements UserDetailsManager {
 						authority.getAuthority()));
 			}
 		}
-		
+
 		try {
 			sql.batch(collect).execute();
 
