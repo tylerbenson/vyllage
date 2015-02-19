@@ -12,6 +12,7 @@ logs/
 work/
 .bower-*
 node_modules
+bower_components
 *.log
 
 # Eclipse
