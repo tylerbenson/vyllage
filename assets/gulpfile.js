@@ -52,6 +52,9 @@ gulp.task('prettify-html', function() {
 });
 
 gulp.task('react', function () {
+    gulp.src('./bower_components/react/*.js')
+        .pipe(gulp.dest('public/javascript/lib'))
+
     return gulp.src('src/components/**/*.jsx')
         .pipe(react())
         .pipe(flatten())
