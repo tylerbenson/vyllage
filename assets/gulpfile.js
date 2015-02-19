@@ -64,7 +64,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['src/components/**/*.scss', 'src/components/**/*.jsx'], ['styles', 'minify-css', 'react']);
+    gulp.watch(['src/components/**/*.scss', 'src/components/**/*.jsx'], ['styles', 'minify-css', 'js-build']);
 });
 
 gulp.task('default', ['watch']);

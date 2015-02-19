@@ -1,5 +1,16 @@
 var React = require('react');
 
+var ShareData = {
+    "privateLink": {
+        "link":"www.linkedin.com/natebenson",
+        "expiresAfter":"40 days"
+    },
+    "publicLink": {
+        "link":"www.linkedin.com/natebenson",
+        "visibleTo":"public"
+    }
+};
+
 var PrivateLinkEdit = React.createClass({
 
     getInitialState: function() {
@@ -158,7 +169,7 @@ var PublicLink = React.createClass({
 var LinkContainer = React.createClass({   
 
     getInitialState: function() {
-        return {ShareData: []};
+        return {ShareData: ShareData};
     },
 
     componentDidMount: function() {
@@ -181,10 +192,10 @@ var LinkContainer = React.createClass({
         return (
              <div className="row info-blog-wrapper">
                 <div className="four columns" >
-                    <PrivateLink data={this.state.shareData.privateLink} updatePrivateLink={this.updatePrivateLink}/>                
+                    <PrivateLink data={this.state.shareData && this.state.shareData.privateLink} updatePrivateLink={this.updatePrivateLink}/>                
                 </div> 
                  <div className="four columns" >
-                    <PublicLink data={this.state.shareData.publicLink} updatePublicLink={this.updatePublicLink} />                
+                    <PublicLink data={this.state.shareData && this.state.shareData.publicLink} updatePublicLink={this.updatePublicLink} />                
                 </div>      
                 <div className="four columns">
                     <div className="export info-blog">
@@ -201,16 +212,7 @@ var LinkContainer = React.createClass({
     }
 });
 
-var ShareData = {
-    "privateLink": {
-        "link":"www.linkedin.com/natebenson",
-        "expiresAfter":"40 days"
-    },
-    "publicLink": {
-        "link":"www.linkedin.com/natebenson",
-        "visibleTo":"public"
-    }
-};
+
 
 // React.render(<LinkContainer shareData={ShareData} />, document.getElementById('share-info'));
 
