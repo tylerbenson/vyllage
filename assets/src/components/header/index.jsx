@@ -23,7 +23,7 @@ var HeaderContainer = React.createClass({
     handleClick: function(){
         var menuContainer = this.refs.menuContainer.getDOMNode();
 
-        if(menuContainer.style.display =='block') {
+        if(menuContainer.style.display ==='block') {
            menuContainer.style.display ='none'
         } else {
             menuContainer.style.display ='block'

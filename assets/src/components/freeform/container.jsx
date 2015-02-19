@@ -1,4 +1,7 @@
 var React = require('react');
+var FreeformMain = require('./main');
+var FreeformEdit = require('./edit');
+var ButtonsContainer = require('./buttons-container');
 
 var FreeformContainer = React.createClass({
 
@@ -71,5 +74,6 @@ var FreeformContainer = React.createClass({
     }
 });
 
+module.exports = FreeformContainer;
 
 

@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 var sass = require('gulp-sass');
 var prefix = require('gulp-autoprefixer');
 var minifyCSS = require('gulp-minify-css');
@@ -11,6 +12,7 @@ var livereload = require('gulp-livereload');
 var uglify = require('gulp-uglify');
 var flatten = require('gulp-flatten');
 var webpack = require('webpack');
+
 
 
 gulp.task('styles', function() {
@@ -46,8 +48,8 @@ gulp.task('react', function () {
 });
 
 gulp.task('js-build', function (callback) {
-    return webpack(require('./webpack.config.js'), function () {
-        if(err) throw new gutil.PluginError("webpack:build", err);
+    return webpack(require('./webpack.config.js'), function (err, stats) {
+        if(err) { throw new gutil.PluginError("webpack:build", err); }
         gutil.log("[webpack:build]", stats.toString({
           colors: true
         }));

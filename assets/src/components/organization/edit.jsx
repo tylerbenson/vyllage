@@ -1,6 +1,12 @@
 var React = require('react');
 var OrganizationName = require('./name');
 var OrganizationDescription = require('./description');
+var Role = require('./role');
+var StartDate =require('./start-date');
+var EndDate = require('./end-date');
+var Location = require('./location');
+var RoleDescription =require('./role-description');
+var Highlights = require('./highlights');
 
 var OrganizationEdit = React.createClass({   
 

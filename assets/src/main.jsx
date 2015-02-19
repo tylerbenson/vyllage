@@ -2,109 +2,11 @@ var React = require('react');
 var Header = require('./components/header');
 var Profile = require('./components/profile');
 var ContactInfo = require('./components/contact/contact');
-var ShareInfo = require('./components/contat/share');
-
-var MainContainer = React.createClass({  
-    
-    getInitialState: function() {
-        return {mainData: []};
-    },
-
-    componentDidMount : function() {
-        // ajax call will go here and fetch the whoole data
-        MainData.sort(compare);
-        this.setState({mainData: MainData});
-    },
-
-    componentDidUpdate: function() {
-
-        var resizingTextareas = [].slice.call(document.querySelectorAll('textarea'));
-
-        resizingTextareas.forEach(function(textarea) {
-          textarea.addEventListener('input', autoresize, false);
-        });
-
-        function autoresize() {
-            this.style.height = 0;
-            this.style.height = this.scrollHeight  +'px';
-        }
-    },
-
-    saveChanges: function (data) {
-
-        for(i = 0; i < this.state.mainData.length; i++){
-
-            if(this.state.mainData[i].sectionId == data.sectionId){
-
-                this.state.mainData[i] = data;
-                this.setState({mainData:   this.state.mainData});
-                return;
-            }
-        }
-    },
-
-    render: function() {
-        var results = this.state.mainData,
-            that = this;
-        return (
-            <div>
-                {
-                    results.map(function(result) {
-                    if(result.type =="freeform")
-                    {
-                        return (
-                         <article className="career-goal">
-                             <div className="row" id = {result.sectionId}>
-                                 <div  className="twelve columns">
-                                    <div>
-                                        <button className="article-btn"> {result.title} </button>
-                                    </div>
-
-                                    <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
-
-                                    <ArticleControlls/>
-
-                                    <CommentsBlog/>  
-                                </div>
-                            </div>
-                        </article>)
-                    }
-                    else
-                    {
-                        return (
-                        <article className="experience">
-                            <div className="row">
-                                 <div className="twelve columns">
-                                    <div>
-                                        <button className="article-btn"> {result.type} </button>
-                                    </div>
-                                    <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
-
-                                    <ArticleControlls />
-
-                                    <CommentsBlog />
-                                </div>
-                            </div>
-                        </article>)
-                    }
-                    
-                    })
-                }
-            </div>
-        );
-    }
-});
-
-function compare(a,b) {
-    
-    if (a.sectionPosition < b.sectionPosition){
-        return -1;
-    }
-    if (a.sectionPosition > b.sectionPosition) {
-        return 1;
-    }
-    return 0;
-}
+var ShareInfo = require('./components/contact/share');
+var FreeformContainer = require('./components/freeform/container');
+var ArticleContent = require('./components/organization/article-content');
+var ArticleControlls =require('./components/freeform/article-controlls');
+var CommentsBlog = require('./components/freeform/comments-blog');
 
 var MainData =[
 {
@@ -186,28 +88,130 @@ var MainData =[
 },
 ];
 
+function compare(a,b) {
+    
+    if (a.sectionPosition < b.sectionPosition){
+        return -1;
+    }
+    if (a.sectionPosition > b.sectionPosition) {
+        return 1;
+    }
+    return 0;
+}
+
+var MainContainer = React.createClass({  
+    
+    getInitialState: function() {
+        return {mainData: []};
+    },
+
+    componentDidMount : function() {
+        // ajax call will go here and fetch the whoole data
+        MainData.sort(compare);
+        this.setState({mainData: MainData});
+    },
+
+    componentDidUpdate: function() {
+
+        var resizingTextareas = [].slice.call(document.querySelectorAll('textarea'));
+
+        resizingTextareas.forEach(function(textarea) {
+          textarea.addEventListener('input', autoresize, false);
+        });
+
+        function autoresize() {
+            this.style.height = 0;
+            this.style.height = this.scrollHeight  +'px';
+        }
+    },
+
+    saveChanges: function (data) {
+
+        for(var i = 0; i < this.state.mainData.length; i++){
+
+            if(this.state.mainData[i].sectionId === data.sectionId){
+
+                this.state.mainData[i] = data;
+                this.setState({mainData:   this.state.mainData});
+                return;
+            }
+        }
+    },
+
+    render: function() {
+        var results = this.state.mainData,
+            that = this;
+        return (
+            <div>
+                {
+                    results.map(function(result) {
+                    if(result.type === "freeform")
+                    {
+                        return (
+                         <article className="career-goal">
+                             <div className="row" id = {result.sectionId}>
+                                 <div  className="twelve columns">
+                                    <div>
+                                        <button className="article-btn"> {result.title} </button>
+                                    </div>
+
+                                    <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
+
+                                    <ArticleControlls/>
+
+                                    <CommentsBlog/>  
+                                </div>
+                            </div>
+                        </article>)
+                    }
+                    else
+                    {
+                        return (
+                        <article className="experience">
+                            <div className="row">
+                                 <div className="twelve columns">
+                                    <div>
+                                        <button className="article-btn"> {result.type} </button>
+                                    </div>
+                                    <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
+
+                                    <ArticleControlls />
+
+                                    <CommentsBlog />
+                                </div>
+                            </div>
+                        </article>)
+                    }
+                    
+                    })
+                }
+            </div>
+        );
+    }
+});
+
 var Main = React.createClass({
   render: function () {
     return (
       <div>
         <header>
-            <div class="container">
+            <div className="container">
                 <Header />
             </div>
         </header>
 
-       <section class="container">
+       <section className="container">
 
-            <article class="profile">
+            <article className="profile">
                 <Profile />
             </article>
 
-            <article id="share-info" class="info-sections">
-               
+            <article className="info-sections">
+               <ShareInfo />
             </article>
 
-            <article id="contact-info" class="info-sections">
-
+            <article className="info-sections">
+                <ContactInfo />  
             </article>
 
             <MainContainer />
@@ -217,7 +221,7 @@ var Main = React.createClass({
   }
 });
 
-React.render(<MainContainer />, document.getElementById('main-container'));
+React.render(<Main />, document.getElementById('main'));
 
 
 
