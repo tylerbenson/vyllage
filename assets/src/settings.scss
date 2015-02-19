@@ -1,5 +1,6 @@
-@import '../_common/_variables';
-@import '../_common/_mixins';
+@import './components/common/variables';
+@import './components/common/mixins';
+
 body {
 	background: url('../../images/background.jpg');
 

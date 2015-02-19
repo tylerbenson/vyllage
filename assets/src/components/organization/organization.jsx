@@ -1,3 +1,5 @@
+var React = require('react');
+
 var OrganizationMain = React.createClass({   
 
     render: function() {

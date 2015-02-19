@@ -1,3 +1,5 @@
+var React = require('react');
+
 var PrivateLinkEdit = React.createClass({
 
     getInitialState: function() {

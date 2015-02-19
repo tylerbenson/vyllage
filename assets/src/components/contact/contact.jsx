@@ -1,3 +1,5 @@
+var React = require('react');
+
 var Social = React.createClass({
 
     getInitialState: function() {
