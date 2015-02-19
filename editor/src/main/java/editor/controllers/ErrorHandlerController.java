@@ -26,36 +26,8 @@ public class ErrorHandlerController implements ErrorController {
 	@Value("${display.weberror}")
 	private boolean displayWebError;
 
-	// @RequestMapping(value = PATH, produces = "text/html")
-	// @ExceptionHandler(value = { JsonProcessingException.class,
-	// ElementNotFoundException.class })
-	// public ModelAndView htmlError(HttpServletRequest request,
-	// Principal principal, Exception ex) {
-	//
-	// Map<String, Object> map = new HashMap<>();
-	// if (ex.getCause() != null) {
-	// map.put("error", ex.getCause().getMessage());
-	// } else {
-	// map.put("error", ex.getMessage());
-	// }
-	// return new ModelAndView("error", map);
-	// }
-	//
-	// @RequestMapping(value = PATH, produces = "application/json")
-	// @ExceptionHandler(value = { JsonProcessingException.class,
-	// ElementNotFoundException.class })
-	// public @ResponseBody Map<String, Object> error(HttpServletRequest
-	// request,
-	// Principal principal, Exception ex) {
-	//
-	// Map<String, Object> map = new HashMap<>();
-	// if (ex.getCause() != null) {
-	// map.put("error", ex.getCause().getMessage());
-	// } else {
-	// map.put("error", ex.getMessage());
-	// }
-	// return map;
-	// }
+	@Value("${display.weberror.authority}")
+	private String authority;
 
 	@Override
 	public String getErrorPath() {
@@ -72,14 +44,22 @@ public class ErrorHandlerController implements ErrorController {
 
 	@RequestMapping(value = PATH, produces = "text/html")
 	public ModelAndView errorHtml(HttpServletRequest request) {
-
 		// Authentication currentUser = SecurityContextHolder.getContext()
 		// .getAuthentication();
+
 		Map<String, Object> body = getErrorAttributes(request, true);
 
-		body.forEach((k, v) -> System.out.println(k + " " + v));
+		// if (displayWebError
+		// || currentUser != null
+		// && currentUser.getAuthorities() != null
+		// && currentUser
+		// .getAuthorities()
+		// .stream()
+		// .anyMatch(
+		// a -> authority.equalsIgnoreCase(a
+		// .getAuthority())))
+		body.put("displayWebError", true);
 
-		body.put("displayWebError", displayWebError);
 		return new ModelAndView("error", body);
 	}
 
@@ -87,7 +67,6 @@ public class ErrorHandlerController implements ErrorController {
 	@ResponseBody
 	public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
 		Map<String, Object> body = getErrorAttributes(request, false);
-		body.forEach((k, v) -> System.out.println(k + " " + v));
 
 		HttpStatus status = getStatus(request);
 		return new ResponseEntity<Map<String, Object>>(body, status);
