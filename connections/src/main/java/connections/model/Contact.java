@@ -1,5 +1,8 @@
 package connections.model;
 
+import lombok.ToString;
+
+@ToString
 public class Contact {
 	private Long id;
 	private String userName;
