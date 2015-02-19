@@ -69,7 +69,7 @@ gulp.task('lint', function() {
 
 gulp.task('watch', function() {
     gulp.watch(['src/**/*.scss'], ['styles']);
-    gulp.watch(['src/**/*.scss'], ['styles']);
+    gulp.watch(['src/**/*.jsx'], ['react']);
     gulp.watch(['src/*.html', 'src/images/*'], ['copy']);
 });
 
