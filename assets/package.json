@@ -32,7 +32,8 @@
     "when": "3.4.4"
   },
   "scripts": {
-    "httpd": "./node_modules/.bin/http-server build -o -c-1",
+    "httpd": "./node_modules/.bin/http-server public -o -c-1",
+    "start": "./node_modules/.bin/http-server public -o -c-1",
     "xprepublish": "bower install --config.interactive=false",
     "build": "gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"

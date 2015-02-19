@@ -13,16 +13,16 @@ var gulp = require('gulp'),
     del = require('del');
 
 gulp.task('clean', function () {
-    del(['./build/*'], function (err) {
+    del(['./public/*'], function (err) {
         console.log('cleaned build directory')
     })
 });
 
 gulp.task('copy', function () {
     gulp.src(['src/images/*'])
-        .pipe(gulp.dest('build/images'))
+        .pipe(gulp.dest('public/images'))
     return gulp.src(['src/*.html'])
-        .pipe(gulp.dest('build'));
+        .pipe(gulp.dest('public'));
 });   
 
 gulp.task('styles', function() {
@@ -30,7 +30,7 @@ gulp.task('styles', function() {
   return gulp.src(['src/components/**/*.scss', 'src/base.scss'])
     .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
     .pipe(flatten())
-    .pipe(gulp.dest('build'))
+    .pipe(gulp.dest('public'))
     .pipe(livereload());
 });
 
@@ -55,7 +55,7 @@ gulp.task('react', function () {
     return gulp.src('src/components/**/*.jsx')
         .pipe(react())
         .pipe(flatten())
-        .pipe(gulp.dest('build/javascript'));
+        .pipe(gulp.dest('public/javascript'));
 });
 
 gulp.task('lint', function() {
