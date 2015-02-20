@@ -4,6 +4,7 @@ import java.util.List;
 
 import login.Application;
 import login.model.BatchAccount;
+import login.model.UserFilterRequest;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -97,6 +98,24 @@ public class UserServiceTest {
 		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 
 		List<User> advisors = service.getAdvisors(user, 5);
+
+		Assert.assertFalse(advisors.isEmpty());
+	}
+
+	@Test
+	public void getAdvisorsWithFilterTest() {
+
+		User user = service.getUser("email");
+
+		UserFilterRequest userFilter = new UserFilterRequest();
+		userFilter.setUserName("one");
+
+		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
+				user, user.getPassword(), user.getAuthorities());
+
+		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+
+		List<User> advisors = service.getAdvisors(userFilter, user, 5);
 
 		Assert.assertFalse(advisors.isEmpty());
 	}

@@ -50,10 +50,8 @@ public class UserFilter {
 			User loggedUser) {
 		UserFilterResponse response = new UserFilterResponse();
 
-		User userFilter = new User(filter.getUserName(), null, null);
-
 		List<FilteredUser> collect = service
-				.getAdvisors(userFilter, loggedUser, limitForFilter).stream()
+				.getAdvisors(filter, loggedUser, limitForFilter).stream()
 				.map(u -> new FilteredUser(u.getUsername()))
 				.collect(Collectors.toList());
 

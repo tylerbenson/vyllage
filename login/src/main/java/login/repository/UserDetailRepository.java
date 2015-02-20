@@ -17,6 +17,7 @@ import login.domain.tables.records.UsersRecord;
 import login.model.Authority;
 import login.model.Group;
 import login.model.GroupMember;
+import login.model.UserFilterRequest;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -332,7 +333,8 @@ public class UserDetailRepository implements UserDetailsManager {
 	// .where(conditions).limit(limit).fetch().into(User.class);
 	// }
 
-	public List<User> getAdvisors(User userFilter, User loggedUser, int limit) {
+	public List<User> getAdvisors(UserFilterRequest filter, User loggedUser,
+			int limit) {
 		final boolean accountNonExpired = true;
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
@@ -341,7 +343,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				GROUP_MEMBERS.USERNAME.eq(loggedUser.getUsername())).into(
 				Group.class);
 
-		String username = userFilter.getUsername();
+		String username = filter.getUserName();
 		Long groupId = group.getId();
 
 		/**
@@ -366,7 +368,8 @@ public class UserDetailRepository implements UserDetailsManager {
 		Result<Record> records = sql.select().from(u)
 				.where(u.USERNAME.in(usernamesFromSameGroup))
 				.and(u.USERNAME.in(advisorUsernames))
-				.and(u.USERNAME.eq(username)).limit(limit).fetch();
+				.and(u.USERNAME.like("%" + username + "%")).limit(limit)
+				.fetch();
 
 		return records
 				.stream()

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import login.model.Authority;
 import login.model.BatchAccount;
 import login.model.GroupAuthority;
+import login.model.UserFilterRequest;
 import login.repository.AuthorityRepository;
 import login.repository.GroupAuthorityRepository;
 import login.repository.GroupRepository;
@@ -81,8 +82,9 @@ public class UserService {
 		userRepository.saveUsers(users);
 	}
 
-	public List<User> getAdvisors(User userFilter, User loggedUser, int maxsize) {
-		return userRepository.getAdvisors(userFilter, loggedUser, maxsize);
+	public List<User> getAdvisors(UserFilterRequest filter, User loggedUser,
+			int maxsize) {
+		return userRepository.getAdvisors(filter, loggedUser, maxsize);
 	}
 
 	public List<User> getAdvisors(User loggedUser, int maxsize) {
