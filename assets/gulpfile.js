@@ -10,6 +10,7 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
     uglify = require('gulp-uglify'),
     flatten = require('gulp-flatten'),
+    tar = require('gulp-tar'),
     del = require('del');
 
 gulp.task('clean', function () {
@@ -27,7 +28,7 @@ gulp.task('copy', function () {
 
 gulp.task('styles', function() {
 
-  return gulp.src(['src/components/**/*.scss', 'src/base.scss'])
+  return gulp.src(['src/**/*.scss'])
     .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
     .pipe(flatten())
     .pipe(gulp.dest('public'))
@@ -66,6 +67,36 @@ gulp.task('lint', function() {
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
+
+// Gulp tasks to build assets.jar
+gulp.task('assets-images', function () {
+    return gulp.src(['src/images/*'])
+        .pipe(gulp.dest('build/static/images'))
+});
+gulp.task('assets-html', function () {
+   return gulp.src(['src/*.html'])
+        .pipe(gulp.dest('build/templates'));
+});
+gulp.task('assets-css', function () {
+    return gulp.src(['src/**/*.scss'])
+        .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
+        .pipe(flatten())
+        .pipe(gulp.dest('build/static'))  
+});
+gulp.task('assets-js', function () {
+    gulp.src('./bower_components/react/*.js')
+        .pipe(gulp.dest('build/static/javascript/lib'))
+    return gulp.src('src/components/**/*.jsx')
+        .pipe(react())
+        .pipe(flatten())
+        .pipe(gulp.dest('build/static/javascript'));  
+}); 
+
+gulp.task('assets.jar', ['assets-images', 'assets-html', 'assets-css', 'assets-js'], function () {
+    gulp.src('./build/**/*')
+        .pipe(tar('assets.jar'))
+        .pipe(gulp.dest('gradle/libs'));
+})
 
 gulp.task('watch', function() {
     gulp.watch(['src/**/*.scss'], ['styles']);
