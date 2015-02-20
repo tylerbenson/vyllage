@@ -1,17 +1,20 @@
-var gulp = require('gulp'),
-    sass = require('gulp-sass'),
-    prefix = require('gulp-autoprefixer'),
-    minifyCSS = require('gulp-minify-css'),
-    rename = require('gulp-rename'),
-    watch = require('gulp-watch'),
-    react = require('gulp-react'),
-    prettify = require('gulp-jsbeautifier'),
-    jshint = require('gulp-jshint'),
-    livereload = require('gulp-livereload'),
-    uglify = require('gulp-uglify'),
-    flatten = require('gulp-flatten'),
-    tar = require('gulp-tar'),
-    del = require('del');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var sass = require('gulp-sass');
+var prefix = require('gulp-autoprefixer');
+var minifyCSS = require('gulp-minify-css');
+var rename = require('gulp-rename');
+var watch = require('gulp-watch');
+var prettify = require('gulp-jsbeautifier');
+var jshint = require('gulp-jshint');
+var livereload = require('gulp-livereload');
+var uglify = require('gulp-uglify');
+var flatten = require('gulp-flatten');
+var webpack = require('webpack');
+var tar = require('gulp-tar');
+var del = require('del');
+var assign = require('lodash.assign');
+var path = require('path');
 
 gulp.task('clean', function () {
     del(['./public/*'], function (err) {
@@ -27,7 +30,6 @@ gulp.task('copy', function () {
 });   
 
 gulp.task('styles', function() {
-
   return gulp.src(['src/**/*.scss'])
     .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
     .pipe(flatten())
@@ -35,16 +37,15 @@ gulp.task('styles', function() {
     .pipe(livereload());
 });
 
-gulp.task('minify-css', ['styles'], function() {
-
-    return gulp.src(['src/css/*.css', '!src/css/libs/*.css'])
-        .pipe(minifyCSS({keepBreaks:false}))
-        .pipe(rename(function (path) {
-            path.extname = ".min.css"
-        })).pipe(flatten())
-        .pipe(gulp.dest('src/css/min'))
-        .pipe(livereload());
-});
+// gulp.task('minify-css', ['styles'], function() {
+//     return gulp.src(['src/css/*.css', '!src/css/libs/*.css'])
+//         .pipe(minifyCSS({keepBreaks:false}))
+//         .pipe(rename(function (path) {
+//             path.extname = ".min.css"
+//         })).pipe(flatten())
+//         .pipe(gulp.dest('src/css/min'))
+//         .pipe(livereload());
+// });
 
 gulp.task('prettify-html', function() {
   return gulp.src('src/*.html')
@@ -52,18 +53,18 @@ gulp.task('prettify-html', function() {
     .pipe(gulp.dest('src/'))
 });
 
-gulp.task('react', function () {
-    gulp.src('./bower_components/react/*.js')
-        .pipe(gulp.dest('public/javascript/lib'))
-
-    return gulp.src('src/components/**/*.jsx')
-        .pipe(react())
-        .pipe(flatten())
-        .pipe(gulp.dest('public/javascript'));
+gulp.task('react', function (callback) {
+    return webpack(require('./webpack.config.js'), function (err, stats) {
+        if(err) { throw new gutil.PluginError("webpack:build", err); }
+        gutil.log("[webpack:build]", stats.toString({
+          colors: true
+        }));
+        callback();
+    })
 });
 
 gulp.task('lint', function() {
-  return gulp.src('src/javascript/*.js')
+  return gulp.src('src/**/*.js')
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
@@ -84,18 +85,21 @@ gulp.task('assets-css', function () {
         .pipe(gulp.dest('build/static'))  
 });
 gulp.task('assets-js', function () {
-    gulp.src('./bower_components/react/*.js')
-        .pipe(gulp.dest('build/static/javascript/lib'))
-    return gulp.src('src/components/**/*.jsx')
-        .pipe(react())
-        .pipe(flatten())
-        .pipe(gulp.dest('build/static/javascript'));  
+    var webpackConfig = assign({}, require('./webpack.config.js'));
+    webpackConfig.output.path = path.join(__dirname, 'build', 'static');
+    return webpack(webpackConfig, function (err, stats) {
+        if(err) { throw new gutil.PluginError("webpack:build", err); }
+        gutil.log("[webpack:build]", stats.toString({
+          colors: true
+        }));
+        callback();
+    })
 }); 
 
 gulp.task('assets.jar', ['assets-images', 'assets-html', 'assets-css', 'assets-js'], function () {
     gulp.src('./build/**/*')
         .pipe(tar('assets.jar'))
-        .pipe(gulp.dest('gradle/libs'));
+        .pipe(gulp.dest('.'));
 })
 
 gulp.task('watch', function() {
