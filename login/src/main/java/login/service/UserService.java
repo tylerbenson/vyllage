@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 
 import login.model.Authority;
 import login.model.BatchAccount;
+import login.model.GroupAuthority;
 import login.repository.AuthorityRepository;
+import login.repository.GroupAuthorityRepository;
 import login.repository.GroupRepository;
 import login.repository.UserDetailRepository;
 
@@ -21,6 +23,9 @@ public class UserService {
 	private GroupRepository groupRepository;
 	@Autowired
 	private AuthorityRepository authorityRepository;
+
+	@Autowired
+	private GroupAuthorityRepository groupAuthorityRepository;
 
 	@Autowired
 	private UserDetailRepository userRepository;
@@ -48,9 +53,6 @@ public class UserService {
 		Assert.notNull(batchAccount.getGroup());
 		Assert.notNull(batchAccount.getEmails());
 
-		final List<Authority> authority = authorityRepository
-				.getAuthorityFromGroup(batchAccount.getGroup());
-
 		String[] emailSplit = batchAccount.getEmails()
 				.replace(";", System.lineSeparator())
 				.replace(",", System.lineSeparator()).trim()
@@ -64,13 +66,34 @@ public class UserService {
 			throw new IllegalArgumentException(
 					"Contains invalid email addresses.");
 
+		GroupAuthority groupAuthority = groupAuthorityRepository
+				.getGroupAuthorityFromGroup(batchAccount.getGroup());
+
 		List<User> users = Arrays
 				.stream(emailSplit)
 				.map(String::trim)
 				.map(s -> new User(s, s, enabled, accountNonExpired,
-						credentialsNonExpired, accountNonLocked, authority))
+						credentialsNonExpired, accountNonLocked, Arrays
+								.asList(new Authority(groupAuthority
+										.getAuthority(), s))))
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
+	}
+
+	public List<User> getAdvisors(User userFilter, User loggedUser, int maxsize) {
+		return userRepository.getAdvisors(userFilter, loggedUser, maxsize);
+	}
+
+	public List<User> getAdvisors(User loggedUser, int maxsize) {
+		return userRepository.getAdvisors(loggedUser, maxsize);
+	}
+
+	public String getDefaultAuthority() {
+		return "USER";
+	}
+
+	public String getDefaultGroup() {
+		return "users";
 	}
 }
