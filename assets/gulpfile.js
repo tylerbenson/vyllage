@@ -102,11 +102,11 @@ gulp.task('assets.jar', ['assets-images', 'assets-html', 'assets-css', 'assets-j
         .pipe(gulp.dest('.'));
 })
 
-gulp.task('watch', function() {
+gulp.task('watch', ['build'], function() {
     gulp.watch(['src/**/*.scss'], ['styles']);
     gulp.watch(['src/**/*.jsx'], ['react']);
     gulp.watch(['src/*.html', 'src/images/*'], ['copy']);
-    gulp.watch(['src/*.html', 'src/images/*', 'src/**/*.scss', 'src/**/*.jsx'], ['assets.jar']);
+    // gulp.watch(['src/*.html', 'src/images/*', 'src/**/*.scss', 'src/**/*.jsx'], ['assets.jar']);
 });
 
 gulp.task('default', ['watch']);

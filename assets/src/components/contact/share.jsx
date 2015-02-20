@@ -192,10 +192,10 @@ var LinkContainer = React.createClass({
         return (
              <div className="row info-blog-wrapper">
                 <div className="four columns" >
-                    <PrivateLink data={this.state.shareData && this.state.shareData.privateLink} updatePrivateLink={this.updatePrivateLink}/>                
+                    <PrivateLink data={this.state.ShareData && this.state.ShareData.privateLink} updatePrivateLink={this.updatePrivateLink}/>                
                 </div> 
                  <div className="four columns" >
-                    <PublicLink data={this.state.shareData && this.state.shareData.publicLink} updatePublicLink={this.updatePublicLink} />                
+                    <PublicLink data={this.state.ShareData && this.state.ShareData.publicLink} updatePublicLink={this.updatePublicLink} />                
                 </div>      
                 <div className="four columns">
                     <div className="export info-blog">
@@ -214,6 +214,6 @@ var LinkContainer = React.createClass({
 
 
 
-// React.render(<LinkContainer shareData={ShareData} />, document.getElementById('share-info'));
+// React.render(<LinkContainer ShareData={ShareData} />, document.getElementById('share-info'));
 
 module.exports = LinkContainer;
