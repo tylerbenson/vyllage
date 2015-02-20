@@ -22,7 +22,7 @@ public class DocumentLinkService {
 		DocumentLink doclink = new DocumentLink();
 		doclink.setUserName(linkRequest.getName());
 		doclink.setGeneratedPassword(getRandomPassword());
-		doclink.setDocumentType("resume");
+		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
 
 		linkRepository.create(doclink, linkRequest.getExpirationDate());

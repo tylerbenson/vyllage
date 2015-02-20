@@ -1,10 +1,11 @@
 package login.controller;
 
+import java.util.Base64;
+
 import login.model.link.DocumentLink;
 import login.model.link.DocumentLinkRequest;
 import login.service.DocumentLinkService;
 
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class DocumentLinkController {
 
 	@Autowired
+	private ObjectMapper mapper;
+
+	@Autowired
 	private DocumentLinkService documentLinkService;
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -31,10 +35,10 @@ public class DocumentLinkController {
 
 		DocumentLink documentLink = documentLinkService.createLink(linkRequest);
 
-		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(documentLink);
-		String safeString = Base64.encodeBase64URLSafeString(json.getBytes());
+		String safeString = Base64.getUrlEncoder().encodeToString(
+				json.getBytes());
 
-		return safeString;
+		return "/login/link/" + safeString;
 	}
 }
