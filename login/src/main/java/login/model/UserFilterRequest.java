@@ -1,18 +1,14 @@
-package connections.model;
+package login.model;
 
 import lombok.ToString;
 
 @ToString
-public class Contact {
-	private Long id;
+public class UserFilterRequest {
+
 	private String userName;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	public boolean isEmpty() {
+		return userName == null || userName.isEmpty();
 	}
 
 	public String getUserName() {
@@ -22,4 +18,5 @@ public class Contact {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
 }
