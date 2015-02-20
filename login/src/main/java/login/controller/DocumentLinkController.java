@@ -1,31 +1,40 @@
 package login.controller;
 
-import login.model.link.LinkRequest;
-import login.service.UserService;
+import login.model.link.DocumentLink;
+import login.model.link.DocumentLinkRequest;
+import login.service.DocumentLinkService;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Controller
 @RequestMapping("link")
 public class DocumentLinkController {
+
 	@Autowired
-	UserService userService;
+	private DocumentLinkService documentLinkService;
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public @ResponseBody String create(@RequestBody LinkRequest linkRequest) {
+	public @ResponseBody String create(
+			@RequestBody DocumentLinkRequest linkRequest)
+			throws JsonProcessingException {
 
-		User user = userService.getUser(linkRequest.getName());
-		if (user == null)
-			userService.createUser(linkRequest.getName());
+		DocumentLink documentLink = documentLinkService.createLink(linkRequest);
 
-		return "";
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(documentLink);
+		String safeString = Base64.encodeBase64URLSafeString(json.getBytes());
+
+		return safeString;
 	}
 }

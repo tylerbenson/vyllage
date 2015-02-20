@@ -10,6 +10,7 @@ import login.repository.AuthorityRepository;
 import login.repository.GroupRepository;
 import login.repository.UserDetailRepository;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class UserService {
 
 	@Autowired
 	private UserDetailRepository userRepository;
+
+	@Autowired
+	private DocumentLinkService documentLinkService;
 
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
@@ -74,19 +78,37 @@ public class UserService {
 		userRepository.saveUsers(users);
 	}
 
-	public void createUser(String username) {
+	/**
+	 * Process a link request, if the user doesn't exist, creates one with a
+	 * random password.
+	 * 
+	 * @param linkRequest
+	 * @return link response
+	 */
+	public User createUser(String userName) {
 		boolean invalid = false;
 
-		if (EmailValidator.validate(username) == invalid)
+		if (EmailValidator.validate(userName) == invalid)
 			throw new IllegalArgumentException(
 					"Contains invalid email addresses.");
 
-		User user = new User(username, getRandomPassword(),
-				authorityRepository.getDefaultAuthoritiesForNewUser(username));
+		String randomPassword = getRandomPassword();
+
+		// TODO: call email service to email the user his account
+		// password if the user didn't exist.
+
+		if (!userRepository.userExists(userName)) {
+
+			User user = new User(userName, randomPassword,
+					authorityRepository
+							.getDefaultAuthoritiesForNewUser(userName));
+			userRepository.createUser(user);
+		}
+
+		return this.getUser(userName);
 	}
 
 	private String getRandomPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return RandomStringUtils.random(60);
 	}
 }

@@ -6,12 +6,16 @@ create table if not exists LOGIN.users(
   password varchar_ignorecase(60) not null,
   enabled boolean not null);
 
-create table if not exists LOGIN.passwords(
+create table if not exists LOGIN.link_passwords(
   username varchar_ignorecase(50) not null,
   password varchar_ignorecase(60) not null,
   enabled boolean not null,
   expires timestamp not null,
-  constraint fk_passwords_users foreign key(username) references LOGIN.users(username)));
+  documentId bigint not null,
+  documentType varchar_ignorecase(30) not null,
+  constraint fk_passwords_users foreign key(username) references LOGIN.users(username));
+ 
+create unique index LOGIN.ix_username_password on LOGIN.link_passwords (username, password);
   
 create table if not exists LOGIN.authorities (
 --create table if not exists authorities (

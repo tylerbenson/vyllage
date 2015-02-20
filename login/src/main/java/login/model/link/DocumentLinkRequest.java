@@ -4,8 +4,14 @@ import java.time.LocalDateTime;
 
 import lombok.ToString;
 
+/**
+ * Request object to generate a link for a particular document for another user.
+ * 
+ * @author uh
+ *
+ */
 @ToString
-public class LinkRequest {
+public class DocumentLinkRequest {
 	private String name;
 
 	private String email;
