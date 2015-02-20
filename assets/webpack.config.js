@@ -8,7 +8,7 @@ module.exports = {
         'main.js': './src/main.jsx'
     },
     output: {
-        path: path.join(__dirname, 'src/javascript'),
+        path: path.join(__dirname, 'public'),
         filename: '[name]'
     },
     module: {
