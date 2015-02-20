@@ -102,6 +102,7 @@ gulp.task('watch', function() {
     gulp.watch(['src/**/*.scss'], ['styles']);
     gulp.watch(['src/**/*.jsx'], ['react']);
     gulp.watch(['src/*.html', 'src/images/*'], ['copy']);
+    gulp.watch(['src/*.html', 'src/images/*', 'src/**/*.scss', 'src/**/*.jsx'], ['assets.jar']);
 });
 
 gulp.task('default', ['watch']);
