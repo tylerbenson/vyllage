@@ -84,7 +84,7 @@ gulp.task('assets-css', function () {
         .pipe(flatten())
         .pipe(gulp.dest('build/static'))  
 });
-gulp.task('assets-js', function () {
+gulp.task('assets-js', function (callback) {
     var webpackConfig = assign({}, require('./webpack.config.js'));
     webpackConfig.output.path = path.join(__dirname, 'build', 'static');
     return webpack(webpackConfig, function (err, stats) {

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Static assets for project, bundled into a WebJar format by gradle.",
   "dependencies": {
+    "lodash.assign": "^3.0.0",
     "react": "^0.12.2"
   },
   "devDependencies": {

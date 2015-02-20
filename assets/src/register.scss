@@ -109,10 +109,10 @@ body {
 	}
 }
 
-@import '_header/header';
-@import '_profile/profile';
-@import '_common/common';
-@import '_common/edit';
-@import '_contact/shareInfo';
+@import './components/header/header';
+@import './components/profile/profile';
+@import './components/common/common';
+@import './components/common/edit';
+@import './components/contact/shareInfo';
 
 
