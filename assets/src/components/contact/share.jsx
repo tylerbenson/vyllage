@@ -214,6 +214,6 @@ var LinkContainer = React.createClass({
 
 
 
-// React.render(<LinkContainer ShareData={ShareData} />, document.getElementById('share-info'));
+React.render(<LinkContainer ShareData={ShareData} />, document.getElementById('share-info'));
 
 module.exports = LinkContainer;

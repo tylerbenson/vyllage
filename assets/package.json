@@ -35,6 +35,7 @@
     "http-server": "~0.7.3",
     "jshint": "2.1",
     "jsx-loader": "^0.12.2",
+    "run-sequence": "^1.0.2",
     "wd": "0.2.17",
     "webpack": "^1.5.3",
     "when": "3.4.4"
