@@ -8,12 +8,12 @@ module.exports = {
         'main.js': './src/main.jsx'
     },
     output: {
-        path: path.join(__dirname, 'public'),
+        path: path.join(__dirname, 'public', 'javascript'),
         filename: '[name]'
     },
     module: {
         loaders: [
-            {test: /\.js|jsx$/, loaders: ['babel']},
+            {test: /\.jsx$/, loaders: ['babel']},
         ],
     },
     resolve : {

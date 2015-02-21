@@ -22,18 +22,23 @@ gulp.task('clean', function () {
     })
 });
 
-gulp.task('copy', function () {
-    gulp.src(['src/images/*'])
-        .pipe(gulp.dest('public/images'))
+gulp.task('copy-images', function () {
+    return gulp.src(['src/images/*'])
+        .pipe(gulp.dest('public/images'));
+});
+
+gulp.task('copy-html', function () {
     return gulp.src(['src/*.html'])
         .pipe(gulp.dest('public'));
 });   
+
+gulp.task('copy', ['copy-images', 'copy-html']);
 
 gulp.task('styles', function() {
   return gulp.src(['src/**/*.scss'])
     .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
     .pipe(flatten())
-    .pipe(gulp.dest('public'))
+    .pipe(gulp.dest('public/css'))
     .pipe(livereload());
 });
 
@@ -82,11 +87,11 @@ gulp.task('assets-css', function () {
     return gulp.src(['src/**/*.scss'])
         .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
         .pipe(flatten())
-        .pipe(gulp.dest('build/static'))  
+        .pipe(gulp.dest('build/static/css'))  
 });
 gulp.task('assets-js', function (callback) {
     var webpackConfig = assign({}, require('./webpack.config.js'));
-    webpackConfig.output.path = path.join(__dirname, 'build', 'static');
+    webpackConfig.output.path = path.join(__dirname, 'build', 'static', 'javascript');
     return webpack(webpackConfig, function (err, stats) {
         if(err) { throw new gutil.PluginError("webpack:build", err); }
         gutil.log("[webpack:build]", stats.toString({
