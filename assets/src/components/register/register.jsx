@@ -15,10 +15,10 @@ var AddSections = React.createClass({
             <article className="add-section education">
                 <div className="row">
                     <div className="twelve columns">
-                        <div>
+                        <div onClick={this.addSection}>
                             <button className="article-btn"> education </button>
                             <p className="add-more"> add more education </p>
-                            <div className="icon-wrapper" onClick={this.addSection}>
+                            <div className="icon-wrapper" >
                                 <img className="icon add" src="images/add.png" width="25" height="25"/>
                             </div>
                         </div>
