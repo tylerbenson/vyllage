@@ -13,6 +13,7 @@ work/
 .bower-*
 node_modules
 bower_components
+npm-debug-log
 *.log
 
 # Eclipse
