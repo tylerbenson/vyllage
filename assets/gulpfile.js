@@ -14,6 +14,8 @@ var webpack = require('webpack');
 var tar = require('gulp-tar');
 var del = require('del');
 var assign = require('lodash.assign');
+var runSequence = require('run-sequence');
+
 var path = require('path');
 
 gulp.task('clean', function () {
@@ -24,12 +26,14 @@ gulp.task('clean', function () {
 
 gulp.task('copy-images', function () {
     return gulp.src(['src/images/*'])
-        .pipe(gulp.dest('public/images'));
+        .pipe(gulp.dest('public/images')) // for devlopement server
+        .pipe(gulp.dest('build/static/images')); // for assets.jar
 });
 
 gulp.task('copy-html', function () {
     return gulp.src(['src/*.html'])
-        .pipe(gulp.dest('public'));
+        .pipe(gulp.dest('public')) // for devlopement server
+        .pipe(gulp.dest('build/templates')); // for assets.jar
 });   
 
 gulp.task('copy', ['copy-images', 'copy-html']);
@@ -38,8 +42,8 @@ gulp.task('styles', function() {
   return gulp.src(['src/**/*.scss'])
     .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
     .pipe(flatten())
-    .pipe(gulp.dest('public/css'))
-    .pipe(livereload());
+    .pipe(gulp.dest('public/css')) // for devlopement server
+    .pipe(gulp.dest('build/static/css')) // for assets.jar
 });
 
 // gulp.task('minify-css', ['styles'], function() {
@@ -68,6 +72,13 @@ gulp.task('react', function (callback) {
     })
 });
 
+// Copy js files to build directory to bundle into assets.jar
+gulp.task('copy-js', function () {
+   return gulp.src('./public/javascript/*')
+      .pipe(gulp.dest('./build/static/javascript'))
+              
+})
+
 gulp.task('lint', function() {
   return gulp.src('src/**/*.js')
     .pipe(jshint())
@@ -75,47 +86,30 @@ gulp.task('lint', function() {
 });
 
 // Gulp tasks to build assets.jar
-gulp.task('assets-images', function () {
-    return gulp.src(['src/images/*'])
-        .pipe(gulp.dest('build/static/images'))
-});
-gulp.task('assets-html', function () {
-   return gulp.src(['src/*.html'])
-        .pipe(gulp.dest('build/templates'));
-});
-gulp.task('assets-css', function () {
-    return gulp.src(['src/**/*.scss'])
-        .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
-        .pipe(flatten())
-        .pipe(gulp.dest('build/static/css'))  
-});
-gulp.task('assets-js', function (callback) {
-    var webpackConfig = assign({}, require('./webpack.config.js'));
-    webpackConfig.output.path = path.join(__dirname, 'build', 'static', 'javascript');
-    return webpack(webpackConfig, function (err, stats) {
-        if(err) { throw new gutil.PluginError("webpack:build", err); }
-        gutil.log("[webpack:build]", stats.toString({
-          colors: true
-        }));
-        callback();
-    })
-}); 
-
-gulp.task('assets.jar', ['assets-images', 'assets-html', 'assets-css', 'assets-js'], function () {
+gulp.task('assets.jar', function () {
     gulp.src('./build/**/*')
         .pipe(tar('assets.jar'))
         .pipe(gulp.dest('.'));
 })
 
 gulp.task('watch', ['build'], function() {
-    gulp.watch(['src/**/*.scss'], ['styles']);
-    gulp.watch(['src/**/*.jsx'], ['react']);
-    gulp.watch(['src/*.html', 'src/images/*'], ['copy']);
-    // gulp.watch(['src/*.html', 'src/images/*', 'src/**/*.scss', 'src/**/*.jsx'], ['assets.jar']);
+    gulp.watch(['src/**/*.scss'], function () {
+        runSequence('styles', 'assets.jar');
+    });
+    gulp.watch(['src/**/*.jsx'], function () {
+        runSequence('react', 'copy-js', 'assets.jar');
+    });
+    gulp.watch(['src/*.html', 'src/images/*'], function () {
+        runSequence('copy', 'assets.jar');
+    });
 });
 
 gulp.task('default', ['watch']);
-gulp.task('build', ['copy', 'styles', 'react']);
+
+gulp.task('build', function () {
+    // react needs to be run before copy-js and assets.jar needs to be run after all tasks
+    runSequence('react', ['copy', 'copy-js', 'styles'] , 'assets.jar');
+});
 
 
 // from https://github.com/spring-io/sagan/blob/master/sagan-client/gulpfile.js
