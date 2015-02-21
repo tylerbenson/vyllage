@@ -7,7 +7,7 @@ var FreeformMain = React.createClass({displayName: "FreeformMain",
                 React.createElement("div", {className: "main"}, 
                     React.createElement("div", {className: "paragraph"}, 
                         React.createElement("p", {className: "freeform-description"}, 
-                           this.props.description, ";"
+                           this.props.description
                         )
                     )
                 )

@@ -15,6 +15,7 @@ section.container {
 		}
 
 		.editable {
+			padding-top: 20px;
 
 			.edit {
 				margin-bottom: 9px;
@@ -22,7 +23,6 @@ section.container {
 
 			input[type = "text"] {
 				border: 1px solid #a89892;
-				border-color: #a89892;
 				height: 26px;
 				font-size: 16px;
 				line-height: 26px;
@@ -88,7 +88,6 @@ section.container {
 		}
 
 		.start-date, .end-date, .location {
-			opacity: 0.5;
 			width: 150px;
 			margin-left: 15px;
 		}

@@ -8,10 +8,25 @@ body {
 	section {
 		margin-top: 30px;
 
+		.article-content:hover {
+
+			.main {
+				background: url(../../images/edit.png) no-repeat top right;
+
+				> p, > ul , > div.paragraph {
+					@include editParagraph();
+				}
+			}
+		}
+
 		article {
 
+			.nonEditable {
+				display: none;
+			}
+
 			.article-content {
-	  			background-color:#ece7e4;
+	  			// background-color:#ece7e4;
 	  		}
 
 	  	  	.add-more {
@@ -46,10 +61,6 @@ body {
 	  			float:left;
 	  			margin:43px 25px 0;
 	  		}
-
-            .contact .info-blog-reg {
-            	margin:5px;
-            }
 
 	  		.ask-advice {
 	  			height: 75px;
@@ -98,14 +109,6 @@ body {
 					display: none;
 				}
 			}
-	  	}
-
-	  	article.info-sections {
-
-	  		.info-link {
-	  			padding-top: 8px;
-				margin-bottom: 8px;
-	  		}
 	  	}
 	}
 }
