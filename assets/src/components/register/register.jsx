@@ -1,3 +1,34 @@
+// this will be a separate component in new structural changes
+
+var AddSections = React.createClass({  
+
+     addSection: function() {
+            
+        if(this.props.addSection){
+            this.props.addSection(this.props.type);
+        }
+    },
+
+    render: function() {
+
+        return (
+            <article className="add-section education">
+                <div className="row">
+                    <div className="twelve columns">
+                        <div>
+                            <button className="article-btn"> education </button>
+                            <p className="add-more"> add more education </p>
+                            <div className="icon-wrapper" onClick={this.addSection}>
+                                <img className="icon add" src="images/add.png" width="25" height="25"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        );
+    }
+});
+
 var MainContainer = React.createClass({  
     
     getInitialState: function() {
@@ -37,10 +68,50 @@ var MainContainer = React.createClass({
         }
     },
 
+    addSection: function (type) {
+        var id = MainData.length + 1;
+
+        if(type == 'freeForm') {
+
+            this.state.mainData.push({
+                "type": "freeform",
+                "title": "career goal",
+                "sectionId": id,
+                "sectionPosition": 1,
+                "state": "shown",
+                "description": ""
+            });
+
+        } else if(type == 'organization') {
+
+            this.state.mainData.push({
+                "type": "experience",
+                "title": "job experience",
+                "sectionId": id,
+                "sectionPosition": 2,
+                "state": "shown",
+                "organizationName": "",
+                "organizationDescription": "",
+                "role": "",
+                "startDate": "",
+                "endDate": "",
+                "isCurrent": false,
+                "location": "",
+                "roleDescription": "",
+                "highlights": ""
+            });
+
+        }
+
+        this.setState({mainData: this.state.mainData});
+
+    },
+
     render: function() {
         var results = this.state.mainData,
             that = this;
         return (
+            <div>
             <div>
                 {
                     results.map(function(result) {
@@ -62,7 +133,7 @@ var MainContainer = React.createClass({
                     }
                     else
                     {
-                        return (
+                    return (
                         <article className="experience">
                             <div className="row">
                                  <div className="twelve columns">
@@ -78,6 +149,12 @@ var MainContainer = React.createClass({
                     
                     })
                 }
+            </div>
+
+            <AddSections addSection={that.addSection} type={'freeForm'}/>
+
+            <AddSections addSection={that.addSection} type={'organization'}/>
+
             </div>
         );
     }

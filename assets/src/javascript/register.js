@@ -1,3 +1,34 @@
+// this will be a separate component in new structural changes
+
+var AddSections = React.createClass({displayName: "AddSections",  
+
+     addSection: function() {
+            
+        if(this.props.addSection){
+            this.props.addSection(this.props.type);
+        }
+    },
+
+    render: function() {
+
+        return (
+            React.createElement("article", {className: "add-section education"}, 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {className: "twelve columns"}, 
+                        React.createElement("div", null, 
+                            React.createElement("button", {className: "article-btn"}, " education "), 
+                            React.createElement("p", {className: "add-more"}, " add more education "), 
+                            React.createElement("div", {className: "icon-wrapper", onClick: this.addSection}, 
+                                React.createElement("img", {className: "icon add", src: "images/add.png", width: "25", height: "25"})
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+});
+
 var MainContainer = React.createClass({displayName: "MainContainer",  
     
     getInitialState: function() {
@@ -37,10 +68,50 @@ var MainContainer = React.createClass({displayName: "MainContainer",
         }
     },
 
+    addSection: function (type) {
+        var id = MainData.length + 1;
+
+        if(type == 'freeForm') {
+
+            this.state.mainData.push({
+                "type": "freeform",
+                "title": "career goal",
+                "sectionId": id,
+                "sectionPosition": 1,
+                "state": "shown",
+                "description": ""
+            });
+
+        } else if(type == 'organization') {
+
+            this.state.mainData.push({
+                "type": "experience",
+                "title": "job experience",
+                "sectionId": id,
+                "sectionPosition": 2,
+                "state": "shown",
+                "organizationName": "",
+                "organizationDescription": "",
+                "role": "",
+                "startDate": "",
+                "endDate": "",
+                "isCurrent": false,
+                "location": "",
+                "roleDescription": "",
+                "highlights": ""
+            });
+
+        }
+
+        this.setState({mainData: this.state.mainData});
+
+    },
+
     render: function() {
         var results = this.state.mainData,
             that = this;
         return (
+            React.createElement("div", null, 
             React.createElement("div", null, 
                 
                     results.map(function(result) {
@@ -62,7 +133,7 @@ var MainContainer = React.createClass({displayName: "MainContainer",
                     }
                     else
                     {
-                        return (
+                    return (
                         React.createElement("article", {className: "experience"}, 
                             React.createElement("div", {className: "row"}, 
                                  React.createElement("div", {className: "twelve columns"}, 
@@ -78,6 +149,12 @@ var MainContainer = React.createClass({displayName: "MainContainer",
                     
                     })
                 
+            ), 
+
+            React.createElement(AddSections, {addSection: that.addSection, type: 'freeForm'}), 
+
+            React.createElement(AddSections, {addSection: that.addSection, type: 'organization'})
+
             )
         );
     }
