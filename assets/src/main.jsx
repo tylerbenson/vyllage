@@ -190,38 +190,7 @@ var MainContainer = React.createClass({
     }
 });
 
-var Main = React.createClass({
-  render: function () {
-    return (
-      <div>
-        <header>
-            <div className="container">
-                <Header />
-            </div>
-        </header>
-
-       <section className="container">
-
-            <article className="profile">
-                <Profile />
-            </article>
-
-            <article className="info-sections">
-               <ShareInfo />
-            </article>
-
-            <article className="info-sections">
-                <ContactInfo />  
-            </article>
-
-            <MainContainer />
-        </section>
-      </div>
-    );
-  }
-});
-
-React.render(<Main />, document.getElementById('main'));
+React.render(<MainContainer />, document.getElementById('main-container'));
 
 
 

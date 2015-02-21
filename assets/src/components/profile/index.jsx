@@ -321,7 +321,7 @@ var Data = {
     tagline: 'Technology Enthusiast analyzing, building, and expanding solutions'
 };
 
-// React.render(<ProfileContainer />, document.getElementById('profile'));
+React.render(<ProfileContainer />, document.getElementById('profile'));
 
 module.exports = ProfileContainer;
 
