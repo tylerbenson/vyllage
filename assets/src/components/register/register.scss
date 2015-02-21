@@ -92,6 +92,10 @@ body {
   			.article-content {
 	  			background-color: $white;
 
+  				.editable, .buttons-container {
+					display: none;
+				}
+
 		  		.tagline-edit {
 					color: #a5a3a2;
 					float: left;
