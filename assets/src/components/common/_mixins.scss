@@ -14,7 +14,7 @@
 @mixin header-logo() {
 	width: $header-logo-width;
 	height: $header-height;
-	background: url('../../images/header-logo.png') no-repeat;
+	background: url('../images/header-logo.png') no-repeat;
 }
 
 @mixin profile-photo(){

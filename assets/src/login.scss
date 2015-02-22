@@ -2,7 +2,7 @@
 @import './components/common/mixins';
 
 .container {
-	background: url('../../images/login_bg.jpg') no-repeat;
+	background: url('../images/login_bg.jpg') no-repeat;
 	min-height: 550px;
 	width: 100%;
 	max-width: inherit;
@@ -27,7 +27,7 @@
 		margin-top: 120px;
 
 		.vyllage-img {
-			background: url('../../images/header-logo.png');
+			background: url('../images/header-logo.png');
 			background-size: contain;
 			height: 138px;
 		}

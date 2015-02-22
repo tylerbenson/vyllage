@@ -40,7 +40,7 @@ gulp.task('copy', ['copy-images', 'copy-html']);
 
 gulp.task('styles', function() {
   return gulp.src(['src/**/*.scss'])
-    .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
+    .pipe(sass({ includePaths: ['./src/components', 'bower_components'], outputStyle: 'expanded' }))
     .pipe(flatten())
     .pipe(gulp.dest('public/css')) // for devlopement server
     .pipe(gulp.dest('build/static/css')) // for assets.jar

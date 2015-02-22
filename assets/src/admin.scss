@@ -2,7 +2,7 @@
 @import './components/common/mixins';
 
 body {
- background: url('../../images/background.jpg');
+ background: url('../images/background.jpg');
 
      .search-area {
         margin: 0 40px 0 0;
@@ -19,7 +19,7 @@ body {
                 height: 45px;
                 border: 2px solid $cancel-btn-bord-color;
                 border-radius: 18px;
-                background: url('../../images/search.png') no-repeat 10px 6px; 
+                background: url('../images/search.png') no-repeat 10px 6px; 
                 background-color: #FAFAFA;
             }
         }

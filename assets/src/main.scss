@@ -12,7 +12,7 @@ body {
 		.article-content:hover {
 
 			.main {
-				background: url(../../images/edit.png) no-repeat top right;
+				background: url(../images/edit.png) no-repeat top right;
 
 				> p, > ul , > div.paragraph {
 					@include editParagraph();
