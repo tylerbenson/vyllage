@@ -79,8 +79,10 @@ public class ResumeController {
 		JsonFactory jfactory = new JsonFactory();
 
 		InputStream in = getClass().getResourceAsStream(
-				"resume-resumeID-header.json");
+				"/editor/resume-resumeID-header.json");
+		
 		JsonParser jParser = jfactory.createParser(in);
+		
 
 		// mapper.readTree(jParser).toString();
 		DocumentHeader header = mapper.readValue(jParser, DocumentHeader.class);
