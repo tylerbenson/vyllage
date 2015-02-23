@@ -8,6 +8,7 @@ var ArticleContent = require('./components/organization/article-content');
 var ArticleControlls =require('./components/freeform/article-controlls');
 var CommentsBlog = require('./components/freeform/comments-blog');
 
+
 var MainData =[
 {
     "type": "freeform",

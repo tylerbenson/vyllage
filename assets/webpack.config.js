@@ -7,6 +7,9 @@ module.exports = {
     entry: {
         'main.js': './src/main.jsx'
     },
+    entry: {
+        'register.js': './src/register.jsx'
+    },
     output: {
         path: path.join(__dirname, 'public', 'javascript'),
         filename: '[name]'

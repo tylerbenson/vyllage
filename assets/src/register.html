@@ -13,258 +13,37 @@
 
 </head>
 <body>
-<form action="/main" method="post">
-	<header>
-		<div class="container">
-			<div class="row">
-				<div class="twelve columns">
-					<div class="u-pull-left header-logo"></div>
-					<div class="u-pull-right header-profile">
-						<img class="u-pull-left header-profile-photo" alt="" src="images/user.png" width="30" height="30"/>
-						<span class="u-pull-left header-username">nathan</span>
-						<button class="u-pull-left ask-advice-btn">ask advice</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</header>
+ 	<header>
+        <div class="container" id="header-container">
+            
+        </div>
+    </header>
 
-	<section class="container">
+   <section class="container">
 
-		<article class="profile" id="profile">
-			<div class="row">
-				<div class="four columns">
-					<img class="profile-photo" src="images/user.png" width="115" height="115"/>
-					<div class="edit-profile-photo">
-						<img  class="edit-photo-btn" src="images/add.png" width="25" height="25"/>
-						<p class="edit-photo-lbl">your photo</p>
-					</div>
-				</div>
-				<div class="four columns article-content profile">
+        <article class="profile" id="profile">
+            
+        </article>
 
-					<div class="headline-container main">
-						<div class="paragraph">
-							<p class="headline headline-edit"> Nathan Benson 	</p>
-							<img class="edit-headline edit-icon" src="images/edit.png" width="25" height="25"/>
-						</div>
-						<div class="paragraph">
-							<p class="tagline tagline-edit">add a professional tagline</p>
-							<img class="edit-tagline edit-icon" src="images/edit.png" width="25" height="25"/>
-						</div>
-					</div>
-					<div class="headline-container edit">
-						<input type="text" class="headline" name="headlin" placeholder="name, surname"/>
-						<input type="text" class="tagline" name="tagline" placeholder="add a professional tagline"/>
-						<div class="edit">
-							<input type="submit" class="save-btn" value="save"/>
-							<button class="cancel-btn">cancel</button>
-						</div>
-					</div>
+         <article id="share-info" class="info-sections">
+           
+        </article>
 
-				</div>
-				<div class="four columns btns-grid">
-					<div class="share-contact-btns-container">
-						<button class="u-pull-left share" id="shareInfoBtn">share</button>
-						<button class="u-pull-left contact" id ="contactInfoBtn">contact</button>
-					</div>
-				</div>
-			</div>
-		</article>
+        <article id="contact-info" class="info-sections">
 
-		<article id="contact-info" class="info-sections">
-			<div class="row info-blog-wrapper">
-				<div class="four columns">
-					<div class="social info-blog edit">
-						<p class="info-title-reg">social</p>
-						<div class="icon-wrapper-reg">
-							<img class="icon add" src="images/add.png" width="25" height="25"/>
-                        </div>
-						<select class="privacy-select">
-							<option>website</option>
-						</select>
-						<select class="privacy-select">
-							<option>add a site</option>
-						</select>
-					</div>
-				</div>
-				<div class="four columns">
-					<div class="contact info-blog edit">
-						<p class="info-title">contact</p>
-						<div class="">
-							<input type="text" class="title-reg" name="email" placeholder="nathan@vyllage.com"/>
-							<input type="text" class="title-reg" name="phone" placeholder="phone number"/>
-						</div>
-					</div>
-				</div>
-				<div class="four columns">
-					<div class="location info-blog edit">
-						<p class="info-title">location</p>
-						<div class="">
-							<input type="text" class="title-reg" name="address" placeholder="street address"/>
-							<input type="text" class="industry-reg" name="zip" placeholder="zip code"/>
-							<input type="text" class="start-date-reg" name="state" placeholder="state"/>
-							<div class="icon-wrapper">
-								<img class="icon edit-reg" src="images/edit.png" width="25" height="25"/>
-                            </div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</article>
+        </article>
 
-		<article id="share-info" class="info-sections">
-			<div class="row info-blog-wrapper" >
-				<div class="four columns">
-					<div class="private-link info-blog edit">
-						<p class="info-title">private link</p>
-						<div class="info-link">
-							<input type="text" class="info-input-edit" name="email" placeholder="https://vyllage.com/nathanbenson123"/>
-						</div>
-						<p class="info-privacy-share">expires after:
-							<select class="privacy-select">
-								<option>30 days</option>
-							</select>
-						</p>
-					</div>
-				</div>
-				<div class="four columns">
-					<div class="public-link info-blog edit">
-						<p class="info-title">public link</p>
-						<div class="info-link">
-							<input type="text" class="info-input-edit" name="email" placeholder="https://vyllage.com/nathanbenson123"/>
-						</div>
-						<p class="info-privacy-public">visible to:
-							<select class="privacy-select">
-								<option>no one</option>
-							</select>
-						</p>
-					</div>
-				</div>
-				<div class="four columns">
-					<div class="export info-blog edit">
-						<p class="info-title">export</p>
-						<div class="exp-buttons">
-							<div class="exp-button">word</div>
-							<div class="exp-button">PDF</div>
-							<div class="exp-button">print</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</article>
+        <div id = "main-container">
 
-		<article class="career-goal">
-			<div class="row">
-				<div class="twelve columns">
-				    <div>
-				   		<button class="article-btn"> career goal </button>
-				    </div>
-					<div class="article-content career-goal">
-					    <div>
-	                        <div class="goal edit">
-								<textarea class="goal-description" name="description" placeholder="tell us about your career goal..." cols="40" rows="6"></textarea>
-						    </div>
-						    <div class="edit">
-								<button class="save-btn">save</button>
-								<button class="cancel-btn">cancel</button>
-							</div>
-							<div class="icon-wrapper edit">
-								<img class="icon edit" src="images/edit.png" width="25" height="25"/>
-                            </div>
-						</div>
-				    </div>
-				</div>
-			</div>
-		</article>
+        </div>
+    </section>
 
-		<article class="experience">
-			<div class="row">
-				<div class="twelve columns">
-					<div>
-						<button class="article-btn"> experience </button>
-					</div>
-					<div class="article-content experience">
-						<div>
-							<div class="company edit">
-								<input type="text" class="company-name" name="company-name" placeholder="company name"/>
-								<input type="text" class="industry" name="industry" placeholder="industry"/>
-							</div>
-						    <div class="company edit">
-								<textarea class="description" name="description" placeholder="write description about your company" cols="40" rows="6"></textarea>
-							</div>
-						</div>
-						<div>
-							<div class="job edit">
-								<input type="text" class="title" name="job-title" placeholder="job title"/>
-								<input type="text" class="start-date" name="start-date" placeholder="start date"/>
-								<input type="text" class="end-date" name="end-date" placeholder="end date"/>
-								<input type="text" class="location" name="location" placeholder="location"/>
-							</div>
-							<div class="job edit">
-								<textarea class="description" name="description" placeholder="provide a description of your job" cols="40" rows="6"></textarea>
-							</div>
-						</div>
-						<div>
-						  	<div class="job edit">
-								<textarea class="responsibilities" placeholder="add at least three notable accomplishments achieved during this position" cols="40" rows="6"></textarea>
-							</div>
-						</div>
-						<div class="edit">
-							<button class="save-btn">save</button>
-							<button class="cancel-btn">cancel</button>
-						</div>
-                        <div class="icon-wrapper edit">
-							<img class="icon edit" src="images/edit.png" width="25" height="25"/>
-                        </div>
-					</div>
 
-					<div class="ask-advice">
-						<button class="u-pull-right ask-advice-btn">ask advice</button>
-						<p class="u-pull-right comments-text"> no comments or suggestions yet... to get started </p>
-					</div>
-					<div class="divider"></div>
-					<div class="experience">
-						<p class="add-more no-button">add more experience </p>
-						<div class="icon-wrapper">
-							<img class="icon add" src="images/add.png" width="25" height="25"/>
-						</div>
-					</div>
-				</div>
-			</div>
-		</article>
-
-		<article class="add-section education">
-			<div class="row">
-				<div class="twelve columns">
-					<div>
-						<button class="article-btn"> education </button>
-						<p class="add-more"> add more education </p>
-						<div class="icon-wrapper">
-							<img class="icon add" src="images/add.png" width="25" height="25"/>
-						</div>
-					</div>
-				</div>
-			</div>
-		</article>
-
-		<article class="add-section skills">
-			<div class="row">
-				<div class="twelve columns">
-					<div>
-						<button class="article-btn">skills </button>
-					</div>
-					<p class="add-more"> add more skills</p>
-				</div>
-				<div class="icon-wrapper">
-					<img class="icon add" src="images/add.png" width="25" height="25"/>
-				</div>
-			</div>
-		</article>
-	</section>
-</form>
-
-<script type="text/javascript" src ="javascript/register.js"></script>
-<script type="text/javascript" src="javascript/utility.js"></script>
+   <script type="text/javascript" src="javascript/base.js"></script>
+   <script type="text/javascript" src="javascript/register.js"></script>
+ 
 
 </body>
+
+
 </html>
