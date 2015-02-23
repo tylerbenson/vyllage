@@ -6,7 +6,8 @@ module.exports = {
 	devtool: '#inline-source-map',
 	entry: {
 		'main.js': './src/main.jsx',
-		'register.js': './src/register.jsx'
+		'register.js': './src/register.jsx',
+        'requestAdvice.js': './src/requestAdvice.jsx'
 	},
 	output: {
 		path: path.join(__dirname, 'public', 'javascript'),
@@ -26,3 +27,4 @@ module.exports = {
 		new CommonsChunkPlugin('base.js'),
 	]
 };
+
