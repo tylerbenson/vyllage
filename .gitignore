@@ -45,9 +45,7 @@ build
 
 
 # WEB
+!assets/build/libs/assets.jar
 assets/.sass-cache
 assets/public
-assets/src/css/*
-!assets/src/css/min
-assets/src/javascript/.module-cache/
 

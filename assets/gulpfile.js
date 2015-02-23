@@ -11,7 +11,7 @@ var livereload = require('gulp-livereload');
 var uglify = require('gulp-uglify');
 var flatten = require('gulp-flatten');
 var webpack = require('webpack');
-var tar = require('gulp-tar');
+var zip = require('gulp-zip');
 var del = require('del');
 var assign = require('lodash.assign');
 var runSequence = require('run-sequence');
@@ -20,8 +20,8 @@ var bower = require('gulp-bower');
 var path = require('path');
 
 gulp.task('clean', function () {
-    del(['./public/*'], function (err) {
-        console.log('cleaned build directory')
+    del(['./public', './build'], function (err) {
+        console.log('cleaned build directories')
     })
 });
 
@@ -31,15 +31,13 @@ gulp.task('bower', function () {
 
 gulp.task('copy-images', function () {
     return gulp.src(['src/images/*'])
-        .pipe(gulp.dest('public/images')) // for devlopement server
-        .pipe(gulp.dest('build/static/images')); // for assets.jar
+        .pipe(gulp.dest('public/images'));
 });
 
 gulp.task('copy-html', function () {
     return gulp.src(['src/*.html'])
-        .pipe(gulp.dest('public')) // for devlopement server
-        .pipe(gulp.dest('build/templates')); // for assets.jar
-});   
+        .pipe(gulp.dest('public'));
+});
 
 gulp.task('copy', ['copy-images', 'copy-html']);
 
@@ -47,8 +45,7 @@ gulp.task('styles', function() {
   return gulp.src(['src/**/*.scss'])
     .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
     .pipe(flatten())
-    .pipe(gulp.dest('public/css')) // for devlopement server
-    .pipe(gulp.dest('build/static/css')) // for assets.jar
+    .pipe(gulp.dest('public/css'))
 });
 
 // gulp.task('minify-css', ['styles'], function() {
@@ -77,13 +74,6 @@ gulp.task('react', function (callback) {
     })
 });
 
-// Copy js files to build directory to bundle into assets.jar
-gulp.task('copy-js', function () {
-   return gulp.src('./public/javascript/*')
-      .pipe(gulp.dest('./build/static/javascript'))
-              
-})
-
 gulp.task('lint', function() {
   return gulp.src('src/**/*.js')
     .pipe(jshint())
@@ -92,9 +82,16 @@ gulp.task('lint', function() {
 
 // Gulp tasks to build assets.jar
 gulp.task('assets.jar', function () {
-    gulp.src('./build/**/*')
-        .pipe(tar('assets.jar'))
-        .pipe(gulp.dest('.'));
+    gulp.src('./public/**/*')
+        .pipe(rename(function (path) {
+            if(path.extname === '.html') {
+                path.dirname = "templates";
+            } else {
+                path.dirname = "static";
+            }
+        }))
+        .pipe(zip('assets.jar'))
+        .pipe(gulp.dest('build/libs'));
 })
 
 gulp.task('watch', ['build'], function() {
@@ -113,7 +110,7 @@ gulp.task('default', ['watch']);
 
 gulp.task('build', function () {
     // react needs to be run before copy-js and assets.jar needs to be run after all tasks
-    runSequence('bower', 'react', ['copy', 'copy-js', 'styles'] , 'assets.jar');
+    runSequence('bower', 'react', ['copy', 'styles'] , 'assets.jar');
 });
 
 

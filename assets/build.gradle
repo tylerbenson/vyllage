@@ -5,36 +5,6 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'java'
 
-jar {
-    //from 'dist'
-    from 'src'
-
-    exclude '**/*.scss'
-    exclude '**/*.css.map'
-    exclude 'css/*.css'
-
-    eachFile { details ->
-        if(details.path.startsWith('META-INF')) {
-            // ignore
-        } else if(details.path.endsWith('.html')) {
-            details.path = 'templates/' + details.path
-        } else {
-            details.path = 'static/' + details.path
-        }
-    }
-    // Jar contains duplicate empty folders, see Gradle issue:
-    // http://issues.gradle.org/browse/GRADLE-1830
-    // so we need to set includeEmptyDirs to false
-    includeEmptyDirs = false
-}
-jar.shouldRunAfter clean
-
-clean {
-    inputs.dir "src/css"
-    delete fileTree(dir: "src/css", exclude: "libs/**")
-    delete 'src/css/min'
-}
-
 task checkNPM {
     try {
         def result = project.exec {
@@ -48,6 +18,14 @@ task checkNPM {
     }
     println "hasNPM = " + System.getProperty("hasNPM")
 }
+
+task npmClean(type:Exec) {
+    logging.captureStandardOutput LogLevel.INFO
+    logging.captureStandardError LogLevel.INFO
+    commandLine 'npm', 'run', 'clean'
+}
+clean.finalizedBy npmClean
+npmClean.onlyIf { "true".equals(System.getProperty('hasNPM')) }
 
 task npmInstall(type:Exec) {
     // be Gradle-like and suppress boilerplate logging
@@ -74,6 +52,27 @@ jar.dependsOn npmBuild
 npmBuild.shouldRunAfter clean
 npmBuild.dependsOn checkNPM
 npmBuild.onlyIf { "true".equals(System.getProperty('hasNPM')) }
+
+jar {
+    from 'public'
+
+    eachFile { details ->
+        if(details.path.startsWith('META-INF')) {
+            // ignore
+        } else if(details.path.endsWith('.html')) {
+            details.path = 'templates/' + details.path
+        } else {
+            details.path = 'static/' + details.path
+        }
+    }
+    // Jar contains duplicate empty folders, see Gradle issue:
+    // http://issues.gradle.org/browse/GRADLE-1830
+    // so we need to set includeEmptyDirs to false
+    includeEmptyDirs = false
+}
+jar.shouldRunAfter clean
+jar.onlyIf { "true".equals(System.getProperty('hasNPM')) }
+
 
 task httpd(dependsOn: npmInstall, type:Exec) {
     commandLine 'npm', 'run', 'httpd'

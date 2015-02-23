@@ -1,0 +1,22 @@
+{
+    "social": {
+        "twitter":"@nben888",
+        "facebook":"natebenson",
+        "linkedin":"www.linkedin.com/natebenson",
+        "visibility":"private"
+    },
+    "contact": {
+        "email":"nathan@vyllage.com",
+        "home":"555-890-2345",
+        "cell":"555-123-2345",
+        "visibility":"private"
+    },
+    "location": {
+        "values":[
+            "address line1",
+            "address line2",
+            "..."
+        ],
+        "visibility":"private"
+    }
+}
