@@ -5,9 +5,7 @@ module.exports = {
 	debug: true,
 	devtool: '#inline-source-map',
 	entry: {
-		'main.js': './src/main.jsx'
-	},
-	entry: {
+		'main.js': './src/main.jsx',
 		'register.js': './src/register.jsx'
 	},
 	output: {
