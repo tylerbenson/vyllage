@@ -14,7 +14,6 @@
   ],
   "dependencies": {
     "normalize-scss": "~3.0.2",
-    "skeleton-scss": "git+https://github.com/lazerwalker/Skeleton-Sass",
-    "react": "~0.12.2"
+    "skeleton-scss": "git+https://github.com/lazerwalker/Skeleton-Sass"
   }
 }

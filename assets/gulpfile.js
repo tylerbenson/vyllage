@@ -15,6 +15,7 @@ var tar = require('gulp-tar');
 var del = require('del');
 var assign = require('lodash.assign');
 var runSequence = require('run-sequence');
+var bower = require('gulp-bower');
 
 var path = require('path');
 
@@ -22,6 +23,10 @@ gulp.task('clean', function () {
     del(['./public/*'], function (err) {
         console.log('cleaned build directory')
     })
+});
+
+gulp.task('bower', function () {
+    return bower({'cmd': 'update'})
 });
 
 gulp.task('copy-images', function () {
@@ -40,7 +45,7 @@ gulp.task('copy', ['copy-images', 'copy-html']);
 
 gulp.task('styles', function() {
   return gulp.src(['src/**/*.scss'])
-    .pipe(sass({ includePaths: ['./src/components', 'bower_components'], outputStyle: 'expanded' }))
+    .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
     .pipe(flatten())
     .pipe(gulp.dest('public/css')) // for devlopement server
     .pipe(gulp.dest('build/static/css')) // for assets.jar
@@ -108,7 +113,7 @@ gulp.task('default', ['watch']);
 
 gulp.task('build', function () {
     // react needs to be run before copy-js and assets.jar needs to be run after all tasks
-    runSequence('react', ['copy', 'copy-js', 'styles'] , 'assets.jar');
+    runSequence('bower', 'react', ['copy', 'copy-js', 'styles'] , 'assets.jar');
 });
 
 
