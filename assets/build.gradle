@@ -45,7 +45,7 @@ task npmBuild(dependsOn: npmInstall, type:Exec) {
     logging.captureStandardError LogLevel.INFO
     inputs.dir "src"
     inputs.file "gulpfile.js"
-    //outputs.dir "dist"
+    outputs.dir "public"
     commandLine 'npm', 'run', 'build'
 }
 jar.dependsOn npmBuild

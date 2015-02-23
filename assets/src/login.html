@@ -1,51 +1,55 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<title>Login</title>
+	<base href="." th:href="@{/}" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-	<link rel="stylesheet" href="css/base.css"/>
-	<link rel="stylesheet" href="css/login.css"/>
+	<link rel="stylesheet" href="css/base.css" />
+	<link rel="stylesheet" href="css/login.css" />
 
-	<link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'/>
-	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'/>
+	<link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css' />
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
 </head>
+
 <body>
-<form th:action="@{/login}" method="post">
-	<section class="container">
+	<form th:action="@{/login}" method="post">
+		<section class="container">
 
-		<article>
-			<div class="row">
-				<div class="twelve column">
-					<button class="request-btn">request invitation</button>
+			<article>
+				<div class="row">
+					<div class="twelve column">
+						<button class="request-btn">request invitation</button>
 
-					<div class="login-content">
-						<div class="vyllage-img"></div>
-						<!-- These need to be styled properly -->
-				        <div th:if="${param.error}" style="background: white">
-				            Invalid email and password.
-				        </div>
-				        <div th:if="${param.logout}" style="background: white">
-				            You have been logged out.
-				        </div>
-						<input type="text" class="input email" name="email" placeholder="email"/>
-						<input type="password" class="input password" name="password" placeholder="password"/>
-						<input type="submit" class="login-btn" value="login"/>
+						<div class="login-content">
+							<div class="vyllage-img"></div>
+							<!-- These need to be styled properly -->
+							<div th:if="${param.error}" style="background: white">
+								Invalid email and password.
+							</div>
+							<div th:if="${param.logout}" style="background: white">
+								You have been logged out.
+							</div>
+							<input type="text" class="input email" name="email" placeholder="email" />
+							<input type="password" class="input password" name="password" placeholder="password" />
+							<input type="submit" class="login-btn" value="login" />
+						</div>
 					</div>
 				</div>
-			</div>
-		</article>
+			</article>
 
-		<article>
-			<div class="row divider-part">
-				<div class="twelve column">
-					<p class="what-vyllage">what is vyllage?</p>
+			<article>
+				<div class="row divider-part">
+					<div class="twelve column">
+						<p class="what-vyllage">what is vyllage?</p>
+					</div>
 				</div>
-			</div>
-		</article>
+			</article>
 
-	</section>
-</form>
+		</section>
+	</form>
 </body>
+
 </html>

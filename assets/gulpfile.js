@@ -20,32 +20,38 @@ var bower = require('gulp-bower');
 var path = require('path');
 
 gulp.task('clean', function () {
-    del(['./public', './build'], function (err) {
-        console.log('cleaned build directories')
-    })
+	del(['./public', './build'], function (err) {
+		console.log('cleaned build directories')
+	})
 });
 
 gulp.task('bower', function () {
-    return bower({'cmd': 'update'})
+	return bower({
+		'cmd': 'update'
+	})
 });
 
 gulp.task('copy-images', function () {
-    return gulp.src(['src/images/*'])
-        .pipe(gulp.dest('public/images'));
+	return gulp.src(['src/images/*'])
+		.pipe(gulp.dest('public/images'));
 });
 
 gulp.task('copy-html', function () {
-    return gulp.src(['src/*.html'])
-        .pipe(gulp.dest('public'));
+	return gulp.src(['src/*.html'])
+		.pipe(gulp.dest('public'));
 });
 
 gulp.task('copy', ['copy-images', 'copy-html']);
 
-gulp.task('styles', function() {
-  return gulp.src(['src/**/*.scss'])
-    .pipe(sass({ includePaths: ['./src/components', 'bower_components'], errLogToConsole: true, outputStyle: 'expanded' }))
-    .pipe(flatten())
-    .pipe(gulp.dest('public/css'))
+gulp.task('styles', ['bower'], function () {
+	return gulp.src(['src/**/*.scss'])
+		.pipe(sass({
+			includePaths: ['./src/components', 'bower_components'],
+			errLogToConsole: true,
+			outputStyle: 'expanded'
+		}))
+		.pipe(flatten())
+		.pipe(gulp.dest('public/css'))
 });
 
 // gulp.task('minify-css', ['styles'], function() {
@@ -58,59 +64,87 @@ gulp.task('styles', function() {
 //         .pipe(livereload());
 // });
 
-gulp.task('prettify-html', function() {
-  return gulp.src('src/*.html')
-    .pipe(prettify({indentSize: 4}))
-    .pipe(gulp.dest('src/'))
+gulp.task('prettify-html', function () {
+	return gulp.src('src/*.html')
+		.pipe(prettify({
+			html: {
+				braceStyle: "collapse",
+				indentChar: "	",
+				indentScripts: "keep",
+				indentSize: 1,
+				maxPreserveNewlines: 5,
+				preserveNewlines: true,
+				unformatted: ["a", "sub", "sup", "b", "i", "u"],
+				wrapLineLength: 120
+			}
+		}))
+		.pipe(gulp.dest('src/'))
+});
+
+gulp.task('prettify-js', function () {
+	return gulp.src(['./*.json', './*.js'])
+		.pipe(prettify({
+			js: {
+				indentWithTabs: true,
+				jslintHappy: true,
+				wrapLineLength: 120
+			}
+		}))
+		.pipe(gulp.dest('.'))
 });
 
 gulp.task('react', function (callback) {
-    return webpack(require('./webpack.config.js'), function (err, stats) {
-        if(err) { throw new gutil.PluginError("webpack:build", err); }
-        gutil.log("[webpack:build]", stats.toString({
-          colors: true
-        }));
-        callback();
-    })
+	return webpack(require('./webpack.config.js'), function (err, stats) {
+		if (err) {
+			throw new gutil.PluginError("webpack:build", err);
+		}
+		gutil.log("[webpack:build]", stats.toString({
+			colors: true
+		}));
+		callback();
+	})
 });
 
-gulp.task('lint', function() {
-  return gulp.src('src/**/*.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+gulp.task('lint', function () {
+	return gulp.src('src/**/*.js')
+		.pipe(jshint())
+		.pipe(jshint.reporter('default'));
 });
 
 // Gulp tasks to build assets.jar
 gulp.task('assets.jar', function () {
-    gulp.src('./public/**/*')
-        .pipe(rename(function (path) {
-            if(path.extname === '.html') {
-                path.dirname = "templates";
-            } else {
-                path.dirname = "static";
-            }
-        }))
-        .pipe(zip('assets.jar'))
-        .pipe(gulp.dest('build/libs'));
+	gulp.src('./public/**/*')
+		.pipe(rename(function (path) {
+			if (path.extname === '.html') {
+				path.dirname = "templates";
+			} else {
+				path.dirname = "static";
+			}
+		}))
+		.pipe(zip('assets.jar'))
+		.pipe(gulp.dest('build/libs'));
 })
 
-gulp.task('watch', ['build'], function() {
-    gulp.watch(['src/**/*.scss'], function () {
-        runSequence('styles', 'assets.jar');
-    });
-    gulp.watch(['src/**/*.jsx'], function () {
-        runSequence('react', 'assets.jar');
-    });
-    gulp.watch(['src/*.html', 'src/images/*'], function () {
-        runSequence('copy', 'assets.jar');
-    });
+gulp.task('watch', ['build'], function () {
+	gulp.watch(['src/**/*.scss'], function () {
+		runSequence('styles', 'assets.jar');
+	});
+	gulp.watch(['src/**/*.jsx'], function () {
+		runSequence('react', 'assets.jar');
+	});
+	gulp.watch(['src/*.html', 'src/images/*'], function () {
+		runSequence('prettify-html', 'copy', 'assets.jar');
+	});
+	gulp.watch(['./*.js', './*.json'], function () {
+		runSequence('prettify-js');
+	});
 });
 
 gulp.task('default', ['watch']);
 
 gulp.task('build', function () {
-    // react needs to be run before copy-js and assets.jar needs to be run after all tasks
-    runSequence('bower', 'react', ['copy', 'styles'] , 'assets.jar');
+	// assets.jar needs to run last
+	runSequence(['react', 'copy', 'styles'], 'assets.jar');
 });
 
 
@@ -175,4 +209,3 @@ gulp.task('build', function () {
 //})
 //
 //gulp.task('build', ['minify-css', 'build-modules', 'copy-assets', 'bower-files'], function(){ });
-
