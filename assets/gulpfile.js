@@ -99,7 +99,7 @@ gulp.task('watch', ['build'], function() {
         runSequence('styles', 'assets.jar');
     });
     gulp.watch(['src/**/*.jsx'], function () {
-        runSequence('react', 'copy-js', 'assets.jar');
+        runSequence('react', 'assets.jar');
     });
     gulp.watch(['src/*.html', 'src/images/*'], function () {
         runSequence('copy', 'assets.jar');
