@@ -146,7 +146,7 @@ class ClientResourcesConfig extends WebMvcConfigurerAdapter {
 		if (!this.homePath.isEmpty()) {
 			registry.addResourceHandler("/**")
 					.addResourceLocations(
-							"file:///" + this.homePath + "/assets/src/")
+							"file:///" + this.homePath + "/assets/public/")
 					.setCachePeriod(0);
 		}
 	}

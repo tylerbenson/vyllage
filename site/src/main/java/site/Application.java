@@ -20,7 +20,7 @@ public class Application {
 			System.setProperty("spring.profiles.active", Profiles.DEBUG);
 			System.setProperty("spring.thymeleaf.prefix",
 					"file:///" + System.getProperty("PROJECT_HOME")
-							+ "/assets/src/");
+							+ "/assets/public/");
 		}
 		SpringApplication.run(Application.class, args);
 	}
