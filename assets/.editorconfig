@@ -1,6 +1,6 @@
 root = true
 
-# 4 space indentation
-[*.{scss, js, html}]
+# 2 space indentation
+[*.{scss, js, jsx, html}]
 indent_style = space
-indent_size = 4
+indent_size = 2
