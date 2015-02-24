@@ -36,12 +36,18 @@ article {
 	margin-top: 45px;
 }
 
+.rcpent {
+  margin: 40px 15px 0px 40px;
+  width: 600px;
+}
+
+.rcpent-add {
+  margin-top: 40px; 
+}
+
 .rcpent-list {
 	display: inline-block;
-	margin: 40px 15px 0px 40px;
-	width: 500px;
 	float: left;
-
 	.rcpent {
 		@include recipient();
 	}
@@ -113,6 +119,7 @@ article {
 
 // suggested users list style
 ul.suggested-users-list {
+    display: block;
 	width: 300px;
 	background-color: $white;
 	box-shadow: 0px 0px 5px 3px  rgba(126, 121, 113, 1);

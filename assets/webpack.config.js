@@ -27,4 +27,3 @@ module.exports = {
 		new CommonsChunkPlugin('base.js'),
 	]
 };
-

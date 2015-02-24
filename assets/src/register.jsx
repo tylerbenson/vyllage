@@ -3,7 +3,7 @@ var Header = require('./components/header');
 var Profile = require('./components/profile');
 var FreeformContainer = require('./components/freeform/container');
 var ArticleContent = require('./components/organization/article-content');
-var AddSections = require('./components/AddSections/addSections');
+var AddSections = require('./components/addSections/addSections');
 
 var RegisterData =[
 {
