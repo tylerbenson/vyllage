@@ -36,20 +36,23 @@ article {
 	margin-top: 45px;
 }
 
-.rcpent {
-  margin: 40px 15px 0px 40px;
-  width: 600px;
-}
-
 .rcpent-add {
   margin-top: 40px; 
 }
 
 .rcpent-list {
-	display: inline-block;
+	// display: inline-block;
+    width: 600px;
 	float: left;
 	.rcpent {
 		@include recipient();
+        p {
+            padding: 10px;
+        }
+        a {
+            color: #000;
+            padding: 10px;
+        }
 	}
 }
 

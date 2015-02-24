@@ -5,7 +5,7 @@ var FormMessage = React.createClass({
     return (
       <div className='u-pull-left'>
         <p className="rqst-key-word">subject:</p>
-        <div className="subject" contentEditable>
+        <div className="subject" >
           <p className="subject-text">
             Could you provide me some feedback on my resume?
           </p>

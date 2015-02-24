@@ -3,7 +3,7 @@ var React = require('react');
 var FormBody = React.createClass({
   render: function () {
     return (
-      <div className = "messageContent" contentEditable>
+      <div className = "messageContent">
         <p className="message-text">
           I could really use your assistance on giving me some career or resume advice. Do you think
           you could take a couple of minutes and look over this for me?
