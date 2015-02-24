@@ -1,14 +1,13 @@
 var React = require('react');
+var _pick = require('lodash.pick');
 
 var RecipientAdd = React.createClass({
   getInitialState: function () {
-    return this.resetState();
-  },
-  resetState: function () {
     return {
       firstName: "",
       lastName: "",
-      email: ""
+      email: "",
+      error: false
     }
   },
   changeHandler: function (key, e) {
@@ -19,8 +18,13 @@ var RecipientAdd = React.createClass({
   },
   addHandler: function (e) {
     e.preventDefault();
-    this.props.addRecipient(this.state);
-    this.setState(this.resetState());
+    if (this.state.firstName && this.state.lastName && this.state.email) {
+      var recipient = _pick(this.state, ['firstName', 'lastName', 'email']);
+      this.props.addRecipient(recipient);
+      this.setState(this.getInitialState());
+    } else {
+      this.setState({error: true});
+    }
   },
   render: function () {
     return (
@@ -31,6 +35,7 @@ var RecipientAdd = React.createClass({
         <button className='one column' onClick={this.addHandler}>
           <img src='images/accept.png' />
         </button> 
+        {this.state.error? <p className='error'>Fill all fields</p> : null}
       </div>
     );
   }

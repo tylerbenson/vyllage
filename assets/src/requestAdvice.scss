@@ -56,6 +56,10 @@ article {
 	}
 }
 
+.error {
+    color: red;
+} 
+
 .fb-button {
 	@include fbButton();
 	float:left;
