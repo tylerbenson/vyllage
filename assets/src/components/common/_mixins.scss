@@ -27,7 +27,11 @@
 
 @mixin button($backgroundColor, $color){
 	font-size: 17px;
+	font-weight: inherit;
+	line-height: 18px;
 	font-family: 'Arimo', sans-serif;
+	text-transform: inherit;
+	letter-spacing: inherit;
 	color: $color;
 	background-color: $backgroundColor;
 	padding: 0 10px;
