@@ -33,6 +33,7 @@ public class UserServiceTest {
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("uno@gmail.com"));
+		Assert.assertFalse(service.getUser("uno@gmail.com").getPassword() == null);
 		Assert.assertTrue(service.userExists("dos@test.com"));
 		Assert.assertTrue(service.userExists("tres@yahoo.com"));
 	}
@@ -48,6 +49,7 @@ public class UserServiceTest {
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
+		Assert.assertFalse(service.getUser("uno@gmail.com").getPassword() == null);
 		Assert.assertTrue(service.userExists("cinco@test.com"));
 		Assert.assertTrue(service.userExists("seis@yahoo.com"));
 	}

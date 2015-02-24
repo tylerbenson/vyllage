@@ -4,17 +4,17 @@ import lombok.ToString;
 
 @ToString
 public class DocumentLink {
-	private String userName;
+	private Long userId;
 	private String generatedPassword;
 	private Long documentId;
 	private String documentType;
 
-	public String getUserName() {
-		return userName;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getGeneratedPassword() {

@@ -2,7 +2,7 @@ package login.service;
 
 import login.model.link.DocumentLink;
 import login.model.link.DocumentLinkRequest;
-import login.repository.LinkPasswordsRepository;
+import login.repository.UserCredentialsRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class DocumentLinkService {
 
 	@Autowired
-	private LinkPasswordsRepository linkRepository;
+	private UserCredentialsRepository linkRepository;
 	@Autowired
 	private UserService userService;
 
@@ -20,12 +20,14 @@ public class DocumentLinkService {
 		userService.createUser(linkRequest.getEmail());
 
 		DocumentLink doclink = new DocumentLink();
-		doclink.setUserName(linkRequest.getName());
+		doclink.setUserId(userService.getUser(linkRequest.getName())
+				.getUserId());
 		doclink.setGeneratedPassword(getRandomPassword());
 		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
 
-		linkRepository.create(doclink, linkRequest.getExpirationDate());
+		linkRepository.createDocumentLinkPassword(doclink,
+				linkRequest.getExpirationDate());
 
 		return doclink;
 	}

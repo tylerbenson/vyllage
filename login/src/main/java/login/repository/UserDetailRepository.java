@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import login.domain.tables.records.UsersRecord;
 import login.model.Authority;
+import login.model.User;
+import login.model.UserCredential;
 
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,6 +44,9 @@ public class UserDetailRepository implements UserDetailsManager {
 
 	@Autowired
 	private AuthorityRepository authorityRepository;
+
+	@Autowired
+	private UserCredentialsRepository credentialsRepository;
 
 	@Autowired
 	private DataSourceTransactionManager txManager;
@@ -68,9 +72,13 @@ public class UserDetailRepository implements UserDetailsManager {
 		List<Authority> authorities = authorityRepository
 				.getByUserName(username);
 
-		User user = new User(record.getUsername(), record.getPassword(),
-				record.getEnabled(), accountNonExpired, credentialsNonExpired,
-				accountNonLocked, authorities);
+		UserCredential credential = credentialsRepository.get(record
+				.getUserid());
+
+		User user = new User(record.getUserid(), record.getUsername(),
+				credential.getPassword(), record.getEnabled(),
+				accountNonExpired, credentialsNonExpired, accountNonLocked,
+				authorities);
 
 		logger.info(user.toString());
 		return user;
@@ -97,9 +105,11 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			UsersRecord newRecord = sql.newRecord(USERS);
 			newRecord.setUsername(user.getUsername());
-			newRecord.setPassword(getEncodedPassword(user));
 			newRecord.setEnabled(user.isEnabled());
 			newRecord.store();
+
+			credentialsRepository.save(newRecord.getUserid(),
+					user.getPassword());
 
 			for (GrantedAuthority grantedAuthority : authorities)
 				authorityRepository.create((Authority) grantedAuthority);
@@ -128,9 +138,10 @@ public class UserDetailRepository implements UserDetailsManager {
 			UsersRecord record = sql.fetchOne(USERS,
 					USERS.USERNAME.eq(user.getUsername()));
 
-			record.setPassword(getEncodedPassword(user));
 			record.setEnabled(user.isEnabled());
 			record.update();
+
+			credentialsRepository.save(record.getUserid(), user.getPassword());
 
 			authorityRepository.deleteByUserName(user.getUsername());
 
@@ -159,6 +170,10 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			UsersRecord record = sql.fetchOne(USERS,
 					USERS.USERNAME.eq(username));
+
+			long userId = record.getUserid();
+			credentialsRepository.delete(userId);
+
 			record.delete();
 
 		} catch (Exception e) {
@@ -174,8 +189,6 @@ public class UserDetailRepository implements UserDetailsManager {
 	public void changePassword(String oldPassword, String newPassword) {
 		Authentication currentUser = SecurityContextHolder.getContext()
 				.getAuthentication();
-		String encodedNewPassword = new BCryptPasswordEncoder()
-				.encode(newPassword);
 
 		if (currentUser == null) {
 			// This would indicate bad coding somewhere
@@ -199,9 +212,9 @@ public class UserDetailRepository implements UserDetailsManager {
 		}
 
 		logger.info("Changing password for user '" + username + "'");
-
-		sql.update(USERS).set(USERS.PASSWORD, encodedNewPassword)
-				.where(USERS.USERNAME.eq(username)).execute();
+		Long userId = this.loadUserByUsername(username).getUserId();
+		credentialsRepository.delete(userId);
+		credentialsRepository.save(userId, newPassword);
 
 		SecurityContextHolder.getContext().setAuthentication(
 				createNewAuthentication(currentUser, newPassword));
@@ -222,11 +235,12 @@ public class UserDetailRepository implements UserDetailsManager {
 		return sql
 				.fetch(USERS)
 				.stream()
-				.map((UsersRecord ur) -> new User(ur.getUsername(), ur
-						.getPassword(), ur.getEnabled(), accountNonExpired,
-						credentialsNonExpired, accountNonLocked,
-						authorityRepository.getByUserName(ur.getUsername())))
-				.collect(Collectors.toList());
+				.map((UsersRecord ur) -> new User(ur.getUserid(), ur
+						.getUsername(), credentialsRepository.get(
+						ur.getUserid()).getPassword(), ur.getEnabled(),
+						accountNonExpired, credentialsNonExpired,
+						accountNonLocked, authorityRepository.getByUserName(ur
+								.getUsername()))).collect(Collectors.toList());
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -241,9 +255,8 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		List collect = users
 				.stream()
-				.map(u -> sql.insertInto(USERS, USERS.USERNAME, USERS.PASSWORD,
-						USERS.ENABLED).values(u.getUsername(),
-						getEncodedPassword(u), enabled)
+				.map(u -> sql.insertInto(USERS, USERS.USERNAME, USERS.ENABLED)
+						.values(u.getUsername(), enabled)
 
 				).collect(Collectors.toList());
 
@@ -258,8 +271,17 @@ public class UserDetailRepository implements UserDetailsManager {
 		try {
 			sql.batch(collect).execute();
 
+			// hmm, well, we won't be inserting THAT many users...
+			for (User user : users) {
+				Long userId = sql.select().from(USERS)
+						.where(USERS.USERNAME.eq(user.getUsername()))
+						.fetchOne(USERS.USERID);
+				credentialsRepository
+						.save(new Long(userId), user.getPassword());
+			}
+
 		} catch (Exception e) {
-			logger.fine(e.toString());
+			logger.info(e.toString());
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
 			transaction.releaseSavepoint(savepoint);

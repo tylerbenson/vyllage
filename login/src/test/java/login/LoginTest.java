@@ -94,6 +94,8 @@ public class LoginTest {
 		assertEquals("User is different.", user, loadedUser);
 		assertTrue("Authorities not found.", loadedUser.getAuthorities()
 				.contains(auth));
+		Assert.assertTrue(new BCryptPasswordEncoder().matches("password",
+				loadedUser.getPassword()));
 	}
 
 	@Test

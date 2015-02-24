@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 
 import login.model.Authority;
 import login.model.BatchAccount;
+import login.model.User;
 import login.repository.AuthorityRepository;
 import login.repository.GroupRepository;
 import login.repository.UserDetailRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
