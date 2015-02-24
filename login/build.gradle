@@ -50,7 +50,8 @@ flyway {
 	url = "jdbc:h2:$buildDir/db/local"
 	user = 'sa'
 	password = ''
-	schemas = ['LOGIN']
+	schemas = [project.name.toUpperCase()]
+	locations = ["classpath:${project.name}/db/migration"]
 }
 
 flywayMigrate.inputs.dir 'src/main/resources/db/migrate'
@@ -73,11 +74,11 @@ jooq {
 			url = "jdbc:h2:$buildDir/db/local"
 			user = 'sa'
 			password = ''
-			schema = 'LOGIN'
+			schema = project.name.toUpperCase()
 		}
-		generator {
-			target {
-				packageName = 'login.domain'
+		generator { 
+			target { 
+				packageName = "${project.name}.domain"
 			}
 		}
 	}

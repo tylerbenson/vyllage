@@ -10,11 +10,11 @@ jar {
 dependencies {
 
 	compile 'com.h2database:h2'
-	compile 'org.flywaydb:flyway-core'
+	compile 'org.flywaydb:flyway-core:3.1'
 	compile 'org.jooq:jooq:3.5.0'
 	compile 'org.apache.commons:commons-email:1.3.3'
 
-	
+
 //    compile("org.springframework.boot:spring-boot-starter-security")
 //    compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-jdbc")
@@ -50,7 +50,8 @@ flyway {
 	url = "jdbc:h2:$buildDir/db/local"
 	user = 'sa'
 	password = ''
-	schemas = ['CONNECTIONS']
+	schemas = [project.name.toUpperCase()]
+	locations = ["classpath:${project.name}/db/migration"]
 }
 
 flywayMigrate.inputs.dir 'src/main/resources/db/migrate'
@@ -73,11 +74,11 @@ jooq {
 			url = "jdbc:h2:$buildDir/db/local"
 			user = 'sa'
 			password = ''
-			schema = 'CONNECTIONS'
+			schema = project.name.toUpperCase()
 		}
-		generator {
-			target {
-				packageName = 'connections.domain'
+		generator { 
+			target { 
+				packageName = "${project.name}.domain"
 			}
 		}
 	}
