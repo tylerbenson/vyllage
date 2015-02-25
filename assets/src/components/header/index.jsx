@@ -3,7 +3,7 @@ var React = require('react');
 var Menu = React.createClass({  
 
     signOut: function() {
-
+        window.location.pathname = "logout";
     },
 
     render: function() {
