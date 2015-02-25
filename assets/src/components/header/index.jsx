@@ -6,6 +6,10 @@ var Menu = React.createClass({
         window.location.pathname = "logout";
     },
 
+    account: function () {
+        window.location.pathname = "/account/1";
+    },
+
     render: function() {
         return (
             <div id="menu-container">
@@ -13,7 +17,7 @@ var Menu = React.createClass({
                 <div id="account-menu"> 
                     <ul className="account-menu">
                         <li>profile</li>
-                        <li>account</li>
+                        <li onClick={this.account}>account</li>
                         <li onClick={this.signOut}>sign out</li>
                     </ul>
                 </div>
@@ -39,11 +43,11 @@ var HeaderContainer = React.createClass({
             documentId;
         
         if(pathItems.length > 1) {
-            documentId = pathItems[1];
+            documentId = pathItems[pathItems.length-1];
         }
 
         if(documentId) {
-            widow.location.pathname = "resume/"+ documentId + "/ask-advice";
+            window.location.pathname = "resume/"+ documentId + "/ask-advice";
         }
 
     },
