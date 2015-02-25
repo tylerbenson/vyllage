@@ -6,6 +6,12 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'java'
 
 task checkNPM {
+    def skipNPM = System.env.GRADLE_SKIP_NPM == 'true'
+    if(skipNPM) {
+        System.setProperty("hasNPM", Boolean.toString(false))
+        return
+    }
+
     try {
         def result = project.exec {
             executable = "npm"
@@ -25,6 +31,7 @@ task npmClean(type:Exec) {
     commandLine 'npm', 'run', 'clean'
 }
 clean.finalizedBy npmClean
+npmClean.dependsOn checkNPM
 npmClean.onlyIf { "true".equals(System.getProperty('hasNPM')) }
 
 task npmInstall(type:Exec) {

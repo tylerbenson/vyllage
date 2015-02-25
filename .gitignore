@@ -45,7 +45,6 @@ build
 
 
 # WEB
-!assets/build/libs/assets.jar
 assets/.sass-cache
 assets/public
 
