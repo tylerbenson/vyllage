@@ -2,6 +2,10 @@ var React = require('react');
 
 var Menu = React.createClass({  
 
+    signOut: function() {
+
+    },
+
     render: function() {
         return (
             <div id="menu-container">
@@ -10,7 +14,7 @@ var Menu = React.createClass({
                     <ul className="account-menu">
                         <li>profile</li>
                         <li>account</li>
-                        <li>sign out</li>
+                        <li onClick={this.signOut}>sign out</li>
                     </ul>
                 </div>
             </div>
@@ -29,6 +33,20 @@ var HeaderContainer = React.createClass({
             menuContainer.style.display ='block'
         }
     },
+
+    askAdvise: function() {
+        var pathItems = window.location.pathname.split("/"),
+            documentId;
+        
+        if(pathItems.length > 1) {
+            documentId = pathItems[1];
+        }
+
+        if(documentId) {
+            widow.location.pathname = "resume/"+ documentId + "/ask-advice";
+        }
+
+    },
     
     render: function() {
         return (
@@ -41,7 +59,7 @@ var HeaderContainer = React.createClass({
                             <span className="u-pull-left header-username" id="account-name">
                                 <p onClick={this.handleClick}>nathan</p>
                             </span>
-                            <button className="u-pull-left ask-advice-btn">ask advice</button>
+                            <button className="u-pull-left ask-advice-btn" onClick={this.askAdvise}>ask advice</button>
                         </div>
                     </div>
                 </div>
