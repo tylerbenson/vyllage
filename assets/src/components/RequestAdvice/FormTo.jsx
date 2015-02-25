@@ -15,7 +15,6 @@ var FormTo = React.createClass({
   },
   updateRecipient: function (recipient) {
     var recipients = this.state.recipients;
-    console.log(recipients, this.state.selectedRecipient);
     if (this.state.selectedRecipient === null) {
       recipients = recipients.concat(recipient);
     } else {
@@ -25,8 +24,6 @@ var FormTo = React.createClass({
       recipients: recipients,
       selectedRecipient: null,
       recipient: {firstName: "", lastName: "", email: ""}
-    }, function () {
-      console.log(recipients, this.state.selectedRecipient);
     });
   },
   removeRecipient: function (index) {
@@ -39,13 +36,13 @@ var FormTo = React.createClass({
     });
   },
   selectRecipient: function (index) {
-    console.log(index)
     this.setState({
-      selectedRecipient: null,
+      selectedRecipient: index,
       recipient: this.state.recipients[index]
     });
   },
   render: function () {
+    console.log(this.state)
     return (
         <div className='content-part'>
           <p className="rqst-key-word one column">to:</p>

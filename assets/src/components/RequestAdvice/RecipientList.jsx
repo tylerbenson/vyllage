@@ -2,9 +2,11 @@ var React = require('react');
 
 var RecipentList = React.createClass({
   removeHandler: function (index, e) {
+    e.preventDefault();
     this.props.removeRecipient(index);
   },
   editHandler: function (index, e) {
+    e.preventDefault();
     this.props.selectRecipient(index);
   },
   render: function () {

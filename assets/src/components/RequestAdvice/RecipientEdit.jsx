@@ -12,7 +12,7 @@ var RecipientEdit = React.createClass({
     this.setState({
       recipient: nextProps.recipient,
       error: false
-    })
+    });
   },
   changeHandler: function (key, e) {
     e.preventDefault();
@@ -20,6 +20,7 @@ var RecipientEdit = React.createClass({
     recipient[key] = e.target.value
     this.setState({recipient: recipient});
   },
+
   updateHandler: function (e) {
     e.preventDefault();
     var recipient = this.state.recipient;
