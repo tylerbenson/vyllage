@@ -1,5 +1,5 @@
 var React = require('react');
-var RecipientAdd = require('./RecipientAdd');
+var RecipientEdit = require('./RecipientEdit');
 var RecipientList = require('./RecipientList');
 
 var FormTo = React.createClass({
@@ -8,25 +8,50 @@ var FormTo = React.createClass({
       recipients: [
         {"firstName": "Tyler", "lastName": "Benson", email: "tyler.benson@vyllage.com" },
         {"firstName": "Nathan", "lastName": "Benson", email: "nathan.benson@vyllage.com" }
-      ]
+      ],
+      selectedRecipient: null,
+      recipient: {firstName: "", lastName: "", email: ""}
     };
   },
-  addRecipient: function (recipient) {
-    var recipients = this.state.recipients.concat(recipient);
-    this.setState({recipients: recipients});
+  updateRecipient: function (recipient) {
+    var recipients = this.state.recipients;
+    console.log(recipients, this.state.selectedRecipient);
+    if (this.state.selectedRecipient === null) {
+      recipients = recipients.concat(recipient);
+    } else {
+      recipients[this.state.selectedRecipient] = recipient; 
+    }
+    this.setState({
+      recipients: recipients,
+      selectedRecipient: null,
+      recipient: {firstName: "", lastName: "", email: ""}
+    }, function () {
+      console.log(recipients, this.state.selectedRecipient);
+    });
   },
   removeRecipient: function (index) {
     var recipients = this.state.recipients;
     recipients.splice(index, 1);
-    this.setState({recipients: recipients});
+    this.setState({
+      recipients: recipients,
+      selectedRecipient: null,
+      recipient: {firstName: "", lastName: "", email: ""}
+    });
+  },
+  selectRecipient: function (index) {
+    console.log(index)
+    this.setState({
+      selectedRecipient: null,
+      recipient: this.state.recipients[index]
+    });
   },
   render: function () {
     return (
         <div className='content-part'>
           <p className="rqst-key-word one column">to:</p>
           <div className='nine columns'>
-             <RecipientAdd addRecipient={this.addRecipient} />
-             <RecipientList recipients={this.state.recipients} removeRecipient={this.removeRecipient} />
+            <RecipientEdit updateRecipient={this.updateRecipient} recipient={this.state.recipient}/>
+            <RecipientList recipients={this.state.recipients} removeRecipient={this.removeRecipient} selectRecipient={this.selectRecipient} />
           </div>
           <div className="two columns fb-button">
             <p className="small-text">ask your</p>
