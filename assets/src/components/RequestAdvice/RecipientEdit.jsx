@@ -20,16 +20,12 @@ var RecipientEdit = React.createClass({
     recipient[key] = e.target.value
     this.setState({recipient: recipient});
   },
-
   updateHandler: function (e) {
     e.preventDefault();
     var recipient = this.state.recipient;
     if (recipient.firstName && recipient.lastName && recipient.email) {
       this.props.updateRecipient(recipient);
-      this.setState({
-        // recipient: {firstName: "", lastName: "", email: ""},
-        error: false
-      });
+      this.setState({error: false});
     } else {
       this.setState({error: true});
     }

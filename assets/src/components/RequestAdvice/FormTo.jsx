@@ -42,7 +42,6 @@ var FormTo = React.createClass({
     });
   },
   render: function () {
-    console.log(this.state)
     return (
         <div className='content-part'>
           <p className="rqst-key-word one column">to:</p>
