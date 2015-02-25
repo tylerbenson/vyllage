@@ -8,9 +8,7 @@ jar {
 
 dependencies {
 	compile parent.javascriptProjects.findAll { it != project}
-	compile 'com.h2database:h2'
-	compile("org.flywaydb:flyway-core")
-	compile 'org.jooq:jooq:3.5.0'
+
 	//    compile("org.springframework.boot:spring-boot-starter-security")
 	//    compile("org.springframework.boot:spring-boot-starter-aop")
 	compile("org.springframework.boot:spring-boot-starter-jdbc")
@@ -27,60 +25,3 @@ dependencies {
 	testCompile("org.springframework.boot:spring-boot-starter-test")
 	testCompile 'com.jayway.restassured:spring-mock-mvc:2.4.0'
 }
-
-
-buildscript {
-	repositories {
-		jcenter()
-		mavenCentral()
-	}
-	dependencies {
-		classpath 'nu.studer:gradle-jooq-plugin:1.0.5'
-		classpath 'org.flywaydb:flyway-gradle-plugin:3.1'
-		classpath 'com.h2database:h2:1.4.185'
-		classpath 'org.jooq:jooq-codegen:3.5.0'
-	}
-}
-apply plugin: 'flyway'
-
-flyway {
-	url = "jdbc:h2:$buildDir/db/local"
-	user = 'sa'
-	password = ''
-	schemas = [project.name.toUpperCase()]
-	locations = ["classpath:${project.name}/db/migration"]
-}
-
-flywayMigrate.inputs.dir 'src/main/resources/db/migrate'
-flywayMigrate.outputs.dir "$buildDir/db"
-
-project.afterEvaluate {
-	flywayClean.dependsOn -= testClasses
-	flywayMigrate.dependsOn = [
-		processResources,
-		processTestResources
-	]
-}
-
-apply plugin: 'nu.studer.jooq'
-
-jooq {
-	h2(sourceSets.main) {
-		jdbc {
-			driver = 'org.h2.Driver'
-			url = "jdbc:h2:$buildDir/db/local"
-			user = 'sa'
-			password = ''
-			schema = project.name.toUpperCase()
-		}
-		generator { 
-			target { 
-				packageName = "${project.name}.domain"
-			}
-		}
-	}
-}
-
-generateH2JooqSchemaSource.inputs.dir "$buildDir/db"
-generateH2JooqSchemaSource.outputs.dir "$buildDir/generated-src"
-generateH2JooqSchemaSource.dependsOn flywayMigrate
