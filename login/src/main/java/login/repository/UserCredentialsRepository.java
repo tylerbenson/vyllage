@@ -4,6 +4,7 @@ import static login.domain.tables.UserCredentials.USER_CREDENTIALS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.logging.Logger;
 
 import login.domain.tables.records.UserCredentialsRecord;
 import login.model.UserCredential;
@@ -23,6 +24,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class UserCredentialsRepository {
+
+	private final Logger logger = Logger
+			.getLogger(UserCredentialsRepository.class.getName());
 
 	@Autowired
 	private DSLContext sql;
@@ -64,6 +68,8 @@ public class UserCredentialsRepository {
 	 */
 	public void createDocumentLinkPassword(DocumentLink linkRequest,
 			LocalDateTime expires) {
+		logger.info("Saving link credentials.");
+
 		UserCredentialsRecord newRecord = sql.newRecord(USER_CREDENTIALS);
 		newRecord.setPassword(getEncodedPassword(linkRequest
 				.getGeneratedPassword()));

@@ -2,6 +2,7 @@ package login.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import login.model.Authority;
@@ -10,14 +11,16 @@ import login.model.User;
 import login.repository.AuthorityRepository;
 import login.repository.GroupRepository;
 import login.repository.UserDetailRepository;
+import login.repository.UserNotFoundException;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 @Service
 public class UserService {
+	private final Logger logger = Logger.getLogger(UserService.class.getName());
+
 	@Autowired
 	private GroupRepository groupRepository;
 	@Autowired
@@ -92,23 +95,20 @@ public class UserService {
 			throw new IllegalArgumentException(
 					"Contains invalid email addresses.");
 
-		String randomPassword = getRandomPassword();
-
-		// TODO: call email service to email the user his account
-		// password if the user didn't exist.
-
 		if (!userRepository.userExists(userName)) {
-
-			User user = new User(userName, randomPassword,
+			logger.info("User does not exist, creating user...");
+			User user = new User(userName, userName, true, true, true, true,
 					authorityRepository
 							.getDefaultAuthoritiesForNewUser(userName));
 			userRepository.createUser(user);
 		}
-
-		return this.getUser(userName);
+		logger.info("User created, returning one");
+		userRepository.loadUserByUsername(userName);
+		logger.info("User created, returning twice");
+		return userRepository.loadUserByUsername(userName);
 	}
 
-	private String getRandomPassword() {
-		return RandomStringUtils.random(60);
+	public User getUser(Long userId) throws UserNotFoundException {
+		return userRepository.get(userId);
 	}
 }

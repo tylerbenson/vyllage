@@ -24,7 +24,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
@@ -54,23 +53,44 @@ public class UserDetailRepository implements UserDetailsManager {
 	public UserDetailRepository() {
 	}
 
+	public User get(Long userId) throws UserNotFoundException {
+		logger.info("looking for user with id " + userId);
+
+		UsersRecord record = sql.fetchOne(USERS, USERS.USERID.eq(userId));
+
+		if (record == null)
+			throw new UserNotFoundException("User with id '" + userId
+					+ "' not found.");
+
+		logger.info("Getting user data ");
+		User user = getUserData(record);
+
+		return user;
+
+	}
+
 	@Override
 	public User loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 
-		// TODO: eventually we'll need these fields in the database.
-		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
-
 		UsersRecord record = sql.fetchOne(USERS, USERS.USERNAME.eq(username));
-
-		logger.info("Looking for user " + username);
 
 		if (record == null)
 			throw new UsernameNotFoundException("User with username '"
 					+ username + "' not found.");
 
-		List<Authority> authorities = authorityRepository
-				.getByUserName(username);
+		User user = getUserData(record);
+
+		return user;
+	}
+
+	protected User getUserData(UsersRecord record) {
+
+		// TODO: eventually we'll need these fields in the database.
+		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
+
+		List<Authority> authorities = authorityRepository.getByUserName(record
+				.getUsername());
 
 		UserCredential credential = credentialsRepository.get(record
 				.getUserid());
@@ -79,8 +99,6 @@ public class UserDetailRepository implements UserDetailsManager {
 				credential.getPassword(), record.getEnabled(),
 				accountNonExpired, credentialsNonExpired, accountNonLocked,
 				authorities);
-
-		logger.info(user.toString());
 		return user;
 	}
 
@@ -302,7 +320,4 @@ public class UserDetailRepository implements UserDetailsManager {
 		return newAuthentication;
 	}
 
-	private String getEncodedPassword(UserDetails user) {
-		return new BCryptPasswordEncoder().encode(user.getPassword());
-	}
 }

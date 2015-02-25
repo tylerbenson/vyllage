@@ -2,7 +2,12 @@ package login.model.link;
 
 import java.time.LocalDateTime;
 
+import login.model.customDeserializer.LocalDateTimeDeserializer;
+import login.model.customDeserializer.LocalDateTimeSerializer;
 import lombok.ToString;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Request object to generate a link for a particular document for another user.
@@ -20,6 +25,8 @@ public class DocumentLinkRequest {
 
 	private String documentType;
 
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime expirationDate;
 
 	public String getName() {
