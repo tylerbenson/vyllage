@@ -43,7 +43,7 @@ gulp.task('copy-html', function () {
 
 gulp.task('copy', ['copy-images', 'copy-html']);
 
-gulp.task('styles', ['bower'], function () {
+gulp.task('styles', function () {
   return gulp.src(['src/**/*.scss'])
     .pipe(sass({
       includePaths: ['./src/components', 'bower_components'],
@@ -146,7 +146,7 @@ gulp.task('default', ['watch']);
 
 gulp.task('build', function () {
   // assets.jar needs to run last
-  runSequence(['react', 'copy', 'styles'], 'assets.jar');
+  runSequence('bower', ['react', 'copy', 'styles'], 'assets.jar');
 });
 
 
