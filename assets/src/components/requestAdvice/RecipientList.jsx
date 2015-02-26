@@ -2,15 +2,20 @@ var React = require('react');
 
 var RecipentList = React.createClass({
   removeHandler: function (index, e) {
+    e.preventDefault();
     this.props.removeRecipient(index);
+  },
+  editHandler: function (index, e) {
+    e.preventDefault();
+    this.props.selectRecipient(index);
   },
   render: function () {
     var nodes = this.props.recipients.map(function (recipient, index) {
       return (
-          <div className="rcpent">
-            <span key={index}>{recipient.firstName + " " + recipient.lastName}</span>
-            <a onClick={this.removeHandler.bind(this, index)}>x</a>
-          </div>
+        <div key={index} className="rcpent">
+          <p onClick={this.editHandler.bind(this, index)}>{recipient.firstName + " " + recipient.lastName}</p>
+          <a onClick={this.removeHandler.bind(this, index)}>x</a>
+        </div>
       );
     }.bind(this));
     return (
