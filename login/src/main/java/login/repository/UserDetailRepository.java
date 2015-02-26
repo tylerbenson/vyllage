@@ -142,6 +142,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			transaction.rollbackToSavepoint(savepoint);
 			logger.info("Transaction ERROR! " + transaction.isCompleted());
 		} finally {
+			txManager.commit(transaction);
 			logger.info("Transaction completed: " + transaction.isCompleted());
 			transaction.releaseSavepoint(savepoint);
 			logger.info("Transaction completed, flushing ");
