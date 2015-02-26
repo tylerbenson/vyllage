@@ -1,4 +1,4 @@
-package editor.controllers;
+package editor.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
