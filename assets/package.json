@@ -1,7 +1,7 @@
 {
   "name": "project-assets",
   "version": "0.0.0",
-  "description": "Static assets for project, bundled into a WebJar format by gradle.",
+  "description": "Static assets for project, bundled into a WebJar format.",
   "dependencies": {
     "lodash.assign": "^3.0.0",
     "lodash.pick": "^3.0.0",
@@ -46,11 +46,16 @@
   "scripts": {
     "httpd": "./node_modules/.bin/http-server public -o -c-1",
     "start": "./node_modules/.bin/http-server public -o -c-1",
-    "xprepublish": "bower install --config.interactive=false",
-    "clean": "gulp clean",
-    "build": "gulp build",
+    "xprepublish": "./node_modules/.bin/bower install --config.interactive=false",
+    "clean": "./node_modules/.bin/gulp clean",
+    "build": "./node_modules/.bin/gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "Commercial"
+  "repository": "https://github.com/natebenson/vyllage",
+  "license": "Commercial",
+  "private": true,
+  "engines": {
+    "node": "0.12.x",
+    "npm": "2.6.x"
+  }
 }

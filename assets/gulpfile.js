@@ -120,7 +120,7 @@ gulp.task('assets.jar', function () {
       if (path.extname === '.html') {
         path.dirname = "templates";
       } else {
-        path.dirname = "static";
+        path.dirname = "static/" + path.dirname;
       }
     }))
     .pipe(zip('assets.jar'))
