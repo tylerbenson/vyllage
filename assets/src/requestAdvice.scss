@@ -37,6 +37,7 @@ article {
 }
 
 .rcpent-add {
+  position: relative;
   margin-top: 40px; 
 }
 
@@ -55,6 +56,13 @@ article {
             padding: 10px;
         }
 	}
+}
+
+.rcpent-dropdown {
+
+}
+.rcpent-dropdown-header {
+   color: #ccc;
 }
 
 .error {
