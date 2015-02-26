@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @Configuration
@@ -24,12 +25,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/", "/css/**", "/images/**", "/javascript/**")
-				.permitAll().anyRequest().authenticated();
+				.permitAll();
 
-		http.formLogin().defaultSuccessUrl("/resume/")
-				.usernameParameter("email").loginPage("/login").permitAll();
+		http.authorizeRequests().anyRequest().authenticated();
 
-		http.logout().permitAll();
+		http.formLogin().loginPage("/login").usernameParameter("email")
+				.defaultSuccessUrl("/resume/").permitAll();
 
+		http.logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.permitAll();
 	}
 }

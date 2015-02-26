@@ -1,4 +1,4 @@
-package editor.controllers;
+package editor.controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import editor.controller.ResumeController;
 import editor.model.Document;
 import editor.model.DocumentSection;
 import editor.repository.ElementNotFoundException;

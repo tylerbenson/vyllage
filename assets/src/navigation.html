@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Navigation links</title>
+  <link rel="stylesheet" href="public/css/base.css" />
+
+  <style>
+  table {
+    width: 80%;
+    margin: 50px auto;
+    border: 1px solid;
+  }
+  tr th {
+    background-color: #6B6883;
+    ;
+    border-color: #e7e7e7;
+    color: #F5F5F5;
+  }
+  tr td {
+    background-color: #EFF0F4;
+    color: #23527c;
+  }
+  </style>
+</head>
+
+<body>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Link / button / page name (:section) </th>
+        <th>Beck end URL hash </th>
+        <th>Actual html page </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td> Home Page </td>
+        <td> /resume/1 </td>
+        <td> main.html</td>
+      </tr>
+      <tr>
+        <td>Profile menu item (:header)</td>
+        <td>/settings </td>
+        <td>settings.html </td>
+      </tr>
+      <tr>
+        <td>Account menu item (:header)</td>
+        <td> /account/1 </td>
+        <td> ???: </td>
+      </tr>
+      <tr>
+        <td>Sign out menu item(:header)</td>
+        <td>/logout </td>
+        <td> logout.html </td>
+      </tr>
+      <tr>
+        <td>Request Advise btn(:header)</td>
+        <td> resume/1/ask-advice </td>
+        <td>requestAdvice.html </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>
