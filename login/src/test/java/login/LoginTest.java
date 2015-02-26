@@ -96,6 +96,21 @@ public class LoginTest {
 				.contains(auth));
 		Assert.assertTrue(new BCryptPasswordEncoder().matches("password",
 				loadedUser.getPassword()));
+
+		GrantedAuthority auth2 = new Authority("TEST", "test2");
+
+		User user2 = new User("test2", "password", Arrays.asList(auth2));
+
+		repository.createUser(user2);
+
+		UserDetails loadedUser2 = repository.loadUserByUsername("test2");
+
+		assertNotNull("User is null.", loadedUser2);
+		assertEquals("User is different.", user2, loadedUser2);
+		assertTrue("Authorities not found.", loadedUser2.getAuthorities()
+				.contains(auth));
+		Assert.assertTrue(new BCryptPasswordEncoder().matches("password",
+				loadedUser.getPassword()));
 	}
 
 	@Test

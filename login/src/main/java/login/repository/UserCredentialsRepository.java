@@ -14,6 +14,7 @@ import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 /**
  * Handles links to documents. A user can generate links to share his documents
@@ -32,17 +33,27 @@ public class UserCredentialsRepository {
 	private DSLContext sql;
 
 	/**
-	 * Returns the permanent user credential, the one use to login, etc.
+	 * Returns the permanent user credential, the one used to login, etc.
 	 * 
 	 * @param id
 	 * @return
 	 */
 	public UserCredential get(Long userId) {
-		return sql.fetchOne(
+		Assert.notNull(userId);
+
+		UserCredential userCredential = sql.fetchOne(
 				USER_CREDENTIALS,
 				USER_CREDENTIALS.USERID.eq(userId).and(
 						USER_CREDENTIALS.EXPIRES.isNull())).into(
 				UserCredential.class);
+
+		logger.info("Loaded credentials " + userCredential);
+		// Assert.notNull(userCredential.getUserId(),
+		// "Loading credential failed! Userid is null!");
+		userCredential.setUserId(userId);
+		logger.info("Loaded credentials " + userCredential);
+
+		return userCredential;
 	}
 
 	/**
@@ -52,12 +63,16 @@ public class UserCredentialsRepository {
 	 * @param password
 	 */
 	public void save(Long userId, String password) {
+		Assert.notNull(userId);
+		Assert.notNull(password);
+		logger.info("Saving credentials " + userId + " " + password);
 		UserCredentialsRecord newRecord = sql.newRecord(USER_CREDENTIALS);
 		newRecord.setPassword(getEncodedPassword(password));
 		newRecord.setUserid(userId);
 		newRecord.setEnabled(true);
 		newRecord.setExpires(null);
-		newRecord.insert();
+		logger.info("User credentials returns  "
+				+ (newRecord.insert() == 1 ? true : false));
 	}
 
 	/**
@@ -76,7 +91,8 @@ public class UserCredentialsRepository {
 		newRecord.setEnabled(true);
 		newRecord.setUserid(linkRequest.getUserId());
 		newRecord.setExpires(Timestamp.valueOf(expires));
-		newRecord.insert();
+		logger.info("User credentials returns  "
+				+ (newRecord.insert() == 1 ? true : false));
 	}
 
 	/**
@@ -94,4 +110,14 @@ public class UserCredentialsRepository {
 		return new BCryptPasswordEncoder().encode(password);
 	}
 
+	public boolean exists(Long userId, String password) {
+		for (UserCredentialsRecord record : sql.fetch(USER_CREDENTIALS,
+				USER_CREDENTIALS.USERID.eq(userId))) {
+			if (new BCryptPasswordEncoder().matches(password,
+					record.getPassword()))
+				return true;
+		}
+
+		return false;
+	}
 }

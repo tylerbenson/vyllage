@@ -58,6 +58,10 @@ public class DocumentLinkController {
 
 		logger.info("looking for encoded user " + documentLink.getUserId());
 
+		if (!documentLinkService.exists(documentLink.getUserId(),
+				documentLink.getGeneratedPassword()))
+			throw new UserNotFoundException("Invalid link provided.");
+
 		User user = userService.getUser(documentLink.getUserId()); // this
 																	// fails!?
 		logger.info("found user " + user);
@@ -66,7 +70,7 @@ public class DocumentLinkController {
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
-		return documentLink.getDocumentType() + "/"
+		return "redirect:/" + documentLink.getDocumentType() + "/"
 				+ documentLink.getDocumentId();
 	}
 

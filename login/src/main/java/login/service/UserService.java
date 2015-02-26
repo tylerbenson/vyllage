@@ -102,10 +102,11 @@ public class UserService {
 							.getDefaultAuthoritiesForNewUser(userName));
 			userRepository.createUser(user);
 		}
-		logger.info("User created, returning one");
-		userRepository.loadUserByUsername(userName);
-		logger.info("User created, returning twice");
-		return userRepository.loadUserByUsername(userName);
+		User loadUserByUsername = userRepository.loadUserByUsername(userName);
+		logger.info("User created, returning user with id "
+				+ loadUserByUsername.getUserId());
+
+		return loadUserByUsername;
 	}
 
 	public User getUser(Long userId) throws UserNotFoundException {

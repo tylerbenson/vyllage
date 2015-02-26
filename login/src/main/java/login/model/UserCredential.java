@@ -6,7 +6,6 @@ import lombok.ToString;
 
 @ToString
 public class UserCredential {
-
 	private Long userId;
 	private String password;
 	private boolean enabled;

@@ -63,7 +63,10 @@ public class UserDetailRepository implements UserDetailsManager {
 					+ "' not found.");
 
 		logger.info("Getting user data ");
-		User user = getUserData(record);
+		// User user = getUserData(record);
+		User user = new User(record.getUserid(), record.getUsername(), "a",
+				record.getEnabled(), true, true, true,
+				authorityRepository.getByUserName(record.getUsername()));
 
 		return user;
 
@@ -126,6 +129,8 @@ public class UserDetailRepository implements UserDetailsManager {
 			newRecord.setEnabled(user.isEnabled());
 			newRecord.store();
 
+			Assert.notNull(newRecord.getUserid());
+
 			credentialsRepository.save(newRecord.getUserid(),
 					user.getPassword());
 
@@ -133,11 +138,16 @@ public class UserDetailRepository implements UserDetailsManager {
 				authorityRepository.create((Authority) grantedAuthority);
 
 		} catch (Exception e) {
-			logger.fine(e.toString());
+			logger.info(e.toString());
 			transaction.rollbackToSavepoint(savepoint);
+			logger.info("Transaction ERROR! " + transaction.isCompleted());
 		} finally {
+			logger.info("Transaction completed: " + transaction.isCompleted());
 			transaction.releaseSavepoint(savepoint);
+			logger.info("Transaction completed, flushing ");
+			transaction.flush();
 		}
+		logger.info("Transaction completed: " + transaction.isCompleted());
 
 	}
 
@@ -172,7 +182,7 @@ public class UserDetailRepository implements UserDetailsManager {
 		} finally {
 			transaction.releaseSavepoint(savepoint);
 		}
-
+		logger.info("Transaction completed: " + transaction.isCompleted());
 	}
 
 	@Override
@@ -200,7 +210,7 @@ public class UserDetailRepository implements UserDetailsManager {
 		} finally {
 			transaction.releaseSavepoint(savepoint);
 		}
-
+		logger.info("Transaction completed: " + transaction.isCompleted());
 	}
 
 	@Override
@@ -307,6 +317,7 @@ public class UserDetailRepository implements UserDetailsManager {
 		// sql.batchStore(userRecords).execute();
 		// logger.info("Stored all records.");
 		// this.getAll().forEach(System.out::println);
+		logger.info("Transaction completed: " + transaction.isCompleted());
 	}
 
 	protected Authentication createNewAuthentication(

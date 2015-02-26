@@ -27,14 +27,21 @@ public class DocumentLinkService {
 		logger.info("Creating user if it doesn't exist...");
 		User user = userService.createUser(linkRequest.getEmail());
 
+		logger.info("Link Credentials for " + user.getUserId() + " "
+				+ linkRepository.get(user.getUserId()));
+
 		DocumentLink doclink = new DocumentLink();
 		doclink.setUserId(user.getUserId());
 		doclink.setGeneratedPassword(getRandomPassword());
 		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
+
 		logger.info("Creating credentials for link...");
 		linkRepository.createDocumentLinkPassword(doclink,
 				linkRequest.getExpirationDate());
+
+		logger.info("Link Credentials for " + user.getUserId() + " "
+				+ linkRepository.get(user.getUserId()));
 
 		logger.info("Returning link");
 		return doclink;
@@ -42,5 +49,9 @@ public class DocumentLinkService {
 
 	private String getRandomPassword() {
 		return RandomStringUtils.random(60);
+	}
+
+	public boolean exists(Long userId, String generatedPassword) {
+		return linkRepository.exists(userId, generatedPassword);
 	}
 }
