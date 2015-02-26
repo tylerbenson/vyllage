@@ -17,6 +17,10 @@ var RecipientEdit = React.createClass({
       error: false
     });
   },
+  selectSuggestion: function (recipient, e) {
+    e.preventDefault();
+    this.setState({recipient: recipient});
+  },
   changeHandler: function (key, e) {
     e.preventDefault();
     var rect = e.target.getBoundingClientRect();
@@ -59,7 +63,7 @@ var RecipientEdit = React.createClass({
           <img src='images/accept.png' />
         </button> 
         {this.state.error? <p className='error'>Fill all fields</p> : null}
-        <Suggestions show={this.state.showSuggestions} position={this.state.position} />
+        <Suggestions show={this.state.showSuggestions} position={this.state.position} selectSuggestion={this.selectSuggestion} />
       </div>
     );
   }
