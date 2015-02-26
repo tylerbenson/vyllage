@@ -21,7 +21,8 @@ module.exports = {
   },
   resolve: {
     alias: {},
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
+    modulesDirectories: ["node_modules", "bower_components"]
   },
   plugins: [
     new CommonsChunkPlugin('base.js'),
