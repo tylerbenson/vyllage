@@ -47,9 +47,9 @@ public class UserCredentialsRepository {
 						USER_CREDENTIALS.EXPIRES.isNull())).into(
 				UserCredential.class);
 
-		logger.info("Loaded credentials " + userCredential);
-		// Assert.notNull(userCredential.getUserId(),
-		// "Loading credential failed! Userid is null!");
+		// logger.info("Loaded credentials " + userCredential);
+		Assert.notNull(userCredential.getUserId(),
+				"Loading credential failed! Userid is null!");
 		userCredential.setUserId(userId);
 		logger.info("Loaded credentials " + userCredential);
 
@@ -65,14 +65,11 @@ public class UserCredentialsRepository {
 	public void save(Long userId, String password) {
 		Assert.notNull(userId);
 		Assert.notNull(password);
-		logger.info("Saving credentials " + userId + " " + password);
 		UserCredentialsRecord newRecord = sql.newRecord(USER_CREDENTIALS);
 		newRecord.setPassword(getEncodedPassword(password));
 		newRecord.setUserid(userId);
 		newRecord.setEnabled(true);
 		newRecord.setExpires(null);
-		logger.info("User credentials returns  "
-				+ (newRecord.insert() == 1 ? true : false));
 	}
 
 	/**
@@ -83,16 +80,12 @@ public class UserCredentialsRepository {
 	 */
 	public void createDocumentLinkPassword(DocumentLink linkRequest,
 			LocalDateTime expires) {
-		logger.info("Saving link credentials.");
-
 		UserCredentialsRecord newRecord = sql.newRecord(USER_CREDENTIALS);
 		newRecord.setPassword(getEncodedPassword(linkRequest
 				.getGeneratedPassword()));
 		newRecord.setEnabled(true);
 		newRecord.setUserid(linkRequest.getUserId());
 		newRecord.setExpires(Timestamp.valueOf(expires));
-		logger.info("User credentials returns  "
-				+ (newRecord.insert() == 1 ? true : false));
 	}
 
 	/**
@@ -111,10 +104,10 @@ public class UserCredentialsRepository {
 	}
 
 	public boolean exists(Long userId, String password) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		for (UserCredentialsRecord record : sql.fetch(USER_CREDENTIALS,
 				USER_CREDENTIALS.USERID.eq(userId))) {
-			if (new BCryptPasswordEncoder().matches(password,
-					record.getPassword()))
+			if (encoder.matches(password, record.getPassword()))
 				return true;
 		}
 

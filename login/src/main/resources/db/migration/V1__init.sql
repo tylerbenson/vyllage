@@ -13,7 +13,7 @@ create table if not exists LOGIN.user_credentials(
   expires timestamp,
   constraint fk_passwords_users foreign key(userid) references LOGIN.users(userid));
  
---create unique index LOGIN.ix_username_password on LOGIN.user_credentials (userid, password);
+create unique index LOGIN.ix_username_password on LOGIN.user_credentials (userid, password);
   
 create table if not exists LOGIN.authorities (
 --create table if not exists authorities (

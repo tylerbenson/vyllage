@@ -56,15 +56,12 @@ public class DocumentLinkController {
 
 		DocumentLink documentLink = mapper.readValue(json, DocumentLink.class);
 
-		logger.info("looking for encoded user " + documentLink.getUserId());
-
 		if (!documentLinkService.exists(documentLink.getUserId(),
 				documentLink.getGeneratedPassword()))
 			throw new UserNotFoundException("Invalid link provided.");
 
-		User user = userService.getUser(documentLink.getUserId()); // this
-																	// fails!?
-		logger.info("found user " + user);
+		User user = userService.getUser(documentLink.getUserId());
+
 		Authentication auth = new UsernamePasswordAuthenticationToken(
 				user.getUsername(), user.getPassword(), user.getAuthorities());
 
@@ -80,20 +77,13 @@ public class DocumentLinkController {
 			@RequestBody DocumentLinkRequest linkRequest)
 			throws JsonProcessingException, UserNotFoundException {
 
-		logger.info("Creating link");
-
 		DocumentLink documentLink = documentLinkService.createLink(linkRequest);
-
-		logger.info("Link created, changing to json");
 
 		String json = mapper.writeValueAsString(documentLink);
 
-		logger.info("Link created, changing to Base64");
-
 		String safeString = Base64.getUrlEncoder().encodeToString(
 				json.getBytes());
-		User user = userService.getUser(documentLink.getUserId()); // this is ok
-		logger.info("Returning link");
+
 		return "/link/advice/" + safeString;
 	}
 }

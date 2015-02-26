@@ -143,13 +143,10 @@ public class UserDetailRepository implements UserDetailsManager {
 			logger.info("Transaction ERROR! " + transaction.isCompleted());
 		} finally {
 			txManager.commit(transaction);
-			logger.info("Transaction completed: " + transaction.isCompleted());
-			transaction.releaseSavepoint(savepoint);
-			logger.info("Transaction completed, flushing ");
-			transaction.flush();
-		}
-		logger.info("Transaction completed: " + transaction.isCompleted());
 
+			transaction.releaseSavepoint(savepoint);
+			logger.info("Transaction completed: " + transaction.isCompleted());
+		}
 	}
 
 	@Override
@@ -181,6 +178,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			logger.fine(e.toString());
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
+			txManager.commit(transaction);
 			transaction.releaseSavepoint(savepoint);
 		}
 		logger.info("Transaction completed: " + transaction.isCompleted());
@@ -314,6 +312,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
 			transaction.releaseSavepoint(savepoint);
+			txManager.commit(transaction);
 		}
 		// sql.batchStore(userRecords).execute();
 		// logger.info("Stored all records.");
