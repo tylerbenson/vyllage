@@ -7,6 +7,7 @@ var FreeformContainer = require('./components/freeform/container');
 var ArticleContent = require('./components/organization/article-content');
 var ArticleControlls =require('./components/freeform/article-controlls');
 var CommentsBlog = require('./components/freeform/comments-blog');
+var request = require('superagent');
 
 
 var MainData =[
@@ -107,9 +108,32 @@ var MainContainer = React.createClass({
     },
 
     componentDidMount : function() {
-        // ajax call will go here and fetch the whoole data
-        MainData.sort(compare);
-        this.setState({mainData: MainData});
+        var self = this, documentId,
+            pathItems = window.location.pathname.split("/");
+        
+        if(pathItems.length > 1) {
+            documentId = pathItems[pathItems.length-1];
+
+            request
+               .get('/resume/' + documentId + '/section')
+               .set('Accept', 'application/json')
+               .end(function(error, res) {
+
+                    if (res.ok) {
+                        if(res.body.length == 0) {
+                            // if data from server is empty , apply hardcoded data
+                            MainData.sort(compare);
+                            self.setState({mainData: MainData});
+                        } else {
+                            self.setState({mainData: res.body});
+                        }
+                    } else {
+                       alert( res.text );
+                   }             
+            });
+        } else {
+            // this case should not happen, throw error
+        }
     },
 
     componentDidUpdate: function() {
@@ -127,15 +151,32 @@ var MainContainer = React.createClass({
     },
 
     saveChanges: function (data) {
+        var self = this, documentId,
+            pathItems = window.location.pathname.split("/");
+        
+        if(pathItems.length > 1) {
+            documentId = pathItems[pathItems.length-1];
 
-        for(var i = 0; i < this.state.mainData.length; i++){
+            request
+                .post('/resume/' + documentId + '/section/' + data.sectionId +'')
+                .set('Accept', 'application/json')
+                .send(data)
+                .end(function(error, res) {
 
-            if(this.state.mainData[i].sectionId === data.sectionId){
+                    //if (res.ok) { commenting out the success check , since now server returns error 
+                        for(var i = 0; i < self.state.mainData.length; i++){
 
-                this.state.mainData[i] = data;
-                this.setState({mainData:   this.state.mainData});
-                return;
-            }
+                            if(self.state.mainData[i].sectionId === data.sectionId){
+
+                                self.state.mainData[i] = data;
+                                self.setState({mainData: self.state.mainData});
+                                return;
+                            }
+                        }
+                    // } else {
+                    //    alert( res.text );
+                    // }  
+                });
         }
     },
 
