@@ -1,0 +1,38 @@
+@import './components/common/variables';
+@import './components/common/mixins';
+
+section.container {
+
+	article { 
+
+		.add-comment {
+			width: 100%;
+			min-height: 100px;
+			font-size: 22px;
+			padding: 20px;
+			resize: none;
+		    overflow: hidden;
+			box-shadow: 0px 0px 8px #5a6b4b;
+		}
+
+		.share-advice-btn {
+			@include ask-advice-btn();
+			margin: 20px 20px 30px 20px;
+		}
+
+		.share-advice-btn:hover {
+			border: 1px solid #050404;
+			background-color: #414D36;
+		}
+
+		.article-content.experience {
+		    background-color:#ece7e4;
+		}
+	}
+}
+
+@import './components/header/header';
+@import './components/profile/profile';
+@import './components/common/common';
+@import './components/common/edit';
+@import './components/comments/comments';

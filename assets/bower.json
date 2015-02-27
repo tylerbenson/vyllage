@@ -1,0 +1,19 @@
+{
+  "name": "vyllage",
+  "version": "0.1.0",
+  "homepage": "https://github.com/natebenson/vyllage",
+  "authors": [],
+  "license": "Commercial",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize-scss": "~3.0.2",
+    "skeleton-scss": "*"
+  }
+}

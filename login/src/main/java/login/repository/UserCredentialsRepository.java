@@ -48,10 +48,9 @@ public class UserCredentialsRepository {
 				UserCredential.class);
 
 		// logger.info("Loaded credentials " + userCredential);
-		Assert.notNull(userCredential.getUserId(),
-				"Loading credential failed! Userid is null!");
+		// Assert.notNull(userCredential.getUserId(),
+		// "Loading credential failed! Userid is null!");
 		userCredential.setUserId(userId);
-		logger.info("Loaded credentials " + userCredential);
 
 		return userCredential;
 	}
@@ -70,6 +69,7 @@ public class UserCredentialsRepository {
 		newRecord.setUserid(userId);
 		newRecord.setEnabled(true);
 		newRecord.setExpires(null);
+		newRecord.insert();
 	}
 
 	/**
@@ -86,6 +86,7 @@ public class UserCredentialsRepository {
 		newRecord.setEnabled(true);
 		newRecord.setUserid(linkRequest.getUserId());
 		newRecord.setExpires(Timestamp.valueOf(expires));
+		newRecord.insert();
 	}
 
 	/**

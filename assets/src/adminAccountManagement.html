@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-	<title>admin - accounts</title>
-	<base href="." th:href="@{/}" />
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	
-	<link rel="stylesheet" href="css/libs/skeleton.css"/>
-	<link rel="stylesheet" href="css/libs/normalize.css"/>
-	<link rel="stylesheet" href="css/min/admin.min.css"/>
-	
-	<link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'/>
-	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'/>
-	
-</head>
-<body>
-	<section class="container">
-		<form action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post">
-					<div class="four columns">
-						<select th:field="*{group}">
-						  <option th:each="grp : ${groups}" 
-						          th:value="${grp.id}" 
-						          th:text="${grp.groupName}">Some group</option>
-						</select>
-						<div class="content-part">
-<!-- 							<input type="text" /> -->
-							<textarea rows="20" cols="80" th:field="*{emails}">
-							</textarea>
-						</div>
-						<br></br>
-						<div class="content-part">
-							<button name="batchAccounts" type="submit" class="send-btn">Submit</button>							
-						</div>
-					<br></br>
-						<div class="content-part">
-							<label th:if="${error != null}" th:text="${error}" style="color: red;"></label>
-						</div>
-					</div>
-			
-		</form>
-	
-	</section>
 
-	
+<head>
+  <title>admin - accounts</title>
+  <base href="." th:href="@{/}" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+
+  <link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+
+</head>
+
+<body>
+  <section class="container">
+    <form action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post">
+      <div class="four columns">
+        <select th:field="*{group}">
+          <option th:each="grp : ${groups}" th:value="${grp.id}" th:text="${grp.groupName}">Some group</option>
+        </select>
+        <div class="content-part">
+          <!-- 							<input type="text" /> -->
+          <textarea rows="20" cols="80" th:field="*{emails}">
+          </textarea>
+        </div>
+        <br></br>
+        <div class="content-part">
+          <button name="batchAccounts" type="submit" class="send-btn">Submit</button>
+        </div>
+        <br></br>
+        <div class="content-part">
+          <label th:if="${error != null}" th:text="${error}" style="color: red;"></label>
+        </div>
+      </div>
+
+    </form>
+
+  </section>
+
+
 </body>
+
 </html>

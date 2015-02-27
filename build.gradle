@@ -1,8 +1,9 @@
 def vJavaLang = '1.8'
 def gradleDir = "${rootProject.rootDir}/gradle"
 ext.javascriptProjects = [ project(':assets') ]
-ext.javaProjects = [ project(':login'), project(':editor'),  project(':site'), project(':connections') ]
-ext.bootProjects = [ project(':login'), project(':editor'),  project(':site'), project(':connections') ]
+ext.javaProjects = [ project(':login'), project(':editor'), project(':site'), project(':connections') ]
+ext.bootProjects = [ project(':login'), project(':editor'), project(':site'), project(':connections') ]
+ext.dbProjects = [ project(':login'), project(':editor'), project(':connections') ]
 
 wrapper.gradleVersion = '2.1'
 
@@ -12,9 +13,15 @@ buildscript {
     }
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+
+        classpath 'org.flywaydb:flyway-gradle-plugin:3.1'
+        classpath 'com.h2database:h2:1.4.185'
+        classpath 'org.jooq:jooq-codegen:3.5.0'
+        classpath 'nu.studer:gradle-jooq-plugin:1.0.5'
     }
 }
 
@@ -86,8 +93,62 @@ configure(bootProjects) {
             // Set PROJECT_HOME env variable to the root. This allows to register an additional
             // resource handler location and serve static resources directly from the template module during dev.
             // See ClientResourcesConfig
-            "-DPROJECT_HOME=${rootProject.rootDir}"
+            "-DPROJECT_HOME=${rootProject.rootDir}",
+			"-Dspring.profiles.active=${project.gradle.startParameter.systemPropertiesArgs['spring.profiles.active']}"
+
     ]
+}
+
+configure(dbProjects) {
+
+    dependencies {
+        compile 'com.h2database:h2'
+        compile 'org.flywaydb:flyway-core:3.1'
+        compile 'org.jooq:jooq:3.5.0'
+    }
+    apply plugin: 'flyway'
+
+    flyway {
+        url = "jdbc:h2:$buildDir/db/local"
+        user = 'sa'
+        password = ''
+        schemas = [project.name.toUpperCase()]
+        locations = ["classpath:${project.name}/db/migration"]
+    }
+
+    flywayMigrate.inputs.dir 'src/main/resources/db/migrate'
+    flywayMigrate.outputs.dir "$buildDir/db"
+
+    project.afterEvaluate {
+        flywayClean.dependsOn -= testClasses
+        flywayMigrate.dependsOn = [
+            processResources,
+            processTestResources
+        ]
+    }
+
+    apply plugin: 'nu.studer.jooq'
+
+    jooq {
+        h2(sourceSets.main) {
+            jdbc {
+                driver = 'org.h2.Driver'
+                url = "jdbc:h2:$buildDir/db/local"
+                user = 'sa'
+                password = ''
+                schema = project.name.toUpperCase()
+            }
+            generator {
+                target {
+                    packageName = "${project.name}.domain"
+                }
+            }
+        }
+    }
+
+    generateH2JooqSchemaSource.inputs.dir "$buildDir/db"
+    generateH2JooqSchemaSource.outputs.dir "$buildDir/generated-src"
+    generateH2JooqSchemaSource.dependsOn flywayMigrate
 }
 
 task stage(dependsOn: [':site:build'])

@@ -1,0 +1,6 @@
+root = true
+
+# 2 space indentation
+[*.{scss, js, jsx, html}]
+indent_style = space
+indent_size = 2

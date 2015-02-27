@@ -7,10 +7,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@ComponentScan(basePackageClasses = { login.Application.class,
-		editor.Application.class, Application.class })
-@PropertySource("classpath:/login/application.properties")
+@ComponentScan(basePackageClasses = { connections.Application.class,
+		editor.Application.class, login.Application.class, Application.class })
+@PropertySource("classpath:/connections/application.properties")
 @PropertySource("classpath:/editor/application.properties")
+@PropertySource("classpath:/login/application.properties")
 @EnableAutoConfiguration
 public class Application {
 
@@ -20,7 +21,7 @@ public class Application {
 			System.setProperty("spring.profiles.active", Profiles.DEBUG);
 			System.setProperty("spring.thymeleaf.prefix",
 					"file:///" + System.getProperty("PROJECT_HOME")
-							+ "/assets/src/");
+							+ "/assets/public/");
 		}
 		SpringApplication.run(Application.class, args);
 	}

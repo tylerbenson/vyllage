@@ -1,233 +1,255 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-	<title>Guest View</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Guest View</title>
+  <base href="." th:href="@{/}" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-	<link rel="stylesheet" href="css/libs/skeleton.min.css"/>
-	<link rel="stylesheet" href="css/libs/normalize.min.css"/>
-	<link rel="stylesheet" href="css/min/guestView.min.css"/>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/guestView.css" />
 
-	<link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'/>
-	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'/>
+  <link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
 
 </head>
+
 <body>
-<form action="" method="post">
-	<header>
-		<div class="container">
-			<div class="row">
-				<div class="twelve columns">
-					<div class="u-pull-left header-logo"></div>
-					<div class="u-pull-right header-profile">
-						<img class="u-pull-left header-profile-photo" alt="" src="images/empty-profile-icon.png" width="30" height="30"/>
-						<span class="u-pull-left header-username">guest</span>
-						<button class="u-pull-left ask-advice-btn">ask advice</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</header>
-	<section class="container">
+  <form action="" method="post">
+    <header>
+      <div class="container">
+        <div class="row">
+          <div class="twelve columns">
+            <div class="u-pull-left header-logo"></div>
+            <div class="u-pull-right header-profile">
+              <img class="u-pull-left header-profile-photo" alt="" src="images/empty-profile-icon.png" width="30" height="30" />
+              <span class="u-pull-left header-username">guest</span>
+              <button class="u-pull-left ask-advice-btn">ask advice</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <section class="container">
 
-		<article class="profile" id="profile">
-			<div class="row">
-				<div class="four columns">
-					<img class="profile-photo" src="images/profile-photo.png" width="115" height="115"/>
-				</div>
-				<div class="four columns article-content profile">
-					<div>
-						<div class="headline-container main">
-							<div class="paragraph">
-								<p class="headline">Nathan Benson</p>
-							</div>
-							<div class="paragraph">
-								<p class="tagline">Technology Enthusiast analyzing, building, and expanding solutions</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="four columns btns-grid">
-					<div class="share-contact-btns-container">
-						<button class="u-pull-left share">share</button>
-						<button class="u-pull-left contact">contact</button>
-					</div>
-				</div>
-			</div>
+      <article class="profile" id="profile">
+        <div class="row">
+          <div class="four columns">
+            <img class="profile-photo" src="images/profile-photo.png" width="115" height="115" />
+          </div>
+          <div class="four columns article-content profile">
+            <div>
+              <div class="headline-container main">
+                <div class="paragraph">
+                  <p class="headline">Nathan Benson</p>
+                </div>
+                <div class="paragraph">
+                  <p class="tagline">Technology Enthusiast analyzing, building, and expanding solutions</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="four columns btns-grid">
+            <div class="share-contact-btns-container">
+              <button class="u-pull-left share">share</button>
+              <button class="u-pull-left contact">contact</button>
+            </div>
+          </div>
+        </div>
 
-		</article>
+      </article>
 
-		<article class="career-goal">
-			<div class="row">
-				<div class="twelve columns">
+      <article class="career-goal">
+        <div class="row">
+          <div class="twelve columns">
 
-					<div><button class="article-btn"> career goal </button></div>
+            <div>
+              <button class="article-btn"> career goal </button>
+            </div>
 
-					<div class="article-content career-goal">
-						<div>
-							<div class="goal main">
-								<div class="paragraph">
-									<p class="goal-description">
-										I am a fervid promoter of creating solutions. The rush of working with a team to launch a project that solves critical
-										problems and intersects with technology is extremely satisfying. I have a successful track record, in leading projects,
-										growing new markets, and expanding existing opportunities. I’m an advocate for agile methodologies beyond the reach
-										of traditional project management settings, but into building and forming teams as well. I have experience in starting
-										businesses, helping others start theirs, and successfully building new territories and opportunities.
-									</p>
-								</div>
-							</div>
+            <div class="article-content career-goal">
+              <div>
+                <div class="goal main">
+                  <div class="paragraph">
+                    <p class="goal-description">
+                      I am a fervid promoter of creating solutions. The rush of working with a team to launch a project that solves critical problems
+                      and intersects with technology is extremely satisfying. I have a successful track record, in leading
+                      projects, growing new markets, and expanding existing opportunities. I’m an advocate for agile methodologies
+                      beyond the reach of traditional project management settings, but into building and forming teams as
+                      well. I have experience in starting businesses, helping others start theirs, and successfully building
+                      new territories and opportunities.
+                    </p>
+                  </div>
+                </div>
 
-							<div class="article-controll">
-								<div class="article-controll-btns edit">
-									<div class="article-controll-btn-wrapper">
-										<a href="" class="comments">comments</a>
-										<span class="suggestions-count count">2</span>
-									</div>
-								</div>
-							</div>
+                <div class="article-controll">
+                  <div class="article-controll-btns edit">
+                    <div class="article-controll-btn-wrapper">
+                      <a href="" class="comments">comments</a>
+                      <span class="suggestions-count count">2</span>
+                    </div>
+                  </div>
+                </div>
 
-							<div class="comment-divider"></div>
+                <div class="comment-divider"></div>
 
-							<div class="comments-content">
-								<div class="add-comment-block">
-									<textarea class="add-comment" placeholder="Share your advice..."></textarea>
-									<button class="u-pull-right share-advice-btn">share advice</button>
-								</div>
-								<div class="comment-divider"></div>
-								<div class="comment-list-block">
-									<div class="comment-person-info">
-										<img class="u-pull-left" src="images/comment-person.png" width="40" height="40"/>
-										<p class="u-pull-left name">Richard Zielke</p>
-										<p class="u-pull-left date">2 hrs ago</p>
-									</div>
-									<div class="comment-body">
-										<p class="">
-											I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
-										</p>
-									</div>
-									<div class="comment-ctrl">
-										<div class="u-pull-right">
-											<ul class="comment-ctrl-list">
-												<li class="comment-ctrl-btn"><a href="#">thank</a></li>
-												<li class="comment-ctrl-btn"><a href="#">hide</a></li>
-												<li class="comment-ctrl-btn"><a href="#">reply</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-								<div class="comment-divider"></div>
-								<div class="comment-list-block">
-									<div class="comment-person-info">
-										<img class="u-pull-left" src="images/comment-person1.png" width="40" height="40"/>
-										<p class="u-pull-left name">Edward Johnson</p>
-										<p class="u-pull-left date">8 hrs ago</p>
-									</div>
-									<div class="comment-body">
-										<p class="">
-											I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
-										</p>
-									</div>
-									<div class="comment-ctrl">
-										<div class="u-pull-right">
-											<ul class="comment-ctrl-list">
-												<li class="comment-ctrl-btn"><a href="#">thank</a></li>
-												<li class="comment-ctrl-btn"><a href="#">hide</a></li>
-												<li class="comment-ctrl-btn"><a href="#">reply</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</article>
+                <div class="comments-content">
+                  <div class="add-comment-block">
+                    <textarea class="add-comment" placeholder="Share your advice..."></textarea>
+                    <button class="u-pull-right share-advice-btn">share advice</button>
+                  </div>
+                  <div class="comment-divider"></div>
+                  <div class="comment-list-block">
+                    <div class="comment-person-info">
+                      <img class="u-pull-left" src="images/comment-person.png" width="40" height="40" />
+                      <p class="u-pull-left name">Richard Zielke</p>
+                      <p class="u-pull-left date">2 hrs ago</p>
+                    </div>
+                    <div class="comment-body">
+                      <p class="">
+                        I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
+                      </p>
+                    </div>
+                    <div class="comment-ctrl">
+                      <div class="u-pull-right">
+                        <ul class="comment-ctrl-list">
+                          <li class="comment-ctrl-btn"><a href="#">thank</a>
+                          </li>
+                          <li class="comment-ctrl-btn"><a href="#">hide</a>
+                          </li>
+                          <li class="comment-ctrl-btn"><a href="#">reply</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment-divider"></div>
+                  <div class="comment-list-block">
+                    <div class="comment-person-info">
+                      <img class="u-pull-left" src="images/comment-person1.png" width="40" height="40" />
+                      <p class="u-pull-left name">Edward Johnson</p>
+                      <p class="u-pull-left date">8 hrs ago</p>
+                    </div>
+                    <div class="comment-body">
+                      <p class="">
+                        I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
+                      </p>
+                    </div>
+                    <div class="comment-ctrl">
+                      <div class="u-pull-right">
+                        <ul class="comment-ctrl-list">
+                          <li class="comment-ctrl-btn"><a href="#">thank</a>
+                          </li>
+                          <li class="comment-ctrl-btn"><a href="#">hide</a>
+                          </li>
+                          <li class="comment-ctrl-btn"><a href="#">reply</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
 
-		<article class="experience">
-			<div class="row">
-				<div class="twelve columns">
-					<div>
-	                	<button class="article-btn"> experience </button>
-	            	</div>
+      <article class="experience">
+        <div class="row">
+          <div class="twelve columns">
+            <div>
+              <button class="article-btn"> experience </button>
+            </div>
 
-	            	<div class="article-content experience">
-	            		<div class="company main">
-		            		<div>
-		            			<br/>
-								<p class="company-name">DeVry Education Group</p>
-							</div>
-							<div class="company edit">
-			                    <textarea class="description_guest" name="description" cols="40" rows="15"> As a fortune 1000 company, DeVry Education Group is and a leadderser in technology and e-learning solutions. </textarea>
-			                </div>
-			                <div>
-								<div class="job main">
-									<p class="title"> Manager, Local Accounts </p>
-									<p class="start-date"> September 2010 - </p>
-									<p class="end-date"> current </p>
-									<p class="location"> Portland, Oregon </p>
-								</div>
-							</div>
-							<div class="job edit">
-			                    <div class="job edit">
-									<textarea class="responsibilities_guest" cols="40" rows="15">In opening the Oregon &amp; SW Washington territory, I was tasked with being the chief relationship builder at a local level, as well as project lead, to deploy DeVry’s corporate e-learning solutions for regional leaders and Fortune 1000 companies.Responsible for project implementation through working with C-level decision makers to diagnose employee development needs through the utilization of a needs assessment, and coordinated tailored e-learning solutions. Regularly conducted training workshops on topics such as time management and goal settings for managers and employees, for small and large audiences.Successfully opened the new role, and built it to a revenue position, cited as a primary channel for revenue growth for the Portland metro market.
-			                        </textarea>
-								</div>
-							</div>
-							<div class="edit">
-								<button class="save-btn">save</button>
-								<button class="cancel-btn">cancel</button>
-							</div>
-	            		</div>
+            <div class="article-content experience">
+              <div class="company main">
+                <div>
+                  <br/>
+                  <p class="company-name">DeVry Education Group</p>
+                </div>
+                <div class="company edit">
+                  <textarea class="description_guest" name="description" cols="40" rows="15"> As a fortune 1000 company, DeVry Education Group is and a leadderser in technology and e-learning solutions.
+                  </textarea>
+                </div>
+                <div>
+                  <div class="job main">
+                    <p class="title"> Manager, Local Accounts </p>
+                    <p class="start-date"> September 2010 - </p>
+                    <p class="end-date"> current </p>
+                    <p class="location"> Portland, Oregon </p>
+                  </div>
+                </div>
+                <div class="job edit">
+                  <div class="job edit">
+                    <textarea class="responsibilities_guest" cols="40" rows="15">In opening the Oregon &amp; SW Washington territory, I was tasked with being the chief relationship builder
+                      at a local level, as well as project lead, to deploy DeVry’s corporate e-learning solutions for regional
+                      leaders and Fortune 1000 companies.Responsible for project implementation through working with C-level
+                      decision makers to diagnose employee development needs through the utilization of a needs assessment,
+                      and coordinated tailored e-learning solutions. Regularly conducted training workshops on topics such
+                      as time management and goal settings for managers and employees, for small and large audiences.Successfully
+                      opened the new role, and built it to a revenue position, cited as a primary channel for revenue growth
+                      for the Portland metro market.
+                    </textarea>
+                  </div>
+                </div>
+                <div class="edit">
+                  <button class="save-btn">save</button>
+                  <button class="cancel-btn">cancel</button>
+                </div>
+              </div>
 
-	            		<div class="article-controll">
-							<div class="article-controll-btns edit">
-								<div class="article-controll-btn-wrapper">
-									<a href="" class="comments">comments</a>
-									<span class="suggestions-count count">1</span>
-								</div>
-							</div>
-						</div>
-					</div>
+              <div class="article-controll">
+                <div class="article-controll-btns edit">
+                  <div class="article-controll-btn-wrapper">
+                    <a href="" class="comments">comments</a>
+                    <span class="suggestions-count count">1</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-					<div class="comment-divider"></div>
+            <div class="comment-divider"></div>
 
-					<div class="comments-content">
-						<div class="add-comment-block">
-							<textarea class="add-comment" placeholder="Share your advice..."></textarea>
-							<button class="u-pull-right share-advice-btn">share advice</button>
-						</div>
-						<div class="comment-divider"></div>
-						<div class="comment-list-block">
-							<div class="comment-person-info">
-								<img class="u-pull-left" src="images/comment-person.png" width="40" height="40"/>
-								<p class="u-pull-left name">Richard Zielke</p>
-								<p class="u-pull-left date">2 hrs ago</p>
-							</div>
-							<div class="comment-body">
-								<p class="">
-									I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
-								</p>
-							</div>
-							<div class="comment-ctrl">
-								<div class="u-pull-right">
-									<ul class="comment-ctrl-list">
-										<li class="comment-ctrl-btn"><a href="#">thank</a></li>
-										<li class="comment-ctrl-btn"><a href="#">hide</a></li>
-										<li class="comment-ctrl-btn"><a href="#">reply</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-            	</div>
-			</div>
-			<div class="comment-divider"></div>
-        </article>
+            <div class="comments-content">
+              <div class="add-comment-block">
+                <textarea class="add-comment" placeholder="Share your advice..."></textarea>
+                <button class="u-pull-right share-advice-btn">share advice</button>
+              </div>
+              <div class="comment-divider"></div>
+              <div class="comment-list-block">
+                <div class="comment-person-info">
+                  <img class="u-pull-left" src="images/comment-person.png" width="40" height="40" />
+                  <p class="u-pull-left name">Richard Zielke</p>
+                  <p class="u-pull-left date">2 hrs ago</p>
+                </div>
+                <div class="comment-body">
+                  <p class="">
+                    I like what you are saying here about your experience with DeVry. You have done an excellent job of outlining your successes.
+                  </p>
+                </div>
+                <div class="comment-ctrl">
+                  <div class="u-pull-right">
+                    <ul class="comment-ctrl-list">
+                      <li class="comment-ctrl-btn"><a href="#">thank</a>
+                      </li>
+                      <li class="comment-ctrl-btn"><a href="#">hide</a>
+                      </li>
+                      <li class="comment-ctrl-btn"><a href="#">reply</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="comment-divider"></div>
+      </article>
 
-	</section>
-</form>
+    </section>
+  </form>
 
-<script type="text/javascript" src="javascript/utility.js"></script>
 </body>
+
 </html>

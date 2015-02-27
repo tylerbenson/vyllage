@@ -1,0 +1,124 @@
+@import './components/common/variables';
+@import './components/common/mixins';
+
+body {
+	background: url('../../images/background.jpg');
+
+	section {
+		margin-top: 30px;
+
+		.article-content:hover {
+
+			.main {
+				background: url(../../images/edit.png) no-repeat top right;
+
+				> p, > ul , > div.paragraph {
+					@include editParagraph();
+				}
+			}
+		}
+
+		article {
+
+			.nonEditable {
+				display: none;
+			}
+
+			.article-content {
+	  			// background-color:#ece7e4;
+	  		}
+
+	  	  	.add-more {
+	  			text-align:center;
+	   			font-size:20px;
+	   			color:#5f605f;
+	   			font-weight:bold;
+	   			margin-top: -30px;
+	  		}
+
+	  		.no-button {
+	  			padding-top: 52px;
+	  		}
+
+	  		.icon-wrapper {
+				cursor:pointer;
+
+	  			.icon {
+		  			float:right;
+		  			margin-top: -25px;
+		  		}
+
+		  		.icon.edit {
+		  			margin-right: -40px;
+		  		}
+		  		.icon.edit-reg{
+		  			margin: 5px -16px 0;
+		  		}
+	  		}
+
+	  		.icon-wrapper-reg {
+	  			float:left;
+	  			margin:43px 25px 0;
+	  		}
+
+	  		.ask-advice {
+	  			height: 75px;
+
+	  			.comments-text {
+	  				color: #4d322a;
+	  				font-size: 16px;
+	  				margin-top: 28px;
+	  			}
+
+	  			.ask-advice-btn {
+		  			@include ask-advice-btn();
+		  			margin: 20px;
+		  		}
+
+		  		.ask-advice-btn:hover {
+					border: 1px solid #050404;
+					background-color: #414D36;
+				}
+	  		}
+
+	  		.add-section  {
+				height: $add-more-block-height;
+	  		}
+	  	}
+
+	  	article.profile {
+
+  			.article-content {
+	  			background-color: $white;
+
+  				.editable, .buttons-container {
+					display: none;
+				}
+
+		  		.tagline-edit {
+					color: #a5a3a2;
+					float: left;
+				}
+
+				.headline-edit {
+					float: left;
+				}
+
+				.edit-icon {
+					cursor: pointer;
+				}
+
+				.edit {
+					display: none;
+				}
+			}
+	  	}
+	}
+}
+
+@import './components/header/header';
+@import './components/profile/profile';
+@import './components/common/common';
+@import './components/common/edit';
+@import './components/contact/shareInfo';
+

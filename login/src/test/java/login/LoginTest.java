@@ -61,7 +61,7 @@ public class LoginTest {
 		String newPassword = "newPassword";
 
 		User user = new User(userName, oldPassword,
-				Arrays.asList(new Authority("TEST", userName)));
+				Arrays.asList(new Authority("changePassword-TEST", userName)));
 
 		repository.createUser(user);
 

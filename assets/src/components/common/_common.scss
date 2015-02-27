@@ -1,0 +1,79 @@
+body {
+	background: url('../images/background.jpg');
+	font-family: 'pt-sans', sans-serif;
+
+	section.container {
+		margin-top: 30px;
+		width: $main-container-width;
+		min-width: $main-container-width;
+
+		article {
+			@include article-grid();
+
+			.main {
+				display: block;
+				padding-right: 20px;
+
+				> p {
+					display: inline;
+					border: 1px solid transparent;
+				}
+
+				> ul, > div.paragraph {
+				 	border: 1px solid transparent;
+				}
+			}
+
+			.article-btn {
+				@include article-btn();
+				margin-bottom: 20px;
+			}
+
+			.article-content {
+				padding: 1px 40px;
+			}
+
+			.article-divider {
+				width: 100%;
+				clear: both;
+				margin-bottom: 25px;
+				border-top: 1px solid #c5c3c2;
+			}
+
+			.comment-divider {
+				clear: both;
+				margin: 0 40px 40px 40px;
+				border-top: 1px solid #c5c3c2;
+			}
+
+			.divider {
+				border-top: 1px solid #c5c3c2;
+			}
+
+			.article-controll-btns {
+				float: right;
+				margin: 0 40px 6px 0;
+
+				a {
+					@include article-control-links();
+				}
+
+				.count {
+					@include countBtn();
+				}
+			}
+
+			.article-controll-btns.edit {
+				margin-bottom: 0px;
+			}
+
+			.article-controll-btn-wrapper {
+				@include article-controll-btn-wrapper();
+			}
+
+			.comments-content {
+				padding: 0 60px;
+			}
+		}
+	}
+}

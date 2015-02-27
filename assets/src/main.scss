@@ -1,0 +1,43 @@
+@import './components/common/variables';
+@import './components/common/mixins';
+
+body {
+
+	article {
+
+		.editable, .buttons-container {
+			display: none;
+		}
+
+		.article-content:hover {
+
+			.main {
+				background: url(../images/edit.png) no-repeat top right;
+
+				> p, > ul , > div.paragraph {
+					@include editParagraph();
+				}
+			}
+		}
+
+		.comments-content {
+			display: none;
+		}
+	}
+
+	article.info-sections {
+
+  		.info-blog.edit {
+  			display: none;
+  		}
+	}
+}
+
+@import './components/header/header';
+@import './components/profile/profile';
+@import './components/common/common';
+@import './components/common/edit';
+@import './components/contact/shareInfo';
+@import './components/comments/comments';
+
+

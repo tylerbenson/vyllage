@@ -1,60 +1,153 @@
-var gulp = require('gulp'),
-    sass = require('gulp-sass'),
-    prefix = require('gulp-autoprefixer'),
-    minifyCSS = require('gulp-minify-css'),
-    rename = require('gulp-rename'),
-    watch = require('gulp-watch'),
-    react = require('gulp-react'),
-    prettify = require('gulp-jsbeautifier'),
-    jshint = require('gulp-jshint'),
-    livereload = require('gulp-livereload'),
-    uglify = require('gulp-uglify'),
-    flatten = require('gulp-flatten');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var sass = require('gulp-sass');
+var prefix = require('gulp-autoprefixer');
+var minifyCSS = require('gulp-minify-css');
+var rename = require('gulp-rename');
+var watch = require('gulp-watch');
+var prettify = require('gulp-jsbeautifier');
+var jshint = require('gulp-jshint');
+var livereload = require('gulp-livereload');
+var uglify = require('gulp-uglify');
+var flatten = require('gulp-flatten');
+var webpack = require('webpack');
+var zip = require('gulp-zip');
+var del = require('del');
+var assign = require('lodash.assign');
+var runSequence = require('run-sequence');
+var bower = require('gulp-bower');
 
-gulp.task('styles', function() {
+var path = require('path');
 
-  return gulp.src('src/components/**/*.scss')
-    .pipe(sass({ includePaths: ['./src/components'], errLogToConsole: true, outputStyle: 'expanded' }))
+gulp.task('clean', function () {
+  del(['./public', './build'], function (err) {
+    console.log('cleaned build directories')
+  })
+});
+
+gulp.task('bower', function () {
+  return bower({
+    'cmd': 'update'
+  })
+});
+
+gulp.task('copy-images', function () {
+  return gulp.src(['src/images/*'])
+    .pipe(gulp.dest('public/images'));
+});
+
+gulp.task('copy-html', function () {
+  return gulp.src(['src/*.html'])
+    .pipe(gulp.dest('public'));
+});
+
+gulp.task('copy', ['copy-images', 'copy-html']);
+
+gulp.task('styles', ['bower'], function () {
+  return gulp.src(['src/**/*.scss'])
+    .pipe(sass({
+      includePaths: ['./src/components', 'bower_components'],
+      errLogToConsole: true,
+      outputStyle: 'expanded'
+    }))
     .pipe(flatten())
-    .pipe(gulp.dest('src/css'));
+    .pipe(gulp.dest('public/css'))
 });
 
-gulp.task('minify-css', ['styles'], function() {
+// gulp.task('minify-css', ['styles'], function() {
+//     return gulp.src(['src/css/*.css', '!src/css/libs/*.css'])
+//         .pipe(minifyCSS({keepBreaks:false}))
+//         .pipe(rename(function (path) {
+//             path.extname = ".min.css"
+//         })).pipe(flatten())
+//         .pipe(gulp.dest('src/css/min'))
+//         .pipe(livereload());
+// });
 
-    return gulp.src(['src/css/*.css', '!src/css/libs/*.css'])
-        .pipe(minifyCSS({keepBreaks:false}))
-        .pipe(rename(function (path) {
-            path.extname = ".min.css"
-        })).pipe(flatten())
-        .pipe(gulp.dest('src/css/min'))
-        .pipe(livereload());
-});
-
-gulp.task('prettify-html', function() {
+gulp.task('prettify-html', function () {
   return gulp.src('src/*.html')
-    .pipe(prettify({indentSize: 4}))
+    .pipe(prettify({
+      html: {
+        braceStyle: "collapse",
+        indentChar: " ",
+        indentScripts: "keep",
+        indentSize: 2,
+        maxPreserveNewlines: 5,
+        preserveNewlines: true,
+        unformatted: ["a", "sub", "sup", "b", "i", "u"],
+        wrapLineLength: 120
+      }
+    }))
     .pipe(gulp.dest('src/'))
 });
 
-gulp.task('react', function () {
-    return gulp.src('src/components/**/*.jsx')
-        .pipe(react())
-        .pipe(flatten())
-        .pipe(gulp.dest('src/javascript'));
+gulp.task('prettify-js', function () {
+  return gulp.src(['./*.json', './*.js'])
+    .pipe(prettify({
+      js: {
+        indentChar: " ",
+        indentLevel: 0,
+        indentSize: 2,
+        jslintHappy: true,
+        wrapLineLength: 120
+      }
+    }))
+    .pipe(gulp.dest('.'))
 });
 
-gulp.task('lint', function() {
-  return gulp.src('src/javascript/*.js')
+gulp.task('react', function (callback) {
+  return webpack(require('./webpack.config.js'), function (err, stats) {
+    if (err) {
+      throw new gutil.PluginError("webpack:build", err);
+    }
+    gutil.log("[webpack:build]", stats.toString({
+      colors: true
+    }));
+    callback();
+  })
+});
+
+gulp.task('lint', function () {
+  return gulp.src('src/**/*.js')
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
 
-gulp.task('watch', function() {
-    gulp.watch(['src/components/**/*.scss', 'src/components/**/*.jsx'], ['styles', 'minify-css', 'react']);
+// Gulp tasks to build assets.jar
+gulp.task('assets.jar', function () {
+  gulp.src('./public/**/*')
+    .pipe(rename(function (path) {
+      if (path.extname === '.html') {
+        path.dirname = "templates";
+      } else {
+        path.dirname = "static/" + path.dirname;
+      }
+    }))
+    .pipe(zip('assets.jar'))
+    .pipe(gulp.dest('build/libs'));
+})
+
+gulp.task('watch', ['build'], function () {
+  gulp.watch(['src/**/*.scss'], function () {
+    runSequence('styles', 'assets.jar');
+  });
+  gulp.watch(['src/**/*.jsx'], function () {
+    runSequence('react', 'assets.jar');
+  });
+  gulp.watch(['src/*.html', 'src/images/*'], function () {
+    runSequence('prettify-html', 'copy', 'assets.jar');
+  });
+  gulp.watch(['./*.js', './*.json'], function () {
+    runSequence('prettify-js');
+  });
 });
 
 gulp.task('default', ['watch']);
-gulp.task('build', ['styles', 'minify-css']);
+
+gulp.task('build', function () {
+  // assets.jar needs to run last
+  runSequence(['react', 'copy', 'styles'], 'assets.jar');
+});
 
 
 // from https://github.com/spring-io/sagan/blob/master/sagan-client/gulpfile.js
@@ -118,4 +211,3 @@ gulp.task('build', ['styles', 'minify-css']);
 //})
 //
 //gulp.task('build', ['minify-css', 'build-modules', 'copy-assets', 'bower-files'], function(){ });
-

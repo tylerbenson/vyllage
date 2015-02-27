@@ -1,191 +1,197 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-	<title>settings</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	
-	<link rel="stylesheet" href="css/libs/skeleton.min.css"/>
-	<link rel="stylesheet" href="css/libs/normalize.min.css"/>
-	<link rel="stylesheet" href="css/min/settings.min.css"/>
-	
-	<link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'/>
-	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'/>
-	
+  <title>settings</title>
+  <base href="." th:href="@{/}" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/settings.css" />
+
+  <link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+
 </head>
+
 <body>
-	<header>
-		<div class="container">
-			<div class="row">
-				<div class="twelve columns">
-					<div class="u-pull-left header-logo"></div>
-					<div class="u-pull-right header-profile">
-						<img class="u-pull-left header-profile-photo" alt="" src="images/profile-photo.png"/>
-						<span class="u-pull-left header-username" id="account-name">nathan</span>
-						<button class="u-pull-left ask-advice-btn">ask advice</button>
-					</div>
-				</div>
-			</div>
-			<div id="menu-container">
-				<div id='triangle-up'> </div>
-				<div id="account-menu">			
-				</div>
-			</div>
-		</div>
-	</header>
-	
-    <section class="container" id="container">
-		<form action=""  method="post">
-	    	<article class="settings-container">
-	    		<div class="row">
-	   				<div class="five columns"> 
-	   					<div class="settings" th:object="${accountSettings}">
-	    					<div class="topper"><p>settings</p></div>
+  <header>
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <div class="u-pull-left header-logo"></div>
+          <div class="u-pull-right header-profile">
+            <img class="u-pull-left header-profile-photo" alt="" src="images/profile-photo.png" />
+            <span class="u-pull-left header-username" id="account-name">nathan</span>
+            <button class="u-pull-left ask-advice-btn">ask advice</button>
+          </div>
+        </div>
+      </div>
+      <div id="menu-container">
+        <div id='triangle-up'> </div>
+        <div id="account-menu">
+        </div>
+      </div>
+    </div>
+  </header>
 
-	    					<div class="profile-row">
-	    						<div class="u-pull-left photo-set"> 
-			    					<img class="u-pull-left header-profile-photo" src="images/profile-photo.png" width="50" height="50"/>
-			    					<p class="update-label"> change</p>
-			    				</div>
-			    				<div class="u-pull-left profile-info-set">	
-			    					<p th:text="*{name}" class="name"> Static Nathan Benson </p>
-			    					<p th:text="'Member since: ' +  *{#strings.capitalize(#strings.toLowerCase(memberSince.getMonth()))} + '. ' + *{memberSince.getDayOfMonth()} + ', ' + *{memberSince.getYear()}" class="member-set"> Member since: Jan. 1, 2014</p>
-<!-- 			    					<p th:text="'Member since: ' ${#dates.format(accountSettings.memberSince, 'dd/MMM/yyyy')}" class="member-set"> Member since: Jan. 1, 2014</p> -->
-			    				</div>
-	    					</div>
+  <section class="container" id="container">
+    <form action="" method="post">
+      <article class="settings-container">
+        <div class="row">
+          <div class="five columns">
+            <div class="settings" th:object="${accountSettings}">
+              <div class="topper">
+                <p>settings</p>
+              </div>
 
-	    					<div class="settings-row">
-	    						<div class="status-info u-pull-left">
-									<p class="info-label"> status: </p>
-									<p th:text="*{status}" class="label-value"> student </p>
-								</div>
-								<p class="update-label">update</p>
-	    					</div>
+              <div class="profile-row">
+                <div class="u-pull-left photo-set">
+                  <img class="u-pull-left header-profile-photo" src="images/profile-photo.png" width="50" height="50" />
+                  <p class="update-label"> change</p>
+                </div>
+                <div class="u-pull-left profile-info-set">
+                  <p th:text="*{name}" class="name"> Static Nathan Benson </p>
+                  <p th:text="'Member since: ' +  *{#strings.capitalize(#strings.toLowerCase(memberSince.getMonth()))} + '. ' + *{memberSince.getDayOfMonth()} + ', ' + *{memberSince.getYear()}"
+                  class="member-set"> Member since: Jan. 1, 2014</p>
+                  <!-- 			    					<p th:text="'Member since: ' ${#dates.format(accountSettings.memberSince, 'dd/MMM/yyyy')}" class="member-set"> Member since: Jan. 1, 2014</p> -->
+                </div>
+              </div>
 
-	    					<div class="settings-row greyed-background">
-	    						<div class="graduation-info u-pull-left">
-									<p class="info-label"> graduation date: </p>
-									<p th:text="*{graduationDate}" class="label-value"> Aug. 1, 2014 </p>
-								</div>
-								<p class="update-label">update</p>
-	    					</div>
-	    					
-	    					<div class="settings-row ">
-	    						<div class="graduation-info u-pull-left">
-									<p class="info-label"> share links </p>
-								</div>
-								<p class="update-label">reset all</p>
-	    					</div>
+              <div class="settings-row">
+                <div class="status-info u-pull-left">
+                  <p class="info-label"> status: </p>
+                  <p th:text="*{status}" class="label-value"> student </p>
+                </div>
+                <p class="update-label">update</p>
+              </div>
 
-	    					<div class="settings-row greyed-background">
-	    						<div class="graduation-info u-pull-left">
-									<p class="info-label"> visibility: </p>
-									<p th:text="*{#strings.capitalize(visibility)}" class="label-value"> no one </p>
-								</div>
-								<p class="update-label">change</p>
-	    					</div>
+              <div class="settings-row greyed-background">
+                <div class="graduation-info u-pull-left">
+                  <p class="info-label"> graduation date: </p>
+                  <p th:text="*{graduationDate}" class="label-value"> Aug. 1, 2014 </p>
+                </div>
+                <p class="update-label">update</p>
+              </div>
 
-	    					<div class="settings-row ">
-	    						<div class="graduation-info u-pull-left">
-									<p class="info-label">password </p>
-								</div>
-								<p class="change add-change">change</p>
-	    					</div>
+              <div class="settings-row ">
+                <div class="graduation-info u-pull-left">
+                  <p class="info-label"> share links </p>
+                </div>
+                <p class="update-label">reset all</p>
+              </div>
 
-    						<div class="settings-row">
-	    						<div class="graduation-info u-pull-left">
-									<p class="info-label"> primary email address </p>
-									<p class="update-label add">change/add</p>
-								</div>
-								<p class="mail" th:text="*{email}">nben888@gmail.com</p>
-	    					</div>
+              <div class="settings-row greyed-background">
+                <div class="graduation-info u-pull-left">
+                  <p class="info-label"> visibility: </p>
+                  <p th:text="*{#strings.capitalize(visibility)}" class="label-value"> no one </p>
+                </div>
+                <p class="update-label">change</p>
+              </div>
 
-	    					<div class="settings-row">
-	    						<div class="graduation-info u-pull-left">
-									<p class="info-label">email updates </p>
-								</div>
-								<p class="change">change</p>
-	    					</div>
-	    					<div class="settings-row">
-	    						<div class="graduation-info u-pull-left last-update">
-									<p class="last-update">last update: </p>
-									<p th:text="*{#strings.capitalize(#strings.toLowerCase(lastUpdate.getMonth()))} + '. ' + *{lastUpdate.getDayOfMonth()} + ', ' + *{lastUpdate.getYear()}" class="last-update"> Jan. 1, 2014 </p>
-								</div>
-								<p class="update last-update">delete account</p>
-	    					</div>
-	    				</div>
-	    			</div>  
+              <div class="settings-row ">
+                <div class="graduation-info u-pull-left">
+                  <p class="info-label">password </p>
+                </div>
+                <p class="change add-change">change</p>
+              </div>
+
+              <div class="settings-row">
+                <div class="graduation-info u-pull-left">
+                  <p class="info-label"> primary email address </p>
+                  <p class="update-label add">change/add</p>
+                </div>
+                <p class="mail" th:text="*{email}">nben888@gmail.com</p>
+              </div>
+
+              <div class="settings-row">
+                <div class="graduation-info u-pull-left">
+                  <p class="info-label">email updates </p>
+                </div>
+                <p class="change">change</p>
+              </div>
+              <div class="settings-row">
+                <div class="graduation-info u-pull-left last-update">
+                  <p class="last-update">last update: </p>
+                  <p th:text="*{#strings.capitalize(#strings.toLowerCase(lastUpdate.getMonth()))} + '. ' + *{lastUpdate.getDayOfMonth()} + ', ' + *{lastUpdate.getYear()}"
+                  class="last-update"> Jan. 1, 2014 </p>
+                </div>
+                <p class="update last-update">delete account</p>
+              </div>
+            </div>
+          </div>
 
 
-	    		    <div  class="seven columns notif-grid"> 
-	    				<div  class="settings-notif">
-			    			<div  class="topper"><p>notifications</p></div>
-			    			<th:block th:each="notif : ${accountSettings.notifications}">
-			    				<div th:if="${notif.userName != null}" class="notification-row">
-				    				<p th:text="${notif.userName} + ' gaves you a suggestion'" class="ntfcation"> John Smith requests your advice</p>
-				    				<p class="view"> view</p>
-				    				<p class="time">1 hour ago</p> 
-			    				</div>
-			    				<div th:if="${notif.userName == null}" class="notification-row">
-				    				<p th:text="'you have ' + ${notif.suggestions.size()} + ' pending suggestions'" class="ntfcation"> you have 3 pending suggestions</p>
-				    				<p class="view"> view</p>
-				    				<p class="time">1 hour ago</p> 
-			    				</div>
-			    			</th:block>
-			    			<th:block th:remove="all"> 
-			    			<div class="notification-row">
-			    				<p class="ntfcation"> you have 3 pending suggestions</p>
-			    				<p class="view"> view</p>
-			    				<p class="time">1 hour ago</p> 
-			    			</div>
-			    			<div class="divider"> </div>
-			    			<div class="notification-row">
-			    				<p class="ntfcation"> John Smith requests your advice</p>
-			    				<p class="view"> view</p>
-			    				<p class="time">8 hour ago</p> 
-			    			</div>
-			    			<div class="divider"> </div>
-			    			<div class="notification-row">
-			    				<p class="ntfcation"> you have 2 pending suggestions</p>
-			    				<p class="view"> view</p>
-			    				<p class="time">3 days ago</p>
-			    			</div>
-			    			<div class="divider"> </div>
-			    			<div class="notification-row">
-			    				<p class="ntfcation"> Jenny Jones requests your advice</p>
-			    				<p class="view">view</p>
-			    				<p class="time">5 days ago</p> 
-			    			</div>
-			    			<div class="divider"> </div>
-			    			<div class="notification-row">
-			    				<p class="ntfcation"> Jerry Fields gaves you a suggestion</p>
-			    				<p class="view"> view</p>
-			    				<p class="time">7 days ago</p> 
-			    			</div>
-			    			<div class=" divider"> </div>
-			    			<div class="notification-row">
-			    				<p class="ntfcation">you have 1 pending suggestions</p>
-			    				<p class="view"> view</p>
-			    				<p class="time">9 days ago</p> 
-			    			</div>
-			    			<div class="divider"> </div>
-			    			<div class="notification-row">
-			    				<p class="ntfcation">you have 1 pending suggestions</p>
-			    				<p class="view"> view</p>
-			    				<p class="time">10 days ago</p> 
-			    			</div>
-			    			<div class="more">
-			    			<p class="view-more"> view more</p>
-			    			</div>
-			    			</th:block>
-			    		</div>
-	    			</div>  			
-	    		</div>
-	    	</article>
-    	</form>
-    </section>
-
-    <script type="text/javascript" src="javascript/lib/react.min.js"></script>
-    <script type="text/javascript" src="javascript/account-menu.js"></script>
+          <div class="seven columns notif-grid">
+            <div class="settings-notif">
+              <div class="topper">
+                <p>notifications</p>
+              </div>
+              <th:block th:each="notif : ${accountSettings.notifications}">
+                <div th:if="${notif.userName != null}" class="notification-row">
+                  <p th:text="${notif.userName} + ' gaves you a suggestion'" class="ntfcation"> John Smith requests your advice</p>
+                  <p class="view"> view</p>
+                  <p class="time">1 hour ago</p>
+                </div>
+                <div th:if="${notif.userName == null}" class="notification-row">
+                  <p th:text="'you have ' + ${notif.suggestions.size()} + ' pending suggestions'" class="ntfcation"> you have 3 pending suggestions</p>
+                  <p class="view"> view</p>
+                  <p class="time">1 hour ago</p>
+                </div>
+              </th:block>
+              <th:block th:remove="all">
+                <div class="notification-row">
+                  <p class="ntfcation"> you have 3 pending suggestions</p>
+                  <p class="view"> view</p>
+                  <p class="time">1 hour ago</p>
+                </div>
+                <div class="divider"> </div>
+                <div class="notification-row">
+                  <p class="ntfcation"> John Smith requests your advice</p>
+                  <p class="view"> view</p>
+                  <p class="time">8 hour ago</p>
+                </div>
+                <div class="divider"> </div>
+                <div class="notification-row">
+                  <p class="ntfcation"> you have 2 pending suggestions</p>
+                  <p class="view"> view</p>
+                  <p class="time">3 days ago</p>
+                </div>
+                <div class="divider"> </div>
+                <div class="notification-row">
+                  <p class="ntfcation"> Jenny Jones requests your advice</p>
+                  <p class="view">view</p>
+                  <p class="time">5 days ago</p>
+                </div>
+                <div class="divider"> </div>
+                <div class="notification-row">
+                  <p class="ntfcation"> Jerry Fields gaves you a suggestion</p>
+                  <p class="view"> view</p>
+                  <p class="time">7 days ago</p>
+                </div>
+                <div class=" divider"> </div>
+                <div class="notification-row">
+                  <p class="ntfcation">you have 1 pending suggestions</p>
+                  <p class="view"> view</p>
+                  <p class="time">9 days ago</p>
+                </div>
+                <div class="divider"> </div>
+                <div class="notification-row">
+                  <p class="ntfcation">you have 1 pending suggestions</p>
+                  <p class="view"> view</p>
+                  <p class="time">10 days ago</p>
+                </div>
+                <div class="more">
+                  <p class="view-more"> view more</p>
+                </div>
+              </th:block>
+            </div>
+          </div>
+        </div>
+      </article>
+    </form>
+  </section>
 </body>
+
 </html>

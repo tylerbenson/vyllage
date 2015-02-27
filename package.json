@@ -1,0 +1,16 @@
+{
+  "name": "vyllage",
+  "version": "0.0.0",
+  "description": "Empty package file to trigger node.js install for heroku",
+  "repository": "https://github.com/natebenson/vyllage",
+  "license": "Commercial",
+  "private": true,
+  "engines": {
+    "node": "0.12.x",
+    "npm": "2.5.x"
+  },
+  "scripts": {
+    "preinstall": "cd assets && npm install",
+    "postinstall": "cd assets && npm run build"
+  }
+}
