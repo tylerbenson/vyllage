@@ -128,7 +128,7 @@ var MainContainer = React.createClass({
                             self.setState({mainData: res.body});
                         }
                     } else {
-                       alert( error );
+                       alert( res.text );
                    }             
             });
         } else {
@@ -174,7 +174,7 @@ var MainContainer = React.createClass({
                             }
                         }
                     // } else {
-                    //    alert( error );
+                    //    alert( res.text );
                     // }  
                 });
         }
