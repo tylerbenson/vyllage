@@ -41,13 +41,11 @@ public class ResumeController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String resume() {
-
 		return "redirect:/resume/1";
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)
 	public String getResume(@PathVariable final Long documentId) {
-
 		return "main";
 	}
 
@@ -63,9 +61,7 @@ public class ResumeController {
 	public @ResponseBody DocumentSection getResumeSection(
 			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId) throws ElementNotFoundException {
-
 		return documentService.getDocumentSection(sectionId);
-
 	}
 
 	@RequestMapping(value = "{resumeId}/header", method = RequestMethod.GET, produces = "application/json")
@@ -80,9 +76,8 @@ public class ResumeController {
 
 		InputStream in = getClass().getResourceAsStream(
 				"/editor/resume-resumeID-header.json");
-		
+
 		JsonParser jParser = jfactory.createParser(in);
-		
 
 		// mapper.readTree(jParser).toString();
 		DocumentHeader header = mapper.readValue(jParser, DocumentHeader.class);
@@ -90,6 +85,21 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody DocumentSection createSection(
+			@PathVariable final Long documentId,
+			@RequestBody final DocumentSection body)
+			throws JsonProcessingException, ElementNotFoundException {
+
+		// TODO: this needs to be updated to create, not save.
+		// logger.info(body.toString());
+		Document document = documentService.getDocument(documentId);
+		logger.info("document is null? " + (document == null));
+
+		return documentService.saveDocumentSection(document, body);
+	}
+
+	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody DocumentSection saveSection(
 			@PathVariable final Long documentId,
@@ -101,7 +111,6 @@ public class ResumeController {
 		logger.info("document is null? " + (document == null));
 
 		return documentService.saveDocumentSection(document, body);
-
 	}
 
 	@RequestMapping(value = "{resumeId}/header", method = RequestMethod.POST, consumes = "application/json")
@@ -109,7 +118,6 @@ public class ResumeController {
 	public void saveHeader(@PathVariable final Long resumeId,
 			@RequestBody final DocumentHeader body) {
 		// logger.info(body.toString());
-
 	}
 
 	@ExceptionHandler(value = { JsonProcessingException.class,
