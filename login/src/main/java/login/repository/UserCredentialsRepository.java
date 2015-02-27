@@ -26,6 +26,7 @@ import org.springframework.util.Assert;
 @Repository
 public class UserCredentialsRepository {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger
 			.getLogger(UserCredentialsRepository.class.getName());
 

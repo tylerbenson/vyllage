@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class IndexController {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(IndexController.class
 			.getName());
 

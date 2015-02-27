@@ -32,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("link")
 public class DocumentLinkController {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(DocumentLinkController.class
 			.getName());
 

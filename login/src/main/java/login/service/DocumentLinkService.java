@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DocumentLinkService {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(DocumentLinkService.class
 			.getName());
 
