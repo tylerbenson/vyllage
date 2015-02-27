@@ -10,6 +10,7 @@ jar {
 dependencies {
 	compile parent.javascriptProjects.findAll { it != project}
 
+	compile 'org.apache.commons:commons-lang3:3.3.2'	
     compile("org.springframework.boot:spring-boot-starter-security")
 //    compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-jdbc")

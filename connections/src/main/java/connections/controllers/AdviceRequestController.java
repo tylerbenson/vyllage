@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("resume")
 public class AdviceRequestController {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger
 			.getLogger(AdviceRequestController.class.getName());
 

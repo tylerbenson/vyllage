@@ -5,6 +5,7 @@ import static login.domain.tables.GroupMembers.GROUP_MEMBERS;
 import static login.domain.tables.Groups.GROUPS;
 import static login.domain.tables.Users.USERS;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -17,6 +18,8 @@ import login.domain.tables.records.UsersRecord;
 import login.model.Authority;
 import login.model.Group;
 import login.model.GroupMember;
+import login.model.User;
+import login.model.UserCredential;
 import login.model.UserFilterRequest;
 
 import org.jooq.DSLContext;
@@ -32,10 +35,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
@@ -63,42 +64,72 @@ public class UserDetailRepository implements UserDetailsManager {
 	private GroupMemberRepository groupMemberRepository;
 
 	@Autowired
+	private UserCredentialsRepository credentialsRepository;
+
+	@Autowired
 	private DataSourceTransactionManager txManager;
 
 	public UserDetailRepository() {
+	}
+
+	public User get(Long userId) throws UserNotFoundException {
+
+		UsersRecord record = sql.fetchOne(USERS, USERS.USERID.eq(userId));
+
+		if (record == null)
+			throw new UserNotFoundException("User with id '" + userId
+					+ "' not found.");
+
+		User user = getUserData(record);
+
+		return user;
+
 	}
 
 	@Override
 	public User loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 
-		// TODO: eventually we'll need these fields in the database.
-		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
-
 		UsersRecord record = sql.fetchOne(USERS, USERS.USERNAME.eq(username));
-
-		logger.info("Looking for user " + username);
 
 		if (record == null)
 			throw new UsernameNotFoundException("User with username '"
 					+ username + "' not found.");
 
-		List<Authority> authorities = authorityRepository
-				.getByUserName(username);
+		User user = getUserData(record);
 
-		User user = new User(record.getUsername(), record.getPassword(),
-				record.getEnabled(), accountNonExpired, credentialsNonExpired,
-				accountNonLocked, authorities);
+		return user;
+	}
 
-		logger.info(user.toString());
+	protected User getUserData(UsersRecord record) {
+
+		// TODO: eventually we'll need these fields in the database.
+		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
+
+		List<Authority> authorities = authorityRepository.getByUserName(record
+				.getUsername());
+
+		UserCredential credential = credentialsRepository.get(record
+				.getUserid());
+
+		User user = new User(record.getUserid(), record.getUsername(),
+				credential.getPassword(), record.getEnabled(),
+				accountNonExpired, credentialsNonExpired, accountNonLocked,
+				authorities);
 		return user;
 	}
 
 	@Override
 	// @Transactional
 	public void createUser(UserDetails user) {
-		Assert.notNull(user.getAuthorities());
-		Assert.isTrue(!user.getAuthorities().isEmpty());
+
+		Collection<? extends GrantedAuthority> authorities;
+
+		if (user.getAuthorities() != null || user.getAuthorities().size() > 0)
+			authorities = user.getAuthorities();
+		else
+			authorities = authorityRepository
+					.getDefaultAuthoritiesForNewUser(user.getUsername());
 
 		TransactionStatus transaction = txManager
 				.getTransaction(new DefaultTransactionDefinition());
@@ -109,11 +140,15 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			UsersRecord newRecord = sql.newRecord(USERS);
 			newRecord.setUsername(user.getUsername());
-			newRecord.setPassword(getEncodedPassword(user));
 			newRecord.setEnabled(user.isEnabled());
 			newRecord.store();
 
-			for (GrantedAuthority authority : user.getAuthorities()) {
+			Assert.notNull(newRecord.getUserid());
+
+			credentialsRepository.save(newRecord.getUserid(),
+					user.getPassword());
+
+			for (GrantedAuthority authority : authorities) {
 				authorityRepository.create((Authority) authority);
 				for (Group group : groupRepository
 						.getGroupFromAuthority(authority.getAuthority())) {
@@ -123,12 +158,13 @@ public class UserDetailRepository implements UserDetailsManager {
 			}
 
 		} catch (Exception e) {
-			logger.fine(e.toString());
+			logger.info(e.toString());
 			transaction.rollbackToSavepoint(savepoint);
-		} finally {
-			transaction.releaseSavepoint(savepoint);
-		}
 
+		} finally {
+			txManager.commit(transaction);
+
+		}
 	}
 
 	@Override
@@ -146,9 +182,10 @@ public class UserDetailRepository implements UserDetailsManager {
 			UsersRecord record = sql.fetchOne(USERS,
 					USERS.USERNAME.eq(user.getUsername()));
 
-			record.setPassword(getEncodedPassword(user));
 			record.setEnabled(user.isEnabled());
 			record.update();
+
+			credentialsRepository.save(record.getUserid(), user.getPassword());
 
 			authorityRepository.deleteByUserName(user.getUsername());
 			groupMemberRepository.deleteByUserName(user.getUsername());
@@ -167,9 +204,8 @@ public class UserDetailRepository implements UserDetailsManager {
 			logger.fine(e.toString());
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
-			transaction.releaseSavepoint(savepoint);
+			txManager.commit(transaction);
 		}
-
 	}
 
 	@Override
@@ -186,23 +222,24 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			UsersRecord record = sql.fetchOne(USERS,
 					USERS.USERNAME.eq(username));
+
+			long userId = record.getUserid();
+			credentialsRepository.delete(userId);
+
 			record.delete();
 
 		} catch (Exception e) {
 			logger.fine(e.toString());
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
-			transaction.releaseSavepoint(savepoint);
+			txManager.commit(transaction);
 		}
-
 	}
 
 	@Override
 	public void changePassword(String oldPassword, String newPassword) {
 		Authentication currentUser = SecurityContextHolder.getContext()
 				.getAuthentication();
-		String encodedNewPassword = new BCryptPasswordEncoder()
-				.encode(newPassword);
 
 		if (currentUser == null) {
 			// This would indicate bad coding somewhere
@@ -226,9 +263,9 @@ public class UserDetailRepository implements UserDetailsManager {
 		}
 
 		logger.info("Changing password for user '" + username + "'");
-
-		sql.update(USERS).set(USERS.PASSWORD, encodedNewPassword)
-				.where(USERS.USERNAME.eq(username)).execute();
+		Long userId = this.loadUserByUsername(username).getUserId();
+		credentialsRepository.delete(userId);
+		credentialsRepository.save(userId, newPassword);
 
 		SecurityContextHolder.getContext().setAuthentication(
 				createNewAuthentication(currentUser, newPassword));
@@ -249,11 +286,12 @@ public class UserDetailRepository implements UserDetailsManager {
 		return sql
 				.fetch(USERS)
 				.stream()
-				.map((UsersRecord ur) -> new User(ur.getUsername(), ur
-						.getPassword(), ur.getEnabled(), accountNonExpired,
-						credentialsNonExpired, accountNonLocked,
-						authorityRepository.getByUserName(ur.getUsername())))
-				.collect(Collectors.toList());
+				.map((UsersRecord ur) -> new User(ur.getUserid(), ur
+						.getUsername(), credentialsRepository.get(
+						ur.getUserid()).getPassword(), ur.getEnabled(),
+						accountNonExpired, credentialsNonExpired,
+						accountNonLocked, authorityRepository.getByUserName(ur
+								.getUsername()))).collect(Collectors.toList());
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -268,12 +306,11 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		List collect = users
 				.stream()
-				.map(u -> sql.insertInto(USERS, USERS.USERNAME, USERS.PASSWORD,
-						USERS.ENABLED).values(u.getUsername(),
-						getEncodedPassword(u), enabled)
+				.map(u -> sql.insertInto(USERS, USERS.USERNAME, USERS.ENABLED)
+						.values(u.getUsername(), enabled)
 
 				).collect(Collectors.toList());
-
+		// for!
 		for (User user : users) {
 			for (GrantedAuthority authority : user.getAuthorities()) {
 				collect.add(sql.insertInto(AUTHORITIES, AUTHORITIES.USERNAME,
@@ -292,11 +329,20 @@ public class UserDetailRepository implements UserDetailsManager {
 		try {
 			sql.batch(collect).execute();
 
+			// hmm, well, we won't be inserting THAT many users...
+			for (User user : users) {
+				Long userId = sql.select().from(USERS)
+						.where(USERS.USERNAME.eq(user.getUsername()))
+						.fetchOne(USERS.USERID);
+				credentialsRepository
+						.save(new Long(userId), user.getPassword());
+			}
+
 		} catch (Exception e) {
-			logger.fine(e.toString());
+			logger.info(e.toString());
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
-			transaction.releaseSavepoint(savepoint);
+			txManager.commit(transaction);
 		}
 	}
 
@@ -310,28 +356,6 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		return newAuthentication;
 	}
-
-	private String getEncodedPassword(UserDetails user) {
-		return new BCryptPasswordEncoder().encode(user.getPassword());
-	}
-
-	// public List<User> where(User user, int limit) {
-	// List<Condition> conditions = new ArrayList<>();
-	//
-	// if (user.getUsername() != null)
-	// conditions.add(USERS.USERNAME.like(user.getUsername()));
-	//
-	// conditions.add(USERS.ENABLED.eq(user.isEnabled()));
-	//
-	// for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
-	// conditions.add(AUTHORITIES.AUTHORITY.like(grantedAuthority
-	// .getAuthority()));
-	// }
-	//
-	// return sql.select().from(USERS).join(AUTHORITIES)
-	// .on(USERS.USERNAME.like(AUTHORITIES.USERNAME))
-	// .where(conditions).limit(limit).fetch().into(User.class);
-	// }
 
 	public List<User> getAdvisors(UserFilterRequest filter, User loggedUser,
 			int limit) {
@@ -373,8 +397,9 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		return records
 				.stream()
-				.map((Record ur) -> new User(ur.getValue(USERS.USERNAME), ur
-						.getValue(USERS.PASSWORD), ur.getValue(USERS.ENABLED),
+				.map((Record ur) -> new User(ur.getValue(USERS.USERNAME),
+						credentialsRepository.get(ur.getValue(USERS.USERID))
+								.getPassword(), ur.getValue(USERS.ENABLED),
 						accountNonExpired, credentialsNonExpired,
 						accountNonLocked, authorityRepository.getByUserName(ur
 								.getValue(USERS.USERNAME))))
@@ -417,8 +442,9 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		return records
 				.stream()
-				.map((Record ur) -> new User(ur.getValue(USERS.USERNAME), ur
-						.getValue(USERS.PASSWORD), ur.getValue(USERS.ENABLED),
+				.map((Record ur) -> new User(ur.getValue(USERS.USERNAME),
+						credentialsRepository.get(ur.getValue(USERS.USERID))
+								.getPassword(), ur.getValue(USERS.ENABLED),
 						accountNonExpired, credentialsNonExpired,
 						accountNonLocked, authorityRepository.getByUserName(ur
 								.getValue(USERS.USERNAME))))

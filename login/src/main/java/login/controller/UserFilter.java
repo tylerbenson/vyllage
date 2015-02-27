@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import login.model.FilteredUser;
+import login.model.User;
 import login.model.UserFilterRequest;
 import login.model.UserFilterResponse;
 import login.repository.GroupRepository;
 import login.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 
 public class UserFilter {
 	private static final int limitForEmptyFilter = 5;

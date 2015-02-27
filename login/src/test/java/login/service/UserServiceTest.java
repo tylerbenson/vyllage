@@ -4,6 +4,7 @@ import java.util.List;
 
 import login.Application;
 import login.model.BatchAccount;
+import login.model.User;
 import login.model.UserFilterRequest;
 
 import org.junit.Assert;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -39,6 +39,7 @@ public class UserServiceTest {
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("uno@gmail.com"));
+		Assert.assertFalse(service.getUser("uno@gmail.com").getPassword() == null);
 		Assert.assertTrue(service.userExists("dos@test.com"));
 		Assert.assertTrue(service.userExists("tres@yahoo.com"));
 	}
@@ -54,6 +55,7 @@ public class UserServiceTest {
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
+		Assert.assertFalse(service.getUser("uno@gmail.com").getPassword() == null);
 		Assert.assertTrue(service.userExists("cinco@test.com"));
 		Assert.assertTrue(service.userExists("seis@yahoo.com"));
 	}

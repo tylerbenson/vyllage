@@ -2,24 +2,29 @@ package login.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import login.model.Authority;
 import login.model.BatchAccount;
 import login.model.GroupAuthority;
+import login.model.User;
 import login.model.UserFilterRequest;
 import login.repository.AuthorityRepository;
 import login.repository.GroupAuthorityRepository;
 import login.repository.GroupRepository;
 import login.repository.UserDetailRepository;
+import login.repository.UserNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 @Service
 public class UserService {
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger.getLogger(UserService.class.getName());
+
 	@Autowired
 	private GroupRepository groupRepository;
 	@Autowired
@@ -30,6 +35,9 @@ public class UserService {
 
 	@Autowired
 	private UserDetailRepository userRepository;
+
+	@Autowired
+	private DocumentLinkService documentLinkService;
 
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
@@ -80,6 +88,35 @@ public class UserService {
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
+	}
+
+	/**
+	 * Process a link request, if the user doesn't exist, creates one with a
+	 * random password.
+	 * 
+	 * @param linkRequest
+	 * @return link response
+	 */
+	public User createUser(String userName) {
+		boolean invalid = false;
+
+		if (EmailValidator.validate(userName) == invalid)
+			throw new IllegalArgumentException(
+					"Contains invalid email addresses.");
+
+		if (!userRepository.userExists(userName)) {
+			User user = new User(userName, userName, true, true, true, true,
+					authorityRepository
+							.getDefaultAuthoritiesForNewUser(userName));
+			userRepository.createUser(user);
+		}
+		User loadUserByUsername = userRepository.loadUserByUsername(userName);
+
+		return loadUserByUsername;
+	}
+
+	public User getUser(Long userId) throws UserNotFoundException {
+		return userRepository.get(userId);
 	}
 
 	public List<User> getAdvisors(UserFilterRequest filter, User loggedUser,

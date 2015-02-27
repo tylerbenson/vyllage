@@ -37,6 +37,7 @@ public class ResumeControllerTest {
 			+ "\"sectionPosition\": 1," + "\"state\": \"shown\","
 			+ "\"description\": \"this is my goal statement.\"" + "}";
 
+	@SuppressWarnings("unused")
 	private static final String HEADER = "{"
 			+ "\"firstName\": \"Nathan\","
 			+ "\"middleName\": \"M\","

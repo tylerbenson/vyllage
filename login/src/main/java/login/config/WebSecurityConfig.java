@@ -23,6 +23,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	// http://stackoverflow.com/questions/21231057/how-to-configure-spring-4-0-with-spring-boot-and-spring-security-openid?rq=1
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().antMatchers("/link/advice/**").permitAll();
+
 		http.authorizeRequests()
 				.antMatchers("/", "/css/**", "/images/**", "/javascript/**")
 				.permitAll();
@@ -35,5 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.permitAll();
+
+		http.csrf().disable();
 	}
 }

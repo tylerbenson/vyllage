@@ -21,6 +21,7 @@ import editor.model.constants.AccountVisibility;
 @RequestMapping("settings")
 public class AccountSettingsController {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger
 			.getLogger(AccountSettingsController.class.getName());
 
