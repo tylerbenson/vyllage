@@ -15,13 +15,14 @@ module.exports = {
   },
   module: {
     loaders: [{
-      test: /\.jsx$/,
+      test: /\.js|jsx$/,
       loaders: ['babel']
     }, ],
   },
   resolve: {
     alias: {},
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
+    modulesDirectories: ["node_modules", "bower_components"]
   },
   plugins: [
     new CommonsChunkPlugin('base.js'),
