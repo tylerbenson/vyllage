@@ -7,6 +7,7 @@ var FreeformContainer = require('./components/freeform/container');
 var ArticleContent = require('./components/organization/article-content');
 var ArticleControlls =require('./components/freeform/article-controlls');
 var CommentsBlog = require('./components/freeform/comments-blog');
+var request = require('superagent');
 
 
 var MainData =[
@@ -107,9 +108,32 @@ var MainContainer = React.createClass({
     },
 
     componentDidMount : function() {
-        // ajax call will go here and fetch the whoole data
-        MainData.sort(compare);
-        this.setState({mainData: MainData});
+        var self = this, documentId,
+            pathItems = window.location.pathname.split("/");
+        
+        if(pathItems.length > 1) {
+            documentId = pathItems[pathItems.length-1];
+
+            request
+               .get('/resume/' + documentId + '/section')
+               .set('Accept', 'application/json')
+               .end(function(error, res) {
+
+                    if (res.ok) {
+                        if(res.body.length == 0) {
+                            // if data from server is empty , apply hardcoded data
+                            MainData.sort(compare);
+                            self.setState({mainData: MainData});
+                        } else {
+                            self.setState({mainData: res.body});
+                        }
+                    } else {
+                       alert( error );
+                   }             
+            });
+        } else {
+            // this case should not happen, throw error
+        }
     },
 
     componentDidUpdate: function() {
