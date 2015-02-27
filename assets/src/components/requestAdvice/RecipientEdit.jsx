@@ -19,7 +19,10 @@ var RecipientEdit = React.createClass({
   },
   selectSuggestion: function (recipient, e) {
     e.preventDefault();
-    this.setState({recipient: recipient});
+    this.props.updateRecipient(recipient);
+    this.setState({
+      showSuggestions: false
+    });
   },
   changeHandler: function (key, e) {
     e.preventDefault();

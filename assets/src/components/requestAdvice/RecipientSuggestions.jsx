@@ -21,14 +21,12 @@ var data = {
 
 var Suggesions = React.createClass({
   mixins: [LayerMixin],
-  
   renderRecipientList: function (recipients) {
     return recipients.map(function (recipient, index) {
       return <li className="item-line" onClick={this.props.selectSuggestion.bind(this, recipient)}><p className="item-text">{recipient.firstName + " " + recipient.lastName}</p></li>;
     }.bind(this));
   },
   renderLayer: function () {
-    console.log(this.props.show);
     if (this.props.show) {
       var style = {
         position: 'absolute'
