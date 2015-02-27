@@ -31,37 +31,14 @@ article#profile {
 	}
 
 	.article-content.profile {
-
-
-		.headline-container.editable {
-
-			.headline {
-				width: 300px;
-				font-size: 18px;
-				line-height: 18px;
-				margin-bottom: 10px;
-				text-align: left;
-			}
-
-			.tagline {
-				width: 300px;
-				font-size: 18px;
-				line-height: 18px;
-				margin-bottom: 10px;
-				text-align: left;
-			}
-		}
-	}
-
-	.article-content.profile {
 		padding: 0px;
 		margin-left: 0;
 		width: 385px;
 
 		.headline-container {
 			font-family: "pt-sans";
-			margin-top: 20px;
 			float: left;
+			width: 100%;
 
 			.paragraph {
 				width: 100%;
@@ -73,10 +50,7 @@ article#profile {
 				line-height: 34px;
 				letter-spacing: 1px;
 				text-align: center;
-			}
-
-			.edit-headline {
-				float: right;
+				margin-top: 20px;
 			}
 
 			.tagline {
@@ -85,10 +59,19 @@ article#profile {
 				padding: 0 10px;
 				text-align: center;
 			}
+		}
 
-			.edit-tagline {
-				float: right;
-			}
+		.editMode {
+			display: none;
+		}
+
+		.tagline-edit {
+			width: 100%;
+			font-size: 18px;
+			line-height: 18px;
+			margin-bottom: 10px;
+			text-align: left;
+			border: 1px solid #a89892;
 		}
 	}
 

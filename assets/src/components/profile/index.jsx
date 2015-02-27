@@ -1,4 +1,5 @@
 var React = require('react');
+var request = require('superagent');
 
 // ----------------------- PROFILE SECTION --------------------------
 
@@ -19,16 +20,26 @@ var ProfilePhotoContainer = React.createClass({
 // ---------------------------------- end ----------------------------------------------------
 
 // --------------------------headline, tagline container, main mode -------------------------- 
-var HeadlineContainerMain = React.createClass({
+var HeadlineContainer = React.createClass({
+
+    render: function() {
+        return (
+            <div className="headline-container headline-field">
+                <p className="headline">
+                    {this.props.profileData.firstName}&nbsp;
+                    {this.props.profileData.middleName}&nbsp;
+                    {this.props.profileData.lastName} 
+                </p>
+            </div>
+        );
+    }
+});
+
+var TaglineContainer = React.createClass({
 
     render: function() {
         return (
             <div className="headline-container main">
-                <div className="paragraph">
-                    <p className="headline">
-                        {this.props.profileData.headline}
-                    </p>
-                </div>
                 <div className="paragraph">
                     <p className="tagline">{this.props.profileData.tagline}</p>
                 </div>
@@ -39,35 +50,7 @@ var HeadlineContainerMain = React.createClass({
 
 // ---------------------------------- end ----------------------------------------------------
 
-// ---------------------------headline, tagline container, edit mode -------------------------- 
-
-var HeadlineEdit = React.createClass({  
-
-    getInitialState: function() {
-        return {headlineData:''}; 
-    },
-
-    componentDidUpdate: function () {
-        this.state.headlineData = this.props.profileData.headline;
-    },
-
-    handleChange: function(event) {
-        this.setState({headlineData: event.target.value});
-
-        if (this.props.changeHeadline) {
-            this.props.changeHeadline(event.target.value);
-        }
-    },
-
-    render: function() {
-        var headlineData = this.state.headlineData; 
-
-        return (
-            <input type="text" className="headline" placeholder="name, surname" 
-                value= {headlineData} onChange={this.handleChange} />         
-        );
-    }
-});
+// --------------------------- tagline container, edit mode -------------------------- 
 
 var TaglineEdit = React.createClass({ 
 
@@ -82,8 +65,8 @@ var TaglineEdit = React.createClass({
     handleChange: function(event) {
         this.setState({taglineData: event.target.value});
 
-        if (this.props.changeTagline) {
-            this.props.changeTagline(event.target.value);
+        if (this.props.updateTagline) {
+            this.props.updateTagline(event.target.value);
         }
     },
 
@@ -91,34 +74,10 @@ var TaglineEdit = React.createClass({
         var taglineData = this.state.taglineData;
 
         return (
-            <input type="text" className="tagline"
+            <input type="text" className="tagline-edit"
                 placeholder="add a professional tagline" 
                 value = {taglineData} 
                 onChange={this.handleChange} />
-        );
-    }
-});
-
-var HeadlineContainerEdit = React.createClass({
-
-    changeHeadline: function (value){
-        if (this.props.updateHeadline) {
-            this.props.updateHeadline(value);
-        }
-    },
-
-    changeTagline: function (value){
-        if (this.props.updateTagline) {
-            this.props.updateTagline(value);
-        }
-    },
-
-    render: function() {
-        return (
-            <div className="headline-container editable">
-                <HeadlineEdit profileData={this.props.profileData} changeHeadline={this.changeHeadline}/>
-                <TaglineEdit profileData={this.props.profileData} changeTagline={this.changeTagline} />
-            </div>
         );
     }
 });
@@ -172,10 +131,6 @@ var ArticleContent = React.createClass({
                  profileData: ''};
     },
 
-    updateHeadline: function (value) {
-        this.state.profileData.headline = value;
-    },
-
     updateTagline: function (value) {
         this.state.profileData.tagline = value;
     },
@@ -226,11 +181,16 @@ var ArticleContent = React.createClass({
 
     render: function() {
         return (
-            <div className="four columns article-content profile" onClick={this.goToEditMode}>
-                <HeadlineContainerMain ref="mainContainer" profileData={this.props.profileData} />
-                <HeadlineContainerEdit ref="editContainer" profileData={this.props.profileData} updateHeadline={this.updateHeadline} updateTagline={this.updateTagline} />
-
-                <ButtonsContainer ref="buttonContainer"  save={this.save} cancel={this.cancel}/>
+            <div className="four columns article-content profile">
+                <HeadlineContainer profileData={this.props.profileData} />
+                <div onClick={this.goToEditMode}>
+                    <TaglineContainer ref="mainContainer" profileData={this.props.profileData} />
+                    <div ref="editContainer" className="editMode">
+                        <TaglineEdit profileData={this.props.profileData} updateTagline={this.updateTagline} />
+                        <ButtonsContainer ref="buttonContainer"  save={this.save} cancel={this.cancel}/>
+                    </div>
+                </div>
+                
             </div>
         );
     }
@@ -275,20 +235,33 @@ var ProfileContainer = React.createClass({
     },
 
     componentDidMount: function() {
-        // ajax call will go here and fetch the profileData
 
-        // $.ajax({
-        //     url: this.props.url,
-        //     dataType: 'json',
-        //     success: function(data) {
-        //         this.setState({profileData: data});
-        //     }.bind(this),
-        //     error: function(xhr, status, err) {
-        //         console.error(this.props.url, status, err.toString());
-        //     }.bind(this)
-        // });
+        var self = this, documentId,
+            pathItems = window.location.pathname.split("/");
+        
+        if(pathItems.length > 1) {
+            documentId = pathItems[pathItems.length-1];
 
-        this.setState({profileData: Data});
+            request
+               .get('/resume/' + documentId + '/header')
+               .set('Accept', 'application/json')
+               .end(function(error, res) {
+
+                    if (res.ok) {
+                        if(res.body.length == 0) {
+                            // if data from server is empty , apply hardcoded data
+                            self.setState({profileData: Data});
+                        } else {
+                            self.setState({profileData: res.body});
+                        }
+                    } else {
+                       alert( res.text );
+                   }             
+            });
+        } else {
+            // this case should not happen, throw error
+        }
+
     },
 
     saveChanges: function (data) {
@@ -317,9 +290,12 @@ var ProfileContainer = React.createClass({
 //   ----------------------------------------- render --------------------------------------------
 
 var Data = { 
-    headline: 'Nathan M Benson',
-    tagline: 'Technology Enthusiast analyzing, building, and expanding solutions'
+   firstName: "Nathan", 
+   middleName: "M",
+   lastName: "Benson", 
+   tagline: "Technology Enthusiast analyzing, building, and expanding solutions"
 };
+
 
 React.render(<ProfileContainer />, document.getElementById('profile'));
 
