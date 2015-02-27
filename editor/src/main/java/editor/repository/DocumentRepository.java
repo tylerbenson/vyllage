@@ -65,6 +65,7 @@ public class DocumentRepository implements IRepository<Document> {
 		document.setLastModified(documentsRecord.getLastmodified()
 				.toLocalDateTime());
 		document.setVisibility(documentsRecord.getVisibility());
+		document.setTagline(documentsRecord.getTagline());
 		return document;
 	}
 
@@ -81,6 +82,7 @@ public class DocumentRepository implements IRepository<Document> {
 			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
 			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
 			newRecord.setVisibility(document.getVisibility());
+			newRecord.setTagline(document.getTagline());
 
 			newRecord.store();
 			document.setId(newRecord.getId());
@@ -95,7 +97,7 @@ public class DocumentRepository implements IRepository<Document> {
 			existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
 					.now()));
 			existingRecord.setVisibility(document.getVisibility());
-
+			existingRecord.setTagline(document.getTagline());
 			existingRecord.update();
 			document.setLastModified(existingRecord.getLastmodified()
 					.toLocalDateTime());

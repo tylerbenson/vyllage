@@ -106,18 +106,23 @@ public class ResumeController {
 			@RequestBody final DocumentSection body)
 			throws JsonProcessingException, ElementNotFoundException {
 
-		// logger.info(body.toString());
 		Document document = documentService.getDocument(documentId);
-		logger.info("document is null? " + (document == null));
 
 		return documentService.saveDocumentSection(document, body);
+	}
+	@RequestMapping(value = "{documentId}/section/{sectiondId}", method = RequestMethod.DELETE, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void deleteSection(@PathVariable final Long documentId,
+			@PathVariable final Long sectionId) throws JsonProcessingException,
+			ElementNotFoundException {
+
+		documentService.deleteSection(sectionId);
 	}
 
 	@RequestMapping(value = "{resumeId}/header", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void saveHeader(@PathVariable final Long resumeId,
 			@RequestBody final DocumentHeader body) {
-		// logger.info(body.toString());
 	}
 
 	@ExceptionHandler(value = { JsonProcessingException.class,
