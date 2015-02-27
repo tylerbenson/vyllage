@@ -151,15 +151,32 @@ var MainContainer = React.createClass({
     },
 
     saveChanges: function (data) {
+        var self = this, documentId,
+            pathItems = window.location.pathname.split("/");
+        
+        if(pathItems.length > 1) {
+            documentId = pathItems[pathItems.length-1];
 
-        for(var i = 0; i < this.state.mainData.length; i++){
+            request
+                .post('/resume/' + documentId + '/section/' + data.sectionId +'')
+                .set('Accept', 'application/json')
+                .send(data)
+                .end(function(error, res) {
 
-            if(this.state.mainData[i].sectionId === data.sectionId){
+                    //if (res.ok) { commenting out the success check , since now server returns error 
+                        for(var i = 0; i < self.state.mainData.length; i++){
 
-                this.state.mainData[i] = data;
-                this.setState({mainData:   this.state.mainData});
-                return;
-            }
+                            if(self.state.mainData[i].sectionId === data.sectionId){
+
+                                self.state.mainData[i] = data;
+                                self.setState({mainData: self.state.mainData});
+                                return;
+                            }
+                        }
+                    // } else {
+                    //    alert( error );
+                    // }  
+                });
         }
     },
 
