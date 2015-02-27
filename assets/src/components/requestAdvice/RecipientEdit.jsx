@@ -55,13 +55,16 @@ var RecipientEdit = React.createClass({
       });
     }
   },
+  closeSuggestions: function () {
+    this.setState({showSuggestions: false});
+  },
   render: function () {
     var recipient = this.state.recipient;
     return (
       <div className='rcpent-add row'>
-        <input className='three columns' type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} />
-        <input className='three columns' type='text' placeholder='Last Name' value={recipient.lastName} onChange={this.changeHandler.bind(this, 'lastName')} />
-        <input className='four columns' type='email' placeholder='E-mail' value={recipient.email} onChange={this.changeHandler.bind(this, 'email')} />
+        <input className='three columns' type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} onBlur={this.closeSuggestions} />
+        <input className='three columns' type='text' placeholder='Last Name' value={recipient.lastName} onChange={this.changeHandler.bind(this, 'lastName')} onBlur={this.closeSuggestions}/>
+        <input className='four columns' type='email' placeholder='E-mail' value={recipient.email} onChange={this.changeHandler.bind(this, 'email')} onBlur={this.closeSuggestions} />
         <button className='one column' onClick={this.updateHandler}>
           <img src='images/accept.png' />
         </button> 
