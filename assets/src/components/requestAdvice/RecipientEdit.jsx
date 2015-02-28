@@ -18,7 +18,9 @@ var RecipientEdit = React.createClass({
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       recipient: nextProps.recipient,
-      error: false
+      firstNameError: false,
+      lastNameError: false,
+      emailError: false
     });
   },
   validate: function () {
@@ -34,13 +36,15 @@ var RecipientEdit = React.createClass({
     e.preventDefault();
     this.props.updateRecipient(recipient);
     this.setState({
-      showSuggestions: false
+      showSuggestions: false,
+      firstNameError: false,
+      lastNameError: false,
+      emailError: false
     });
   },
   changeHandler: function (key, e) {
     e.preventDefault();
     var rect = e.target.getBoundingClientRect();
-    console.log(rect);
     var recipient = this.state.recipient;
     recipient[key] = e.target.value
     this.setState({
@@ -83,7 +87,7 @@ var RecipientEdit = React.createClass({
           </div>
           <div className='four columns'>
             <input type='email' placeholder='E-mail' value={recipient.email} onChange={this.changeHandler.bind(this, 'email')} onBlur={this.closeSuggestions} />
-            {this.state.emailError? <p className='error'>Invalid Email</p>: null}
+            {this.state.emailError? <p className='error'>* invalid email</p>: null}
           </div>
           <div className='one columns'>
             <a className='add-button'><img src='images/add.png' onClick={this.updateHandler} /></a>
