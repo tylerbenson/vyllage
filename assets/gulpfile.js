@@ -149,6 +149,12 @@ gulp.task('build', function () {
   runSequence('bower', ['react', 'copy', 'styles'], 'assets.jar');
 });
 
+gulp.task('mock-server', function () {
+  gulp.watch('api/**/*.md', function () {
+    
+  })
+})
+
 
 // from https://github.com/spring-io/sagan/blob/master/sagan-client/gulpfile.js
 //var gulpFilter = require('gulp-filter'),
