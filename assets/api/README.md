@@ -10,13 +10,19 @@ Returns the requested section in JSON format. If the section can't be found then
 
 {"error":"DocumentSection with id '2' not found."}
 
-
 **POST** */resume/{documentId}/section/{sectionId}*
 
-Saves or updates the section (JSON) from the request body.
+Updates the section from the request body (JSON).
+
+**POST** */resume/{documentId}/section*
+
+Creates the section in the request body (JSON).
 
 Returns the saved section.
 
+**DELETE** */resume/{documentId}/section/{sectionId}*
+
+Deletes the section.
 
 **GET** */resume/{documentId}/header*
 

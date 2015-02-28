@@ -80,4 +80,21 @@ public class DocumentSectionRepositoryTest {
 				new Long(2L).equals(savedDocumentSection.getSectionVersion()));
 	}
 
+	@Test
+	public void deleteDocumentSectionTest() {
+		DocumentSection documentSection = DocumentSection.fromJSON(JSON);
+		documentSection.setDocumentId(0L);
+
+		DocumentSection savedDocumentSection = dsRepository
+				.save(documentSection);
+
+		Assert.assertNotNull(savedDocumentSection);
+
+		Long sectionId = savedDocumentSection.getSectionId();
+		dsRepository.delete(sectionId);
+
+		Assert.assertFalse(dsRepository.exists(sectionId));
+
+	}
+
 }
