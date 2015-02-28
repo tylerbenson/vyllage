@@ -7,6 +7,7 @@ import lombok.ToString;
 @ToString
 public class Document {
 	private Long id;
+	private String tagline;
 	private Account account;
 	private Boolean visibility;
 	private LocalDateTime dateCreated;
@@ -50,6 +51,14 @@ public class Document {
 
 	public LocalDateTime getLastModified() {
 		return this.lastModified;
+	}
+
+	public String getTagline() {
+		return tagline;
+	}
+
+	public void setTagline(String tagline) {
+		this.tagline = tagline;
 	}
 
 }

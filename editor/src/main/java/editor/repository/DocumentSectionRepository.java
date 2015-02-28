@@ -194,72 +194,9 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		existingRecord.delete();
 	}
 
-	// /**
-	// * Saves a section of a document
-	// *
-	// * @param documentId
-	// * @param body
-	// * @return
-	// * @throws JsonProcessingException
-	// */
-	// public void insertDocumentSection(Long documentId, DocumentSection body)
-	// throws JsonProcessingException {
-	// int execute;
-	// execute = sql
-	// .insertInto(DOCUMENT_SECTIONS,
-	// DOCUMENT_SECTIONS.ID, //
-	// DOCUMENT_SECTIONS.SECTIONVERSION,
-	// DOCUMENT_SECTIONS.JSONDOCUMENT, //
-	// DOCUMENT_SECTIONS.DOCUMENTID, //
-	// DOCUMENT_SECTIONS.DATECREATED, //
-	// DOCUMENT_SECTIONS.LASTMODIFIED, //
-	// DOCUMENT_SECTIONS.POSITION).values(body.getSectionId(), //
-	// 1L, body.asJSON(), //
-	// documentId, //
-	// Timestamp.valueOf(LocalDateTime.now()), //
-	// Timestamp.valueOf(LocalDateTime.now()), //
-	// body.getSectionPosition()).execute();
-	//
-	// logger.info("Inserted " + execute + " records.");
-	// }
-	//
-	// public void updateDocumentSection(DocumentSection body)
-	// throws JsonProcessingException {
-	// sql.update(DOCUMENT_SECTIONS)
-	// .set(DOCUMENT_SECTIONS.JSONDOCUMENT, body.asJSON())
-	// .set(DOCUMENT_SECTIONS.LASTMODIFIED,
-	// Timestamp.valueOf(LocalDateTime.now()))
-	// .where(DOCUMENT_SECTIONS.ID.equal(body.getSectionId()))
-	// .execute();
-	// }
-
-	// public String getSection(Document document, DocumentSection
-	// documentSection)
-	// throws DocumentSectionNotFoundException {
-	//
-	// Long sectionId = documentSection.getSectionId();
-	// Long documentId = document.getId();
-	//
-	// Result<Record> records = sql
-	// .select()
-	// .from(DOCUMENT_SECTIONS)
-	// .where(DOCUMENT_SECTIONS.ID.equal(sectionId).and(
-	// DOCUMENT_SECTIONS.DOCUMENTID.equal(documentId)))
-	// .fetch();
-	//
-	// logger.info("Records found: " + records.size());
-	//
-	// String value;
-	//
-	// try {
-	// value = records.get(0).getValue(DOCUMENT_SECTIONS.JSONDOCUMENT);
-	//
-	// } catch (IndexOutOfBoundsException e) {
-	// throw new DocumentSectionNotFoundException("Section " + sectionId
-	// + " from document " + documentId + " not found.");
-	// }
-	//
-	// return value;
-	// }
+	public boolean exists(Long sectionId) {
+		return sql.fetchExists(sql.select().from(DOCUMENT_SECTIONS)
+				.where(DOCUMENT_SECTIONS.ID.eq(sectionId)));
+	}
 
 }

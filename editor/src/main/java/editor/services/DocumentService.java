@@ -56,7 +56,7 @@ public class DocumentService {
 		} catch (ElementNotFoundException e) {
 			logger.info("Document with id" + document.getId()
 					+ "not found, saving document first.");
-			document = documentRepository.save(document);
+			document = this.saveDocument(document);
 		}
 
 		documentSection.setDocumentId(document.getId());
@@ -105,6 +105,10 @@ public class DocumentService {
 	public Document getDocument(Long documentId)
 			throws ElementNotFoundException {
 		return documentRepository.get(documentId);
+	}
+
+	public void deleteSection(Long sectionId) {
+		documentSectionRepository.delete(sectionId);
 	}
 
 }
