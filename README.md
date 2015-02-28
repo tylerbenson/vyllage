@@ -14,7 +14,8 @@ or
 ```
 cd assets
 npm install
-npm run-script httpd
+npm start  // To start nodejs development server
+gulp  // To build static assets
 ```
 
 To build and run as a java app:
