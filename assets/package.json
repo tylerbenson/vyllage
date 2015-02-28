@@ -56,7 +56,6 @@
     "when": "3.4.4"
   },
   "scripts": {
-    "httpd": "./node_modules/.bin/http-server public -o -c-1",
     "start": "nodemon -e js,md mock-server.js",
     "xprepublish": "./node_modules/.bin/bower install --config.interactive=false",
     "clean": "./node_modules/.bin/gulp clean",
