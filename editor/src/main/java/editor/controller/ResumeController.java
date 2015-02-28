@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -40,8 +42,13 @@ public class ResumeController {
 			.getName());
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String resume() {
-		return "redirect:/resume/1";
+	public String resume(HttpServletRequest request)
+			throws ElementNotFoundException {
+		Long userId = (Long) request.getSession().getAttribute("userId");
+
+		Document documentByUser = documentService.getDocumentByUser(userId);
+
+		return "redirect:/resume/" + documentByUser.getId();
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)

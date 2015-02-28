@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -32,12 +33,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().anyRequest().authenticated();
 
 		http.formLogin().loginPage("/login").usernameParameter("email")
-				.defaultSuccessUrl("/resume/").permitAll();
+				.defaultSuccessUrl("/resume/").successHandler(successHandler())
+				.permitAll();
 
 		http.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.permitAll();
+	}
 
-		http.csrf().disable();
+	@Bean
+	public AddUserAuthenticationSuccessHandler successHandler() {
+		AddUserAuthenticationSuccessHandler successHandler = new AddUserAuthenticationSuccessHandler();
+		successHandler.setDefaultTargetUrl("/resume/");
+
+		return successHandler;
 	}
 }

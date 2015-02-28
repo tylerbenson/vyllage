@@ -116,5 +116,19 @@ public class DocumentRepository implements IRepository<Document> {
 			existingRecord.delete();
 		}
 	}
+	
+	public Document getDocumentByUser(Long userId)
+			throws ElementNotFoundException {
+		DocumentsRecord record = sql.fetchOne(DOCUMENTS,
+				DOCUMENTS.USERID.eq(userId));
+		logger.info("Searching document with userid " + userId);
+
+		if (record == null)
+			throw new ElementNotFoundException("Document for user id '"
+					+ userId + "' could not be found.");
+
+		return recordToDocument(record);
+
+	}
 
 }

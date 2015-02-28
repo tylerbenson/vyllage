@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import editor.model.Document;
 import editor.model.DocumentSection;
+import editor.repository.DocumentRepository;
 import editor.repository.DocumentSectionRepository;
 import editor.repository.ElementNotFoundException;
-import editor.repository.IRepository;
 
 /**
  * This service takes care of saving, retrieving and manipulating documents.
@@ -25,7 +25,7 @@ public class DocumentService {
 			.getName());
 
 	@Autowired
-	private IRepository<Document> documentRepository;
+	private DocumentRepository documentRepository;
 
 	@Autowired
 	private DocumentSectionRepository documentSectionRepository;
@@ -109,6 +109,11 @@ public class DocumentService {
 
 	public void deleteSection(Long sectionId) {
 		documentSectionRepository.delete(sectionId);
+	}
+	
+	public Document getDocumentByUser(Long userId)
+			throws ElementNotFoundException {
+		return documentRepository.getDocumentByUser(userId);
 	}
 
 }
