@@ -1,4 +1,4 @@
-# GET /resume/55/header
+# GET /resume/{resumeId}/header
 
 + Response 200 (application/json)
   [
