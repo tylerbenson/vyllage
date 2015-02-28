@@ -142,19 +142,29 @@ gulp.task('watch', ['build'], function () {
   });
 });
 
-gulp.task('default', ['watch']);
 
 gulp.task('build', function () {
   // assets.jar needs to run last
   runSequence('bower', ['react', 'copy', 'styles'], 'assets.jar');
 });
 
-gulp.task('mock-server', function () {
-  gulp.watch('api/**/*.md', function () {
-    
-  })
-})
+gulp.task('dev-watch', ['dev-build'], function () {
+  gulp.watch(['src/**/*.scss'], function () {
+    runSequence('styles');
+  });
+  gulp.watch(['src/*.html', 'src/images/*'], function () {
+    runSequence('prettify-html', 'copy');
+  });
+  gulp.watch(['./*.js', './*.json'], function () {
+    runSequence('prettify-js');
+  });
+});
 
+gulp.task('dev-build', function () {
+  runSequence('bower', ['copy', 'styles']);
+});
+
+gulp.task('default', ['dev-watch']);
 
 // from https://github.com/spring-io/sagan/blob/master/sagan-client/gulpfile.js
 //var gulpFilter = require('gulp-filter'),

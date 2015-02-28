@@ -6,16 +6,17 @@ var resourceWalker = require('api-mock/lib/walker');
 var walk = require('walk');
 var app = express();
 
-var walker = walk.walk(path.resolve('./api'), {
-});
+var walker = walk.walk(path.resolve('./api'), {});
 
 walker.on('file', function (root, fileStats, next) {
   var filePath = path.join(root, fileStats.name);
   var fileExt = path.extname(fileStats.name);
   if (fileExt === '.md') {
     fs.readFile(filePath, 'utf8', function (err, data) {
-      if (err) { throw err };
-      protagonist.parse(data, function(error, result) {
+      if (err) {
+        throw err
+      };
+      protagonist.parse(data, function (error, result) {
         try {
           resourceWalker(app, result.ast['resourceGroups']);
         } catch (error) {
@@ -28,6 +29,3 @@ walker.on('file', function (root, fileStats, next) {
 });
 
 app.listen(8000);
-
-
-
