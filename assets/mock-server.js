@@ -7,8 +7,14 @@ var logger = require('morgan');
 var walk = require('walk');
 var app = express();
 var template = require('lodash.template');
+var webpack = require('webpack');
+var webpackMiddleware = require('webpack-dev-middleware');
+var webpackConfig = require('./webpack.config.js');
 
 app.use(logger('dev'));
+app.use(webpackMiddleware(webpack(webpackConfig), {
+  publicPath: '/javascript'
+}));
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 app.use('/css', express.static(path.join(__dirname, 'public/css')));
 

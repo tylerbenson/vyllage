@@ -151,7 +151,7 @@ gulp.task('watch', ['build'], function () {
 
 gulp.task('build', function () {
   // assets.jar needs to run last
-  runSequence('bower', ['react', 'copy', 'styles'], 'assets.jar');
+  runSequence('clean', 'bower', ['react', 'copy', 'styles'], 'assets.jar');
 });
 
 gulp.task('dev-watch', ['dev-build'], function () {
@@ -167,7 +167,7 @@ gulp.task('dev-watch', ['dev-build'], function () {
 });
 
 gulp.task('dev-build', function () {
-  runSequence('bower', ['copy', 'styles']);
+  runSequence('clean', 'bower', ['copy', 'styles']);
 });
 
 gulp.task('default', ['dev-watch']);
