@@ -52,7 +52,7 @@
   },
   "scripts": {
     "httpd": "./node_modules/.bin/http-server public -o -c-1",
-    "start": "./node_modules/.bin/http-server public -o -c-1",
+    "start": "node mock-server.js",
     "xprepublish": "./node_modules/.bin/bower install --config.interactive=false",
     "clean": "./node_modules/.bin/gulp clean",
     "build": "./node_modules/.bin/gulp build",

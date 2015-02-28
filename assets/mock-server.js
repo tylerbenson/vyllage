@@ -12,7 +12,6 @@ var walker = walk.walk(path.resolve('./api'), {
 walker.on('file', function (root, fileStats, next) {
   var filePath = path.join(root, fileStats.name);
   var fileExt = path.extname(fileStats.name);
-  console.log(filePath, fileExt);
   if (fileExt === '.md') {
     fs.readFile(filePath, 'utf8', function (err, data) {
       if (err) { throw err };
