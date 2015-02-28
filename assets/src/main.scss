@@ -9,6 +9,14 @@ body {
 			display: none;
 		}
 
+		.forceEditMode{
+			background-color: red;
+
+			.editable, .buttons-container {
+			display: block;
+
+			}
+		}
 		.article-content:hover {
 
 			.main {
