@@ -1,18 +1,17 @@
-**Editor**
 
-**GET** */resume/{documentId}/section*
 
-Returns a list of sections from the specified document in JSON format. (See api-response-spec)
+# Returns a list of sections from the specified document in JSON format. (See api-response-spec)
+## GET /resume/{documentId}/section*
++ Response 200 (application/json)
+  {}
 
-**GET** */resume/{documentId}/section/{sectionId}*
-
-Returns the requested section in JSON format. If the section can't be found then returns code 404 with the following response:
+# Returns the requested section in JSON format. If the section can't be found then returns code 404 with the following response:
+## GET /resume/{documentId}/section/{sectionId}*
+  + Response 200 (application/json)
+  {} 
 
 {"error":"DocumentSection with id '2' not found."}
 
-**POST** */resume/{documentId}/section/{sectionId}*
-
-Updates the section from the request body (JSON).
 
 **POST** */resume/{documentId}/section*
 
