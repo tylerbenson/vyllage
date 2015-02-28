@@ -39,6 +39,9 @@ article {
 .rcpent-add {
   position: relative;
   margin-top: 40px; 
+  input {
+    width: 100%;
+  }
 }
 
 .rcpent-list {
@@ -60,7 +63,10 @@ article {
 	}
 }
 
-
+.add-button {
+  // width: 40px;
+  // height: auto;
+}
 
 .error {
     color: red;

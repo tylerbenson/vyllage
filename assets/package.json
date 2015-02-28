@@ -9,7 +9,8 @@
     "react": "^0.12.2",
     "react-layer-mixin": "^0.1.0",
     "react-layers": "^0.3.1",
-    "superagent": "^0.21.0"
+    "superagent": "^0.21.0",
+    "validator": "^3.32.0"
   },
   "devDependencies": {
     "api-mock": "^0.1.1",
