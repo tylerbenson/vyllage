@@ -122,6 +122,7 @@ article {
 
 	.send-btn {
 		@include saveBtn();
+    margin: 20px;
 	}
 
 	.send-btn:hover {
@@ -143,7 +144,7 @@ article {
 // suggested users list style
 .suggested-users-list {
   background-color: #fff;
-  margin-top: 5px;
+  margin-top: 12px;
   ul {
     display: block;
   	width: 300px;

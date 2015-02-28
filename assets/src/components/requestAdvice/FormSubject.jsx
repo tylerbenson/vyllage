@@ -1,10 +1,10 @@
 var React = require('react');
 
-var FormMessage = React.createClass({
+var FormSubject = React.createClass({
   render: function () {
     return (
-      <div className='u-pull-left'>
-        <p className="rqst-key-word">subject:</p>
+      <div className='row'>
+        <p className="two columns rqst-key-word">subject:</p>
         <div className="subject" >
           <p className="subject-text">
             Could you provide me some feedback on my resume?
@@ -15,4 +15,4 @@ var FormMessage = React.createClass({
   }
 });
 
-module.exports = FormMessage;
+module.exports = FormSubject;

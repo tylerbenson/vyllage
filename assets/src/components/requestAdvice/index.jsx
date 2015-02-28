@@ -1,6 +1,6 @@
 var React = require('react');
 var To = require('./FormTo');
-var Message = require('./FormMessage');
+var Subject = require('./FormSubject');
 var Body = require('./FormBody');
 
 var Form = React.createClass({
@@ -10,7 +10,7 @@ var Form = React.createClass({
         <div className='twelve columns'>
           <form>
             <To />
-            <Message />
+            <Subject />
             <div className='message'>
               <Body />
               <div className='u-pull-right'>
