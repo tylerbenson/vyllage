@@ -16,6 +16,7 @@ var del = require('del');
 var assign = require('lodash.assign');
 var runSequence = require('run-sequence');
 var bower = require('gulp-bower');
+var cache = require('gulp-cached');
 
 var path = require('path');
 
@@ -64,8 +65,10 @@ gulp.task('styles', function () {
 //         .pipe(livereload());
 // });
 
+
 gulp.task('prettify-html', function () {
   return gulp.src('src/*.html')
+    .pipe(cache('prettify-html'))
     .pipe(prettify({
       html: {
         braceStyle: "collapse",
@@ -81,8 +84,10 @@ gulp.task('prettify-html', function () {
     .pipe(gulp.dest('src/'))
 });
 
+
 gulp.task('prettify-js', function () {
   return gulp.src(['./*.json', './*.js'])
+    .pipe(cache('prettify-js'))
     .pipe(prettify({
       js: {
         indentChar: " ",
@@ -109,6 +114,7 @@ gulp.task('react', function (callback) {
 
 gulp.task('lint', function () {
   return gulp.src('src/**/*.js')
+    .pipe(cache('lint'))
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });

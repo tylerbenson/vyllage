@@ -21,6 +21,7 @@
     "gulp-autoprefixer": "^2.0.0",
     "gulp-bower": "0.0.10",
     "gulp-bower-src": "0.1.0",
+    "gulp-cached": "^1.0.2",
     "gulp-cram": "0.2.0",
     "gulp-debug": "^2.0.0",
     "gulp-expect-file": "0.0.7",
