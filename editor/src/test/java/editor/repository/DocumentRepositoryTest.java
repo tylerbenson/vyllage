@@ -9,7 +9,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import editor.Application;
-import editor.model.Account;
 import editor.model.Document;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -61,11 +60,7 @@ public class DocumentRepositoryTest {
 
 	private Document generateDocument() {
 		Document doc1 = new Document();
-
-		Account account = new Account();
-		account.setId(0);
-		account.setUserName("username");
-		doc1.setAccount(account);
+		doc1.setUserId(0L);
 		doc1.setVisibility(false);
 		return doc1;
 	}

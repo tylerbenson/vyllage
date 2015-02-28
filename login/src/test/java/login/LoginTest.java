@@ -66,7 +66,7 @@ public class LoginTest {
 		repository.createUser(user);
 
 		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
-				user, oldPassword, user.getAuthorities());
+				user, oldPassword);
 
 		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 
