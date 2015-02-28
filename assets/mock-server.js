@@ -3,8 +3,14 @@ var path = require('path');
 var fs = require('fs');
 var protagonist = require('protagonist');
 var resourceWalker = require('api-mock/lib/walker');
+var logger = require('morgan');
 var walk = require('walk');
 var app = express();
+var template = require('lodash.template');
+
+app.use(logger('dev'));
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
+app.use('/css', express.static(path.join(__dirname, 'public/css')));
 
 var walker = walk.walk(path.resolve('./api'), {});
 
@@ -26,6 +32,39 @@ walker.on('file', function (root, fileStats, next) {
     })
   }
   next();
+});
+
+app.get('/:htmlName', function (req, res) {
+  var htmlPath = path.join(__dirname, 'public', req.params.htmlName);
+  fs.readFile(htmlPath, 'utf8', function (err, data) {
+    if (err) {
+      res.status(404).end();
+    }
+    res.send(data);
+  })
+})
+
+app.get('/', function (req, res) {
+  var htmlFiles = [];
+  var html = '';
+  var walker = walk.walk(path.resolve('./public'));
+  walker.on('file', function (root, fileStats, next) {
+    var filePath = path.join(root, fileStats.name);
+    var fileExt = path.extname(fileStats.name);
+    if (fileExt === '.html') {
+      htmlFiles.push(fileStats.name);
+    }
+    next();
+  });
+  walker.on('end', function () {
+    htmlFiles.forEach(function (name) {
+      var compiled = template("<div><a href='\/${ name }'>${ name }</a></div>");
+      html += compiled({
+        name: name
+      });
+    });
+    res.send(html);
+  });
 });
 
 app.listen(8000);
