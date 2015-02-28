@@ -45,6 +45,7 @@ article {
 	// display: inline-block;
   width: 600px;
 	float: left;
+  cursor: pointer;
 	.rcpent {
 		@include recipient();
         p {
@@ -54,6 +55,7 @@ article {
         a {
             color: #000;
             padding: 10px;
+
         }
 	}
 }
