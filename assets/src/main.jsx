@@ -24,7 +24,7 @@ var MainData =[
     "type": "experience",
     "title": "experience",
     "sectionId": 124,
-    "sectionPosition": 6,
+    "sectionPosition": 2,
     "state": "shown",
     "organizationName": "DeVry Education Group",
     "organizationDescription": "Blah Blah Blah.",
@@ -38,7 +38,7 @@ var MainData =[
 },
 {
     "type": "experience",
-    "title": "education",
+    "title": "experience",
     "sectionId": 125,
     "sectionPosition": 3,
     "state": "hidden",
@@ -53,18 +53,20 @@ var MainData =[
     "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
 },
 {
-    "type": "freeform",
-    "title": "skills",
-    "sectionId": 126,
+    "type": "experience",
+    "title": "education",
+    "sectionId": 125,
     "sectionPosition": 4,
-    "description": "basket weaving, spear fishing, dominion"
-},
-{
-    "type": "freeform",
-    "title": "skills",
-    "sectionId": 127,
-    "sectionPosition": 7,
-    "description": "basket weaving, spear fishing, dominion"
+    "state": "hidden",
+    "organizationName": "Keller Graduate School of Management",
+    "organizationDescription": "Blah Blah Blah.",
+    "role": "Masters of Project Management",
+    "startDate": "September 2010",
+    "endDate": "September 2012",
+    "isCurrent": false,
+    "location": "Portland, Oregon",
+    "roleDescription": "tryrty",
+    "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
 },
 {
     "type": "freeform",
@@ -72,23 +74,7 @@ var MainData =[
     "sectionId": 128,
     "sectionPosition": 5,
     "description": "basket weaving, spear fishing, dominion"
-},
-{
-    "type": "experience",
-    "title": "education",
-    "sectionId": 129,
-    "sectionPosition": 2,
-    "state": "hidden",
-    "organizationName": "Pisik",
-    "organizationDescription": "Blah Blah Blah.",
-    "role": "Masters of Project Management",
-    "startDate": "September 2010",
-    "endDate": "September 2012",
-    "isCurrent": false,
-    "location": "Portland, Oregon",
-    "roleDescription": "tyrty",
-    "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
-},
+}
 ];
 
 function compare(a,b) {
@@ -291,12 +277,9 @@ var MainContainer = React.createClass({
                              <article className="career-goal">
                                  <div className="row" id = {result.sectionId}>
                                      <div  className="twelve columns">
-                                        <div>
-                                            <button className="article-btn"> {result.title} </button>
-                                        </div>
-
-                                        <div>
-                                            <button className="article-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> + </button>
+                                        <div className="u-pull-left full">
+                                          <button className="u-pull-left article-btn"> {result.title} </button>
+                                          <button className="u-pull-right article-btn addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> + </button>
                                         </div>
                                          
                                         <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
@@ -312,7 +295,7 @@ var MainContainer = React.createClass({
                             return (
                              <article className="career-goal">
                                  <div className="row" id = {result.sectionId}>
-                                     <div  className="twelve columns">
+                                     <div className="twelve columns">
                                                                                 
                                         <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
 
@@ -339,17 +322,14 @@ var MainContainer = React.createClass({
                         if (addNewItem == 1) {
                             addNewItem = 0;
                             return (
-                                <article className="experience forceEditMode">
+                                <article className="experience">
                                     <div className="row">
                                          <div className="twelve columns">
-                                            <div>
-                                                <button className="article-btn"> {result.title} </button>
+                                             <div className="u-pull-left full">
+                                                <button className="u-pull-left article-btn"> {result.title} </button>
+                                                <button className="u-pull-right article-btn addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> + </button>
                                             </div>
-                                            
-                                            <div>
-                                                <button className="article-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> + </button>
-                                            </div>
-                                            
+
                                             <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
 
                                             <ArticleControlls />

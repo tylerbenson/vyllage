@@ -9,7 +9,7 @@ var FreeformMain = React.createClass({
                 <div className="main">
                     <div className="paragraph">
                         <p className="freeform-description">
-                           {this.props.description};
+                           {this.props.description}
                         </p>
                     </div>
                 </div>
