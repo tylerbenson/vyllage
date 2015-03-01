@@ -1,28 +1,44 @@
 @import './components/common/variables';
 @import './components/common/mixins';
 
-body {
+	.full {
+		width: 100%;
+	}
 
-	article {
+	.addSection-btn {
+		background-color: #eeebe9;
+		border: 1px solid;
+		color: #5E5757;
+	}
+
+	.editable, .buttons-container {
+		display: none;
+	}
+
+	.forceEditMode {
 
 		.editable, .buttons-container {
-			display: none;
+			display: block;
 		}
 
-		.article-content:hover {
+		.main {
+			display: none;
+		}
+	}
 
-			.main {
-				background: url(../images/edit.png) no-repeat top right;
+	.article-content:hover {
 
-				> p, > ul , > div.paragraph {
-					@include editParagraph();
-				}
+		.main {
+			background: url(../images/edit.png) no-repeat top right;
+
+			> p, > ul , > div.paragraph {
+				@include editParagraph();
 			}
 		}
+	}
 
-		.comments-content {
-			display: none;
-		}
+	.comments-content {
+		display: none;
 	}
 
 	article.info-sections {
@@ -31,7 +47,7 @@ body {
   			display: none;
   		}
 	}
-}
+
 
 @import './components/header/header';
 @import './components/profile/profile';

@@ -7,6 +7,7 @@ var FreeformContainer = require('./components/freeform/container');
 var ArticleContent = require('./components/organization/article-content');
 var ArticleControlls =require('./components/freeform/article-controlls');
 var CommentsBlog = require('./components/freeform/comments-blog');
+var AddSections = require('./components/addSections/addSections');
 var request = require('superagent');
 
 
@@ -21,9 +22,9 @@ var MainData =[
 },
 {
     "type": "experience",
-    "title": "job experience",
+    "title": "experience",
     "sectionId": 124,
-    "sectionPosition": 6,
+    "sectionPosition": 2,
     "state": "shown",
     "organizationName": "DeVry Education Group",
     "organizationDescription": "Blah Blah Blah.",
@@ -37,7 +38,7 @@ var MainData =[
 },
 {
     "type": "experience",
-    "title": "education",
+    "title": "experience",
     "sectionId": 125,
     "sectionPosition": 3,
     "state": "hidden",
@@ -52,18 +53,20 @@ var MainData =[
     "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
 },
 {
-    "type": "freeform",
-    "title": "skills",
-    "sectionId": 126,
+    "type": "experience",
+    "title": "education",
+    "sectionId": 125,
     "sectionPosition": 4,
-    "description": "basket weaving, spear fishing, dominion"
-},
-{
-    "type": "freeform",
-    "title": "skills",
-    "sectionId": 127,
-    "sectionPosition": 7,
-    "description": "basket weaving, spear fishing, dominion"
+    "state": "hidden",
+    "organizationName": "Keller Graduate School of Management",
+    "organizationDescription": "Blah Blah Blah.",
+    "role": "Masters of Project Management",
+    "startDate": "September 2010",
+    "endDate": "September 2012",
+    "isCurrent": false,
+    "location": "Portland, Oregon",
+    "roleDescription": "tryrty",
+    "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
 },
 {
     "type": "freeform",
@@ -71,23 +74,7 @@ var MainData =[
     "sectionId": 128,
     "sectionPosition": 5,
     "description": "basket weaving, spear fishing, dominion"
-},
-{
-    "type": "experience",
-    "title": "education",
-    "sectionId": 129,
-    "sectionPosition": 2,
-    "state": "hidden",
-    "organizationName": "Pisik",
-    "organizationDescription": "Blah Blah Blah.",
-    "role": "Masters of Project Management",
-    "startDate": "September 2010",
-    "endDate": "September 2012",
-    "isCurrent": false,
-    "location": "Portland, Oregon",
-    "roleDescription": "tyrty",
-    "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
-},
+}
 ];
 
 function compare(a,b) {
@@ -180,49 +167,192 @@ var MainContainer = React.createClass({
         }
     },
 
+    addSection: function (type,sectionPosition) {
+        var id = MainData.length + 1,
+                 position = sectionPosition,
+                 data = this.state.mainData;
+
+         // Set position           
+         data.map(function(result) {
+            if(result.sectionPosition >= position)
+            {
+                result.sectionPosition = result.sectionPosition + 1;
+            }
+        });
+
+        this.state.editModePosition = position;
+
+        switch(type) {
+            case 'career goal':
+                    data.push({
+                    "type": "freeform",
+                    "title": "career goal",
+                    "sectionId": id,
+                    "sectionPosition": position,
+                    "state": "shown",
+                    "description": ""
+                });
+                break;
+            case 'skills':
+                data.push({
+                    "type": "freeform",
+                    "title": "skills",
+                    "sectionId": id,
+                    "sectionPosition": position,
+                    "state": "shown",
+                    "description": ""
+                });
+                break;
+            case 'experience':
+                    data.push({
+                    "type": "experience",
+                    "title": "experience",
+                    "sectionId": id,
+                    "sectionPosition": position,
+                    "state": "shown",
+                    "organizationName": "",
+                    "organizationDescription": "",
+                    "role": "",
+                    "startDate": "",
+                    "endDate": "",
+                    "isCurrent": false,
+                    "location": "",
+                    "roleDescription": "",
+                    "highlights": ""
+                });
+                break;
+            case 'education':
+                    data.push({
+                    "type": "experience",
+                    "title": "education",
+                    "sectionId": id,
+                    "sectionPosition": position,
+                    "state": "shown",
+                    "organizationName": "",
+                    "organizationDescription": "",
+                    "role": "",
+                    "startDate": "",
+                    "endDate": "",
+                    "isCurrent": false,
+                    "location": "",
+                    "roleDescription": "",
+                    "highlights": ""
+                });
+                break;
+        }      
+
+        // Sort by sectionPosition
+        data.sort(compare);
+        this.setState({mainData: data});
+    },
+
     render: function() {
         var results = this.state.mainData,
-            that = this;
+            that = this,
+            experienceCount = 0,
+            educationCount = 0,
+            careergoalCount = 0,
+            skillsCount = 0,
+            addNewItem = 0;
+
         return (
             <div>
                 {
-                    results.map(function(result) {
-                    if(result.type === "freeform")
-                    {
-                        return (
-                         <article className="career-goal">
-                             <div className="row" id = {result.sectionId}>
-                                 <div  className="twelve columns">
-                                    <div>
-                                        <button className="article-btn"> {result.title} </button>
+                results.map(function(result) {
+                    if(result.type === "freeform"){
+                        addNewItem = 0;
+                        if(careergoalCount == 0  && result.title == "career goal") {
+                            addNewItem = 1;
+                            careergoalCount = careergoalCount + 1;
+                        }
+
+                        if(skillsCount == 0 && result.title == "skills") {
+                            addNewItem = 1;
+                            skillsCount = skillsCount + 1;
+                        }
+
+                        if (addNewItem == 1) {
+                            addNewItem = 0;
+                            return (
+                             <article className="career-goal">
+                                 <div className="row" id = {result.sectionId}>
+                                     <div  className="twelve columns">
+                                        <div className="u-pull-left full">
+                                          <button className="u-pull-left article-btn"> {result.title} </button>
+                                          <button className="u-pull-right article-btn addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> + </button>
+                                        </div>
+                                         
+                                        <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
+
+                                        <ArticleControlls/>
+
+                                        <CommentsBlog/>  
                                     </div>
-
-                                    <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
-
-                                    <ArticleControlls/>
-
-                                    <CommentsBlog/>  
                                 </div>
-                            </div>
-                        </article>)
+                            </article>)
+                        }
+                        else {
+                            return (
+                             <article className="career-goal">
+                                 <div className="row" id = {result.sectionId}>
+                                     <div className="twelve columns">
+                                                                                
+                                        <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
+
+                                        <ArticleControlls/>
+
+                                        <CommentsBlog/>  
+                                    </div>
+                                </div>
+                            </article>)
+                        }
                     }
-                    else
-                    {
-                        return (
-                        <article className="experience">
-                            <div className="row">
-                                 <div className="twelve columns">
-                                    <div>
-                                        <button className="article-btn"> {result.type} </button>
+                    else {
+                        addNewItem = 0;
+                        if(experienceCount == 0 && result.title == "experience"){
+                            addNewItem = 1;
+                            experienceCount = experienceCount + 1;
+                        }
+
+                        if(educationCount == 0 && result.title == "education"){
+                            addNewItem = 1;
+                            educationCount = educationCount + 1;
+                        }
+
+                        if (addNewItem == 1) {
+                            addNewItem = 0;
+                            return (
+                                <article className="experience">
+                                    <div className="row">
+                                         <div className="twelve columns">
+                                             <div className="u-pull-left full">
+                                                <button className="u-pull-left article-btn"> {result.title} </button>
+                                                <button className="u-pull-right article-btn addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> + </button>
+                                            </div>
+
+                                            <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
+
+                                            <ArticleControlls />
+
+                                            <CommentsBlog />
+                                        </div>
                                     </div>
-                                    <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
+                                </article>)
+                        } else {
+                             return (
+                                <article className="experience">
+                                    <div className="row">
+                                         <div className="twelve columns">
+                                                                                                                         
+                                            <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
 
-                                    <ArticleControlls />
+                                            <ArticleControlls />
 
-                                    <CommentsBlog />
-                                </div>
-                            </div>
-                        </article>)
+                                            <CommentsBlog />
+                                        </div>
+                                    </div>
+                                </article>)
+                        }
                     }
                     
                     })
