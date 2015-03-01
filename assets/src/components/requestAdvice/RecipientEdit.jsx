@@ -49,7 +49,7 @@ var RecipientEdit = React.createClass({
     recipient[key] = e.target.value
     this.setState({
       recipient: recipient,
-      showSuggestions: true,
+      showSuggestions: (this.props.selectedRecipient === null),
       position: {
         top: rect.bottom,
         left: rect.left

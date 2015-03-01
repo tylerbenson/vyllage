@@ -46,7 +46,11 @@ var FormTo = React.createClass({
         <div className='content-part'>
           <p className="rqst-key-word one column">to:</p>
           <div className='nine columns'>
-            <RecipientEdit updateRecipient={this.updateRecipient} recipient={this.state.recipient}/>
+            <RecipientEdit 
+              updateRecipient={this.updateRecipient}
+              recipient={this.state.recipient}
+              selectedRecipient={this.state.selectedRecipient}
+              />
             <RecipientList recipients={this.state.recipients} removeRecipient={this.removeRecipient} selectRecipient={this.selectRecipient} />
           </div>
           <div className="two columns fb-button">
