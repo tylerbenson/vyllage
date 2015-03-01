@@ -36,6 +36,10 @@ article {
 	margin-top: 45px;
 }
 
+.rcpent-edit {
+  position: relative;
+}
+
 .rcpent-add {
   position: relative;
   margin-top: 40px; 
@@ -141,10 +145,19 @@ article {
 }
 
 
-// suggested users list style
+// // suggested users list style
+// .suggestion-overlay {
+//   position: fixed;
+//   left: 0;
+//   right: 0;
+//   top: 0;
+//   bottom: 0;
+// }
 .suggested-users-list {
+  position: absolute;
   background-color: #fff;
   margin-top: 12px;
+  cursor: pointer;
   ul {
     display: block;
   	width: 300px;

@@ -14,6 +14,7 @@ var FormTo = React.createClass({
     };
   },
   updateRecipient: function (recipient) {
+    console.log(recipient);
     var recipients = this.state.recipients;
     if (this.state.selectedRecipient === null) {
       recipients = recipients.concat(recipient);
@@ -43,7 +44,7 @@ var FormTo = React.createClass({
   },
   render: function () {
     return (
-        <div className='content-part'>
+        <div className='row'>
           <p className="rqst-key-word one column">to:</p>
           <div className='nine columns'>
             <RecipientEdit 
