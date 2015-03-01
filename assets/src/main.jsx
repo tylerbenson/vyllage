@@ -185,14 +185,14 @@ var MainContainer = React.createClass({
         switch(type) {
             case 'career goal':
                     data.push({
-                    "type": "freeform",
-                    "title": "career goal",
-                    "sectionId": id,
-                    "sectionPosition": position,
-                    "state": "shown",
-                    "description": ""
-                });
-                break;
+                        "type": "freeform",
+                        "title": "career goal",
+                        "sectionId": id,
+                        "sectionPosition": position,
+                        "state": "shown",
+                        "description": ""
+                    });
+                    break;
             case 'skills':
                 data.push({
                     "type": "freeform",
@@ -248,12 +248,9 @@ var MainContainer = React.createClass({
 
     render: function() {
         var results = this.state.mainData,
-            that = this,
-            experienceCount = 0,
-            educationCount = 0,
-            careergoalCount = 0,
-            skillsCount = 0,
-            addNewItem = 0;
+            that = this, experienceCount = 0,
+            educationCount = 0, careergoalCount = 0,
+            skillsCount = 0,  addNewItem = 0;
 
         return (
             <div>
@@ -261,97 +258,162 @@ var MainContainer = React.createClass({
                 results.map(function(result) {
                     if(result.type === "freeform"){
                         addNewItem = 0;
-                        if(careergoalCount == 0  && result.title == "career goal") {
-                            addNewItem = 1;
-                            careergoalCount = careergoalCount + 1;
-                        }
 
-                        if(skillsCount == 0 && result.title == "skills") {
-                            addNewItem = 1;
-                            skillsCount = skillsCount + 1;
-                        }
+                        if(that.state.editModePosition == result.sectionPosition)
+                        {
+                             if(result.title == "career goal") {
+                                addNewItem = 1;
+                                careergoalCount = careergoalCount + 1;
+                            }
 
-                        if (addNewItem == 1) {
-                            addNewItem = 0;
-                            return (
-                             <article className="career-goal">
-                                 <div className="row" id = {result.sectionId}>
-                                     <div  className="twelve columns">
-                                        <div className="u-pull-left full">
-                                          <button className="u-pull-left article-btn"> {result.title} </button>
-                                          <button className="u-pull-right article-btn addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> + </button>
-                                        </div>
-                                         
-                                        <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
-
-                                        <ArticleControlls/>
-
-                                        <CommentsBlog/>  
-                                    </div>
-                                </div>
-                            </article>)
-                        }
-                        else {
-                            return (
-                             <article className="career-goal">
-                                 <div className="row" id = {result.sectionId}>
-                                     <div className="twelve columns">
-                                                                                
-                                        <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
-
-                                        <ArticleControlls/>
-
-                                        <CommentsBlog/>  
-                                    </div>
-                                </div>
-                            </article>)
-                        }
-                    }
-                    else {
-                        addNewItem = 0;
-                        if(experienceCount == 0 && result.title == "experience"){
-                            addNewItem = 1;
-                            experienceCount = experienceCount + 1;
-                        }
-
-                        if(educationCount == 0 && result.title == "education"){
-                            addNewItem = 1;
-                            educationCount = educationCount + 1;
-                        }
-
-                        if (addNewItem == 1) {
-                            addNewItem = 0;
-                            return (
-                                <article className="experience">
-                                    <div className="row">
-                                         <div className="twelve columns">
-                                             <div className="u-pull-left full">
-                                                <button className="u-pull-left article-btn"> {result.title} </button>
-                                                <button className="u-pull-right article-btn addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> + </button>
+                            if(result.title == "skills") {
+                                addNewItem = 1;
+                                skillsCount = skillsCount + 1;
+                            }
+                             return (
+                                 <article className="career-goal forceEditMode">
+                                     <div className="row" id = {result.sectionId}>
+                                         <div  className="twelve columns">
+                                            <div className="u-pull-left full">
+                                              <button className="u-pull-left article-btn"> {result.title} </button>
+                                              <button className="u-pull-right article-btn " onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> {result.title}</button>
                                             </div>
+                                             
+                                            <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
 
-                                            <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
+                                            <ArticleControlls/>
 
-                                            <ArticleControlls />
-
-                                            <CommentsBlog />
+                                            <CommentsBlog/>  
                                         </div>
                                     </div>
                                 </article>)
                         } else {
-                             return (
-                                <article className="experience">
-                                    <div className="row">
+                            
+                            if(careergoalCount == 0  && result.title == "career goal") {
+                                addNewItem = 1;
+                                careergoalCount = careergoalCount + 1;
+                            }
+
+                            if(skillsCount == 0 && result.title == "skills") {
+                                addNewItem = 1;
+                                skillsCount = skillsCount + 1;
+                            }
+
+                            if (addNewItem == 1) {
+                                addNewItem = 0;
+                                return (
+                                    <article className="career-goal">
+                                        <div className="row" id = {result.sectionId}>
+                                             <div  className="twelve columns">
+                                                <div className="u-pull-left full">
+                                                  <button className="u-pull-left article-btn"> {result.title} </button>
+                                                  <button className="u-pull-right addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> {result.title} </button>
+                                                </div>
+                                                 
+                                                <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
+
+                                                <ArticleControlls/>
+
+                                                <CommentsBlog/>  
+                                            </div>
+                                        </div>
+                                    </article>)
+                            }
+                            else {
+                                return (
+                                 <article className="career-goal">
+                                     <div className="row" id = {result.sectionId}>
                                          <div className="twelve columns">
-                                                                                                                         
-                                            <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
+                                                                                    
+                                            <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
 
-                                            <ArticleControlls />
+                                            <ArticleControlls/>
 
-                                            <CommentsBlog />
+                                            <CommentsBlog/>  
                                         </div>
                                     </div>
                                 </article>)
+                            }
+                        }
+                    }
+                    else {
+                        addNewItem = 0;
+
+                        if(that.state.editModePosition == result.sectionPosition)
+                        {
+                            if(result.title == "experience"){
+                                addNewItem = 1;
+                                experienceCount = experienceCount + 1;
+                            }
+
+                            if(result.title == "education"){
+                                addNewItem = 1;
+                                educationCount = educationCount + 1;
+                            }
+
+                            return (
+                                    <article className="experience forceEditMode">
+                                        <div className="row">
+                                             <div className="twelve columns">
+                                                 <div className="u-pull-left full">
+                                                    <button className="u-pull-left article-btn"> {result.title} </button>
+                                                    <button className="u-pull-right article-btn addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}>{result.title}</button>
+                                                </div>
+
+                                                <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
+
+                                                <ArticleControlls />
+
+                                                <CommentsBlog />
+                                            </div>
+                                        </div>
+                                    </article>)
+
+                        }else{
+                            if(experienceCount == 0 && result.title == "experience"){
+                                addNewItem = 1;
+                                experienceCount = experienceCount + 1;
+                            }
+
+                            if(educationCount == 0 && result.title == "education"){
+                                addNewItem = 1;
+                                educationCount = educationCount + 1;
+                            }
+
+                            if (addNewItem == 1) {
+                                addNewItem = 0;
+                                return (
+                                    <article className="experience">
+                                        <div className="row">
+                                             <div className="twelve columns">
+                                                 <div className="u-pull-left full">
+                                                    <button className="u-pull-left article-btn"> {result.title} </button>
+                                                    <button className="u-pull-right article-btn addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}>{result.title}</button>
+                                                </div>
+
+                                                <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
+
+                                                <ArticleControlls />
+
+                                                <CommentsBlog />
+                                            </div>
+                                        </div>
+                                    </article>)
+                            } else {
+                                 return (
+                                    <article className="experience">
+                                        <div className="row">
+                                             <div className="twelve columns">
+                                                                                                                             
+                                                <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
+
+                                                <ArticleControlls />
+
+                                                <CommentsBlog />
+                                            </div>
+                                        </div>
+                                    </article>)
+                            }
                         }
                     }
                     
