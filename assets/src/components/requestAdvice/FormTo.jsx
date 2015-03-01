@@ -10,7 +10,7 @@ var FormTo = React.createClass({
         {"firstName": "Nathan", "lastName": "Benson", email: "nathan.benson@vyllage.com" }
       ],
       selectedRecipient: null,
-      recipient: {firstName: "", lastName: "", email: ""}
+      recipient: {firstName: "", lastName: "", email: "", newRecipient: true}
     };
   },
   updateRecipient: function (recipient) {
@@ -24,7 +24,7 @@ var FormTo = React.createClass({
     this.setState({
       recipients: recipients,
       selectedRecipient: null,
-      recipient: {firstName: "", lastName: "", email: ""}
+      recipient: {firstName: "", lastName: "", email: "", newRecipient: true}
     });
   },
   removeRecipient: function (index) {
@@ -33,7 +33,7 @@ var FormTo = React.createClass({
     this.setState({
       recipients: recipients,
       selectedRecipient: null,
-      recipient: {firstName: "", lastName: "", email: ""}
+      recipient: {firstName: "", lastName: "", email: "", newRecipient: true}
     });
   },
   selectRecipient: function (index) {

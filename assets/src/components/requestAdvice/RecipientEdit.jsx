@@ -44,7 +44,10 @@ var RecipientEdit = React.createClass({
     e.preventDefault();
     var rect = e.target.getBoundingClientRect();
     var recipient = this.state.recipient;
-    recipient[key] = e.target.value
+    // Only newly added recipients are editable
+    if (recipient.newRecipient) {
+      recipient[key] = e.target.value
+    }
     this.setState({
       recipient: recipient,
       showSuggestions: (this.props.selectedRecipient === null),
