@@ -6,7 +6,6 @@ var minifyCSS = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var watch = require('gulp-watch');
 var prettify = require('gulp-jsbeautifier');
-var jsxformat = require('jsxformat');
 var jshint = require('gulp-jshint');
 var livereload = require('gulp-livereload');
 var uglify = require('gulp-uglify');
@@ -87,7 +86,7 @@ gulp.task('prettify-html', function () {
 
 
 gulp.task('prettify-js', function () {
-  return gulp.src(['./**/*.json', './**/*.js'])
+  return gulp.src(['./*.json', './*.js'])
     .pipe(cache('prettify-js'))
     .pipe(prettify({
       js: {
@@ -98,13 +97,6 @@ gulp.task('prettify-js', function () {
         wrapLineLength: 120
       }
     }))
-    .pipe(gulp.dest('.'))
-});
-
-gulp.task('prettify-jsx', function () {
-  return gulp.src(['./**/*.jsx'])
-    .pipe(cache('prettify-js'))
-    .pipe(jsxformat())
     .pipe(gulp.dest('.'))
 });
 

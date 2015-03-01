@@ -14,7 +14,6 @@ var FormTo = React.createClass({
     };
   },
   updateRecipient: function (recipient) {
-    console.log(recipient);
     var recipients = this.state.recipients;
     if (this.state.selectedRecipient === null) {
       recipients = recipients.concat(recipient);

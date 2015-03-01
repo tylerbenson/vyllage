@@ -1,5 +1,5 @@
 var React = require('react');
-var ContentEditable = require("react-contenteditable");
+var ContentEditable = require("./ContentEditable");
 
 var FormSubject = React.createClass({
   getInitialState: function(){
@@ -10,9 +10,9 @@ var FormSubject = React.createClass({
   },
   render: function () {
     return (
-      <div className='row'>
+      <div className='row subject'>
         <p className="two columns rqst-key-word">subject:</p>
-        <div className='subject'>
+        <div className="ten columns">
           <ContentEditable html={this.state.html} onChange={this.handleChange}/>
         </div>
       </div>

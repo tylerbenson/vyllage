@@ -74,7 +74,6 @@ var RecipientEdit = React.createClass({
   },
   render: function () {
     var recipient = this.state.recipient;
-    console.log(this.state.position);
     return (
       <div onBlur={this.closeSuggestions}>
         <div className='rcpent-add row'>
