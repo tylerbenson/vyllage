@@ -22,9 +22,17 @@ var data = {
 var Suggesions = React.createClass({
   mixins: [LayerMixin],
   renderRecipientList: function (recipients) {
+    var selectSuggestion = this.props.selectSuggestion;
     return recipients.map(function (recipient, index) {
-      return <li className="item-line" onClick={this.props.selectSuggestion.bind(this, recipient)}><p className="item-text">{recipient.firstName + " " + recipient.lastName}</p></li>;
-    }.bind(this));
+      return (
+        <li 
+          key={index}
+          className="item-line"
+          onClick={selectSuggestion(recipient)}>
+          <p className="item-text">{recipient.firstName + " " + recipient.lastName}</p>
+         </li>
+      );
+    });
   },
   renderLayer: function () {
     if (this.props.show) {
@@ -47,7 +55,7 @@ var Suggesions = React.createClass({
         </div>
       );
     } else {
-      return null;
+      return <div></div>;
     }
   },
   render: function () {

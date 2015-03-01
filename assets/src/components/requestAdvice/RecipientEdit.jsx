@@ -7,7 +7,6 @@ var RecipientEdit = React.createClass({
   getInitialState: function () {
     return {
       recipient: this.props.recipient,
-      error: false,
       showSuggestions: false,
       position: {},
       firstNameError: false,
@@ -32,15 +31,17 @@ var RecipientEdit = React.createClass({
     this.setState(errors);
     return !(errors.firstNameError || errors.lastNameError || errors.emailError)
   },
-  selectSuggestion: function (recipient, e) {
-    e.preventDefault();
-    this.props.updateRecipient(recipient);
-    this.setState({
-      showSuggestions: false,
-      firstNameError: false,
-      lastNameError: false,
-      emailError: false
-    });
+  selectSuggestion: function (recipient) {
+    return function (e) {
+      e.preventDefault();
+      this.props.updateRecipient(recipient);
+      this.setState({
+        showSuggestions: false,
+        firstNameError: false,
+        lastNameError: false,
+        emailError: false
+      });
+    }.bind(this);
   },
   changeHandler: function (key, e) {
     e.preventDefault();
@@ -63,7 +64,6 @@ var RecipientEdit = React.createClass({
     if (isValid) {
       this.props.updateRecipient(recipient);
       this.setState({
-        error: false,
         showSuggestions: false
       });
     }
@@ -92,8 +92,12 @@ var RecipientEdit = React.createClass({
           <div className='one columns'>
             <a className='add-button'><img src='images/add.png' onClick={this.updateHandler} /></a>
           </div>
-         </div> 
-         <Suggestions show={this.state.showSuggestions} position={this.state.position} selectSuggestion={this.selectSuggestion} />
+        </div> 
+        <Suggestions
+          show={this.state.showSuggestions}
+          position={this.state.position}
+          selectSuggestion={this.selectSuggestion}
+        />
       </div>
     );
   }
