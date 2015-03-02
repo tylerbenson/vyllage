@@ -1,147 +1,79 @@
 @import './components/common/variables';
 @import './components/common/mixins';
 
-
-body {
-	background: url('../images/background.jpg');
-	font-family: 'pt-sans', sans-serif;
-
-	p {
-		padding: 0px;
-		margin: 0px;
-	}
+.request-advice {
+  background: #fff;
+  margin-top: 36px;
+  border: 1px solid $border-color;
+  p {
+    padding: 0;
+    margin: 0;
+  }
 }
 
-section#container {
-	margin-top: 36px;
-	width: 750px;
-}
-
-article {
-	@include article-grid();
-}
-
-.topper {
+.request-advice-header {
 	@include topper();
 	padding-left: 50px;
 }
 
-.content-part {
-	margin-bottom: 10px;
+.request-advice-form {
 }
 
+.request-advice-form-to {
+  padding: 16px;
+}
+
+.request-advice-form-subject {
+  height: 32px;
+  padding: 24px;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+}
+
+.request-advice-form-message {
+  padding: 16px;
+}
+
+
 .rqst-key-word {
-	@include  rqstKeyWord();
-	margin-left: 37px; 
-	margin-top: 45px;
+}
+
+.rcpent-edit {
+  position: relative;
 }
 
 .rcpent-add {
   position: relative;
-  margin-top: 40px; 
+  input {
+    width: 100%;
+  }
 }
 
 .rcpent-list {
-	// display: inline-block;
-  width: 600px;
-	float: left;
+  cursor: pointer;
 	.rcpent {
-		@include recipient();
-        p {
-          padding: 10px;
-          display: inline-block;
-        }
-        a {
-            color: #000;
-            padding: 10px;
-        }
+    float: left;
+    border: 1px solid $border-color;
+    margin: 5px;
+    a {
+      color: #000;
+      padding: 10px;
+    }
 	}
 }
 
-
-
-.error {
-    color: red;
-} 
-
-.fb-button {
-	@include fbButton();
-	float:left;
-	margin-top: 30px;
-
-	.small-text {
-		font-size: 15px;
-		line-height: 15px;
-	}
-
-	.big-text {
-		font-size: 20px;
-		line-height: 26px;
-	}
-}
-
-.subject {
-	width: 610px;
-	height: 99px;
-	margin-top: 16px;
-	border-top: 1px solid $cancel-btn-bkg-color;
-	float:left;
-
-	.subject-text {
-		margin-bottom: 0px;
-		margin-top: 29px;
-		padding-left: 60px;
-		font-size: 20px;
-	}
-}
-
-.message {
-	float:left;
-	padding: 47px 60px 0px 55px;
-	border-top: 1px solid $cancel-btn-bkg-color;
-
-	.messageContent {
-		margin-bottom: 20px;
-
-		.message-text {
-			font-size: 18px;
-			line-height: 28px;
-		}
-	}
-
-	.send-btn {
-		@include saveBtn();
-	}
-
-	.send-btn:hover {
-		border-color: rgb(47, 52, 92);
-		background-color: rgb(66, 81, 130);
-	}
-	
-	.cancel-btn {
-		@include cancelBtn();
-	}
-
-	.cancel-btn:hover {
-		border-color: #030303;
-		background-color: #C0BFBF;
-	}
-}
-
-
-// suggested users list style
 .suggested-users-list {
+  position: absolute;
   background-color: #fff;
-  margin-top: 5px;
+  margin-top: 12px;
+  cursor: pointer;
   ul {
     display: block;
   	width: 300px;
   	box-shadow: 0px 0px 5px 3px  rgba(126, 121, 113, 1);
 
   	li.topper {
-  		font-size: 16px;
-  		line-height: 24px;
-
+      background-color: $top-bkg-color;
   		p.topper-text {
   			text-align: center;
   		}
@@ -149,19 +81,60 @@ article {
 
   	li {
   		height: 20px;
-  		padding: 5px;
+  		padding: 10px;
   		margin: 0px;
-  		font-size: 16px;
-  		line-height: 24px;
+  		// font-size: 16px;
   		list-style-type: none;
   		border-bottom: 1px solid $cancel-btn-bkg-color;
 
   		p.item-text {
-  			float: left;
   			padding-left: 15px
   		}
   	}
   }	
+}
+
+.send-btn {
+  @include saveBtn();
+  margin: 20px;
+}
+
+.send-btn:hover {
+  border-color: rgb(47, 52, 92);
+  background-color: rgb(66, 81, 130);
+}
+
+.cancel-btn {
+  @include cancelBtn();
+}
+
+.cancel-btn:hover {
+  border-color: #030303;
+  background-color: #C0BFBF;
+}
+
+
+.fb-button {
+  @include fbButton();
+  height: 72px;
+  // float:left;
+  // margin-top: 30px;
+
+  .small-text {
+    font-size: 15px;
+    line-height: 15px;
+  }
+
+  .big-text {
+    font-size: 20px;
+    line-height: 26px;
+  }
+}
+
+.add-button {
+  img {
+    width: 34px;
+  }
 }
 
 @import './components/header/header';

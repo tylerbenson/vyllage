@@ -21,35 +21,64 @@ var data = {
 
 var Suggesions = React.createClass({
   mixins: [LayerMixin],
-  
+  getInitialState: function () {
+    return { 
+      isFocused: false,
+      isOpen: false
+    };
+  },
+  enterHandler: function (e) {
+    this.setState({
+      isFocused: true,
+    });
+  },
+  leaveHandler: function (e) {
+    this.setState({
+      isFocused: false,
+    });
+  },
+  clickHandler: function (recipient, e) {
+    e.preventDefault();
+    this.props.selectSuggestion(recipient);
+    this.setState({
+      isFocused: false,
+    });
+  },
   renderRecipientList: function (recipients) {
     return recipients.map(function (recipient, index) {
-      return <li className="item-line" onClick={this.props.selectSuggestion.bind(this, recipient)}><p className="item-text">{recipient.firstName + " " + recipient.lastName}</p></li>;
+      return (
+        <li key={index} className="item-line">
+          <p className="item-text" onClick={this.clickHandler.bind(this, recipient)}>
+            {recipient.firstName + " " + recipient.lastName}
+          </p>
+         </li>
+      );
     }.bind(this));
   },
   renderLayer: function () {
-    console.log(this.props.show);
-    if (this.props.show) {
+    if (this.props.show || this.state.isFocused) {
       var style = {
         position: 'absolute'
       };
       style = assign({}, style, this.props.position);
       return (
-        <div style={style} className={"suggested-users-list"}>
-          <ul className="">
-            <li className="topper">
-              <p className="topper-text">recent supporters</p>
-            </li>
-            {this.renderRecipientList(data.recent)}
-            <li className="topper">
-              <p className="topper-text">recommended supporters</p>
-            </li>
-            {this.renderRecipientList(data.recommended)}
-          </ul>  
+        <div onMouseDown={this.enterHandler} onMouseUp={this.leaveHanlder}>
+          <div id='suggested-users-list' style={style} className={"suggested-users-list"}>
+            <ul className="">
+              <li className="topper">
+                <p className="topper-text">recent</p>
+              </li>
+              {this.renderRecipientList(data.recent)}
+              <li className="topper">
+                <p className="topper-text">recommended</p>
+              </li>
+              {this.renderRecipientList(data.recommended)}
+            </ul>  
+          </div>
         </div>
       );
     } else {
-      return null;
+      return <div></div>;
     }
   },
   render: function () {

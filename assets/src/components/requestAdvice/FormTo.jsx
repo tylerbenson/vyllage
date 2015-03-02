@@ -10,7 +10,7 @@ var FormTo = React.createClass({
         {"firstName": "Nathan", "lastName": "Benson", email: "nathan.benson@vyllage.com" }
       ],
       selectedRecipient: null,
-      recipient: {firstName: "", lastName: "", email: ""}
+      recipient: {firstName: "", lastName: "", email: "", newRecipient: true}
     };
   },
   updateRecipient: function (recipient) {
@@ -23,7 +23,7 @@ var FormTo = React.createClass({
     this.setState({
       recipients: recipients,
       selectedRecipient: null,
-      recipient: {firstName: "", lastName: "", email: ""}
+      recipient: {firstName: "", lastName: "", email: "", newRecipient: true}
     });
   },
   removeRecipient: function (index) {
@@ -32,7 +32,7 @@ var FormTo = React.createClass({
     this.setState({
       recipients: recipients,
       selectedRecipient: null,
-      recipient: {firstName: "", lastName: "", email: ""}
+      recipient: {firstName: "", lastName: "", email: "", newRecipient: true}
     });
   },
   selectRecipient: function (index) {
@@ -43,16 +43,20 @@ var FormTo = React.createClass({
   },
   render: function () {
     return (
-        <div className='content-part'>
-          <p className="rqst-key-word one column">to:</p>
+        <div className='request-advice-form-to row'>
+          <span className="one column rqst-key-word">to:</span>
           <div className='nine columns'>
-            <RecipientEdit updateRecipient={this.updateRecipient} recipient={this.state.recipient}/>
+            <RecipientEdit 
+              updateRecipient={this.updateRecipient}
+              recipient={this.state.recipient}
+              selectedRecipient={this.state.selectedRecipient}
+              />
             <RecipientList recipients={this.state.recipients} removeRecipient={this.removeRecipient} selectRecipient={this.selectRecipient} />
           </div>
           <div className="two columns fb-button">
-            <p className="small-text">ask your</p>
-            <p className="big-text">facebook</p>
-            <p className="small-text">friends</p>
+            <span className="small-text">ask your</span><br/>
+            <span className="big-text">facebook</span><br/>
+            <span className="small-text">friends</span><br/>
           </div>
         </div>
     );

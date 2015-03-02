@@ -1,0 +1,7 @@
+@mixin button($backgroundColor, $color){
+  font-size: 17px;
+  line-height: 18px;
+  color: $color;
+  background-color: $backgroundColor;
+  padding: 0 10px;
+}

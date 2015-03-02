@@ -13,13 +13,13 @@ var RecipentList = React.createClass({
     var nodes = this.props.recipients.map(function (recipient, index) {
       return (
         <div key={index} className="rcpent">
-          <p onClick={this.editHandler.bind(this, index)}>{recipient.firstName + " " + recipient.lastName}</p>
+          <a onClick={this.editHandler.bind(this, index)}>{recipient.firstName + " " + recipient.lastName}</a>
           <a onClick={this.removeHandler.bind(this, index)}>x</a>
         </div>
       );
     }.bind(this));
     return (
-      <div className='rcpent-list'>
+      <div className='rcpent-list u-cf'>
         {nodes}
       </div>
     );
