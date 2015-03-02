@@ -16,7 +16,7 @@ These are the api details I need for request advice feature.
 # Get suggestions for adding suggestions
 ## GET /request-advice/{userId}/suggestions
 
-+ Response 200 (application/json)
++ Response 200 (application/son)
 
   {
     "recent" : [
