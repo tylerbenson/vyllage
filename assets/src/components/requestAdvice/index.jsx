@@ -1,7 +1,7 @@
 var React = require('react');
 var To = require('./FormTo');
 var Subject = require('./FormSubject');
-var Body = require('./FormBody');
+var Message = require('./FormMessage');
 
 var Form = React.createClass({
   submitHandler: function (e) {
@@ -18,8 +18,8 @@ var Form = React.createClass({
             <form className='request-advice-form' onSubmit={this.submitHandler}>
               <To />
               <Subject />
-              <div className='message'>
-                <Body />
+              <div className='request-advice-form-message'>
+                <Message />
                 <div className='u-pull-right'>
                   <button className="send-btn">send</button>
                   <button className="cancel-btn">cancel</button>
@@ -32,26 +32,5 @@ var Form = React.createClass({
     );
   }
 });
-
-// var Form = React.createClass({
-//   render: function () {
-//     return (
-//       <div className='row'>
-//         <div className='twelve columns'>
-//           <form>
-//             <To />
-//             <div className='message'>
-//               <Body />
-//               <div className='u-pull-right'>
-//                 <button className="cancel-btn">cancel</button>
-//                 <button className="send-btn">send</button>
-//               </div>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-//     );
-//   }
-// });
 
 module.exports = Form;

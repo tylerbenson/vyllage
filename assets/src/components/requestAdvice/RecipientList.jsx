@@ -19,7 +19,7 @@ var RecipentList = React.createClass({
       );
     }.bind(this));
     return (
-      <div className='rcpent-list'>
+      <div className='rcpent-list u-cf'>
         {nodes}
       </div>
     );

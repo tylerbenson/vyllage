@@ -43,8 +43,8 @@ var FormTo = React.createClass({
   },
   render: function () {
     return (
-        <div className='row'>
-          <span className="one column">to:</span>
+        <div className='request-advice-form-to row'>
+          <span className="one column rqst-key-word">to:</span>
           <div className='nine columns'>
             <RecipientEdit 
               updateRecipient={this.updateRecipient}
