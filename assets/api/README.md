@@ -29,6 +29,7 @@
 
 
 # Returns the requested section in JSON format. If the section can't be found then returns code 404 with the following response:
++ Response 404 {error:"Reason"}
 
 ## GET /resume/{documentId}/section/{sectionId}*
 + Response 200 (application/json)
@@ -47,13 +48,17 @@
 ## POST /resume/{documentId}/section/{sectionId}*
 + Response 200
 
+#Creates the section from the request body (JSON). Returns the saved section.
+## POST /resume/{documentId}/section/*
++ Response 200
+
 
 # Deletes the section.
 ## DELETE /resume/{documentId}/section/{sectionId}
 + Response 200
 
 
-# The placeholder header in api-response-spec in JSON format.
+# Returns the placeholder header in api-response-spec in JSON format.
 ## GET /resume/{documentId}/header*
 + Response 200 (application/json)
   {
@@ -62,5 +67,11 @@
     "lastName": "Benson",
     "tagline": "Technology Enthusiast analyzing, building, and expanding solutions"
   }
+
+# Saves the tagline. [STUBBED]
+## POST /resume/{documentId}/header*
+{"tagline":"This is my tagline."}
+
++ Response 200
 
 
