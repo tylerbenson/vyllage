@@ -7,10 +7,7 @@ import lombok.ToString;
 @ToString
 public class Document {
 	private Long id;
-<<<<<<< Upstream, based on origin/master
 	private String tagline;
-=======
->>>>>>> 168358e Added document redirection according to the user's id.
 	private Long userId;
 	private Boolean visibility;
 	private LocalDateTime dateCreated;
