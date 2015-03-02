@@ -51,7 +51,7 @@ insert into EDITOR.document_sections(id, sectionVersion, documentId, position, j
 
 insert into EDITOR.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(124, 1, 0, 2, '{
 	"type": "experience",
-	"title": "job experience",
+	"title": "experience",
 	"sectionId": 124,
 	"sectionPosition": 2,
 	"state": "shown",

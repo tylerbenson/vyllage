@@ -12,7 +12,7 @@
     },
     {
       "type": "experience",
-      "title": "job experience",
+      "title": "experience",
       "sectionId": 124,
       "sectionPosition": 2,
       "state": "shown",

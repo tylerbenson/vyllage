@@ -20,7 +20,7 @@ import editor.model.DocumentSection;
 public class DocumentSectionRepositoryTest {
 
 	private static final String JSON = "{" + "\"type\": \"experience\","
-			+ "\"title\": \"job experience\"," + "\"sectionId\": null,"
+			+ "\"title\": \"experience\"," + "\"sectionId\": null,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
