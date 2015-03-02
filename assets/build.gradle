@@ -25,15 +25,6 @@ task checkNPM {
     println "hasNPM = " + System.getProperty("hasNPM")
 }
 
-task npmClean(type:Exec) {
-    logging.captureStandardOutput LogLevel.INFO
-    logging.captureStandardError LogLevel.INFO
-    commandLine 'npm', 'run', 'clean'
-}
-clean.finalizedBy npmClean
-npmClean.dependsOn checkNPM
-npmClean.onlyIf { "true".equals(System.getProperty('hasNPM')) }
-
 task npmInstall(type:Exec) {
     // be Gradle-like and suppress boilerplate logging
     logging.captureStandardOutput LogLevel.INFO
@@ -46,6 +37,15 @@ task npmInstall(type:Exec) {
 npmInstall.shouldRunAfter clean
 npmInstall.dependsOn checkNPM
 npmInstall.onlyIf { "true".equals(System.getProperty('hasNPM')) }
+
+task npmClean(dependsOn: npmInstall, type:Exec) {
+    logging.captureStandardOutput LogLevel.INFO
+    logging.captureStandardError LogLevel.INFO
+    commandLine 'npm', 'run', 'clean'
+}
+clean.finalizedBy npmClean
+npmClean.dependsOn checkNPM
+npmClean.onlyIf { "true".equals(System.getProperty('hasNPM')) }
 
 task npmBuild(dependsOn: npmInstall, type:Exec) {
     logging.captureStandardOutput LogLevel.INFO
