@@ -2,7 +2,7 @@ API details of settings features
 
 # API for getting settings
 ## GET /settings/{userId}
-+ Response 200 (application/son)
++ Response 200 (application/json)
   {
     "role": "student",
     "organization": "organization name"
