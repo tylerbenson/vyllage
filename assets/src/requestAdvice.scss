@@ -1,39 +1,38 @@
 @import './components/common/variables';
 @import './components/common/mixins';
 
-
-body {
-	background: url('../images/background.jpg');
-	font-family: 'pt-sans', sans-serif;
-
-	p {
-		padding: 0px;
-		margin: 0px;
-	}
+.margin0 {
+  margin: 0;
 }
 
-section#container {
-	margin-top: 36px;
-	width: 750px;
+.request-advice {
+  background: #fff;
+  margin-top: 36px;
+  border: 1px solid $border-color;
+  p {
+    padding: 0;
+    margin: 0;
+  }
+  // padding: 10px;
+  // width: 750px;
 }
 
-article {
-	@include article-grid();
-}
-
-.topper {
+.request-advice-header {
 	@include topper();
 	padding-left: 50px;
 }
 
-.content-part {
-	margin-bottom: 10px;
+.request-advice-form {
+  padding: 16px;
+  input {
+  }
 }
 
+
 .rqst-key-word {
-	@include  rqstKeyWord();
-	margin-left: 37px; 
-	margin-top: 45px;
+	// @include  rqstKeyWord();
+	// margin-left: 37px; 
+	// margin-top: 45px;
 }
 
 .rcpent-edit {
@@ -42,28 +41,25 @@ article {
 
 .rcpent-add {
   position: relative;
-  margin-top: 40px; 
+  float: left;
+  // margin-top: 40px; 
   input {
     width: 100%;
   }
 }
 
 .rcpent-list {
-	// display: inline-block;
   width: 600px;
 	float: left;
   cursor: pointer;
 	.rcpent {
-		@include recipient();
-        p {
-          padding: 10px;
-          display: inline-block;
-        }
-        a {
-            color: #000;
-            padding: 10px;
-
-        }
+    float: left;
+    border: 1px solid $border-color;
+    margin: 5px;
+    a {
+      color: #000;
+      padding: 10px;
+    }
 	}
 }
 
@@ -71,18 +67,17 @@ article {
   img {
     width: 34px;
   }
-  // width: 40px;
-  // height: auto;
 }
 
 .error {
-    color: red;
+  color: red;
 } 
 
 .fb-button {
 	@include fbButton();
-	float:left;
-	margin-top: 30px;
+  height: 72px;
+	// float:left;
+	// margin-top: 30px;
 
 	.small-text {
 		font-size: 15px;
@@ -105,7 +100,7 @@ article {
 	p {
 		margin-bottom: 0px;
 		margin-top: 29px;
-		font-size: 20px;
+		// font-size: 20px;
 	}
 }
 
@@ -118,7 +113,7 @@ article {
 		margin-bottom: 20px;
 
 		p {
-			font-size: 18px;
+			// font-size: 18px;
 			line-height: 28px;
 		}
 	}
@@ -175,7 +170,7 @@ article {
   		height: 20px;
   		padding: 10px;
   		margin: 0px;
-  		font-size: 16px;
+  		// font-size: 16px;
   		line-height: 24px;
   		list-style-type: none;
   		border-bottom: 1px solid $cancel-btn-bkg-color;

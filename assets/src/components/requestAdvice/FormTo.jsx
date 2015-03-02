@@ -44,7 +44,7 @@ var FormTo = React.createClass({
   render: function () {
     return (
         <div className='row'>
-          <p className="rqst-key-word one column">to:</p>
+          <span className="one column">to:</span>
           <div className='nine columns'>
             <RecipientEdit 
               updateRecipient={this.updateRecipient}
@@ -54,9 +54,9 @@ var FormTo = React.createClass({
             <RecipientList recipients={this.state.recipients} removeRecipient={this.removeRecipient} selectRecipient={this.selectRecipient} />
           </div>
           <div className="two columns fb-button">
-            <p className="small-text">ask your</p>
-            <p className="big-text">facebook</p>
-            <p className="small-text">friends</p>
+            <span className="small-text">ask your</span><br/>
+            <span className="big-text">facebook</span><br/>
+            <span className="small-text">friends</span><br/>
           </div>
         </div>
     );

@@ -76,7 +76,7 @@ var RecipientEdit = React.createClass({
     var recipient = this.state.recipient;
     return (
       <div onBlur={this.closeSuggestions}>
-        <div className='rcpent-add row'>
+        <div className='rcpent-add'>
           <div className='three columns'>
             <input  type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} />
             {this.state.firstNameError? <p className='error'>* required </p>: null}
@@ -86,7 +86,7 @@ var RecipientEdit = React.createClass({
             {this.state.lastNameError? <p className='error'>* required </p>: null}
 
           </div>
-          <div className='four columns'>
+          <div className='five columns'>
             <input type='email' placeholder='E-mail' value={recipient.email} onChange={this.changeHandler.bind(this, 'email')} />
             {this.state.emailError? <p className='error'>* invalid email</p>: null}
           </div>

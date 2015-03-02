@@ -1,2 +1,11 @@
 @import "normalize-scss/normalize";
 @import "skeleton-scss/scss/skeleton";
+
+body {
+  background: url('../images/background.jpg');
+  font-family: 'pt-sans', sans-serif;
+}
+
+.collapse {
+  padding: 0;
+}
