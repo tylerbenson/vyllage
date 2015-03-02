@@ -29,8 +29,14 @@ body {
 				margin-bottom: 20px;
 			}
 
+			.addSection-btn {
+				@include addSection-btn();
+			}
+
 			.article-content {
 				padding: 1px 40px;
+				width: 93%;
+				float: left;
 			}
 
 			.article-divider {

@@ -5,12 +5,6 @@
 		width: 100%;
 	}
 
-	.addSection-btn {
-		background-color: #eeebe9;
-		border: 1px solid;
-		color: #5E5757;
-	}
-
 	.editable, .buttons-container {
 		display: none;
 	}
@@ -21,7 +15,7 @@
 			display: block;
 		}
 
-		.main {
+		.nonEditable {
 			display: none;
 		}
 	}
