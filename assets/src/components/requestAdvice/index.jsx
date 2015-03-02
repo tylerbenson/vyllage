@@ -18,11 +18,13 @@ var Form = React.createClass({
             <form className='request-advice-form' onSubmit={this.submitHandler}>
               <To />
               <Subject />
-              <div className='request-advice-form-message'>
-                <Message />
-                <div className='u-pull-right'>
-                  <button className="send-btn">send</button>
-                  <button className="cancel-btn">cancel</button>
+              <div className='offset-by-one nine columns'>
+                <div className='request-advice-form-message'>
+                  <Message />
+                  <div className='u-pull-right'>
+                    <button className="send-btn">send</button>
+                    <button className="cancel-btn">cancel</button>
+                  </div>
                 </div>
               </div>
             </form>

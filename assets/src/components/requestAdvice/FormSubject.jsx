@@ -11,7 +11,7 @@ var FormSubject = React.createClass({
   render: function () {
     return (
       <div className='request-advice-form-subject'>
-        <div className="two columns rqst-key-word">subject:</div>
+        <div className="one columns rqst-key-word">subject:</div>
         <div className="ten columns">
           <ContentEditable html={this.state.html} onChange={this.handleChange}/>
         </div>
