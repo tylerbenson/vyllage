@@ -21,7 +21,7 @@ import editor.services.DocumentService;
 public class DocumentServiceTest {
 
 	private static final String JSON = "{" + "\"type\": \"experience\","
-			+ "\"title\": \"job experience\"," + "\"sectionId\": 124,"
+			+ "\"title\": \"experience\"," + "\"sectionId\": 124,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","

@@ -16,7 +16,7 @@ var RegisterData =[
 },
 {
     "type": "experience",
-    "title": "job experience",
+    "title": "experience",
     "sectionId": 2,
     "sectionPosition": 2,
     "state": "shown",

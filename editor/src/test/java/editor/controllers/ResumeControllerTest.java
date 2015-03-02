@@ -22,7 +22,7 @@ import editor.services.DocumentService;
 public class ResumeControllerTest {
 
 	private static final String SECTION_124 = "{" + "\"type\": \"experience\","
-			+ "\"title\": \"job experience\"," + "\"sectionId\": 124,"
+			+ "\"title\": \"experience\"," + "\"sectionId\": 124,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
