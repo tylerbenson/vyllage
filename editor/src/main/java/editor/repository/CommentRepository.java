@@ -19,7 +19,7 @@ import editor.model.Comment;
 @Repository
 public class CommentRepository implements IRepository<Comment> {
 
-	private final Logger logger = Logger.getLogger(AccountRepository.class
+	private final Logger logger = Logger.getLogger(CommentRepository.class
 			.getName());
 
 	@Autowired

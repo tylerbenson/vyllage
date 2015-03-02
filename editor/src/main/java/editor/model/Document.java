@@ -8,17 +8,17 @@ import lombok.ToString;
 public class Document {
 	private Long id;
 	private String tagline;
-	private Account account;
+	private Long userId;
 	private Boolean visibility;
 	private LocalDateTime dateCreated;
 	private LocalDateTime lastModified;
 
-	public Account getAccount() {
-		return this.account;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public Boolean getVisibility() {

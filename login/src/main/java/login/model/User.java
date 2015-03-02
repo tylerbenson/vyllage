@@ -9,6 +9,12 @@ public class User extends org.springframework.security.core.userdetails.User {
 
 	private Long userId;
 
+	private String firstName;
+
+	private String middleName;
+
+	private String lastName;
+
 	/**
 	 * 
 	 */
@@ -27,13 +33,17 @@ public class User extends org.springframework.security.core.userdetails.User {
 		super(userName, randomPassword, defaultAuthoritiesForNewUser);
 	}
 
-	public User(Long userId, String username, String password, boolean enabled,
+	public User(Long userId, String firstName, String middleName,
+			String lastName, String username, String password, boolean enabled,
 			boolean accountNonExpired, boolean credentialsNonExpired,
 			boolean accountNonLocked,
 			Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, authorities);
 		this.userId = userId;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
 	}
 
 	public Long getUserId() {
@@ -42,6 +52,30 @@ public class User extends org.springframework.security.core.userdetails.User {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 }

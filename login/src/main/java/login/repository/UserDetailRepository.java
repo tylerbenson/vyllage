@@ -49,6 +49,7 @@ public class UserDetailRepository implements UserDetailsManager {
 	private final Logger logger = Logger.getLogger(UserDetailRepository.class
 			.getName());
 
+	// @Autowired
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
@@ -112,10 +113,11 @@ public class UserDetailRepository implements UserDetailsManager {
 		UserCredential credential = credentialsRepository.get(record
 				.getUserid());
 
-		User user = new User(record.getUserid(), record.getUsername(),
-				credential.getPassword(), record.getEnabled(),
-				accountNonExpired, credentialsNonExpired, accountNonLocked,
-				authorities);
+		User user = new User(record.getUserid(), record.getFirstname(),
+				record.getMiddlename(), record.getLastname(),
+				record.getUsername(), credential.getPassword(),
+				record.getEnabled(), accountNonExpired, credentialsNonExpired,
+				accountNonLocked, authorities);
 		return user;
 	}
 
@@ -287,8 +289,9 @@ public class UserDetailRepository implements UserDetailsManager {
 				.fetch(USERS)
 				.stream()
 				.map((UsersRecord ur) -> new User(ur.getUserid(), ur
-						.getUsername(), credentialsRepository.get(
-						ur.getUserid()).getPassword(), ur.getEnabled(),
+						.getFirstname(), ur.getMiddlename(), ur.getLastname(),
+						ur.getUsername(), credentialsRepository.get(
+								ur.getUserid()).getPassword(), ur.getEnabled(),
 						accountNonExpired, credentialsNonExpired,
 						accountNonLocked, authorityRepository.getByUserName(ur
 								.getUsername()))).collect(Collectors.toList());

@@ -25,9 +25,6 @@ public class DocumentRepository implements IRepository<Document> {
 	@Autowired
 	private DSLContext sql;
 
-	@Autowired
-	private AccountRepository accountRepository;
-
 	@Override
 	public Document get(Long id) throws ElementNotFoundException {
 		DocumentsRecord record = sql.fetchOne(DOCUMENTS, DOCUMENTS.ID.eq(id));
@@ -55,11 +52,10 @@ public class DocumentRepository implements IRepository<Document> {
 		Document document = new Document();
 
 		logger.info("Looking for account with id "
-				+ documentsRecord.getAccountid());
+				+ documentsRecord.getUserid());
 
 		document.setId(documentsRecord.getId());
-		document.setAccount(accountRepository.get(documentsRecord
-				.getAccountid()));
+		document.setUserId(documentsRecord.getUserid());
 		document.setDateCreated(documentsRecord.getDatecreated()
 				.toLocalDateTime());
 		document.setLastModified(documentsRecord.getLastmodified()
@@ -78,7 +74,7 @@ public class DocumentRepository implements IRepository<Document> {
 		if (existingRecord == null) {
 			DocumentsRecord newRecord = sql.newRecord(DOCUMENTS);
 
-			newRecord.setAccountid(document.getAccount().getId());
+			newRecord.setUserid(document.getUserId());
 			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
 			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
 			newRecord.setVisibility(document.getVisibility());
@@ -93,7 +89,7 @@ public class DocumentRepository implements IRepository<Document> {
 
 		} else {
 
-			existingRecord.setAccountid(document.getAccount().getId());
+			existingRecord.setUserid(document.getUserId());
 			existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
 					.now()));
 			existingRecord.setVisibility(document.getVisibility());
@@ -120,16 +116,5 @@ public class DocumentRepository implements IRepository<Document> {
 			existingRecord.delete();
 		}
 	}
-
-	// sql.insertInto(DOCUMENTS, DOCUMENTS.ID, //
-	// DOCUMENTS.ACCOUNTID, //
-	// DOCUMENTS.DATECREATED, //
-	// DOCUMENTS.LASTMODIFIED, //
-	// DOCUMENTS.VISIBILITY)//
-	// .values(documentId, //
-	// 0L, //
-	// Timestamp.valueOf(LocalDateTime.now()), //
-	// Timestamp.valueOf(LocalDateTime.now()), //
-	// true).execute();
 
 }
