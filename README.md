@@ -27,7 +27,7 @@ cd assets
 npm install
 npm run-script httpd  
 gulp watch
-open http://localhost:8000
+opens a browser window automatically
 ```
 
 To build and run as a java app:
