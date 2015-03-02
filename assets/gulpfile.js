@@ -1,24 +1,19 @@
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var sass = require('gulp-sass');
-var prefix = require('gulp-autoprefixer');
-var minifyCSS = require('gulp-minify-css');
-var rename = require('gulp-rename');
-var watch = require('gulp-watch');
-var prettify = require('gulp-jsbeautifier');
-var jshint = require('gulp-jshint');
-var livereload = require('gulp-livereload');
-var uglify = require('gulp-uglify');
-var flatten = require('gulp-flatten');
-var webpack = require('webpack');
-var zip = require('gulp-zip');
-var del = require('del');
-var assign = require('lodash.assign');
-var runSequence = require('run-sequence');
 var bower = require('gulp-bower');
 var cache = require('gulp-cached');
-
+var del = require('del');
+var flatten = require('gulp-flatten');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var jshint = require('gulp-jshint');
+var livereload = require('gulp-livereload');
+var minifyCSS = require('gulp-minify-css');
 var path = require('path');
+var prettify = require('gulp-jsbeautifier');
+var rename = require('gulp-rename');
+var runSequence = require('run-sequence');
+var sass = require('gulp-sass');
+var watch = require('gulp-watch');
+var webpack = require('webpack');
 
 gulp.task('clean', function () {
   del(['./public', './build'], function (err) {
@@ -65,7 +60,6 @@ gulp.task('styles', function () {
 //         .pipe(livereload());
 // });
 
-
 gulp.task('prettify-html', function () {
   return gulp.src('src/*.html')
     .pipe(cache('prettify-html'))
@@ -83,7 +77,6 @@ gulp.task('prettify-html', function () {
     }))
     .pipe(gulp.dest('src/'))
 });
-
 
 gulp.task('prettify-js', function () {
   return gulp.src(['./*.json', './*.js'])
@@ -119,41 +112,26 @@ gulp.task('lint', function () {
     .pipe(jshint.reporter('default'));
 });
 
-// Gulp tasks to build assets.jar
-gulp.task('assets.jar', function () {
-  gulp.src('./public/**/*')
-    .pipe(rename(function (path) {
-      if (path.extname === '.html') {
-        path.dirname = "templates";
-      } else {
-        path.dirname = "static/" + path.dirname;
-      }
-    }))
-    .pipe(zip('assets.jar'))
-    .pipe(gulp.dest('build/libs'));
-})
-
 gulp.task('watch', ['build'], function () {
   gulp.watch(['src/**/*.scss'], function () {
-    runSequence('styles', 'assets.jar');
+    runSequence('styles');
   });
   gulp.watch(['src/**/*.jsx'], function () {
-    runSequence('react', 'assets.jar');
+    runSequence('react');
   });
   gulp.watch(['src/*.html', 'src/images/*'], function () {
-    runSequence('prettify-html', 'copy', 'assets.jar');
+    runSequence('prettify-html', 'copy');
   });
   gulp.watch(['./*.js', './*.json'], function () {
     runSequence('prettify-js');
   });
 });
 
-
 gulp.task('build', function () {
-  // assets.jar needs to run last
-  runSequence('clean', 'bower', ['react', 'copy', 'styles'], 'assets.jar');
+  runSequence('clean', 'bower', ['react', 'copy', 'styles']);
 });
 
+// dev-watch excludes the react/jsx compilation, allowing this to be done by the server.
 gulp.task('dev-watch', ['dev-build'], function () {
   gulp.watch(['src/**/*.scss'], function () {
     runSequence('styles');
@@ -166,70 +144,11 @@ gulp.task('dev-watch', ['dev-build'], function () {
   });
 });
 
+// dev-build excludes the react/jsx compilation, allowing this to be done by the server.
 gulp.task('dev-build', function () {
   runSequence('clean', 'bower', ['copy', 'styles']);
 });
 
-gulp.task('default', ['dev-watch']);
+gulp.task('default', ['watch']);
 
 // from https://github.com/spring-io/sagan/blob/master/sagan-client/gulpfile.js
-//var gulpFilter = require('gulp-filter'),
-//    cram = require('gulp-cram'),
-//    uglify = require('gulp-uglify'),
-//    bowerSrc = require('gulp-bower-src'),
-//    sourcemaps = require('gulp-sourcemaps'),
-//    cssmin = require('gulp-minify-css'),
-//    gulp = require('gulp');
-//
-//var paths = {
-//    run: 'src/run.js',
-//    css: {
-//        files: ['src/css/*.css'],
-//        root: 'src/css'
-//    },
-//    assets: ['src/img*/**','src/*.txt','src/*.html','src/font*/**','src/css*/filterable-list.css'],
-//    dest: './dist/'
-//};
-//
-//
-//// concat and minify CSS files
-//gulp.task('minify-css', function() {
-//    return gulp.src(paths.css.files)
-//        .pipe(cssmin({root:paths.css.root}))
-//        .pipe(gulp.dest(paths.dest+'css'));
-//});
-//
-//// cram and uglify JavaScript source files
-//gulp.task('build-modules', function() {
-//
-//    var opts = {
-//        includes: [ 'curl/loader/legacy', 'curl/loader/cjsm11'],
-//        excludes: ['gmaps']
-//    };
-//
-//    return cram(paths.run, opts).into('run.js')
-//        .pipe(sourcemaps.init())
-//        .pipe(uglify())
-//        .pipe(sourcemaps.write("./"))
-//        .pipe(gulp.dest(paths.dest));
-//});
-//
-//// copy main bower files (see bower.json) and optimize js
-//gulp.task('bower-files', function() {
-//    var filter = gulpFilter(["**/*.js", "!**/*.min.js"]);
-//    return bowerSrc()
-//        .pipe(sourcemaps.init())
-//        .pipe(filter)
-//        .pipe(uglify())
-//        .pipe(filter.restore())
-//        .pipe(sourcemaps.write("./"))
-//        .pipe(gulp.dest(paths.dest+'lib'));
-//})
-//
-//// copy assets
-//gulp.task('copy-assets', function() {
-//    return gulp.src(paths.assets)
-//        .pipe(gulp.dest(paths.dest));
-//})
-//
-//gulp.task('build', ['minify-css', 'build-modules', 'copy-assets', 'bower-files'], function(){ });
