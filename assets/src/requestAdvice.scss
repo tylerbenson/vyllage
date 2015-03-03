@@ -43,13 +43,13 @@
 }
 
 .rcpent-add {
-  padding: 10px;
+  padding: 10px 20px 10px 10px;
   height: 35px;
   background-color: lighten($top-bkg-color, 5%);
   input {
     // padding: 0px;
     height: 35px;
-    width: 100%;
+    width: 110%;
   }
 }
 
@@ -142,7 +142,8 @@
 }
 
 .add-button {
-  margin-left: -5px;
+  // margin: 10px 5px 0 0;
+  padding: 10px;
   img {
     width: 32px;
   }
