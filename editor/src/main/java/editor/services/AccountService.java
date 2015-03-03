@@ -5,6 +5,9 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
@@ -34,34 +37,26 @@ public class AccountService {
 		Assert.notNull(userId);
 		// logger.info("User " + userId);
 
-		// logger.info(restTemplate.getForObject(
-		// "http://localhost:8080/account/names/" + userId, String.class));
-
 		// request.getParameterMap().forEach(
 		// (k, v) -> logger.info("Header " + k + " " + v));
-		//
+
 		// for (Cookie cookie : request.getCookies()) {
 		// logger.info(cookie.getValue());
 		// }
 
-		// HttpHeaders headers = new HttpHeaders();
-		// headers.set("Cookie",
-		// "JSESSIONID=" + request.getCookies()[0].getValue());
-		//
-		// Map<String, String> c = new HashMap<>();
-		//
-		// HttpEntity<Object> entity = new HttpEntity<Object>(c, headers);
-		//
-		// HttpEntity names = restTemplate.exchange(
-		// "http://localhost:8080/account/names/" + userId,
-		// HttpMethod.GET, entity, HttpEntity.class);
-		//
-		// logger.info(names.toString());
+		HttpHeaders headers = new HttpHeaders();
+		/*
+		 * TODO There must be a better way to get the right cookie, isn't there?
+		 * (This will break if we add more cookies.)
+		 */
+		headers.set("Cookie",
+				"JSESSIONID=" + request.getCookies()[0].getValue());
 
-		// return null;
+		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
 
-		return restTemplate.getForObject("http://localhost:8080/account/names/"
-				+ userId, AccountNames.class);
+		return restTemplate.exchange(
+				"http://localhost:8080/account/names/" + userId,
+				HttpMethod.GET, entity, AccountNames.class).getBody();
 	}
 
 }
