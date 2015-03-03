@@ -1,4 +1,5 @@
 var React = require('react');
+var cx = require('react/lib/cx');
 
 var RecipentList = React.createClass({
   removeHandler: function (index, e) {
@@ -14,8 +15,12 @@ var RecipentList = React.createClass({
   },
   render: function () {
     var nodes = this.props.recipients.map(function (recipient, index) {
+      var classes = {
+        rcpent: true,
+        'rcpent-selected': this.props.selectedRecipient === index
+      };
       return (
-        <div key={index} className="rcpent">
+        <div key={index} className={cx(classes)}>
           <a onClick={this.editHandler.bind(this, index)}>{recipient.firstName + " " + recipient.lastName}</a>
           <a onClick={this.removeHandler.bind(this, index)}>x</a>
         </div>

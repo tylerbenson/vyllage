@@ -65,6 +65,9 @@
       padding: 10px;
     }
 	}
+  .rcpent-selected {
+    border: 1px solid darken($border-color, 20%);
+  }
 }
 
 .suggested-users-list {

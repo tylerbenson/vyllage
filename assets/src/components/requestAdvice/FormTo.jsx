@@ -2,6 +2,7 @@ var React = require('react');
 var RecipientEdit = require('./RecipientEdit');
 var RecipientList = require('./RecipientList');
 var Suggestions = require('./RecipientSuggestions');
+var assign = require('lodash.assign');
 
 var FormTo = React.createClass({
   getInitialState: function () {
@@ -51,7 +52,7 @@ var FormTo = React.createClass({
   selectRecipient: function (index) {
     this.setState({
       selectedRecipient: index,
-      recipient: this.state.recipients[index]
+      recipient: assign({}, this.state.recipients[index])
     });
   },
   closeSuggestions: function (e) {
@@ -75,9 +76,12 @@ var FormTo = React.createClass({
               onSubmit={this.updateRecipient}
               recipient={this.state.recipient}
               closeSuggestions={this.closeSuggestions}
-              openSuggestions={this.openSuggestions}
-              />
-            <RecipientList recipients={this.state.recipients} removeRecipient={this.removeRecipient} selectRecipient={this.selectRecipient} />
+              openSuggestions={this.openSuggestions} />
+            <RecipientList 
+              recipients={this.state.recipients}
+              removeRecipient={this.removeRecipient}
+              selectRecipient={this.selectRecipient} 
+              selectedRecipient={this.state.selectedRecipient} />
             <Suggestions show={this.state.showSuggestions} selectSuggestion={this.updateRecipient} />
           </div>
           <div className="two columns fb-button">
