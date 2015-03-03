@@ -6,79 +6,39 @@ var validator = require('validator');
 var RecipientEdit = React.createClass({
   getInitialState: function () {
     return {
-      recipient: this.props.recipient,
-      showSuggestions: false,
-      position: {},
       firstNameError: false,
       lastNameError: false,
       emailError: false,
     }
   },
-  componentWillReceiveProps: function (nextProps) {
-    this.setState({
-      recipient: nextProps.recipient,
-      firstNameError: false,
-      lastNameError: false,
-      emailError: false
-    });
-  },
   validate: function () {
     var errors = {
-      firstNameError: !this.state.recipient.firstName,
-      lastNameError: !this.state.recipient.lastName,
-      emailError: !validator.isEmail(this.state.recipient.email)
+      firstNameError: !this.props.recipient.firstName,
+      lastNameError: !this.props.recipient.lastName,
+      emailError: !validator.isEmail(this.props.recipient.email)
     }
     this.setState(errors);
     return !(errors.firstNameError || errors.lastNameError || errors.emailError)
   },
-  selectSuggestion: function (recipient) {
-    this.props.updateRecipient(recipient);
-    this.setState({
-      showSuggestions: false,
-      firstNameError: false,
-      lastNameError: false,
-      emailError: false
-    });
-  },
   changeHandler: function (key, e) {
     e.preventDefault();
-    var rect = e.target.getBoundingClientRect();
-    var recipient = this.state.recipient;
-    // Only newly added recipients are editable
-    if (recipient.newRecipient) {
-      recipient[key] = e.target.value
-    }
-    this.setState({
-      recipient: recipient,
-      showSuggestions: (this.props.selectedRecipient === null),
-      position: {
-        top: rect.bottom,
-        left: rect.left
-      }
-    });
+    this.props.onChange(key, e.target.value);
   },
   updateHandler: function (e) {
     e.preventDefault();
     var isValid = this.validate();
-    var recipient = this.state.recipient;
+    var recipient = this.props.recipient;
     if (isValid) {
-      this.props.updateRecipient(recipient);
-      this.setState({
-        showSuggestions: false
-      });
+      this.props.onSubmit(recipient);
     }
   },
-  closeSuggestions: function (e) {
-    e.preventDefault();
-    this.setState({showSuggestions: false});
-  },
   render: function () {
-    var recipient = this.state.recipient;
+    var recipient = this.props.recipient;
     return (
-      <div onBlur={this.closeSuggestions}>
+      <div onBlur={this.props.closeSuggestions} onFocus={this.props.openSuggestions}>
         <div className='rcpent-add'>
           <div className='three columns'>
-            <input  type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} />
+            <input  type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} autoComplete='off' />
             {this.state.firstNameError? <p className='error'>* required </p>: null}
           </div>
           <div className='three columns'>
@@ -93,11 +53,6 @@ var RecipientEdit = React.createClass({
           <div className='one columns'>
             <a className='add-button'><img src='images/add.png' onClick={this.updateHandler} /></a>
           </div>
-          <Suggestions
-            show={this.state.showSuggestions}
-            position={this.state.position}
-            selectSuggestion={this.selectSuggestion}
-          />
         </div> 
       </div>
     );
@@ -106,3 +61,8 @@ var RecipientEdit = React.createClass({
 
 module.exports = RecipientEdit;
 
+// <Suggestions
+//             show={this.state.showSuggestions}
+//             position={this.state.position}
+//             selectSuggestion={this.selectSuggestion}
+//           />

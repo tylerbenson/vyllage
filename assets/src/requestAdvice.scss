@@ -21,6 +21,9 @@
 
 .request-advice-form-to {
   padding: 16px;
+  .gray-box {
+    background: $top-bkg-color;
+  }
 }
 
 .request-advice-form-subject {
@@ -36,41 +39,47 @@
 
 
 .rqst-key-word {
-}
-
-.rcpent-edit {
-  position: relative;
+  text-align: center;
 }
 
 .rcpent-add {
-  position: relative;
+  padding: 10px 20px 10px 10px;
+  height: 35px;
+  background-color: lighten($top-bkg-color, 5%);
   input {
-    width: 100%;
+    // padding: 0px;
+    height: 35px;
+    width: 110%;
   }
 }
 
 .rcpent-list {
   cursor: pointer;
 	.rcpent {
+    display: inline-block;
     float: left;
     border: 1px solid $border-color;
     margin: 5px;
+    padding: 5px 0;
     a {
       color: #000;
       padding: 10px;
     }
 	}
+  .rcpent-selected {
+    border: 1px solid darken($border-color, 20%);
+  }
 }
 
 .suggested-users-list {
   position: absolute;
   background-color: #fff;
-  margin-top: 12px;
+  margin-top: 16px;
   cursor: pointer;
   ul {
     display: block;
   	width: 300px;
-  	box-shadow: 0px 0px 5px 3px  rgba(126, 121, 113, 1);
+  	box-shadow: 2px 2px 2px $border-color, -2px -2px 2px $border-color;
 
   	li.topper {
       background-color: $top-bkg-color;
@@ -80,15 +89,13 @@
   	}
 
   	li {
-  		height: 20px;
-  		padding: 10px;
+  		// height: 20px;
+  		padding: 5px;
   		margin: 0px;
   		// font-size: 16px;
   		list-style-type: none;
-  		border-bottom: 1px solid $cancel-btn-bkg-color;
-
   		p.item-text {
-  			padding-left: 15px
+  			padding-left: 25px
   		}
   	}
   }	
@@ -97,6 +104,9 @@
 .send-btn {
   @include saveBtn();
   margin: 20px;
+  &:hover {
+    color: #fff;
+  }
 }
 
 .send-btn:hover {
@@ -132,8 +142,10 @@
 }
 
 .add-button {
+  // margin: 10px 5px 0 0;
+  padding: 10px;
   img {
-    width: 34px;
+    width: 32px;
   }
 }
 

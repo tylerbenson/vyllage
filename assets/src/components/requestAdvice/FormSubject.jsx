@@ -1,5 +1,5 @@
 var React = require('react');
-var ContentEditable = require("./ContentEditable");
+var ContentEditable = require("react-contenteditable");
 
 var FormSubject = React.createClass({
   getInitialState: function(){

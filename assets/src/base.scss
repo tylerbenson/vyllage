@@ -9,3 +9,8 @@ body {
 .error {
   color: red;
 } 
+
+//This class is added by react-contenteditable components of contenteditable elements
+.react-contenteditable {
+  outline: 0px solid transparent; // Removes border around contenteditable element
+}
