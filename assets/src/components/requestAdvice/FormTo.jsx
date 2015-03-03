@@ -1,6 +1,7 @@
 var React = require('react');
 var RecipientEdit = require('./RecipientEdit');
 var RecipientList = require('./RecipientList');
+var Suggestions = require('./RecipientSuggestions');
 
 var FormTo = React.createClass({
   getInitialState: function () {
@@ -52,6 +53,7 @@ var FormTo = React.createClass({
               selectedRecipient={this.state.selectedRecipient}
               />
             <RecipientList recipients={this.state.recipients} removeRecipient={this.removeRecipient} selectRecipient={this.selectRecipient} />
+
           </div>
           <div className="two columns fb-button">
             <span className="small-text">ask your</span><br/>
