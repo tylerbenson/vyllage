@@ -57,7 +57,7 @@ create table if not exists LOGIN.persistent_logins (
 --  password varchar_ignorecase(60) not null,
 --  enabled boolean not null);
 --NOTE: password == '$2a$10$6REiiQD8i4FTE4D/X3.chOnlgxghwWMGcngksAjyQun0njGDQznxq'
-insert into LOGIN.users ( username, enabled ) values ( 'email', true );
+insert into LOGIN.users ( username, firstName, middleName, lastName, enabled ) values ( 'email', 'Luke', 'F', 'Skywalker', true );
 insert into LOGIN.users ( username, enabled ) values ( 'testuser@vyllage.com', true );
 insert into LOGIN.users ( username, enabled ) values ( 'deana@vyllage.com', true );
 insert into LOGIN.users ( username, enabled ) values ( 'someone@vyllage.com', true );

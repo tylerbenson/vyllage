@@ -1,7 +1,6 @@
 package editor.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,15 +19,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import editor.model.Document;
 import editor.model.DocumentHeader;
 import editor.model.DocumentSection;
 import editor.repository.ElementNotFoundException;
+import editor.services.AccountNames;
+import editor.services.AccountService;
 import editor.services.DocumentService;
 
 @Controller
@@ -37,6 +35,9 @@ public class ResumeController {
 
 	@Autowired
 	private DocumentService documentService;
+
+	@Autowired
+	private AccountService accountService;
 
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
@@ -71,23 +72,22 @@ public class ResumeController {
 		return documentService.getDocumentSection(sectionId);
 	}
 
-	@RequestMapping(value = "{resumeId}/header", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/header", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody DocumentHeader getResumeHeader(
-			@PathVariable final Long resumeId) throws JsonProcessingException,
-			IOException {
+			HttpServletRequest request, @PathVariable final Long documentId)
+			throws JsonProcessingException, IOException,
+			ElementNotFoundException {
 
-		// TODO: once we load the actual data from a database all this will be
-		// replaced.
-		ObjectMapper mapper = new ObjectMapper();
-		JsonFactory jfactory = new JsonFactory();
+		Document document = documentService.getDocument(documentId);
 
-		InputStream in = getClass().getResourceAsStream(
-				"/editor/resume-resumeID-header.json");
+		AccountNames namesForUser = accountService.getNamesForUser(
+				document.getUserId(), request);
 
-		JsonParser jParser = jfactory.createParser(in);
-
-		// mapper.readTree(jParser).toString();
-		DocumentHeader header = mapper.readValue(jParser, DocumentHeader.class);
+		DocumentHeader header = new DocumentHeader();
+		header.setFirstName(namesForUser.getFirstName());
+		header.setMiddleName(namesForUser.getMiddleName());
+		header.setLastName(namesForUser.getLastName());
+		header.setTagline(document.getTagline());
 		return header;
 	}
 
@@ -117,6 +117,7 @@ public class ResumeController {
 
 		return documentService.saveDocumentSection(document, body);
 	}
+
 	@RequestMapping(value = "{documentId}/section/{sectiondId}", method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteSection(@PathVariable final Long documentId,
@@ -126,10 +127,15 @@ public class ResumeController {
 		documentService.deleteSection(sectionId);
 	}
 
-	@RequestMapping(value = "{resumeId}/header", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/header", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void saveHeader(@PathVariable final Long resumeId,
-			@RequestBody final DocumentHeader body) {
+	public void saveHeader(@PathVariable final Long documentId,
+			@RequestBody final DocumentHeader documentHeader)
+			throws ElementNotFoundException {
+
+		Document document = documentService.getDocument(documentId);
+		document.setTagline(documentHeader.getTagline());
+		documentService.saveDocument(document);
 	}
 
 	@ExceptionHandler(value = { JsonProcessingException.class,
