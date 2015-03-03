@@ -34,18 +34,19 @@
 	letter-spacing: inherit;
 	color: $color;
 	background-color: $backgroundColor;
-	padding: 0 10px;
 }
 
 @mixin ask-advice-btn() {
 	@include button($ask-advice-btn-bkg-color, $white);
 	border: 1px solid #050505;
 	font-weight: bold;
+	padding: 0 10px;
 }
 
 @mixin share-contact-btn() {
 	@include button($share-contact-btn-bkg-color, #a5a3a2);
 	height: 29px;
+	padding: 0 10px;
 	border-top: 1px dotted #878887;
 	border-left: 1px dotted #878887;
 	border-right: 0;
@@ -57,22 +58,22 @@
 	@include button($article-btn-bkg-color, $white);
 	cursor: initial;
 	border-radius: 2px;
+	padding: 0 10px;
 	border: 0;
 	height: 32px;
 	min-width: 100px;
 }
 
 @mixin addSection-btn() {
-	@include button(#eeebe9, #5E5757);
-	cursor: initial;
-	background: url('../images/add.png') no-repeat center right;
+	cursor: pointer;
+	background: url('../images/add.png') no-repeat 94px 5px;
 	border-radius: 2px;
-	padding-right: 23px;
 	border: 1px solid;
 	height: 32px;
-	min-width: 100px;
 	width: 120px;
-	margin-top: 10px;
+	margin: 10px 20px;
+	padding: 0 20px 0 0;
+	@include button(#eeebe9, #5E5757);
 }
 
 @mixin article-control-links() {
