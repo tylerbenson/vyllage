@@ -11,7 +11,8 @@ var FormTo = React.createClass({
         {"firstName": "Nathan", "lastName": "Benson", email: "nathan.benson@vyllage.com" }
       ],
       selectedRecipient: null,
-      recipient: {firstName: "", lastName: "", email: "", newRecipient: true}
+      recipient: {firstName: "", lastName: "", email: "", newRecipient: true},
+      showSuggestions: false
     };
   },
   updateRecipient: function (recipient) {
@@ -22,6 +23,7 @@ var FormTo = React.createClass({
       recipients[this.state.selectedRecipient] = recipient; 
     }
     this.setState({
+      showSuggestions: false,
       recipients: recipients,
       selectedRecipient: null,
       recipient: {firstName: "", lastName: "", email: "", newRecipient: true}
@@ -42,6 +44,14 @@ var FormTo = React.createClass({
       recipient: this.state.recipients[index]
     });
   },
+  closeSuggestions: function (e) {
+    e.preventDefault();
+    this.setState({showSuggestions: false});
+  },
+  openSuggestions: function (e) {
+    // e.preventDefault();
+    this.setState({showSuggestions: true});
+  },
   render: function () {
     return (
         <div className='request-advice-form-to row'>
@@ -51,9 +61,11 @@ var FormTo = React.createClass({
               updateRecipient={this.updateRecipient}
               recipient={this.state.recipient}
               selectedRecipient={this.state.selectedRecipient}
+              closeSuggestions={this.closeSuggestions}
+              openSuggestions={this.openSuggestions}
               />
             <RecipientList recipients={this.state.recipients} removeRecipient={this.removeRecipient} selectRecipient={this.selectRecipient} />
-
+            <Suggestions show={this.state.showSuggestions} selectSuggestion={this.updateRecipient} />
           </div>
           <div className="two columns fb-button">
             <span className="small-text">ask your</span><br/>

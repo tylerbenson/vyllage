@@ -7,8 +7,6 @@ var RecipientEdit = React.createClass({
   getInitialState: function () {
     return {
       recipient: this.props.recipient,
-      showSuggestions: false,
-      position: {},
       firstNameError: false,
       lastNameError: false,
       emailError: false,
@@ -31,31 +29,29 @@ var RecipientEdit = React.createClass({
     this.setState(errors);
     return !(errors.firstNameError || errors.lastNameError || errors.emailError)
   },
-  selectSuggestion: function (recipient) {
-    this.props.updateRecipient(recipient);
-    this.setState({
-      showSuggestions: false,
-      firstNameError: false,
-      lastNameError: false,
-      emailError: false
-    });
-  },
+  // selectSuggestion: function (recipient) {
+  //   this.props.updateRecipient(recipient);
+  //   this.setState({
+  //     showSuggestions: false,
+  //     firstNameError: false,
+  //     lastNameError: false,
+  //     emailError: false
+  //   });
+  // },
   changeHandler: function (key, e) {
     e.preventDefault();
-    var rect = e.target.getBoundingClientRect();
     var recipient = this.state.recipient;
     // Only newly added recipients are editable
+    // this.props.openSuggestions();
     if (recipient.newRecipient) {
       recipient[key] = e.target.value
     }
     this.setState({
       recipient: recipient,
       showSuggestions: (this.props.selectedRecipient === null),
-      position: {
-        top: rect.bottom,
-        left: rect.left
-      }
-    });
+    }, function () {
+      this.props.openSuggestions(e);
+    }.bind(this));
   },
   updateHandler: function (e) {
     e.preventDefault();
@@ -68,14 +64,11 @@ var RecipientEdit = React.createClass({
       });
     }
   },
-  closeSuggestions: function (e) {
-    e.preventDefault();
-    this.setState({showSuggestions: false});
-  },
+  
   render: function () {
     var recipient = this.state.recipient;
     return (
-      <div onBlur={this.closeSuggestions}>
+      <div onBlur={this.props.closeSuggestions} onFocus={this.props.closeSuggestions}>
         <div className='rcpent-add'>
           <div className='three columns'>
             <input  type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} />
@@ -93,11 +86,7 @@ var RecipientEdit = React.createClass({
           <div className='one columns'>
             <a className='add-button'><img src='images/add.png' onClick={this.updateHandler} /></a>
           </div>
-          <Suggestions
-            show={this.state.showSuggestions}
-            position={this.state.position}
-            selectSuggestion={this.selectSuggestion}
-          />
+          
         </div> 
       </div>
     );
@@ -106,3 +95,8 @@ var RecipientEdit = React.createClass({
 
 module.exports = RecipientEdit;
 
+// <Suggestions
+//             show={this.state.showSuggestions}
+//             position={this.state.position}
+//             selectSuggestion={this.selectSuggestion}
+//           />

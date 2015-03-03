@@ -20,7 +20,7 @@ var data = {
 }
 
 var Suggesions = React.createClass({
-  mixins: [LayerMixin],
+  // mixins: [LayerMixin],
   getInitialState: function () {
     return { 
       isFocused: false,
@@ -55,12 +55,12 @@ var Suggesions = React.createClass({
       );
     }.bind(this));
   },
-  renderLayer: function () {
+  render: function () {
     if (this.props.show || this.state.isFocused) {
       var style = {
         position: 'absolute'
       };
-      style = assign({}, style, this.props.position);
+      style = assign({}, style);
       return (
         <div onMouseDown={this.enterHandler} onMouseUp={this.leaveHanlder}>
           <div id='suggested-users-list' style={style} className={"suggested-users-list"}>
@@ -78,12 +78,12 @@ var Suggesions = React.createClass({
         </div>
       );
     } else {
-      return <div></div>;
+      return null;
     }
   },
-  render: function () {
-    return null;
-  }
+  // render: function () {
+  //   return null;
+  // }
 });
 
 module.exports = Suggesions;
