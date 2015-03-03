@@ -10,70 +10,30 @@ var CommentsBlog = require('./components/freeform/comments-blog');
 var AddSections = require('./components/addSections/addSections');
 var request = require('superagent');
 
-
-var MainData =[
+var RegisterData =[
 {
     "type": "freeform",
     "title": "career goal",
-    "sectionId": 123,
+    "sectionId": 1,
     "sectionPosition": 1,
     "state": "shown",
-    "description": "this is my goal statement."
+    "description": ""
 },
 {
     "type": "experience",
     "title": "experience",
-    "sectionId": 124,
+    "sectionId": 2,
     "sectionPosition": 2,
     "state": "shown",
-    "organizationName": "DeVry Education Group",
-    "organizationDescription": "Blah Blah Blah.",
-    "role": "Manager, Local Accounts",
-    "startDate": "September 2010",
+    "organizationName": "",
+    "organizationDescription": "",
+    "role": "",
+    "startDate": "",
     "endDate": "",
-    "isCurrent": true,
-    "location": "Portland, Oregon",
-    "roleDescription": "Blah Blah Blah",
-    "highlights": "I was in charge of..."
-},
-{
-    "type": "experience",
-    "title": "experience",
-    "sectionId": 125,
-    "sectionPosition": 3,
-    "state": "hidden",
-    "organizationName": "Keller Graduate School of Management",
-    "organizationDescription": "Blah Blah Blah.",
-    "role": "Masters of Project Management",
-    "startDate": "September 2010",
-    "endDate": "September 2012",
     "isCurrent": false,
-    "location": "Portland, Oregon",
-    "roleDescription": "tryrty",
-    "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
-},
-{
-    "type": "experience",
-    "title": "education",
-    "sectionId": 125,
-    "sectionPosition": 4,
-    "state": "hidden",
-    "organizationName": "Keller Graduate School of Management",
-    "organizationDescription": "Blah Blah Blah.",
-    "role": "Masters of Project Management",
-    "startDate": "September 2010",
-    "endDate": "September 2012",
-    "isCurrent": false,
-    "location": "Portland, Oregon",
-    "roleDescription": "tryrty",
-    "highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
-},
-{
-    "type": "freeform",
-    "title": "skills",
-    "sectionId": 128,
-    "sectionPosition": 5,
-    "description": "basket weaving, spear fishing, dominion"
+    "location": "",
+    "roleDescription": "",
+    "highlights": ""
 }
 ];
 
@@ -108,9 +68,9 @@ var MainContainer = React.createClass({
 
                     if (res.ok) {
                         if(res.body.length == 0) {
-                            // if data from server is empty , apply hardcoded data
-                            MainData.sort(compare);
-                            self.setState({mainData: MainData});
+                            // data is empty eq. registration page, first logged in
+                            RegisterData.sort(compare);
+                            self.setState({mainData: RegisterData});
                         } else {
                             self.setState({mainData: res.body});
                         }
@@ -168,7 +128,7 @@ var MainContainer = React.createClass({
     },
 
     addSection: function (type,sectionPosition) {
-        var id = MainData.length + 1,
+        var id = this.state.mainData.length + 1,
                  position = sectionPosition,
                  data = this.state.mainData;
 
@@ -419,6 +379,10 @@ var MainContainer = React.createClass({
                     
                     })
                 }
+
+                <AddSections addSection={that.addSection} type={'freeForm'}/>
+
+                <AddSections addSection={that.addSection} type={'organization'}/>
             </div>
         );
     }

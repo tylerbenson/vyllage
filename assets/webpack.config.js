@@ -6,7 +6,6 @@ module.exports = {
   devtool: '#inline-source-map',
   entry: {
     'main.js': './src/main.jsx',
-    'register.js': './src/register.jsx',
     'requestAdvice.js': './src/requestAdvice.jsx'
   },
   output: {
