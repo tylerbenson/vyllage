@@ -15,6 +15,16 @@ var FormTo = React.createClass({
       showSuggestions: false
     };
   },
+  changeRecipient: function (key, value) {
+    var recipient = this.state.recipient;
+    if (recipient.newRecipient) {
+      recipient[key] = value
+    }
+    this.setState({
+      recipient: recipient,
+      showSuggestions: (this.state.selectedRecipient === null)
+    });
+  },
   updateRecipient: function (recipient) {
     var recipients = this.state.recipients;
     if (this.state.selectedRecipient === null) {
@@ -50,7 +60,7 @@ var FormTo = React.createClass({
   },
   openSuggestions: function (e) {
     // e.preventDefault();
-    this.setState({showSuggestions: true});
+    // this.setState({showSuggestions: this.state.selectedRecipient === null});
   },
   render: function () {
     return (
@@ -58,11 +68,10 @@ var FormTo = React.createClass({
           <span className="one column rqst-key-word">to:</span>
           <div className='nine columns'>
             <RecipientEdit 
-              updateRecipient={this.updateRecipient}
+              onChange={this.changeRecipient}
+              onSubmit={this.updateRecipient}
               recipient={this.state.recipient}
-              selectedRecipient={this.state.selectedRecipient}
               closeSuggestions={this.closeSuggestions}
-              openSuggestions={this.openSuggestions}
               />
             <RecipientList recipients={this.state.recipients} removeRecipient={this.removeRecipient} selectRecipient={this.selectRecipient} />
             <Suggestions show={this.state.showSuggestions} selectSuggestion={this.updateRecipient} />
