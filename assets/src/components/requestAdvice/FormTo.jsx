@@ -59,8 +59,11 @@ var FormTo = React.createClass({
     this.setState({showSuggestions: false});
   },
   openSuggestions: function (e) {
-    // e.preventDefault();
-    // this.setState({showSuggestions: this.state.selectedRecipient === null});
+    e.preventDefault();
+    var recipient = this.state.recipient;
+    if (recipient.firstName || recipient.lastName || recipient.email) {
+      this.setState({showSuggestions: this.state.selectedRecipient === null});
+    }
   },
   render: function () {
     return (
@@ -72,6 +75,7 @@ var FormTo = React.createClass({
               onSubmit={this.updateRecipient}
               recipient={this.state.recipient}
               closeSuggestions={this.closeSuggestions}
+              openSuggestions={this.openSuggestions}
               />
             <RecipientList recipients={this.state.recipients} removeRecipient={this.removeRecipient} selectRecipient={this.selectRecipient} />
             <Suggestions show={this.state.showSuggestions} selectSuggestion={this.updateRecipient} />

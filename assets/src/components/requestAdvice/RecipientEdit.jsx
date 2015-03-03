@@ -35,7 +35,7 @@ var RecipientEdit = React.createClass({
   render: function () {
     var recipient = this.props.recipient;
     return (
-      <div onBlur={this.props.closeSuggestions}>
+      <div onBlur={this.props.closeSuggestions} onFocus={this.props.openSuggestions}>
         <div className='rcpent-add'>
           <div className='three columns'>
             <input  type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} />
