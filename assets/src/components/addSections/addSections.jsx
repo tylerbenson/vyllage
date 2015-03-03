@@ -16,11 +16,11 @@ var AddSections = React.createClass({
                 <div className="row">
                     <div className="twelve columns">
                         <div onClick={this.addSection}>
-                            <button className="article-btn"> education </button>
-                            <p className="add-more"> add more education </p>
-                            <div className="icon-wrapper" >
-                                <img className="icon add" src="images/add.png" width="25" height="25"/>
+                            <div className ="add-more-container">
+                                <button className="u-pull-left article-btn"> {this.props.title} </button>
+                                <button className="u-pull-right article-btn addSection-btn">{this.props.title}</button>
                             </div>
+                            <p className="add-more"> no {this.props.title} added yet </p>
                         </div>
                     </div>
                 </div>

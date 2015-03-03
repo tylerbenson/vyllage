@@ -380,9 +380,9 @@ var MainContainer = React.createClass({
                     })
                 }
 
-                <AddSections addSection={that.addSection} type={'freeForm'}/>
+                <AddSections addSection={that.addSection} title={'education'}/>
 
-                <AddSections addSection={that.addSection} type={'organization'}/>
+                <AddSections addSection={that.addSection} title={'skills'}/>
             </div>
         );
     }
