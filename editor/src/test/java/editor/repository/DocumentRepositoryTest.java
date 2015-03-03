@@ -39,8 +39,8 @@ public class DocumentRepositoryTest {
 
 		Assert.assertNotNull("Document1 is null.", doc1);
 		Assert.assertNotNull("Document2 is null.", doc2);
-		Assert.assertTrue(doc1.getId().equals(1L));
-		Assert.assertTrue(doc2.getId().equals(2L));
+		Assert.assertTrue(doc1.getId() != null);
+		Assert.assertTrue(doc2.getId() != null);
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -62,6 +62,7 @@ public class DocumentRepositoryTest {
 		Document doc1 = new Document();
 		doc1.setUserId(0L);
 		doc1.setVisibility(false);
+		doc1.setTagline("my tagline");
 		return doc1;
 	}
 }
