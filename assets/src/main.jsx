@@ -10,7 +10,7 @@ var CommentsBlog = require('./components/freeform/comments-blog');
 var AddSections = require('./components/addSections/addSections');
 var request = require('superagent');
 
-var RegisterData =[
+var EmptyStateData =[
 {
     "type": "freeform",
     "title": "career goal",
@@ -339,12 +339,12 @@ var MainContainer = React.createClass({
              return (
                 <div>
                     { 
-                        RegisterData.map(function(result) {
+                        EmptyStateData.map(function(result) {
                             if(result.type === "freeform"){
-                                return that.freeFormItems(RegisterData[0], true,true);
+                                return that.freeFormItems(EmptyStateData[0], true,true);
                             }
                             else{
-                                return that.experienceItems(RegisterData[1], true,true); 
+                                return that.experienceItems(EmptyStateData[1], true,true); 
                             }
 
                         })
