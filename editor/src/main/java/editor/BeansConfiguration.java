@@ -9,9 +9,6 @@ public class BeansConfiguration {
 	@Bean
 	public RestTemplate restTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
-		// TODO: for the future
-		// restTemplate.setInterceptors(Collections
-		// .singletonList(new TokenAuthenticationInterceptor()));
 		return restTemplate;
 	}
 
