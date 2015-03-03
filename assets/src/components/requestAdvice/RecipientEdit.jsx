@@ -38,7 +38,7 @@ var RecipientEdit = React.createClass({
       <div onBlur={this.props.closeSuggestions} onFocus={this.props.openSuggestions}>
         <div className='rcpent-add'>
           <div className='three columns'>
-            <input  type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} />
+            <input  type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} autoComplete='off' />
             {this.state.firstNameError? <p className='error'>* required </p>: null}
           </div>
           <div className='three columns'>
