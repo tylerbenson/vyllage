@@ -115,10 +115,8 @@
 
 .send-btn {
   @include saveBtn();
+  color: #fff;
   margin: 20px;
-  &:hover {
-    color: #fff;
-  }
 }
 
 .send-btn:hover {
