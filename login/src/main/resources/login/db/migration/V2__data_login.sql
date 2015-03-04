@@ -14,7 +14,7 @@ insert into LOGIN.users ( username, enabled, dateCreated, lastModified ) values 
 --	emailUpdates varchar_ignorecase(15),
 --	phoneNumber varchar_ignorecase(20),
 --	constraint fk_personal_users foreign key(userid) references LOGIN.users(userid));
-insert into LOGIN.personal(userid, graduationDate, emailUpdates, phoneNumber) values (0, CURRENT_DATE(), 'weekly', '123456789');
+insert into LOGIN.personal_information(userid, graduationDate, emailUpdates, phoneNumber) values (0, CURRENT_DATE(), 'weekly', '123456789');
 
 --create table if not exists LOGIN.user_credentials(
 --  userid  bigint not null,

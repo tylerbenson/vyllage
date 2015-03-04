@@ -1,6 +1,5 @@
 package login.model.account;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class AccountSettings {
@@ -10,9 +9,10 @@ public class AccountSettings {
 	private String lastName;
 	private String email;
 	private String role;
-	private LocalDate graduationDate;
+	private LocalDateTime graduationDate;
 	private LocalDateTime memberSince;
 	private LocalDateTime lastUpdate;
+	private PersonalInformation userPersonalInformation;
 
 	public String getEmail() {
 		return email;
@@ -22,12 +22,12 @@ public class AccountSettings {
 		this.email = email;
 	}
 
-	public LocalDate getGraduationDate() {
+	public LocalDateTime getGraduationDate() {
 		return graduationDate;
 	}
 
-	public void setGraduationDate(LocalDate graduationDate) {
-		this.graduationDate = graduationDate;
+	public void setGraduationDate(LocalDateTime localDateTime) {
+		this.graduationDate = localDateTime;
 	}
 
 	public LocalDateTime getMemberSince() {
@@ -76,6 +76,15 @@ public class AccountSettings {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public PersonalInformation getUserPersonalInformation() {
+		return userPersonalInformation;
+	}
+
+	public void setUserPersonalInformation(
+			PersonalInformation userPersonalInformation) {
+		this.userPersonalInformation = userPersonalInformation;
 	}
 
 }

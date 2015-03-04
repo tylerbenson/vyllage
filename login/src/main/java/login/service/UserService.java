@@ -10,9 +10,11 @@ import login.model.BatchAccount;
 import login.model.GroupAuthority;
 import login.model.User;
 import login.model.UserFilterRequest;
+import login.model.account.PersonalInformation;
 import login.repository.AuthorityRepository;
 import login.repository.GroupAuthorityRepository;
 import login.repository.GroupRepository;
+import login.repository.PersonalInformationRepository;
 import login.repository.UserDetailRepository;
 import login.repository.UserNotFoundException;
 
@@ -38,6 +40,9 @@ public class UserService {
 
 	@Autowired
 	private DocumentLinkService documentLinkService;
+
+	@Autowired
+	private PersonalInformationRepository pInformation;
 
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
@@ -134,5 +139,9 @@ public class UserService {
 
 	public String getDefaultGroup() {
 		return "users";
+	}
+
+	public PersonalInformation getUserPersonalInformation(Long userId) {
+		return pInformation.get(userId);
 	}
 }

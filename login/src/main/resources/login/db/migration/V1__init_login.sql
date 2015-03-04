@@ -11,15 +11,15 @@ create table if not exists LOGIN.users(
   dateCreated timestamp not null,
   lastModified timestamp not null);
 
-create table if not exists LOGIN.personal(
-	userid bigint not null,
+create table if not exists LOGIN.personal_information(
+	userid bigint not null primary key,
 	graduationDate timestamp,
 	emailUpdates varchar_ignorecase(15),
 	phoneNumber varchar_ignorecase(20),
 	constraint fk_personal_users foreign key(userid) references LOGIN.users(userid));
   
 create table if not exists LOGIN.user_credentials(
-  userid  bigint not null,
+  userid  bigint not null primary key,
   password varchar_ignorecase(60) not null,
   enabled boolean not null,
   expires timestamp,

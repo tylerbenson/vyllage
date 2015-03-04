@@ -1,11 +1,11 @@
 package login.controller;
 
-import java.time.LocalDate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import login.model.User;
 import login.model.account.AccountSettings;
+import login.model.account.PersonalInformation;
 import login.repository.UserNotFoundException;
 import login.service.UserService;
 
@@ -44,8 +44,10 @@ public class AccountSettingsController {
 					.map(r -> r.getAuthority())
 					.collect(Collectors.joining(", ")));
 
-		// TODO: placeholder, add another table with the rest.
-		accountSettings.setGraduationDate(LocalDate.now());
+		PersonalInformation userPersonalInformation = userService
+				.getUserPersonalInformation(userId);
+
+		accountSettings.setUserPersonalInformation(userPersonalInformation);
 
 		return "settings";
 	}
