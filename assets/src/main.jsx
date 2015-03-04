@@ -106,6 +106,9 @@ var MainContainer = React.createClass({
             request
                 .post('/resume/' + documentId + '/section/' + data.sectionId +'')
                 .set('Accept', 'application/json')
+                // Need to populate the CSRF token since this is not a GET.
+                // Something like this:
+                //.set("meta[name='_csrf_header']", "meta[name='_csrf_token']")
                 .send(data)
                 .end(function(error, res) {
 

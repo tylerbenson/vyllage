@@ -272,6 +272,10 @@ var ProfileContainer = React.createClass({
         this.setState({profileData: data});
 
         // here ajax call will go to the server, and update the data
+
+        // Need to populate the CSRF token since this is not a GET.
+        // Something like this:
+        //.set("meta[name='_csrf_header']", "meta[name='_csrf_token']")
     },
 
     render: function() {
