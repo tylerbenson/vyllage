@@ -76,11 +76,26 @@ var FormTo = React.createClass({
     });
   },
   selectSuggestion: function (index) {
-    this.setState({
-      selectedSuggestion: index,
-    });
     var suggestions = this.state.suggestions.recent.concat(this.state.suggestions.recommended);
     this.updateRecipient(suggestions[index])
+  },
+  changeSelectedSuggestion: function (e) {
+    var suggestions = this.state.suggestions.recent.concat(this.state.suggestions.recommended);
+    var selectedSuggestion;
+    if (e.key === 'ArrowDown') {
+      if (this.state.selectedSuggestion === null) {
+        selectedSuggestion = 0;
+      } else if (this.state.selectedSuggestion < suggestions.length -1) {
+        selectedSuggestion = this.state.selectedSuggestion + 1;
+      } else {
+        selectedSuggestion = this.state.selectedSuggestion;
+      }
+    }
+
+    if (e.key === 'ArrowUp') {
+      selectedSuggestion = (this.state.selectedSuggestion > 0)? this.state.selectedSuggestion - 1: 0;
+    } 
+    this.setState({selectedSuggestion: selectedSuggestion});
   },
   closeSuggestions: function (e) {
     e.preventDefault();
@@ -108,6 +123,9 @@ var FormTo = React.createClass({
               onSubmit={this.updateRecipient}
               recipient={this.state.recipient}
               selectedRecipient={this.state.selectedRecipient}
+              selectedSuggestion={this.state.selectedSuggestion}
+              changeSelectedSuggestion={this.changeSelectedSuggestion}
+              selectSuggestion={this.selectSuggestion}
               closeSuggestions={this.closeSuggestions}
               openSuggestions={this.openSuggestions} />
             <RecipientList 

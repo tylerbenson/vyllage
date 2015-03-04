@@ -107,6 +107,9 @@
         background: lighten($top-bkg-color, 4%);
       }
   	}
+    .is-active {
+      background: lighten($top-bkg-color, 4%);
+    }
   }	
 }
 

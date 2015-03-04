@@ -25,8 +25,16 @@ var RecipientEdit = React.createClass({
     this.props.onChange(key, e.target.value);
   },
   keyPress: function (e) {
-    if (e.which === 13) {
-      this.updateHandler(e);
+    if (e.key === 'Enter') {
+      if (this.props.selectedSuggestion === null) {
+        this.updateHandler(e);
+      } else {
+        this.props.selectSuggestion(this.props.selectedSuggestion)
+        this.setState(this.getInitialState());
+      }
+    } 
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      this.props.changeSelectedSuggestion(e);
     }
   },
   updateHandler: function (e) {
@@ -48,7 +56,7 @@ var RecipientEdit = React.createClass({
               placeholder='First Name'
               value={recipient.firstName}
               onChange={this.changeHandler.bind(this, 'firstName')}
-              onKeyPress={this.keyPress}
+              onKeyDown={this.keyPress}
               autoComplete='off'
               autoFocus />
             {this.state.firstNameError? <p className='error'>* required </p>: null}
@@ -59,7 +67,7 @@ var RecipientEdit = React.createClass({
               placeholder='Last Name'
               value={recipient.lastName}
               onChange={this.changeHandler.bind(this, 'lastName')}
-              onKeyPress={this.keyPress} />
+              onKeyDown={this.keyPress} />
             {this.state.lastNameError? <p className='error'>* required </p>: null}
           </div>
           <div className='five columns'>
@@ -68,7 +76,7 @@ var RecipientEdit = React.createClass({
               placeholder='E-mail'
               value={recipient.email}
               onChange={this.changeHandler.bind(this, 'email')}
-              onKeyPress={this.keyPress} />
+              onKeyDown={this.keyPress} />
             {this.state.emailError? <p className='error'>* invalid email</p>: null}
           </div>
           <div className='one columns'>

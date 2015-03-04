@@ -1,8 +1,7 @@
 var React = require('react');
 var LayerMixin = require('react-layer-mixin');
 var assign = require('lodash.assign');
-
-
+var cx = require('react/lib/cx');
 
 var Suggesions = React.createClass({
   // mixins: [LayerMixin],
@@ -31,9 +30,12 @@ var Suggesions = React.createClass({
   },
   renderRecipientList: function (recipients, baseIndex) {
     return recipients.map(function (recipient, index) {
+      var classes = {
+        'is-active': this.props.selectedSuggestion === baseIndex + index
+      }
       return (
-        <li key={baseIndex + index} className="item-line">
-          <p className="item-text" onClick={this.clickHandler.bind(this, baseIndex + index)}>
+        <li key={baseIndex + index} className={cx(classes)}>
+          <p className='item-text' onClick={this.clickHandler.bind(this, baseIndex + index)}>
             {recipient.firstName + " " + recipient.lastName}
           </p>
          </li>
