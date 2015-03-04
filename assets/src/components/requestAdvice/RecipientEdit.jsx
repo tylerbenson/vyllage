@@ -51,7 +51,7 @@ var RecipientEdit = React.createClass({
             {this.state.emailError? <p className='error'>* invalid email</p>: null}
           </div>
           <div className='one columns'>
-            <a className='add-button'><img src='images/add.png' onClick={this.updateHandler} /></a>
+            <a className='add-button'>+</a>
           </div>
         </div> 
       </div>
