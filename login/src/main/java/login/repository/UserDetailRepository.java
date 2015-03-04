@@ -5,6 +5,8 @@ import static login.domain.tables.GroupMembers.GROUP_MEMBERS;
 import static login.domain.tables.Groups.GROUPS;
 import static login.domain.tables.Users.USERS;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
@@ -117,7 +119,9 @@ public class UserDetailRepository implements UserDetailsManager {
 				record.getMiddlename(), record.getLastname(),
 				record.getUsername(), credential.getPassword(),
 				record.getEnabled(), accountNonExpired, credentialsNonExpired,
-				accountNonLocked, authorities);
+				accountNonLocked, authorities, record.getDatecreated()
+						.toLocalDateTime(), record.getLastmodified()
+						.toLocalDateTime());
 		return user;
 	}
 
@@ -143,6 +147,8 @@ public class UserDetailRepository implements UserDetailsManager {
 			UsersRecord newRecord = sql.newRecord(USERS);
 			newRecord.setUsername(user.getUsername());
 			newRecord.setEnabled(user.isEnabled());
+			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
+			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
 			newRecord.store();
 
 			Assert.notNull(newRecord.getUserid());
@@ -185,6 +191,7 @@ public class UserDetailRepository implements UserDetailsManager {
 					USERS.USERNAME.eq(user.getUsername()));
 
 			record.setEnabled(user.isEnabled());
+			record.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
 			record.update();
 
 			credentialsRepository.save(record.getUserid(), user.getPassword());
@@ -288,13 +295,17 @@ public class UserDetailRepository implements UserDetailsManager {
 		return sql
 				.fetch(USERS)
 				.stream()
-				.map((UsersRecord ur) -> new User(ur.getUserid(), ur
-						.getFirstname(), ur.getMiddlename(), ur.getLastname(),
-						ur.getUsername(), credentialsRepository.get(
-								ur.getUserid()).getPassword(), ur.getEnabled(),
+				.map((UsersRecord record) -> new User(record.getUserid(),
+						record.getFirstname(), record.getMiddlename(), record
+								.getLastname(), record.getUsername(),
+						credentialsRepository.get(record.getUserid())
+								.getPassword(), record.getEnabled(),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, authorityRepository.getByUserName(ur
-								.getUsername()))).collect(Collectors.toList());
+						accountNonLocked, authorityRepository
+								.getByUserName(record.getUsername()), record
+								.getDatecreated().toLocalDateTime(), record
+								.getLastmodified().toLocalDateTime()))
+				.collect(Collectors.toList());
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -309,8 +320,11 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		List collect = users
 				.stream()
-				.map(u -> sql.insertInto(USERS, USERS.USERNAME, USERS.ENABLED)
-						.values(u.getUsername(), enabled)
+				.map(u -> sql.insertInto(USERS, USERS.USERNAME, USERS.ENABLED,
+						USERS.DATECREATED, USERS.LASTMODIFIED).values(
+						u.getUsername(), enabled,
+						Timestamp.valueOf(LocalDateTime.now()),
+						Timestamp.valueOf(LocalDateTime.now()))
 
 				).collect(Collectors.toList());
 		// for!
