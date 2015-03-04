@@ -10,7 +10,7 @@ var CommentsBlog = require('./components/freeform/comments-blog');
 var AddSections = require('./components/addSections/addSections');
 var request = require('superagent');
 
-var RegisterData =[
+var EmptyStateData =[
 {
     "type": "freeform",
     "title": "career goal",
@@ -58,8 +58,8 @@ var MainContainer = React.createClass({
         var self = this, documentId,
             pathItems = window.location.pathname.split("/");
         
-        if(pathItems.length > 1) {
-            documentId = pathItems[pathItems.length-1];
+        if(pathItems.length > 2) {
+            documentId = pathItems[2];
 
             request
                .get('/resume/' + documentId + '/section')
@@ -69,8 +69,7 @@ var MainContainer = React.createClass({
                     if (res.ok) {
                         if(res.body.length == 0) {
                             // data is empty eq. registration page, first logged in
-                            RegisterData.sort(compare);
-                            self.setState({mainData: RegisterData});
+                            self.setState({mainData: ''});
                         } else {
                             self.setState({mainData: res.body});
                         }
@@ -99,18 +98,20 @@ var MainContainer = React.createClass({
 
     saveChanges: function (data) {
         var self = this, documentId,
-            pathItems = window.location.pathname.split("/");
-        
-        if(pathItems.length > 1) {
-            documentId = pathItems[pathItems.length-1];
+            pathItems = window.location.pathname.split("/"),
+            token_header = document.getElementById('meta_header').content,
+            token_val = document.getElementById('meta_token').content;
+
+        if(pathItems.length > 2) {
+            documentId = pathItems[2];
 
             request
                 .post('/resume/' + documentId + '/section/' + data.sectionId +'')
-                .set('Accept', 'application/json')
+                .set(token_header, token_val)
                 .send(data)
                 .end(function(error, res) {
 
-                    //if (res.ok) { commenting out the success check , since now server returns error 
+                    if (res.ok) {
                         for(var i = 0; i < self.state.mainData.length; i++){
 
                             if(self.state.mainData[i].sectionId === data.sectionId){
@@ -120,9 +121,9 @@ var MainContainer = React.createClass({
                                 return;
                             }
                         }
-                    // } else {
-                    //    alert( res.text );
-                    // }  
+                    } else {
+                       alert( res.text );
+                    }  
                 });
         }
     },
@@ -206,185 +207,250 @@ var MainContainer = React.createClass({
         this.setState({mainData: data});
     },
 
+    // Get freeForm items
+    freeFormItems : function(result,addNewSection,firstElement) {
+        // This will be called when clicking on Add Section button, section will be displayed in edit mode
+        if(addNewSection) {
+            return (
+                 <article className="career-goal forceEditMode">
+                     <div className="row" id = {result.sectionId}>
+                         <div  className="twelve columns">
+                            <div className="u-pull-left full">
+                              <button className="u-pull-left article-btn"> {result.title} </button>
+                              <button className="u-pull-right article-btn addSection-btn" onClick={this.addSection.bind(null, result.title,result.sectionPosition)}> {result.title}</button>
+                            </div>
+                             
+                            <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
+
+                            <ArticleControlls/>
+
+                            <CommentsBlog/>  
+                        </div>
+                    </div>
+                </article>)
+        }
+
+        // this will be called on page rendering for the first item on each section , section will be displayed in main mode.
+        if(firstElement) {
+            return (
+                 <article className="career-goal ">
+                     <div className="row" id = {result.sectionId}>
+                         <div  className="twelve columns">
+                            <div className="u-pull-left full">
+                              <button className="u-pull-left article-btn"> {result.title} </button>
+                              <button className="u-pull-right article-btn addSection-btn " onClick={this.addSection.bind(null, result.title,result.sectionPosition)}> {result.title}</button>
+                            </div>
+                             
+                            <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
+
+                            <ArticleControlls/>
+
+                            <CommentsBlog/>  
+                        </div>
+                    </div>
+                </article>)
+        } else {
+            // secondary items on main mode.
+            return (
+                <article className="career-goal">
+                     <div className="row" id = {result.sectionId}>
+                         <div className="twelve columns">
+                                                                    
+                            <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
+
+                            <ArticleControlls/>
+
+                            <CommentsBlog/>  
+                        </div>
+                    </div>
+                </article>)
+        }
+
+    },
+
+    // Get experience items
+    experienceItems : function(result,addNewSection,firstElement)
+    {
+        // This will be called when clicking on Add Section button, section will be displayed in edit mode
+        if(addNewSection) {
+             return (
+                    <article className="experience forceEditMode">
+                        <div className="row">
+                             <div className="twelve columns">
+                                 <div className="u-pull-left full">
+                                    <button className="u-pull-left article-btn"> {result.title} </button>
+                                    <button className="u-pull-right article-btn addSection-btn" onClick={this.addSection.bind(null, result.title,result.sectionPosition)}>{result.title}</button>
+                                </div>
+
+                                <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
+
+                                <ArticleControlls />
+
+                                <CommentsBlog />
+                            </div>
+                        </div>
+                    </article>)
+        }
+
+        // this will be called on page rendering for the first item on each section , section will be displayed in main mode.
+        if(firstElement){
+            return (
+                 <article className="experience">
+                    <div className="row">
+                         <div className="twelve columns">
+                             <div className="u-pull-left full">
+                                <button className="u-pull-left article-btn"> {result.title} </button>
+                                <button className="u-pull-right article-btn addSection-btn" onClick={this.addSection.bind(null, result.title,result.sectionPosition)}>{result.title}</button>
+                            </div>
+
+                            <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
+
+                            <ArticleControlls />
+
+                            <CommentsBlog />
+                        </div>
+                    </div>
+                </article>)
+        } else {
+            // secondary items on main mode.
+            return (
+                <article className="experience">
+                    <div className="row">
+                         <div className="twelve columns">
+                                                                                                         
+                            <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
+
+                            <ArticleControlls />
+
+                            <CommentsBlog />
+                        </div>
+                    </div>
+                </article>)
+        }
+
+    },
+
     render: function() {
         var results = this.state.mainData,
             that = this, experienceCount = 0,
             educationCount = 0, careergoalCount = 0,
             skillsCount = 0,  addNewItem = 0;
 
-        return (
-            <div>
-                {
-                results.map(function(result) {
-                    if(result.type === "freeform"){
-                        addNewItem = 0;
-
-                        if(that.state.editModePosition == result.sectionPosition)
-                        {
-                             if(result.title == "career goal") {
-                                addNewItem = 1;
-                                careergoalCount = careergoalCount + 1;
+        if(results == '') {
+             return (
+                <div>
+                    { 
+                        EmptyStateData.map(function(result) {
+                            if(result.type === "freeform"){
+                                return that.freeFormItems(EmptyStateData[0], true,true);
+                            }
+                            else{
+                                return that.experienceItems(EmptyStateData[1], true,true); 
                             }
 
-                            if(result.title == "skills") {
-                                addNewItem = 1;
-                                skillsCount = skillsCount + 1;
-                            }
-                             return (
-                                 <article className="career-goal forceEditMode">
-                                     <div className="row" id = {result.sectionId}>
-                                         <div  className="twelve columns">
-                                            <div className="u-pull-left full">
-                                              <button className="u-pull-left article-btn"> {result.title} </button>
-                                              <button className="u-pull-right article-btn " onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> {result.title}</button>
-                                            </div>
-                                             
-                                            <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
-
-                                            <ArticleControlls/>
-
-                                            <CommentsBlog/>  
-                                        </div>
-                                    </div>
-                                </article>)
-                        } else {
-                            
-                            if(careergoalCount == 0  && result.title == "career goal") {
-                                addNewItem = 1;
-                                careergoalCount = careergoalCount + 1;
-                            }
-
-                            if(skillsCount == 0 && result.title == "skills") {
-                                addNewItem = 1;
-                                skillsCount = skillsCount + 1;
-                            }
-
-                            if (addNewItem == 1) {
-                                addNewItem = 0;
-                                return (
-                                    <article className="career-goal">
-                                        <div className="row" id = {result.sectionId}>
-                                             <div  className="twelve columns">
-                                                <div className="u-pull-left full">
-                                                  <button className="u-pull-left article-btn"> {result.title} </button>
-                                                  <button className="u-pull-right addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}> {result.title} </button>
-                                                </div>
-                                                 
-                                                <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
-
-                                                <ArticleControlls/>
-
-                                                <CommentsBlog/>  
-                                            </div>
-                                        </div>
-                                    </article>)
-                            }
-                            else {
-                                return (
-                                 <article className="career-goal">
-                                     <div className="row" id = {result.sectionId}>
-                                         <div className="twelve columns">
-                                                                                    
-                                            <FreeformContainer freeformData={result} saveChanges={that.saveChanges}/>
-
-                                            <ArticleControlls/>
-
-                                            <CommentsBlog/>  
-                                        </div>
-                                    </div>
-                                </article>)
-                            }
-                        }
+                        })
                     }
-                    else {
-                        addNewItem = 0;
+                        <AddSections addSection={that.addSection} title={'education'}/>
 
-                        if(that.state.editModePosition == result.sectionPosition)
-                        {
-                            if(result.title == "experience"){
-                                addNewItem = 1;
-                                experienceCount = experienceCount + 1;
-                            }
+                        <AddSections addSection={that.addSection} title={'skills'}/>
+                   </div>
+                );
 
-                            if(result.title == "education"){
-                                addNewItem = 1;
-                                educationCount = educationCount + 1;
-                            }
+        } else {
+            results.sort(compare);
+            return ( 
+                <div>{              
+                    // Create loop for elements.
+                    results.map(function(result) {
+                        // Check for item type
+                        if(result.type === "freeform"){
+                            addNewItem = 0;
 
-                            return (
-                                    <article className="experience forceEditMode">
-                                        <div className="row">
-                                             <div className="twelve columns">
-                                                 <div className="u-pull-left full">
-                                                    <button className="u-pull-left article-btn"> {result.title} </button>
-                                                    <button className="u-pull-right article-btn addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}>{result.title}</button>
-                                                </div>
+                            // Check for find edit item position
+                            if(that.state.editModePosition == result.sectionPosition)
+                            {
+                                // Case when have edit mode item.
+                                // Check for find first element (career goal), need for add button.
+                                if(result.title == "career goal") {
+                                    addNewItem = 1;
+                                    careergoalCount = careergoalCount + 1;
+                                }
 
-                                                <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
-
-                                                <ArticleControlls />
-
-                                                <CommentsBlog />
-                                            </div>
-                                        </div>
-                                    </article>)
-
-                        }else{
-                            if(experienceCount == 0 && result.title == "experience"){
-                                addNewItem = 1;
-                                experienceCount = experienceCount + 1;
-                            }
-
-                            if(educationCount == 0 && result.title == "education"){
-                                addNewItem = 1;
-                                educationCount = educationCount + 1;
-                            }
-
-                            if (addNewItem == 1) {
-                                addNewItem = 0;
-                                return (
-                                    <article className="experience">
-                                        <div className="row">
-                                             <div className="twelve columns">
-                                                 <div className="u-pull-left full">
-                                                    <button className="u-pull-left article-btn"> {result.title} </button>
-                                                    <button className="u-pull-right article-btn addSection-btn" onClick={that.addSection.bind(null, result.title,result.sectionPosition)}>{result.title}</button>
-                                                </div>
-
-                                                <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
-
-                                                <ArticleControlls />
-
-                                                <CommentsBlog />
-                                            </div>
-                                        </div>
-                                    </article>)
+                                // Check for find first element (skills), need for add button.
+                                if(result.title == "skills") {
+                                    addNewItem = 1;
+                                    skillsCount = skillsCount + 1;
+                                }
+                                
+                                // return element
+                                return that.freeFormItems(result, true,true);
                             } else {
-                                 return (
-                                    <article className="experience">
-                                        <div className="row">
-                                             <div className="twelve columns">
-                                                                                                                             
-                                                <ArticleContent organizationData={result} saveChanges={that.saveChanges} />
+                                
+                                if(careergoalCount == 0  && result.title == "career goal") {
+                                    addNewItem = 1;
+                                    careergoalCount = careergoalCount + 1;
+                                }
 
-                                                <ArticleControlls />
+                                if(skillsCount == 0 && result.title == "skills") {
+                                    addNewItem = 1;
+                                    skillsCount = skillsCount + 1;
+                                }
 
-                                                <CommentsBlog />
-                                            </div>
-                                        </div>
-                                    </article>)
+                                if (addNewItem == 1) {
+                                    addNewItem = 0;
+                                    return that.freeFormItems(result,false,true);
+                                }
+                                else {
+                                    return that.freeFormItems(result,false,false);
+                                }
                             }
                         }
+                        else {
+                            addNewItem = 0;
+
+                            if(that.state.editModePosition == result.sectionPosition)
+                            {
+                                if(result.title == "experience"){
+                                    addNewItem = 1;
+                                    experienceCount = experienceCount + 1;
+                                }
+
+                                if(result.title == "education"){
+                                    addNewItem = 1;
+                                    educationCount = educationCount + 1;
+                                }
+
+                                return that.experienceItems(result, true,true);
+
+                            }else{
+                                if(experienceCount == 0 && result.title == "experience"){
+                                    addNewItem = 1;
+                                    experienceCount = experienceCount + 1;
+                                }
+
+                                if(educationCount == 0 && result.title == "education"){
+                                    addNewItem = 1;
+                                    educationCount = educationCount + 1;
+                                }
+
+                                if (addNewItem == 1) {
+                                    addNewItem = 0;
+                                    return that.experienceItems(result,false,true);
+                                } else {
+                                    return that.experienceItems(result,false,false);
+                                }
+                            }
+                        }
+                        
+                        })
                     }
-                    
-                    })
-                }
 
-                <AddSections addSection={that.addSection} title={'education'}/>
+                    <AddSections addSection={that.addSection} title={'education'}/>
 
-                <AddSections addSection={that.addSection} title={'skills'}/>
-            </div>
-        );
+                    <AddSections addSection={that.addSection} title={'skills'}/>
+                </div>
+            );
+        }
     }
 });
 

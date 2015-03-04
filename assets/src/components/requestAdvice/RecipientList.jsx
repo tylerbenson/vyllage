@@ -17,12 +17,13 @@ var RecipentList = React.createClass({
     var nodes = this.props.recipients.map(function (recipient, index) {
       var classes = {
         rcpent: true,
-        'rcpent-selected': this.props.selectedRecipient === index
+        'rcpent-selected': this.props.selectedRecipient === index,
+        'rcpent-editable': recipient.newRecipient 
       };
       return (
         <div key={index} className={cx(classes)}>
           <a onClick={this.editHandler.bind(this, index)}>{recipient.firstName + " " + recipient.lastName}</a>
-          <a onClick={this.removeHandler.bind(this, index)}>x</a>
+          <a onClick={this.removeHandler.bind(this, index)} className='rcpent-delete'>x</a>
         </div>
       );
     }.bind(this));

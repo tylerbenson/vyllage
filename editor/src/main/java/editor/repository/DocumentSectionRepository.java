@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
-import org.jooq.Record;
 import org.jooq.Record3;
 import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,16 +80,6 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 				.collect(Collectors.toList());
 	}
 
-	private static DocumentSection generateDocumentSection(
-			Record3<String, Long, Long> existingRecord) {
-		DocumentSection fromJSON = DocumentSection.fromJSON(existingRecord
-				.value1());
-		fromJSON.setDocumentId(existingRecord.value2());
-		fromJSON.setSectionVersion(existingRecord.value3());
-		return fromJSON;
-	}
-
-	// TODO> change to get latest version.
 	/**
 	 *
 	 * @param documentId
@@ -101,17 +90,25 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	public List<DocumentSection> getDocumentSections(Long documentId)
 			throws ElementNotFoundException {
 
-		Result<Record> documentSections = sql.select().from(DOCUMENT_SECTIONS)
-				.where(DOCUMENT_SECTIONS.DOCUMENTID.eq(documentId)).fetch();
+		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
+		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
 
-		if (documentSections == null)
+		Result<Record3<String, Long, Long>> existingRecords = sql
+				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION) //
+				.from(s1) //
+				.join(s2) //
+				.on(s1.ID.eq(s2.ID)) //
+				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)) //
+				.where(s1.DOCUMENTID.eq(documentId)).fetch();
+
+		if (existingRecords == null)
 			throw new ElementNotFoundException(
-					"DocumentSection from Document id '" + documentId
+					"DocumentSections for Document id '" + documentId
 							+ "' not found.");
 
-		return documentSections.stream()
-				.map(r -> r.getValue(DOCUMENT_SECTIONS.JSONDOCUMENT))
-				.map(DocumentSection::fromJSON).collect(Collectors.toList());
+		return existingRecords.stream()
+				.map(DocumentSectionRepository::generateDocumentSection)
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -198,6 +195,22 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	public boolean exists(Long sectionId) {
 		return sql.fetchExists(sql.select().from(DOCUMENT_SECTIONS)
 				.where(DOCUMENT_SECTIONS.ID.eq(sectionId)));
+	}
+
+	/**
+	 * Generates a DocumentSection from the records containing the latest
+	 * versions of the document sections.
+	 * 
+	 * @param existingRecord
+	 * @return
+	 */
+	private static DocumentSection generateDocumentSection(
+			Record3<String, Long, Long> existingRecord) {
+		DocumentSection fromJSON = DocumentSection.fromJSON(existingRecord
+				.value1());
+		fromJSON.setDocumentId(existingRecord.value2());
+		fromJSON.setSectionVersion(existingRecord.value3());
+		return fromJSON;
 	}
 
 }

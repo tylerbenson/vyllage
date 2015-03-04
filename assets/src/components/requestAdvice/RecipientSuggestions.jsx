@@ -1,23 +1,7 @@
 var React = require('react');
 var LayerMixin = require('react-layer-mixin');
 var assign = require('lodash.assign');
-
-var data = {
-  "recent" : [
-    {"firstName": "Tyler", "lastName": "Benson", "email": "tyler.benson@vyllage.com"},
-    {"firstName": "Nathon", "lastName": "Benson", "email": "nathon.benson@vyllage.com"},
-    {"firstName": "Nick", "lastName": "Disney", "email": "nick.disney@vyllage.com"},
-    {"firstName": "Keith", "lastName": "Biggs", "email": "keith.biggs@vyllage.com"},
-    {"firstName": "Devin", "lastName": "Moncor", "email": "devin.moncor@vyllage.com"},
-  ],
-  "recommended": [
-    {"firstName": "Tyler", "lastName": "Benson", "email": "tyler.benson@vyllage.com"},
-    {"firstName": "Nathon", "lastName": "Benson", "email": "nathon.benson@vyllage.com"},
-    {"firstName": "Nick", "lastName": "Disney", "email": "nick.disney@vyllage.com"},
-    {"firstName": "Keith", "lastName": "Biggs", "email": "keith.biggs@vyllage.com"},
-    {"firstName": "Devin", "lastName": "Moncor", "email": "devin.moncor@vyllage.com"},
-  ]
-}
+var cx = require('react/lib/cx');
 
 var Suggesions = React.createClass({
   // mixins: [LayerMixin],
@@ -37,18 +21,21 @@ var Suggesions = React.createClass({
       isFocused: false,
     });
   },
-  clickHandler: function (recipient, e) {
+  clickHandler: function (index, e) {
     e.preventDefault();
-    this.props.selectSuggestion(recipient);
+    this.props.selectSuggestion(index);
     this.setState({
       isFocused: false,
     });
   },
-  renderRecipientList: function (recipients) {
+  renderRecipientList: function (recipients, baseIndex) {
     return recipients.map(function (recipient, index) {
+      var classes = {
+        'is-active': this.props.selectedSuggestion === baseIndex + index
+      }
       return (
-        <li key={index} className="item-line">
-          <p className="item-text" onClick={this.clickHandler.bind(this, recipient)}>
+        <li key={baseIndex + index} className={cx(classes)}>
+          <p className='item-text' onClick={this.clickHandler.bind(this, baseIndex + index)}>
             {recipient.firstName + " " + recipient.lastName}
           </p>
          </li>
@@ -68,11 +55,11 @@ var Suggesions = React.createClass({
               <li className="topper">
                 <p className="topper-text">recent</p>
               </li>
-              {this.renderRecipientList(data.recent)}
+              {this.renderRecipientList(this.props.suggestions.recent, 0)}
               <li className="topper">
                 <p className="topper-text">recommended</p>
               </li>
-              {this.renderRecipientList(data.recommended)}
+              {this.renderRecipientList(this.props.suggestions.recommended, this.props.suggestions.recent.length)}
             </ul>  
           </div>
         </div>

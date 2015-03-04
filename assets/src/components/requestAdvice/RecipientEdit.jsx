@@ -24,6 +24,19 @@ var RecipientEdit = React.createClass({
     e.preventDefault();
     this.props.onChange(key, e.target.value);
   },
+  keyPress: function (e) {
+    if (e.key === 'Enter') {
+      if (this.props.selectedSuggestion === null) {
+        this.updateHandler(e);
+      } else {
+        this.props.selectSuggestion(this.props.selectedSuggestion)
+        this.setState(this.getInitialState());
+      }
+    } 
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      this.props.changeSelectedSuggestion(e);
+    }
+  },
   updateHandler: function (e) {
     e.preventDefault();
     var isValid = this.validate();
@@ -38,20 +51,38 @@ var RecipientEdit = React.createClass({
       <div onBlur={this.props.closeSuggestions} onFocus={this.props.openSuggestions}>
         <div className='rcpent-add'>
           <div className='three columns'>
-            <input  type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} autoComplete='off' />
+            <input 
+              type='text'
+              placeholder='First Name'
+              value={recipient.firstName}
+              onChange={this.changeHandler.bind(this, 'firstName')}
+              onKeyDown={this.keyPress}
+              autoComplete='off'
+              autoFocus />
             {this.state.firstNameError? <p className='error'>* required </p>: null}
           </div>
           <div className='three columns'>
-            <input  type='text' placeholder='Last Name' value={recipient.lastName} onChange={this.changeHandler.bind(this, 'lastName')} />
+            <input
+              type='text'
+              placeholder='Last Name'
+              value={recipient.lastName}
+              onChange={this.changeHandler.bind(this, 'lastName')}
+              onKeyDown={this.keyPress} />
             {this.state.lastNameError? <p className='error'>* required </p>: null}
-
           </div>
           <div className='five columns'>
-            <input type='email' placeholder='E-mail' value={recipient.email} onChange={this.changeHandler.bind(this, 'email')} />
+            <input
+              type='email'
+              placeholder='E-mail'
+              value={recipient.email}
+              onChange={this.changeHandler.bind(this, 'email')}
+              onKeyDown={this.keyPress} />
             {this.state.emailError? <p className='error'>* invalid email</p>: null}
           </div>
           <div className='one columns'>
-            <a className='add-button'><img src='images/add.png' onClick={this.updateHandler} /></a>
+            <div className='rcpent-button' onClick={this.updateHandler}>
+              {this.props.selectedRecipient === null? <p>+</p>: <p>&#10004;</p>}
+            </div>
           </div>
         </div> 
       </div>

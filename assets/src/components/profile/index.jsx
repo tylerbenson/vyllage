@@ -238,9 +238,9 @@ var ProfileContainer = React.createClass({
 
         var self = this, documentId,
             pathItems = window.location.pathname.split("/");
-        
-        if(pathItems.length > 1) {
-            documentId = pathItems[pathItems.length-1];
+
+        if(pathItems.length > 2) {
+            documentId = pathItems[2];
 
             request
                .get('/resume/' + documentId + '/header')
@@ -255,7 +255,10 @@ var ProfileContainer = React.createClass({
                             self.setState({profileData: res.body});
                         }
                     } else {
-                       alert( res.text );
+                        //apply hardcoded data.
+                        //  temporary solution if server returns error
+                        self.setState({profileData: Data});
+                        alert( res.text );
                    }             
             });
         } else {
@@ -268,6 +271,10 @@ var ProfileContainer = React.createClass({
         this.setState({profileData: data});
 
         // here ajax call will go to the server, and update the data
+
+        // Need to populate the CSRF token since this is not a GET.
+        // Something like this:
+        //.set("meta[name='_csrf_header']", "meta[name='_csrf_token']")
     },
 
     render: function() {
