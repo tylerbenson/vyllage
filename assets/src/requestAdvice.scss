@@ -40,7 +40,7 @@
 
 .rqst-key-word {
   text-align: center;
-  color: #ccc;
+  // color: #887b94;
 }
 
 .rcpent-add {
@@ -103,6 +103,9 @@
   		p.item-text {
   			padding-left: 25px
   		}
+      &:hover {
+        background: lighten($top-bkg-color, 4%);
+      }
   	}
   }	
 }
