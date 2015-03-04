@@ -10,7 +10,7 @@
     "npm": "2.5.x"
   },
   "scripts": {
-    "preinstall": "cd assets && npm install",
+    "preinstall": "cd assets && npm install --no-optional",
     "postinstall": "cd assets && npm run build"
   }
 }
