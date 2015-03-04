@@ -58,7 +58,7 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<DocumentSection> getResumeSection(
+	public @ResponseBody List<DocumentSection> getResumeSections(
 			@PathVariable final Long documentId)
 			throws JsonProcessingException, ElementNotFoundException {
 
@@ -110,6 +110,7 @@ public class ResumeController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody DocumentSection saveSection(
 			@PathVariable final Long documentId,
+			@PathVariable final Long sectionId,
 			@RequestBody final DocumentSection body)
 			throws JsonProcessingException, ElementNotFoundException {
 

@@ -238,14 +238,13 @@ var ProfileContainer = React.createClass({
 
         var self = this, documentId,
             pathItems = window.location.pathname.split("/");
-        
-        if(pathItems.length > 1) {
-            documentId = pathItems[pathItems.length-1];
+
+        if(pathItems.length > 2) {
+            documentId = pathItems[2];
 
             request
                .get('/resume/' + documentId + '/header')
                .set('Accept', 'application/json')
-               .query({ documentId : documentId })
                .end(function(error, res) {
 
                     if (res.ok) {

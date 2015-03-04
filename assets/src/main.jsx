@@ -58,8 +58,8 @@ var MainContainer = React.createClass({
         var self = this, documentId,
             pathItems = window.location.pathname.split("/");
         
-        if(pathItems.length > 1) {
-            documentId = pathItems[pathItems.length-1];
+        if(pathItems.length > 2) {
+            documentId = pathItems[2];
 
             request
                .get('/resume/' + documentId + '/section')
@@ -102,8 +102,8 @@ var MainContainer = React.createClass({
             token_header = document.getElementById('meta_header').content,
             token_val = document.getElementById('meta_token').content;
 
-        if(pathItems.length > 1) {
-            documentId = pathItems[pathItems.length-1];
+        if(pathItems.length > 2) {
+            documentId = pathItems[2];
 
             request
                 .post('/resume/' + documentId + '/section/' + data.sectionId +'')
