@@ -98,21 +98,20 @@ var MainContainer = React.createClass({
 
     saveChanges: function (data) {
         var self = this, documentId,
-            pathItems = window.location.pathname.split("/");
-        
+            pathItems = window.location.pathname.split("/"),
+            token_header = document.getElementById('meta_header').content,
+            token_val = document.getElementById('meta_token').content;
+
         if(pathItems.length > 1) {
             documentId = pathItems[pathItems.length-1];
 
             request
                 .post('/resume/' + documentId + '/section/' + data.sectionId +'')
-                .set('Accept', 'application/json')
-                // Need to populate the CSRF token since this is not a GET.
-                // Something like this:
-                //.set("meta[name='_csrf_header']", "meta[name='_csrf_token']")
+                .set(token_header, token_val)
                 .send(data)
                 .end(function(error, res) {
 
-                    //if (res.ok) { commenting out the success check , since now server returns error 
+                    if (res.ok) {
                         for(var i = 0; i < self.state.mainData.length; i++){
 
                             if(self.state.mainData[i].sectionId === data.sectionId){
@@ -122,9 +121,9 @@ var MainContainer = React.createClass({
                                 return;
                             }
                         }
-                    // } else {
-                    //    alert( res.text );
-                    // }  
+                    } else {
+                       alert( res.text );
+                    }  
                 });
         }
     },
@@ -337,8 +336,7 @@ var MainContainer = React.createClass({
             educationCount = 0, careergoalCount = 0,
             skillsCount = 0,  addNewItem = 0;
 
-        if(results == '')
-        {
+        if(results == '') {
              return (
                 <div>
                     { 
@@ -358,94 +356,94 @@ var MainContainer = React.createClass({
                    </div>
                 );
 
-        }else{
-            return (
-                <div>
-                    {                    
-                        // Create loop for elements.
-                        results.map(function(result) {
-                            // Check for item type
-                            if(result.type === "freeform"){
-                                addNewItem = 0;
+        } else {
+            results.sort(compare);
+            return ( 
+                <div>{              
+                    // Create loop for elements.
+                    results.map(function(result) {
+                        // Check for item type
+                        if(result.type === "freeform"){
+                            addNewItem = 0;
 
-                                // Check for find edit item position
-                                if(that.state.editModePosition == result.sectionPosition)
-                                {
-                                    // Case when have edit mode item.
-                                    // Check for find first element (career goal), need for add button.
-                                    if(result.title == "career goal") {
-                                        addNewItem = 1;
-                                        careergoalCount = careergoalCount + 1;
-                                    }
+                            // Check for find edit item position
+                            if(that.state.editModePosition == result.sectionPosition)
+                            {
+                                // Case when have edit mode item.
+                                // Check for find first element (career goal), need for add button.
+                                if(result.title == "career goal") {
+                                    addNewItem = 1;
+                                    careergoalCount = careergoalCount + 1;
+                                }
 
-                                    // Check for find first element (skills), need for add button.
-                                    if(result.title == "skills") {
-                                        addNewItem = 1;
-                                        skillsCount = skillsCount + 1;
-                                    }
-                                    
-                                    // return element
-                                    return that.freeFormItems(result, true,true);
-                                } else {
-                                    
-                                    if(careergoalCount == 0  && result.title == "career goal") {
-                                        addNewItem = 1;
-                                        careergoalCount = careergoalCount + 1;
-                                    }
+                                // Check for find first element (skills), need for add button.
+                                if(result.title == "skills") {
+                                    addNewItem = 1;
+                                    skillsCount = skillsCount + 1;
+                                }
+                                
+                                // return element
+                                return that.freeFormItems(result, true,true);
+                            } else {
+                                
+                                if(careergoalCount == 0  && result.title == "career goal") {
+                                    addNewItem = 1;
+                                    careergoalCount = careergoalCount + 1;
+                                }
 
-                                    if(skillsCount == 0 && result.title == "skills") {
-                                        addNewItem = 1;
-                                        skillsCount = skillsCount + 1;
-                                    }
+                                if(skillsCount == 0 && result.title == "skills") {
+                                    addNewItem = 1;
+                                    skillsCount = skillsCount + 1;
+                                }
 
-                                    if (addNewItem == 1) {
-                                        addNewItem = 0;
-                                        return that.freeFormItems(result,false,true);
-                                    }
-                                    else {
-                                        return that.freeFormItems(result,false,false);
-                                    }
+                                if (addNewItem == 1) {
+                                    addNewItem = 0;
+                                    return that.freeFormItems(result,false,true);
+                                }
+                                else {
+                                    return that.freeFormItems(result,false,false);
                                 }
                             }
-                            else {
-                                addNewItem = 0;
-
-                                if(that.state.editModePosition == result.sectionPosition)
-                                {
-                                    if(result.title == "experience"){
-                                        addNewItem = 1;
-                                        experienceCount = experienceCount + 1;
-                                    }
-
-                                    if(result.title == "education"){
-                                        addNewItem = 1;
-                                        educationCount = educationCount + 1;
-                                    }
-
-                                    return that.experienceItems(result, true,true);
-
-                                }else{
-                                    if(experienceCount == 0 && result.title == "experience"){
-                                        addNewItem = 1;
-                                        experienceCount = experienceCount + 1;
-                                    }
-
-                                    if(educationCount == 0 && result.title == "education"){
-                                        addNewItem = 1;
-                                        educationCount = educationCount + 1;
-                                    }
-
-                                    if (addNewItem == 1) {
-                                        addNewItem = 0;
-                                        return that.experienceItems(result,false,true);
-                                    } else {
-                                        return that.experienceItems(result,false,false);
-                                    }
-                                }
-                            }
-                            
-                            })
                         }
+                        else {
+                            addNewItem = 0;
+
+                            if(that.state.editModePosition == result.sectionPosition)
+                            {
+                                if(result.title == "experience"){
+                                    addNewItem = 1;
+                                    experienceCount = experienceCount + 1;
+                                }
+
+                                if(result.title == "education"){
+                                    addNewItem = 1;
+                                    educationCount = educationCount + 1;
+                                }
+
+                                return that.experienceItems(result, true,true);
+
+                            }else{
+                                if(experienceCount == 0 && result.title == "experience"){
+                                    addNewItem = 1;
+                                    experienceCount = experienceCount + 1;
+                                }
+
+                                if(educationCount == 0 && result.title == "education"){
+                                    addNewItem = 1;
+                                    educationCount = educationCount + 1;
+                                }
+
+                                if (addNewItem == 1) {
+                                    addNewItem = 0;
+                                    return that.experienceItems(result,false,true);
+                                } else {
+                                    return that.experienceItems(result,false,false);
+                                }
+                            }
+                        }
+                        
+                        })
+                    }
 
                     <AddSections addSection={that.addSection} title={'education'}/>
 
