@@ -77,6 +77,7 @@ var FormTo = React.createClass({
               onChange={this.changeRecipient}
               onSubmit={this.updateRecipient}
               recipient={this.state.recipient}
+              selectedRecipient={this.state.selectedRecipient}
               closeSuggestions={this.closeSuggestions}
               openSuggestions={this.openSuggestions} />
             <RecipientList 

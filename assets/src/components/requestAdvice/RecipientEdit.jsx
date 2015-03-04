@@ -51,7 +51,9 @@ var RecipientEdit = React.createClass({
             {this.state.emailError? <p className='error'>* invalid email</p>: null}
           </div>
           <div className='one columns'>
-            <a className='add-button'>+</a>
+            <div className='rcpent-button' onClick={this.updateHandler}>
+              {this.props.selectedRecipient === null? <p>+</p>: <p>&#10004;</p>}
+            </div>
           </div>
         </div> 
       </div>
