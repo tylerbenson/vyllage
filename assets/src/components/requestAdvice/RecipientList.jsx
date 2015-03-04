@@ -17,7 +17,8 @@ var RecipentList = React.createClass({
     var nodes = this.props.recipients.map(function (recipient, index) {
       var classes = {
         rcpent: true,
-        'rcpent-selected': this.props.selectedRecipient === index
+        'rcpent-selected': this.props.selectedRecipient === index,
+        'rcpent-editable': recipient.newRecipient 
       };
       return (
         <div key={index} className={cx(classes)}>

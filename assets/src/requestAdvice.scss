@@ -40,6 +40,7 @@
 
 .rqst-key-word {
   text-align: center;
+  color: #ccc;
 }
 
 .rcpent-add {
@@ -52,11 +53,11 @@
 }
 
 .rcpent-list {
-  cursor: pointer;
 	.rcpent {
     display: inline-block;
     float: left;
     border: 1px solid $border-color;
+    background: $top-bkg-color;
     margin: 5px;
     padding: 5px 0;
     a {
@@ -66,6 +67,14 @@
 	}
   .rcpent-selected {
     border: 1px solid darken($border-color, 20%);
+  }
+  .rcpent-editable {
+    background: white;
+    cursor: pointer;
+  }
+  .rcpent-delete {
+    color: #ccc;
+    cursor: pointer;
   }
 }
 
