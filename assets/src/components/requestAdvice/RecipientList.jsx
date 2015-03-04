@@ -23,7 +23,7 @@ var RecipentList = React.createClass({
       return (
         <div key={index} className={cx(classes)}>
           <a onClick={this.editHandler.bind(this, index)}>{recipient.firstName + " " + recipient.lastName}</a>
-          <a onClick={this.removeHandler.bind(this, index)}>x</a>
+          <a onClick={this.removeHandler.bind(this, index)} className='rcpent-delete'>x</a>
         </div>
       );
     }.bind(this));
