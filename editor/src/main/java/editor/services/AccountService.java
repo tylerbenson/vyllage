@@ -52,9 +52,10 @@ public class AccountService {
 
 		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
 
+		// Sadly it doesn't like port past in as a variable...
 		return restTemplate.exchange(
-				"http://{host}:{port}/account/names/{userId}", HttpMethod.GET,
-				entity, AccountNames.class, ACCOUNTS_HOST, ACCOUNTS_PORT,
+				"http://{host}:" + ACCOUNTS_PORT + "/account/names/{userId}",
+				HttpMethod.GET, entity, AccountNames.class, ACCOUNTS_HOST,
 				userId).getBody();
 	}
 }

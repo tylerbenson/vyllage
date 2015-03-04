@@ -41,9 +41,9 @@ var HeaderContainer = React.createClass({
     askAdvise: function() {
         var pathItems = window.location.pathname.split("/"),
             documentId;
-        
-        if(pathItems.length > 1) {
-            documentId = pathItems[pathItems.length-1];
+
+        if(pathItems.length > 2) {
+            documentId = pathItems[2];
         }
 
         if(documentId) {
