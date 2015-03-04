@@ -51,9 +51,6 @@ public class DocumentRepository implements IRepository<Document> {
 	private Document recordToDocument(DocumentsRecord documentsRecord) {
 		Document document = new Document();
 
-		logger.info("Looking for account with id "
-				+ documentsRecord.getUserid());
-
 		document.setId(documentsRecord.getId());
 		document.setUserId(documentsRecord.getUserid());
 		document.setDateCreated(documentsRecord.getDatecreated()
@@ -116,7 +113,7 @@ public class DocumentRepository implements IRepository<Document> {
 			existingRecord.delete();
 		}
 	}
-	
+
 	public Document getDocumentByUser(Long userId)
 			throws ElementNotFoundException {
 		DocumentsRecord record = sql.fetchOne(DOCUMENTS,
