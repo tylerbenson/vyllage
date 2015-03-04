@@ -24,6 +24,11 @@ var RecipientEdit = React.createClass({
     e.preventDefault();
     this.props.onChange(key, e.target.value);
   },
+  keyPress: function (e) {
+    if (e.which === 13) {
+      this.updateHandler(e);
+    }
+  },
   updateHandler: function (e) {
     e.preventDefault();
     var isValid = this.validate();
@@ -38,16 +43,32 @@ var RecipientEdit = React.createClass({
       <div onBlur={this.props.closeSuggestions} onFocus={this.props.openSuggestions}>
         <div className='rcpent-add'>
           <div className='three columns'>
-            <input  type='text' placeholder='First Name' value={recipient.firstName} onChange={this.changeHandler.bind(this, 'firstName')} autoComplete='off' autoFocus />
+            <input 
+              type='text'
+              placeholder='First Name'
+              value={recipient.firstName}
+              onChange={this.changeHandler.bind(this, 'firstName')}
+              onKeyPress={this.keyPress}
+              autoComplete='off'
+              autoFocus />
             {this.state.firstNameError? <p className='error'>* required </p>: null}
           </div>
           <div className='three columns'>
-            <input  type='text' placeholder='Last Name' value={recipient.lastName} onChange={this.changeHandler.bind(this, 'lastName')} />
+            <input
+              type='text'
+              placeholder='Last Name'
+              value={recipient.lastName}
+              onChange={this.changeHandler.bind(this, 'lastName')}
+              onKeyPress={this.keyPress} />
             {this.state.lastNameError? <p className='error'>* required </p>: null}
-
           </div>
           <div className='five columns'>
-            <input type='email' placeholder='E-mail' value={recipient.email} onChange={this.changeHandler.bind(this, 'email')} />
+            <input
+              type='email'
+              placeholder='E-mail'
+              value={recipient.email}
+              onChange={this.changeHandler.bind(this, 'email')}
+              onKeyPress={this.keyPress} />
             {this.state.emailError? <p className='error'>* invalid email</p>: null}
           </div>
           <div className='one columns'>
