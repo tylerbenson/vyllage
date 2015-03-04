@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,14 +25,11 @@ public class AccountService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	// @Value("${account.service.url}")
-	// public String ACCOUNT_URL;
+	@Value("${accounts.host}")
+	public String ACCOUNTS_HOST;
 
-	public AccountService() {
-		// Assert.notNull(environment);
-		// ACCOUNT_URL = environment.getProperty("account.service.url");
-		// logger.info(ACCOUNT_URL);
-	}
+	@Value("${accounts.port}")
+	public String ACCOUNTS_PORT;
 
 	public AccountNames getNamesForUser(Long userId, HttpServletRequest request) {
 		Assert.notNull(userId);
@@ -55,8 +53,8 @@ public class AccountService {
 		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
 
 		return restTemplate.exchange(
-				"http://localhost:8080/account/names/" + userId,
-				HttpMethod.GET, entity, AccountNames.class).getBody();
+				"http://{host}:{port}/account/names/{userId}", HttpMethod.GET,
+				entity, AccountNames.class, ACCOUNTS_HOST, ACCOUNTS_PORT,
+				userId).getBody();
 	}
-
 }
