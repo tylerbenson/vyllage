@@ -245,6 +245,7 @@ var ProfileContainer = React.createClass({
             request
                .get('/resume/' + documentId + '/header')
                .set('Accept', 'application/json')
+               .query({ documentId : documentId })
                .end(function(error, res) {
 
                     if (res.ok) {
@@ -255,7 +256,10 @@ var ProfileContainer = React.createClass({
                             self.setState({profileData: res.body});
                         }
                     } else {
-                       alert( res.text );
+                        //apply hardcoded data.
+                        //  temporary solution if server returns error
+                        self.setState({profileData: Data});
+                        alert( res.text );
                    }             
             });
         } else {
