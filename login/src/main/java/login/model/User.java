@@ -1,5 +1,6 @@
 package login.model;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,6 +15,10 @@ public class User extends org.springframework.security.core.userdetails.User {
 	private String middleName;
 
 	private String lastName;
+
+	private LocalDateTime dateCreated;
+
+	private LocalDateTime lastModified;
 
 	/**
 	 * 
@@ -37,13 +42,16 @@ public class User extends org.springframework.security.core.userdetails.User {
 			String lastName, String username, String password, boolean enabled,
 			boolean accountNonExpired, boolean credentialsNonExpired,
 			boolean accountNonLocked,
-			Collection<? extends GrantedAuthority> authorities) {
+			Collection<? extends GrantedAuthority> authorities,
+			LocalDateTime dateCreated, LocalDateTime lastModified) {
 		super(username, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, authorities);
 		this.userId = userId;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
+		this.dateCreated = dateCreated;
+		this.lastModified = lastModified;
 	}
 
 	public Long getUserId() {
@@ -76,6 +84,22 @@ public class User extends org.springframework.security.core.userdetails.User {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public LocalDateTime getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(LocalDateTime dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public LocalDateTime getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(LocalDateTime lastModified) {
+		this.lastModified = lastModified;
 	}
 
 }

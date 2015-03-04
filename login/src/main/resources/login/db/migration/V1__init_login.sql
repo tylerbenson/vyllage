@@ -7,15 +7,24 @@ create table if not exists LOGIN.users(
   firstName varchar_ignorecase(50),
   middleName varchar_ignorecase(50),
   lastName varchar_ignorecase(50),
-  enabled boolean not null);
+  enabled boolean not null,
+  dateCreated timestamp not null,
+  lastModified timestamp not null);
 
+create table if not exists LOGIN.personal(
+	userid bigint not null,
+	graduationDate timestamp,
+	emailUpdates varchar_ignorecase(15),
+	phoneNumber varchar_ignorecase(20),
+	constraint fk_personal_users foreign key(userid) references LOGIN.users(userid));
+  
 create table if not exists LOGIN.user_credentials(
   userid  bigint not null,
   password varchar_ignorecase(60) not null,
   enabled boolean not null,
   expires timestamp,
   constraint fk_passwords_users foreign key(userid) references LOGIN.users(userid));
- 
+
 create unique index LOGIN.ix_username_password on LOGIN.user_credentials (userid, password);
   
 create table if not exists LOGIN.authorities (

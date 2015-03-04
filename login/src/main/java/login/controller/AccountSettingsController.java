@@ -1,7 +1,6 @@
 package login.controller;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -25,22 +24,7 @@ public class AccountSettingsController {
 			.getLogger(AccountSettingsController.class.getName());
 
 	@Autowired
-	UserService userService;
-
-	// @ModelAttribute
-	// public AccountSettings accountSettings() {
-	// // TODO: retrieve data from somewhere
-	// AccountSettings accountSettings = new AccountSettings();
-	// accountSettings.setEmail("nben888@gmail.com");
-	// accountSettings.setFirstName("Nathan");
-	// accountSettings.setLastName("Benson");
-	// accountSettings.setRole("CEO");
-	// accountSettings.setGraduationDate(LocalDate.now());
-	// accountSettings.setLastUpdate(LocalDateTime.now());
-	// accountSettings.setMemberSince(LocalDateTime.now());
-	//
-	// return accountSettings;
-	// }
+	private UserService userService;
 
 	@RequestMapping(value = "{userId}", method = RequestMethod.GET)
 	public String getAccountSettings(@PathVariable final Long userId)
@@ -52,16 +36,17 @@ public class AccountSettingsController {
 		accountSettings.setMiddleName(user.getMiddleName());
 		accountSettings.setLastName(user.getLastName());
 		accountSettings.setEmail(user.getUsername());
+		accountSettings.setLastUpdate(user.getLastModified());
+		accountSettings.setMemberSince(user.getDateCreated());
 
 		if (user.getAuthorities() != null && !user.getAuthorities().isEmpty())
 			accountSettings.setRole(user.getAuthorities().stream()
 					.map(r -> r.getAuthority())
 					.collect(Collectors.joining(", ")));
 
-		// placeholders
+		// TODO: placeholder, add another table with the rest.
 		accountSettings.setGraduationDate(LocalDate.now());
-		accountSettings.setLastUpdate(LocalDateTime.now());
-		accountSettings.setMemberSince(LocalDateTime.now());
+
 		return "settings";
 	}
 }

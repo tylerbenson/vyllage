@@ -3,10 +3,18 @@
 --  password varchar_ignorecase(60) not null,
 --  enabled boolean not null);
 --NOTE: password == '$2a$10$6REiiQD8i4FTE4D/X3.chOnlgxghwWMGcngksAjyQun0njGDQznxq'
-insert into LOGIN.users ( username, enabled ) values ( 'email', true );
-insert into LOGIN.users ( username, enabled ) values ( 'testuser@vyllage.com', true );
-insert into LOGIN.users ( username, enabled ) values ( 'deana@vyllage.com', true );
-insert into LOGIN.users ( username, enabled ) values ( 'someone@vyllage.com', true );
+insert into LOGIN.users ( username, firstName, middleName, lastName, enabled, dateCreated, lastModified) values ( 'email', 'Luke', 'V', 'Skywalker', true, CURRENT_DATE(), CURRENT_DATE());
+insert into LOGIN.users ( username, enabled, dateCreated, lastModified ) values ( 'testuser@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE());
+insert into LOGIN.users ( username, enabled, dateCreated, lastModified ) values ( 'deana@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE() );
+insert into LOGIN.users ( username, enabled, dateCreated, lastModified ) values ( 'someone@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE() );
+
+--create table if not exists LOGIN.personal(
+--	userid bigint not null,
+--	graduationDate timestamp,
+--	emailUpdates varchar_ignorecase(15),
+--	phoneNumber varchar_ignorecase(20),
+--	constraint fk_personal_users foreign key(userid) references LOGIN.users(userid));
+insert into LOGIN.personal(userid, graduationDate, emailUpdates, phoneNumber) values (0, CURRENT_DATE(), 'weekly', '123456789');
 
 --create table if not exists LOGIN.user_credentials(
 --  userid  bigint not null,
