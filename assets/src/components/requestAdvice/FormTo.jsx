@@ -4,14 +4,33 @@ var RecipientList = require('./RecipientList');
 var Suggestions = require('./RecipientSuggestions');
 var assign = require('lodash.assign');
 
+var suggestions = {
+  recent: [
+    {"firstName": "Tyler", "lastName": "Benson", "email": "tyler.benson@vyllage.com"},
+    {"firstName": "Nathon", "lastName": "Benson", "email": "nathon.benson@vyllage.com"},
+    {"firstName": "Nick", "lastName": "Disney", "email": "nick.disney@vyllage.com"},
+    {"firstName": "Keith", "lastName": "Biggs", "email": "keith.biggs@vyllage.com"},
+    {"firstName": "Devin", "lastName": "Moncor", "email": "devin.moncor@vyllage.com"}
+  ],
+  recommended: [  
+    {"firstName": "Tyler", "lastName": "Benson", "email": "tyler.benson@vyllage.com"},
+    {"firstName": "Nathon", "lastName": "Benson", "email": "nathon.benson@vyllage.com"},
+    {"firstName": "Nick", "lastName": "Disney", "email": "nick.disney@vyllage.com"},
+    {"firstName": "Keith", "lastName": "Biggs", "email": "keith.biggs@vyllage.com"},
+    {"firstName": "Devin", "lastName": "Moncor", "email": "devin.moncor@vyllage.com"},
+  ]
+}
+
 var FormTo = React.createClass({
   getInitialState: function () {
     return {
+      suggestions: suggestions,
       recipients: [
         {"firstName": "Tyler", "lastName": "Benson", email: "tyler.benson@vyllage.com" },
         {"firstName": "Nathan", "lastName": "Benson", email: "nathan.benson@vyllage.com" }
       ],
       selectedRecipient: null,
+      selectedSuggestion: null,
       recipient: {firstName: "", lastName: "", email: "", newRecipient: true},
       showSuggestions: false
     };
@@ -37,6 +56,7 @@ var FormTo = React.createClass({
       showSuggestions: false,
       recipients: recipients,
       selectedRecipient: null,
+      selectedSuggestion: null,
       recipient: {firstName: "", lastName: "", email: "", newRecipient: true}
     });
   },
@@ -55,9 +75,34 @@ var FormTo = React.createClass({
       recipient: assign({}, this.state.recipients[index])
     });
   },
+  selectSuggestion: function (index) {
+    var suggestions = this.state.suggestions.recent.concat(this.state.suggestions.recommended);
+    this.updateRecipient(suggestions[index])
+  },
+  changeSelectedSuggestion: function (e) {
+    var suggestions = this.state.suggestions.recent.concat(this.state.suggestions.recommended);
+    var selectedSuggestion;
+    if (e.key === 'ArrowDown') {
+      if (this.state.selectedSuggestion === null) {
+        selectedSuggestion = 0;
+      } else if (this.state.selectedSuggestion < suggestions.length -1) {
+        selectedSuggestion = this.state.selectedSuggestion + 1;
+      } else {
+        selectedSuggestion = this.state.selectedSuggestion;
+      }
+    }
+
+    if (e.key === 'ArrowUp') {
+      selectedSuggestion = (this.state.selectedSuggestion > 0)? this.state.selectedSuggestion - 1: 0;
+    } 
+    this.setState({selectedSuggestion: selectedSuggestion});
+  },
   closeSuggestions: function (e) {
     e.preventDefault();
-    this.setState({showSuggestions: false});
+    this.setState({
+      showSuggestions: false,
+      selectedSuggestion: null
+    });
   },
   openSuggestions: function (e) {
     e.preventDefault();
@@ -77,6 +122,10 @@ var FormTo = React.createClass({
               onChange={this.changeRecipient}
               onSubmit={this.updateRecipient}
               recipient={this.state.recipient}
+              selectedRecipient={this.state.selectedRecipient}
+              selectedSuggestion={this.state.selectedSuggestion}
+              changeSelectedSuggestion={this.changeSelectedSuggestion}
+              selectSuggestion={this.selectSuggestion}
               closeSuggestions={this.closeSuggestions}
               openSuggestions={this.openSuggestions} />
             <RecipientList 
@@ -84,7 +133,11 @@ var FormTo = React.createClass({
               removeRecipient={this.removeRecipient}
               selectRecipient={this.selectRecipient} 
               selectedRecipient={this.state.selectedRecipient} />
-            <Suggestions show={this.state.showSuggestions} selectSuggestion={this.updateRecipient} />
+            <Suggestions
+              show={this.state.showSuggestions}
+              suggestions={this.state.suggestions}
+              selectSuggestion={this.selectSuggestion}
+              selectedSuggestion={this.state.selectedSuggestion} />
           </div>
           <div className="two columns fb-button">
             <span className="small-text">ask your</span><br/>

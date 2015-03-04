@@ -40,6 +40,7 @@
 
 .rqst-key-word {
   text-align: center;
+  // color: #887b94;
 }
 
 .rcpent-add {
@@ -47,27 +48,32 @@
   height: 35px;
   background-color: lighten($top-bkg-color, 5%);
   input {
-    // padding: 0px;
-    height: 35px;
     width: 110%;
   }
 }
 
 .rcpent-list {
-  cursor: pointer;
 	.rcpent {
     display: inline-block;
     float: left;
     border: 1px solid $border-color;
+    background: $top-bkg-color;
     margin: 5px;
     padding: 5px 0;
     a {
       color: #000;
       padding: 10px;
     }
+    .rcpent-delete {
+      cursor: pointer;
+    }
 	}
   .rcpent-selected {
     border: 1px solid darken($border-color, 20%);
+  }
+  .rcpent-editable {
+    background: white;
+    cursor: pointer;
   }
 }
 
@@ -97,16 +103,20 @@
   		p.item-text {
   			padding-left: 25px
   		}
+      &:hover {
+        background: lighten($top-bkg-color, 4%);
+      }
   	}
+    .is-active {
+      background: lighten($top-bkg-color, 4%);
+    }
   }	
 }
 
 .send-btn {
   @include saveBtn();
+  color: #fff;
   margin: 20px;
-  &:hover {
-    color: #fff;
-  }
 }
 
 .send-btn:hover {
@@ -141,12 +151,22 @@
   }
 }
 
-.add-button {
-  // margin: 10px 5px 0 0;
-  padding: 10px;
-  img {
-    width: 32px;
-  }
+.rcpent-button {
+  background: #4d4d4d; //$article-btn-bkg-color;
+  margin: 0 0 0 10px;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 36px;
+  color: white;
+  width: 32px;
+  text-align: center;
+  cursor: pointer;
 }
+
+// .rcpent-button-add {
+// }
+
+// .rcpent-button-save {
+// }
 
 @import './components/header/header';
