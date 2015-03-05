@@ -74,7 +74,8 @@ var MainContainer = React.createClass({
                             self.setState({mainData: res.body});
                         }
                     } else {
-                       alert( res.text );
+                        alert(res.text); // this is left intentionally 
+                        console.log(res.text); 
                    }             
             });
         } else {
@@ -122,7 +123,8 @@ var MainContainer = React.createClass({
                             }
                         }
                     } else {
-                       alert( res.text );
+                       alert( res.text );  // this is left intentionally
+                       console.log(res.text); 
                     }  
                 });
         }

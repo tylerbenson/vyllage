@@ -10,6 +10,10 @@ var Role = React.createClass({
         this.state.role = this.props.role;
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.state.role = nextProps.role;
+    },
+
     handleChange: function(event) {
         this.setState({role: event.target.value});
 

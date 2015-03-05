@@ -10,6 +10,10 @@ var Location = React.createClass({
         this.state.location = this.props.location;
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.state.location = nextProps.location;
+    },
+
     handleChange: function(event) {
         this.setState({location: event.target.value});
 

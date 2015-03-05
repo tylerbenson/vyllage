@@ -10,6 +10,10 @@ var OrganizationDescription = React.createClass({
         this.state.organizationDescription = this.props.organizationDescription;
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.state.organizationDescription = nextProps.organizationDescription;
+    },
+
     handleChange: function(event) {
         this.setState({organizationDescription: event.target.value});
 

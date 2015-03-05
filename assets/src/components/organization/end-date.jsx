@@ -10,6 +10,10 @@ var EndDate = React.createClass({
         this.state.endDate = this.props.endDate;
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.state.endDate = nextProps.endDate;
+    },
+
     handleChange: function(event) {
         this.setState({endDate: event.target.value});
 

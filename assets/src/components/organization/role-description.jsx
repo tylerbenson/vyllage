@@ -10,6 +10,10 @@ var RoleDescription = React.createClass({
         this.state.roleDescription = this.props.roleDescription;
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.state.roleDescription = nextProps.roleDescription;
+    },
+
     handleChange: function(event) {
         this.setState({roleDescription: event.target.value});
 
