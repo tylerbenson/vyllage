@@ -1,9 +1,9 @@
 def vJavaLang = '1.8'
 def gradleDir = "${rootProject.rootDir}/gradle"
 ext.javascriptProjects = [ project(':assets') ]
-ext.javaProjects = [ project(':login'), project(':editor'), project(':site'), project(':connections') ]
-ext.bootProjects = [ project(':login'), project(':editor'), project(':site'), project(':connections') ]
-ext.dbProjects = [ project(':login'), project(':editor'), project(':connections') ]
+ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') ]
+ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') ]
+ext.dbProjects = [ project(':accounts'), project(':documents'), project(':connections') ]
 
 wrapper.gradleVersion = '2.1'
 

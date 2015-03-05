@@ -29,20 +29,20 @@ public class FlywayConfig {
 	}
 
 	@Bean(initMethod = "migrate")
-	public Flyway flywayEditor() {
+	public Flyway flywayDocuments() {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(this.dataSource);
-		flyway.setLocations("classpath:editor/db/migration");
-		flyway.setSchemas("EDITOR");
+		flyway.setLocations("classpath:documents/db/migration");
+		flyway.setSchemas("DOCUMENTS");
 		return flyway;
 	}
 
 	@Bean(initMethod = "migrate")
-	public Flyway flywayLogin() {
+	public Flyway flywayAccounts() {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(this.dataSource);
-		flyway.setLocations("classpath:login/db/migration");
-		flyway.setSchemas("LOGIN");
+		flyway.setLocations("classpath:accounts/db/migration");
+		flyway.setSchemas("ACCOUNTS");
 		return flyway;
 	}
 }

@@ -2,6 +2,6 @@ rootProject.name = 'vyllage'
 
 include 'assets'
 include 'connections'
-include 'login'
-include 'editor'
+include 'accounts'
+include 'documents'
 include 'site'
