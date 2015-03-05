@@ -2,6 +2,7 @@ package accounts.repository;
 
 import static accounts.domain.tables.PersonalInformation.PERSONAL_INFORMATION;
 
+import java.sql.Timestamp;
 import java.util.logging.Logger;
 
 import org.jooq.DSLContext;
@@ -32,4 +33,19 @@ public class PersonalInformationRepository {
 		return pi;
 	}
 
+	public void save(PersonalInformation userPersonalInformation) {
+		PersonalInformationRecord record = sql.fetchOne(PERSONAL_INFORMATION,
+				PERSONAL_INFORMATION.USERID.eq(userPersonalInformation
+						.getUserId()));
+
+		if (record == null) {
+			record = sql.newRecord(PERSONAL_INFORMATION);
+		}
+
+		record.setEmailupdates(userPersonalInformation.getEmailUpdates());
+		record.setGraduationdate(Timestamp.valueOf(userPersonalInformation
+				.getGraduationDate()));
+		record.setPhonenumber(userPersonalInformation.getPhoneNumber());
+		record.store();
+	}
 }

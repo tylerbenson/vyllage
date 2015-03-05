@@ -1,7 +1,11 @@
 package accounts.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +23,8 @@ import accounts.service.UserService;
 @RequestMapping("account")
 public class AccountSettingsController {
 
+	private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger
 			.getLogger(AccountSettingsController.class.getName());
@@ -26,9 +32,10 @@ public class AccountSettingsController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(value = "{userId}", method = RequestMethod.GET)
-	public String getAccountSettings(@PathVariable final Long userId)
+	@RequestMapping(method = RequestMethod.GET)
+	public String getAccountSettings(HttpServletRequest request)
 			throws UserNotFoundException {
+		Long userId = getUserId(request);
 		User user = userService.getUser(userId);
 
 		AccountSettings accountSettings = new AccountSettings();
@@ -50,5 +57,43 @@ public class AccountSettingsController {
 		accountSettings.setUserPersonalInformation(userPersonalInformation);
 
 		return "settings";
+	}
+
+	@RequestMapping(value = "phoneNumber/{phoneNumber}", method = RequestMethod.POST)
+	public void savePhoneNumber(HttpServletRequest request,
+			@PathVariable String phoneNumber) {
+		Long userId = getUserId(request);
+
+		PersonalInformation userPersonalInformation = userService
+				.getUserPersonalInformation(userId);
+		userPersonalInformation.setPhoneNumber(phoneNumber);
+		userService.savePersonalInformation(userPersonalInformation);
+	}
+
+	@RequestMapping(value = "emailUpdates/{emailUpdates}", method = RequestMethod.POST)
+	public void saveEmailUpdates(HttpServletRequest request,
+			@PathVariable String emailUpdates) {
+		Long userId = getUserId(request);
+
+		PersonalInformation userPersonalInformation = userService
+				.getUserPersonalInformation(userId);
+		userPersonalInformation.setEmailUpdates(emailUpdates);
+		userService.savePersonalInformation(userPersonalInformation);
+	}
+
+	@RequestMapping(value = "graduationDate/{graduationDate}", method = RequestMethod.POST)
+	public void saveGraduationDate(HttpServletRequest request,
+			@PathVariable String graduationDate) {
+		Long userId = getUserId(request);
+
+		PersonalInformation userPersonalInformation = userService
+				.getUserPersonalInformation(userId);
+		userPersonalInformation.setGraduationDate(LocalDateTime.parse(
+				graduationDate, DateTimeFormatter.ofPattern(YYYY_MM_DD)));
+		userService.savePersonalInformation(userPersonalInformation);
+	}
+
+	private Long getUserId(HttpServletRequest request) {
+		return (Long) request.getSession().getAttribute("userId");
 	}
 }
