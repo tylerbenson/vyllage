@@ -159,14 +159,14 @@ var MainContainer = React.createClass({
         var  position = sectionPosition,
              data = this.state.mainData;
 
-         // Set position           
-         data.map(function(result) {
+         // Set position    
+        data.map(function(result) {
             if(result.sectionPosition >= position)
             {
                 result.sectionPosition = result.sectionPosition + 1;
             }
         });
-
+        
         this.state.editModePosition = position;
 
         switch(type) {
@@ -359,22 +359,23 @@ var MainContainer = React.createClass({
             skillsCount = 0,  addNewItem = 0;
 
         if(results == '') {
+            this.state.mainData = EmptyStateData;
              return (
                 <div>
                     { 
                         EmptyStateData.map(function(result) {
                             if(result.type === "freeform"){
-                                return that.freeFormItems(EmptyStateData[0], true,true);
+                                return that.freeFormItems(this.state.mainData[0], true,true);
                             }
                             else{
-                                return that.experienceItems(EmptyStateData[1], true,true); 
+                                return that.experienceItems(this.state.mainData[1], true,true); 
                             }
 
                         })
                     }
-                        <AddSections addSection={that.addSection} title={'education'}/>
+                        <AddSections addSection={that.addSection} title={'education'}  position={results.length+1}/>
 
-                        <AddSections addSection={that.addSection} title={'skills'}/>
+                        <AddSections addSection={that.addSection} title={'skills'}  position={results.length+1}/>
                    </div>
                 );
 
@@ -467,9 +468,9 @@ var MainContainer = React.createClass({
                         })
                     }
 
-                    <AddSections addSection={that.addSection} title={'education'}/>
+                    <AddSections addSection={this.addSection} title={'education'} position={results.length+1} />
 
-                    <AddSections addSection={that.addSection} title={'skills'}/>
+                    <AddSections addSection={this.addSection} title={'skills'} position={results.length+1} />
                 </div>
             );
         }
