@@ -10,6 +10,10 @@ var StartDate = React.createClass({
         this.state.startDate = this.props.startDate;
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.state.startDate = nextProps.startDate;
+    },
+
     handleChange: function(event) {
         this.setState({startDate: event.target.value});
 

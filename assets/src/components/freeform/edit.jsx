@@ -10,6 +10,10 @@ var  FreeformEdit = React.createClass({
         this.state.description = this.props.description;
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.state.description = nextProps.description;
+    },
+
     handleChange: function(event) {
         this.setState({description: event.target.value});
 

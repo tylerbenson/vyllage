@@ -10,6 +10,10 @@ var Highlights = React.createClass({
         this.state.highlights = this.props.highlights;
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.state.highlights = nextProps.highlights;
+    },
+
     handleChange: function(event) {
         this.setState({highlights: event.target.value});
 

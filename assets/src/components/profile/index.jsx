@@ -62,6 +62,10 @@ var TaglineEdit = React.createClass({
         this.state.taglineData = this.props.profileData.tagline;
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.state.taglineData = nextProps.taglineData;
+    },
+
     handleChange: function(event) {
         this.setState({taglineData: event.target.value});
 
@@ -255,10 +259,8 @@ var ProfileContainer = React.createClass({
                             self.setState({profileData: res.body});
                         }
                     } else {
-                        //apply hardcoded data.
-                        //  temporary solution if server returns error
-                        self.setState({profileData: Data});
-                        alert( res.text );
+                        alert(res.text); // this is left intentionally 
+                        console.log(res.text);
                    }             
             });
         } else {

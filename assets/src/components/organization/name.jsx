@@ -10,6 +10,10 @@ var OrganizationName = React.createClass({
         this.state.organizationName = this.props.organizationName;
     },
 
+    componentWillReceiveProps: function(nextProps) {
+        this.state.organizationName = nextProps.organizationName;
+    },
+
     handleChange: function(event) {
         this.setState({organizationName: event.target.value});
 
