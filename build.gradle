@@ -50,6 +50,7 @@ configure(javaProjects) {
     dependencies {
         compile 'org.slf4j:slf4j-api'
         compile 'org.projectlombok:lombok:1.14.8'
+        compile 'com.newrelic.agent.java:newrelic-api:3.+'
         testCompile 'junit:junit'
         testCompile 'org.hamcrest:hamcrest-library'
         testCompile 'org.mockito:mockito-core'
