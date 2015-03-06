@@ -71,11 +71,11 @@ var Settings = React.createClass({
               </div>
               <Name value={settings.name} changeSetting={this.changeSetting} />
               <ul className='settings-profile'>
-                <Role value={settings.role} />
-                <GraduationDate value={settings.graduationDate} />
-                <Organization value={settings.organization}/>
-                <FacebookAccount value={settings.facebookAccount}/>
-                <SharedLinks value={settings.sharedLinks}/>
+                <Role value={settings.role} changeSetting={this.changeSetting} />
+                <GraduationDate value={settings.graduationDate} changeSetting={this.changeSetting} />
+                <Organization value={settings.organization} changeSetting={this.changeSetting} />
+                <FacebookAccount value={settings.facebookAccount} changeSetting={this.changeSetting} />
+                <SharedLinks value={settings.sharedLinks} changeSetting={this.changeSetting} />
                 <Password />
               </ul>
             </div>

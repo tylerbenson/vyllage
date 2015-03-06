@@ -9,7 +9,6 @@ var Name = React.createClass({
     this.setState({edit: true});
   },
   changeHandler: function (e) {
-    console.log(e.target.value);
     e.preventDefault();
     this.props.changeSetting('name', e.target.value);
   },
