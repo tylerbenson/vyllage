@@ -12,7 +12,7 @@ var AddSections = React.createClass({
     render: function() {
 
         return (
-            <article className="add-section education">
+            <article className={this.props.shouldHide ? 'hidden add-section education' : 'add-section education'}>
                 <div className="row">
                     <div className="twelve columns">
                         <div onClick={this.addSection}>

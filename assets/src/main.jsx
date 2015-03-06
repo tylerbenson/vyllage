@@ -124,6 +124,16 @@ var MainContainer = React.createClass({
                                 }
                             }
                         } else {
+                           // Remove added element  
+                           for(var i = 0; i < self.state.mainData.length; i++){
+
+                                if(self.state.mainData[i].sectionPosition === data.sectionPosition){
+
+                                    self.state.mainData.splice(i,1);
+                                    self.setState({mainData: self.state.mainData});
+                                }
+                            }
+
                            alert( res.text );  // this is left intentionally
                            console.log(res.text); 
                         }  
@@ -147,6 +157,17 @@ var MainContainer = React.createClass({
                                 }
                             }
                         } else {
+
+                           // Remove new element for add.
+                            for(var i = 0; i < self.state.mainData.length; i++){
+
+                                if(self.state.mainData[i].sectionPosition === data.sectionPosition){
+
+                                    self.state.mainData.splice(i,1);
+                                    self.setState({mainData: self.state.mainData});
+                                }
+                            }
+
                            alert( res.text );  // this is left intentionally
                            console.log(res.text); 
                         }  
@@ -356,7 +377,8 @@ var MainContainer = React.createClass({
         var results = this.state.mainData,
             that = this, experienceCount = 0,
             educationCount = 0, careergoalCount = 0,
-            skillsCount = 0,  addNewItem = 0;
+            skillsCount = 0,  addNewItem = 0,
+            shouldHideEducation = false, shouldHideSkills = false;
 
         if(results == '') {
             this.state.mainData = EmptyStateData;
@@ -402,6 +424,7 @@ var MainContainer = React.createClass({
                                 // Check for find first element (skills), need for add button.
                                 if(result.title == "skills") {
                                     addNewItem = 1;
+                                    shouldHideSkills = true;
                                     skillsCount = skillsCount + 1;
                                 }
                                 
@@ -417,6 +440,7 @@ var MainContainer = React.createClass({
                                 if(skillsCount == 0 && result.title == "skills") {
                                     addNewItem = 1;
                                     skillsCount = skillsCount + 1;
+                                    shouldHideSkills = true;
                                 }
 
                                 if (addNewItem == 1) {
@@ -441,6 +465,7 @@ var MainContainer = React.createClass({
                                 if(result.title == "education"){
                                     addNewItem = 1;
                                     educationCount = educationCount + 1;
+                                    shouldHideEducation = true;
                                 }
 
                                 return that.experienceItems(result, true,true);
@@ -454,6 +479,7 @@ var MainContainer = React.createClass({
                                 if(educationCount == 0 && result.title == "education"){
                                     addNewItem = 1;
                                     educationCount = educationCount + 1;
+                                    shouldHideEducation = true;
                                 }
 
                                 if (addNewItem == 1) {
@@ -468,9 +494,9 @@ var MainContainer = React.createClass({
                         })
                     }
 
-                    <AddSections addSection={this.addSection} title={'education'} position={results.length+1} />
+                        <AddSections addSection={this.addSection} title={'education'} position={results.length+1} shouldHide = {shouldHideEducation} />
 
-                    <AddSections addSection={this.addSection} title={'skills'} position={results.length+1} />
+                        <AddSections addSection={this.addSection} title={'skills'} position={results.length+1} shouldHide = {shouldHideSkills}/>
                 </div>
             );
         }
