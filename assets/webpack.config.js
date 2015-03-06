@@ -6,7 +6,8 @@ module.exports = {
   devtool: '#inline-source-map',
   entry: {
     'main.js': './src/main.jsx',
-    'requestAdvice.js': './src/requestAdvice.jsx'
+    'requestAdvice.js': './src/requestAdvice.jsx',
+    'settings.js': './src/settings.jsx'
   },
   output: {
     path: path.join(__dirname, 'public', 'javascript'),
