@@ -7,6 +7,10 @@ body {
 		width: $main-container-width;
 		min-width: $main-container-width;
 
+		article.hidden { 
+	        display:none; 
+	    }
+
 		article {
 			@include article-grid();
 
