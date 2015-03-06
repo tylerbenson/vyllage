@@ -1,6 +1,10 @@
 @import './components/common/variables';
 @import './components/common/mixins';
 
+.margin-fix {
+  margin-left: -10px;
+}
+
 .settings {
   background: white;
   border: 1px solid $border-color;

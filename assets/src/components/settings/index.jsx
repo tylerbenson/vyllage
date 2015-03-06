@@ -19,7 +19,7 @@ var settings = {
   role: 'student',
   graduationDate: 'Aug 1, 2015',
   organization: 'Org Name',
-  facebookAccount: 'linked',
+  facebookAccount: true,
   sharedLinks: '',
   email: {
     value: ['nben888@gmail.com'],
