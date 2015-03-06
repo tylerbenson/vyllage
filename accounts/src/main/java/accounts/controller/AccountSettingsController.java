@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +31,8 @@ import accounts.service.UserService;
 @RequestMapping("account")
 public class AccountSettingsController {
 
-	private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+	// private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+	private static final String MMMM_YYYY_DD = "MMMM yyyy dd HH:mm:ss";
 
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger
@@ -41,9 +42,8 @@ public class AccountSettingsController {
 	private UserService userService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String getAccountSettings(HttpServletRequest request)
-			throws UserNotFoundException {
-		Long userId = getUserId(request);
+	public String getAccountSettings() throws UserNotFoundException {
+		Long userId = getUserId();
 		User user = userService.getUser(userId);
 
 		AccountSettings accountSettings = new AccountSettings();
@@ -69,9 +69,8 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "phoneNumber/{phoneNumber}", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void savePhoneNumber(HttpServletRequest request,
-			@PathVariable String phoneNumber) {
-		Long userId = getUserId(request);
+	public void savePhoneNumber(@PathVariable String phoneNumber) {
+		Long userId = getUserId();
 
 		PersonalInformation userPersonalInformation = userService
 				.getUserPersonalInformation(userId);
@@ -81,12 +80,11 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "emailUpdates/{emailUpdates}", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void saveEmailUpdates(HttpServletRequest request,
-			@PathVariable String emailUpdates) {
-		Long userId = getUserId(request);
+	public void saveEmailUpdates(@PathVariable String emailUpdates) {
+		Long userId = getUserId();
 
 		try {
-			EmailUpdates.valueOf(emailUpdates);
+			EmailUpdates.valueOf(emailUpdates.toUpperCase());
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("Invalid time interval.");
 		}
@@ -99,14 +97,17 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "graduationDate", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void saveGraduationDate(HttpServletRequest request,
-			@RequestBody String graduationDate) {
-		Long userId = getUserId(request);
+	public void saveGraduationDate(@RequestBody String graduationDate) {
+		Long userId = getUserId();
 
 		PersonalInformation userPersonalInformation = userService
 				.getUserPersonalInformation(userId);
+		// "startDate": "September 2010"
+
+		graduationDate += " 01 00:00:00"; // Can't be parsed if it's incomplete
+
 		LocalDateTime date = LocalDateTime.parse(graduationDate,
-				DateTimeFormatter.ofPattern(YYYY_MM_DD));
+				DateTimeFormatter.ofPattern(MMMM_YYYY_DD));
 
 		// not sure if needed?
 		if (date.isBefore(LocalDateTime.now()))
@@ -130,7 +131,10 @@ public class AccountSettingsController {
 		return map;
 	}
 
-	private Long getUserId(HttpServletRequest request) {
-		return (Long) request.getSession().getAttribute("userId");
+	private Long getUserId() {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		return ((User) auth.getPrincipal()).getUserId();
 	}
 }

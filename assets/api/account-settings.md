@@ -5,7 +5,7 @@
 # Save frequency to receive emails
 ## POST /account/emailUpdates/{emailUpdates}* 
 + Parameters  
-	+ emailUpdates (WEEKLY|BIWEEKLY|MONTHLY|NEVER)
+	+ emailUpdates (weekly|biweekly|monthly|never)
 
 + Response 200
 
@@ -13,6 +13,6 @@
 ## POST /account/graduationDate/*
 Model (application/json) without {}
 
-"yyyy-MM-dd'T'HH:mm:ss.SSS"
+"MMMM-yyyy"
   
 + Response 200 
