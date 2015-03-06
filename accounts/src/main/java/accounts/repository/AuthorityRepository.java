@@ -1,6 +1,6 @@
 package accounts.repository;
 
-import static accounts.domain.tables.Authorities.AUTHORITIES;
+import static accounts.domain.tables.Roles.ROLES;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import accounts.domain.tables.records.AuthoritiesRecord;
+import accounts.domain.tables.records.RolesRecord;
 import accounts.model.Authority;
 
 @Repository
@@ -21,30 +21,29 @@ public class AuthorityRepository {
 	private DSLContext sql;
 
 	public List<Authority> getByUserName(String userName) {
-		Result<AuthoritiesRecord> records = sql.fetch(AUTHORITIES,
-				AUTHORITIES.USERNAME.eq(userName));
+		Result<RolesRecord> records = sql.fetch(ROLES,
+				ROLES.USER_NAME.eq(userName));
 
 		return records.stream().map(Authority::new)
 				.collect(Collectors.toList());
 	}
 
 	public void create(Authority authority) {
-		AuthoritiesRecord auth = sql.newRecord(AUTHORITIES);
-		auth.setUsername(authority.getUserName());
-		auth.setAuthority(authority.getAuthority());
+		RolesRecord auth = sql.newRecord(ROLES);
+		auth.setUserName(authority.getUserName());
+		auth.setRole(authority.getAuthority());
 		auth.insert();
 	}
 
 	public List<Authority> getAll() {
-		Result<AuthoritiesRecord> records = sql.fetch(AUTHORITIES);
+		Result<RolesRecord> records = sql.fetch(ROLES);
 
 		return records.stream().map(Authority::new)
 				.collect(Collectors.toList());
 	}
 
 	public void deleteByUserName(String userName) {
-		sql.delete(AUTHORITIES).where(AUTHORITIES.USERNAME.eq(userName))
-				.execute();
+		sql.delete(ROLES).where(ROLES.USER_NAME.eq(userName)).execute();
 	}
 
 	public List<Authority> getDefaultAuthoritiesForNewUser(String userName) {

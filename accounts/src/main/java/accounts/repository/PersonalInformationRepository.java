@@ -22,12 +22,12 @@ public class PersonalInformationRepository {
 
 	public PersonalInformation get(Long userId) {
 		PersonalInformationRecord record = sql.fetchOne(PERSONAL_INFORMATION,
-				PERSONAL_INFORMATION.USERID.eq(userId));
+				PERSONAL_INFORMATION.USER_ID.eq(userId));
 		PersonalInformation pi = new PersonalInformation();
-		pi.setUserId(record.getUserid());
-		pi.setEmailUpdates(record.getEmailupdates());
-		pi.setGraduationDate(record.getGraduationdate().toLocalDateTime());
-		pi.setPhoneNumber(record.getPhonenumber());
+		pi.setUserId(record.getUserId());
+		pi.setEmailUpdates(record.getEmailUpdates());
+		pi.setGraduationDate(record.getGraduationDate().toLocalDateTime());
+		pi.setPhoneNumber(record.getPhoneNumber());
 
 		return pi;
 	}

@@ -5,7 +5,7 @@ import lombok.ToString;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import accounts.domain.tables.records.AuthoritiesRecord;
+import accounts.domain.tables.records.RolesRecord;
 
 @ToString
 @EqualsAndHashCode
@@ -27,9 +27,9 @@ public class Authority implements GrantedAuthority {
 
 	}
 
-	public Authority(AuthoritiesRecord record) {
-		this.authority = record.getAuthority();
-		this.userName = record.getUsername();
+	public Authority(RolesRecord record) {
+		this.authority = record.getRole();
+		this.userName = record.getUserName();
 	}
 
 	@Override
