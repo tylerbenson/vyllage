@@ -54,6 +54,12 @@ section.container {
 			border-color: rgb(47, 52, 92);
 			background-color: rgb(66, 81, 130);
 		}
+
+		.save-btn[disabled], .save-btn[disabled]:hover {
+			background-color: red;
+			background-color: #B3B6BE;
+  			border: 1px solid #B1B2B8;;
+		}
 		
 		.cancel-btn {
 			@include cancelBtn();
