@@ -8,7 +8,7 @@ var Password = React.createClass({
           <span>password</span>
         </div>
         <div className="three columns">
-          <a className="">change</a>
+          <a className="" href="/account/password/reset">change</a>
         </div>
       </li>
     );
