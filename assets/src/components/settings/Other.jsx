@@ -1,4 +1,5 @@
 var React = require('react');
+var PrivacySelect = require('./PrivacySelect');
 
 var Other = React.createClass({
   render: function () {
@@ -15,9 +16,7 @@ var Other = React.createClass({
           </div>
         </div>
         <div className='four columns'>
-          <select className="u-full-width">
-            <option value="org name">Org name</option>
-          </select>
+          <PrivacySelect />
         </div>
       </li>
     );

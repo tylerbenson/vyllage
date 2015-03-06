@@ -1,4 +1,5 @@
 var React = require('react');
+var PrivacySelect = require('./PrivacySelect');
 
 var Twitter = React.createClass({
   render: function () {
@@ -18,9 +19,7 @@ var Twitter = React.createClass({
           </div>
         </div>
         <div className='four columns'>
-          <select className="u-full-width">
-            <option value="everyone">EveryOne</option>
-          </select>
+          <PrivacySelect />
         </div>
       </li>
     );
