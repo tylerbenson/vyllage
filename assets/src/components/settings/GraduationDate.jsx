@@ -9,13 +9,13 @@ var GraduationDate = React.createClass({
     this.setState({edit: !this.state.edit});
   },
   changeHandler: function (e) {
-    console.log(e.target.value);
     e.preventDefault();
     this.props.changeSetting('graduationDate', e.target.value);
   },
   keyPress: function (e) {
     // prevent default on keyPress is prevent onChange event from triggering if input is empty
     // e.preventDefault(); 
+    e.stopPropagation();
     if (e.key === 'Enter') {
       this.setState({edit: false});
     }
