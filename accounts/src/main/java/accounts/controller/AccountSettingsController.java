@@ -85,7 +85,11 @@ public class AccountSettingsController {
 			@PathVariable String emailUpdates) {
 		Long userId = getUserId(request);
 
-		EmailUpdates.valueOf(emailUpdates);
+		try {
+			EmailUpdates.valueOf(emailUpdates);
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException("Invalid time interval.");
+		}
 
 		PersonalInformation userPersonalInformation = userService
 				.getUserPersonalInformation(userId);
@@ -101,8 +105,15 @@ public class AccountSettingsController {
 
 		PersonalInformation userPersonalInformation = userService
 				.getUserPersonalInformation(userId);
-		userPersonalInformation.setGraduationDate(LocalDateTime.parse(
-				graduationDate, DateTimeFormatter.ofPattern(YYYY_MM_DD)));
+		LocalDateTime date = LocalDateTime.parse(graduationDate,
+				DateTimeFormatter.ofPattern(YYYY_MM_DD));
+
+		// not sure if needed?
+		if (date.isBefore(LocalDateTime.now()))
+			throw new IllegalArgumentException(
+					"Graduation date can't be in the past.");
+
+		userPersonalInformation.setGraduationDate(date);
 		userService.savePersonalInformation(userPersonalInformation);
 	}
 
