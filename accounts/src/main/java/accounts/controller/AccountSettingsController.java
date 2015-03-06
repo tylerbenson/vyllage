@@ -2,6 +2,8 @@ package accounts.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -10,14 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import accounts.model.User;
 import accounts.model.account.AccountSettings;
+import accounts.model.account.EmailUpdates;
 import accounts.model.account.PersonalInformation;
 import accounts.repository.UserNotFoundException;
 import accounts.service.UserService;
@@ -80,6 +85,8 @@ public class AccountSettingsController {
 			@PathVariable String emailUpdates) {
 		Long userId = getUserId(request);
 
+		EmailUpdates.valueOf(emailUpdates);
+
 		PersonalInformation userPersonalInformation = userService
 				.getUserPersonalInformation(userId);
 		userPersonalInformation.setEmailUpdates(emailUpdates);
@@ -97,6 +104,19 @@ public class AccountSettingsController {
 		userPersonalInformation.setGraduationDate(LocalDateTime.parse(
 				graduationDate, DateTimeFormatter.ofPattern(YYYY_MM_DD)));
 		userService.savePersonalInformation(userPersonalInformation);
+	}
+
+	@ExceptionHandler(value = { IllegalArgumentException.class })
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public @ResponseBody Map<String, Object> handleInvalidSettingsException(
+			Exception ex) {
+		Map<String, Object> map = new HashMap<>();
+		if (ex.getCause() != null) {
+			map.put("error", ex.getCause().getMessage());
+		} else {
+			map.put("error", ex.getMessage());
+		}
+		return map;
 	}
 
 	private Long getUserId(HttpServletRequest request) {

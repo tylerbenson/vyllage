@@ -1,13 +1,16 @@
 # Save phone number 
-## POST /account/phoneNumber/{phoneNumber}
+## POST /account/phoneNumber/{phoneNumber}*
 + Response 200
 
-# Save email address
-## POST /account/emailUpdates/{emailUpdates}
+# Save frequency to receive emails
+## POST /account/emailUpdates/{emailUpdates}* 
++ Parameters  
+	+ emailUpdates (WEEKLY|BIWEEKLY|MONTHLY|NEVER)
+
 + Response 200
 
 # Save Graduation Date
-## POST /account/graduationDate/
+## POST /account/graduationDate/*
 Model (application/json) without {}
 
 "yyyy-MM-dd'T'HH:mm:ss.SSS"
