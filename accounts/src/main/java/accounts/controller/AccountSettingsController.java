@@ -8,10 +8,13 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import accounts.model.User;
 import accounts.model.account.AccountSettings;
@@ -60,6 +63,7 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "phoneNumber/{phoneNumber}", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
 	public void savePhoneNumber(HttpServletRequest request,
 			@PathVariable String phoneNumber) {
 		Long userId = getUserId(request);
@@ -71,6 +75,7 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "emailUpdates/{emailUpdates}", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
 	public void saveEmailUpdates(HttpServletRequest request,
 			@PathVariable String emailUpdates) {
 		Long userId = getUserId(request);
@@ -81,9 +86,10 @@ public class AccountSettingsController {
 		userService.savePersonalInformation(userPersonalInformation);
 	}
 
-	@RequestMapping(value = "graduationDate/{graduationDate}", method = RequestMethod.POST)
+	@RequestMapping(value = "graduationDate", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
 	public void saveGraduationDate(HttpServletRequest request,
-			@PathVariable String graduationDate) {
+			@RequestBody String graduationDate) {
 		Long userId = getUserId(request);
 
 		PersonalInformation userPersonalInformation = userService

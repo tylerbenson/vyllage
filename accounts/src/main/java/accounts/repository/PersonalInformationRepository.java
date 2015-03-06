@@ -40,6 +40,7 @@ public class PersonalInformationRepository {
 
 		if (record == null) {
 			record = sql.newRecord(PERSONAL_INFORMATION);
+			record.setUserid(userPersonalInformation.getUserId());
 		}
 
 		record.setEmailupdates(userPersonalInformation.getEmailUpdates());

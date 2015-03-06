@@ -16,12 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @PropertySource("classpath:/accounts/application.properties")
 public class Application implements CommandLineRunner {
 
-	// @Autowired
-	// private PersonRepository repository;
-
 	@Override
 	public void run(String... args) throws Exception {
-		// System.err.println(this.repository.findAll());
 	}
 
 	public static void main(String[] args) {
