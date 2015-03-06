@@ -41,11 +41,11 @@ var Twitter = React.createClass({
               twitter:
             </div>
             <div className="six columns">
-              <a>update</a>
+              <a onClick={this.editHandler}>update</a>
             </div>
           </div>
           <div>
-            {this.props.value}
+            {this.state.edit? this.renderForm(): this.props.value}
           </div>
         </div>
         <div className='four columns'>
