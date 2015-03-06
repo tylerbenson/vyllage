@@ -54,7 +54,10 @@ var Email = React.createClass({
           </div>
         </div>
         <div className='four columns'>
-          <PrivacySelect organization={this.props.organization} onChange={this.props.privacyHandler}/>
+          <PrivacySelect 
+            value={this.props.privacy}
+            organization={this.props.organization}
+            onChange={this.props.privacyHandler} />
         </div>
       </li>
     );
