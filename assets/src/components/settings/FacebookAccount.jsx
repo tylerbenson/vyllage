@@ -3,9 +3,13 @@ var React = require('react');
 var FacebookAccount = React.createClass({
   render: function () {
     return (
-      <li>
-        <span>facebook account: linkedin</span>
-        <a className="u-pull-right">remove</a>
+      <li className="row settings-profile-item">
+        <div className="nine columns">
+          <span>facebook account: linkedin</span>
+        </div>
+        <div className='three columns'>
+          <a className="">remove</a>
+        </div>
       </li>
     );
   }

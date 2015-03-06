@@ -3,14 +3,16 @@ var React = require('react');
 var Address = React.createClass({
   render: function () {
     return (
-      <li>
+      <li className="row settings-account-item">
         <div className="eight columns">
           <div>
             <div className="six columns">
-              <div>address:</div>
-              <div>1906 NE 151st Cir</div>
-              <div>Unit 15b</div>
-              <div>Vancovuer, WA 98686</div>
+              <address>
+                address:<br />
+                1906 NE 151st Cir <br />
+                Unit 15b <br />
+                Vancovuer, WA 98686 <br />
+              </address>
             </div>
             <div className="six columns">
               <a>update</a>

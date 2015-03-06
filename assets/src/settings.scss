@@ -48,9 +48,15 @@
     background: $top-bkg-color;
   }
 }
-
+.settings-profile-item {
+  padding: 5px;
+}
 .settings-account {
   list-style: none;
+}
+
+.settings-account-item {
+  padding: 10px 20px 10px 10px;
 }
 
 

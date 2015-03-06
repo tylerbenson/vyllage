@@ -3,7 +3,7 @@ var React = require('react');
 var Linkedin = React.createClass({
   render: function () {
     return (
-      <li>
+      <li className="row settings-account-item">
         <div className="eight columns">
           <div>
             <div className="six columns">

@@ -3,9 +3,13 @@ var React = require('react');
 var Role = React.createClass({
   render: function () {
     return (
-      <li>
-        <span>role: student</span>
-        <a className="u-pull-right">change</a>
+      <li className="row settings-profile-item">
+        <div className='nine columns'>
+          <span>role: student</span>
+        </div>
+        <div className='three columns'>
+          <a className="">change</a>
+        </div>
       </li>
     );
   }

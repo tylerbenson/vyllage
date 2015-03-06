@@ -39,7 +39,7 @@ var Settings = React.createClass({
                 <p>account</p>
               </div>
               <ul className="settings-account">
-                <li>
+                <li className="row settings-account-item">
                   <div className="offset-by-eight four columns text-center">
                     <span className=''>visible to:</span>
                   </div>
@@ -51,7 +51,7 @@ var Settings = React.createClass({
                 <Linkedin />
                 <Facebook />
                 <Other />
-                <li>
+                <li className="row settings-account-item">
                   <div className="offset-by-eight four columns text-center">
                     <span className=''>delete account</span>
                   </div>
