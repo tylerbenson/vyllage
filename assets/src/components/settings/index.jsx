@@ -53,6 +53,11 @@ var Settings = React.createClass({
   getInitialState: function () {
     return { settings: settings }
   },
+  changeSetting : function (name, value) {
+    var settings = this.state.settings;
+    settings[name] = value;
+    this.setState({settings: settings});
+  },
   render: function () {
     var settings = this.state.settings;
 
@@ -64,7 +69,7 @@ var Settings = React.createClass({
               <div className='topper'>
                 <p>settings</p>
               </div>
-              <Name value={settings.name} />
+              <Name value={settings.name} changeSetting={this.changeSetting} />
               <ul className='settings-profile'>
                 <Role value={settings.role} />
                 <GraduationDate value={settings.graduationDate} />
