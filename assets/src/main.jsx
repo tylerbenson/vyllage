@@ -365,10 +365,10 @@ var MainContainer = React.createClass({
                     { 
                         EmptyStateData.map(function(result) {
                             if(result.type === "freeform"){
-                                return that.freeFormItems(this.state.mainData[0], true,true);
+                                return that.freeFormItems(that.state.mainData[0], true,true);
                             }
                             else{
-                                return that.experienceItems(this.state.mainData[1], true,true); 
+                                return that.experienceItems(that.state.mainData[1], true,true); 
                             }
 
                         })
