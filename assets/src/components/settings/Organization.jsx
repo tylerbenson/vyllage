@@ -11,7 +11,6 @@ var Organization = React.createClass({
   changeHandler: function (e) {
     e.preventDefault();
     this.props.changeSetting('organization', e.target.value);
-    this.setState({edit: false});
   },
   keyPress: function (e) {
     e.stopPropagation();
