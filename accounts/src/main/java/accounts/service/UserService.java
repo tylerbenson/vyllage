@@ -17,7 +17,6 @@ import accounts.model.UserFilterRequest;
 import accounts.model.account.PersonalInformation;
 import accounts.repository.AuthorityRepository;
 import accounts.repository.GroupAuthorityRepository;
-import accounts.repository.GroupRepository;
 import accounts.repository.PersonalInformationRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
@@ -28,8 +27,6 @@ public class UserService {
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
 
 	@Autowired
-	private GroupRepository groupRepository;
-	@Autowired
 	private AuthorityRepository authorityRepository;
 
 	@Autowired
@@ -37,9 +34,6 @@ public class UserService {
 
 	@Autowired
 	private UserDetailRepository userRepository;
-
-	@Autowired
-	private DocumentLinkService documentLinkService;
 
 	@Autowired
 	private PersonalInformationRepository pInformation;
@@ -143,5 +137,10 @@ public class UserService {
 
 	public PersonalInformation getUserPersonalInformation(Long userId) {
 		return pInformation.get(userId);
+	}
+
+	public void savePersonalInformation(
+			PersonalInformation userPersonalInformation) {
+		pInformation.save(userPersonalInformation);
 	}
 }

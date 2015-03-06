@@ -16,12 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @PropertySource("classpath:/accounts/application.properties")
 public class Application implements CommandLineRunner {
 
-	// @Autowired
-	// private PersonRepository repository;
-
 	@Override
 	public void run(String... args) throws Exception {
-		// System.err.println(this.repository.findAll());
 	}
 
 	public static void main(String[] args) {
@@ -32,40 +28,5 @@ public class Application implements CommandLineRunner {
 	public ObjectMapper objectMapper() {
 		return new ObjectMapper();
 	}
-}
 
-// @Repository
-// interface PersonRepository extends CrudRepository<Person, Long> {
-//
-// }
-//
-// @Entity
-// class Person {
-// @Id
-// @GeneratedValue
-// private Long id;
-// private String firstName;
-// private String lastName;
-//
-// public String getFirstName() {
-// return this.firstName;
-// }
-//
-// public void setFirstName(String firstName) {
-// this.firstName = firstName;
-// }
-//
-// public String getLastName() {
-// return this.lastName;
-// }
-//
-// public void setLastName(String lastname) {
-// this.lastName = lastname;
-// }
-//
-// @Override
-// public String toString() {
-// return "Person [firstName=" + this.firstName + ", lastName="
-// + this.lastName + "]";
-// }
-// }
+}
