@@ -18,7 +18,7 @@ var Address = React.createClass({
           </div>
         </div>
         <div className='four columns'>
-          <PrivacySelect />
+          <PrivacySelect organization={this.props.organization} />
         </div>
       </li>
     );

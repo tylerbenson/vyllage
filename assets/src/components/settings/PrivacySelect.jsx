@@ -6,7 +6,7 @@ var PrivacySelect = React.createClass({
       <select className="u-full-width">
         <option value="everyone">everyone</option>
         <option value="none">no one</option>
-        <option value="organization">org name</option>
+        <option value="organization">{this.props.organization}</option>
       </select>
     );
   }
