@@ -4,21 +4,15 @@ var Role = React.createClass({
   getInitialState: function () {
     return { edit: false };
   },
-  editHandler: function (e) {
+  toggleHandler: function (e) {
     e.preventDefault();
-    this.setState({edit: true});
+    this.setState({edit: !this.state.edit});
   },
   changeHandler: function (e) {
     e.preventDefault();
     this.props.changeSetting('role', e.target.value);
     this.setState({edit: false});
   },
-  // keyPress: function (e) {
-  //   e.preventDefault();
-  //   if (e.key === 'Enter') {
-  //     this.setState({edit: false});
-  //   }
-  // },
   renderForm: function () {
     return (
       <select onChange={this.changeHandler} value={this.props.value}>
@@ -36,7 +30,7 @@ var Role = React.createClass({
           role: {this.state.edit ? this.renderForm(): this.props.value}
         </div>
         <div className='three columns'>
-          <a className="" onClick={this.editHandler}>change</a>
+          <a className="" onClick={this.toggleHandler}>{this.state.edit ? 'update' : 'change'}</a>
         </div>
       </li>
     );

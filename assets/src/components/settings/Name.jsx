@@ -13,7 +13,6 @@ var Name = React.createClass({
     this.props.changeSetting('name', e.target.value);
   },
   keyPress: function (e) {
-    e.preventDefault();
     if (e.key === 'Enter') {
       this.setState({edit: false});
     }

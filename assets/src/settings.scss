@@ -11,9 +11,12 @@
     text-decoration: none;
     cursor: pointer;
   }
+  input, select {
+    height: 32px;
+    margin-bottom: 0px;
+  }
+
 }
-
-
 
 .settings-left {
   border-right: 1px solid $border-color;
