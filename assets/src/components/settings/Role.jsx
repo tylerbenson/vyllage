@@ -5,7 +5,7 @@ var Role = React.createClass({
     return (
       <li className="row settings-profile-item">
         <div className='nine columns'>
-          <span>role: student</span>
+          <span>role: {this.props.value}</span>
         </div>
         <div className='three columns'>
           <a className="">change</a>

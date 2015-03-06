@@ -15,7 +15,7 @@ var PhoneNumber = React.createClass({
             </div>
           </div>
           <div>
-            <span>971.800.1565</span>
+            {this.props.value}
           </div>
         </div>
         <div className='four columns'>

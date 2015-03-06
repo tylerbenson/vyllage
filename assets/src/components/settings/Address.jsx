@@ -8,11 +8,8 @@ var Address = React.createClass({
         <div className="eight columns">
           <div>
             <div className="six columns">
-              <address>
-                address:<br />
-                1906 NE 151st Cir <br />
-                Unit 15b <br />
-                Vancovuer, WA 98686 <br />
+              address:
+              <address dangerouslySetInnerHTML={{__html: this.props.value}}>
               </address>
             </div>
             <div className="six columns">

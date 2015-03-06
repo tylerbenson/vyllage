@@ -16,7 +16,7 @@ var Email = React.createClass({
           </div>
           <div>
             <div className="six columns">
-              <span>nben888@gmail.com</span>
+              {this.props.value}
             </div>
             <div className="six columns">
               <a>primary</a>

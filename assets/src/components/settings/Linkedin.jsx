@@ -15,7 +15,7 @@ var Linkedin = React.createClass({
             </div>
           </div>
           <div>
-            <span>www.linkedin.com/natebenson</span>
+            {this.props.value}
           </div>
         </div>
         <div className='four columns'>

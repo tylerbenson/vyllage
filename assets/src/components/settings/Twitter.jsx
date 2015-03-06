@@ -15,7 +15,7 @@ var Twitter = React.createClass({
             </div>
           </div>
           <div>
-            <span>@natespn</span>
+            {this.props.value}
           </div>
         </div>
         <div className='four columns'>

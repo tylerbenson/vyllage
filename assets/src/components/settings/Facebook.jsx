@@ -15,7 +15,7 @@ var Facebook = React.createClass({
             </div>
           </div>
           <div>
-            <span>www.facebook.com/natebenson</span>
+            {this.props.value}
           </div>
         </div>
         <div className='four columns'>
