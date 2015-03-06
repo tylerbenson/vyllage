@@ -28,7 +28,6 @@ var FacebookAccount = React.createClass({
     return <div>facebook account: <span className='error'>Are you sure ?</span></div>;
   },
   render: function () {
-    console.log(this.props.value);
     return (
       <li className="row settings-profile-item">
         <div className={this.state.confirm? "eight columns": "nine columns"}>

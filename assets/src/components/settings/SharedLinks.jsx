@@ -7,7 +7,7 @@ var SharedLinks = React.createClass({
   removeHandler: function (e) {
     e.preventDefault();
     if (this.state.confirm) {
-      this.props.changeSetting('facebookAccount', false);
+      this.props.changeSetting('sharedLinks', false);
       this.setState({
         confirm: false
       })
@@ -24,7 +24,7 @@ var SharedLinks = React.createClass({
   render: function () {
     return (
        <li className="row settings-profile-item">
-          <div className="nine columns">
+          <div className={this.state.confirm? "seven columns": "nine columns"}>
             <span>shared links</span>
             {this.state.confirm? <span className='error'>Are you sure?</span>: null}
           </div>
