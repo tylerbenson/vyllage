@@ -131,7 +131,6 @@ var MainContainer = React.createClass({
 
                                     self.state.mainData.splice(i,1);
                                     self.setState({mainData: self.state.mainData});
-                                    return;
                                 }
                             }
 
@@ -166,7 +165,6 @@ var MainContainer = React.createClass({
 
                                     self.state.mainData.splice(i,1);
                                     self.setState({mainData: self.state.mainData});
-                                    return;
                                 }
                             }
 
