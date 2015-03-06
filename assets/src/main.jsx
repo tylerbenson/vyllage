@@ -14,7 +14,6 @@ var EmptyStateData =[
 {
     "type": "freeform",
     "title": "career goal",
-    "sectionId": 1,
     "sectionPosition": 1,
     "state": "shown",
     "description": ""
@@ -22,7 +21,6 @@ var EmptyStateData =[
 {
     "type": "experience",
     "title": "experience",
-    "sectionId": 2,
     "sectionPosition": 2,
     "state": "shown",
     "organizationName": "",
@@ -106,43 +104,69 @@ var MainContainer = React.createClass({
         if(pathItems.length > 2) {
             documentId = pathItems[2];
 
-            request
-                .post('/resume/' + documentId + '/section/' + data.sectionId +'')
-                .set(token_header, token_val)
-                .send(data)
-                .end(function(error, res) {
+            // Check for Create mode
+            if(!data.sectionId) {
+                // Create mode
+                request
+                    .post('/resume/' + documentId + '/section/')
+                    .set(token_header, token_val)
+                    .send(data)
+                    .end(function(error, res) {
 
-                    if (res.ok) {
-                        for(var i = 0; i < self.state.mainData.length; i++){
+                        if (res.ok) {
+                            for(var i = 0; i < self.state.mainData.length; i++){
 
-                            if(self.state.mainData[i].sectionId === data.sectionId){
+                                if(self.state.mainData[i].sectionPosition === data.sectionPosition){
 
-                                self.state.mainData[i] = data;
-                                self.setState({mainData: self.state.mainData});
-                                return;
+                                    self.state.mainData[i] = data;
+                                    self.setState({mainData: self.state.mainData});
+                                    return;
+                                }
                             }
-                        }
-                    } else {
-                       alert( res.text );  // this is left intentionally
-                       console.log(res.text); 
-                    }  
-                });
+                        } else {
+                           alert( res.text );  // this is left intentionally
+                           console.log(res.text); 
+                        }  
+                    });
+            } else {
+                // Update mode
+                request
+                    .post('/resume/' + documentId + '/section/' + data.sectionId +'')
+                    .set(token_header, token_val)
+                    .send(data)
+                    .end(function(error, res) {
+
+                        if (res.ok) {
+                            for(var i = 0; i < self.state.mainData.length; i++){
+
+                                if(self.state.mainData[i].sectionId === data.sectionId){
+
+                                    self.state.mainData[i] = data;
+                                    self.setState({mainData: self.state.mainData});
+                                    return;
+                                }
+                            }
+                        } else {
+                           alert( res.text );  // this is left intentionally
+                           console.log(res.text); 
+                        }  
+                    });
+            }
         }
     },
 
     addSection: function (type,sectionPosition) {
-        var id = this.state.mainData.length + 1,
-                 position = sectionPosition,
-                 data = this.state.mainData;
+        var  position = sectionPosition,
+             data = this.state.mainData;
 
-         // Set position           
-         data.map(function(result) {
+         // Set position    
+        data.map(function(result) {
             if(result.sectionPosition >= position)
             {
                 result.sectionPosition = result.sectionPosition + 1;
             }
         });
-
+        
         this.state.editModePosition = position;
 
         switch(type) {
@@ -150,57 +174,53 @@ var MainContainer = React.createClass({
                     data.push({
                         "type": "freeform",
                         "title": "career goal",
-                        "sectionId": id,
                         "sectionPosition": position,
                         "state": "shown",
                         "description": ""
                     });
-                    break;
+                break;
             case 'skills':
-                data.push({
-                    "type": "freeform",
-                    "title": "skills",
-                    "sectionId": id,
-                    "sectionPosition": position,
-                    "state": "shown",
-                    "description": ""
-                });
+                    data.push({
+                        "type": "freeform",
+                        "title": "skills",
+                        "sectionPosition": position,
+                        "state": "shown",
+                        "description": ""
+                    });
                 break;
             case 'experience':
-                    data.push({
-                    "type": "experience",
-                    "title": "experience",
-                    "sectionId": id,
-                    "sectionPosition": position,
-                    "state": "shown",
-                    "organizationName": "",
-                    "organizationDescription": "",
-                    "role": "",
-                    "startDate": "",
-                    "endDate": "",
-                    "isCurrent": false,
-                    "location": "",
-                    "roleDescription": "",
-                    "highlights": ""
-                });
+                        data.push({
+                        "type": "experience",
+                        "title": "experience",
+                        "sectionPosition": position,
+                        "state": "shown",
+                        "organizationName": "",
+                        "organizationDescription": "",
+                        "role": "",
+                        "startDate": "",
+                        "endDate": "",
+                        "isCurrent": false,
+                        "location": "",
+                        "roleDescription": "",
+                        "highlights": ""
+                    });
                 break;
             case 'education':
-                    data.push({
-                    "type": "experience",
-                    "title": "education",
-                    "sectionId": id,
-                    "sectionPosition": position,
-                    "state": "shown",
-                    "organizationName": "",
-                    "organizationDescription": "",
-                    "role": "",
-                    "startDate": "",
-                    "endDate": "",
-                    "isCurrent": false,
-                    "location": "",
-                    "roleDescription": "",
-                    "highlights": ""
-                });
+                        data.push({
+                        "type": "experience",
+                        "title": "education",
+                        "sectionPosition": position,
+                        "state": "shown",
+                        "organizationName": "",
+                        "organizationDescription": "",
+                        "role": "",
+                        "startDate": "",
+                        "endDate": "",
+                        "isCurrent": false,
+                        "location": "",
+                        "roleDescription": "",
+                        "highlights": ""
+                    });
                 break;
         }      
 
@@ -339,22 +359,23 @@ var MainContainer = React.createClass({
             skillsCount = 0,  addNewItem = 0;
 
         if(results == '') {
+            this.state.mainData = EmptyStateData;
              return (
                 <div>
                     { 
                         EmptyStateData.map(function(result) {
                             if(result.type === "freeform"){
-                                return that.freeFormItems(EmptyStateData[0], true,true);
+                                return that.freeFormItems(that.state.mainData[0], true,true);
                             }
                             else{
-                                return that.experienceItems(EmptyStateData[1], true,true); 
+                                return that.experienceItems(that.state.mainData[1], true,true); 
                             }
 
                         })
                     }
-                        <AddSections addSection={that.addSection} title={'education'}/>
+                        <AddSections addSection={that.addSection} title={'education'}  position={results.length+1}/>
 
-                        <AddSections addSection={that.addSection} title={'skills'}/>
+                        <AddSections addSection={that.addSection} title={'skills'}  position={results.length+1}/>
                    </div>
                 );
 
@@ -447,9 +468,9 @@ var MainContainer = React.createClass({
                         })
                     }
 
-                    <AddSections addSection={that.addSection} title={'education'}/>
+                    <AddSections addSection={this.addSection} title={'education'} position={results.length+1} />
 
-                    <AddSections addSection={that.addSection} title={'skills'}/>
+                    <AddSections addSection={this.addSection} title={'skills'} position={results.length+1} />
                 </div>
             );
         }

@@ -17,7 +17,6 @@
 ## POST /resume/{documentId}/header*
 + Parameters
   + documentId (string, `1`) - The id of the document.
-  + sectionId (string, `1`) - The id of the section.
 + Model (application/json)
 
   {
