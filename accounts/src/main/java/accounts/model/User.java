@@ -34,7 +34,7 @@ public class User extends org.springframework.security.core.userdetails.User {
 	}
 
 	public User(String userName, String randomPassword,
-			List<Authority> defaultAuthoritiesForNewUser) {
+			List<Role> defaultAuthoritiesForNewUser) {
 		super(userName, randomPassword, defaultAuthoritiesForNewUser);
 	}
 

@@ -11,30 +11,30 @@ import org.springframework.stereotype.Repository;
 
 import accounts.domain.tables.OrganizationRoles;
 import accounts.domain.tables.Organizations;
-import accounts.model.Group;
+import accounts.model.Organization;
 
 @Repository
-public class GroupRepository {
+public class OrganizationRepository {
 	@Autowired
 	private DSLContext sql;
 
-	public Group get(Long id) {
+	public Organization get(Long id) {
 		return sql
 				.fetchOne(ORGANIZATIONS, ORGANIZATIONS.ORGANIZATION_ID.eq(id))
-				.into(Group.class);
+				.into(Organization.class);
 	}
 
-	public List<Group> getAll() {
-		return sql.select().from(ORGANIZATIONS).fetch().into(Group.class);
+	public List<Organization> getAll() {
+		return sql.select().from(ORGANIZATIONS).fetch().into(Organization.class);
 	}
 
-	public List<Group> getGroupFromAuthority(String authority) {
+	public List<Organization> getOrganizationFromAuthority(String authority) {
 		Organizations g = ORGANIZATIONS.as("g");
 		OrganizationRoles ga = ORGANIZATION_ROLES.as("ga");
 
 		return sql.select(g.fields()).from(ga).join(g)
 				.on(ga.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
-				.where(ga.ROLE.eq(authority)).fetchInto(Group.class);
+				.where(ga.ROLE.eq(authority)).fetchInto(Organization.class);
 		/**
 		 * select *.g from group_authorities ga join groups g on ga.group_id =
 		 * g.id;

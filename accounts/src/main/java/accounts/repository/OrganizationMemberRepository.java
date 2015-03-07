@@ -7,19 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import accounts.domain.tables.records.OrganizationMembersRecord;
-import accounts.model.GroupMember;
+import accounts.model.OrganizationMember;
 
 @Repository
-public class GroupMemberRepository {
+public class OrganizationMemberRepository {
 
 	@Autowired
 	private DSLContext sql;
 
-	public void create(GroupMember groupMember) {
+	public void create(OrganizationMember organizationMember) {
 		OrganizationMembersRecord newRecord = sql
 				.newRecord(ORGANIZATION_MEMBERS);
-		newRecord.setOrganizationId(groupMember.getGroup_id());
-		newRecord.setUserName(groupMember.getUserName());
+		newRecord.setOrganizationId(organizationMember.getOrganizationId());
+		newRecord.setUserName(organizationMember.getUserName());
 		newRecord.store();
 
 	}

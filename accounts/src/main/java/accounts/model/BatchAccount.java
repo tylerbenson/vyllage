@@ -6,7 +6,7 @@ import lombok.ToString;
 public class BatchAccount {
 
 	private String emails;
-	private Long group;
+	private Long organization;
 
 	public String getEmails() {
 		return emails;
@@ -16,15 +16,15 @@ public class BatchAccount {
 		this.emails = emails;
 	}
 
-	public Long getGroup() {
-		return group;
+	public Long getOrganization() {
+		return organization;
 	}
 
-	public void setGroup(Long group) {
-		this.group = group;
+	public void setOrganization(Long group) {
+		this.organization = group;
 	}
 
 	public boolean hasErrors() {
-		return emails == null || emails.isEmpty() || group == null;
+		return emails == null || emails.isEmpty() || organization == null;
 	}
 }

@@ -9,44 +9,33 @@ import accounts.domain.tables.records.RolesRecord;
 
 @ToString
 @EqualsAndHashCode
-public class Authority implements GrantedAuthority {
+public class Role implements GrantedAuthority {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6420872157496814372L;
-	private String authority;
-	private String userName;
+	private final String role;
+	private final String userName;
 
-	public Authority() {
-	}
-
-	public Authority(String authority, String userName) {
-		this.authority = authority;
+	public Role(String role, String userName) {
+		this.role = role;
 		this.userName = userName;
 
 	}
 
-	public Authority(RolesRecord record) {
-		this.authority = record.getRole();
+	public Role(RolesRecord record) {
+		this.role = record.getRole();
 		this.userName = record.getUserName();
 	}
 
 	@Override
 	public String getAuthority() {
-		return this.authority;
-	}
-
-	public void setAuthority(String authority) {
-		this.authority = authority;
+		return this.role;
 	}
 
 	public String getUserName() {
 		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 
 }

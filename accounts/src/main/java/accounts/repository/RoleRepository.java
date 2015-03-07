@@ -12,33 +12,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import accounts.domain.tables.records.RolesRecord;
-import accounts.model.Authority;
+import accounts.model.Role;
 
 @Repository
-public class AuthorityRepository {
+public class RoleRepository {
 
 	@Autowired
 	private DSLContext sql;
 
-	public List<Authority> getByUserName(String userName) {
+	public List<Role> getByUserName(String userName) {
 		Result<RolesRecord> records = sql.fetch(ROLES,
 				ROLES.USER_NAME.eq(userName));
 
-		return records.stream().map(Authority::new)
+		return records.stream().map(Role::new)
 				.collect(Collectors.toList());
 	}
 
-	public void create(Authority authority) {
+	public void create(Role role) {
 		RolesRecord auth = sql.newRecord(ROLES);
-		auth.setUserName(authority.getUserName());
-		auth.setRole(authority.getAuthority());
+		auth.setUserName(role.getUserName());
+		auth.setRole(role.getAuthority());
 		auth.insert();
 	}
 
-	public List<Authority> getAll() {
+	public List<Role> getAll() {
 		Result<RolesRecord> records = sql.fetch(ROLES);
 
-		return records.stream().map(Authority::new)
+		return records.stream().map(Role::new)
 				.collect(Collectors.toList());
 	}
 
@@ -46,8 +46,8 @@ public class AuthorityRepository {
 		sql.delete(ROLES).where(ROLES.USER_NAME.eq(userName)).execute();
 	}
 
-	public List<Authority> getDefaultAuthoritiesForNewUser(String userName) {
-		Authority auth = new Authority("USER", userName);
+	public List<Role> getDefaultAuthoritiesForNewUser(String userName) {
+		Role auth = new Role("USER", userName);
 		return Arrays.asList(auth);
 	}
 

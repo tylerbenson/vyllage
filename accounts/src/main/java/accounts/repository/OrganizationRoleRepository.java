@@ -6,18 +6,18 @@ import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import accounts.model.GroupAuthority;
+import accounts.model.OrganizationRole;
 
 @Repository
-public class GroupAuthorityRepository {
+public class OrganizationRoleRepository {
 
 	@Autowired
 	private DSLContext sql;
 
-	public GroupAuthority getGroupAuthorityFromGroup(long id) {
+	public OrganizationRole getGroupAuthorityFromGroup(long id) {
 
 		return sql.fetchOne(ORGANIZATION_ROLES,
-				ORGANIZATION_ROLES.ORGANIZATION_ID.eq(id)).into(GroupAuthority.class);
+				ORGANIZATION_ROLES.ORGANIZATION_ID.eq(id)).into(OrganizationRole.class);
 	}
 
 }

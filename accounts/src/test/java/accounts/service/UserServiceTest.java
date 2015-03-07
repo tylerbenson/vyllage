@@ -35,7 +35,7 @@ public class UserServiceTest {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount.setEmails("uno@gmail.com, dos@test.com, tres@yahoo.com");
-		batchAccount.setGroup(1L);
+		batchAccount.setOrganization(1L);
 
 		service.batchCreateUsers(batchAccount);
 
@@ -51,7 +51,7 @@ public class UserServiceTest {
 
 		batchAccount
 				.setEmails("cuatro@gmail.com; cinco@test.com; seis@yahoo.com");
-		batchAccount.setGroup(1L);
+		batchAccount.setOrganization(1L);
 
 		service.batchCreateUsers(batchAccount);
 
@@ -67,7 +67,7 @@ public class UserServiceTest {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount.setEmails("siet@gmail.com, , nueve@yahoo.com");
-		batchAccount.setGroup(1L);
+		batchAccount.setOrganization(1L);
 
 		service.batchCreateUsers(batchAccount);
 
@@ -81,7 +81,7 @@ public class UserServiceTest {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount.setEmails("diez@gmail.com, once.@, doce@yahoo.com");
-		batchAccount.setGroup(1L);
+		batchAccount.setOrganization(1L);
 
 		service.batchCreateUsers(batchAccount);
 
