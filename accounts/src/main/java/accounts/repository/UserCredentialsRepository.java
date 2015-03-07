@@ -44,7 +44,7 @@ public class UserCredentialsRepository {
 
 		UserCredential userCredential = sql.fetchOne(
 				USER_CREDENTIALS,
-				USER_CREDENTIALS.USERID.eq(userId).and(
+				USER_CREDENTIALS.USER_ID.eq(userId).and(
 						USER_CREDENTIALS.EXPIRES.isNull())).into(
 				UserCredential.class);
 
@@ -67,7 +67,7 @@ public class UserCredentialsRepository {
 		Assert.notNull(password);
 		UserCredentialsRecord newRecord = sql.newRecord(USER_CREDENTIALS);
 		newRecord.setPassword(getEncodedPassword(password));
-		newRecord.setUserid(userId);
+		newRecord.setUserId(userId);
 		newRecord.setEnabled(true);
 		newRecord.setExpires(null);
 		newRecord.insert();
@@ -85,7 +85,7 @@ public class UserCredentialsRepository {
 		newRecord.setPassword(getEncodedPassword(linkRequest
 				.getGeneratedPassword()));
 		newRecord.setEnabled(true);
-		newRecord.setUserid(linkRequest.getUserId());
+		newRecord.setUserId(linkRequest.getUserId());
 		newRecord.setExpires(Timestamp.valueOf(expires));
 		newRecord.insert();
 	}
@@ -97,7 +97,7 @@ public class UserCredentialsRepository {
 	 */
 	public void delete(long userId) {
 		sql.delete(USER_CREDENTIALS)
-				.where(USER_CREDENTIALS.USERID.eq(userId).and(
+				.where(USER_CREDENTIALS.USER_ID.eq(userId).and(
 						USER_CREDENTIALS.EXPIRES.isNull())).execute();
 	}
 
@@ -108,7 +108,7 @@ public class UserCredentialsRepository {
 	public boolean exists(Long userId, String password) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		for (UserCredentialsRecord record : sql.fetch(USER_CREDENTIALS,
-				USER_CREDENTIALS.USERID.eq(userId))) {
+				USER_CREDENTIALS.USER_ID.eq(userId))) {
 			if (encoder.matches(password, record.getPassword()))
 				return true;
 		}

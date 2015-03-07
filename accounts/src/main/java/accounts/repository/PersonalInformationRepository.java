@@ -2,6 +2,7 @@ package accounts.repository;
 
 import static accounts.domain.tables.PersonalInformation.PERSONAL_INFORMATION;
 
+import java.sql.Timestamp;
 import java.util.logging.Logger;
 
 import org.jooq.DSLContext;
@@ -22,14 +23,30 @@ public class PersonalInformationRepository {
 
 	public PersonalInformation get(Long userId) {
 		PersonalInformationRecord record = sql.fetchOne(PERSONAL_INFORMATION,
-				PERSONAL_INFORMATION.USERID.eq(userId));
+				PERSONAL_INFORMATION.USER_ID.eq(userId));
 		PersonalInformation pi = new PersonalInformation();
-		pi.setUserId(record.getUserid());
-		pi.setEmailUpdates(record.getEmailupdates());
-		pi.setGraduationDate(record.getGraduationdate().toLocalDateTime());
-		pi.setPhoneNumber(record.getPhonenumber());
+		pi.setUserId(record.getUserId());
+		pi.setEmailUpdates(record.getEmailUpdates());
+		pi.setGraduationDate(record.getGraduationDate().toLocalDateTime());
+		pi.setPhoneNumber(record.getPhoneNumber());
 
 		return pi;
 	}
 
+	public void save(PersonalInformation userPersonalInformation) {
+		PersonalInformationRecord record = sql.fetchOne(PERSONAL_INFORMATION,
+				PERSONAL_INFORMATION.USERID.eq(userPersonalInformation
+						.getUserId()));
+
+		if (record == null) {
+			record = sql.newRecord(PERSONAL_INFORMATION);
+			record.setUserid(userPersonalInformation.getUserId());
+		}
+
+		record.setEmailupdates(userPersonalInformation.getEmailUpdates());
+		record.setGraduationdate(Timestamp.valueOf(userPersonalInformation
+				.getGraduationDate()));
+		record.setPhonenumber(userPersonalInformation.getPhoneNumber());
+		record.store();
+	}
 }

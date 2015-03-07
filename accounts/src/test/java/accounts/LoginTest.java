@@ -23,9 +23,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import accounts.Application;
-import accounts.model.Authority;
-import accounts.repository.AuthorityRepository;
+import accounts.model.Role;
+import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,7 +36,7 @@ public class LoginTest {
 	private UserDetailRepository repository;
 
 	@Autowired
-	private AuthorityRepository authRepo;
+	private RoleRepository authRepo;
 
 	@Test
 	public void userExistsTest() {
@@ -61,8 +60,8 @@ public class LoginTest {
 		String oldPassword = "password";
 		String newPassword = "newPassword";
 
-		User user = new User(userName, oldPassword,
-				Arrays.asList(new Authority("changePassword-TEST", userName)));
+		User user = new User(userName, oldPassword, Arrays.asList(new Role(
+				"changePassword-TEST", userName)));
 
 		repository.createUser(user);
 
@@ -83,7 +82,7 @@ public class LoginTest {
 
 	@Test
 	public void testUserCreatedAndLoadsCorrectly() {
-		GrantedAuthority auth = new Authority("TEST", "test");
+		GrantedAuthority auth = new Role("TEST", "test");
 
 		User user = new User("test", "password", Arrays.asList(auth));
 
@@ -98,7 +97,7 @@ public class LoginTest {
 		Assert.assertTrue(new BCryptPasswordEncoder().matches("password",
 				loadedUser.getPassword()));
 
-		GrantedAuthority auth2 = new Authority("TEST", "test2");
+		GrantedAuthority auth2 = new Role("TEST", "test2");
 
 		User user2 = new User("test2", "password", Arrays.asList(auth2));
 
@@ -118,7 +117,7 @@ public class LoginTest {
 	public void testUserDelete() {
 		String userName = "test-delete";
 
-		User user = new User(userName, "password", Arrays.asList(new Authority(
+		User user = new User(userName, "password", Arrays.asList(new Role(
 				"TEST", userName)));
 
 		repository.createUser(user);
@@ -157,8 +156,8 @@ public class LoginTest {
 	@Test
 	public void testUserCreateDuplicateAuthoritySavesOnlyOne() {
 		String userName = "test-duplicate-auth";
-		GrantedAuthority auth1 = new Authority("USER", userName);
-		GrantedAuthority auth2 = new Authority("USER", userName);
+		GrantedAuthority auth1 = new Role("USER", userName);
+		GrantedAuthority auth2 = new Role("USER", userName);
 
 		User user = new User(userName, "password", Arrays.asList(auth1, auth2));
 
@@ -166,13 +165,12 @@ public class LoginTest {
 
 		UserDetails loadedUser = repository.loadUserByUsername(userName);
 
-		List<Authority> byUserName = authRepo.getByUserName(userName);
-		assertNotNull("User is not null.", loadedUser);
+		List<Role> roles = authRepo.getByUserName(userName);
 		assertTrue("Found more than 1 authority, "
 				+ loadedUser.getAuthorities().size(), loadedUser
 				.getAuthorities().size() == 1);
-		assertTrue("Found more than 1 authority, " + byUserName.size(),
-				byUserName.size() == 1);
+		assertTrue("Found more than 1 authority, " + roles.size(),
+				roles.size() == 1);
 	}
 
 }

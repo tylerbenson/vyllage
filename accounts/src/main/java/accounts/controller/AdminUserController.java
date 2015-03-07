@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import accounts.model.BatchAccount;
-import accounts.repository.GroupRepository;
+import accounts.repository.OrganizationRepository;
 import accounts.service.UserService;
 
 @Controller
@@ -18,7 +18,7 @@ public class AdminUserController {
 	private UserService service;
 
 	@Autowired
-	private GroupRepository groupRepository;
+	private OrganizationRepository organizationRepository;
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
@@ -36,7 +36,7 @@ public class AdminUserController {
 			prepareBatchError(
 					batch,
 					model,
-					"Please provide ',' separated emails and select the Group the users will belong to.");
+					"Please provide ',' or line separated emails and select the Group the users will belong to.");
 			return "adminAccountManagement";
 		}
 
@@ -47,13 +47,13 @@ public class AdminUserController {
 	}
 
 	private void prepareBatchError(BatchAccount batch, Model model, String msg) {
-		model.addAttribute("groups", groupRepository.getAll());
+		model.addAttribute("groups", organizationRepository.getAll());
 		model.addAttribute("batchAccount", batch);
 		model.addAttribute("error", msg);
 	}
 
 	private void prepareBatch(Model model) {
-		model.addAttribute("groups", groupRepository.getAll());
+		model.addAttribute("groups", organizationRepository.getAll());
 		model.addAttribute("batchAccount", new BatchAccount());
 	}
 

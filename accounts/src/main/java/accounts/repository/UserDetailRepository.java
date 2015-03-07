@@ -1,8 +1,8 @@
 package accounts.repository;
 
-import static accounts.domain.tables.Authorities.AUTHORITIES;
-import static accounts.domain.tables.GroupMembers.GROUP_MEMBERS;
-import static accounts.domain.tables.Groups.GROUPS;
+import static accounts.domain.tables.OrganizationMembers.ORGANIZATION_MEMBERS;
+import static accounts.domain.tables.Organizations.ORGANIZATIONS;
+import static accounts.domain.tables.Roles.ROLES;
 import static accounts.domain.tables.Users.USERS;
 
 import java.sql.Timestamp;
@@ -33,14 +33,14 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
 
-import accounts.domain.tables.Authorities;
-import accounts.domain.tables.GroupMembers;
-import accounts.domain.tables.Groups;
+import accounts.domain.tables.OrganizationMembers;
+import accounts.domain.tables.Organizations;
+import accounts.domain.tables.Roles;
 import accounts.domain.tables.Users;
 import accounts.domain.tables.records.UsersRecord;
-import accounts.model.Authority;
-import accounts.model.Group;
-import accounts.model.GroupMember;
+import accounts.model.Organization;
+import accounts.model.OrganizationMember;
+import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserCredential;
 import accounts.model.UserFilterRequest;
@@ -58,13 +58,13 @@ public class UserDetailRepository implements UserDetailsManager {
 	private DSLContext sql;
 
 	@Autowired
-	private AuthorityRepository authorityRepository;
+	private RoleRepository roleRepository;
 
 	@Autowired
-	private GroupRepository groupRepository;
+	private OrganizationRepository organizationRepository;
 
 	@Autowired
-	private GroupMemberRepository groupMemberRepository;
+	private OrganizationMemberRepository organizationMemberRepository;
 
 	@Autowired
 	private UserCredentialsRepository credentialsRepository;
@@ -77,7 +77,7 @@ public class UserDetailRepository implements UserDetailsManager {
 
 	public User get(Long userId) throws UserNotFoundException {
 
-		UsersRecord record = sql.fetchOne(USERS, USERS.USERID.eq(userId));
+		UsersRecord record = sql.fetchOne(USERS, USERS.USER_ID.eq(userId));
 
 		if (record == null)
 			throw new UserNotFoundException("User with id '" + userId
@@ -93,7 +93,7 @@ public class UserDetailRepository implements UserDetailsManager {
 	public User loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 
-		UsersRecord record = sql.fetchOne(USERS, USERS.USERNAME.eq(username));
+		UsersRecord record = sql.fetchOne(USERS, USERS.USER_NAME.eq(username));
 
 		if (record == null)
 			throw new UsernameNotFoundException("User with username '"
@@ -109,18 +109,17 @@ public class UserDetailRepository implements UserDetailsManager {
 		// TODO: eventually we'll need these fields in the database.
 		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
 
-		List<Authority> authorities = authorityRepository.getByUserName(record
-				.getUsername());
+		List<Role> roles = roleRepository.getByUserName(record.getUserName());
 
 		UserCredential credential = credentialsRepository.get(record
-				.getUserid());
+				.getUserId());
 
-		User user = new User(record.getUserid(), record.getFirstname(),
-				record.getMiddlename(), record.getLastname(),
-				record.getUsername(), credential.getPassword(),
+		User user = new User(record.getUserId(), record.getFirstName(),
+				record.getMiddleName(), record.getLastName(),
+				record.getUserName(), credential.getPassword(),
 				record.getEnabled(), accountNonExpired, credentialsNonExpired,
-				accountNonLocked, authorities, record.getDatecreated()
-						.toLocalDateTime(), record.getLastmodified()
+				accountNonLocked, roles, record.getDateCreated()
+						.toLocalDateTime(), record.getLastModified()
 						.toLocalDateTime());
 		return user;
 	}
@@ -129,13 +128,13 @@ public class UserDetailRepository implements UserDetailsManager {
 	// @Transactional
 	public void createUser(UserDetails user) {
 
-		Collection<? extends GrantedAuthority> authorities;
+		Collection<? extends GrantedAuthority> roles;
 
 		if (user.getAuthorities() != null || user.getAuthorities().size() > 0)
-			authorities = user.getAuthorities();
+			roles = user.getAuthorities();
 		else
-			authorities = authorityRepository
-					.getDefaultAuthoritiesForNewUser(user.getUsername());
+			roles = roleRepository.getDefaultAuthoritiesForNewUser(user
+					.getUsername());
 
 		TransactionStatus transaction = txManager
 				.getTransaction(new DefaultTransactionDefinition());
@@ -145,23 +144,24 @@ public class UserDetailRepository implements UserDetailsManager {
 		try {
 
 			UsersRecord newRecord = sql.newRecord(USERS);
-			newRecord.setUsername(user.getUsername());
+			newRecord.setUserName(user.getUsername());
 			newRecord.setEnabled(user.isEnabled());
-			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
-			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
+			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now()));
+			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
 			newRecord.store();
 
-			Assert.notNull(newRecord.getUserid());
+			Assert.notNull(newRecord.getUserId());
 
-			credentialsRepository.save(newRecord.getUserid(),
+			credentialsRepository.save(newRecord.getUserId(),
 					user.getPassword());
 
-			for (GrantedAuthority authority : authorities) {
-				authorityRepository.create((Authority) authority);
-				for (Group group : groupRepository
-						.getGroupFromAuthority(authority.getAuthority())) {
-					groupMemberRepository.create(new GroupMember(group.getId(),
-							user.getUsername()));
+			for (GrantedAuthority role : roles) {
+				roleRepository.create((Role) role);
+				for (Organization organization : organizationRepository
+						.getOrganizationFromAuthority(role.getAuthority())) {
+					organizationMemberRepository.create(new OrganizationMember(
+							organization.getOrganizationId(), newRecord
+									.getUserId()));
 				}
 			}
 
@@ -188,24 +188,26 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		try {
 			UsersRecord record = sql.fetchOne(USERS,
-					USERS.USERNAME.eq(user.getUsername()));
+					USERS.USER_NAME.eq(user.getUsername()));
 
 			record.setEnabled(user.isEnabled());
-			record.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
+			record.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
 			record.update();
 
-			credentialsRepository.save(record.getUserid(), user.getPassword());
+			credentialsRepository.save(record.getUserId(), user.getPassword());
 
-			authorityRepository.deleteByUserName(user.getUsername());
-			groupMemberRepository.deleteByUserName(user.getUsername());
+			roleRepository.deleteByUserName(user.getUsername());
+			organizationMemberRepository.deleteByUserId(((User) user)
+					.getUserId());
 
 			for (GrantedAuthority authority : user.getAuthorities()) {
-				authorityRepository.create((Authority) authority);
+				roleRepository.create((Role) authority);
 
-				for (Group group : groupRepository
-						.getGroupFromAuthority(authority.getAuthority())) {
-					groupMemberRepository.create(new GroupMember(group.getId(),
-							user.getUsername()));
+				for (Organization organization : organizationRepository
+						.getOrganizationFromAuthority(authority.getAuthority())) {
+					organizationMemberRepository.create(new OrganizationMember(
+							organization.getOrganizationId(), record
+									.getUserId()));
 				}
 			}
 
@@ -226,13 +228,13 @@ public class UserDetailRepository implements UserDetailsManager {
 		Object savepoint = transaction.createSavepoint();
 
 		try {
-			authorityRepository.deleteByUserName(username);
-			groupMemberRepository.deleteByUserName(username);
-
 			UsersRecord record = sql.fetchOne(USERS,
-					USERS.USERNAME.eq(username));
+					USERS.USER_NAME.eq(username));
 
-			long userId = record.getUserid();
+			roleRepository.deleteByUserName(username);
+			organizationMemberRepository.deleteByUserId(record.getUserId());
+
+			long userId = record.getUserId();
 			credentialsRepository.delete(userId);
 
 			record.delete();
@@ -283,7 +285,7 @@ public class UserDetailRepository implements UserDetailsManager {
 	@Override
 	public boolean userExists(String username) {
 		return sql.fetchExists(sql.select().from(USERS)
-				.where(USERS.USERNAME.eq(username)));
+				.where(USERS.USER_NAME.eq(username)));
 	}
 
 	public List<User> getAll() {
@@ -295,16 +297,16 @@ public class UserDetailRepository implements UserDetailsManager {
 		return sql
 				.fetch(USERS)
 				.stream()
-				.map((UsersRecord record) -> new User(record.getUserid(),
-						record.getFirstname(), record.getMiddlename(), record
-								.getLastname(), record.getUsername(),
-						credentialsRepository.get(record.getUserid())
+				.map((UsersRecord record) -> new User(record.getUserId(),
+						record.getFirstName(), record.getMiddleName(), record
+								.getLastName(), record.getUserName(),
+						credentialsRepository.get(record.getUserId())
 								.getPassword(), record.getEnabled(),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, authorityRepository
-								.getByUserName(record.getUsername()), record
-								.getDatecreated().toLocalDateTime(), record
-								.getLastmodified().toLocalDateTime()))
+						accountNonLocked, roleRepository.getByUserName(record
+								.getUserName()), record.getDateCreated()
+								.toLocalDateTime(), record.getLastModified()
+								.toLocalDateTime()))
 				.collect(Collectors.toList());
 	}
 
@@ -320,8 +322,8 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		List collect = users
 				.stream()
-				.map(u -> sql.insertInto(USERS, USERS.USERNAME, USERS.ENABLED,
-						USERS.DATECREATED, USERS.LASTMODIFIED).values(
+				.map(u -> sql.insertInto(USERS, USERS.USER_NAME, USERS.ENABLED,
+						USERS.DATE_CREATED, USERS.LAST_MODIFIED).values(
 						u.getUsername(), enabled,
 						Timestamp.valueOf(LocalDateTime.now()),
 						Timestamp.valueOf(LocalDateTime.now()))
@@ -330,14 +332,14 @@ public class UserDetailRepository implements UserDetailsManager {
 		// for!
 		for (User user : users) {
 			for (GrantedAuthority authority : user.getAuthorities()) {
-				collect.add(sql.insertInto(AUTHORITIES, AUTHORITIES.USERNAME,
-						AUTHORITIES.AUTHORITY).values(user.getUsername(),
-						authority.getAuthority()));
-				for (Group group : groupRepository
-						.getGroupFromAuthority(authority.getAuthority())) {
-					sql.insertInto(GROUP_MEMBERS, GROUP_MEMBERS.GROUP_ID,
-							GROUP_MEMBERS.USERNAME).values(group.getId(),
-							user.getUsername());
+				collect.add(sql.insertInto(ROLES, ROLES.USER_NAME, ROLES.ROLE)
+						.values(user.getUsername(), authority.getAuthority()));
+				for (Organization organization : organizationRepository
+						.getOrganizationFromAuthority(authority.getAuthority())) {
+					sql.insertInto(ORGANIZATION_MEMBERS,
+							ORGANIZATION_MEMBERS.ORGANIZATION_ID,
+							ORGANIZATION_MEMBERS.USER_ID).values(
+							organization.getOrganizationId(), user.getUserId());
 				}
 
 			}
@@ -349,8 +351,8 @@ public class UserDetailRepository implements UserDetailsManager {
 			// hmm, well, we won't be inserting THAT many users...
 			for (User user : users) {
 				Long userId = sql.select().from(USERS)
-						.where(USERS.USERNAME.eq(user.getUsername()))
-						.fetchOne(USERS.USERID);
+						.where(USERS.USER_NAME.eq(user.getUsername()))
+						.fetchOne(USERS.USER_ID);
 				credentialsRepository
 						.save(new Long(userId), user.getPassword());
 			}
@@ -380,46 +382,47 @@ public class UserDetailRepository implements UserDetailsManager {
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
 
-		Group group = sql.fetchOne(GROUP_MEMBERS,
-				GROUP_MEMBERS.USERNAME.eq(loggedUser.getUsername())).into(
-				Group.class);
+		Organization organization = sql.fetchOne(ORGANIZATION_MEMBERS,
+				ORGANIZATION_MEMBERS.USER_ID.eq(loggedUser.getUserId())).into(
+				Organization.class);
 
 		String username = filter.getUserName();
-		Long groupId = group.getId();
+		Long groupId = organization.getOrganizationId();
 
 		/**
-		 * select u.* from accounts.users u where username in ( select gm.username
-		 * from accounts.group_members gm join accounts.groups g on gm.group_id = g.id
-		 * where g.id = 0) and username in (select username from
-		 * accounts.authorities where authority like 'ADVISOR');
+		 * select u.* from accounts.users u where username in ( select
+		 * gm.username from accounts.group_members gm join accounts.groups g on
+		 * gm.group_id = g.id where g.id = 0) and username in (select username
+		 * from accounts.authorities where authority like 'ADVISOR');
 		 * 
 		 */
 		Users u = USERS.as("u");
-		Authorities a = AUTHORITIES.as("a");
-		GroupMembers gm = GROUP_MEMBERS.as("gm");
-		Groups g = GROUPS.as("g");
+		Roles a = ROLES.as("a");
+		OrganizationMembers gm = ORGANIZATION_MEMBERS.as("gm");
+		Organizations g = ORGANIZATIONS.as("g");
 
-		SelectConditionStep<Record1<String>> usernamesFromSameGroup = sql
-				.select(gm.USERNAME).from(gm).join(g).on(gm.GROUP_ID.eq(g.ID))
-				.where(g.ID.eq(groupId));
+		SelectConditionStep<Record1<Long>> usernamesFromSameGroup = sql
+				.select(gm.USER_ID).from(gm).join(g)
+				.on(gm.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
+				.where(g.ORGANIZATION_ID.eq(groupId));
 
 		SelectConditionStep<Record1<String>> advisorUsernames = sql
-				.select(a.USERNAME).from(a).where(a.AUTHORITY.like("ADVISOR"));
+				.select(a.USER_NAME).from(a).where(a.ROLE.like("ADVISOR"));
 
 		Result<Record> records = sql.select().from(u)
-				.where(u.USERNAME.in(usernamesFromSameGroup))
-				.and(u.USERNAME.in(advisorUsernames))
-				.and(u.USERNAME.like("%" + username + "%")).limit(limit)
+				.where(u.USER_ID.in(usernamesFromSameGroup))
+				.and(u.USER_NAME.in(advisorUsernames))
+				.and(u.USER_NAME.like("%" + username + "%")).limit(limit)
 				.fetch();
 
 		return records
 				.stream()
-				.map((Record ur) -> new User(ur.getValue(USERS.USERNAME),
-						credentialsRepository.get(ur.getValue(USERS.USERID))
+				.map((Record ur) -> new User(ur.getValue(USERS.USER_NAME),
+						credentialsRepository.get(ur.getValue(USERS.USER_ID))
 								.getPassword(), ur.getValue(USERS.ENABLED),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, authorityRepository.getByUserName(ur
-								.getValue(USERS.USERNAME))))
+						accountNonLocked, roleRepository.getByUserName(ur
+								.getValue(USERS.USER_NAME))))
 				.collect(Collectors.toList());
 	}
 
@@ -428,43 +431,44 @@ public class UserDetailRepository implements UserDetailsManager {
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
 
-		Group group = sql.fetchOne(GROUP_MEMBERS,
-				GROUP_MEMBERS.USERNAME.eq(loggedUser.getUsername())).into(
-				Group.class);
+		Organization organization = sql.fetchOne(ORGANIZATION_MEMBERS,
+				ORGANIZATION_MEMBERS.USER_ID.eq(loggedUser.getUserId())).into(
+				Organization.class);
 
-		Long groupId = group.getId();
+		Long groupId = organization.getOrganizationId();
 
 		/**
-		 * select u.* from accounts.users u where username in ( select gm.username
-		 * from accounts.group_members gm join accounts.groups g on gm.group_id = g.id
-		 * where g.id = 0) and username in (select username from
-		 * accounts.authorities where authority like 'ADVISOR');
+		 * select u.* from accounts.users u where username in ( select
+		 * gm.username from accounts.group_members gm join accounts.groups g on
+		 * gm.group_id = g.id where g.id = 0) and username in (select username
+		 * from accounts.authorities where authority like 'ADVISOR');
 		 * 
 		 */
 		Users u = USERS.as("u");
-		Authorities a = AUTHORITIES.as("a");
-		GroupMembers gm = GROUP_MEMBERS.as("gm");
-		Groups g = GROUPS.as("g");
+		Roles a = ROLES.as("a");
+		OrganizationMembers gm = ORGANIZATION_MEMBERS.as("gm");
+		Organizations g = ORGANIZATIONS.as("g");
 
-		SelectConditionStep<Record1<String>> usernamesFromSameGroup = sql
-				.select(gm.USERNAME).from(gm).join(g).on(gm.GROUP_ID.eq(g.ID))
-				.where(g.ID.eq(groupId));
+		SelectConditionStep<Record1<Long>> usernamesFromSameGroup = sql
+				.select(gm.USER_ID).from(gm).join(g)
+				.on(gm.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
+				.where(g.ORGANIZATION_ID.eq(groupId));
 
 		SelectConditionStep<Record1<String>> advisorUsernames = sql
-				.select(a.USERNAME).from(a).where(a.AUTHORITY.like("ADVISOR"));
+				.select(a.USER_NAME).from(a).where(a.ROLE.like("ADVISOR"));
 
 		Result<Record> records = sql.select().from(u)
-				.where(u.USERNAME.in(usernamesFromSameGroup))
-				.and(u.USERNAME.in(advisorUsernames)).limit(limit).fetch();
+				.where(u.USER_ID.in(usernamesFromSameGroup))
+				.and(u.USER_NAME.in(advisorUsernames)).limit(limit).fetch();
 
 		return records
 				.stream()
-				.map((Record ur) -> new User(ur.getValue(USERS.USERNAME),
-						credentialsRepository.get(ur.getValue(USERS.USERID))
+				.map((Record ur) -> new User(ur.getValue(USERS.USER_NAME),
+						credentialsRepository.get(ur.getValue(USERS.USER_ID))
 								.getPassword(), ur.getValue(USERS.ENABLED),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, authorityRepository.getByUserName(ur
-								.getValue(USERS.USERNAME))))
+						accountNonLocked, roleRepository.getByUserName(ur
+								.getValue(USERS.USER_NAME))))
 				.collect(Collectors.toList());
 	}
 

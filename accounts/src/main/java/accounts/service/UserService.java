@@ -9,15 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import accounts.model.Authority;
+import accounts.model.Role;
 import accounts.model.BatchAccount;
-import accounts.model.GroupAuthority;
+import accounts.model.OrganizationRole;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
 import accounts.model.account.PersonalInformation;
-import accounts.repository.AuthorityRepository;
-import accounts.repository.GroupAuthorityRepository;
-import accounts.repository.GroupRepository;
+import accounts.repository.RoleRepository;
+import accounts.repository.OrganizationRoleRepository;
+import accounts.repository.OrganizationRepository;
 import accounts.repository.PersonalInformationRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
@@ -28,18 +28,16 @@ public class UserService {
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
 
 	@Autowired
-	private GroupRepository groupRepository;
+	private OrganizationRepository organizationRepository;
+	
 	@Autowired
-	private AuthorityRepository authorityRepository;
+	private RoleRepository roleRepository;
 
 	@Autowired
-	private GroupAuthorityRepository groupAuthorityRepository;
+	private OrganizationRoleRepository organizationRoleRepository;
 
 	@Autowired
 	private UserDetailRepository userRepository;
-
-	@Autowired
-	private DocumentLinkService documentLinkService;
 
 	@Autowired
 	private PersonalInformationRepository pInformation;
@@ -64,7 +62,7 @@ public class UserService {
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
 
-		Assert.notNull(batchAccount.getGroup());
+		Assert.notNull(batchAccount.getOrganization());
 		Assert.notNull(batchAccount.getEmails());
 
 		String[] emailSplit = batchAccount.getEmails()
@@ -80,16 +78,16 @@ public class UserService {
 			throw new IllegalArgumentException(
 					"Contains invalid email addresses.");
 
-		GroupAuthority groupAuthority = groupAuthorityRepository
-				.getGroupAuthorityFromGroup(batchAccount.getGroup());
+		OrganizationRole organizationRole = organizationRoleRepository
+				.getGroupAuthorityFromGroup(batchAccount.getOrganization());
 
 		List<User> users = Arrays
 				.stream(emailSplit)
 				.map(String::trim)
 				.map(s -> new User(s, s, enabled, accountNonExpired,
 						credentialsNonExpired, accountNonLocked, Arrays
-								.asList(new Authority(groupAuthority
-										.getAuthority(), s))))
+								.asList(new Role(organizationRole
+										.getRole(), s))))
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
@@ -111,7 +109,7 @@ public class UserService {
 
 		if (!userRepository.userExists(userName)) {
 			User user = new User(userName, userName, true, true, true, true,
-					authorityRepository
+					roleRepository
 							.getDefaultAuthoritiesForNewUser(userName));
 			userRepository.createUser(user);
 		}
@@ -143,5 +141,10 @@ public class UserService {
 
 	public PersonalInformation getUserPersonalInformation(Long userId) {
 		return pInformation.get(userId);
+	}
+
+	public void savePersonalInformation(
+			PersonalInformation userPersonalInformation) {
+		pInformation.save(userPersonalInformation);
 	}
 }

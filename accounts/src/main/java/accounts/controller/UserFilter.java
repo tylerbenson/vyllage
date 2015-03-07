@@ -9,7 +9,7 @@ import accounts.model.FilteredUser;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
 import accounts.model.UserFilterResponse;
-import accounts.repository.GroupRepository;
+import accounts.repository.OrganizationRepository;
 import accounts.service.UserService;
 
 public class UserFilter {
@@ -21,7 +21,7 @@ public class UserFilter {
 	private UserService service;
 
 	@Autowired
-	private GroupRepository groupRepository;
+	private OrganizationRepository organizationRepository;
 
 	public UserFilterResponse filter(UserFilterRequest filter, User loggedUser) {
 		UserFilterResponse response = null;
