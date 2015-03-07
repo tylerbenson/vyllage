@@ -19,13 +19,13 @@ public class OrganizationMemberRepository {
 		OrganizationMembersRecord newRecord = sql
 				.newRecord(ORGANIZATION_MEMBERS);
 		newRecord.setOrganizationId(organizationMember.getOrganizationId());
-		newRecord.setUserName(organizationMember.getUserName());
+		newRecord.setUserId(organizationMember.getUserId());
 		newRecord.store();
 
 	}
 
-	public void deleteByUserName(String userName) {
+	public void deleteByUserId(Long userId) {
 		sql.delete(ORGANIZATION_MEMBERS)
-				.where(ORGANIZATION_MEMBERS.USER_NAME.eq(userName)).execute();
+				.where(ORGANIZATION_MEMBERS.USER_ID.eq(userId)).execute();
 	}
 }

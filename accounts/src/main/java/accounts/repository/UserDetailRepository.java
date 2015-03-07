@@ -109,8 +109,7 @@ public class UserDetailRepository implements UserDetailsManager {
 		// TODO: eventually we'll need these fields in the database.
 		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
 
-		List<Role> roles = roleRepository.getByUserName(record
-				.getUserName());
+		List<Role> roles = roleRepository.getByUserName(record.getUserName());
 
 		UserCredential credential = credentialsRepository.get(record
 				.getUserId());
@@ -134,8 +133,8 @@ public class UserDetailRepository implements UserDetailsManager {
 		if (user.getAuthorities() != null || user.getAuthorities().size() > 0)
 			roles = user.getAuthorities();
 		else
-			roles = roleRepository
-					.getDefaultAuthoritiesForNewUser(user.getUsername());
+			roles = roleRepository.getDefaultAuthoritiesForNewUser(user
+					.getUsername());
 
 		TransactionStatus transaction = txManager
 				.getTransaction(new DefaultTransactionDefinition());
@@ -161,7 +160,8 @@ public class UserDetailRepository implements UserDetailsManager {
 				for (Organization organization : organizationRepository
 						.getOrganizationFromAuthority(role.getAuthority())) {
 					organizationMemberRepository.create(new OrganizationMember(
-							organization.getOrganizationId(), user.getUsername()));
+							organization.getOrganizationId(), newRecord
+									.getUserId()));
 				}
 			}
 
@@ -197,7 +197,8 @@ public class UserDetailRepository implements UserDetailsManager {
 			credentialsRepository.save(record.getUserId(), user.getPassword());
 
 			roleRepository.deleteByUserName(user.getUsername());
-			organizationMemberRepository.deleteByUserName(user.getUsername());
+			organizationMemberRepository.deleteByUserId(((User) user)
+					.getUserId());
 
 			for (GrantedAuthority authority : user.getAuthorities()) {
 				roleRepository.create((Role) authority);
@@ -205,7 +206,8 @@ public class UserDetailRepository implements UserDetailsManager {
 				for (Organization organization : organizationRepository
 						.getOrganizationFromAuthority(authority.getAuthority())) {
 					organizationMemberRepository.create(new OrganizationMember(
-							organization.getOrganizationId(), user.getUsername()));
+							organization.getOrganizationId(), record
+									.getUserId()));
 				}
 			}
 
@@ -226,11 +228,11 @@ public class UserDetailRepository implements UserDetailsManager {
 		Object savepoint = transaction.createSavepoint();
 
 		try {
-			roleRepository.deleteByUserName(username);
-			organizationMemberRepository.deleteByUserName(username);
-
 			UsersRecord record = sql.fetchOne(USERS,
 					USERS.USER_NAME.eq(username));
+
+			roleRepository.deleteByUserName(username);
+			organizationMemberRepository.deleteByUserId(record.getUserId());
 
 			long userId = record.getUserId();
 			credentialsRepository.delete(userId);
@@ -301,10 +303,10 @@ public class UserDetailRepository implements UserDetailsManager {
 						credentialsRepository.get(record.getUserId())
 								.getPassword(), record.getEnabled(),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, roleRepository
-								.getByUserName(record.getUserName()), record
-								.getDateCreated().toLocalDateTime(), record
-								.getLastModified().toLocalDateTime()))
+						accountNonLocked, roleRepository.getByUserName(record
+								.getUserName()), record.getDateCreated()
+								.toLocalDateTime(), record.getLastModified()
+								.toLocalDateTime()))
 				.collect(Collectors.toList());
 	}
 
@@ -336,8 +338,8 @@ public class UserDetailRepository implements UserDetailsManager {
 						.getOrganizationFromAuthority(authority.getAuthority())) {
 					sql.insertInto(ORGANIZATION_MEMBERS,
 							ORGANIZATION_MEMBERS.ORGANIZATION_ID,
-							ORGANIZATION_MEMBERS.USER_NAME).values(
-							organization.getOrganizationId(), user.getUsername());
+							ORGANIZATION_MEMBERS.USER_ID).values(
+							organization.getOrganizationId(), user.getUserId());
 				}
 
 			}
@@ -381,8 +383,8 @@ public class UserDetailRepository implements UserDetailsManager {
 		final boolean accountNonLocked = true;
 
 		Organization organization = sql.fetchOne(ORGANIZATION_MEMBERS,
-				ORGANIZATION_MEMBERS.USER_NAME.eq(loggedUser.getUsername()))
-				.into(Organization.class);
+				ORGANIZATION_MEMBERS.USER_ID.eq(loggedUser.getUserId())).into(
+				Organization.class);
 
 		String username = filter.getUserName();
 		Long groupId = organization.getOrganizationId();
@@ -399,8 +401,8 @@ public class UserDetailRepository implements UserDetailsManager {
 		OrganizationMembers gm = ORGANIZATION_MEMBERS.as("gm");
 		Organizations g = ORGANIZATIONS.as("g");
 
-		SelectConditionStep<Record1<String>> usernamesFromSameGroup = sql
-				.select(gm.USER_NAME).from(gm).join(g)
+		SelectConditionStep<Record1<Long>> usernamesFromSameGroup = sql
+				.select(gm.USER_ID).from(gm).join(g)
 				.on(gm.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
 				.where(g.ORGANIZATION_ID.eq(groupId));
 
@@ -408,7 +410,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				.select(a.USER_NAME).from(a).where(a.ROLE.like("ADVISOR"));
 
 		Result<Record> records = sql.select().from(u)
-				.where(u.USER_NAME.in(usernamesFromSameGroup))
+				.where(u.USER_ID.in(usernamesFromSameGroup))
 				.and(u.USER_NAME.in(advisorUsernames))
 				.and(u.USER_NAME.like("%" + username + "%")).limit(limit)
 				.fetch();
@@ -430,8 +432,8 @@ public class UserDetailRepository implements UserDetailsManager {
 		final boolean accountNonLocked = true;
 
 		Organization organization = sql.fetchOne(ORGANIZATION_MEMBERS,
-				ORGANIZATION_MEMBERS.USER_NAME.eq(loggedUser.getUsername()))
-				.into(Organization.class);
+				ORGANIZATION_MEMBERS.USER_ID.eq(loggedUser.getUserId())).into(
+				Organization.class);
 
 		Long groupId = organization.getOrganizationId();
 
@@ -447,8 +449,8 @@ public class UserDetailRepository implements UserDetailsManager {
 		OrganizationMembers gm = ORGANIZATION_MEMBERS.as("gm");
 		Organizations g = ORGANIZATIONS.as("g");
 
-		SelectConditionStep<Record1<String>> usernamesFromSameGroup = sql
-				.select(gm.USER_NAME).from(gm).join(g)
+		SelectConditionStep<Record1<Long>> usernamesFromSameGroup = sql
+				.select(gm.USER_ID).from(gm).join(g)
 				.on(gm.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
 				.where(g.ORGANIZATION_ID.eq(groupId));
 
@@ -456,7 +458,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				.select(a.USER_NAME).from(a).where(a.ROLE.like("ADVISOR"));
 
 		Result<Record> records = sql.select().from(u)
-				.where(u.USER_NAME.in(usernamesFromSameGroup))
+				.where(u.USER_ID.in(usernamesFromSameGroup))
 				.and(u.USER_NAME.in(advisorUsernames)).limit(limit).fetch();
 
 		return records

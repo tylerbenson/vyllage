@@ -58,7 +58,7 @@ insert into ACCOUNTS.organization_roles ( organization_id, role ) values ( 2, 'A
 --  user_name varchar(50) not null,
 --  group_id bigint not null,
 --  constraint fk_group_members_group foreign key(group_id) references groups(id));
-insert into ACCOUNTS.organization_members ( user_name, organization_id ) values ( 'email', 0 );
-insert into ACCOUNTS.organization_members ( user_name, organization_id ) values ( 'testuser@vyllage.com', 1 );
-insert into ACCOUNTS.organization_members ( user_name, organization_id ) values ( 'deana@vyllage.com', 2 );
-insert into ACCOUNTS.organization_members ( user_name, organization_id ) values ( 'someone@vyllage.com', 0 );
+insert into ACCOUNTS.organization_members ( user_id, organization_id ) values ( 0, 0 );
+insert into ACCOUNTS.organization_members ( user_id, organization_id ) values ( 1, 1 );
+insert into ACCOUNTS.organization_members ( user_id, organization_id ) values ( 2, 2 );
+insert into ACCOUNTS.organization_members ( user_id, organization_id ) values ( 3, 0 );

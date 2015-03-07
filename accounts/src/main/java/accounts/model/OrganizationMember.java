@@ -2,14 +2,14 @@ package accounts.model;
 
 public class OrganizationMember {
 	private Long organizationId;
-	private String userName;
+	private Long userId;
 
 	public OrganizationMember() {
 	}
 
-	public OrganizationMember(Long group_id, String userName) {
+	public OrganizationMember(Long group_id, Long userId) {
 		this.organizationId = group_id;
-		this.userName = userName;
+		this.userId = userId;
 	}
 
 	public Long getOrganizationId() {
@@ -20,11 +20,12 @@ public class OrganizationMember {
 		this.organizationId = organizationId;
 	}
 
-	public String getUserName() {
-		return userName;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
+
 }
