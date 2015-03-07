@@ -29,6 +29,7 @@ public class UserService {
 
 	@Autowired
 	private OrganizationRepository organizationRepository;
+	
 	@Autowired
 	private RoleRepository roleRepository;
 
@@ -37,9 +38,6 @@ public class UserService {
 
 	@Autowired
 	private UserDetailRepository userRepository;
-
-	@Autowired
-	private DocumentLinkService documentLinkService;
 
 	@Autowired
 	private PersonalInformationRepository pInformation;
@@ -143,5 +141,10 @@ public class UserService {
 
 	public PersonalInformation getUserPersonalInformation(Long userId) {
 		return pInformation.get(userId);
+	}
+
+	public void savePersonalInformation(
+			PersonalInformation userPersonalInformation) {
+		pInformation.save(userPersonalInformation);
 	}
 }

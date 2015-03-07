@@ -36,7 +36,7 @@ public class AdminUserController {
 			prepareBatchError(
 					batch,
 					model,
-					"Please provide ',' separated emails and select the Group the users will belong to.");
+					"Please provide ',' or line separated emails and select the Group the users will belong to.");
 			return "adminAccountManagement";
 		}
 

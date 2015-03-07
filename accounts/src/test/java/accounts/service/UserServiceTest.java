@@ -1,5 +1,6 @@
 package accounts.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.Assert;
@@ -9,6 +10,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -18,7 +20,7 @@ import accounts.Application;
 import accounts.model.BatchAccount;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
-import accounts.service.UserService;
+import accounts.model.account.PersonalInformation;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -123,4 +125,43 @@ public class UserServiceTest {
 		Assert.assertFalse(advisors.isEmpty());
 	}
 
+	@Test
+	public void savePersonalInformation() {
+		PersonalInformation pi = new PersonalInformation();
+		String emailUpdates = "NEVER";
+		String phoneNumber = "123";
+		LocalDateTime now = LocalDateTime.now();
+		Long userId = 1L;
+
+		pi.setEmailUpdates(emailUpdates);
+		pi.setGraduationDate(now);
+		pi.setPhoneNumber(phoneNumber);
+		pi.setUserId(userId);
+
+		service.savePersonalInformation(pi);
+
+		PersonalInformation information = service
+				.getUserPersonalInformation(userId);
+		Assert.assertEquals(emailUpdates, information.getEmailUpdates());
+		Assert.assertEquals(phoneNumber, information.getPhoneNumber());
+		Assert.assertEquals(now, information.getGraduationDate());
+		Assert.assertEquals(userId, information.getUserId());
+	}
+
+	@Test(expected = DataIntegrityViolationException.class)
+	public void savePersonalInformationWrongId() {
+		PersonalInformation pi = new PersonalInformation();
+		Long userId = -1L;
+		LocalDateTime now = LocalDateTime.now();
+
+		pi.setUserId(userId);
+		pi.setGraduationDate(now);
+
+		service.savePersonalInformation(pi);
+
+		PersonalInformation information = service
+				.getUserPersonalInformation(userId);
+
+		Assert.assertTrue(information == null);
+	}
 }

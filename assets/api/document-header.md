@@ -1,4 +1,4 @@
-# Returns the placeholder header in api-response-spec in JSON format.
+# Returns the header.
 ## GET /resume/{documentId}/header*
 + Parameters
   + documentId (string, `1`) - The id of the document.
@@ -13,7 +13,7 @@
     }
 
 
-# Saves the tagline. [STUBBED]
+# Saves the tagline.
 ## POST /resume/{documentId}/header*
 + Parameters
   + documentId (string, `1`) - The id of the document.

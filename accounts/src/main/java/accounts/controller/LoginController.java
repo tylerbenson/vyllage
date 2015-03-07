@@ -1,16 +1,10 @@
 package accounts.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Controller
 public class LoginController {
-
-	@Autowired
-	private ObjectMapper mapper;
 
 	// http://localhost:8080/login
 	@RequestMapping("/login")
