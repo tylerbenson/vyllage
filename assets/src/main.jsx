@@ -274,7 +274,7 @@ var MainContainer = React.createClass({
         } else {
             // secondary items on main mode.
             return (
-                <article className="career-goal">
+                <article className="career-goal same-section">
                      <div className="row" id = {result.sectionId}>
                          <div className="twelve columns">
                                                                     
@@ -336,7 +336,7 @@ var MainContainer = React.createClass({
         } else {
             // secondary items on main mode.
             return (
-                <article className="experience">
+                <article className="experience same-section">
                     <div className="row">
                          <div className="twelve columns">
                                                                                                          
