@@ -1,236 +1,8 @@
 var React = require('react');
 var request = require('superagent');
-
-// ----------------------- PROFILE SECTION --------------------------
-
-
-// -------------------------- profile photo container -------------------------- 
-
-var ProfilePhotoContainer = React.createClass({
-
-    render: function() {
-        return (
-            <div className="four columns">
-                <img className="profile-photo" src="images/profile-photo.png" width="115" height="115" />
-            </div>
-        );
-    }
-});
-
-// ---------------------------------- end ----------------------------------------------------
-
-// --------------------------headline, tagline container, main mode -------------------------- 
-var HeadlineContainer = React.createClass({
-
-    render: function() {
-        return (
-            <div className="headline-container headline-field">
-                <p className="headline">
-                    {this.props.profileData.firstName}&nbsp;
-                    {this.props.profileData.middleName}&nbsp;
-                    {this.props.profileData.lastName} 
-                </p>
-            </div>
-        );
-    }
-});
-
-var TaglineContainer = React.createClass({
-
-    render: function() {
-        return (
-            <div className="headline-container main">
-                <div className="paragraph">
-                    <p className="tagline">{this.props.profileData.tagline}</p>
-                </div>
-            </div>
-        );
-    }
-});
-
-// ---------------------------------- end ----------------------------------------------------
-
-// --------------------------- tagline container, edit mode -------------------------- 
-
-var TaglineEdit = React.createClass({ 
-
-    getInitialState: function() {
-        return {taglineData: ''}; 
-    },
-
-    componentDidUpdate: function () {
-        this.state.taglineData = this.props.profileData.tagline;
-    },
-
-    componentWillReceiveProps: function(nextProps) {
-        this.state.taglineData = nextProps.taglineData;
-    },
-
-    handleChange: function(event) {
-        this.setState({taglineData: event.target.value});
-
-        if (this.props.updateTagline) {
-            this.props.updateTagline(event.target.value);
-        }
-    },
-
-    render: function() {
-        var taglineData = this.state.taglineData;
-
-        return (
-            <input type="text" className="tagline-edit"
-                placeholder="add a professional tagline" 
-                value = {taglineData} 
-                onChange={this.handleChange} />
-        );
-    }
-});
-
-// --------------------------------------------- end --------------------------------------------
-
-
-// ---------------------------------- save, cancel buttons container ----------------------------
-
-var ButtonsContainer = React.createClass({  
-
-    saveHandler: function(event) {
-
-        if (this.props.save) {
-            this.props.save();
-        }
-
-        event.preventDefault();
-        event.stopPropagation();
-    },    
-
-    cancelHandler: function(event) {
-
-        if (this.props.cancel) {
-            this.props.cancel();
-        }
-
-        event.preventDefault();
-        event.stopPropagation();
-    },    
-
-    render: function() {
-        return (
-            <div className="buttons-container">
-                <button className="save-btn" onClick={this.saveHandler}>save</button>
-                <button className="cancel-btn" onClick={this.cancelHandler}>cancel</button>
-            </div>
-        );
-    }
-});
-
-// --------------------------------------------- end --------------------------------------------
-
-
-// -------------------------------------- Article container  ------------------------------------
-
-var ArticleContent = React.createClass({ 
-
-    getInitialState: function() {
-        return {isMain: true,
-                 profileData: ''};
-    },
-
-    updateTagline: function (value) {
-        this.state.profileData.tagline = value;
-    },
-
-    save: function () {
-        if(this.props.saveChanges){
-            this.props.saveChanges(this.state.profileData);
-        }
-      this.handleModeChange();
-    },
-
-    cancel: function () {
-        this.handleModeChange();
-    },
-
-    handleModeChange: function () {
-
-        if(!this.state.isMain) {
-            var data = JSON.parse( JSON.stringify( this.props.profileData ));
-            this.setState({ profileData :data,
-                            isMain: true });
-
-            this.refs.mainContainer.getDOMNode().style.display="block";
-            this.refs.editContainer.getDOMNode().style.display="none";
-
-            this.refs.buttonContainer.getDOMNode().style.display="none";
-
-            this.state.isMain=true ;
-        }
-
-        return false;
-    },
-
-    goToEditMode: function() {
-
-        if(this.state.isMain) {
-             var data = JSON.parse( JSON.stringify( this.props.profileData ));
-             this.setState({ profileData :data,
-                        isMain: false });
-
-            this.refs.mainContainer.getDOMNode().style.display="none";
-            this.refs.editContainer.getDOMNode().style.display="block";
-            this.refs.buttonContainer.getDOMNode().style.display="block" ;
-
-            this.state.isMain=false;
-        }
-    },
-
-    render: function() {
-        return (
-            <div className="four columns article-content profile">
-                <HeadlineContainer profileData={this.props.profileData} />
-                <div onClick={this.goToEditMode}>
-                    <TaglineContainer ref="mainContainer" profileData={this.props.profileData} />
-                    <div ref="editContainer" className="editMode">
-                        <TaglineEdit profileData={this.props.profileData} updateTagline={this.updateTagline} />
-                        <ButtonsContainer ref="buttonContainer"  save={this.save} cancel={this.cancel}/>
-                    </div>
-                </div>
-                
-            </div>
-        );
-    }
-});
-
-// --------------------------------------------- end --------------------------------------------
-
-
-var ShareContactButtons = React.createClass({ 
-
-    showShare: function() {
-        document.getElementById('share-info').style.display = 'block';
-        document.getElementById('contact-info').style.display = 'none';
-    },
-
-    showContact: function() {
-        document.getElementById('contact-info').style.display = 'block';
-        document.getElementById('share-info').style.display = 'none';
-    },
-
-    render: function() {
-        return ( 
-            <div className="four columns btns-grid">
-                <div className="share-contact-btns-container">
-                    <button className="u-pull-left share" onClick={this.showShare}>share</button>
-                    <button className="u-pull-left contact" onClick={this.showContact}>contact</button>
-                </div>
-            </div>
-        );
-    }
-
-});
-
-
-
-// -------------------------- Profile Container for both modes ----------------------------------
+var ProfilePhotoContainer = require('./photo-container');
+var ArticleContent =  require('./article-content');
+var ShareContactButtons = require('./share-contact-btns');
 
 var ProfileContainer = React.createClass({ 
 
@@ -253,8 +25,7 @@ var ProfileContainer = React.createClass({
 
                     if (res.ok) {
                         if(res.body.length == 0) {
-                            // if data from server is empty , apply hardcoded data
-                            self.setState({profileData: Data});
+                            // if data from server is empty TBD??
                         } else {
                             self.setState({profileData: res.body});
                         }
@@ -270,13 +41,28 @@ var ProfileContainer = React.createClass({
     },
 
     saveChanges: function (data) {
-        this.setState({profileData: data});
+            var self = this, documentId,
+            pathItems = window.location.pathname.split("/"),
+            token_header = document.getElementById('meta_header').content,
+            token_val = document.getElementById('meta_token').content;
 
-        // here ajax call will go to the server, and update the data
+        if(pathItems.length > 2) {
+            documentId = pathItems[2];
 
-        // Need to populate the CSRF token since this is not a GET.
-        // Something like this:
-        //.set("meta[name='_csrf_header']", "meta[name='_csrf_token']")
+            request
+                .post('/resume/' + documentId + '/header')
+                .set(token_header, token_val)
+                .send(data)
+                .end(function(error, res) {
+
+                    if (res.ok) {
+                         self.setState({profileData: data});
+                    } else {
+                       alert( res.text );  // this is left intentionally
+                       console.log(res.text); 
+                    }  
+                });
+        }
     },
 
     render: function() {
@@ -292,19 +78,6 @@ var ProfileContainer = React.createClass({
     }
 
 });
-
-// --------------------------------------------- end --------------------------------------------
-
-
-//   ----------------------------------------- render --------------------------------------------
-
-var Data = { 
-   firstName: "Nathan", 
-   middleName: "M",
-   lastName: "Benson", 
-   tagline: "Technology Enthusiast analyzing, building, and expanding solutions"
-};
-
 
 React.render(<ProfileContainer />, document.getElementById('profile'));
 
