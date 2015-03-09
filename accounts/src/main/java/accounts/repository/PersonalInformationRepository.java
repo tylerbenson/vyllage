@@ -35,18 +35,18 @@ public class PersonalInformationRepository {
 
 	public void save(PersonalInformation userPersonalInformation) {
 		PersonalInformationRecord record = sql.fetchOne(PERSONAL_INFORMATION,
-				PERSONAL_INFORMATION.USERID.eq(userPersonalInformation
+				PERSONAL_INFORMATION.USER_ID.eq(userPersonalInformation
 						.getUserId()));
 
 		if (record == null) {
 			record = sql.newRecord(PERSONAL_INFORMATION);
-			record.setUserid(userPersonalInformation.getUserId());
+			record.setUserId(userPersonalInformation.getUserId());
 		}
 
-		record.setEmailupdates(userPersonalInformation.getEmailUpdates());
-		record.setGraduationdate(Timestamp.valueOf(userPersonalInformation
+		record.setEmailUpdates(userPersonalInformation.getEmailUpdates());
+		record.setGraduationDate(Timestamp.valueOf(userPersonalInformation
 				.getGraduationDate()));
-		record.setPhonenumber(userPersonalInformation.getPhoneNumber());
+		record.setPhoneNumber(userPersonalInformation.getPhoneNumber());
 		record.store();
 	}
 }
