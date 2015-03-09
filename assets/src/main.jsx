@@ -124,16 +124,6 @@ var MainContainer = React.createClass({
                                 }
                             }
                         } else {
-                           // Remove added element  
-                           for(var i = 0; i < self.state.mainData.length; i++){
-
-                                if(self.state.mainData[i].sectionPosition === data.sectionPosition){
-
-                                    self.state.mainData.splice(i,1);
-                                    self.setState({mainData: self.state.mainData});
-                                }
-                            }
-
                            alert( res.text );  // this is left intentionally
                            console.log(res.text); 
                         }  
@@ -157,17 +147,6 @@ var MainContainer = React.createClass({
                                 }
                             }
                         } else {
-
-                           // Remove new element for add.
-                            for(var i = 0; i < self.state.mainData.length; i++){
-
-                                if(self.state.mainData[i].sectionPosition === data.sectionPosition){
-
-                                    self.state.mainData.splice(i,1);
-                                    self.setState({mainData: self.state.mainData});
-                                }
-                            }
-
                            alert( res.text );  // this is left intentionally
                            console.log(res.text); 
                         }  
@@ -295,7 +274,7 @@ var MainContainer = React.createClass({
         } else {
             // secondary items on main mode.
             return (
-                <article className="career-goal">
+                <article className="career-goal same-section">
                      <div className="row" id = {result.sectionId}>
                          <div className="twelve columns">
                                                                     
@@ -357,7 +336,7 @@ var MainContainer = React.createClass({
         } else {
             // secondary items on main mode.
             return (
-                <article className="experience">
+                <article className="experience same-section">
                     <div className="row">
                          <div className="twelve columns">
                                                                                                          

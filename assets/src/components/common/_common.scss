@@ -11,6 +11,14 @@ body {
 	        display:none; 
 	    }
 
+	    article.same-section {
+	    	margin-top: -7px;
+			border-top: 0px;
+			border-top-right-radius: 0px;
+			border-top-left-radius: 0px;
+			padding-top: 15px;
+	    }
+
 		article {
 			@include article-grid();
 

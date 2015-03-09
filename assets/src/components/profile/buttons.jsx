@@ -1,33 +1,35 @@
 var React = require('react');
 
-var Buttons = React.createClass({   
+var ButtonsContainer = React.createClass({  
 
     saveHandler: function(event) {
-        event.preventDefault();
-        event.stopPropagation();
 
         if (this.props.save) {
             this.props.save();
         }
+
+        event.preventDefault();
+        event.stopPropagation();
     },    
 
     cancelHandler: function(event) {
-        event.preventDefault();
-        event.stopPropagation();
 
         if (this.props.cancel) {
             this.props.cancel();
         }
-    },
+
+        event.preventDefault();
+        event.stopPropagation();
+    },    
 
     render: function() {
         return (
-            <div >
-                <button className="save-btn"  disabled={this.props.valid ? '' : 'disabled'}  onClick={this.saveHandler}>save</button>
+            <div className="buttons-container">
+                <button className="save-btn" onClick={this.saveHandler}>save</button>
                 <button className="cancel-btn" onClick={this.cancelHandler}>cancel</button>
             </div>
         );
     }
 });
 
-module.exports = Buttons;
+module.exports = ButtonsContainer;
