@@ -10,6 +10,7 @@ module.exports = {
     'settings.js': './src/settings.jsx'
   },
   output: {
+    publicPath: '/javascript',
     path: path.join(__dirname, 'public', 'javascript'),
     filename: '[name]'
   },

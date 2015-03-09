@@ -1,10 +1,8 @@
 var React = require('react');
-var LayerMixin = require('react-layer-mixin');
-var assign = require('lodash.assign');
 var cx = require('react/lib/cx');
+var Actions = require('./actions');
 
 var Suggesions = React.createClass({
-  // mixins: [LayerMixin],
   getInitialState: function () {
     return { 
       isFocused: false,
@@ -21,21 +19,40 @@ var Suggesions = React.createClass({
       isFocused: false,
     });
   },
-  clickHandler: function (index, e) {
-    e.preventDefault();
-    this.props.selectSuggestion(index);
+  recentClick: function (index) {
+    Actions.selectRecentSuggestion(index);
     this.setState({
       isFocused: false,
     });
   },
-  renderRecipientList: function (recipients, baseIndex) {
-    return recipients.map(function (recipient, index) {
+  recommendedClick: function (index) {
+    Actions.selectRecommendedSuggestion(index);
+    this.setState({
+      isFocused: false,
+    });
+  },
+  renderRecentList: function () {
+    return this.props.suggestions.recent.map(function (recipient, index) {
       var classes = {
-        'is-active': this.props.selectedSuggestion === baseIndex + index
+        'is-active': this.props.selectedSuggestion === index
       }
       return (
-        <li key={baseIndex + index} className={cx(classes)}>
-          <p className='item-text' onClick={this.clickHandler.bind(this, baseIndex + index)}>
+        <li key={index} className={cx(classes)}>
+          <p className='item-text' onClick={this.recentClick.bind(this, index)}>
+            {recipient.firstName + " " + recipient.lastName}
+          </p>
+         </li>
+      );
+    }.bind(this));
+  },
+  renderRecommendedList: function () {
+    return this.props.suggestions.recent.map(function (recipient, index) {
+      var classes = {
+        'is-active': this.props.selectedSuggestion === this.props.suggestions.recent.length + index
+      }
+      return (
+        <li key={this.props.suggestions.recent.length + index} className={cx(classes)}>
+          <p className='item-text' onClick={this.recommendedClick.bind(this, index)}>
             {recipient.firstName + " " + recipient.lastName}
           </p>
          </li>
@@ -47,7 +64,6 @@ var Suggesions = React.createClass({
       var style = {
         position: 'absolute'
       };
-      style = assign({}, style);
       return (
         <div onMouseDown={this.enterHandler} onMouseUp={this.leaveHanlder}>
           <div id='suggested-users-list' style={style} className={"suggested-users-list"}>
@@ -55,11 +71,11 @@ var Suggesions = React.createClass({
               <li className="topper">
                 <p className="topper-text">recent</p>
               </li>
-              {this.renderRecipientList(this.props.suggestions.recent, 0)}
+              {this.renderRecentList()}
               <li className="topper">
                 <p className="topper-text">recommended</p>
               </li>
-              {this.renderRecipientList(this.props.suggestions.recommended, this.props.suggestions.recent.length)}
+              {this.renderRecommendedList()}
             </ul>  
           </div>
         </div>
@@ -68,9 +84,6 @@ var Suggesions = React.createClass({
       return null;
     }
   },
-  // render: function () {
-  //   return null;
-  // }
 });
 
 module.exports = Suggesions;

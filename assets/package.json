@@ -10,6 +10,7 @@
     "react-contenteditable": "git+https://github.com/lovasoa/react-contenteditable#b969aaf2ce",
     "react-layer-mixin": "^0.1.0",
     "react-layers": "^0.3.1",
+    "reflux": "^0.2.6",
     "superagent": "^0.21.0",
     "validator": "^3.32.0"
   },
