@@ -5,6 +5,10 @@
   margin-left: -10px;
 }
 
+.gray-text {
+  color: $subheader-color;
+}
+
 .settings {
   background: white;
   border: 1px solid $border-color;
@@ -29,10 +33,11 @@
 
 .settings-left {
   border-right: 1px solid $border-color;
+  height: 800px;
 }
 
 .settings-right {
-  // margin: 0;
+ 
 }
 
 .topper {
@@ -72,6 +77,10 @@
   padding: 10px 20px 10px 10px;
 }
 
+.settings-last-update {
+  padding: 10px;
+  border-right: 1px solid $border-color;
+}
 
 
 @import './components/header/header';

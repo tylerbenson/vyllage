@@ -34,7 +34,8 @@ var settings = {
   },
   others: [
     { value: 'www.natecast.com', privacy: 'everyone' }
-  ]
+  ],
+  lastUpdate: 'Jan 1, 2014'
 };
 
 module.exports = Reflux.createStore({

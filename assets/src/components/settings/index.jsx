@@ -40,6 +40,7 @@ var Settings = React.createClass({
                 <SharedLinks value={settings.sharedLinks} />
                 <Password />
               </ul>
+              <div className='gray-text'></div>
             </div>
             <div className='seven columns settings-right'>
               <div className='topper topper-right'>
@@ -59,12 +60,17 @@ var Settings = React.createClass({
                 <Facebook {...settings.facebook} organization={settings.organization} />
                 <OtherList others={settings.others} organization={settings.organization} />
                 <Other {...settings.others} organization={settings.organization} />
-                <li className='row settings-account-item'>
-                  <div className='offset-by-eight four columns text-center'>
-                    <span className=''>delete account</span>
-                  </div>
-                </li>
               </ul>
+            </div>
+          </div>
+          <div className="row">
+            <div className="five columns settings-last-update gray-text">
+              last update: {settings.lastUpdate}
+            </div>
+            <div className="seven columns settings-delete-account">
+              <div className='offset-by-eight four columns text-center'>
+                <span className=''>delete account</span>
+              </div>
             </div>
           </div>
         </div>   
