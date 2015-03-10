@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,6 +28,12 @@ public class Application implements CommandLineRunner {
 	@Bean
 	public ObjectMapper objectMapper() {
 		return new ObjectMapper();
+	}
+
+	@Bean
+	public RestTemplate restTemplate() {
+		RestTemplate restTemplate = new RestTemplate();
+		return restTemplate;
 	}
 
 }

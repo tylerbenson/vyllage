@@ -415,15 +415,8 @@ public class UserDetailRepository implements UserDetailsManager {
 				.and(u.USER_NAME.like("%" + username + "%")).limit(limit)
 				.fetch();
 
-		return records
-				.stream()
-				.map((Record ur) -> new User(ur.getValue(USERS.USER_NAME),
-						credentialsRepository.get(ur.getValue(USERS.USER_ID))
-								.getPassword(), ur.getValue(USERS.ENABLED),
-						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, roleRepository.getByUserName(ur
-								.getValue(USERS.USER_NAME))))
-				.collect(Collectors.toList());
+		return advisorRecordsToUser(accountNonExpired, credentialsNonExpired,
+				accountNonLocked, records);
 	}
 
 	public List<User> getAdvisors(User loggedUser, int limit) {
@@ -461,15 +454,27 @@ public class UserDetailRepository implements UserDetailsManager {
 				.where(u.USER_ID.in(usernamesFromSameGroup))
 				.and(u.USER_NAME.in(advisorUsernames)).limit(limit).fetch();
 
-		return records
-				.stream()
-				.map((Record ur) -> new User(ur.getValue(USERS.USER_NAME),
-						credentialsRepository.get(ur.getValue(USERS.USER_ID))
-								.getPassword(), ur.getValue(USERS.ENABLED),
-						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, roleRepository.getByUserName(ur
-								.getValue(USERS.USER_NAME))))
-				.collect(Collectors.toList());
+		return advisorRecordsToUser(accountNonExpired, credentialsNonExpired,
+				accountNonLocked, records);
 	}
 
+	private List<User> advisorRecordsToUser(final boolean accountNonExpired,
+			final boolean credentialsNonExpired,
+			final boolean accountNonLocked, Result<Record> records) {
+		return records
+				.stream()
+				.map((Record ur) -> new User(ur.getValue(USERS.USER_ID), ur
+						.getValue(USERS.FIRST_NAME), ur
+						.getValue(USERS.MIDDLE_NAME), ur
+						.getValue(USERS.LAST_NAME), ur
+						.getValue(USERS.USER_NAME), credentialsRepository.get(
+						ur.getValue(USERS.USER_ID)).getPassword(), ur
+						.getValue(USERS.ENABLED), accountNonExpired,
+						credentialsNonExpired, accountNonLocked, roleRepository
+								.getByUserName(ur.getValue(USERS.USER_NAME)),
+						ur.getValue(USERS.DATE_CREATED).toLocalDateTime(), ur
+								.getValue(USERS.LAST_MODIFIED)
+								.toLocalDateTime()))
+				.collect(Collectors.toList());
+	}
 }
