@@ -52,7 +52,7 @@ var PhoneNumber = React.createClass({
           <PrivacySelect 
             value={this.props.privacy}
             organization={this.props.organization}
-            onChange={this.props.privacyHandler} />
+            onChange={this.privacyHandler} />
         </div>
       </li>
     );

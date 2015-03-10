@@ -8,6 +8,7 @@ var GraduationDate = require('./GraduationDate');
 var Linkedin = require('./Linkedin');
 var Organization = require('./Organization');
 var Other = require('./Other');
+var OtherList = require('./OtherList');
 var Password = require('./Password');
 var PhoneNumber = require('./PhoneNumber');
 var Role = require('./Role');
@@ -59,7 +60,8 @@ var Settings = React.createClass({
                 <Twitter {...settings.twitter} organization={settings.organization} changeSetting={this.changeSetting} />
                 <Linkedin {...settings.linkedin} organization={settings.organization} changeSetting={this.changeSetting} />
                 <Facebook {...settings.facebook} organization={settings.organization} changeSetting={this.changeSetting} />
-                <Other {...settings.other} organization={settings.organization} changeSetting={this.changeSetting} />
+                <OtherList others={settings.others} organization={settings.organization} changeSetting={this.changeSetting} />
+                <Other {...settings.others} organization={settings.organization} changeSetting={this.changeSetting} />
                 <li className='row settings-account-item'>
                   <div className='offset-by-eight four columns text-center'>
                     <span className=''>delete account</span>

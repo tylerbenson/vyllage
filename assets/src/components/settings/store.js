@@ -43,6 +43,18 @@ module.exports = Reflux.createStore({
     this.settings[key] = value;
     this.update();
   },
+  onAddOther: function (other) {
+    this.settings.others = this.settings.others.concat(other);
+    this.update();
+  },
+  onUpdateOther: function (other, index) {
+    this.settings.others[index] = other;
+    this.update();
+  },
+  onRemoveother: function (index) {
+    this.settings.others.splice(index, 1);
+    this.update();
+  },
   update: function () {
     this.trigger({
       settings: this.settings

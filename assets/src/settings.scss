@@ -20,6 +20,11 @@
     margin-bottom: 0px;
   }
 
+  ul {
+    list-style: none;
+    margin: 0;
+  }
+
 }
 
 .settings-left {
@@ -51,17 +56,16 @@
 }
 
 .settings-profile {
-  list-style: none;
-  // font-size: 18px;
   li:nth-child(even) { 
     background: $top-bkg-color;
   }
 }
+
 .settings-profile-item {
   padding: 5px;
 }
+
 .settings-account {
-  list-style: none;
 }
 
 .settings-account-item {

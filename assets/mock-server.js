@@ -28,7 +28,7 @@ walker.on('file', function (root, fileStats, next) {
     fs.readFile(filePath, 'utf8', function (err, data) {
       if (err) {
         throw err
-      };
+      }
       protagonist.parse(data, function (error, result) {
         try {
           resourceWalker(app, result.ast['resourceGroups']);
