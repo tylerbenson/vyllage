@@ -1,7 +1,6 @@
 package accounts.controller;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
+import accounts.service.Encryptor;
 import accounts.service.UserService;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -45,15 +45,15 @@ public class DocumentLinkController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private Encryptor linkEncryptor;
+
 	@RequestMapping(value = "/advice/{encodedDocumentLink}", method = RequestMethod.GET)
 	public String sharedLinkLogin(@PathVariable String encodedDocumentLink)
 			throws JsonParseException, JsonMappingException, IOException,
 			UserNotFoundException {
 
-		byte[] decodedBytes = Base64.getUrlDecoder().decode(
-				encodedDocumentLink.getBytes());
-
-		String json = new String(decodedBytes);
+		String json = linkEncryptor.decrypt(encodedDocumentLink);
 
 		DocumentLink documentLink = mapper.readValue(json, DocumentLink.class);
 
@@ -82,8 +82,7 @@ public class DocumentLinkController {
 
 		String json = mapper.writeValueAsString(documentLink);
 
-		String safeString = Base64.getUrlEncoder().encodeToString(
-				json.getBytes());
+		String safeString = linkEncryptor.encrypt(json);
 
 		return "/link/advice/" + safeString;
 	}
