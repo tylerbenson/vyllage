@@ -2,8 +2,11 @@ var React = require('react');
 var To = require('./FormTo');
 var Subject = require('./FormSubject');
 var Message = require('./FormMessage');
+var Reflux = require('reflux');
+var requestAdviceStore = require('./store');
 
 var Form = React.createClass({
+  mixins: [Reflux.connect(requestAdviceStore)],
   submitHandler: function (e) {
     e.preventDefault();
   },
