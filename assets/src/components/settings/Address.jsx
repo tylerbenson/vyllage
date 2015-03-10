@@ -1,6 +1,8 @@
 var React = require('react');
 var PrivacySelect = require('./PrivacySelect');
 var ContentEditable = require("react-contenteditable");
+var Actions = require('./actions');
+
 var Address = React.createClass({
   getInitialState: function () {
     return { edit: false };
@@ -11,11 +13,11 @@ var Address = React.createClass({
   },
   valueHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('address', {value: e.target.value, privacy: this.props.privacy});
+    Actions.changeSetting('address', {value: e.target.value, privacy: this.props.privacy});
   },
   privacyHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('address', {value: this.props.value, privacy: e.target.value});
+    Actions.changeSetting('address', {value: this.props.value, privacy: e.target.value});
   },
   keyPress: function (e) {
     e.stopPropagation();
@@ -44,7 +46,7 @@ var Address = React.createClass({
           <PrivacySelect 
             value={this.props.privacy}
             organization={this.props.organization}
-            onChange={this.props.privacyHandler} />
+            onChange={this.privacyHandler} />
         </div>
       </li>
     );

@@ -11,16 +11,16 @@ var Role = React.createClass({
   },
   changeHandler: function (e) {
     e.preventDefault();
-    Actions.changeSetting('role', e.target.value);
+    Actions.changeSetting('emailUpdates', e.target.value);
     this.setState({edit: false});
   },
   renderForm: function () {
     return (
       <select onChange={this.changeHandler} value={this.props.value}>
-        <option value='former student'>former student</option>
-        <option value='student'>student</option>
-        <option value='alumni'>alumni</option>
-        <option value='prospective student'>prospective student</option>
+        <option value='weekly'>weekly</option>
+        <option value='bi-weekly'>bi-weekly</option>
+        <option value='monthly'>monthly</option>
+        <option value='no-updates'>no updates</option>
       </select>
     );
   },
@@ -28,7 +28,7 @@ var Role = React.createClass({
     return (
       <li className="row settings-profile-item">
         <div className='nine columns'>
-          role: {this.state.edit ? this.renderForm(): this.props.value}
+          email updates: {this.state.edit ? this.renderForm(): this.props.value}
         </div>
         <div className='three columns'>
           <a className="" onClick={this.toggleHandler}>{this.state.edit ? 'update' : 'change'}</a>
