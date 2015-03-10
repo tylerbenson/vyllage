@@ -60,8 +60,8 @@ var Settings = React.createClass({
                 <Twitter {...settings.twitter} organization={settings.organization} changeSetting={this.changeSetting} />
                 <Linkedin {...settings.linkedin} organization={settings.organization} changeSetting={this.changeSetting} />
                 <Facebook {...settings.facebook} organization={settings.organization} changeSetting={this.changeSetting} />
-                <OtherList others={settings.others} organization={settings.organization} changeSetting={this.changeSetting} />
-                <Other {...settings.others} organization={settings.organization} changeSetting={this.changeSetting} />
+                <OtherList others={settings.others} organization={settings.organization} />
+                <Other {...settings.others} organization={settings.organization} />
                 <li className='row settings-account-item'>
                   <div className='offset-by-eight four columns text-center'>
                     <span className=''>delete account</span>

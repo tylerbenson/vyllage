@@ -1,11 +1,13 @@
 var React = require('react');
 var PrivacySelect = require('./PrivacySelect');
 var Actions = require('./actions');
+var validator = require("validator");
 
 var Other = React.createClass({
   getInitialState: function () {
     return { 
       edit: false,
+      error: false,
       value: '',
       privacy: 'organization'
     };
@@ -14,7 +16,6 @@ var Other = React.createClass({
     this.setState({edit: true});
   },
   valueHandler: function (e) {
-    console.log(e.target.value);
     e.preventDefault();
     this.setState({value: e.target.value});
   },
@@ -25,8 +26,16 @@ var Other = React.createClass({
   keyPress: function (e) {
     e.stopPropagation();
     if (e.key === 'Enter') {
-      Actions.addOther({value: this.state.value, privacy: this.state.privacy})
-      this.setState({edit: false});
+      if (validator.isURL(this.state.value)) {
+        Actions.addOther({value: this.state.value, privacy: this.state.privacy})
+        this.setState({
+          edit: false,
+          error: false,
+          value: ""
+        });
+      } else {
+        this.setState({error: true});
+      }
     }
   },
   renderForm: function () {
@@ -39,6 +48,7 @@ var Other = React.createClass({
           onKeyPress={this.keyPress}
           onChange={this.valueHandler} 
         />
+        {this.state.error ? <p className='error'>* Not a valid link</p>: null}
       </div>
     );
   },

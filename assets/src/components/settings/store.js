@@ -51,7 +51,7 @@ module.exports = Reflux.createStore({
     this.settings.others[index] = other;
     this.update();
   },
-  onRemoveother: function (index) {
+  onRemoveOther: function (index) {
     this.settings.others.splice(index, 1);
     this.update();
   },
