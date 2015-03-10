@@ -4,6 +4,7 @@ var Address = require('./Address');
 var Email = require('./Email');
 var Facebook = require('./Facebook');
 var FacebookAccount = require('./FacebookAccount');
+var EmailUpdates = require('./EmailUpdates');
 var GraduationDate = require('./GraduationDate');
 var Linkedin = require('./Linkedin');
 var Organization = require('./Organization');
@@ -35,6 +36,7 @@ var Settings = React.createClass({
                 <GraduationDate value={settings.graduationDate} />
                 <Organization value={settings.organization} />
                 <FacebookAccount value={settings.facebookAccount} />
+                <EmailUpdates value={settings.emailUpdates} />
                 <SharedLinks value={settings.sharedLinks} />
                 <Password />
               </ul>

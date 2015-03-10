@@ -6,6 +6,7 @@ var settings = {
   graduationDate: 'Aug 1, 2015',
   organization: 'Org Name',
   facebookAccount: true,
+  emailUpdates: 'weekly',
   sharedLinks: '',
   email: {
     value: ['nben888@gmail.com'],
@@ -39,7 +40,6 @@ var settings = {
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
   onChangeSetting: function (key, value) {
-    console.log(key, value);
     this.settings[key] = value;
     this.update();
   },
