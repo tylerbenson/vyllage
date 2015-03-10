@@ -9,10 +9,7 @@ var RecipentList = React.createClass({
   },
   editHandler: function (index, e) {
     e.preventDefault();
-    var recipient = this.props.recipients[index];
-    if (recipient.newRecipient) {
-      Actions.selectRecipient(index);
-    }
+    Actions.selectRecipient(index);
   },
   render: function () {
     var nodes = this.props.recipients.map(function (recipient, index) {

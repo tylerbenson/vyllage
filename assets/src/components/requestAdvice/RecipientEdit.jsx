@@ -23,7 +23,6 @@ var RecipientEdit = React.createClass({
   },
   changeHandler: function (key, e) {
     e.preventDefault();
-    console.log(key, e.target.value);
     Actions.changeRecipient(key, e.target.value)
     Actions.openSuggestions();
   },
@@ -85,7 +84,6 @@ var RecipientEdit = React.createClass({
   },
   render: function () {
     var recipient = this.props.recipient;
-    console.log(recipient);
     return (
       <div onBlur={this.blurHandler} onFocus={this.focusHandler}>
         <div className='rcpent-add'>
