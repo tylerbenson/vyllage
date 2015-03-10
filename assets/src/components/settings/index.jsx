@@ -13,46 +13,11 @@ var PhoneNumber = require('./PhoneNumber');
 var Role = require('./Role');
 var SharedLinks = require('./SharedLinks');
 var Twitter = require('./Twitter');
-
-var settings = {
-  name: 'Nathan Benson',
-  role: 'student',
-  graduationDate: 'Aug 1, 2015',
-  organization: 'Org Name',
-  facebookAccount: true,
-  sharedLinks: '',
-  email: {
-    value: ['nben888@gmail.com'],
-    privacy: 'everyone'
-  },
-  phoneNumber: {
-    value: '971.800.1565',
-    privacy: 'none'
-  },
-  address: {
-    value: '1906 NE 151st Cir <br /> Unit 15b <br /> Vancovuer, WA 98686',
-    privacy: 'none'
-  },
-  twitter: {
-    value: '@natespn',
-    privacy: 'everyone'
-  },
-  linkedin: {
-    value: 'www.linkedin.com/natebenson',
-    privacy: 'everyone'
-  },
-  facebook: {
-    value: 'www.facebook.com/natebenson',
-    privacy: 'everyone'
-  },
-  other: [
-  ]
-};
+var Reflux = require('reflux');
+var settingsStore = require('./store');
 
 var Settings = React.createClass({
-  getInitialState: function () {
-    return { settings: settings }
-  },
+  mixins: [Reflux.connect(settingsStore)],
   changeSetting : function (name, value) {
     var settings = this.state.settings;
     settings[name] = value;
@@ -60,7 +25,6 @@ var Settings = React.createClass({
   },
   render: function () {
     var settings = this.state.settings;
-
     return (
       <section className='container'>
         <div className='settings'>
@@ -69,7 +33,7 @@ var Settings = React.createClass({
               <div className='topper'>
                 <p>settings</p>
               </div>
-              <Name value={settings.name} changeSetting={this.changeSetting} />
+              <Name value={settings.name} />
               <ul className='settings-profile'>
                 <Role value={settings.role} changeSetting={this.changeSetting} />
                 <GraduationDate value={settings.graduationDate} changeSetting={this.changeSetting} />

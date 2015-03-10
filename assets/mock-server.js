@@ -13,7 +13,8 @@ var webpackConfig = require('./webpack.config.js');
 
 app.use(logger('dev'));
 app.use(webpackMiddleware(webpack(webpackConfig), {
-  publicPath: '/javascript'
+  publicPath: '/javascript',
+  lazy: false
 }));
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 app.use('/css', express.static(path.join(__dirname, 'public/css')));

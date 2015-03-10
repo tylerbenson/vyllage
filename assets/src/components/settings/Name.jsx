@@ -1,4 +1,5 @@
 var React = require('react');
+var Actions = require('./actions');
 
 var Name = React.createClass({
   getInitialState: function () {
@@ -10,7 +11,8 @@ var Name = React.createClass({
   },
   changeHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('name', e.target.value);
+    // this.props.changeSetting('name', e.target.value);
+    Actions.changeSetting('name', e.target.value);
   },
   keyPress: function (e) {
     if (e.key === 'Enter') {
