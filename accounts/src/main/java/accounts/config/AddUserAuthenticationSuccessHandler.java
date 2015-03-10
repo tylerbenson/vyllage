@@ -28,11 +28,15 @@ public class AddUserAuthenticationSuccessHandler extends
 	public void onAuthenticationSuccess(HttpServletRequest request,
 			HttpServletResponse response, Authentication authentication)
 			throws ServletException, IOException {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 
-		request.getSession().setAttribute("userId",
-				((User) auth.getPrincipal()).getUserId());
+		request.getSession().setAttribute("userId", user.getUserId());
+
+		request.getSession().setAttribute("userFirstName", user.getFirstName());
+
+		request.getSession().setAttribute("userLastNameName",
+				user.getLastName());
 
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
