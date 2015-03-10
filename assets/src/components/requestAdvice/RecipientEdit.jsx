@@ -10,28 +10,21 @@ var RecipientEdit = React.createClass({
       firstNameError: false,
       lastNameError: false,
       emailError: false,
-      recipient: {firstName: "", lastName: "", email: "", newRecipient: true}
-    }
-  },
-  componentWillReceiveProps: function (nextProps) {
-    if (nextProps.selectedRecipient !== null) {
-      this.setState({recipient: nextProps.recipients[nextProps.selectedRecipient]});
     }
   },
   validate: function () {
     var errors = {
-      firstNameError: !this.state.recipient.firstName,
-      lastNameError: !this.state.recipient.lastName,
-      emailError: !validator.isEmail(this.state.recipient.email)
+      firstNameError: !this.props.recipient.firstName,
+      lastNameError: !this.props.recipient.lastName,
+      emailError: !validator.isEmail(this.props.recipient.email)
     }
     this.setState(errors);
     return !(errors.firstNameError || errors.lastNameError || errors.emailError)
   },
   changeHandler: function (key, e) {
     e.preventDefault();
-    var recipient = this.state.recipient;
-    recipient[key] = e.target.value;
-    this.setState({recipient: recipient});
+    console.log(key, e.target.value);
+    Actions.changeRecipient(key, e.target.value)
     Actions.openSuggestions();
   },
   keyPress: function (e) {
@@ -53,7 +46,7 @@ var RecipientEdit = React.createClass({
   updateHandler: function (e) {
     e.preventDefault();
     var isValid = this.validate();
-    var recipient = this.state.recipient;
+    var recipient = this.props.recipient;
     if (isValid) {
       if (this.props.selectedRecipient === null) {
         Actions.addRecipient(recipient);
@@ -85,13 +78,14 @@ var RecipientEdit = React.createClass({
     Actions.closeSuggestions();
   },
   focusHandler: function () {
-    var recipient = this.state.recipient;
+    var recipient = this.props.recipient;
     if (recipient.firstName || recipient.lastName || recipient.email) {
       Actions.openSuggestions();
     }
   },
   render: function () {
-    var recipient = this.state.recipient;
+    var recipient = this.props.recipient;
+    console.log(recipient);
     return (
       <div onBlur={this.blurHandler} onFocus={this.focusHandler}>
         <div className='rcpent-add'>

@@ -22,12 +22,18 @@ var recipients = [
   {"firstName": "Nathan", "lastName": "Benson", email: "nathan.benson@vyllage.com" }
 ];
 
+var defaultRecipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+
 var RequestAdviceStore = Reflux.createStore({
   listenables: require('./actions'),
   onAddRecipient: function (recipient) {
     this.recipients.push(recipient)
     this.selectedRecipient = null;
     this.showSuggestions = false;
+    this.update();
+  },
+  onChangeRecipient: function (key, value) {
+    this.recipient[key] = value;
     this.update();
   },
   onUpdateRecipient: function (recipient, index) {
@@ -43,8 +49,8 @@ var RequestAdviceStore = Reflux.createStore({
     this.update();
   },
   selectRecipient: function (index) {
-    console.log(index);
     this.selectedRecipient = index;
+    this.recipient = this.recipients[index];
     this.update();
   },
   onSuggestionIndex: function (index) {
@@ -57,7 +63,6 @@ var RequestAdviceStore = Reflux.createStore({
     } else {
       this.onSelectRecommendedSuggestion(index - this.suggestions.recent.length);
     }
-    this.selectedRecipient = null;
     this.update();
   },
   onSelectRecentSuggestion: function (index) {
@@ -86,6 +91,7 @@ var RequestAdviceStore = Reflux.createStore({
       selectedSuggestion: this.selectedSuggestion,
       showSuggestions: this.showSuggestions,
       selectedRecipient: this.selectedRecipient,
+      recipient: this.recipient,
     })
   },
   getInitialState: function () {
@@ -94,12 +100,14 @@ var RequestAdviceStore = Reflux.createStore({
     this.selectedSuggestion = null;
     this.showSuggestions = false;
     this.selectedRecipient = null;
+    this.recipient = defaultRecipient;
     return {
       recipients: this.recipients,
       suggestions: this.suggestions,
       selectedSuggestion: this.selectedSuggestion,
       showSuggestions: this.showSuggestions,
       selectedRecipient: this.selectedRecipient,
+      recipient: this.recipient,
     }
   }
 });

@@ -16,6 +16,7 @@ var FormTo = React.createClass({
           </div>
           <div className='nine columns'>
             <RecipientEdit 
+              recipient={this.state.recipient}
               recipients={this.state.recipients}
               suggestions={this.state.suggestions}
               selectedRecipient={this.state.selectedRecipient}
