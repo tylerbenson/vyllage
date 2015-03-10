@@ -11,7 +11,6 @@ var Name = React.createClass({
   },
   changeHandler: function (e) {
     e.preventDefault();
-    // this.props.changeSetting('name', e.target.value);
     Actions.changeSetting('name', e.target.value);
   },
   keyPress: function (e) {

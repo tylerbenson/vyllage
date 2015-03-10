@@ -1,5 +1,6 @@
 var React = require('react');
 var PrivacySelect = require('./PrivacySelect');
+var Actions = require('./actions');
 
 var Linkedin = React.createClass({
   getInitialState: function () {
@@ -11,11 +12,11 @@ var Linkedin = React.createClass({
   },
   valueHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('linkedin', {value: e.target.value, privacy: this.props.privacy});
+    Actions.changeSetting('linkedin', {value: e.target.value, privacy: this.props.privacy});
   },
   privacyHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('linkedin', {value: this.props.value, privacy: e.target.value});
+    Actions.changeSetting('linkedin', {value: this.props.value, privacy: e.target.value});
   },
   keyPress: function (e) {
     e.stopPropagation();

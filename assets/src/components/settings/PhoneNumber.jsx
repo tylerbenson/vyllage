@@ -1,5 +1,6 @@
 var React = require('react');
 var PrivacySelect = require('./PrivacySelect');
+var Actions = require('./actions');
 
 var PhoneNumber = React.createClass({
   getInitialState: function () {
@@ -11,11 +12,11 @@ var PhoneNumber = React.createClass({
   },
   valueHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('phoneNumber', {value: e.target.value, privacy: this.props.privacy});
+    Actions.changeSetting('phoneNumber', {value: e.target.value, privacy: this.props.privacy});
   },
   privacyHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('phoneNumber', {value: this.props.value, privacy: e.target.value});
+    Actions.changeSetting('phoneNumber', {value: this.props.value, privacy: e.target.value});
   },
   keyPress: function (e) {
     e.stopPropagation();

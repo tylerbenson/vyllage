@@ -1,5 +1,6 @@
 var React = require('react');
 var PrivacySelect = require('./PrivacySelect');
+var Actions = require('./actions');
 
 var Email = React.createClass({
   getInitialState: function () {
@@ -11,11 +12,11 @@ var Email = React.createClass({
   },
   valueHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('email', {value: e.target.value, privacy: this.props.privacy});
+    Actions.changeSettings('email', {value: e.target.value, privacy: this.props.privacy});
   },
   privacyHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('email', {value: this.props.value, privacy: e.target.value});
+    Actions.changeSettings('email', {value: this.props.value, privacy: e.target.value});
   },
   keyPress: function (e) {
     e.stopPropagation();

@@ -1,4 +1,5 @@
 var React = require('react');
+var Actions = require('./actions');
 
 var Role = React.createClass({
   getInitialState: function () {
@@ -10,7 +11,7 @@ var Role = React.createClass({
   },
   changeHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('role', e.target.value);
+    Actions.changeSetting('role', e.target.value);
     this.setState({edit: false});
   },
   renderForm: function () {

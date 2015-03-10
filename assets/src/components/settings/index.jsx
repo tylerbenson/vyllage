@@ -19,11 +19,6 @@ var settingsStore = require('./store');
 
 var Settings = React.createClass({
   mixins: [Reflux.connect(settingsStore)],
-  changeSetting : function (name, value) {
-    var settings = this.state.settings;
-    settings[name] = value;
-    this.setState({settings: settings});
-  },
   render: function () {
     var settings = this.state.settings;
     return (
@@ -36,11 +31,11 @@ var Settings = React.createClass({
               </div>
               <Name value={settings.name} />
               <ul className='settings-profile'>
-                <Role value={settings.role} changeSetting={this.changeSetting} />
-                <GraduationDate value={settings.graduationDate} changeSetting={this.changeSetting} />
-                <Organization value={settings.organization} changeSetting={this.changeSetting} />
-                <FacebookAccount value={settings.facebookAccount} changeSetting={this.changeSetting} />
-                <SharedLinks value={settings.sharedLinks} changeSetting={this.changeSetting} />
+                <Role value={settings.role} />
+                <GraduationDate value={settings.graduationDate} />
+                <Organization value={settings.organization} />
+                <FacebookAccount value={settings.facebookAccount} />
+                <SharedLinks value={settings.sharedLinks} />
                 <Password />
               </ul>
             </div>
@@ -54,12 +49,12 @@ var Settings = React.createClass({
                     <span className=''>visible to:</span>
                   </div>
                 </li>
-                <Email {...settings.email} organization={settings.organization} changeSetting={this.changeSetting} />
-                <PhoneNumber {...settings.phoneNumber} organization={settings.organization} changeSetting={this.changeSetting} />
-                <Address {...settings.address} organization={settings.organization} changeSetting={this.changeSetting} />
-                <Twitter {...settings.twitter} organization={settings.organization} changeSetting={this.changeSetting} />
-                <Linkedin {...settings.linkedin} organization={settings.organization} changeSetting={this.changeSetting} />
-                <Facebook {...settings.facebook} organization={settings.organization} changeSetting={this.changeSetting} />
+                <Email {...settings.email} organization={settings.organization} />
+                <PhoneNumber {...settings.phoneNumber} organization={settings.organization} />
+                <Address {...settings.address} organization={settings.organization} />
+                <Twitter {...settings.twitter} organization={settings.organization} />
+                <Linkedin {...settings.linkedin} organization={settings.organization} />
+                <Facebook {...settings.facebook} organization={settings.organization} />
                 <OtherList others={settings.others} organization={settings.organization} />
                 <Other {...settings.others} organization={settings.organization} />
                 <li className='row settings-account-item'>
