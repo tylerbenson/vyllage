@@ -25,6 +25,12 @@ public class AdviceService {
 	@Value("${accounts.port}")
 	public String ACCOUNTS_PORT;
 
+	@Value("${documents.host}")
+	public String DOCUMENTS_HOST;
+
+	@Value("${documents.port}")
+	public String DOCUMENTS_PORT;
+
 	public UserFilterResponse getUsers(HttpServletRequest request, Long userId,
 			List<Long> excludedIds) {
 		UserFilterResponse response = new UserFilterResponse();
@@ -38,18 +44,19 @@ public class AdviceService {
 		HttpEntity<Object> entity = addCookieToHeader(request);
 
 		List<FilteredUser> advisors = getAdvisors(userId, entity);
-
 		Assert.notNull(advisors);
 
-		System.out.println("Received Advisors: ");
-		// advisors.forEach(System.out::println);
-
 		response.setRecommended(advisors);
+
+		List<FilteredUser> recentUsers = getRecentUsers(userId, entity);
+		Assert.notNull(recentUsers);
+
+		response.setRecent(recentUsers);
 
 		return response;
 	}
 
-	private HttpEntity<Object> addCookieToHeader(HttpServletRequest request) {
+	protected HttpEntity<Object> addCookieToHeader(HttpServletRequest request) {
 		HttpHeaders headers = new HttpHeaders();
 
 		headers.set("Cookie",
@@ -60,7 +67,17 @@ public class AdviceService {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<FilteredUser> getAdvisors(Long userId,
+	protected List<FilteredUser> getRecentUsers(Long userId,
+			HttpEntity<Object> entity) {
+
+		return restTemplate.exchange(
+				"http://{host}:" + DOCUMENTS_PORT + "/resume/recent/{userId}",
+				HttpMethod.GET, entity, List.class, DOCUMENTS_HOST, userId)
+				.getBody();
+	}
+
+	@SuppressWarnings("unchecked")
+	protected List<FilteredUser> getAdvisors(Long userId,
 			HttpEntity<Object> entity) {
 		return restTemplate
 				.exchange(
