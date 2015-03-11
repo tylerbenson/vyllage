@@ -9,16 +9,19 @@ var ArticleControlls =require('./components/freeform/article-controlls');
 var CommentsBlog = require('./components/freeform/comments-blog');
 var AddSections = require('./components/addSections/addSections');
 var request = require('superagent');
+var Reflux = require('reflux');
+
+var SectionsStore = require('./components/organization/store');
 
 var EmptyStateData =[
-{
+  {
     "type": "freeform",
     "title": "career goal",
     "sectionPosition": 1,
     "state": "shown",
     "description": ""
-},
-{
+  },
+  {
     "type": "experience",
     "title": "experience",
     "sectionPosition": 2,
@@ -32,67 +35,50 @@ var EmptyStateData =[
     "location": "",
     "roleDescription": "",
     "highlights": ""
-}
+  }
 ];
 
 function compare(a,b) {
-    
-    if (a.sectionPosition < b.sectionPosition){
-        return -1;
-    }
-    if (a.sectionPosition > b.sectionPosition) {
-        return 1;
-    }
-    return 0;
+  if (a.sectionPosition < b.sectionPosition){
+    return -1;
+  }
+  if (a.sectionPosition > b.sectionPosition) {
+    return 1;
+  }
+  return 0;
 }
 
 var MainContainer = React.createClass({  
+
+    // mixins: [Reflux.connect(SectionsStore)],
     
     getInitialState: function() {
-        return {mainData: []};
+      return {mainData: SectionsStore.getSections()};
     },
 
     componentDidMount : function() {
-        var self = this, documentId,
-            pathItems = window.location.pathname.split("/");
-        
-        if(pathItems.length > 2) {
-            documentId = pathItems[2];
+      this.unsubscribe = SectionsStore.listen(this.onChange);
+    },
 
-            request
-               .get('/resume/' + documentId + '/section')
-               .set('Accept', 'application/json')
-               .end(function(error, res) {
+    componentWillUnmount: function() {
+      this.unsubscribe();
+    },
 
-                    if (res.ok) {
-                        if(res.body.length == 0) {
-                            // data is empty eq. registration page, first logged in
-                            self.setState({mainData: ''});
-                        } else {
-                            self.setState({mainData: res.body});
-                        }
-                    } else {
-                        alert(res.text); // this is left intentionally 
-                        console.log(res.text); 
-                   }             
-            });
-        } else {
-            // this case should not happen, throw error
-        }
+    onChange: function(sections) {
+      this.setState({ mainData: sections });
     },
 
     componentDidUpdate: function() {
+      var resizingTextareas = [].slice.call(document.querySelectorAll('textarea'));
 
-        var resizingTextareas = [].slice.call(document.querySelectorAll('textarea'));
+      resizingTextareas.forEach(function(textarea) {
+        textarea.addEventListener('input', autoresize, false);
+      });
 
-        resizingTextareas.forEach(function(textarea) {
-          textarea.addEventListener('input', autoresize, false);
-        });
-
-        function autoresize() {
-            this.style.height = 0;
-            this.style.height = this.scrollHeight  +'px';
-        }
+      function autoresize() {
+          this.style.height = 0;
+          this.style.height = this.scrollHeight  +'px';
+      }
     },
 
     saveChanges: function (data) {
@@ -155,7 +141,7 @@ var MainContainer = React.createClass({
         }
     },
 
-    addSection: function (type,sectionPosition) {
+    addSection: function (type, sectionPosition) {
         var  position = sectionPosition,
              data = this.state.mainData;
 
@@ -229,256 +215,199 @@ var MainContainer = React.createClass({
         this.setState({mainData: data});
     },
 
-    // Get freeForm items
-    freeFormItems : function(result,addNewSection,firstElement) {
-        // This will be called when clicking on Add Section button, section will be displayed in edit mode
-        if(addNewSection) {
-            return (
-                 <article className="career-goal forceEditMode">
-                     <div className="row" id = {result.sectionId}>
-                         <div  className="twelve columns">
-                            <div className="u-pull-left full">
-                              <button className="u-pull-left article-btn"> {result.title} </button>
-                              <button className="u-pull-right article-btn addSection-btn" onClick={this.addSection.bind(null, result.title,result.sectionPosition)}> {result.title}</button>
-                            </div>
-                             
-                            <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
+    // Render freeForm items
+    freeFormItems : function(result, addNewSection, firstElement) {
 
-                            <ArticleControlls/>
+        var AddSectionButtons;
 
-                            <CommentsBlog/>  
-                        </div>
-                    </div>
-                </article>)
+        if(addNewSection || firstElement) {
+
+            AddSectionButtons = ( 
+              <div className="u-pull-left full">
+                <button className="u-pull-left article-btn"> {result.title} </button>
+                <button className="u-pull-right article-btn addSection-btn" 
+                    onClick={this.addSection.bind(null, result.title,result.sectionPosition)}> 
+                    {result.title}
+                </button>
+              </div>
+            );
         }
 
-        // this will be called on page rendering for the first item on each section , section will be displayed in main mode.
-        if(firstElement) {
-            return (
-                 <article className="career-goal ">
-                     <div className="row" id = {result.sectionId}>
-                         <div  className="twelve columns">
-                            <div className="u-pull-left full">
-                              <button className="u-pull-left article-btn"> {result.title} </button>
-                              <button className="u-pull-right article-btn addSection-btn " onClick={this.addSection.bind(null, result.title,result.sectionPosition)}> {result.title}</button>
-                            </div>
-                             
-                            <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
+        return (
+             <article className = {addNewSection? "career-goal forceEditMode" : firstElement ? "career-goal": "career-goal same-section"}>
+                 <div className="row" id = {result.sectionId}>
+                     <div  className="twelve columns">
 
-                            <ArticleControlls/>
+                        {AddSectionButtons}
+                         
+                        <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
 
-                            <CommentsBlog/>  
-                        </div>
+                        <ArticleControlls/>
+
+                        <CommentsBlog/>  
                     </div>
-                </article>)
-        } else {
-            // secondary items on main mode.
-            return (
-                <article className="career-goal same-section">
-                     <div className="row" id = {result.sectionId}>
-                         <div className="twelve columns">
-                                                                    
-                            <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
-
-                            <ArticleControlls/>
-
-                            <CommentsBlog/>  
-                        </div>
-                    </div>
-                </article>)
-        }
-
+                </div>
+            </article>
+        )
     },
 
-    // Get experience items
-    experienceItems : function(result,addNewSection,firstElement)
-    {
-        // This will be called when clicking on Add Section button, section will be displayed in edit mode
-        if(addNewSection) {
-             return (
-                    <article className="experience forceEditMode">
-                        <div className="row">
-                             <div className="twelve columns">
-                                 <div className="u-pull-left full">
-                                    <button className="u-pull-left article-btn"> {result.title} </button>
-                                    <button className="u-pull-right article-btn addSection-btn" onClick={this.addSection.bind(null, result.title,result.sectionPosition)}>{result.title}</button>
-                                </div>
+    // Render experience items
+    experienceItems : function(result, addNewSection, firstElement) {
+        var AddSectionButtons;
 
-                                <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
+        if(addNewSection || firstElement) {
 
-                                <ArticleControlls />
+            AddSectionButtons = ( 
+              <div className="u-pull-left full">
+                <button className="u-pull-left article-btn"> {result.title} </button>
+                <button className="u-pull-right article-btn addSection-btn"
+                    onClick={this.addSection.bind(null, result.title,result.sectionPosition)}>
+                    {result.title}
+                </button>
+              </div>
+            );
+        } 
+        return (
+            <article className = {addNewSection? "experience forceEditMode" : firstElement ? "experience": "experience same-section"}>
+                <div className="row">
+                     <div className="twelve columns">
+                        {AddSectionButtons}
 
-                                <CommentsBlog />
-                            </div>
-                        </div>
-                    </article>)
-        }
+                        <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
 
-        // this will be called on page rendering for the first item on each section , section will be displayed in main mode.
-        if(firstElement){
-            return (
-                 <article className="experience">
-                    <div className="row">
-                         <div className="twelve columns">
-                             <div className="u-pull-left full">
-                                <button className="u-pull-left article-btn"> {result.title} </button>
-                                <button className="u-pull-right article-btn addSection-btn" onClick={this.addSection.bind(null, result.title,result.sectionPosition)}>{result.title}</button>
-                            </div>
+                        <ArticleControlls />
 
-                            <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
-
-                            <ArticleControlls />
-
-                            <CommentsBlog />
-                        </div>
+                        <CommentsBlog />
                     </div>
-                </article>)
-        } else {
-            // secondary items on main mode.
-            return (
-                <article className="experience same-section">
-                    <div className="row">
-                         <div className="twelve columns">
-                                                                                                         
-                            <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
-
-                            <ArticleControlls />
-
-                            <CommentsBlog />
-                        </div>
-                    </div>
-                </article>)
-        }
-
+                </div>
+            </article>
+        )
     },
 
     render: function() {
-        var results = this.state.mainData,
-            that = this, experienceCount = 0,
-            educationCount = 0, careergoalCount = 0,
-            skillsCount = 0,  addNewItem = 0,
-            shouldHideEducation = false, shouldHideSkills = false;
+      var results = this.state.mainData,
+          that = this,
+          experienceCount = 0,
+          educationCount = 0,
+          careergoalCount = 0,
+          skillsCount = 0,
+          addNewItem = 0,
+          shouldHideEducation = false, 
+          shouldHideSkills = false;
 
-        if(results == '') {
-            this.state.mainData = EmptyStateData;
-             return (
-                <div>
-                    { 
-                        EmptyStateData.map(function(result) {
-                            if(result.type === "freeform"){
-                                return that.freeFormItems(that.state.mainData[0], true,true);
-                            }
-                            else{
-                                return that.experienceItems(that.state.mainData[1], true,true); 
-                            }
+      if(results == undefined || results == '') {
+        this.state.mainData = EmptyStateData;
+          return (
+            <div>
+                { 
+                  EmptyStateData.map(function(result) {
+                      if(result.type === "freeform"){
+                          return that.freeFormItems(that.state.mainData[0], true,true);
+                      }
+                      else{
+                          return that.experienceItems(that.state.mainData[1], true,true); 
+                      }
 
-                        })
-                    }
-                        <AddSections addSection={that.addSection} title={'education'}  position={results.length+1}/>
+                  })
+                }
+                <AddSections addSection={that.addSection} title={'education'}  position={this.state.mainData.length+1}/>
 
-                        <AddSections addSection={that.addSection} title={'skills'}  position={results.length+1}/>
-                   </div>
-                );
-
-        } else {
-            results.sort(compare);
-            return ( 
-                <div>{              
-                    // Create loop for elements.
-                    results.map(function(result) {
-                        // Check for item type
-                        if(result.type === "freeform"){
-                            addNewItem = 0;
-
-                            // Check for find edit item position
-                            if(that.state.editModePosition == result.sectionPosition)
-                            {
-                                // Case when have edit mode item.
-                                // Check for find first element (career goal), need for add button.
-                                if(result.title == "career goal") {
-                                    addNewItem = 1;
-                                    careergoalCount = careergoalCount + 1;
-                                }
-
-                                // Check for find first element (skills), need for add button.
-                                if(result.title == "skills") {
-                                    addNewItem = 1;
-                                    shouldHideSkills = true;
-                                    skillsCount = skillsCount + 1;
-                                }
-                                
-                                // return element
-                                return that.freeFormItems(result, true,true);
-                            } else {
-                                
-                                if(careergoalCount == 0  && result.title == "career goal") {
-                                    addNewItem = 1;
-                                    careergoalCount = careergoalCount + 1;
-                                }
-
-                                if(skillsCount == 0 && result.title == "skills") {
-                                    addNewItem = 1;
-                                    skillsCount = skillsCount + 1;
-                                    shouldHideSkills = true;
-                                }
-
-                                if (addNewItem == 1) {
-                                    addNewItem = 0;
-                                    return that.freeFormItems(result,false,true);
-                                }
-                                else {
-                                    return that.freeFormItems(result,false,false);
-                                }
-                            }
-                        }
-                        else {
-                            addNewItem = 0;
-
-                            if(that.state.editModePosition == result.sectionPosition)
-                            {
-                                if(result.title == "experience"){
-                                    addNewItem = 1;
-                                    experienceCount = experienceCount + 1;
-                                }
-
-                                if(result.title == "education"){
-                                    addNewItem = 1;
-                                    educationCount = educationCount + 1;
-                                    shouldHideEducation = true;
-                                }
-
-                                return that.experienceItems(result, true,true);
-
-                            }else{
-                                if(experienceCount == 0 && result.title == "experience"){
-                                    addNewItem = 1;
-                                    experienceCount = experienceCount + 1;
-                                }
-
-                                if(educationCount == 0 && result.title == "education"){
-                                    addNewItem = 1;
-                                    educationCount = educationCount + 1;
-                                    shouldHideEducation = true;
-                                }
-
-                                if (addNewItem == 1) {
-                                    addNewItem = 0;
-                                    return that.experienceItems(result,false,true);
-                                } else {
-                                    return that.experienceItems(result,false,false);
-                                }
-                            }
-                        }
-                        
-                        })
+                <AddSections addSection={that.addSection} title={'skills'}  position={this.state.mainData.length+1}/>
+            </div>
+          );
+      } else {
+        results.sort(compare);
+        return ( 
+          <div> 
+            {              
+              // Create loop for elements.
+              results.map(function(result) {
+                // Check for item type
+                if(result.type === "freeform"){
+                  addNewItem = 0;
+                    // Check for find edit item position
+                  if(that.state.editModePosition == result.sectionPosition) {
+                    // Case when have edit mode item.
+                    // Check for find first element (career goal), need for add button.
+                    if(result.title == "career goal") {
+                      addNewItem = 1;
+                      careergoalCount = careergoalCount + 1;
                     }
 
-                        <AddSections addSection={this.addSection} title={'education'} position={results.length+1} shouldHide = {shouldHideEducation} />
+                    // Check for find first element (skills), need for add button.
+                    if(result.title == "skills") {
+                      addNewItem = 1;
+                      shouldHideSkills = true;
+                      skillsCount = skillsCount + 1;
+                    }
+                    
+                    // return element
+                    return that.freeFormItems(result, true,true);
+                  } else {
+                    if(careergoalCount == 0  && result.title == "career goal") {
+                      addNewItem = 1;
+                      careergoalCount = careergoalCount + 1;
+                    }
 
-                        <AddSections addSection={this.addSection} title={'skills'} position={results.length+1} shouldHide = {shouldHideSkills}/>
-                </div>
-            );
-        }
+                    if(skillsCount == 0 && result.title == "skills") {
+                      addNewItem = 1;
+                      skillsCount = skillsCount + 1;
+                      shouldHideSkills = true;
+                    }
+
+                    if (addNewItem == 1) {
+                      addNewItem = 0;
+                      return that.freeFormItems(result,false,true);
+                    }
+                    else {
+                      return that.freeFormItems(result,false,false);
+                    }
+                  }
+                } else {
+                  addNewItem = 0;
+                  if(that.state.editModePosition == result.sectionPosition) {
+                    if(result.title == "experience"){
+                      addNewItem = 1;
+                      experienceCount = experienceCount + 1;
+                    }
+
+                    if(result.title == "education"){
+                      addNewItem = 1;
+                      educationCount = educationCount + 1;
+                      shouldHideEducation = true;
+                    }
+
+                    return that.experienceItems(result, true,true);
+
+                  } else {
+                    if(experienceCount == 0 && result.title == "experience"){
+                      addNewItem = 1;
+                      experienceCount = experienceCount + 1;
+                    }
+
+                    if(educationCount == 0 && result.title == "education"){
+                      addNewItem = 1;
+                      educationCount = educationCount + 1;
+                      shouldHideEducation = true;
+                    }
+
+                    if (addNewItem == 1) {
+                      addNewItem = 0;
+                      return that.experienceItems(result,false,true);
+                    } else {
+                      return that.experienceItems(result,false,false);
+                    }
+                  }
+                }
+              })
+            }
+
+            <AddSections addSection={this.addSection} title={'education'} position={results.length+1} shouldHide = {shouldHideEducation} />
+
+            <AddSections addSection={this.addSection} title={'skills'} position={results.length+1} shouldHide = {shouldHideSkills}/>
+          </div>
+        );
+      }
     }
 });
 
