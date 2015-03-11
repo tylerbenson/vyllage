@@ -218,70 +218,69 @@ var MainContainer = React.createClass({
     // Render freeForm items
     freeFormItems : function(result, addNewSection, firstElement) {
 
-        var AddSectionButtons;
+      var AddSectionButtons;
 
-        if(addNewSection || firstElement) {
+      if(addNewSection || firstElement) {
 
-            AddSectionButtons = ( 
-              <div className="u-pull-left full">
-                <button className="u-pull-left article-btn"> {result.title} </button>
-                <button className="u-pull-right article-btn addSection-btn" 
-                    onClick={this.addSection.bind(null, result.title,result.sectionPosition)}> 
-                    {result.title}
-                </button>
-              </div>
-            );
-        }
+        AddSectionButtons = ( 
+          <div className="u-pull-left full">
+            <button className="u-pull-left article-btn"> {result.title} </button>
+            <button className="u-pull-right article-btn addSection-btn" 
+                onClick={this.addSection.bind(null, result.title,result.sectionPosition)}> 
+                {result.title}
+            </button>
+          </div>
+        );
+      }
 
-        return (
-             <article className = {addNewSection? "career-goal forceEditMode" : firstElement ? "career-goal": "career-goal same-section"}>
-                 <div className="row" id = {result.sectionId}>
-                     <div  className="twelve columns">
+      return (
+       <article className = {addNewSection? "career-goal forceEditMode" : firstElement ? "career-goal": "career-goal same-section"}>
+        <div className="row" id = {result.sectionId}>
+          <div className="twelve columns">
 
-                        {AddSectionButtons}
-                         
-                        <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
+            {AddSectionButtons}
 
-                        <ArticleControlls/>
+            <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
 
-                        <CommentsBlog/>  
-                    </div>
-                </div>
-            </article>
-        )
+            <ArticleControlls/>
+
+            <CommentsBlog/>  
+          </div>
+        </div>
+      </article>
+      )
     },
 
     // Render experience items
     experienceItems : function(result, addNewSection, firstElement) {
-        var AddSectionButtons;
+      var AddSectionButtons;
 
-        if(addNewSection || firstElement) {
+      if(addNewSection || firstElement) {
+        AddSectionButtons = ( 
+          <div className="u-pull-left full">
+            <button className="u-pull-left article-btn"> {result.title} </button>
+            <button className="u-pull-right article-btn addSection-btn"
+                onClick={this.addSection.bind(null, result.title,result.sectionPosition)}>
+                {result.title}
+            </button>
+          </div>
+        );
+      } 
+      return (
+        <article className = {addNewSection? "experience forceEditMode" : firstElement ? "experience": "experience same-section"}>
+          <div className="row">
+            <div className="twelve columns">
+              {AddSectionButtons}
 
-            AddSectionButtons = ( 
-              <div className="u-pull-left full">
-                <button className="u-pull-left article-btn"> {result.title} </button>
-                <button className="u-pull-right article-btn addSection-btn"
-                    onClick={this.addSection.bind(null, result.title,result.sectionPosition)}>
-                    {result.title}
-                </button>
-              </div>
-            );
-        } 
-        return (
-            <article className = {addNewSection? "experience forceEditMode" : firstElement ? "experience": "experience same-section"}>
-                <div className="row">
-                     <div className="twelve columns">
-                        {AddSectionButtons}
+              <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
 
-                        <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
+              <ArticleControlls />
 
-                        <ArticleControlls />
-
-                        <CommentsBlog />
-                    </div>
-                </div>
-            </article>
-        )
+              <CommentsBlog />
+            </div>
+          </div>
+        </article>
+      )
     },
 
     render: function() {
