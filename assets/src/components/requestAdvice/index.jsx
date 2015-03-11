@@ -12,6 +12,9 @@ var Form = React.createClass({
     e.preventDefault();
     Actions.postRequestAdvice();
   },
+  cancelHandler: function (e) {
+    window.location = '/resume';
+  },
   render: function () {
     return (
       <section className="container request-advice">
@@ -27,8 +30,8 @@ var Form = React.createClass({
                 <div className='request-advice-form-message'>
                   <Message message={this.state.message} />
                   <div className='u-pull-right'>
-                    <button className="send-btn">send</button>
-                    <button className="cancel-btn">cancel</button>
+                    <button type='submit' className="send-btn" onClick={this.submitHandler}>send</button>
+                    <button className="cancel-btn" onClick={this.cancelHandler}>cancel</button>
                   </div>
                 </div>
               </div>
