@@ -3,11 +3,8 @@ var RecipientEdit = require('./RecipientEdit');
 var RecipientList = require('./RecipientList');
 var Suggestions = require('./RecipientSuggestions');
 var assign = require('lodash.assign');
-var Reflux =require('reflux');
-var requestAdviceStore = require('./store');
 
 var FormTo = React.createClass({
-  mixins: [Reflux.connect(requestAdviceStore)],
   render: function () {
     return (
         <div className='request-advice-form-to row'>
@@ -16,19 +13,19 @@ var FormTo = React.createClass({
           </div>
           <div className='nine columns'>
             <RecipientEdit 
-              recipient={this.state.recipient}
-              recipients={this.state.recipients}
-              suggestions={this.state.suggestions}
-              selectedRecipient={this.state.selectedRecipient}
-              selectedSuggestion={this.state.selectedSuggestion}
+              recipient={this.props.recipient}
+              recipients={this.props.recipients}
+              suggestions={this.props.suggestions}
+              selectedRecipient={this.props.selectedRecipient}
+              selectedSuggestion={this.props.selectedSuggestion}
             />
             <RecipientList 
-              recipients={this.state.recipients}
-              selectedRecipient={this.state.selectedRecipient} />
+              recipients={this.props.recipients}
+              selectedRecipient={this.props.selectedRecipient} />
             <Suggestions
-              show={this.state.showSuggestions}
-              suggestions={this.state.suggestions}
-              selectedSuggestion={this.state.selectedSuggestion}
+              show={this.props.showSuggestions}
+              suggestions={this.props.suggestions}
+              selectedSuggestion={this.props.selectedSuggestion}
             />
           </div>
           <div className="two columns fb-button">

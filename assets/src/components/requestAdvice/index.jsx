@@ -3,10 +3,10 @@ var To = require('./FormTo');
 var Subject = require('./FormSubject');
 var Message = require('./FormMessage');
 var Reflux = require('reflux');
-var requestAdviceStore = require('./store');
+var RequestAdviceStore = require('./store');
 
 var Form = React.createClass({
-  mixins: [Reflux.connect(requestAdviceStore)],
+  mixins: [Reflux.connect(RequestAdviceStore)],
   submitHandler: function (e) {
     e.preventDefault();
   },
@@ -19,7 +19,7 @@ var Form = React.createClass({
         <div className='row'>
           <div className='twelve columns'>
             <form className='request-advice-form' onSubmit={this.submitHandler}>
-              <To />
+              <To {...this.state} />
               <Subject />
               <div className='offset-by-one nine columns'>
                 <div className='request-advice-form-message'>
