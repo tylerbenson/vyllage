@@ -26,7 +26,8 @@ var Address = React.createClass({
     }
   },
   renderForm: function () {
-    return <ContentEditable html={this.props.value} onChange={this.valueHandler} />;
+    return <div className='editable'><ContentEditable html={this.props.value} onChange={this.valueHandler} /></div>;
+    // return <textarea onChange={this.valueHandler}>{this.props.value}</textarea>
   }, 
   render: function () {
     return (
