@@ -5,6 +5,10 @@
   margin-left: -10px;
 }
 
+.gray-text {
+  color: $subheader-color;
+}
+
 .settings {
   background: white;
   border: 1px solid $border-color;
@@ -20,14 +24,20 @@
     margin-bottom: 0px;
   }
 
+  ul {
+    list-style: none;
+    margin: 0;
+  }
+
 }
 
 .settings-left {
   border-right: 1px solid $border-color;
+  height: 800px;
 }
 
 .settings-right {
-  // margin: 0;
+ 
 }
 
 .topper {
@@ -51,23 +61,26 @@
 }
 
 .settings-profile {
-  list-style: none;
-  // font-size: 18px;
   li:nth-child(even) { 
     background: $top-bkg-color;
   }
 }
+
 .settings-profile-item {
   padding: 5px;
 }
+
 .settings-account {
-  list-style: none;
 }
 
 .settings-account-item {
   padding: 10px 20px 10px 10px;
 }
 
+.settings-last-update {
+  padding: 10px;
+  border-right: 1px solid $border-color;
+}
 
 
 @import './components/header/header';

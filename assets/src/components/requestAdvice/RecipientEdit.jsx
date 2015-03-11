@@ -2,6 +2,7 @@ var React = require('react');
 var _pick = require('lodash.pick');
 var Suggestions = require('./RecipientSuggestions');
 var validator = require('validator');
+var Actions = require('./actions');
 
 var RecipientEdit = React.createClass({
   getInitialState: function () {
@@ -22,19 +23,23 @@ var RecipientEdit = React.createClass({
   },
   changeHandler: function (key, e) {
     e.preventDefault();
-    this.props.onChange(key, e.target.value);
+    Actions.changeRecipient(key, e.target.value)
+    Actions.openSuggestions();
   },
   keyPress: function (e) {
     if (e.key === 'Enter') {
       if (this.props.selectedSuggestion === null) {
         this.updateHandler(e);
       } else {
-        this.props.selectSuggestion(this.props.selectedSuggestion)
+        Actions.selectSuggestion(this.props.selectedSuggestion);
         this.setState(this.getInitialState());
       }
     } 
+
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      this.props.changeSelectedSuggestion(e);
+      this.changeSelectedSuggestion(e);
+    } else {
+      Actions.suggestionIndex(null);
     }
   },
   updateHandler: function (e) {
@@ -42,13 +47,45 @@ var RecipientEdit = React.createClass({
     var isValid = this.validate();
     var recipient = this.props.recipient;
     if (isValid) {
-      this.props.onSubmit(recipient);
+      if (this.props.selectedRecipient === null) {
+        Actions.addRecipient(recipient);
+      } else {
+        Actions.updateRecipient(recipient, this.props.selectedRecipient)
+      }
+      this.setState(this.getInitialState());
+    }
+  },
+  changeSelectedSuggestion: function (e) {
+    var totalSuggestions = this.props.suggestions.recent.length + this.props.suggestions.recommended.length
+    var selectedSuggestion;
+    if (e.key === 'ArrowDown') {
+      if (this.props.selectedSuggestion === null) {
+        selectedSuggestion = 0;
+      } else if (this.props.selectedSuggestion < totalSuggestions -1) {
+        selectedSuggestion = this.props.selectedSuggestion + 1;
+      } else {
+        selectedSuggestion = this.props.selectedSuggestion;
+      }
+    }
+
+    if (e.key === 'ArrowUp') {
+      selectedSuggestion = (this.props.selectedSuggestion > 0)? this.props.selectedSuggestion - 1: 0;
+    } 
+    Actions.suggestionIndex(selectedSuggestion);
+  },
+  blurHandler: function () {
+    Actions.closeSuggestions();
+  },
+  focusHandler: function () {
+    var recipient = this.props.recipient;
+    if (recipient.firstName || recipient.lastName || recipient.email) {
+      Actions.openSuggestions();
     }
   },
   render: function () {
     var recipient = this.props.recipient;
     return (
-      <div onBlur={this.props.closeSuggestions} onFocus={this.props.openSuggestions}>
+      <div onBlur={this.blurHandler} onFocus={this.focusHandler}>
         <div className='rcpent-add'>
           <div className='three columns'>
             <input 
@@ -92,8 +129,3 @@ var RecipientEdit = React.createClass({
 
 module.exports = RecipientEdit;
 
-// <Suggestions
-//             show={this.state.showSuggestions}
-//             position={this.state.position}
-//             selectSuggestion={this.selectSuggestion}
-//           />

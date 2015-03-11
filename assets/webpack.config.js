@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var path = require('path');
 
@@ -10,6 +11,7 @@ module.exports = {
     'settings.js': './src/settings.jsx'
   },
   output: {
+    publicPath: '/javascript',
     path: path.join(__dirname, 'public', 'javascript'),
     filename: '[name]'
   },
@@ -26,5 +28,6 @@ module.exports = {
   },
   plugins: [
     new CommonsChunkPlugin('base.js'),
+    new webpack.HotModuleReplacementPlugin()
   ]
 };

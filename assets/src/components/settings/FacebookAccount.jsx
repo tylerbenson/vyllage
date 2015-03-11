@@ -1,4 +1,5 @@
 var React = require('react');
+var Actions = require('./actions');
 
 var FacebookAccount = React.createClass({
   getInitialState: function () {
@@ -7,7 +8,7 @@ var FacebookAccount = React.createClass({
   removeHandler: function (e) {
     e.preventDefault();
     if (this.state.confirm) {
-      this.props.changeSetting('facebookAccount', false);
+      Actions.changeSetting('facebookAccount', false);
       this.setState({
         confirm: false
       })

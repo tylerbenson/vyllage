@@ -10,6 +10,7 @@
     "react-contenteditable": "git+https://github.com/lovasoa/react-contenteditable#b969aaf2ce",
     "react-layer-mixin": "^0.1.0",
     "react-layers": "^0.3.1",
+    "reflux": "^0.2.6",
     "superagent": "^0.21.0",
     "validator": "^3.32.0"
   },
@@ -54,7 +55,7 @@
   },
   "scripts": {
     "httpd": "./node_modules/.bin/http-server public -o -c-1",
-    "start": "nodemon -e js,md mock-server.js",
+    "start": "nodemon mock-server.js -e js,md  -w api -w mock-server.js -w webpack.config.js",
     "xprepublish": "./node_modules/.bin/bower install --config.interactive=false",
     "clean": "./node_modules/.bin/gulp clean",
     "build": "./node_modules/.bin/gulp build",

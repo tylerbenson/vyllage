@@ -1,17 +1,15 @@
 var React = require('react');
 var cx = require('react/lib/cx');
+var Actions = require('./actions');
 
 var RecipentList = React.createClass({
   removeHandler: function (index, e) {
     e.preventDefault();
-    this.props.removeRecipient(index);
+    Actions.removeRecipient(index);
   },
   editHandler: function (index, e) {
     e.preventDefault();
-    var recipient = this.props.recipients[index];
-    if (recipient.newRecipient) {
-      this.props.selectRecipient(index);
-    }
+    Actions.selectRecipient(index);
   },
   render: function () {
     var nodes = this.props.recipients.map(function (recipient, index) {

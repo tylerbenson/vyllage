@@ -1,4 +1,5 @@
 var React = require('react');
+var Actions = require('./actions');
 
 var GraduationDate = React.createClass({
   getInitialState: function () {
@@ -10,7 +11,7 @@ var GraduationDate = React.createClass({
   },
   changeHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('graduationDate', e.target.value);
+    Actions.changeSetting('graduationDate', e.target.value);
   },
   keyPress: function (e) {
     // prevent default on keyPress is prevent onChange event from triggering if input is empty

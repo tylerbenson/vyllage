@@ -1,5 +1,6 @@
 var React = require('react');
 var PrivacySelect = require('./PrivacySelect');
+var Actions = require('./actions');
 
 var Twitter = React.createClass({
   getInitialState: function () {
@@ -11,11 +12,11 @@ var Twitter = React.createClass({
   },
   valueHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('twitter', {value: e.target.value, privacy: this.props.privacy});
+    Actions.changeSetting('twitter', {value: e.target.value, privacy: this.props.privacy});
   },
   privacyHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('twitter', {value: this.props.value, privacy: e.target.value});
+    Actions.changeSetting('twitter', {value: this.props.value, privacy: e.target.value});
   },
   keyPress: function (e) {
     e.stopPropagation();
@@ -52,7 +53,7 @@ var Twitter = React.createClass({
           <PrivacySelect
             value={this.props.privacy} 
             organization={this.props.organization}
-            onChange={this.props.privacyHandler} />
+            onChange={this.privacyHandler} />
         </div>
       </li>
     );

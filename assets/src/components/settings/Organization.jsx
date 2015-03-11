@@ -1,4 +1,5 @@
 var React = require('react');
+var Actions = require('./actions');
 
 var Organization = React.createClass({
   getInitialState: function () {
@@ -10,7 +11,7 @@ var Organization = React.createClass({
   },
   changeHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('organization', e.target.value);
+    Actions.changeSetting('organization', e.target.value);
   },
   keyPress: function (e) {
     e.stopPropagation();

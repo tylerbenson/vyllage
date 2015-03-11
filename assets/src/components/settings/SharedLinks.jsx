@@ -1,4 +1,5 @@
 var React = require('react');
+var Actions = require('./actions');
 
 var SharedLinks = React.createClass({
   getInitialState: function () {
@@ -7,7 +8,7 @@ var SharedLinks = React.createClass({
   removeHandler: function (e) {
     e.preventDefault();
     if (this.state.confirm) {
-      this.props.changeSetting('sharedLinks', false);
+      Actions.changeSetting('sharedLinks', false);
       this.setState({
         confirm: false
       })

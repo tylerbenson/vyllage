@@ -1,4 +1,3 @@
-
 # Endpoint for loading the request advice form
 ## GET /resume/{documentId}/ask-advice
 + Parameters
