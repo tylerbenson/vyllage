@@ -36,8 +36,24 @@ var RequestAdviceStore = Reflux.createStore({
         }
       })
   },
+  onGetSuggestions: function () {
+    request
+      .get('/suggestions')
+      .query({firstName: this.recipient.firstName})
+      .query({lastName: this.recipient.lastName})
+      .query({email: this.recipient.email})
+      .end(function (err, res) {
+        if (res.status === 200) {
+          this.suggestions = res.body;
+        } else {
+          // placeholder suggestions are used for temporary use and should be removed for production
+          this.suggestions = suggestions;
+        }
+      }.bind(this))
+  },
   onChangeRecipient: function (key, value) {
     this.recipient[key] = value;
+    this.onGetSuggestions();
     this.update();
   },
   onAddRecipient: function (recipient) {
@@ -127,7 +143,7 @@ var RequestAdviceStore = Reflux.createStore({
   },
   getInitialState: function () {
     this.recipients = [];
-    this.suggestions = suggestions;
+    this.suggestions = {};
     this.selectedSuggestion = null;
     this.showSuggestions = false;
     this.selectedRecipient = null;
