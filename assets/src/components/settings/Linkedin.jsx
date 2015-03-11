@@ -8,7 +8,7 @@ var Linkedin = React.createClass({
   },
   editHandler: function (e) {
     e.preventDefault();
-    this.setState({edit: true});
+    this.setState({edit: !this.state.edit});
   },
   valueHandler: function (e) {
     e.preventDefault();
