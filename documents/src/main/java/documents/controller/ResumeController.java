@@ -24,6 +24,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
+import documents.model.FilteredUser;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountNames;
 import documents.services.AccountService;
@@ -126,6 +127,20 @@ public class ResumeController {
 			ElementNotFoundException {
 
 		documentService.deleteSection(sectionId);
+	}
+
+	@RequestMapping(value = "{documentId}/recentUsers", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<FilteredUser> getRecentUsers(
+			HttpServletRequest request, @PathVariable final Long documentId)
+			throws JsonProcessingException, IOException,
+			ElementNotFoundException {
+
+		// Document document = documentService.getDocument(documentId);
+		List<Long> userIds = documentService
+				.getRecentUsersForDocument(documentId);
+
+		// recentUsers
+		return null;
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.POST, consumes = "application/json")

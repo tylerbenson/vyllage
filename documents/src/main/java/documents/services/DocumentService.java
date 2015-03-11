@@ -11,6 +11,7 @@ import documents.model.DocumentSection;
 import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
+import documents.repository.SuggestionRepository;
 
 /**
  * This service takes care of saving, retrieving and manipulating documents.
@@ -23,6 +24,9 @@ public class DocumentService {
 
 	private final Logger logger = Logger.getLogger(DocumentService.class
 			.getName());
+
+	@Autowired
+	private SuggestionRepository suggestionRepository;
 
 	@Autowired
 	private DocumentRepository documentRepository;
@@ -110,10 +114,16 @@ public class DocumentService {
 	public void deleteSection(Long sectionId) {
 		documentSectionRepository.delete(sectionId);
 	}
-	
+
 	public Document getDocumentByUser(Long userId)
 			throws ElementNotFoundException {
 		return documentRepository.getDocumentByUser(userId);
+	}
+
+	public List<Long> getRecentUsersForDocument(Long documentId) {
+		// suggestionRepository.getForDocument(documentId);
+
+		return null;
 	}
 
 }

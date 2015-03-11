@@ -31,8 +31,8 @@ public class AdviceService {
 	@Value("${documents.port}")
 	public String DOCUMENTS_PORT;
 
-	public UserFilterResponse getUsers(HttpServletRequest request, Long userId,
-			List<Long> excludedIds) {
+	public UserFilterResponse getUsers(HttpServletRequest request,
+			Long documentId, Long userId, List<Long> excludedIds) {
 		UserFilterResponse response = new UserFilterResponse();
 		// get recent users from Documents:
 		// send my user id
@@ -48,7 +48,7 @@ public class AdviceService {
 
 		response.setRecommended(advisors);
 
-		List<FilteredUser> recentUsers = getRecentUsers(userId, entity);
+		List<FilteredUser> recentUsers = getRecentUsers(documentId, entity);
 		Assert.notNull(recentUsers);
 
 		response.setRecent(recentUsers);
@@ -67,13 +67,13 @@ public class AdviceService {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected List<FilteredUser> getRecentUsers(Long userId,
+	protected List<FilteredUser> getRecentUsers(Long documentId,
 			HttpEntity<Object> entity) {
 
 		return restTemplate.exchange(
-				"http://{host}:" + DOCUMENTS_PORT + "/resume/recent/{userId}",
-				HttpMethod.GET, entity, List.class, DOCUMENTS_HOST, userId)
-				.getBody();
+				"http://{host}:" + DOCUMENTS_PORT
+						+ "/resume/{documentId}/recentUsers", HttpMethod.GET,
+				entity, List.class, DOCUMENTS_HOST, documentId).getBody();
 	}
 
 	@SuppressWarnings("unchecked")

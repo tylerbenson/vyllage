@@ -31,10 +31,11 @@ public class AdviceRequestController {
 		return "requestAdvice";
 	}
 
-	@RequestMapping(value = "users", method = RequestMethod.GET)
-	public @ResponseBody UserFilterResponse getUsers(HttpServletRequest request) {
+	@RequestMapping(value = "{documentId}/users", method = RequestMethod.GET)
+	public @ResponseBody UserFilterResponse getUsers(
+			HttpServletRequest request, @PathVariable final Long documentId) {
 		Long userId = (Long) request.getSession().getAttribute("userId");
 		// @RequestBody List<Long> excludedIds
-		return service.getUsers(request, userId, Arrays.asList(0L));
+		return service.getUsers(request, documentId, userId, Arrays.asList(0L));
 	}
 }

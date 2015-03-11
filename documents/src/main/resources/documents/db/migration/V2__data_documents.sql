@@ -52,10 +52,10 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"description": "basket weaving, spear fishing, dominion"
 }',CURRENT_DATE(), CURRENT_DATE());
 
-insert into DOCUMENTS.comments(sectionId, sectionVersion, username, commentText, lastModified) values(124, 1, 'mario', 'Its a me, Mario!', CURRENT_DATE());
-insert into DOCUMENTS.comments(sectionId, sectionVersion, username, commentText, lastModified) values(126, 1, 'pretendergod', 'Well played.', CURRENT_DATE());
+insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(124, 1, 0, 'Its a me, Mario!', CURRENT_DATE());
+insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(126, 1, 0, 'Well played.', CURRENT_DATE());
 
-insert into DOCUMENTS.suggestions(sectionId, sectionVersion, username, jsonDocument, lastModified) values (124, 1, 'link', '{
+insert into DOCUMENTS.suggestions(section_Id, section_Version, user_id, json_Document, last_Modified) values (124, 1, 0, '{
 	"type": "freeform",
 	"title": "career goal",
 	"sectionId": 123,
