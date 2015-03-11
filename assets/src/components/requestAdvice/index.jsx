@@ -20,10 +20,10 @@ var Form = React.createClass({
           <div className='twelve columns'>
             <form className='request-advice-form' onSubmit={this.submitHandler}>
               <To {...this.state} />
-              <Subject />
+              <Subject subject={this.state.subject}/>
               <div className='offset-by-one nine columns'>
                 <div className='request-advice-form-message'>
-                  <Message />
+                  <Message message={this.state.message} />
                   <div className='u-pull-right'>
                     <button className="send-btn">send</button>
                     <button className="cancel-btn">cancel</button>

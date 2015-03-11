@@ -90,8 +90,16 @@ var RequestAdviceStore = Reflux.createStore({
     this.update();
   },
   closeSuggestions: function () {
-    this.showSuggestions = false
-    this.selectedRecipient = null
+    this.showSuggestions = false;
+    this.selectedRecipient = null;
+    this.update();
+  },
+  updateSubject: function (subject) {
+    this.subject = subject;
+    this.update();
+  },
+  updateMessage: function (message) {
+    this.message = message;
     this.update();
   },
   update: function () {
@@ -102,6 +110,8 @@ var RequestAdviceStore = Reflux.createStore({
       showSuggestions: this.showSuggestions,
       selectedRecipient: this.selectedRecipient,
       recipient: this.recipient,
+      subject: this.subject,
+      message: this.message
     })
   },
   getInitialState: function () {
@@ -111,6 +121,8 @@ var RequestAdviceStore = Reflux.createStore({
     this.showSuggestions = false;
     this.selectedRecipient = null;
     this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+    this.subject = '<p>Could you provide me some feedback on my resume?</p>';
+    this.message = '<p>I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?</p><br/><p>Thanks,</p><p>Nathan</p>';
     return {
       recipients: this.recipients,
       suggestions: this.suggestions,
@@ -118,6 +130,8 @@ var RequestAdviceStore = Reflux.createStore({
       showSuggestions: this.showSuggestions,
       selectedRecipient: this.selectedRecipient,
       recipient: this.recipient,
+      subject: this.subject,
+      message: this.message,
     }
   }
 });
