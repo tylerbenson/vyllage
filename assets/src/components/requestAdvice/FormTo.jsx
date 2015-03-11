@@ -28,11 +28,6 @@ var FormTo = React.createClass({
               selectedSuggestion={this.props.selectedSuggestion}
             />
           </div>
-          <div className="two columns fb-button">
-            <span className="small-text">ask your</span><br/>
-            <span className="big-text">facebook</span><br/>
-            <span className="small-text">friends</span><br/>
-          </div>
         </div>
     );
   }
