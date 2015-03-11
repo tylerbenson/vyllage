@@ -8,7 +8,7 @@ var FormTo = React.createClass({
   render: function () {
     return (
         <div className='request-advice-form-to row'>
-          <div className="one column rqst-key-word" style={{paddingTop: '16px'}}>
+          <div className="one column" style={{paddingTop: '16px', textAlign: 'center'}}>
             to:
           </div>
           <div className='nine columns'>

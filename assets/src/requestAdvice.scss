@@ -37,13 +37,7 @@
   padding: 16px;
 }
 
-
-.rqst-key-word {
-  text-align: center;
-  // color: #887b94;
-}
-
-.rcpent-add {
+.recipient-add {
   padding: 10px 20px 10px 10px;
   height: 35px;
   background-color: lighten($top-bkg-color, 5%);
@@ -52,8 +46,8 @@
   }
 }
 
-.rcpent-list {
-	.rcpent {
+.recipient-list {
+	.recipient {
     display: inline-block;
     float: left;
     border: 1px solid $border-color;
@@ -64,14 +58,14 @@
       color: #000;
       padding: 10px;
     }
-    .rcpent-delete {
+    .recipient-delete {
       cursor: pointer;
     }
 	}
-  .rcpent-selected {
+  .recipient-selected {
     border: 1px solid darken($border-color, 20%);
   }
-  .rcpent-editable {
+  .recipient-editable {
     background: white;
     cursor: pointer;
   }
@@ -151,7 +145,7 @@
   }
 }
 
-.rcpent-button {
+.recipient-button {
   background: #4d4d4d; //$article-btn-bkg-color;
   margin: 0 0 0 10px;
   font-size: 32px;
@@ -162,11 +156,5 @@
   text-align: center;
   cursor: pointer;
 }
-
-// .rcpent-button-add {
-// }
-
-// .rcpent-button-save {
-// }
 
 @import './components/header/header';
