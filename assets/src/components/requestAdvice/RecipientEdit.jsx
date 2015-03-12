@@ -86,7 +86,7 @@ var RecipientEdit = React.createClass({
     var recipient = this.props.recipient;
     return (
       <div onBlur={this.blurHandler} onFocus={this.focusHandler}>
-        <div className='rcpent-add'>
+        <div className='recipient-add'>
           <div className='three columns'>
             <input 
               type='text'
@@ -117,7 +117,7 @@ var RecipientEdit = React.createClass({
             {this.state.emailError? <p className='error'>* invalid email</p>: null}
           </div>
           <div className='one columns'>
-            <div className='rcpent-button' onClick={this.updateHandler}>
+            <div className='recipient-button' onClick={this.updateHandler}>
               {this.props.selectedRecipient === null? <p>+</p>: <p>&#10004;</p>}
             </div>
           </div>

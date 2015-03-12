@@ -14,19 +14,19 @@ var RecipentList = React.createClass({
   render: function () {
     var nodes = this.props.recipients.map(function (recipient, index) {
       var classes = {
-        rcpent: true,
-        'rcpent-selected': this.props.selectedRecipient === index,
-        'rcpent-editable': recipient.newRecipient 
+        recipient: true,
+        'recipient-selected': this.props.selectedRecipient === index,
+        'recipient-editable': recipient.newRecipient 
       };
       return (
         <div key={index} className={cx(classes)}>
           <a onClick={this.editHandler.bind(this, index)}>{recipient.firstName + " " + recipient.lastName}</a>
-          <a onClick={this.removeHandler.bind(this, index)} className='rcpent-delete'>x</a>
+          <a onClick={this.removeHandler.bind(this, index)} className='recipient-delete'>x</a>
         </div>
       );
     }.bind(this));
     return (
-      <div className='rcpent-list u-cf'>
+      <div className='recipient-list u-cf'>
         {nodes}
       </div>
     );
