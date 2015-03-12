@@ -12,6 +12,7 @@ var request = require('superagent');
 var Reflux = require('reflux');
 
 var SectionsStore = require('./components/organization/store');
+var Actions = require('./components/organization/actions');
 
 var EmptyStateData =[
   {
@@ -142,77 +143,9 @@ var MainContainer = React.createClass({
     },
 
     addSection: function (type, sectionPosition) {
-        var  position = sectionPosition,
-             data = this.state.mainData;
 
-         // Set position    
-        data.map(function(result) {
-            if(result.sectionPosition >= position)
-            {
-                result.sectionPosition = result.sectionPosition + 1;
-            }
-        });
-        
-        this.state.editModePosition = position;
-
-        switch(type) {
-            case 'career goal':
-                    data.push({
-                        "type": "freeform",
-                        "title": "career goal",
-                        "sectionPosition": position,
-                        "state": "shown",
-                        "description": ""
-                    });
-                break;
-            case 'skills':
-                    data.push({
-                        "type": "freeform",
-                        "title": "skills",
-                        "sectionPosition": position,
-                        "state": "shown",
-                        "description": ""
-                    });
-                break;
-            case 'experience':
-                        data.push({
-                        "type": "experience",
-                        "title": "experience",
-                        "sectionPosition": position,
-                        "state": "shown",
-                        "organizationName": "",
-                        "organizationDescription": "",
-                        "role": "",
-                        "startDate": "",
-                        "endDate": "",
-                        "isCurrent": false,
-                        "location": "",
-                        "roleDescription": "",
-                        "highlights": ""
-                    });
-                break;
-            case 'education':
-                        data.push({
-                        "type": "experience",
-                        "title": "education",
-                        "sectionPosition": position,
-                        "state": "shown",
-                        "organizationName": "",
-                        "organizationDescription": "",
-                        "role": "",
-                        "startDate": "",
-                        "endDate": "",
-                        "isCurrent": false,
-                        "location": "",
-                        "roleDescription": "",
-                        "highlights": ""
-                    });
-                break;
-        }      
-
-        // Sort by sectionPosition
-        data.sort(compare);
-        this.setState({mainData: data});
+      this.state.editModePosition = sectionPosition;
+      Actions.addSection(type, sectionPosition);
     },
 
     // Render freeForm items

@@ -5,11 +5,77 @@ var SectionsStore = Reflux.createStore({
 
   listenables: require('./actions'),
 
-  onAddSection: function() {
+  onAddSection: function(type, position) {
+
+    // Set position    
+    this.sections.map(function(result) {
+      if(result.sectionPosition >= position) {
+        result.sectionPosition = result.sectionPosition + 1;
+      }
+    });
+
+    switch(type) {
+      case 'career goal':
+          this.sections.push({
+              "type": "freeform",
+              "title": "career goal",
+              "sectionPosition": position,
+              "state": "shown",
+              "description": ""
+          });
+        break;
+      case 'skills':
+        this.sections.push({
+            "type": "freeform",
+            "title": "skills",
+            "sectionPosition": position,
+            "state": "shown",
+            "description": ""
+        });
+        break;
+      case 'experience':
+          this.sections.push({
+            "type": "experience",
+            "title": "experience",
+            "sectionPosition": position,
+            "state": "shown",
+            "organizationName": "",
+            "organizationDescription": "",
+            "role": "",
+            "startDate": "",
+            "endDate": "",
+            "isCurrent": false,
+            "location": "",
+            "roleDescription": "",
+            "highlights": ""
+        });
+        break;
+      case 'education':
+            this.sections.push({
+              "type": "experience",
+              "title": "education",
+              "sectionPosition": position,
+              "state": "shown",
+              "organizationName": "",
+              "organizationDescription": "",
+              "role": "",
+              "startDate": "",
+              "endDate": "",
+              "isCurrent": false,
+              "location": "",
+              "roleDescription": "",
+              "highlights": ""
+          });
+        break;
+    }   
     this.update();
   },
 
   onEditSection: function() {
+    this.update();
+  },
+
+  onSaveSection: function() {
     this.update();
   },
 
