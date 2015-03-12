@@ -8,6 +8,9 @@ var Comments = React.createClass({
   componentDidMount: function () {
     Actions.getComments(this.props);
   },
+  clickHandler: function () {
+    Actions.toggleComments();
+  },
   render: function () {
     return (
         <div className=" u-pull-left">

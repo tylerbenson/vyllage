@@ -30,17 +30,24 @@ module.exports = Reflux.createStore({
   onPostComment: function () {
 
   },
+  onToggleComments: function () {
+    this.showComments = !this.showComments;
+    this.update();
+  },
+  getProperties: function () {
+    return {
+      comment: this.comment,
+      comments: this.comments,
+      showComments: this.showComments,
+    }
+  },
   update: function () {
-    this.trigger({
-      comments: this.comments
-    });
+    this.trigger(this.getProperties());
   },
   getInitialState: function () {
     this.comment = {};
     this.comments = [];
-    return {
-      comment: this.comment,
-      comments: this.comments
-    }
+    this.showComments = false;
+    return this.getProperties();
   }
 })
