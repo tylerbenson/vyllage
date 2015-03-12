@@ -5,6 +5,10 @@
 		width: 100%;
 	}
 
+	button[disabled] {
+		background-color: red !important;
+	}
+
 	.editable, .buttons-container {
 		display: none;
 	}

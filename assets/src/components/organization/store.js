@@ -67,7 +67,9 @@ var SectionsStore = Reflux.createStore({
 							"highlights": ""
 					});
 				break;
-		}   
+		}
+
+		this.disableEditMode = true;
 		this.update();
 	},
 
@@ -95,6 +97,7 @@ var SectionsStore = Reflux.createStore({
 												break;
 											}
 										}
+										self.disableEditMode = false;
 										self.update();
 									} else {
 										alert(res.text);
@@ -156,16 +159,23 @@ var SectionsStore = Reflux.createStore({
 		return this.sections;
 	},
 
+	getDisableState: function(){
+		return this.disableEditMode;
+	},
+
 	getInitialState: function () {
 		this.sections = [];
+		this.disableEditMode = false;
 		
 		return {
 			sections: this.sections,
+			disableEditMode: this.disableEditMode
 		}
 	},
 
 	update: function () {
-		this.trigger(this.sections)
+		this.trigger({sections: this.sections,
+					  disableEditMode: this.disableEditMode});
 	}
 
 });

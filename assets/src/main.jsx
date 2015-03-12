@@ -53,7 +53,8 @@ function compare(a,b) {
 var MainContainer = React.createClass({  
     
     getInitialState: function() {
-      return {mainData: SectionsStore.getSections()};
+      return {mainData: SectionsStore.getSections(),
+              disableEditMode: SectionsStore.getDisableState()};
     },
 
     componentDidMount : function() {
@@ -65,7 +66,8 @@ var MainContainer = React.createClass({
     },
 
     onChange: function(sections) {
-      this.setState({ mainData: sections });
+      this.setState({ mainData: sections['sections'],
+                      disableEditMode: sections['disableEditMode'] });
     },
 
     componentDidUpdate: function() {
@@ -82,9 +84,10 @@ var MainContainer = React.createClass({
     },
 
     addSection: function (type, sectionPosition) {
-
-      this.state.editModePosition = sectionPosition;
-      Actions.addSection(type, sectionPosition);
+      if(!this.state.disableEditMode) {
+        this.state.editModePosition = sectionPosition;
+        Actions.addSection(type, sectionPosition);
+      }
     },
 
     // Render freeForm items
@@ -97,9 +100,10 @@ var MainContainer = React.createClass({
         AddSectionButtons = ( 
           <div className="u-pull-left full">
             <button className="u-pull-left article-btn"> {result.title} </button>
-            <button className="u-pull-right article-btn addSection-btn" 
-                onClick={this.addSection.bind(null, result.title, result.sectionPosition)}> 
-                {result.title}
+            <button disabled={this.state.disableEditMode?'disabled':''}  
+                    className="u-pull-right article-btn addSection-btn"
+                    onClick={this.addSection.bind(null, result.title, result.sectionPosition)}> 
+                    {result.title}
             </button>
           </div>
         );
@@ -112,7 +116,7 @@ var MainContainer = React.createClass({
 
             {AddSectionButtons}
 
-            <FreeformContainer freeformData={result} />
+            <FreeformContainer freeformData={result} ref="section"/>
 
             <ArticleControlls/>
 
@@ -132,8 +136,9 @@ var MainContainer = React.createClass({
           <div className="u-pull-left full">
             <button className="u-pull-left article-btn"> {result.title} </button>
             <button className="u-pull-right article-btn addSection-btn"
-                onClick={this.addSection.bind(null, result.title, result.sectionPosition)}>
-                {result.title}
+                    disabled={this.state.disableEditMode?'disabled':''}
+                    onClick={this.addSection.bind(null, result.title, result.sectionPosition)}>
+                    {result.title}
             </button>
           </div>
         );
