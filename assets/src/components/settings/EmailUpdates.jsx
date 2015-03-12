@@ -1,7 +1,7 @@
 var React = require('react');
 var Actions = require('./actions');
 
-var Role = React.createClass({
+var EmailUpdates = React.createClass({
   getInitialState: function () {
     return { edit: false };
   },
@@ -38,4 +38,4 @@ var Role = React.createClass({
   }
 });
 
-module.exports = Role;
+module.exports = EmailUpdates;

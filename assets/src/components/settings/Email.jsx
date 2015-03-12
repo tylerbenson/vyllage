@@ -12,7 +12,7 @@ var Email = React.createClass({
   },
   editHandler: function (e) {
     e.preventDefault();
-    this.setState({edit: true});
+    this.setState({edit: !this.state.edit});
   },
   valueHandler: function (e) {
     e.preventDefault();
@@ -35,7 +35,7 @@ var Email = React.createClass({
               type='text'
               className='u-full-width'
               autoFocus
-              value={this.props.value}
+              defaultValue={this.props.value}
               onKeyPress={this.keyPress}
               onChange={this.valueHandler} />
   }, 
@@ -48,7 +48,7 @@ var Email = React.createClass({
               <span>email address:</span>
             </div>
             <div className="six columns">
-              <a onClick={this.editHandler}>change/add</a>
+              <a onClick={this.editHandler}>update</a>
             </div>
           </div>
           <div>

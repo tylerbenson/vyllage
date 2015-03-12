@@ -33,7 +33,7 @@ var OtherItem = React.createClass({
               type='text'
               className='u-full-width'
               autoFocus
-              value={this.props.value}
+              defaultValue={this.props.value}
               onKeyPress={this.keyPress}
               onChange={this.valueHandler} />
   }, 

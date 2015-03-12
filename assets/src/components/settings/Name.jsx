@@ -7,7 +7,7 @@ var Name = React.createClass({
   },
   editHandler: function (e) {
     e.preventDefault();
-    this.setState({edit: true});
+    this.setState({edit: !this.state.edit});
   },
   changeHandler: function (e) {
     e.preventDefault();
@@ -28,12 +28,15 @@ var Name = React.createClass({
   },
   renderForm: function () {
     return (
-      <input 
-        type='text'
-        autoFocus
-        value={this.props.value}
-        onChange={this.changeHandler}
-        onKeyPress={this.keyPress} />
+      <div className='row'>
+        <input 
+          type='text'
+          autoFocus={true}
+          defaultValue={this.props.value}
+          onChange={this.changeHandler}
+          onKeyPress={this.keyPress} />
+        <a onClick={this.editHandler}>update</a>
+      </div>
     );
   },
   render: function () {

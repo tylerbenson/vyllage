@@ -8,7 +8,7 @@ var Twitter = React.createClass({
   },
   editHandler: function (e) {
     e.preventDefault();
-    this.setState({edit: true});
+    this.setState({edit: !this.state.edit});
   },
   valueHandler: function (e) {
     e.preventDefault();
@@ -29,7 +29,7 @@ var Twitter = React.createClass({
               type='text'
               className='u-full-width'
               autoFocus
-              value={this.props.value}
+              defaultValue={this.props.value}
               onKeyPress={this.keyPress}
               onChange={this.valueHandler} />
   }, 

@@ -16,10 +16,14 @@ var Role = require('./Role');
 var SharedLinks = require('./SharedLinks');
 var Twitter = require('./Twitter');
 var Reflux = require('reflux');
-var settingsStore = require('./store');
+var SettingsStore = require('./store');
+var Actions = require('./actions');
 
 var Settings = React.createClass({
-  mixins: [Reflux.connect(settingsStore)],
+  mixins: [Reflux.connect(SettingsStore)],
+  componentDidMount: function () {
+    Actions.getSettings();
+  },
   render: function () {
     var settings = this.state.settings;
     return (

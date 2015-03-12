@@ -1,5 +1,6 @@
 @import './components/common/variables';
 @import './components/common/mixins';
+$primary-color: #33c3f0;
 
 .margin-fix {
   margin-left: -10px;
@@ -7,6 +8,13 @@
 
 .gray-text {
   color: $subheader-color;
+}
+
+.editable {
+  border: 1px solid $primary-color;
+  padding: 5px;
+  outline: 0;
+  background-color: #fff;
 }
 
 .settings {
