@@ -6,7 +6,6 @@ var ShareInfo = require('./components/contact/share');
 var FreeformContainer = require('./components/freeform/container');
 var ArticleContent = require('./components/organization/article-content');
 var ArticleControlls =require('./components/freeform/article-controlls');
-var CommentsBlog = require('./components/freeform/comments-blog');
 var AddSections = require('./components/addSections/addSections');
 var request = require('superagent');
 var Reflux = require('reflux');
@@ -243,8 +242,6 @@ var MainContainer = React.createClass({
             <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
 
             <ArticleControlls/>
-
-            <CommentsBlog/>  
           </div>
         </div>
       </article>
@@ -275,8 +272,6 @@ var MainContainer = React.createClass({
               <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
 
               <ArticleControlls />
-
-              <CommentsBlog />
             </div>
           </div>
         </article>
