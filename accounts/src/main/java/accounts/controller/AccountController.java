@@ -25,29 +25,6 @@ public class AccountController {
 	@Autowired
 	private UserService userService;
 
-	// /**
-	// * Returns a map with containing the first, middle and last names for an
-	// * specific user.
-	// *
-	// * @param userId
-	// * @return
-	// * @throws UserNotFoundException
-	// */
-	// @RequestMapping(value = "names/{userId}", method = RequestMethod.GET,
-	// produces = "application/json")
-	// // @PreAuthorize("hasAuthority('USER')")
-	// public @ResponseBody UserIdAndName getNamesForUser(
-	// @PathVariable final Long userId) throws UserNotFoundException {
-	// User user = userService.getNames(userIds);
-	//
-	// Map<String, String> names = new HashMap<>();
-	// names.put("firstName", user.getFirstName());
-	// names.put("middleName", user.getMiddleName());
-	// names.put("lastName", user.getLastName());
-	//
-	// return names;
-	// }
-
 	/**
 	 * Returns a list containing the id, first, middle and last names for an
 	 * specific user.
