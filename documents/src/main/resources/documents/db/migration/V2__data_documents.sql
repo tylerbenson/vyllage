@@ -1,5 +1,5 @@
 
-insert into DOCUMENTS.documents(userId, visibility, dateCreated, lastModified) values(0, true, CURRENT_DATE(), CURRENT_DATE());
+insert into DOCUMENTS.documents(userId, visibility, tagline, dateCreated, lastModified) values(0, true, 'My tagline.', CURRENT_DATE(), CURRENT_DATE());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(123, 1, 0, 1, '{
 	"type": "freeform",
@@ -52,7 +52,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"description": "basket weaving, spear fishing, dominion"
 }',CURRENT_DATE(), CURRENT_DATE());
 
-insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(124, 1, 0, 'Its a me, Mario!', CURRENT_DATE());
+insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(124, 1, 1, 'Its a me, Mario!', CURRENT_DATE());
 insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(126, 1, 0, 'Well played.', CURRENT_DATE());
 
 insert into DOCUMENTS.suggestions(section_Id, section_Version, user_id, json_Document, last_Modified) values (124, 1, 0, '{

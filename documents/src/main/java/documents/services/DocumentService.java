@@ -121,9 +121,7 @@ public class DocumentService {
 	}
 
 	public List<Long> getRecentUsersForDocument(Long documentId) {
-		// suggestionRepository.getForDocument(documentId);
-
-		return null;
+		return documentRepository.getRecentUsersForDocument(documentId);
 	}
 
 }

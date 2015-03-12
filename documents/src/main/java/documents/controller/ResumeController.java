@@ -1,6 +1,7 @@
 package documents.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import documents.model.AccountNames;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
-import documents.model.FilteredUser;
 import documents.repository.ElementNotFoundException;
-import documents.services.AccountNames;
 import documents.services.AccountService;
 import documents.services.DocumentService;
 
@@ -81,13 +81,15 @@ public class ResumeController {
 
 		Document document = documentService.getDocument(documentId);
 
-		AccountNames namesForUser = accountService.getNamesForUser(
-				document.getUserId(), request);
+		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
+				Arrays.asList(document.getUserId()), request);
 
 		DocumentHeader header = new DocumentHeader();
-		header.setFirstName(namesForUser.getFirstName());
-		header.setMiddleName(namesForUser.getMiddleName());
-		header.setLastName(namesForUser.getLastName());
+		if (namesForUsers != null && namesForUsers.size() > 0) {
+			header.setFirstName(namesForUsers.get(0).getFirstName());
+			header.setMiddleName(namesForUsers.get(0).getMiddleName());
+			header.setLastName(namesForUsers.get(0).getLastName());
+		}
 		header.setTagline(document.getTagline());
 		return header;
 	}
@@ -130,17 +132,15 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/recentUsers", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<FilteredUser> getRecentUsers(
+	public @ResponseBody List<AccountNames> getRecentUsers(
 			HttpServletRequest request, @PathVariable final Long documentId)
 			throws JsonProcessingException, IOException,
 			ElementNotFoundException {
 
-		// Document document = documentService.getDocument(documentId);
-		List<Long> userIds = documentService
+		List<Long> recentUsersForDocument = documentService
 				.getRecentUsersForDocument(documentId);
 
-		// recentUsers
-		return null;
+		return accountService.getNamesForUsers(recentUsersForDocument, request);
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.POST, consumes = "application/json")

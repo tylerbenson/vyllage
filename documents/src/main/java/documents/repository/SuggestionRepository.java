@@ -126,9 +126,4 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 
 		return suggestion;
 	}
-
-	public void getForDocument(Long documentId) {
-		// sql.fetch(SUGGESTIONS, SUGGESTIONS.)
-	}
-
 }

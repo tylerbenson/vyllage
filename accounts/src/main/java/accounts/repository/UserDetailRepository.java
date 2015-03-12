@@ -44,6 +44,7 @@ import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserCredential;
 import accounts.model.UserFilterRequest;
+import accounts.model.account.AccountNames;
 
 @Repository
 public class UserDetailRepository implements UserDetailsManager {
@@ -475,6 +476,21 @@ public class UserDetailRepository implements UserDetailsManager {
 						ur.getValue(USERS.DATE_CREATED).toLocalDateTime(), ur
 								.getValue(USERS.LAST_MODIFIED)
 								.toLocalDateTime()))
+				.collect(Collectors.toList());
+	}
+
+	public List<AccountNames> getNames(List<Long> userIds) {
+		return sql
+				.select(USERS.USER_ID, USERS.FIRST_NAME, USERS.MIDDLE_NAME,
+						USERS.LAST_NAME)
+				.from(USERS)
+				.where(USERS.USER_ID.in(userIds))
+				.fetch()
+				.stream()
+				.map(r -> new AccountNames(r.getValue(USERS.USER_ID), r
+						.getValue(USERS.FIRST_NAME), r
+						.getValue(USERS.MIDDLE_NAME), r
+						.getValue(USERS.LAST_NAME)))
 				.collect(Collectors.toList());
 	}
 }

@@ -36,6 +36,7 @@ public class AdviceRequestController {
 			HttpServletRequest request, @PathVariable final Long documentId) {
 		Long userId = (Long) request.getSession().getAttribute("userId");
 		// @RequestBody List<Long> excludedIds
-		return service.getUsers(request, documentId, userId, Arrays.asList(0L));
+		return service
+				.getUsers(request, documentId, userId, Arrays.asList(-1L));
 	}
 }

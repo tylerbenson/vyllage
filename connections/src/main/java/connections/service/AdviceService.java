@@ -1,5 +1,6 @@
 package connections.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,12 +44,12 @@ public class AdviceService {
 
 		HttpEntity<Object> entity = addCookieToHeader(request);
 
-		List<FilteredUser> advisors = getAdvisors(userId, entity);
+		List<AccountNames> advisors = getAdvisors(userId, entity);
 		Assert.notNull(advisors);
 
 		response.setRecommended(advisors);
 
-		List<FilteredUser> recentUsers = getRecentUsers(documentId, entity);
+		List<AccountNames> recentUsers = getRecentUsers(documentId, entity);
 		Assert.notNull(recentUsers);
 
 		response.setRecent(recentUsers);
@@ -66,24 +67,34 @@ public class AdviceService {
 		return entity;
 	}
 
-	@SuppressWarnings("unchecked")
-	protected List<FilteredUser> getRecentUsers(Long documentId,
+	protected List<AccountNames> getRecentUsers(Long documentId,
 			HttpEntity<Object> entity) {
 
-		return restTemplate.exchange(
+		AccountNames[] body = restTemplate.exchange(
 				"http://{host}:" + DOCUMENTS_PORT
 						+ "/resume/{documentId}/recentUsers", HttpMethod.GET,
-				entity, List.class, DOCUMENTS_HOST, documentId).getBody();
+				entity, AccountNames[].class, DOCUMENTS_HOST, documentId)
+				.getBody();
+
+		if (body != null)
+			return Arrays.asList(body);
+
+		return Arrays.asList();
 	}
 
-	@SuppressWarnings("unchecked")
-	protected List<FilteredUser> getAdvisors(Long userId,
+	protected List<AccountNames> getAdvisors(Long userId,
 			HttpEntity<Object> entity) {
-		return restTemplate
+		AccountNames[] body = restTemplate
 				.exchange(
 						"http://{host}:" + ACCOUNTS_PORT
 								+ "/account/advisors/{userId}", HttpMethod.GET,
-						entity, List.class, ACCOUNTS_HOST, userId).getBody();
+						entity, AccountNames[].class, ACCOUNTS_HOST, userId)
+				.getBody();
+
+		if (body != null)
+			return Arrays.asList(body);
+
+		return Arrays.asList();
 	}
 
 }
