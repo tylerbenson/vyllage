@@ -30,6 +30,10 @@ module.exports = Reflux.createStore({
   onPostComment: function () {
 
   },
+  onAddComment: function (comment) {
+    this.comments = [comment].concat(this.comments);
+    this.update();
+  },
   onToggleComments: function () {
     this.showComments = !this.showComments;
     this.update();
