@@ -50,8 +50,6 @@ function compare(a,b) {
 }
 
 var MainContainer = React.createClass({  
-
-    // mixins: [Reflux.connect(SectionsStore)],
     
     getInitialState: function() {
       return {mainData: SectionsStore.getSections()};
@@ -80,66 +78,6 @@ var MainContainer = React.createClass({
           this.style.height = 0;
           this.style.height = this.scrollHeight  +'px';
       }
-    },
-
-    saveChanges: function (data) {
-        var self = this, documentId,
-            pathItems = window.location.pathname.split("/"),
-            token_header = document.getElementById('meta_header').content,
-            token_val = document.getElementById('meta_token').content;
-
-        if(pathItems.length > 2) {
-            documentId = pathItems[2];
-
-            // Check for Create mode
-            if(!data.sectionId) {
-                // Create mode
-                request
-                    .post('/resume/' + documentId + '/section/')
-                    .set(token_header, token_val)
-                    .send(data)
-                    .end(function(error, res) {
-
-                        if (res.ok) {
-                            for(var i = 0; i < self.state.mainData.length; i++){
-
-                                if(self.state.mainData[i].sectionPosition === data.sectionPosition){
-
-                                    self.state.mainData[i] = data;
-                                    self.setState({mainData: self.state.mainData});
-                                    return;
-                                }
-                            }
-                        } else {
-                           alert( res.text );  // this is left intentionally
-                           console.log(res.text); 
-                        }  
-                    });
-            } else {
-                // Update mode
-                request
-                    .post('/resume/' + documentId + '/section/' + data.sectionId +'')
-                    .set(token_header, token_val)
-                    .send(data)
-                    .end(function(error, res) {
-
-                        if (res.ok) {
-                            for(var i = 0; i < self.state.mainData.length; i++){
-
-                                if(self.state.mainData[i].sectionId === data.sectionId){
-
-                                    self.state.mainData[i] = data;
-                                    self.setState({mainData: self.state.mainData});
-                                    return;
-                                }
-                            }
-                        } else {
-                           alert( res.text );  // this is left intentionally
-                           console.log(res.text); 
-                        }  
-                    });
-            }
-        }
     },
 
     addSection: function (type, sectionPosition) {
@@ -173,7 +111,7 @@ var MainContainer = React.createClass({
 
             {AddSectionButtons}
 
-            <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
+            <FreeformContainer freeformData={result} />
 
             <ArticleControlls/>
 
@@ -205,7 +143,7 @@ var MainContainer = React.createClass({
             <div className="twelve columns">
               {AddSectionButtons}
 
-              <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
+              <ArticleContent organizationData={result}/>
 
               <ArticleControlls />
 
@@ -335,7 +273,6 @@ var MainContainer = React.createClass({
             }
 
             <AddSections addSection={this.addSection} title={'education'} position={results.length+1} shouldHide = {shouldHideEducation} />
-
             <AddSections addSection={this.addSection} title={'skills'} position={results.length+1} shouldHide = {shouldHideSkills}/>
           </div>
         );

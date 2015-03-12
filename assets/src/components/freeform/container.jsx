@@ -2,6 +2,7 @@ var React = require('react');
 var FreeformMain = require('./main');
 var FreeformEdit = require('./edit');
 var ButtonsContainer = require('./buttons-container');
+var Actions = require('../organization/actions');
 
 var FreeformContainer = React.createClass({
 
@@ -18,10 +19,8 @@ var FreeformContainer = React.createClass({
     },
 
     save: function () {
-        if(this.props.saveChanges){
-            this.props.saveChanges(this.state.freeformData);
-        }
-      this.handleModeChange();
+        Actions.saveSection(this.state.freeformData);
+        this.handleModeChange();
     },
 
     cancel: function () {
