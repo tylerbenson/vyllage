@@ -24,17 +24,14 @@ public class AccountService {
 	private final Logger logger = Logger.getLogger(AccountService.class
 			.getName());
 
-	// @Autowired
-	// private Environment environment;
-
 	@Autowired
 	private RestTemplate restTemplate;
 
-	@Value("${accounts.host}")
-	public String ACCOUNTS_HOST;
+	@Value("${accounts.host:localhost}")
+	private final String ACCOUNTS_HOST = null;
 
-	@Value("${accounts.port}")
-	public String ACCOUNTS_PORT;
+	@Value("${accounts.port:8080}")
+	private final String ACCOUNTS_PORT = null;
 
 	public List<AccountNames> getNamesForUsers(List<Long> userIds,
 			HttpServletRequest request) {

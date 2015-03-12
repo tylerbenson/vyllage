@@ -20,17 +20,17 @@ public class AdviceService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	@Value("${accounts.host}")
-	public String ACCOUNTS_HOST;
+	@Value("${accounts.host:localhost}")
+	private final String ACCOUNTS_HOST = null;
 
-	@Value("${accounts.port}")
-	public String ACCOUNTS_PORT;
+	@Value("${accounts.port:8080}")
+	private final String ACCOUNTS_PORT = null;
 
-	@Value("${documents.host}")
-	public String DOCUMENTS_HOST;
+	@Value("${documents.host:localhost}")
+	private final String DOCUMENTS_HOST = null;
 
-	@Value("${documents.port}")
-	public String DOCUMENTS_PORT;
+	@Value("${documents.port:8080}")
+	private final String DOCUMENTS_PORT = null;
 
 	public UserFilterResponse getUsers(HttpServletRequest request,
 			Long documentId, Long userId, List<Long> excludedIds) {

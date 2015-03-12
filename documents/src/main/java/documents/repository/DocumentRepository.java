@@ -143,20 +143,16 @@ public class DocumentRepository implements IRepository<Document> {
 		Comments c = COMMENTS.as("c");
 		Suggestions sg = SUGGESTIONS.as("sg");
 
-		Result<Record2<Long, Long>> result = sql
-				.select(c.USER_ID, sg.USER_ID)
-				//
-				.from(s1)
-				//
-				.join(s2)
-				//
-				.on(s1.ID.eq(s2.ID))
-				//
-				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION))
-				//
-				.join(c).on(c.SECTION_ID.eq(s1.ID)).join(sg)
-				.on(sg.SECTION_ID.eq(s1.ID))
-				.where(s1.DOCUMENTID.eq(documentId)).fetch();
+		Result<Record2<Long, Long>> result = sql.select(c.USER_ID, sg.USER_ID) //
+				.from(s1) //
+				.join(s2) //
+				.on(s1.ID.eq(s2.ID)) //
+				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)) //
+				.join(c) //
+				.on(c.SECTION_ID.eq(s1.ID)) //
+				.join(sg) //
+				.on(sg.SECTION_ID.eq(s1.ID)) //
+				.where(s1.DOCUMENTID.eq(documentId)).fetch(); //
 
 		return result
 				.stream()
