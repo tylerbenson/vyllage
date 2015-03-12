@@ -22,7 +22,7 @@ var Buttons = React.createClass({
 
     render: function() {
         return (
-            <div >
+            <div>
                 <button className="save-btn"  disabled={this.props.valid ? '' : 'disabled'}  onClick={this.saveHandler}>save</button>
                 <button className="cancel-btn" onClick={this.cancelHandler}>cancel</button>
             </div>

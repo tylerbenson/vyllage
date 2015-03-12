@@ -1,4 +1,7 @@
 var React = require('react');
+var request = require('superagent');
+var Reflux = require('reflux');
+
 var Header = require('./components/header');
 var Profile = require('./components/profile');
 var ContactInfo = require('./components/contact/contact');
@@ -8,8 +11,6 @@ var ArticleContent = require('./components/organization/article-content');
 var ArticleControlls =require('./components/freeform/article-controlls');
 var CommentsBlog = require('./components/freeform/comments-blog');
 var AddSections = require('./components/addSections/addSections');
-var request = require('superagent');
-var Reflux = require('reflux');
 
 var SectionsStore = require('./components/organization/store');
 var Actions = require('./components/organization/actions');
@@ -97,7 +98,7 @@ var MainContainer = React.createClass({
           <div className="u-pull-left full">
             <button className="u-pull-left article-btn"> {result.title} </button>
             <button className="u-pull-right article-btn addSection-btn" 
-                onClick={this.addSection.bind(null, result.title,result.sectionPosition)}> 
+                onClick={this.addSection.bind(null, result.title, result.sectionPosition)}> 
                 {result.title}
             </button>
           </div>
@@ -131,7 +132,7 @@ var MainContainer = React.createClass({
           <div className="u-pull-left full">
             <button className="u-pull-left article-btn"> {result.title} </button>
             <button className="u-pull-right article-btn addSection-btn"
-                onClick={this.addSection.bind(null, result.title,result.sectionPosition)}>
+                onClick={this.addSection.bind(null, result.title, result.sectionPosition)}>
                 {result.title}
             </button>
           </div>

@@ -71,10 +71,6 @@ var SectionsStore = Reflux.createStore({
 		this.update();
 	},
 
-	onEditSection: function() {
-		this.update();
-	},
-
 	onSaveSection: function(data) {
 		var self = this, documentId,
 				pathItems = window.location.pathname.split("/"),
