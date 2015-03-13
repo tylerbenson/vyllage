@@ -1,6 +1,6 @@
 package connections.controllers;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import connections.service.AdviceService;
@@ -33,10 +34,11 @@ public class AdviceRequestController {
 
 	@RequestMapping(value = "{documentId}/users", method = RequestMethod.GET)
 	public @ResponseBody UserFilterResponse getUsers(
-			HttpServletRequest request, @PathVariable final Long documentId) {
+			HttpServletRequest request,
+			@PathVariable final Long documentId,
+			@RequestParam(value = "excludedUserIds", required = false) final List<Long> excludedUserIds) {
 		Long userId = (Long) request.getSession().getAttribute("userId");
-		// @RequestBody List<Long> excludedIds
-		return service
-				.getUsers(request, documentId, userId, Arrays.asList(-1L));
+
+		return service.getUsers(request, documentId, userId, excludedUserIds);
 	}
 }

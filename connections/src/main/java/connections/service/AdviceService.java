@@ -1,5 +1,6 @@
 package connections.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,12 +45,15 @@ public class AdviceService {
 
 		HttpEntity<Object> entity = addCookieToHeader(request);
 
-		List<AccountNames> advisors = getAdvisors(userId, entity);
+		List<AccountNames> advisors = getAdvisors(userId, entity, excludedIds);
+
 		Assert.notNull(advisors);
 
 		response.setRecommended(advisors);
 
-		List<AccountNames> recentUsers = getRecentUsers(documentId, entity);
+		List<AccountNames> recentUsers = getRecentUsers(documentId, entity,
+				excludedIds);
+
 		Assert.notNull(recentUsers);
 
 		response.setRecent(recentUsers);
@@ -68,7 +72,7 @@ public class AdviceService {
 	}
 
 	protected List<AccountNames> getRecentUsers(Long documentId,
-			HttpEntity<Object> entity) {
+			HttpEntity<Object> entity, List<Long> excludedIds) {
 
 		AccountNames[] body = restTemplate.exchange(
 				"http://{host}:" + DOCUMENTS_PORT
@@ -76,14 +80,21 @@ public class AdviceService {
 				entity, AccountNames[].class, DOCUMENTS_HOST, documentId)
 				.getBody();
 
-		if (body != null)
-			return Arrays.asList(body);
+		List<AccountNames> recentUsers = new ArrayList<>();
+
+		if (body != null) {
+			for (int i = 0; i < body.length; i++) {
+				if (!excludedIds.contains(body[i].getUserId()))
+					recentUsers.add(body[i]);
+			}
+			return recentUsers;
+		}
 
 		return Arrays.asList();
 	}
 
 	protected List<AccountNames> getAdvisors(Long userId,
-			HttpEntity<Object> entity) {
+			HttpEntity<Object> entity, List<Long> excludedIds) {
 		AccountNames[] body = restTemplate
 				.exchange(
 						"http://{host}:" + ACCOUNTS_PORT
@@ -91,8 +102,15 @@ public class AdviceService {
 						entity, AccountNames[].class, ACCOUNTS_HOST, userId)
 				.getBody();
 
-		if (body != null)
-			return Arrays.asList(body);
+		List<AccountNames> advisors = new ArrayList<>();
+
+		if (body != null) {
+			for (int i = 0; i < body.length; i++) {
+				if (!excludedIds.contains(body[i].getUserId()))
+					advisors.add(body[i]);
+			}
+			return advisors;
+		}
 
 		return Arrays.asList();
 	}
