@@ -36,9 +36,9 @@ public class AdviceRequestController {
 	public @ResponseBody UserFilterResponse getUsers(
 			HttpServletRequest request,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "excludedUserIds", required = false) final List<Long> excludedUserIds) {
+			@RequestParam(value = "excludeIds", required = false) final List<Long> excludeIds) {
 		Long userId = (Long) request.getSession().getAttribute("userId");
 
-		return service.getUsers(request, documentId, userId, excludedUserIds);
+		return service.getUsers(request, documentId, userId, excludeIds);
 	}
 }

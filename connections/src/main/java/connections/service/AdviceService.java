@@ -1,8 +1,8 @@
 package connections.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class AdviceService {
@@ -25,16 +26,16 @@ public class AdviceService {
 	private final String ACCOUNTS_HOST = null;
 
 	@Value("${accounts.port:8080}")
-	private final String ACCOUNTS_PORT = null;
+	private final Integer ACCOUNTS_PORT = null;
 
 	@Value("${documents.host:localhost}")
 	private final String DOCUMENTS_HOST = null;
 
 	@Value("${documents.port:8080}")
-	private final String DOCUMENTS_PORT = null;
+	private final Integer DOCUMENTS_PORT = null;
 
 	public UserFilterResponse getUsers(HttpServletRequest request,
-			Long documentId, Long userId, List<Long> excludedIds) {
+			Long documentId, Long userId, List<Long> excludeIds) {
 		UserFilterResponse response = new UserFilterResponse();
 		// get recent users from Documents:
 		// send my user id
@@ -45,14 +46,14 @@ public class AdviceService {
 
 		HttpEntity<Object> entity = addCookieToHeader(request);
 
-		List<AccountNames> advisors = getAdvisors(userId, entity, excludedIds);
+		List<AccountNames> advisors = getAdvisors(userId, entity, excludeIds);
 
 		Assert.notNull(advisors);
 
 		response.setRecommended(advisors);
 
 		List<AccountNames> recentUsers = getRecentUsers(documentId, entity,
-				excludedIds);
+				excludeIds);
 
 		Assert.notNull(recentUsers);
 
@@ -72,45 +73,47 @@ public class AdviceService {
 	}
 
 	protected List<AccountNames> getRecentUsers(Long documentId,
-			HttpEntity<Object> entity, List<Long> excludedIds) {
+			HttpEntity<Object> entity, List<Long> excludeIds) {
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
+				.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
+				.path("/resume/" + documentId + "/recentUsers");
+
+		if (excludeIds.size() > 0)
+			builder.queryParam(
+					"excludeIds",
+					excludeIds.stream().map(Object::toString)
+							.collect(Collectors.joining(",")));
 
 		AccountNames[] body = restTemplate.exchange(
-				"http://{host}:" + DOCUMENTS_PORT
-						+ "/resume/{documentId}/recentUsers", HttpMethod.GET,
-				entity, AccountNames[].class, DOCUMENTS_HOST, documentId)
-				.getBody();
+				builder.build().toUriString(), HttpMethod.GET, entity,
+				AccountNames[].class).getBody();
 
-		List<AccountNames> recentUsers = new ArrayList<>();
-
-		if (body != null) {
-			for (int i = 0; i < body.length; i++) {
-				if (!excludedIds.contains(body[i].getUserId()))
-					recentUsers.add(body[i]);
-			}
-			return recentUsers;
-		}
+		if (body != null)
+			return Arrays.asList(body);
 
 		return Arrays.asList();
 	}
 
 	protected List<AccountNames> getAdvisors(Long userId,
-			HttpEntity<Object> entity, List<Long> excludedIds) {
-		AccountNames[] body = restTemplate
-				.exchange(
-						"http://{host}:" + ACCOUNTS_PORT
-								+ "/account/advisors/{userId}", HttpMethod.GET,
-						entity, AccountNames[].class, ACCOUNTS_HOST, userId)
-				.getBody();
+			HttpEntity<Object> entity, List<Long> excludeIds) {
 
-		List<AccountNames> advisors = new ArrayList<>();
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
+				.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
+				.path("/account/" + userId + "/advisors");
 
-		if (body != null) {
-			for (int i = 0; i < body.length; i++) {
-				if (!excludedIds.contains(body[i].getUserId()))
-					advisors.add(body[i]);
-			}
-			return advisors;
-		}
+		if (excludeIds.size() > 0)
+			builder.queryParam(
+					"excludeIds",
+					excludeIds.stream().map(Object::toString)
+							.collect(Collectors.joining(",")));
+
+		AccountNames[] body = restTemplate.exchange(
+				builder.build().toUriString(), HttpMethod.GET, entity,
+				AccountNames[].class).getBody();
+
+		if (body != null)
+			return Arrays.asList(body);
 
 		return Arrays.asList();
 	}

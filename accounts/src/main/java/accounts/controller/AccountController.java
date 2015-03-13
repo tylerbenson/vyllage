@@ -49,14 +49,17 @@ public class AccountController {
 	 * @return
 	 * @throws UserNotFoundException
 	 */
-	@RequestMapping(value = "advisors/{userId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{userId}/advisors", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountNames> getAdvisorsForUser(
-			@PathVariable final Long userId) throws UserNotFoundException {
+			@PathVariable final Long userId,
+			@RequestParam(value = "excludeIds", required = false) final List<Long> excludeIds)
+			throws UserNotFoundException {
 		User user = userService.getUser(userId);
 
 		List<AccountNames> response = userService
 				.getAdvisors(user, limitForEmptyFilter)
 				.stream()
+				.filter(u -> !excludeIds.contains(u.getUserId()))
 				.map(u -> new AccountNames(u.getUserId(), u.getFirstName(), u
 						.getMiddleName(), u.getLastName()))
 				.collect(Collectors.toList());

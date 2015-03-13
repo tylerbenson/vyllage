@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -133,12 +134,19 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/recentUsers", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountNames> getRecentUsers(
-			HttpServletRequest request, @PathVariable final Long documentId)
+			HttpServletRequest request,
+			@PathVariable final Long documentId,
+			@RequestParam(value = "excludeIds", required = false) final List<Long> excludeIds)
 			throws JsonProcessingException, IOException,
 			ElementNotFoundException {
 
 		List<Long> recentUsersForDocument = documentService
 				.getRecentUsersForDocument(documentId);
+
+		recentUsersForDocument.removeAll(excludeIds);
+
+		if (recentUsersForDocument.size() == 0)
+			return Arrays.asList();
 
 		return accountService.getNamesForUsers(recentUsersForDocument, request);
 	}

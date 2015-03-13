@@ -60,10 +60,9 @@ public class AccountService {
 		builder.queryParam("userIds", userIds.stream().map(Object::toString)
 				.collect(Collectors.joining(",")));
 
-		String uriString = builder.build().toUriString();
-
-		AccountNames[] body = restTemplate.exchange(uriString, HttpMethod.GET,
-				entity, AccountNames[].class).getBody();
+		AccountNames[] body = restTemplate.exchange(
+				builder.build().toUriString(), HttpMethod.GET, entity,
+				AccountNames[].class).getBody();
 
 		if (body != null)
 			return Arrays.asList(body);
