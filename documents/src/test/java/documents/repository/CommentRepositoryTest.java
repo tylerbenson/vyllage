@@ -10,8 +10,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import documents.Application;
 import documents.model.Comment;
-import documents.repository.ElementNotFoundException;
-import documents.repository.IRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -27,7 +25,7 @@ public class CommentRepositoryTest {
 		Comment comment = repository.get(0L);
 
 		Assert.assertNotNull("Comment is null.", comment);
-		Assert.assertTrue(comment.getId().equals(0L));
+		Assert.assertTrue(comment.getCommentId().equals(0L));
 	}
 
 	@Test
@@ -41,10 +39,10 @@ public class CommentRepositoryTest {
 
 		Assert.assertNotNull("Comment1 is null.", comment1);
 		Assert.assertNotNull("Comment2 is null.", comment2);
-		Assert.assertTrue("Expected id 2 got " + comment1.getId(), comment1
-				.getId().equals(2L));
-		Assert.assertTrue("Expected id 3 got " + comment2.getId(), comment2
-				.getId().equals(3L));
+		Assert.assertTrue("Expected id 2 got " + comment1.getCommentId(),
+				comment1.getCommentId().equals(2L));
+		Assert.assertTrue("Expected id 3 got " + comment2.getCommentId(),
+				comment2.getCommentId().equals(3L));
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -53,9 +51,9 @@ public class CommentRepositoryTest {
 		Comment comment = generateComment();
 
 		comment = repository.save(comment);
-		Long id = comment.getId();
+		Long id = comment.getCommentId();
 
-		repository.delete(comment.getId());
+		repository.delete(comment.getCommentId());
 
 		comment = repository.get(id);
 
@@ -67,7 +65,7 @@ public class CommentRepositoryTest {
 		comment.setCommentText("Testing!");
 		comment.setSectionId(124L);
 		comment.setSectionVersion(1L);
-		comment.setUserName("link");
+		comment.setUserId(0L);
 		return comment;
 	}
 

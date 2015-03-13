@@ -31,7 +31,7 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 	@Override
 	public Suggestion get(Long suggestionId) throws ElementNotFoundException {
 		SuggestionsRecord record = sql.fetchOne(SUGGESTIONS,
-				SUGGESTIONS.ID.eq(suggestionId));
+				SUGGESTIONS.SUGGESTION_ID.eq(suggestionId));
 		if (record == null)
 			throw new ElementNotFoundException("Suggestion with id '"
 					+ suggestionId + "' was not found.");
@@ -51,7 +51,7 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 	@Override
 	public Suggestion save(Suggestion suggestion) {
 
-		if (suggestion.getId() == null)
+		if (suggestion.getSuggestionId() == null)
 			suggestion = createNew(suggestion);
 		else
 			suggestion = update(suggestion);
@@ -64,42 +64,42 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 	private Suggestion createNew(Suggestion suggestion) {
 		SuggestionsRecord newRecord = sql.newRecord(SUGGESTIONS);
 
-		newRecord.setSectionid(suggestion.getSectionId());
-		newRecord.setSectionversion(suggestion.getSectionVersion());
+		newRecord.setSectionId(suggestion.getSectionId());
+		newRecord.setSectionVersion(suggestion.getSectionVersion());
 		try {
-			newRecord.setJsondocument(suggestion.getDocumentSection().asJSON());
+			newRecord.setJsonDocument(suggestion.getDocumentSection().asJSON());
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
 
-		newRecord.setUsername(suggestion.getUserName());
-		newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
+		newRecord.setUserId(suggestion.getUserId());
+		newRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
 
 		newRecord.store();
-		suggestion.setId(newRecord.getId());
+		suggestion.setSuggestionId(newRecord.getSuggestionId());
 
 		return suggestion;
 	}
 
 	private Suggestion update(Suggestion suggestion) {
 		SuggestionsRecord existingRecord = sql.fetchOne(SUGGESTIONS,
-				SUGGESTIONS.ID.eq(suggestion.getId()));
+				SUGGESTIONS.SUGGESTION_ID.eq(suggestion.getSuggestionId()));
 
 		if (existingRecord == null)
 			return createNew(suggestion);
 
-		existingRecord.setSectionid(suggestion.getSectionId());
-		existingRecord.setSectionversion(suggestion.getSectionVersion());
+		existingRecord.setSectionId(suggestion.getSectionId());
+		existingRecord.setSectionVersion(suggestion.getSectionVersion());
 
 		try {
-			existingRecord.setJsondocument(suggestion.getDocumentSection()
+			existingRecord.setJsonDocument(suggestion.getDocumentSection()
 					.asJSON());
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
 
-		existingRecord.setUsername(suggestion.getUserName());
-		existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
+		existingRecord.setUserId(suggestion.getUserId());
+		existingRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
 
 		existingRecord.update();
 
@@ -109,22 +109,21 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 	@Override
 	public void delete(Long suggestionId) {
 		SuggestionsRecord record = sql.fetchOne(SUGGESTIONS,
-				SUGGESTIONS.ID.eq(suggestionId));
+				SUGGESTIONS.SUGGESTION_ID.eq(suggestionId));
 		record.delete();
 	}
 
 	public static Suggestion recordToSuggestion(SuggestionsRecord record) {
 		Suggestion suggestion = new Suggestion();
-		suggestion.setId(record.getId());
+		suggestion.setSuggestionId(record.getSuggestionId());
 		suggestion.setDocumentSection(DocumentSection.fromJSON(record
-				.getJsondocument()));
+				.getJsonDocument()));
 
-		suggestion.setLastModified(record.getLastmodified().toLocalDateTime());
-		suggestion.setSectionId(record.getSectionid());
-		suggestion.setSectionVersion(record.getSectionversion());
-		suggestion.setUserName(record.getUsername());
+		suggestion.setLastModified(record.getLastModified().toLocalDateTime());
+		suggestion.setSectionId(record.getSectionId());
+		suggestion.setSectionVersion(record.getSectionVersion());
+		suggestion.setUserId(record.getUserId());
 
 		return suggestion;
 	}
-
 }

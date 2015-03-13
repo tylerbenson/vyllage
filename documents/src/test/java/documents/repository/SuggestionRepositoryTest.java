@@ -11,8 +11,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import documents.Application;
 import documents.model.DocumentSection;
 import documents.model.Suggestion;
-import documents.repository.ElementNotFoundException;
-import documents.repository.IRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -39,7 +37,7 @@ public class SuggestionRepositoryTest {
 		Suggestion suggestion = repository.get(0L);
 
 		Assert.assertNotNull("Suggestion is null.", suggestion);
-		Assert.assertTrue(suggestion.getId().equals(0L));
+		Assert.assertTrue(suggestion.getSuggestionId().equals(0L));
 	}
 
 	@Test
@@ -53,8 +51,8 @@ public class SuggestionRepositoryTest {
 
 		Assert.assertNotNull("Suggestion1 is null.", suggestion1);
 		Assert.assertNotNull("Suggestion2 is null.", suggestion2);
-		Assert.assertTrue(suggestion1.getId().equals(1L));
-		Assert.assertTrue(suggestion2.getId().equals(2L));
+		Assert.assertTrue(suggestion1.getSuggestionId().equals(1L));
+		Assert.assertTrue(suggestion2.getSuggestionId().equals(2L));
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -63,9 +61,9 @@ public class SuggestionRepositoryTest {
 		Suggestion suggestion = generateSuggestion();
 
 		suggestion = repository.save(suggestion);
-		Long id = suggestion.getId();
+		Long id = suggestion.getSuggestionId();
 
-		repository.delete(suggestion.getId());
+		repository.delete(suggestion.getSuggestionId());
 
 		suggestion = repository.get(id);
 
@@ -77,7 +75,7 @@ public class SuggestionRepositoryTest {
 		suggestion.setDocumentSection(DocumentSection.fromJSON(JSON));
 		suggestion.setSectionId(124L);
 		suggestion.setSectionVersion(1L);
-		suggestion.setUserName("link");
+		suggestion.setUserId(0L);
 		return suggestion;
 	}
 

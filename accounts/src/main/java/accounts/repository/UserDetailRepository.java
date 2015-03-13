@@ -44,6 +44,7 @@ import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserCredential;
 import accounts.model.UserFilterRequest;
+import accounts.model.account.AccountNames;
 
 @Repository
 public class UserDetailRepository implements UserDetailsManager {
@@ -415,15 +416,8 @@ public class UserDetailRepository implements UserDetailsManager {
 				.and(u.USER_NAME.like("%" + username + "%")).limit(limit)
 				.fetch();
 
-		return records
-				.stream()
-				.map((Record ur) -> new User(ur.getValue(USERS.USER_NAME),
-						credentialsRepository.get(ur.getValue(USERS.USER_ID))
-								.getPassword(), ur.getValue(USERS.ENABLED),
-						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, roleRepository.getByUserName(ur
-								.getValue(USERS.USER_NAME))))
-				.collect(Collectors.toList());
+		return advisorRecordsToUser(accountNonExpired, credentialsNonExpired,
+				accountNonLocked, records);
 	}
 
 	public List<User> getAdvisors(User loggedUser, int limit) {
@@ -461,15 +455,42 @@ public class UserDetailRepository implements UserDetailsManager {
 				.where(u.USER_ID.in(usernamesFromSameGroup))
 				.and(u.USER_NAME.in(advisorUsernames)).limit(limit).fetch();
 
+		return advisorRecordsToUser(accountNonExpired, credentialsNonExpired,
+				accountNonLocked, records);
+	}
+
+	private List<User> advisorRecordsToUser(final boolean accountNonExpired,
+			final boolean credentialsNonExpired,
+			final boolean accountNonLocked, Result<Record> records) {
 		return records
 				.stream()
-				.map((Record ur) -> new User(ur.getValue(USERS.USER_NAME),
-						credentialsRepository.get(ur.getValue(USERS.USER_ID))
-								.getPassword(), ur.getValue(USERS.ENABLED),
-						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, roleRepository.getByUserName(ur
-								.getValue(USERS.USER_NAME))))
+				.map((Record ur) -> new User(ur.getValue(USERS.USER_ID), ur
+						.getValue(USERS.FIRST_NAME), ur
+						.getValue(USERS.MIDDLE_NAME), ur
+						.getValue(USERS.LAST_NAME), ur
+						.getValue(USERS.USER_NAME), credentialsRepository.get(
+						ur.getValue(USERS.USER_ID)).getPassword(), ur
+						.getValue(USERS.ENABLED), accountNonExpired,
+						credentialsNonExpired, accountNonLocked, roleRepository
+								.getByUserName(ur.getValue(USERS.USER_NAME)),
+						ur.getValue(USERS.DATE_CREATED).toLocalDateTime(), ur
+								.getValue(USERS.LAST_MODIFIED)
+								.toLocalDateTime()))
 				.collect(Collectors.toList());
 	}
 
+	public List<AccountNames> getNames(List<Long> userIds) {
+		return sql
+				.select(USERS.USER_ID, USERS.FIRST_NAME, USERS.MIDDLE_NAME,
+						USERS.LAST_NAME)
+				.from(USERS)
+				.where(USERS.USER_ID.in(userIds))
+				.fetch()
+				.stream()
+				.map(r -> new AccountNames(r.getValue(USERS.USER_ID), r
+						.getValue(USERS.FIRST_NAME), r
+						.getValue(USERS.MIDDLE_NAME), r
+						.getValue(USERS.LAST_NAME)))
+				.collect(Collectors.toList());
+	}
 }

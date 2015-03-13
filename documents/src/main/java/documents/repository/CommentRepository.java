@@ -28,7 +28,7 @@ public class CommentRepository implements IRepository<Comment> {
 	@Override
 	public Comment get(Long commentId) throws ElementNotFoundException {
 		CommentsRecord record = sql.fetchOne(COMMENTS,
-				COMMENTS.ID.eq(commentId));
+				COMMENTS.COMMENT_ID.eq(commentId));
 		if (record == null)
 			throw new ElementNotFoundException("Comment with id '" + commentId
 					+ "' not found.");
@@ -48,29 +48,29 @@ public class CommentRepository implements IRepository<Comment> {
 	@Override
 	public Comment save(Comment comment) {
 		CommentsRecord existingRecord = sql.fetchOne(COMMENTS,
-				COMMENTS.ID.eq(comment.getId()));
+				COMMENTS.COMMENT_ID.eq(comment.getCommentId()));
 
 		if (existingRecord == null) {
 			CommentsRecord newRecord = sql.newRecord(COMMENTS);
 
-			newRecord.setCommentid(comment.getCommentId());
-			newRecord.setCommenttext(comment.getCommentText());
-			newRecord.setSectionid(comment.getSectionId());
-			newRecord.setSectionversion(comment.getSectionVersion());
-			newRecord.setUsername(comment.getUserName());
-			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
+			newRecord.setOtherCommentId(comment.getOtherCommentId());
+			newRecord.setCommentText(comment.getCommentText());
+			newRecord.setSectionId(comment.getSectionId());
+			newRecord.setSectionVersion(comment.getSectionVersion());
+			newRecord.setUserId(comment.getUserId());
+			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
 
 			newRecord.store();
-			comment.setId(newRecord.getId());
+			comment.setCommentId(newRecord.getCommentId());
 
 		} else {
 
-			existingRecord.setCommentid(comment.getCommentId());
-			existingRecord.setCommenttext(comment.getCommentText());
-			existingRecord.setSectionid(comment.getSectionId());
-			existingRecord.setSectionversion(comment.getSectionVersion());
-			existingRecord.setUsername(comment.getUserName());
-			existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
+			existingRecord.setOtherCommentId(comment.getOtherCommentId());
+			existingRecord.setCommentText(comment.getCommentText());
+			existingRecord.setSectionId(comment.getSectionId());
+			existingRecord.setSectionVersion(comment.getSectionVersion());
+			existingRecord.setUserId(comment.getUserId());
+			existingRecord.setLastModified(Timestamp.valueOf(LocalDateTime
 					.now()));
 
 			existingRecord.update();
@@ -84,20 +84,20 @@ public class CommentRepository implements IRepository<Comment> {
 	@Override
 	public void delete(Long commentId) {
 		CommentsRecord existingRecord = sql.fetchOne(COMMENTS,
-				COMMENTS.ID.eq(commentId));
+				COMMENTS.COMMENT_ID.eq(commentId));
 		existingRecord.delete();
 
 	}
 
 	public static Comment recordToComment(CommentsRecord record) {
 		Comment comment = new Comment();
-		comment.setId(record.getId());
-		comment.setCommentId(record.getCommentid());
-		comment.setUserName(record.getUsername());
-		comment.setSectionId(record.getSectionid());
-		comment.setSectionVersion(record.getSectionversion());
-		comment.setLastModified(record.getLastmodified().toLocalDateTime());
-		comment.setCommentText(record.getCommenttext());
+		comment.setCommentId(record.getCommentId());
+		comment.setOtherCommentId(record.getOtherCommentId());
+		comment.setUserId(record.getUserId());
+		comment.setSectionId(record.getSectionId());
+		comment.setSectionVersion(record.getSectionVersion());
+		comment.setLastModified(record.getLastModified().toLocalDateTime());
+		comment.setCommentText(record.getCommentText());
 		return comment;
 	}
 
