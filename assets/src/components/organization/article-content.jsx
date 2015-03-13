@@ -1,6 +1,8 @@
 var React = require('react');
 var OrganizationEdit = require('./edit');
 var OrganizationMain = require('./main');
+
+var SectionsStore = require('./store');
 var Actions = require('./actions');
 
 var ArticleContent = React.createClass({  
@@ -24,11 +26,13 @@ var ArticleContent = React.createClass({
 	},
 
 	 goToEditMode: function() {
-			var data = JSON.parse(JSON.stringify(this.props.organizationData));
-			this.setState({organizationData :data});
+	 		if(!SectionsStore.getDisableState()){
+				var data = JSON.parse(JSON.stringify(this.props.organizationData));
+				this.setState({organizationData :data});
 
-			this.refs.mainContainer.getDOMNode().style.display="none";
-			this.refs.editContainer.getDOMNode().style.display="block";
+				this.refs.mainContainer.getDOMNode().style.display="none";
+				this.refs.editContainer.getDOMNode().style.display="block";
+			}
 	},
 
 	render: function() {

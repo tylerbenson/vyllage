@@ -3,7 +3,6 @@ var React = require('react');
 var ButtonsContainer = React.createClass({  
 
 	saveHandler: function(event) {
-
 		event.preventDefault();
 		event.stopPropagation();
 
