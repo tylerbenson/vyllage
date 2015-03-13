@@ -5,8 +5,8 @@
 --NOTE: password == '$2a$10$6REiiQD8i4FTE4D/X3.chOnlgxghwWMGcngksAjyQun0njGDQznxq'
 insert into ACCOUNTS.users ( user_name, first_Name, middle_name, last_name, enabled, date_created, last_modified) values ( 'email', 'Luke', 'V', 'Skywalker', true, CURRENT_DATE(), CURRENT_DATE());
 insert into ACCOUNTS.users ( user_name, enabled, date_created, last_modified ) values ( 'testuser@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE());
-insert into ACCOUNTS.users ( user_name, enabled, date_created, last_modified ) values ( 'deana@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE() );
-insert into ACCOUNTS.users ( user_name, enabled, date_created, last_modified ) values ( 'someone@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE() );
+insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'deana@vyllage.com', 'Deana', 'Troi', true, CURRENT_DATE(), CURRENT_DATE() );
+insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'someone@vyllage.com', 'Some', 'One', true, CURRENT_DATE(), CURRENT_DATE() );
 
 --create table if not exists ACCOUNTS.personal(
 --	user_id bigint not null,
@@ -60,5 +60,7 @@ insert into ACCOUNTS.organization_roles ( organization_id, role ) values ( 2, 'A
 --  constraint fk_group_members_group foreign key(group_id) references groups(id));
 insert into ACCOUNTS.organization_members ( user_id, organization_id ) values ( 0, 0 );
 insert into ACCOUNTS.organization_members ( user_id, organization_id ) values ( 1, 1 );
+insert into ACCOUNTS.organization_members ( user_id, organization_id ) values ( 2, 0 );
 insert into ACCOUNTS.organization_members ( user_id, organization_id ) values ( 2, 2 );
 insert into ACCOUNTS.organization_members ( user_id, organization_id ) values ( 3, 0 );
+

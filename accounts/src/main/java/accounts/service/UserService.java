@@ -9,16 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import accounts.model.Role;
 import accounts.model.BatchAccount;
 import accounts.model.OrganizationRole;
+import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
 import accounts.model.account.PersonalInformation;
-import accounts.repository.RoleRepository;
-import accounts.repository.OrganizationRoleRepository;
+import accounts.model.account.AccountNames;
 import accounts.repository.OrganizationRepository;
+import accounts.repository.OrganizationRoleRepository;
 import accounts.repository.PersonalInformationRepository;
+import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
 
@@ -29,7 +30,7 @@ public class UserService {
 
 	@Autowired
 	private OrganizationRepository organizationRepository;
-	
+
 	@Autowired
 	private RoleRepository roleRepository;
 
@@ -85,9 +86,8 @@ public class UserService {
 				.stream(emailSplit)
 				.map(String::trim)
 				.map(s -> new User(s, s, enabled, accountNonExpired,
-						credentialsNonExpired, accountNonLocked, Arrays
-								.asList(new Role(organizationRole
-										.getRole(), s))))
+						credentialsNonExpired, accountNonLocked,
+						Arrays.asList(new Role(organizationRole.getRole(), s))))
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
@@ -109,8 +109,7 @@ public class UserService {
 
 		if (!userRepository.userExists(userName)) {
 			User user = new User(userName, userName, true, true, true, true,
-					roleRepository
-							.getDefaultAuthoritiesForNewUser(userName));
+					roleRepository.getDefaultAuthoritiesForNewUser(userName));
 			userRepository.createUser(user);
 		}
 		User loadUserByUsername = userRepository.loadUserByUsername(userName);
@@ -146,5 +145,10 @@ public class UserService {
 	public void savePersonalInformation(
 			PersonalInformation userPersonalInformation) {
 		pInformation.save(userPersonalInformation);
+	}
+
+	public List<AccountNames> getNames(List<Long> userIds) {
+
+		return userRepository.getNames(userIds);
 	}
 }

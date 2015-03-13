@@ -6,19 +6,19 @@ import lombok.ToString;
 
 @ToString
 public class Suggestion {
-	private Long id;
+	private Long suggestionId;
 	private Long sectionId;
 	private Long sectionVersion;
 	private DocumentSection documentSection;
 	private LocalDateTime lastModified;
-	private String userName;
+	private Long userId;
 
-	public Long getId() {
-		return id;
+	public Long getSuggestionId() {
+		return suggestionId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setSuggestionId(Long id) {
+		this.suggestionId = id;
 	}
 
 	public DocumentSection getDocumentSection() {
@@ -53,11 +53,11 @@ public class Suggestion {
 		this.sectionVersion = sectionVersion;
 	}
 
-	public String getUserName() {
-		return userName;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }

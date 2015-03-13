@@ -1,3 +1,38 @@
+.controls {
+  a {
+    padding: 10px;
+    color: $article-controll-link-color;
+  }
+  .controls-count {
+    border: 1px solid $article-controll-link-color;
+    padding: 2px;
+  }
+}
+
+.comments-form {
+  margin: 10px 20px;
+  textarea {
+    border: 1px solid $article-border-color;
+  }
+}
+
+.comment-list {
+
+}
+
+.comment {
+  padding: 10px;
+  border: 1px solid $article-border-color;
+}
+.comment-name {
+  // margin-right: 20px;
+}
+
+.comment-text {
+  padding-left: 10px;
+}
+
+// old
 .comment-list-block {
 
 	margin: 0 40px 40px;

@@ -1,9 +1,8 @@
-package accounts.model;
+package connections.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import accounts.model.account.AccountNames;
 import lombok.ToString;
 
 @ToString

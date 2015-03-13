@@ -8,8 +8,7 @@ var ContactInfo = require('./components/contact/contact');
 var ShareInfo = require('./components/contact/share');
 var FreeformContainer = require('./components/freeform/container');
 var ArticleContent = require('./components/organization/article-content');
-var ArticleControlls =require('./components/freeform/article-controlls');
-var CommentsBlog = require('./components/freeform/comments-blog');
+var ArticleControlls =require('./components/comments/Controls');
 var AddSections = require('./components/addSections/addSections');
 
 var SectionsStore = require('./components/organization/store');
@@ -119,8 +118,6 @@ var MainContainer = React.createClass({
             <FreeformContainer freeformData={result} ref="section"/>
 
             <ArticleControlls/>
-
-            <CommentsBlog/>  
           </div>
         </div>
       </article>
@@ -152,8 +149,6 @@ var MainContainer = React.createClass({
               <ArticleContent organizationData={result}/>
 
               <ArticleControlls />
-
-              <CommentsBlog />
             </div>
           </div>
         </article>

@@ -6,28 +6,28 @@ import lombok.ToString;
 
 @ToString
 public class Comment {
-	private Long id;
 	private Long commentId;
+	private Long otherCommentId;
 	private Long sectionId;
 	private Long sectionVersion;
-	private String userName;
+	private Long userId;
 	private String commentText;
 	private LocalDateTime lastModified;
 
-	public Long getId() {
-		return id;
+	public Long getCommentId() {
+		return commentId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setCommentId(Long id) {
+		this.commentId = id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public Long getSectionId() {
@@ -65,16 +65,16 @@ public class Comment {
 	/**
 	 * @return the id of the other comment this one refers to.
 	 */
-	public Long getCommentId() {
-		return commentId;
+	public Long getOtherCommentId() {
+		return otherCommentId;
 	}
 
 	/**
 	 * @param commentId
 	 *            the Id of the comment this one will refer to.
 	 */
-	public void setCommentId(Long commentId) {
-		this.commentId = commentId;
+	public void setOtherCommentId(Long commentId) {
+		this.otherCommentId = commentId;
 	}
 
 }
