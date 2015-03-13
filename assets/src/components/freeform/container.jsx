@@ -19,7 +19,6 @@ var FreeformContainer = React.createClass({
 
 	save: function () {
 		Actions.saveSection(this.state.description);
-		this.handleModeChange();
 	},
 
 	cancel: function () {

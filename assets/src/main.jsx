@@ -208,7 +208,7 @@ var MainContainer = React.createClass({
                       shouldHideSkills = true;
                       skillsCount += 1;
                     }
-                    
+                    that.state.editModePosition = undefined;
                     // return element
                     return that.freeFormItems(result, true,true);
                   } else {
@@ -243,7 +243,7 @@ var MainContainer = React.createClass({
                       educationCount += 1;
                       shouldHideEducation = true;
                     }
-
+                     that.state.editModePosition = undefined;
                     return that.experienceItems(result, true,true);
 
                   } else {

@@ -45,6 +45,12 @@ body {
 				@include addSection-btn();
 			}
 
+			.addSection-btn[disabled] {
+				background-color: #FDFDFF;
+				border: 1px solid rgb(242, 239, 239);
+				cursor: inherit;
+			}
+
 			.article-content {
 				padding: 1px 40px;
 				width: 93%;

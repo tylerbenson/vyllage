@@ -11,7 +11,6 @@ var ArticleContent = React.createClass({
 
 	save: function () {
 		Actions.saveSection(this.refs.editContainer.state.organizationData);
-		this.handleModeChange();
 	},
 
 	cancel: function () {
@@ -34,7 +33,7 @@ var ArticleContent = React.createClass({
 
 	render: function() {
 		return (
-			<div className="article-content" >
+			<div className="article-content">
 				<OrganizationMain ref="mainContainer" organizationData={this.props.organizationData} goToEditMode={this.goToEditMode}/>
 				<OrganizationEdit ref="editContainer" organizationData={this.props.organizationData} save={this.save} cancel={this.cancel}/>
 			</div>
