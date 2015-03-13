@@ -1,8 +1,20 @@
 @import './components/common/variables';
 @import './components/common/mixins';
+$primary-color: #33c3f0;
 
 .margin-fix {
   margin-left: -10px;
+}
+
+.gray-text {
+  color: $subheader-color;
+}
+
+.editable {
+  border: 1px solid $primary-color;
+  padding: 5px;
+  outline: 0;
+  background-color: #fff;
 }
 
 .settings {
@@ -20,14 +32,20 @@
     margin-bottom: 0px;
   }
 
+  ul {
+    list-style: none;
+    margin: 0;
+  }
+
 }
 
 .settings-left {
   border-right: 1px solid $border-color;
+  height: 800px;
 }
 
 .settings-right {
-  // margin: 0;
+ 
 }
 
 .topper {
@@ -51,23 +69,26 @@
 }
 
 .settings-profile {
-  list-style: none;
-  // font-size: 18px;
   li:nth-child(even) { 
     background: $top-bkg-color;
   }
 }
+
 .settings-profile-item {
   padding: 5px;
 }
+
 .settings-account {
-  list-style: none;
 }
 
 .settings-account-item {
   padding: 10px 20px 10px 10px;
 }
 
+.settings-last-update {
+  padding: 10px;
+  border-right: 1px solid $border-color;
+}
 
 
 @import './components/header/header';

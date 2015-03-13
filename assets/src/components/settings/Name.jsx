@@ -1,4 +1,5 @@
 var React = require('react');
+var Actions = require('./actions');
 
 var Name = React.createClass({
   getInitialState: function () {
@@ -6,11 +7,11 @@ var Name = React.createClass({
   },
   editHandler: function (e) {
     e.preventDefault();
-    this.setState({edit: true});
+    this.setState({edit: !this.state.edit});
   },
   changeHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('name', e.target.value);
+    Actions.changeSetting('name', e.target.value);
   },
   keyPress: function (e) {
     if (e.key === 'Enter') {
@@ -27,12 +28,15 @@ var Name = React.createClass({
   },
   renderForm: function () {
     return (
-      <input 
-        type='text'
-        autoFocus
-        value={this.props.value}
-        onChange={this.changeHandler}
-        onKeyPress={this.keyPress} />
+      <div className='row'>
+        <input 
+          type='text'
+          autoFocus={true}
+          defaultValue={this.props.value}
+          onChange={this.changeHandler}
+          onKeyPress={this.keyPress} />
+        <a onClick={this.editHandler}>update</a>
+      </div>
     );
   },
   render: function () {

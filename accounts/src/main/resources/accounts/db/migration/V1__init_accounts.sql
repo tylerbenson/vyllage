@@ -18,7 +18,7 @@ create table if not exists ACCOUNTS.personal_information(
 	constraint fk_personal_users foreign key(user_id) references ACCOUNTS.users(user_id));
   
 create table if not exists ACCOUNTS.user_credentials(
-  user_id  bigint not null primary key,
+  user_id  bigint not null,
   password varchar_ignorecase(60) not null,
   enabled boolean not null,
   expires timestamp,

@@ -1,5 +1,6 @@
 var React = require('react');
 var PrivacySelect = require('./PrivacySelect');
+var Actions = require('./actions');
 
 var PhoneNumber = React.createClass({
   getInitialState: function () {
@@ -7,15 +8,15 @@ var PhoneNumber = React.createClass({
   },
   editHandler: function (e) {
     e.preventDefault();
-    this.setState({edit: true});
+    this.setState({edit: !this.state.edit});
   },
   valueHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('phoneNumber', {value: e.target.value, privacy: this.props.privacy});
+    Actions.changeSetting('phoneNumber', {value: e.target.value, privacy: this.props.privacy});
   },
   privacyHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('phoneNumber', {value: this.props.value, privacy: e.target.value});
+    Actions.changeSetting('phoneNumber', {value: this.props.value, privacy: e.target.value});
   },
   keyPress: function (e) {
     e.stopPropagation();
@@ -28,7 +29,7 @@ var PhoneNumber = React.createClass({
               type='text'
               className='u-full-width'
               autoFocus
-              value={this.props.value}
+              defaultValue={this.props.value}
               onKeyPress={this.keyPress}
               onChange={this.valueHandler} />
   }, 
@@ -52,7 +53,7 @@ var PhoneNumber = React.createClass({
           <PrivacySelect 
             value={this.props.privacy}
             organization={this.props.organization}
-            onChange={this.props.privacyHandler} />
+            onChange={this.privacyHandler} />
         </div>
       </li>
     );

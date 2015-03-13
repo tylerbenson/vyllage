@@ -1,21 +1,23 @@
 var React = require('react');
 var PrivacySelect = require('./PrivacySelect');
 var ContentEditable = require("react-contenteditable");
+var Actions = require('./actions');
+
 var Address = React.createClass({
   getInitialState: function () {
     return { edit: false };
   },
   editHandler: function (e) {
     e.preventDefault();
-    this.setState({edit: true});
+    this.setState({edit: !this.state.edit});
   },
   valueHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('address', {value: e.target.value, privacy: this.props.privacy});
+    Actions.changeSetting('address', {value: e.target.value, privacy: this.props.privacy});
   },
   privacyHandler: function (e) {
     e.preventDefault();
-    this.props.changeSetting('address', {value: this.props.value, privacy: e.target.value});
+    Actions.changeSetting('address', {value: this.props.value, privacy: e.target.value});
   },
   keyPress: function (e) {
     e.stopPropagation();
@@ -24,7 +26,7 @@ var Address = React.createClass({
     }
   },
   renderForm: function () {
-    return <ContentEditable html={this.props.value} onChange={this.valueHandler} />;
+    return <div className='editable'><ContentEditable html={this.props.value} onChange={this.valueHandler} /></div>;
   }, 
   render: function () {
     return (
@@ -44,7 +46,7 @@ var Address = React.createClass({
           <PrivacySelect 
             value={this.props.privacy}
             organization={this.props.organization}
-            onChange={this.props.privacyHandler} />
+            onChange={this.privacyHandler} />
         </div>
       </li>
     );

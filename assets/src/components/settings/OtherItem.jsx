@@ -2,7 +2,7 @@ var React = require('react');
 var PrivacySelect = require('./PrivacySelect');
 var Actions = require('./actions');
 
-var Facebook = React.createClass({
+var OtherItem = React.createClass({
   getInitialState: function () {
     return { edit: false };
   },
@@ -12,11 +12,11 @@ var Facebook = React.createClass({
   },
   valueHandler: function (e) {
     e.preventDefault();
-    Actions.changeSetting('facebook', {value: e.target.value, privacy: this.props.privacy});
+    Actions.updateOther({value: e.target.value, privacy: this.props.privacy}, this.props.index);
   },
   privacyHandler: function (e) {
     e.preventDefault();
-    Actions.changeSetting('facebook', {value: this.props.value, privacy: e.target.value});
+    Actions.updateOther({value: this.props.value, privacy: e.target.value}, this.props.index);
   },
   keyPress: function (e) {
     e.stopPropagation();
@@ -24,12 +24,16 @@ var Facebook = React.createClass({
       this.setState({edit: false});
     }
   },
+  removeHandler: function (e) {
+    e.preventDefault();
+    Actions.removeOther(this.props.index);
+  },
   renderForm: function () {
     return <input 
               type='text'
               className='u-full-width'
               autoFocus
-              value={this.props.value}
+              defaultValue={this.props.value}
               onKeyPress={this.keyPress}
               onChange={this.valueHandler} />
   }, 
@@ -39,19 +43,21 @@ var Facebook = React.createClass({
         <div className="eight columns">
           <div>
             <div className="six columns">
-              facebook.com
+              {this.state.edit ? this.renderForm(): this.props.value}
             </div>
             <div className="six columns">
-              <a onClick={this.editHandler}>update</a>
+              <div className={this.state.edit ? "six columns": ""}>
+                <a onClick={this.editHandler}>{this.state.edit? 'update': 'update/remove'}</a>
+              </div>
+              {this.state.edit ? <div className="six columns">
+                {<a onClick={this.removeHandler}>remove</a>}
+              </div>: null}
             </div>
-          </div>
-          <div>
-            {this.state.edit? this.renderForm(): this.props.value}
           </div>
         </div>
         <div className='four columns'>
-          <PrivacySelect 
-            value={this.props.privacy}
+          <PrivacySelect
+            value={this.props.privacy} 
             organization={this.props.organization}
             onChange={this.privacyHandler} />
         </div>
@@ -60,4 +66,4 @@ var Facebook = React.createClass({
   }
 });
 
-module.exports = Facebook;
+module.exports = OtherItem;
