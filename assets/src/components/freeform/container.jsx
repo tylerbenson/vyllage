@@ -8,18 +8,17 @@ var FreeformContainer = React.createClass({
 
 	getInitialState: function() {
 		return {
-			isMain: true,
-			freeformData: ''
+			description: ''
 		};
 	},
 
 	updateDescription: function (value) {
-		this.state.freeformData.description = value;
-		this.setState({freeformData: this.state.freeformData });
+		this.state.description = value;
+		this.setState({description: this.state.description });
 	},
 
 	save: function () {
-		Actions.saveSection(this.state.freeformData);
+		Actions.saveSection(this.state.description);
 		this.handleModeChange();
 	},
 
@@ -28,50 +27,40 @@ var FreeformContainer = React.createClass({
 	},
 
 	valid: function (){
-		return this.state.freeformData.description !== undefined && 
-				this.state.freeformData.description.length > 0;
+		return this.state.description !== undefined && 
+				this.state.description.length > 0;
 	},
 
 	handleModeChange: function () {
-
-		if(!this.state.isMain) {
-			var data = JSON.parse(JSON.stringify(this.props.freeformData));
+			var data = JSON.parse(JSON.stringify(this.props.description));
 
 			this.setState({ 
-				freeformData :data,
-				isMain: true 
+				description :data
 			});
-
 			this.refs.goalMain.getDOMNode().style.display="block";
 			this.refs.goalEdit.getDOMNode().style.display="none";
 			this.refs.buttonContainer.getDOMNode().style.display="none";
-			this.state.isMain=true ;
-		}
 		return false;
 	},
 
 	goToEditMode: function() {
 
-		if(this.state.isMain) {
-			var data = JSON.parse(JSON.stringify(this.props.freeformData));
+			var data = JSON.parse(JSON.stringify(this.props.description));
 			this.setState({ 
-				freeformData :data,
-				isMain: false 
+				description :data
 			});
 
 			this.refs.goalMain.getDOMNode().style.display="none";
 			this.refs.goalEdit.getDOMNode().style.display="block";
 			this.refs.buttonContainer.getDOMNode().style.display="block";
-			this.state.isMain=false;
-		}
 	},
 
 	render: function() {
 		return (
-			<div className="article-content" onClick={this.goToEditMode}>
+			<div className="article-content">
 
-				<FreeformMain ref="goalMain" description={this.props.freeformData.description}/>
-				<FreeformEdit ref="goalEdit" description={this.props.freeformData.description} updateDescription={this.updateDescription} />
+				<FreeformMain ref="goalMain" description={this.props.description} goToEditMode ={this.goToEditMode} />
+				<FreeformEdit ref="goalEdit" description={this.props.description} updateDescription={this.updateDescription} />
 
 				<ButtonsContainer ref="buttonContainer" save={this.save} cancel={this.cancel} valid={this.valid()}/>
 			</div>

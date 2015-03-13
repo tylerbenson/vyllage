@@ -17,7 +17,7 @@ var  FreeformEdit = React.createClass({
 	handleChange: function(event) {
 		this.setState({description: event.target.value});
 
-		if (this.props.updateDescription) {
+		if(this.props.updateDescription) {
 			this.props.updateDescription(event.target.value);
 		}
 	},
