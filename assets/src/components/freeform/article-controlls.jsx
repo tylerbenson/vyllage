@@ -9,9 +9,9 @@ var ArticleControlls = React.createClass({
                         <a href="" className="suggestions">suggestions</a>
                         <span className="suggestions-count count">2</span>
                     </div>
-                    <div className=" u-pull-left">
-                        <a href="" className="comments">comments</a>
-                        <span className="suggestions-count count">3</span>
+                     <div className="u-pull-left">
+                        <a href="" className="suggestions">comments</a>
+                        <span className="suggestions-count count">2</span>
                     </div>
                 </div>
             </div>
