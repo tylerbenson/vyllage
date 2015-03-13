@@ -1,4 +1,7 @@
 var React = require('react');
+var request = require('superagent');
+var Reflux = require('reflux');
+
 var Header = require('./components/header');
 var Profile = require('./components/profile');
 var ContactInfo = require('./components/contact/contact');
@@ -7,10 +10,9 @@ var FreeformContainer = require('./components/freeform/container');
 var ArticleContent = require('./components/organization/article-content');
 var ArticleControlls =require('./components/comments/Controls');
 var AddSections = require('./components/addSections/addSections');
-var request = require('superagent');
-var Reflux = require('reflux');
 
 var SectionsStore = require('./components/organization/store');
+var Actions = require('./components/organization/actions');
 
 var EmptyStateData =[
   {
@@ -48,11 +50,10 @@ function compare(a,b) {
 }
 
 var MainContainer = React.createClass({  
-
-    // mixins: [Reflux.connect(SectionsStore)],
     
     getInitialState: function() {
-      return {mainData: SectionsStore.getSections()};
+      return {mainData: SectionsStore.getSections(),
+              disableEditMode: SectionsStore.getDisableState()};
     },
 
     componentDidMount : function() {
@@ -64,7 +65,8 @@ var MainContainer = React.createClass({
     },
 
     onChange: function(sections) {
-      this.setState({ mainData: sections });
+      this.setState({ mainData: sections['sections'],
+                      disableEditMode: sections['disableEditMode'] });
     },
 
     componentDidUpdate: function() {
@@ -80,138 +82,11 @@ var MainContainer = React.createClass({
       }
     },
 
-    saveChanges: function (data) {
-        var self = this, documentId,
-            pathItems = window.location.pathname.split("/"),
-            token_header = document.getElementById('meta_header').content,
-            token_val = document.getElementById('meta_token').content;
-
-        if(pathItems.length > 2) {
-            documentId = pathItems[2];
-
-            // Check for Create mode
-            if(!data.sectionId) {
-                // Create mode
-                request
-                    .post('/resume/' + documentId + '/section/')
-                    .set(token_header, token_val)
-                    .send(data)
-                    .end(function(error, res) {
-
-                        if (res.ok) {
-                            for(var i = 0; i < self.state.mainData.length; i++){
-
-                                if(self.state.mainData[i].sectionPosition === data.sectionPosition){
-
-                                    self.state.mainData[i] = data;
-                                    self.setState({mainData: self.state.mainData});
-                                    return;
-                                }
-                            }
-                        } else {
-                           alert( res.text );  // this is left intentionally
-                           console.log(res.text); 
-                        }  
-                    });
-            } else {
-                // Update mode
-                request
-                    .post('/resume/' + documentId + '/section/' + data.sectionId +'')
-                    .set(token_header, token_val)
-                    .send(data)
-                    .end(function(error, res) {
-
-                        if (res.ok) {
-                            for(var i = 0; i < self.state.mainData.length; i++){
-
-                                if(self.state.mainData[i].sectionId === data.sectionId){
-
-                                    self.state.mainData[i] = data;
-                                    self.setState({mainData: self.state.mainData});
-                                    return;
-                                }
-                            }
-                        } else {
-                           alert( res.text );  // this is left intentionally
-                           console.log(res.text); 
-                        }  
-                    });
-            }
-        }
-    },
-
     addSection: function (type, sectionPosition) {
-        var  position = sectionPosition,
-             data = this.state.mainData;
-
-         // Set position    
-        data.map(function(result) {
-            if(result.sectionPosition >= position)
-            {
-                result.sectionPosition = result.sectionPosition + 1;
-            }
-        });
-        
-        this.state.editModePosition = position;
-
-        switch(type) {
-            case 'career goal':
-                    data.push({
-                        "type": "freeform",
-                        "title": "career goal",
-                        "sectionPosition": position,
-                        "state": "shown",
-                        "description": ""
-                    });
-                break;
-            case 'skills':
-                    data.push({
-                        "type": "freeform",
-                        "title": "skills",
-                        "sectionPosition": position,
-                        "state": "shown",
-                        "description": ""
-                    });
-                break;
-            case 'experience':
-                        data.push({
-                        "type": "experience",
-                        "title": "experience",
-                        "sectionPosition": position,
-                        "state": "shown",
-                        "organizationName": "",
-                        "organizationDescription": "",
-                        "role": "",
-                        "startDate": "",
-                        "endDate": "",
-                        "isCurrent": false,
-                        "location": "",
-                        "roleDescription": "",
-                        "highlights": ""
-                    });
-                break;
-            case 'education':
-                        data.push({
-                        "type": "experience",
-                        "title": "education",
-                        "sectionPosition": position,
-                        "state": "shown",
-                        "organizationName": "",
-                        "organizationDescription": "",
-                        "role": "",
-                        "startDate": "",
-                        "endDate": "",
-                        "isCurrent": false,
-                        "location": "",
-                        "roleDescription": "",
-                        "highlights": ""
-                    });
-                break;
-        }      
-
-        // Sort by sectionPosition
-        data.sort(compare);
-        this.setState({mainData: data});
+      if(!this.state.disableEditMode) {
+        this.state.editModePosition = sectionPosition;
+        Actions.addSection(type, sectionPosition);
+      }
     },
 
     // Render freeForm items
@@ -224,9 +99,10 @@ var MainContainer = React.createClass({
         AddSectionButtons = ( 
           <div className="u-pull-left full">
             <button className="u-pull-left article-btn"> {result.title} </button>
-            <button className="u-pull-right article-btn addSection-btn" 
-                onClick={this.addSection.bind(null, result.title,result.sectionPosition)}> 
-                {result.title}
+            <button disabled={this.state.disableEditMode?'disabled':''}  
+                    className="u-pull-right article-btn addSection-btn"
+                    onClick={this.addSection.bind(null, result.title, result.sectionPosition)}> 
+                    {result.title}
             </button>
           </div>
         );
@@ -239,7 +115,7 @@ var MainContainer = React.createClass({
 
             {AddSectionButtons}
 
-            <FreeformContainer freeformData={result} saveChanges={this.saveChanges}/>
+            <FreeformContainer freeformData={result} ref="section"/>
 
             <ArticleControlls/>
           </div>
@@ -257,8 +133,9 @@ var MainContainer = React.createClass({
           <div className="u-pull-left full">
             <button className="u-pull-left article-btn"> {result.title} </button>
             <button className="u-pull-right article-btn addSection-btn"
-                onClick={this.addSection.bind(null, result.title,result.sectionPosition)}>
-                {result.title}
+                    disabled={this.state.disableEditMode?'disabled':''}
+                    onClick={this.addSection.bind(null, result.title, result.sectionPosition)}>
+                    {result.title}
             </button>
           </div>
         );
@@ -269,7 +146,7 @@ var MainContainer = React.createClass({
             <div className="twelve columns">
               {AddSectionButtons}
 
-              <ArticleContent organizationData={result} saveChanges={this.saveChanges} />
+              <ArticleContent organizationData={result}/>
 
               <ArticleControlls />
             </div>
@@ -397,7 +274,6 @@ var MainContainer = React.createClass({
             }
 
             <AddSections addSection={this.addSection} title={'education'} position={results.length+1} shouldHide = {shouldHideEducation} />
-
             <AddSections addSection={this.addSection} title={'skills'} position={results.length+1} shouldHide = {shouldHideSkills}/>
           </div>
         );

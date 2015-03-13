@@ -1,6 +1,7 @@
 var React = require('react');
 
 var ArticleControlls = React.createClass({
+
     render: function() {
         return (
             <div className="article-controll">

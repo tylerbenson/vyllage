@@ -2,41 +2,41 @@ var React = require('react');
 
 var  FreeformEdit = React.createClass({ 
 
-    getInitialState: function() {
-        return {description:this.props.description}; 
-    },
+	getInitialState: function() {
+		return {description:this.props.description}; 
+	},
 
-    componentDidUpdate: function () {
-        this.state.description = this.props.description;
-    },
+	componentDidUpdate: function () {
+		this.state.description = this.props.description;
+	},
 
-    componentWillReceiveProps: function(nextProps) {
-        this.state.description = nextProps.description;
-    },
+	componentWillReceiveProps: function(nextProps) {
+		this.state.description = nextProps.description;
+	},
 
-    handleChange: function(event) {
-        this.setState({description: event.target.value});
+	handleChange: function(event) {
+		this.setState({description: event.target.value});
 
-        if (this.props.updateDescription) {
-            this.props.updateDescription(event.target.value);
-        }
-    },
+		if (this.props.updateDescription) {
+			this.props.updateDescription(event.target.value);
+		}
+	},
 
-    render: function() {
+	render: function() {
 
-        var description = this.state.description;
+		var description = this.state.description;
 
-        return (
-            <div className="editable">
-                <div className="edit">
-                    <textarea className="freeform-description" 
-                        placeholder="tell us about your career goal..." 
-                        onChange={this.handleChange} value ={description} >
-                    </textarea>
-                </div>
-            </div>
-        );
-    }
+		return (
+			<div className="editable">
+				<div className="edit">
+					<textarea className="freeform-description" 
+						placeholder="tell us about your career goal..." 
+						onChange={this.handleChange} value ={description} >
+					</textarea>
+				</div>
+			</div>
+		);
+	}
 });
 
 module.exports = FreeformEdit;
