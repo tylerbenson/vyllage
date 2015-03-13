@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import accounts.model.User;
@@ -33,10 +33,11 @@ public class AccountController {
 	 * @return
 	 * @throws UserNotFoundException
 	 */
-	@RequestMapping(value = "names", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "names", method = RequestMethod.GET, produces = "application/json")
 	// @PreAuthorize("hasAuthority('USER')")
 	public @ResponseBody List<AccountNames> getNames(
-			@RequestBody final List<Long> userIds) throws UserNotFoundException {
+			@RequestParam("userIds") final List<Long> userIds)
+			throws UserNotFoundException {
 
 		return userService.getNames(userIds);
 	}

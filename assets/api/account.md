@@ -1,7 +1,7 @@
 # Retrieve names for a list of user ids.
-## POST /account/names
-+ Body 
-	+ [0, 1, 2] 
+## GET /account/names?userIds=
++ RequestParam   
+	+ userIds=0,1,2...
 + Response 200 (application/json)
 ```
    [	
