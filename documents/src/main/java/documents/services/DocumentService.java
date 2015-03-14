@@ -1,13 +1,21 @@
 package documents.services;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import documents.model.AccountNames;
+import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentSection;
+import documents.repository.CommentRepository;
 import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
@@ -26,13 +34,19 @@ public class DocumentService {
 			.getName());
 
 	@Autowired
-	private SuggestionRepository suggestionRepository;
-
-	@Autowired
 	private DocumentRepository documentRepository;
 
 	@Autowired
 	private DocumentSectionRepository documentSectionRepository;
+
+	@Autowired
+	private CommentRepository commentRepository;
+
+	@Autowired
+	private SuggestionRepository suggestionRepository;
+
+	@Autowired
+	private AccountService accountService;
 
 	public Document saveDocument(Document document) {
 		logger.info("Saving document " + document);
@@ -122,6 +136,34 @@ public class DocumentService {
 
 	public List<Long> getRecentUsersForDocument(Long documentId) {
 		return documentRepository.getRecentUsersForDocument(documentId);
+	}
+
+	public List<Comment> getCommentsForSection(HttpServletRequest request,
+			Long sectionId) {
+		List<Comment> comments = commentRepository
+				.getCommentsForSection(sectionId);
+
+		if (comments == null || comments.isEmpty())
+			return Arrays.asList();
+
+		List<AccountNames> names = accountService.getNamesForUsers(comments
+				.stream().map(c -> c.getUserId()).collect(Collectors.toList()),
+				request);
+
+		for (Comment comment : comments) {
+			Optional<AccountNames> accountNames = names.stream()
+					.filter(an -> an.getUserId().equals(comment.getUserId()))
+					.findFirst();
+
+			accountNames.ifPresent(an -> comment.setUserName(an.getFirstName()
+					+ " " + an.getLastName()));
+		}
+
+		return comments;
+	}
+
+	public int getNumberOfCommentsForSection(Long sectionId) {
+		return commentRepository.getNumberOfCommentsForSection(sectionId);
 	}
 
 }

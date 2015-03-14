@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 
 import lombok.ToString;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(value = { "lastModified" })
 @ToString
 public class Comment {
 	private Long commentId;
@@ -13,6 +16,7 @@ public class Comment {
 	private Long userId;
 	private String commentText;
 	private LocalDateTime lastModified;
+	private String userName;
 
 	public Long getCommentId() {
 		return commentId;
@@ -75,6 +79,14 @@ public class Comment {
 	 */
 	public void setOtherCommentId(Long commentId) {
 		this.otherCommentId = commentId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }

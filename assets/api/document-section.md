@@ -28,6 +28,7 @@
         "organizationName": "DeVry Education Group",
         "organizationDescription": "Blah Blah Blah.",
         "role": "Manager, Local Accounts",
+        "numberOfComments":1
         "startDate": "September 2010",
         "endDate": "",
         "isCurrent": true,
@@ -77,6 +78,21 @@
   + sectionId (string, `1`) - The id of the section.
 + Response 200
 
+#Returns all the comments from a section.
+## GET /resume/{documentId}/section/{sectionId}/comments
++ Parameters
+  + documentId (string, `1`) - The id of the document.
+  + sectionId (string, `1`) - The id of the section.
+ 
+	[{	
+		"commentId":0,
+		"otherCommentId":null,
+		"sectionId":124,
+		"sectionVersion":1,
+		"userId":3,
+		"commentText":"Its a me, Mario!",
+		"userName":"Mario Mario"
+	}]
 
 
 

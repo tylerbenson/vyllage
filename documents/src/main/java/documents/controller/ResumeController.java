@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.model.AccountNames;
+import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
@@ -63,15 +64,32 @@ public class ResumeController {
 	public @ResponseBody List<DocumentSection> getResumeSections(
 			@PathVariable final Long documentId)
 			throws JsonProcessingException, ElementNotFoundException {
+		List<DocumentSection> documentSections = documentService
+				.getDocumentSections(documentId);
 
-		return documentService.getDocumentSections(documentId);
+		for (DocumentSection documentSection : documentSections) {
+			int commentsForSection = documentService
+					.getNumberOfCommentsForSection(documentSection
+							.getSectionId());
+			documentSection.setNumberOfComments(commentsForSection);
+		}
+
+		return documentSections;
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody DocumentSection getResumeSection(
-			@PathVariable final Long documentId,
+			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId) throws ElementNotFoundException {
-		return documentService.getDocumentSection(sectionId);
+
+		int commentsForSection = documentService
+				.getNumberOfCommentsForSection(sectionId);
+
+		DocumentSection documentSection = documentService
+				.getDocumentSection(sectionId);
+
+		documentSection.setNumberOfComments(commentsForSection);
+		return documentSection;
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.GET, produces = "application/json")
@@ -132,7 +150,7 @@ public class ResumeController {
 		documentService.deleteSection(sectionId);
 	}
 
-	@RequestMapping(value = "{documentId}/recentUsers", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/recent-users", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountNames> getRecentUsers(
 			HttpServletRequest request,
 			@PathVariable final Long documentId,
@@ -160,6 +178,14 @@ public class ResumeController {
 		Document document = documentService.getDocument(documentId);
 		document.setTagline(documentHeader.getTagline());
 		documentService.saveDocument(document);
+	}
+
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comments", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Comment> getCommentsForSection(
+			HttpServletRequest request, @PathVariable final Long documentId,
+			@PathVariable final Long sectionId) throws ElementNotFoundException {
+
+		return documentService.getCommentsForSection(request, sectionId);
 	}
 
 	@ExceptionHandler(value = { JsonProcessingException.class,
