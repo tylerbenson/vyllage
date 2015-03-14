@@ -5,6 +5,7 @@
   "dependencies": {
     "lodash.assign": "^3.0.0",
     "lodash.filter": "^3.0.0",
+    "lodash.findindex": "^3.0.0",
     "lodash.pick": "^3.0.0",
     "lodash.template": "^3.3.0",
     "react": "^0.12.2",
