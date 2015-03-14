@@ -34,12 +34,6 @@ var OrganizationEdit = React.createClass({
 		} else return false;
 	},
 
-	save: function () {
-		if(this.props.save){
-			this.props.save();
-		}
-	},
-
 	cancel: function () {
 		if(this.props.cancel){
 			this.props.cancel();
@@ -104,7 +98,7 @@ var OrganizationEdit = React.createClass({
 					<Highlights highlights={this.props.organizationData.highlights} updateRoleHighlights={this.updateRoleHighlights} />
 				</div>
 
-				<Buttons ref="buttonContainer" save={this.save} cancel={this.cancel} valid={this.valid()}/>
+				<Buttons ref="buttonContainer" cancel={this.cancel} valid={this.valid()} data={this.props.organizationData}/>
 			</div>
 		);
 	}

@@ -115,7 +115,7 @@ var MainContainer = React.createClass({
 
             {AddSectionButtons}
 
-            <FreeformContainer description={result.description} ref="section"/>
+            <FreeformContainer freeformData={result} ref="section"/>
 
             <ArticleControlls/>
           </div>

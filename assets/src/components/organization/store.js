@@ -88,6 +88,7 @@ var SectionsStore = Reflux.createStore({
 							request
 								.post('/resume/' + documentId + '/section/')
 								.set(token_header, token_val)
+								.set('Accept', 'application/json')
 								.send(data)
 								.end(function(error, res) {
 									if (res.ok) {
@@ -109,6 +110,7 @@ var SectionsStore = Reflux.createStore({
 						request
 							.post('/resume/' + documentId + '/section/' + data.sectionId +'')
 							.set(token_header, token_val)
+							.set('Accept', 'application/json')
 							.send(data)
 							.end(function(error, res) {
 
@@ -127,6 +129,38 @@ var SectionsStore = Reflux.createStore({
 							});
 					}
 				}
+	},
+
+	onDeleteSection: function(sectionId){
+		var self = this, documentId,
+		pathItems = window.location.pathname.split("/"),
+		token_header = document.getElementById('meta_header').content,
+		token_val = document.getElementById('meta_token').content;
+
+		if(pathItems.length > 2) {
+			documentId = pathItems[2];
+
+				// Check for Create mode
+			if(sectionId) {
+					request
+						.del('/resume/' + documentId + '/section/'+ sectionId)
+						.set(token_header, token_val)
+						.set('Accept', 'application/json')
+						.end(function(error, res) {
+							if (res.ok) {
+								for(var i = 0; i < self.sections.length; i++){
+                  if(self.sections[i].sectionId === sectionId){
+                    self.sections.splice(i,1);
+                  }
+                }
+								self.update();
+							} else {
+								alert(res.text);
+								console.log(res.text); 
+							}  
+				});
+			}
+		}
 	},
 
 	getSections: function() {
