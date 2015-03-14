@@ -82,7 +82,9 @@
 ## GET /resume/{documentId}/section/{sectionId}/comments
 + Parameters
   + documentId (string, `1`) - The id of the document.
-  + sectionId (string, `1`) - The id of the section.
+  + sectionId (string, `1`) - The id of the section. 
++ Response 200 (application/json)
+  + Body
  
 	[{	
 		"commentId":0,
