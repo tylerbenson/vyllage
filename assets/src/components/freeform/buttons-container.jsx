@@ -1,7 +1,6 @@
 var React = require('react');
 var Actions = require('../organization/actions');
 
-
 var ButtonsContainer = React.createClass({  
 
 	saveHandler: function(event) {

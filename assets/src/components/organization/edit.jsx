@@ -104,7 +104,7 @@ var OrganizationEdit = React.createClass({
 					<Highlights highlights={this.props.organizationData.highlights} updateRoleHighlights={this.updateRoleHighlights} />
 				</div>
 
-				<Buttons ref="buttonContainer" save={this.save} cancel={this.cancel} valid={this.valid()}/>
+				<Buttons ref="buttonContainer" save={this.save} cancel={this.cancel} valid={this.valid()} sectionId={this.props.organizationData.sectionId}/>
 			</div>
 		);
 	}
