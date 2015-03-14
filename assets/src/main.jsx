@@ -115,7 +115,7 @@ var MainContainer = React.createClass({
 
             {AddSectionButtons}
 
-            <FreeformContainer freeformData={result} ref="section"/>
+            <FreeformContainer description={result.description} ref="section"/>
 
             <ArticleControlls/>
           </div>
@@ -170,20 +170,17 @@ var MainContainer = React.createClass({
         this.state.mainData = EmptyStateData;
           return (
             <div>
-                { 
-                  EmptyStateData.map(function(result) {
-                      if(result.type === "freeform"){
-                          return that.freeFormItems(that.state.mainData[0], true,true);
-                      }
-                      else{
-                          return that.experienceItems(that.state.mainData[1], true,true); 
-                      }
-
-                  })
-                }
-                <AddSections addSection={that.addSection} title={'education'}  position={this.state.mainData.length+1}/>
-
-                <AddSections addSection={that.addSection} title={'skills'}  position={this.state.mainData.length+1}/>
+              { 
+                EmptyStateData.map(function(result) {
+                  if(result.type === "freeform") {
+                    return that.freeFormItems(that.state.mainData[0], true,true);
+                  } else {
+                    return that.experienceItems(that.state.mainData[1], true,true); 
+                  }
+                })
+              }
+              <AddSections addSection={that.addSection} title={'education'} position={this.state.mainData.length+1}/>
+              <AddSections addSection={that.addSection} title={'skills'} position={this.state.mainData.length+1}/>
             </div>
           );
       } else {
@@ -202,63 +199,62 @@ var MainContainer = React.createClass({
                     // Check for find first element (career goal), need for add button.
                     if(result.title == "career goal") {
                       addNewItem = 1;
-                      careergoalCount = careergoalCount + 1;
+                      careergoalCount += 1;
                     }
 
                     // Check for find first element (skills), need for add button.
                     if(result.title == "skills") {
                       addNewItem = 1;
                       shouldHideSkills = true;
-                      skillsCount = skillsCount + 1;
+                      skillsCount += 1;
                     }
-                    
+                    that.state.editModePosition = undefined;
                     // return element
                     return that.freeFormItems(result, true,true);
                   } else {
                     if(careergoalCount == 0  && result.title == "career goal") {
                       addNewItem = 1;
-                      careergoalCount = careergoalCount + 1;
+                      careergoalCount += 1;
                     }
 
                     if(skillsCount == 0 && result.title == "skills") {
                       addNewItem = 1;
-                      skillsCount = skillsCount + 1;
+                      skillsCount += 1;
                       shouldHideSkills = true;
                     }
 
                     if (addNewItem == 1) {
                       addNewItem = 0;
                       return that.freeFormItems(result,false,true);
-                    }
-                    else {
+                    } else {
                       return that.freeFormItems(result,false,false);
                     }
                   }
                 } else {
                   addNewItem = 0;
                   if(that.state.editModePosition == result.sectionPosition) {
-                    if(result.title == "experience"){
+                    if(result.title == "experience") {
                       addNewItem = 1;
-                      experienceCount = experienceCount + 1;
+                      experienceCount += 1;
                     }
 
                     if(result.title == "education"){
                       addNewItem = 1;
-                      educationCount = educationCount + 1;
+                      educationCount += 1;
                       shouldHideEducation = true;
                     }
-
+                     that.state.editModePosition = undefined;
                     return that.experienceItems(result, true,true);
 
                   } else {
-                    if(experienceCount == 0 && result.title == "experience"){
+                    if(experienceCount == 0 && result.title == "experience") {
                       addNewItem = 1;
-                      experienceCount = experienceCount + 1;
+                      experienceCount += 1;
                     }
 
-                    if(educationCount == 0 && result.title == "education"){
+                    if(educationCount == 0 && result.title == "education") {
                       addNewItem = 1;
-                      educationCount = educationCount + 1;
+                      educationCount += 1;
                       shouldHideEducation = true;
                     }
 

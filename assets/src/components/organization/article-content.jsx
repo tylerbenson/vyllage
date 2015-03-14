@@ -1,20 +1,18 @@
 var React = require('react');
 var OrganizationEdit = require('./edit');
 var OrganizationMain = require('./main');
+
+var SectionsStore = require('./store');
 var Actions = require('./actions');
 
 var ArticleContent = React.createClass({  
 
 	getInitialState: function() {
-		return {
-				isMain: true,
-				organizationData: ''
-			};
+		return {organizationData: ''};
 	}, 
 
 	save: function () {
 		Actions.saveSection(this.refs.editContainer.state.organizationData);
-		this.handleModeChange();
 	},
 
 	cancel: function () {
@@ -22,40 +20,26 @@ var ArticleContent = React.createClass({
 	},
 
 	handleModeChange: function () {
-
-		if(!this.state.isMain) {
-			
 			this.refs.mainContainer.getDOMNode().style.display="block";
 			this.refs.editContainer.getDOMNode().style.display="none";
-
-			this.state.isMain=true ;
-		}
-
 		return false;
 	},
 
 	 goToEditMode: function() {
+	 		if(!SectionsStore.getDisableState()){
+				var data = JSON.parse(JSON.stringify(this.props.organizationData));
+				this.setState({organizationData :data});
 
-		if(this.state.isMain) {
-			var data = JSON.parse(JSON.stringify(this.props.organizationData));
-			this.setState({
-				organizationData :data,
-				isMain: false
-			 });
-
-			this.refs.mainContainer.getDOMNode().style.display="none";
-			this.refs.editContainer.getDOMNode().style.display="block";
-			this.state.isMain=false;
-		}
+				this.refs.mainContainer.getDOMNode().style.display="none";
+				this.refs.editContainer.getDOMNode().style.display="block";
+			}
 	},
 
 	render: function() {
 		return (
-			<div className="article-content" onClick={this.goToEditMode}>
-
-				<OrganizationMain ref="mainContainer" organizationData={this.props.organizationData}/>
+			<div className="article-content">
+				<OrganizationMain ref="mainContainer" organizationData={this.props.organizationData} goToEditMode={this.goToEditMode}/>
 				<OrganizationEdit ref="editContainer" organizationData={this.props.organizationData} save={this.save} cancel={this.cancel}/>
-				
 			</div>
 		);
 	}
