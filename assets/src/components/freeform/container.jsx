@@ -17,10 +17,6 @@ var FreeformContainer = React.createClass({
 		this.setState({description: this.state.description });
 	},
 
-	save: function () {
-		Actions.saveSection(this.state.description);
-	},
-
 	cancel: function () {
 		this.handleModeChange();
 	},
@@ -56,7 +52,7 @@ var FreeformContainer = React.createClass({
 			<div className="article-content">
 				<FreeformMain ref="goalMain" description={this.props.freeformData.description} goToEditMode ={this.goToEditMode} />
 				<FreeformEdit ref="goalEdit" description={this.props.freeformData.description} updateDescription={this.updateDescription} />
-				<ButtonsContainer ref="buttonContainer" save={this.save} cancel={this.cancel} valid={this.valid()} sectionId={this.props.freeformData.sectionId}/>
+				<ButtonsContainer ref="buttonContainer" data= {this.props.freeformData} cancel={this.cancel} valid={this.valid()}/>
 			</div>
 		);
 	}
