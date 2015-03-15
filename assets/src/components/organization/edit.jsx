@@ -20,6 +20,7 @@ var OrganizationEdit = React.createClass({
 	},
 
 	valid: function () {
+		// Valid function should not be called in render tree. It should be called in a event handler
 		if(this.state.organizationData !== "" && this.state.organizationData !== undefined) {
 			if(this.state.organizationData.organizationName.trim() || 
 				this.state.organizationData.organizationDescription.trim() || 
@@ -98,7 +99,7 @@ var OrganizationEdit = React.createClass({
 					<Highlights highlights={this.props.organizationData.highlights} updateRoleHighlights={this.updateRoleHighlights} />
 				</div>
 
-				<Buttons ref="buttonContainer" cancel={this.cancel} valid={this.valid()} data={this.props.organizationData}/>
+				<Buttons ref="buttonContainer" cancel={this.cancel} valid={this.valid} data={this.props.organizationData}/>
 			</div>
 		);
 	}

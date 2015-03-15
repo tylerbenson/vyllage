@@ -7,7 +7,7 @@ var CareerGoal = React.createClass({
     var sections = this.props.sections || [];
     var sectionNodes = sections.map(function (section, index) {
       return <FreeformContainer  key={index} freeformData={section} ref="section"/>
-    })
+    });
     return (
       <article className='career-goal forceEditMode'>
         <div className="row">

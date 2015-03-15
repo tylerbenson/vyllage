@@ -3,6 +3,8 @@ var actions = require('../actions');
 
 var SectionHeader = React.createClass({
   addSection: function (e) {
+    e.preventDefault()
+    e.stopPropagation()
     actions.postSection({type: this.props.type}, {});
   },
   render: function () {
