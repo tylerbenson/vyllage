@@ -79,7 +79,10 @@ var ProfileContainer = React.createClass({
 
 });
 
-React.render(<ProfileContainer />, document.getElementById('profile'));
+// This render to id should be deleted after refractoring
+if (document.getElementById('profile')) {
+    React.render(<ProfileContainer />, document.getElementById('profile'));
+}
 
 module.exports = ProfileContainer;
 
