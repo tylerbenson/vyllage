@@ -4,10 +4,39 @@ var endpoints = require('../endpoints');
 var urlTemplate = require('url-template');
 var findindex = require('lodash.findindex');
 
+var resume = {
+  sections: [
+    {
+      "type": "career-goal",
+      "title": "career goal",
+      "sectionPosition": 1,
+      "state": "shown",
+      "description": ""
+    },
+    {
+      "type": "experience",
+      "title": "experience",
+      "sectionPosition": 2,
+      "state": "shown",
+      "organizationName": "",
+      "organizationDescription": "",
+      "role": "",
+      "startDate": "",
+      "endDate": "",
+      "isCurrent": false,
+      "location": "",
+      "roleDescription": "",
+      "highlights": ""
+    }
+  ]
+}
+
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
-    this.resume = {};
+    // temporarily asseigned placeholder 
+    this.resume = resume;
+    // this.resume = {}; // uncomment of api call integration
   },
   onGetResume: function (params) {
     var url = urlTemplate.parse(endpoints.resume).expand(params);
@@ -32,14 +61,18 @@ module.exports = Reflux.createStore({
       }.bind(this))
   },
   onPostSection: function (data, params) {
-    var url = urlTemplate.parse(endpoints.resumeSections).expand(params);
-    request
-      .post(url)
-      .send(data)
-      .end(function (err, res) {
-        this.resume.sections.push(res.body);
-        this.trigger(this.resume);
-      }.bind(this))
+    // var url = urlTemplate.parse(endpoints.resumeSections).expand(params);
+    // request
+    //   .post(url)
+    //   .send(data)
+    //   .end(function (err, res) {
+    //     this.resume.sections.push(res.body);
+    //     this.trigger(this.resume);
+    //   }.bind(this))
+    
+    // for temporary use
+    this.resume.sections.push(data);
+    this.trigger(this.resume);
   },
   onPutSection: function (data, params) {
     var url = urlTemplate.parse(endpoints.resumeSection).expand(params);

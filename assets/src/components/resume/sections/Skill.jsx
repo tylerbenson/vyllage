@@ -1,8 +1,13 @@
 var React = require('react');
 var Header = require('./Header');
+var AddSections = require('../../addSections/addSections');
 
 var Skills = React.createClass({
+  addSection: function () {
+
+  },
   render: function () {
+    
     return (
       <article className='career-goal'>
         <div className="row">

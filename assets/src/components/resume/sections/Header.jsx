@@ -1,8 +1,9 @@
 var React = require('react');
+var actions = require('../actions');
 
 var SectionHeader = React.createClass({
   addSection: function (e) {
-
+    actions.postSection({type: this.props.type}, {});
   },
   render: function () {
     return  (
