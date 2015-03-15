@@ -8,7 +8,7 @@ var ContactInfo = require('./components/contact/contact');
 var ShareInfo = require('./components/contact/share');
 var FreeformContainer = require('./components/freeform/container');
 var ArticleContent = require('./components/organization/article-content');
-var ArticleControlls =require('./components/comments/Controls');
+var ArticleControlls =require('./components/resume/comments/Controls');
 var AddSections = require('./components/addSections/addSections');
 
 var SectionsStore = require('./components/organization/store');
