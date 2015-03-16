@@ -1,23 +1,23 @@
 var React = require('react');
 var Header = require('./Header');
-var ArticleContent = require('../../organization/article-content');
+var FreeformContainer = require('../../freeform/container');
 
-var Experience = React.createClass({
+var Skills = React.createClass({
   render: function () {
     var sectionNodes;
     var sections = this.props.sections || [];
     if (sections.length > 0) {
       sectionNodes = sections.map(function (section, index) {
-        return <ArticleContent  key={index} organizationData={section}/>
-      })
+        return <FreeformContainer key={index} freeformData={section} />
+      });
     } else {
-      sectionNodes = <p className='add-more'>No experience added yet</p>;
+      sectionNodes = <p className='add-more'>No skills added yet</p>
     }
     return (
-      <article className='experience forceEditMode'>
+      <article className='career-goal'>
         <div className="row">
           <div className="twelve columns">
-            <Header title='experience' type='experience'/> 
+            <Header title='skills' type='skill' /> 
             {sectionNodes}
           </div>
         </div>
@@ -26,4 +26,4 @@ var Experience = React.createClass({
   }
 });
 
-module.exports = Experience;
+module.exports = Skills;
