@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 var request = require('superagent');
 var template = require('url-template');
-var endpoints = require('../endpoints');
+var endpoints = require('../../endpoints');
 
 var comments = [
   {commentId: 1, commentText: 'Looks good'},

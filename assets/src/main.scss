@@ -5,12 +5,12 @@
 		width: 100%;
 	}
 
-	button[disabled] {
-		background-color: red !important;
-	}
-
 	.editable, .buttons-container {
 		display: none;
+	}
+
+	.nonEditable {
+		display: block;
 	}
 
 	.forceEditMode {
@@ -52,6 +52,6 @@
 @import './components/common/common';
 @import './components/common/edit';
 @import './components/contact/shareInfo';
-@import './components/comments/comments';
+@import './components/resume/comments/comments';
 
 

@@ -2,9 +2,15 @@ var React = require('react');
 
 var OrganizationMain = React.createClass({   
 
+	goToEditMode: function() {
+		if(this.props.goToEditMode) {
+			this.props.goToEditMode();
+		}
+	},
+
 	render: function() {
 		return (
-			<div className="nonEditable">
+			<div className="nonEditable" onClick={this.goToEditMode}>
 
 				<div className="main">
 					<p className="organization-name">

@@ -7,7 +7,7 @@ var Menu = React.createClass({
     },
 
     account: function () {
-        window.location.pathname = "/account/1";
+        window.location.pathname = "/account/";
     },
 
     render: function() {
