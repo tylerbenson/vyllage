@@ -128,7 +128,7 @@ public class ResumeController {
 		return documentService.saveDocumentSection(document, body);
 	}
 
-	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody DocumentSection saveSection(
 			@PathVariable final Long documentId,
@@ -180,12 +180,36 @@ public class ResumeController {
 		documentService.saveDocument(document);
 	}
 
-	@RequestMapping(value = "{documentId}/section/{sectionId}/comments", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Comment> getCommentsForSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
-			@PathVariable final Long sectionId) throws ElementNotFoundException {
+			@PathVariable final Long sectionId) {
 
 		return documentService.getCommentsForSection(request, sectionId);
+	}
+
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void saveCommentsForSection(@PathVariable final Long documentId,
+			@PathVariable final Long sectionId,
+			@RequestBody final Comment comment) {
+
+		documentService.saveComment(comment);
+	}
+
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void saveCommentsForComment(@PathVariable final Long documentId,
+			@PathVariable final Long sectionId,
+			@PathVariable final Long commentId,
+			@RequestBody final Comment comment) {
+
+		// hmm, not sure if we need this one
+
+		if (comment.getOtherCommentId() == null)
+			comment.setCommentId(commentId);
+
+		documentService.saveComment(comment);
 	}
 
 	@ExceptionHandler(value = { JsonProcessingException.class,

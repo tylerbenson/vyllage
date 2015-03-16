@@ -166,4 +166,8 @@ public class DocumentService {
 		return commentRepository.getNumberOfCommentsForSection(sectionId);
 	}
 
+	public void saveComment(Comment comment) {
+		commentRepository.save(comment);
+	}
+
 }
