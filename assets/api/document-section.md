@@ -104,7 +104,7 @@
 +Body  
 
 	{	
-		"commentId":0,
+		"commentId":null,
 		"otherCommentId":null,
 		"sectionId":124,
 		"sectionVersion":1,
@@ -123,7 +123,7 @@
 +Body  
 
 	{	
-		"commentId":0,
+		"commentId":null,
 		"otherCommentId":2,
 		"sectionId":124,
 		"sectionVersion":1,
