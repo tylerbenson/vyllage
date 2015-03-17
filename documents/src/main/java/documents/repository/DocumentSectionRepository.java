@@ -44,10 +44,11 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		Result<Record3<String, Long, Long>> existingRecords = sql
 				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION) //
 				.from(s1) //
-				.join(s2) //
-				.on(s1.ID.eq(s2.ID)) //
-				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)) //
-				.where(s1.ID.eq(id)).fetch();
+				.leftOuterJoin(s2) //
+				.on(s1.ID.eq(s2.ID).and(
+						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION))) //
+				.where(s2.ID.isNull().and(s1.ID.eq(id))) //
+				.orderBy(s1.SECTIONVERSION).fetch();
 
 		// select d1.*
 		// from docs d1
@@ -70,10 +71,10 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		Result<Record3<String, Long, Long>> existingRecords = sql
 				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION) //
 				.from(s1) //
-				.join(s2) //
-				.on(s1.ID.eq(s2.ID)) //
-				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)) //
-				.fetch();
+				.leftOuterJoin(s2) //
+				.on(s1.ID.eq(s2.ID).and(
+						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION))) //
+				.where(s2.ID.isNull()).fetch();
 
 		return existingRecords.stream()
 				.map(DocumentSectionRepository::generateDocumentSection)
@@ -94,12 +95,13 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
 
 		Result<Record3<String, Long, Long>> existingRecords = sql
-				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION) //
-				.from(s1) //
-				.join(s2) //
-				.on(s1.ID.eq(s2.ID)) //
-				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)) //
-				.where(s1.DOCUMENTID.eq(documentId)).fetch();
+				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION)
+				.from(s1)
+				.leftOuterJoin(s2)
+				.on(s1.ID.eq(s2.ID).and(
+						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION)))
+				.where(s2.ID.isNull().and(s1.DOCUMENTID.eq(documentId)))
+				.fetch();
 
 		if (existingRecords == null)
 			throw new ElementNotFoundException(
@@ -128,11 +130,24 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	@Override
 	public DocumentSection save(DocumentSection documentSection) {
 
-		DocumentSectionsRecord existingRecord = sql.fetchOne(DOCUMENT_SECTIONS,
-				DOCUMENT_SECTIONS.ID.eq(documentSection.getSectionId()));
+		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
+		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
+
+		List<DocumentSectionsRecord> records = sql
+				.select()
+				.from(s1)
+				.leftOuterJoin(s2)
+				.on(s1.ID.eq(s2.ID).and(
+						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION)))
+				.where(s2.ID.isNull().and(
+						s1.ID.eq(documentSection.getSectionId())))
+				.orderBy(s1.SECTIONVERSION)
+				.fetchInto(DocumentSectionsRecord.class);
+
+		DocumentSectionsRecord existingRecord = records != null
+				&& !records.isEmpty() ? records.get(0) : null;
 
 		if (existingRecord == null) {
-			logger.info("Saving documentSection: " + documentSection);
 
 			DocumentSectionsRecord newRecord = sql.newRecord(DOCUMENT_SECTIONS);
 			long newSectionVersion = 0L;
@@ -181,15 +196,14 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 
 		}
 
-		logger.info("Saved document section " + documentSection);
 		return documentSection;
 	}
 
 	@Override
 	public void delete(Long sectionId) {
-		DocumentSectionsRecord existingRecord = sql.fetchOne(DOCUMENT_SECTIONS,
-				DOCUMENT_SECTIONS.ID.eq(sectionId));
-		existingRecord.delete();
+		Result<DocumentSectionsRecord> existingRecords = sql.fetch(
+				DOCUMENT_SECTIONS, DOCUMENT_SECTIONS.ID.eq(sectionId));
+		existingRecords.forEach(r -> r.delete());
 	}
 
 	public boolean exists(Long sectionId) {
