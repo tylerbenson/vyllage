@@ -1,5 +1,6 @@
 var React = require('react');
 var Headline = require('./Headline');
+var Tagline = require('./Tagline');
 var ShareContactButtons = require('./share-contact-btns');
 var Contact = require('../contact');
 var Share = require('../share');
@@ -26,22 +27,16 @@ var Header = React.createClass({
       <div className="row">
         <article>
           <Headline {...header}/>
-          <ShareContactButtons 
-            toggleContact={this.toggleContact}
-            toggleShare={this.toggleShare}
-          />
-        </article>
-        <article className="info-sections" id='share-info'>
-          <Share />
-        </article>
-        <article className="info-sections" id='contact-info'>
-          <Contact />
+          <Tagline tagline={header.tagline} />
         </article>
       </div>
     );
   }
 });
 
-
+// <ShareContactButtons 
+            // toggleContact={this.toggleContact}
+            // toggleShare={this.toggleShare}
+          // />
 module.exports = Header;
 

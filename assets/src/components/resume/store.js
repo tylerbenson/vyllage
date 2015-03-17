@@ -66,6 +66,11 @@ module.exports = Reflux.createStore({
         } 
       }.bind(this))
   },
+  onUpdateTagline: function (tagline) {
+    // implement api call also here
+    this.resume.header.tagline = tagline;
+    this.trigger(this.resume);
+  },
   onGetSections: function (params) {
     var url = urlTemplate.parse(endpoints.resumeSections).expand(params);
     request

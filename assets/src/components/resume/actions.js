@@ -4,7 +4,7 @@ module.exports = Reflux.createActions([
   //
   'getResume',
   'getHeader',
-  'putHeader',
+  'updateTagline',
   // sections
   'getSections',
   'postSection',
@@ -12,5 +12,6 @@ module.exports = Reflux.createActions([
   'deleteSection',
   // comments
   'getComments',
-  'postComment'
+  'postComment',
+
 ]);
