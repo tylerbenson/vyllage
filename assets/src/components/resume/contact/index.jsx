@@ -314,8 +314,4 @@ var ContactData = {
     }
 };
 
-// This render should be deleted after contact 
-if (document.getElementById('contact-info')) {
-    React.render(<ContactCantainer />, document.getElementById('contact-info'));
-}
 module.exports = ContactCantainer;

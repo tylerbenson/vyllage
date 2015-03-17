@@ -8,8 +8,8 @@ var Experience = require('./sections/Experience');
 var Education = require('./sections/Education');
 var Skill = require('./sections/Skill');
 var Profile = require('./profile');
-var Contact = require('./contact/contact');
-var Share = require('./contact/share');
+var Contact = require('./contact');
+var Share = require('./share');
 
 var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],

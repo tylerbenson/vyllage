@@ -212,9 +212,4 @@ var LinkContainer = React.createClass({
     }
 });
 
-// This render should be deleted after refracter
-if (document.getElementById('share-info')) {
-    React.render(<LinkContainer ShareData={ShareData} />, document.getElementById('share-info'));
-}
-
 module.exports = LinkContainer;
