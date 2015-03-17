@@ -56,7 +56,7 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)
 	public String getResume(@PathVariable final Long documentId) {
-		return "main";
+		return "resume";
 	}
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
