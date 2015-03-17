@@ -74,7 +74,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 				.leftOuterJoin(s2) //
 				.on(s1.ID.eq(s2.ID).and(
 						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION))) //
-				.fetch();
+				.where(s2.ID.isNull()).fetch();
 
 		return existingRecords.stream()
 				.map(DocumentSectionRepository::generateDocumentSection)
@@ -95,12 +95,13 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
 
 		Result<Record3<String, Long, Long>> existingRecords = sql
-				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION) //
-				.from(s1) //
-				.leftOuterJoin(s2) //
+				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION)
+				.from(s1)
+				.leftOuterJoin(s2)
 				.on(s1.ID.eq(s2.ID).and(
-						s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION))) //
-				.where(s1.DOCUMENTID.eq(documentId)).fetch();
+						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION)))
+				.where(s2.ID.isNull().and(s1.DOCUMENTID.eq(documentId)))
+				.fetch();
 
 		if (existingRecords == null)
 			throw new ElementNotFoundException(
