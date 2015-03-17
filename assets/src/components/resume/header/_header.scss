@@ -1,0 +1,46 @@
+.resume-header {
+  height: $profile-height;
+}
+
+.headline {
+	font-size: 42px;
+	line-height: 34px;
+	letter-spacing: 1px;
+	text-align: center;
+	margin-top: 20px;
+}
+
+.tagline {
+	font-size: 20px;
+	line-height: 22px;
+	padding: 0 10px;
+	text-align: center;
+}
+
+.tagline-edit {
+	width: 100%;
+	font-size: 18px;
+	line-height: 18px;
+	margin-bottom: 10px;
+	text-align: left;
+	border: 1px solid #a89892;
+}
+
+.btns-grid {
+	margin-left: 0px;
+	width: 200px;
+
+	.share-contact-btns-container {
+		float: right;
+		margin-top: 146px;
+		margin-right: -2px;
+
+		.share {
+			@include share-contact-btn();
+		}
+
+		.contact {
+			@include share-contact-btn();
+		}
+	}
+}

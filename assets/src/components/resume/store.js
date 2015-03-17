@@ -5,6 +5,12 @@ var urlTemplate = require('url-template');
 var findindex = require('lodash.findindex');
 
 var resume = {
+  header: {
+    firstName: "Nathan",
+    middleName: "M",
+    lastName: "Benson",
+    tagline: "Technology Enthusiast analyzing, building, and expanding solutions"
+  },
   sections: [
     {
       "type": "career-goal",
@@ -49,6 +55,17 @@ module.exports = Reflux.createStore({
         } 
       }.bind(this))
   },
+  onGetHeader: function (params) {
+    var url = urlTemplate.parse(endpoints.resumeHeader).expand(params);
+    request
+      .get(url)
+      .end(function (err, res) {
+        if (res.ok) {
+          this.resume.header = res.body;
+          this.trigger(this.resume);
+        } 
+      }.bind(this))
+  },
   onGetSections: function (params) {
     var url = urlTemplate.parse(endpoints.resumeSections).expand(params);
     request
@@ -61,9 +78,12 @@ module.exports = Reflux.createStore({
       }.bind(this))
   },
   onPostSection: function (data, params) {
+    // var tokenHeader = document.getElementById('meta_header').content,
+    // var tokenValue = document.getElementById('meta_token').content;
     // var url = urlTemplate.parse(endpoints.resumeSections).expand(params);
     // request
     //   .post(url)
+    //   .set(tokenHeader, tokenValue) 
     //   .send(data)
     //   .end(function (err, res) {
     //     this.resume.sections.push(res.body);

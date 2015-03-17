@@ -1,47 +1,6 @@
 var React = require('react');
 
 var Social = React.createClass({
-
-    getInitialState: function() {
-        return {data: '',
-                editMode: false}; 
-    },
-
-    componentWillMount : function() {
-        this.setState({data: this.props.data,
-                editMode: false});
-    },
-
-    edit: function() {
-        if(!this.state.editMode){
-            this.refs.twitterEdit.getDOMNode().style.display="block" ;
-            this.refs.twitterMain.getDOMNode().style.display="none" ;
-
-            this.refs.linkedinEdit.getDOMNode().style.display="block" ;
-            this.refs.linkedinMain.getDOMNode().style.display="none" ;
-        } else {
-            this.refs.twitterEdit.getDOMNode().style.display="none";
-            this.refs.twitterMain.getDOMNode().style.display="";
-
-            this.refs.linkedinEdit.getDOMNode().style.display="none" ;
-            this.refs.linkedinMain.getDOMNode().style.display="block" ;
-
-            if(this.props.updateSocialData){
-                this.props.updateSocialData(this.state.data);
-            }
-        }
-
-        this.state.editMode = !this.state.editMode;
-    },
-
-    updateValue: function (type, data) {
-        if(type=="twitter"){
-            this.state.data.twitter = data;
-        } else if(type=="linkedin"){
-            this.state.data.linkedin = data;
-        }
-    },
-
     render: function() {
 		return (
             <div className="social info-blog">
