@@ -5,13 +5,11 @@ import static documents.domain.tables.DocumentSections.DOCUMENT_SECTIONS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
-import org.jooq.Record;
 import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -115,26 +113,26 @@ public class CommentRepository implements IRepository<Comment> {
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
 		Comments c = COMMENTS.as("c");
 
-		List<Record> records = sql.select(c.fields()).from(s1).join(s2)
+		List<Comment> comments = sql.select(c.fields()).from(s1).join(s2)
 				.on(s1.ID.eq(s2.ID))
 				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)).join(c)
 				.on(c.SECTION_ID.eq(s2.ID)).where(c.SECTION_ID.eq(sectionId))
-				.fetch();
+				.fetchInto(Comment.class);
 
-		List<Comment> comments = new ArrayList<>();
-		for (Record record : records) {
-			Comment comment = new Comment();
-			comment.setCommentId(record.getValue(COMMENTS.COMMENT_ID));
-			comment.setCommentText(record.getValue(COMMENTS.COMMENT_TEXT));
-			comment.setLastModified(record.getValue(COMMENTS.LAST_MODIFIED)
-					.toLocalDateTime());
-			comment.setOtherCommentId(record
-					.getValue(COMMENTS.OTHER_COMMENT_ID));
-			comment.setSectionId(sectionId);
-			comment.setSectionVersion(record.getValue(COMMENTS.SECTION_VERSION));
-			comment.setUserId(record.getValue(COMMENTS.USER_ID));
-			comments.add(comment);
-		}
+		// List<Comment> comments = new ArrayList<>();
+		// for (Record record : records) {
+		// Comment comment = new Comment();
+		// comment.setCommentId(record.getValue(COMMENTS.COMMENT_ID));
+		// comment.setCommentText(record.getValue(COMMENTS.COMMENT_TEXT));
+		// comment.setLastModified(record.getValue(COMMENTS.LAST_MODIFIED)
+		// .toLocalDateTime());
+		// comment.setOtherCommentId(record
+		// .getValue(COMMENTS.OTHER_COMMENT_ID));
+		// comment.setSectionId(sectionId);
+		// comment.setSectionVersion(record.getValue(COMMENTS.SECTION_VERSION));
+		// comment.setUserId(record.getValue(COMMENTS.USER_ID));
+		// comments.add(comment);
+		// }
 
 		return comments;
 

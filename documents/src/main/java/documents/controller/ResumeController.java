@@ -204,8 +204,6 @@ public class ResumeController {
 			@PathVariable final Long commentId,
 			@RequestBody final Comment comment) {
 
-		// hmm, not sure if we need this one
-
 		if (comment.getOtherCommentId() == null)
 			comment.setCommentId(commentId);
 
