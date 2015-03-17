@@ -1,6 +1,6 @@
 var React = require('react');
 var Header = require('./Header');
-var FreeformContainer = require('../../freeform/container');
+var FreeformContainer = require('../freeform/container');
 
 var CareerGoal = React.createClass({
   render: function () {

@@ -3,6 +3,8 @@ var Reflux = require('reflux');
 module.exports = Reflux.createActions([
   //
   'getResume',
+  'getHeader',
+  'updateTagline',
   // sections
   'getSections',
   'postSection',
@@ -10,5 +12,6 @@ module.exports = Reflux.createActions([
   'deleteSection',
   // comments
   'getComments',
-  'postComment'
+  'postComment',
+
 ]);
