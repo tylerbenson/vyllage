@@ -27,8 +27,8 @@ var CareerGoal = React.createClass({
     e.preventDefault();
     var careerGoal = this.props.careerGoal;
     careerGoal.description = this.state.description;
-    actions.updateSection(careerGoal); 
     this.setState({edit: false});
+    actions.updateSection(careerGoal); 
   },
   cancelHandler: function (e) {
     e.preventDefault();
