@@ -9,6 +9,8 @@ import org.jooq.DSLContext;
 import org.jooq.ExecuteListenerProvider;
 import org.jooq.SQLDialect;
 import org.jooq.TransactionProvider;
+import org.jooq.conf.RenderNameStyle;
+import org.jooq.conf.Settings;
 import org.jooq.impl.DataSourceConnectionProvider;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultDSLContext;
@@ -16,6 +18,7 @@ import org.jooq.impl.DefaultExecuteListenerProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
@@ -28,9 +31,13 @@ public class LoginDatabaseConfiguration {
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private Environment env;
+
 	@Bean
 	public DSLContext dsl(org.jooq.Configuration config) {
-		return new DefaultDSLContext(config);
+		DSLContext dsl = new DefaultDSLContext(config);
+		return dsl;
 	}
 
 	@Bean
@@ -69,11 +76,12 @@ public class LoginDatabaseConfiguration {
 			ConnectionProvider connectionProvider,
 			TransactionProvider transactionProvider,
 			ExecuteListenerProvider executeListenerProvider) {
-		return new DefaultConfiguration() //
-				.derive(connectionProvider) //
-				.derive(transactionProvider) //
-				.derive(executeListenerProvider) //
-				.derive(SQLDialect.H2);
+		return new DefaultConfiguration()
+				.derive(connectionProvider)
+				.derive(transactionProvider)
+				.derive(executeListenerProvider)
+				.derive(SQLDialect.valueOf(env
+						.getRequiredProperty("jooq.sql.dialect")))
+				.set(new Settings().withRenderNameStyle(RenderNameStyle.LOWER));
 	}
-
 }
