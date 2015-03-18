@@ -11,6 +11,27 @@ var resume = {
     lastName: "Benson",
     tagline: "Technology Enthusiast analyzing, building, and expanding solutions"
   },
+  contact: {
+    "social": {
+      "twitter":"@nben888",
+      "facebook":"natebenson",
+      "linkedin":"www.linkedin.com/natebenson",
+      "visibility":"private"
+    },
+    "contact": {
+      "email":"nathan@vyllage.com",
+      "home":"555-890-2345",
+      "cell":"555-123-2345",
+      "visibility":"private"
+    },
+    "location": {
+      "values":[
+        "1906 NE 151st Cicle, Vancouver WA g8589",
+        "1906 NE 151st Cicle, Vancouver WA g8589"
+      ],
+      "visibility":"private"
+    }
+  },
   sections: [
     {
       "type": "career-goal",
