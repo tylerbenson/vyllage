@@ -58,10 +58,6 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)
-<<<<<<< Upstream, based on origin/master
-	public String getResume(@PathVariable final Long documentId) {
-		return "resume";
-=======
 	public String getResume(HttpServletRequest request,
 			@PathVariable final Long documentId, Model model) {
 		Long userId = (Long) request.getSession().getAttribute("userId");
@@ -70,8 +66,7 @@ public class ResumeController {
 				Arrays.asList(userId), request);
 		model.addAttribute("accountName", namesForUsers.get(0));
 
-		return "main";
->>>>>>> 604b9f3 Added logged user name ito the model.  
+		return "resume";
 	}
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")

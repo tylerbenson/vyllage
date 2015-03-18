@@ -15,11 +15,14 @@
 
   <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
+  <meta name="name" th:content="${accountName.firstName + ' ' + accountName.lastName}"/>
 </head>
 
 <body>
   <header>
-    <div class="container" id="header-container"></div>
+    <div class="container" id="header-container">
+    	<label th:text="${accountName.firstName + ' ' + accountName.lastName}"></label>
+    </div>
   </header>
 
   <section class="container">
