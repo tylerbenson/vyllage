@@ -45,6 +45,7 @@ public class DocumentSection {
 	private String highlights;
 
 	private String description;
+	private int numberOfComments;
 
 	public DocumentSection() {
 	}
@@ -205,6 +206,14 @@ public class DocumentSection {
 
 	public void setSectionVersion(Long sectionVersion) {
 		this.sectionVersion = sectionVersion;
+	}
+
+	public void setNumberOfComments(int numberOfComments) {
+		this.numberOfComments = numberOfComments;
+	}
+
+	public int getNumberOfComments() {
+		return numberOfComments;
 	}
 
 }

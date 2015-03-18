@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.model.AccountNames;
+import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
@@ -63,15 +65,37 @@ public class ResumeController {
 	public @ResponseBody List<DocumentSection> getResumeSections(
 			@PathVariable final Long documentId)
 			throws JsonProcessingException, ElementNotFoundException {
+		List<DocumentSection> documentSections = documentService
+				.getDocumentSections(documentId);
 
-		return documentService.getDocumentSections(documentId);
+		Map<Long, Integer> numberOfCommentsForSections = documentService
+				.getNumberOfCommentsForSections(documentSections.stream()
+						.map(ds -> ds.getSectionId())
+						.collect(Collectors.toList()));
+
+		documentSections
+				.stream()
+				.filter(ds -> numberOfCommentsForSections.get(ds.getSectionId()) != null)
+				.forEach(
+						ds -> ds.setNumberOfComments(numberOfCommentsForSections
+								.get(ds.getSectionId())));
+
+		return documentSections;
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody DocumentSection getResumeSection(
-			@PathVariable final Long documentId,
+			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId) throws ElementNotFoundException {
-		return documentService.getDocumentSection(sectionId);
+
+		int commentsForSection = documentService
+				.getNumberOfCommentsForSection(sectionId);
+
+		DocumentSection documentSection = documentService
+				.getDocumentSection(sectionId);
+
+		documentSection.setNumberOfComments(commentsForSection);
+		return documentSection;
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.GET, produces = "application/json")
@@ -110,7 +134,7 @@ public class ResumeController {
 		return documentService.saveDocumentSection(document, body);
 	}
 
-	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody DocumentSection saveSection(
 			@PathVariable final Long documentId,
@@ -132,7 +156,7 @@ public class ResumeController {
 		documentService.deleteSection(sectionId);
 	}
 
-	@RequestMapping(value = "{documentId}/recentUsers", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/recent-users", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountNames> getRecentUsers(
 			HttpServletRequest request,
 			@PathVariable final Long documentId,
@@ -160,6 +184,39 @@ public class ResumeController {
 		Document document = documentService.getDocument(documentId);
 		document.setTagline(documentHeader.getTagline());
 		documentService.saveDocument(document);
+	}
+
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<Comment> getCommentsForSection(
+			HttpServletRequest request, @PathVariable final Long documentId,
+			@PathVariable final Long sectionId) {
+
+		return documentService.getCommentsForSection(request, sectionId);
+	}
+
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void saveCommentsForSection(@PathVariable final Long documentId,
+			@PathVariable final Long sectionId,
+			@RequestBody final Comment comment) {
+
+		if (comment.getSectionId() == null)
+			comment.setSectionId(sectionId);
+
+		documentService.saveComment(comment);
+	}
+
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void saveCommentsForComment(@PathVariable final Long documentId,
+			@PathVariable final Long sectionId,
+			@PathVariable final Long commentId,
+			@RequestBody final Comment comment) {
+
+		if (comment.getOtherCommentId() == null)
+			comment.setOtherCommentId(commentId);
+
+		documentService.saveComment(comment);
 	}
 
 	@ExceptionHandler(value = { JsonProcessingException.class,

@@ -52,7 +52,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"description": "basket weaving, spear fishing, dominion"
 }',CURRENT_DATE(), CURRENT_DATE());
 
-insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(124, 1, 1, 'Its a me, Mario!', CURRENT_DATE());
+insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(124, 1, 3, 'Its a me, Mario!', CURRENT_DATE());
 insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(126, 1, 0, 'Well played.', CURRENT_DATE());
 
 insert into DOCUMENTS.suggestions(section_Id, section_Version, user_id, json_Document, last_Modified) values (124, 1, 0, '{

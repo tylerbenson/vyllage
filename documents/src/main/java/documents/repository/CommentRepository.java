@@ -1,18 +1,27 @@
 package documents.repository;
 
 import static documents.domain.tables.Comments.COMMENTS;
+import static documents.domain.tables.DocumentSections.DOCUMENT_SECTIONS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Record2;
 import org.jooq.Result;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import documents.domain.tables.Comments;
+import documents.domain.tables.DocumentSections;
 import documents.domain.tables.records.CommentsRecord;
 import documents.model.Comment;
 
@@ -24,6 +33,9 @@ public class CommentRepository implements IRepository<Comment> {
 
 	@Autowired
 	private DSLContext sql;
+
+	@Autowired
+	private DocumentSectionRepository documentSectionRepository;
 
 	@Override
 	public Comment get(Long commentId) throws ElementNotFoundException {
@@ -99,6 +111,68 @@ public class CommentRepository implements IRepository<Comment> {
 		comment.setLastModified(record.getLastModified().toLocalDateTime());
 		comment.setCommentText(record.getCommentText());
 		return comment;
+	}
+
+	public List<Comment> getCommentsForSection(Long sectionId) {
+
+		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
+		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
+		Comments c = COMMENTS.as("c");
+
+		List<Record> records = sql
+				.select(c.fields())
+				.from(s1)
+				.leftOuterJoin(s2)
+				.on(s1.ID.eq(s2.ID).and(
+						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION))).join(c)
+				.on(c.SECTION_ID.eq(s1.ID))
+				.where(s2.ID.isNull().and(c.SECTION_ID.eq(sectionId))).fetch();
+
+		List<Comment> comments = new ArrayList<>();
+		for (Record record : records) {
+			Comment comment = new Comment();
+			comment.setCommentId(record.getValue(COMMENTS.COMMENT_ID));
+			comment.setCommentText(record.getValue(COMMENTS.COMMENT_TEXT));
+			comment.setLastModified(record.getValue(COMMENTS.LAST_MODIFIED)
+					.toLocalDateTime());
+			comment.setOtherCommentId(record
+					.getValue(COMMENTS.OTHER_COMMENT_ID));
+			comment.setSectionId(sectionId);
+			comment.setSectionVersion(record.getValue(COMMENTS.SECTION_VERSION));
+			comment.setUserId(record.getValue(COMMENTS.USER_ID));
+			comments.add(comment);
+		}
+
+		return comments;
+
+	}
+
+	public Map<Long, Integer> getNumberOfCommentsForSections(
+			List<Long> sectionIds) {
+		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
+		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
+		Comments c = COMMENTS.as("c");
+
+		Map<Long, Integer> sectionComments = new HashMap<>();
+
+		Result<Record2<Long, Integer>> fetch = sql
+				.select(s1.ID, DSL.count(c.COMMENT_ID))
+				.from(s1)
+				.leftOuterJoin(s2)
+				.on(s1.ID.eq(s2.ID).and(
+						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION))).join(c)
+				.on(c.SECTION_ID.eq(s1.ID))
+				.where(s2.ID.isNull().and(s1.ID.in(sectionIds))).groupBy(s1.ID)
+				.fetch();
+
+		for (Record2<Long, Integer> record : fetch) {
+			sectionComments.put((Long) record.getValue(0),
+					(Integer) record.getValue(1));
+		}
+
+		System.out.println(fetch);
+
+		return sectionComments;
 	}
 
 }

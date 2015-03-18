@@ -82,6 +82,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	}
 
 	/**
+	 * Returns all the sections of the document
 	 *
 	 * @param documentId
 	 *            the id of the related document

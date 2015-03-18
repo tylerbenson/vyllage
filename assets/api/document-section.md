@@ -28,6 +28,7 @@
         "organizationName": "DeVry Education Group",
         "organizationDescription": "Blah Blah Blah.",
         "role": "Manager, Local Accounts",
+        "numberOfComments":1
         "startDate": "September 2010",
         "endDate": "",
         "isCurrent": true,
@@ -57,7 +58,7 @@
 
 
 #Updates the section from the request body (JSON). Returns the saved section.
-## POST /resume/{documentId}/section/{sectionId}*
+## PUT /resume/{documentId}/section/{sectionId}*
 + Parameters
   + documentId (string, `1`) - The id of the document.
   + sectionId (string, `1`) - The id of the section.
@@ -77,6 +78,58 @@
   + sectionId (string, `1`) - The id of the section.
 + Response 200
 
+#Returns all the comments from a section.
+## GET /resume/{documentId}/section/{sectionId}/comment
++ Parameters
+  + documentId (string, `1`) - The id of the document.
+  + sectionId (string, `1`) - The id of the section. 
++ Response 200 (application/json)
+  + Body
+ 
+	[{	
+		"commentId":0,
+		"otherCommentId":null,
+		"sectionId":124,
+		"sectionVersion":1,
+		"userId":3,
+		"commentText":"Its a me, Mario!",
+		"userName":"Mario Mario"
+	}]
 
+#Save Comment for a Section
+## POST {documentId}/section/{sectionId}/comment
++ Parameters
+  + documentId (string, `1`) - The id of the document.
+  + sectionId (string, `1`) - The id of the section. 
++Body  
 
+	{	
+		"commentId":null,
+		"otherCommentId":null,
+		"sectionId":124,
+		"sectionVersion":1,
+		"userId":3,
+		"commentText":"Its a me, Mario!",
+		"userName":"Mario Mario"
+	}
+ + Response 200
+
+#Save Comment in response to another comment
+## POST {documentId}/section/{sectionId}/comment/{commentId}
++ Parameters
+  + documentId (string, `1`) - The id of the document.
+  + sectionId (string, `1`) - The id of the section. 
+  + commentId (string, `1`) - The id of the comment. 
++Body  
+
+	{	
+		"commentId":null,
+		"otherCommentId":2,
+		"sectionId":124,
+		"sectionVersion":1,
+		"userId":3,
+		"commentText":"Its a me, Mario!",
+		"userName":"Mario Mario"
+	}
+ + Response 200
 
