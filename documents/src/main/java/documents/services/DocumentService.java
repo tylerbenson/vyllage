@@ -164,7 +164,8 @@ public class DocumentService {
 	}
 
 	public int getNumberOfCommentsForSection(Long sectionId) {
-		return commentRepository.getNumberOfCommentsForSection(sectionId);
+		return commentRepository.getNumberOfCommentsForSections(
+				Arrays.asList(sectionId)).getOrDefault(sectionId, 0);
 	}
 
 	public Map<Long, Integer> getNumberOfCommentsForSections(

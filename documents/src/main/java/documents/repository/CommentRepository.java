@@ -147,23 +147,6 @@ public class CommentRepository implements IRepository<Comment> {
 
 	}
 
-	public int getNumberOfCommentsForSection(Long sectionId) {
-		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
-		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
-		Comments c = COMMENTS.as("c");
-
-		int count = sql.fetchCount(sql
-				.select(c.COMMENT_ID)
-				.from(s1)
-				.leftOuterJoin(s2)
-				.on(s1.ID.eq(s2.ID).and(
-						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION))).join(c)
-				.on(c.SECTION_ID.eq(s1.ID))
-				.where(s2.ID.isNull().and(s1.ID.eq(sectionId))));
-
-		return count;
-	}
-
 	public Map<Long, Integer> getNumberOfCommentsForSections(
 			List<Long> sectionIds) {
 		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
