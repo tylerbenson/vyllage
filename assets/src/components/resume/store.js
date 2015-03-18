@@ -38,7 +38,7 @@ var resume = {
       "title": "career goal",
       "sectionPosition": 1,
       "state": "shown",
-      "description": ""
+      "description": "I am a frevid promoter of creating solutions"
     },
     {
       "type": "experience",
