@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,7 +58,14 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)
-	public String getResume(@PathVariable final Long documentId) {
+	public String getResume(HttpServletRequest request,
+			@PathVariable final Long documentId, Model model) {
+		Long userId = (Long) request.getSession().getAttribute("userId");
+
+		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
+				Arrays.asList(userId), request);
+		model.addAttribute("accountName", namesForUsers.get(0));
+
 		return "resume";
 	}
 

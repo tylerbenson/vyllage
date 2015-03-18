@@ -113,7 +113,7 @@ public class UserServiceTest {
 		User user = service.getUser("email");
 
 		UserFilterRequest userFilter = new UserFilterRequest();
-		userFilter.setUserName("one");
+		userFilter.setUserName("ean");
 
 		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
 				user, user.getPassword(), user.getAuthorities());
