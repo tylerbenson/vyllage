@@ -205,7 +205,7 @@ public class ResumeController {
 			@RequestBody final Comment comment) {
 
 		if (comment.getOtherCommentId() == null)
-			comment.setCommentId(commentId);
+			comment.setOtherCommentId(commentId);
 
 		documentService.saveComment(comment);
 	}
