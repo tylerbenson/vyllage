@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,12 +68,17 @@ public class ResumeController {
 		List<DocumentSection> documentSections = documentService
 				.getDocumentSections(documentId);
 
-		for (DocumentSection documentSection : documentSections) {
-			int commentsForSection = documentService
-					.getNumberOfCommentsForSection(documentSection
-							.getSectionId());
-			documentSection.setNumberOfComments(commentsForSection);
-		}
+		Map<Long, Integer> numberOfCommentsForSections = documentService
+				.getNumberOfCommentsForSections(documentSections.stream()
+						.map(ds -> ds.getSectionId())
+						.collect(Collectors.toList()));
+
+		documentSections
+				.stream()
+				.filter(ds -> numberOfCommentsForSections.get(ds.getSectionId()) != null)
+				.forEach(
+						ds -> ds.setNumberOfComments(numberOfCommentsForSections
+								.get(ds.getSectionId())));
 
 		return documentSections;
 	}
@@ -193,6 +199,9 @@ public class ResumeController {
 	public void saveCommentsForSection(@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@RequestBody final Comment comment) {
+
+		if (comment.getSectionId() == null)
+			comment.setSectionId(sectionId);
 
 		documentService.saveComment(comment);
 	}

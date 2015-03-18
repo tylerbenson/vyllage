@@ -6,13 +6,17 @@ import static documents.domain.tables.DocumentSections.DOCUMENT_SECTIONS;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Record2;
 import org.jooq.Result;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -154,10 +158,38 @@ public class CommentRepository implements IRepository<Comment> {
 				.leftOuterJoin(s2)
 				.on(s1.ID.eq(s2.ID).and(
 						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION))).join(c)
-				.on(c.SECTION_ID.eq(s2.ID))
-				.where(s2.ID.isNull().and(c.SECTION_ID.eq(sectionId))));
+				.on(c.SECTION_ID.eq(s1.ID))
+				.where(s2.ID.isNull().and(s1.ID.eq(sectionId))));
 
 		return count;
+	}
+
+	public Map<Long, Integer> getNumberOfCommentsForSections(
+			List<Long> sectionIds) {
+		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
+		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
+		Comments c = COMMENTS.as("c");
+
+		Map<Long, Integer> sectionComments = new HashMap<>();
+
+		Result<Record2<Long, Integer>> fetch = sql
+				.select(s1.ID, DSL.count(c.COMMENT_ID))
+				.from(s1)
+				.leftOuterJoin(s2)
+				.on(s1.ID.eq(s2.ID).and(
+						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION))).join(c)
+				.on(c.SECTION_ID.eq(s1.ID))
+				.where(s2.ID.isNull().and(s1.ID.in(sectionIds))).groupBy(s1.ID)
+				.fetch();
+
+		for (Record2<Long, Integer> record : fetch) {
+			sectionComments.put((Long) record.getValue(0),
+					(Integer) record.getValue(1));
+		}
+
+		System.out.println(fetch);
+
+		return sectionComments;
 	}
 
 }

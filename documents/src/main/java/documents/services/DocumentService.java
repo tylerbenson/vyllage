@@ -2,6 +2,7 @@ package documents.services;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -164,6 +165,11 @@ public class DocumentService {
 
 	public int getNumberOfCommentsForSection(Long sectionId) {
 		return commentRepository.getNumberOfCommentsForSection(sectionId);
+	}
+
+	public Map<Long, Integer> getNumberOfCommentsForSections(
+			List<Long> sectionIds) {
+		return commentRepository.getNumberOfCommentsForSections(sectionIds);
 	}
 
 	public void saveComment(Comment comment) {
