@@ -77,5 +77,4 @@ public class ConnectionsDatabaseConfiguration {
 						.getRequiredProperty("jooq.sql.dialect")))
 				.set(new Settings().withRenderNameStyle(RenderNameStyle.LOWER));
 	}
-
 }
