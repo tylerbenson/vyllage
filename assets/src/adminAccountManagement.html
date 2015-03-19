@@ -13,14 +13,21 @@
   <link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css' />
   <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
 
+  <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
 </head>
 
 <body>
+ <header>
+    <div class="container" id="header-container" th:name="${accountName.firstName}">
+    </div>
+  </header>
+
   <section class="container">
     <form action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post">
       <div class="four columns">
-        <select th:field="*{group}">
-          <option th:each="grp : ${groups}" th:value="${grp.id}" th:text="${grp.groupName}">Some group</option>
+        <select th:field="*{organization}">
+          <option th:each="grp : ${organizations}" th:value="${grp.organizationId}" th:text="${grp.organizationName}">Some group</option>
         </select>
         <div class="content-part">
           <!-- 							<input type="text" /> -->
@@ -40,8 +47,8 @@
     </form>
 
   </section>
-
-
+  <script type="text/javascript" src="javascript/base.js"></script>
+  <script type="text/javascript" src="javascript/resume.js"></script>
 </body>
 
 </html>

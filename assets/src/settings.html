@@ -13,28 +13,13 @@
   <link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css' />
   <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
 
-  <meta name="_csrf_token" th:content="${_csrf.token}" />
-  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
 </head>
 
 <body>
   <header>
-    <div class="container">
-      <div class="row">
-        <div class="twelve columns">
-          <div class="u-pull-left header-logo"></div>
-          <div class="u-pull-right header-profile">
-            <img class="u-pull-left header-profile-photo" alt="" src="images/profile-photo.png" />
-            <span class="u-pull-left header-username" id="account-name">nathan</span>
-            <button class="u-pull-left ask-advice-btn">ask advice</button>
-          </div>
-        </div>
-      </div>
-      <div id="menu-container">
-        <div id='triangle-up'> </div>
-        <div id="account-menu">
-        </div>
-      </div>
+    <div class="container" id="header-container" th:name="${accountName.firstName}">
     </div>
   </header>
 
