@@ -38,7 +38,7 @@ var resume = {
       "title": "career goal",
       "sectionPosition": 1,
       "state": "shown",
-      "description": ""
+      "description": "I am a frevid promoter of creating solutions"
     },
     {
       "type": "experience",
@@ -63,7 +63,7 @@ module.exports = Reflux.createStore({
   init: function () {
     // temporarily asseigned placeholder 
     this.resume = resume;
-    // this.resume = {}; // uncomment of api call integration
+    // this.resume = {}; // uncomment after api call integration
   },
   onGetResume: function (params) {
     var url = urlTemplate.parse(endpoints.resume).expand(params);
@@ -121,15 +121,18 @@ module.exports = Reflux.createStore({
     this.trigger(this.resume);
   },
   onPutSection: function (data, params) {
-    var url = urlTemplate.parse(endpoints.resumeSection).expand(params);
-    request
-      .post(url)
-      .send(data)
-      .end(function (err, res) {
-        var index = findindex(this.resume.sections, {documentId: params.documentId});
-        this.resume.sections[index] = res.body;
-        this.trigger(this.resume);
-      })
+    // var url = urlTemplate.parse(endpoints.resumeSection).expand(params);
+    // request
+    //   .post(url)
+    //   .send(data)
+    //   .end(function (err, res) {
+    //     var index = findindex(this.resume.sections, {documentId: params.documentId});
+    //     this.resume.sections[index] = res.body;
+    //     this.trigger(this.resume);
+    //   });
+    var index = findindex(this.resume.sections, {sectionId: data.sectionId});
+    this.resume.sections[index] = data;
+    this.trigger(this.resume);
   },
   onDeleteSection: function (params) {
     var url = urlTemplate.parse(endpoints.resumeSection).expand(params);

@@ -14,14 +14,16 @@
       {
         "type": "freeform",
         "title": "career goal",
+        "documentId": 1,
         "sectionId": 123,
         "sectionPosition": 1,
         "state": "shown",
         "description": "this is my goal statement."
       },
       {
-        "type": "experience",
+        "type": "organization",
         "title": "experience",
+        "documentId": 1,
         "sectionId": 124,
         "sectionPosition": 2,
         "state": "shown",
@@ -50,6 +52,7 @@
     {
       "type": "freeform",
       "title": "career goal",
+      "documentId": 1,
       "sectionId": 123,
       "sectionPosition": 1,
       "state": "shown",
