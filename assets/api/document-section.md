@@ -12,7 +12,7 @@
 
     [
       {
-        "type": "career-goal",
+        "type": "freeform",
         "title": "career goal",
         "documentId": 1,
         "sectionId": 123,
@@ -21,7 +21,7 @@
         "description": "this is my goal statement."
       },
       {
-        "type": "experience",
+        "type": "organization",
         "title": "experience",
         "documentId": 1,
         "sectionId": 124,
