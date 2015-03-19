@@ -10,9 +10,12 @@ var FreeformPreview = React.createClass({
     var className = this.props.className + '-preview';
     return (
       <div className={className}>
-        <a className='button' onClick={this.editHandler}>Edit</a>
+        <div className='row'>
+          <h4 className='u-pull-left'>{this.props.section.title}</h4>
+          <a className='button u-pull-right' onClick={this.editHandler}>Edit</a>
+        </div>
         <p>
-          {this.props.description}
+          {this.props.section.description}
         </p>
       </div>
     );

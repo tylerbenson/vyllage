@@ -10,7 +10,7 @@ var Freeform = React.createClass({
     };
   },
   render: function () {
-    var uiEditMode = this.props.sections.uiEditMode;
+    var uiEditMode = this.props.section.uiEditMode;
     return (
       <div className={this.props.className}>
         {uiEditMode ? <Edit {...this.props} />: <Preview {...this.props}/>}

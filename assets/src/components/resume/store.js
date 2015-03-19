@@ -35,14 +35,16 @@ var resume = {
   sections: [
     {
       "type": "career-goal",
-      "title": "career goal",
+      "title": "Career Goal",
+      "sectionId": 1,
       "sectionPosition": 1,
       "state": "shown",
       "description": "I am a frevid promoter of creating solutions"
     },
     {
       "type": "experience",
-      "title": "experience",
+      "title": "Experience",
+      "sectionId": 2,
       "sectionPosition": 2,
       "state": "shown",
       "organizationName": "",
@@ -163,6 +165,7 @@ module.exports = Reflux.createStore({
       })
   },
   onEnableEditMode: function (sectionId) {
+    console.log(sectionId)
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].uiEditMode = true;
     this.trigger(this.resume);

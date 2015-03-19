@@ -28,7 +28,7 @@ var ResumeEditor = React.createClass({
       <div>
         <Header profileData={profileData} contactData={contactData}/>
         <section className="container">
-          <CareerGoal sections={careerGoalSections} />
+          <CareerGoal careerGoal={careerGoal} />
           <Experience sections={experienceSections} />
           <Education sections={educationSections} />
           <Skill sections={skillSections} />
