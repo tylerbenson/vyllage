@@ -44,15 +44,12 @@ public class SuggestionRepositoryTest {
 	public void suggestionSaveTest() {
 
 		Suggestion suggestion1 = generateSuggestion();
-		Suggestion suggestion2 = generateSuggestion();
 
 		suggestion1 = repository.save(suggestion1);
-		suggestion2 = repository.save(suggestion2);
 
 		Assert.assertNotNull("Suggestion1 is null.", suggestion1);
-		Assert.assertNotNull("Suggestion2 is null.", suggestion2);
-		Assert.assertTrue(suggestion1.getSuggestionId().equals(1L));
-		Assert.assertTrue(suggestion2.getSuggestionId().equals(2L));
+		Assert.assertNotNull("Suggestion id not found. ",
+				suggestion1.getSuggestionId());
 	}
 
 	@Test(expected = ElementNotFoundException.class)

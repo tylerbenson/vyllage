@@ -104,6 +104,7 @@ configure(dbProjects) {
 
     dependencies {
         compile 'com.h2database:h2'
+		compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
         compile 'org.flywaydb:flyway-core:3.1'
         compile 'org.jooq:jooq:3.5.0'
     }

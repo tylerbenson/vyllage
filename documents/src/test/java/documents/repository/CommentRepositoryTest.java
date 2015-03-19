@@ -39,10 +39,8 @@ public class CommentRepositoryTest {
 
 		Assert.assertNotNull("Comment1 is null.", comment1);
 		Assert.assertNotNull("Comment2 is null.", comment2);
-		Assert.assertTrue("Expected id 2 got " + comment1.getCommentId(),
-				comment1.getCommentId().equals(2L));
-		Assert.assertTrue("Expected id 3 got " + comment2.getCommentId(),
-				comment2.getCommentId().equals(3L));
+		Assert.assertNotNull("Expected id ", comment1.getCommentId());
+		Assert.assertNotNull("Expected id ", comment2.getCommentId());
 	}
 
 	@Test(expected = ElementNotFoundException.class)

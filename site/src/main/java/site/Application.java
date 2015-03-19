@@ -8,7 +8,8 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ComponentScan(basePackageClasses = { connections.Application.class,
-		documents.Application.class, accounts.Application.class, Application.class })
+		documents.Application.class, accounts.Application.class,
+		Application.class })
 @PropertySource("classpath:/connections/application.properties")
 @PropertySource("classpath:/documents/application.properties")
 @PropertySource("classpath:/accounts/application.properties")
@@ -18,7 +19,8 @@ public class Application {
 	public static void main(String[] args) {
 		if (Application.class.getResource("Application.class").getProtocol()
 				.equals("file")) {
-			System.setProperty("spring.profiles.active", Profiles.DEBUG);
+			// System.setProperty("spring.profiles.active", Profiles.DEBUG);
+			System.out.println(System.getProperty("spring.profiles.active"));
 			System.setProperty("spring.thymeleaf.prefix",
 					"file:///" + System.getProperty("PROJECT_HOME")
 							+ "/assets/public/");

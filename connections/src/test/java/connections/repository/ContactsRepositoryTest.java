@@ -12,24 +12,21 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import connections.Application;
 import connections.model.Contact;
-import connections.repository.ElementNotFoundException;
-import connections.repository.IRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 public class ContactsRepositoryTest {
-	// Note, ids start at 0.
 
 	@Autowired
 	private IRepository<Contact> repository;
 
 	@Test
 	public void getContactTest() throws ElementNotFoundException {
-		Contact contact = repository.get(0L);
+		Contact contact = repository.get(1L);
 
 		Assert.assertNotNull(contact);
-		Assert.assertTrue(contact.getId().equals(0L));
+		Assert.assertTrue(contact.getId().equals(1L));
 	}
 
 	@Test
