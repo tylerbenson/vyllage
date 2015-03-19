@@ -37,7 +37,12 @@ gulp.task('copy-html', function () {
     .pipe(gulp.dest('public'));
 });
 
-gulp.task('copy', ['copy-images', 'copy-html']);
+gulp.task('copy-fonts', function () {
+  return gulp.src(['bower_components/ionicons/fonts/*'])
+    .pipe(gulp.dest('public/fonts'));
+});
+
+gulp.task('copy', ['copy-images', 'copy-html', 'copy-fonts']);
 
 gulp.task('styles', function () {
   return gulp.src(['src/**/*.scss'])

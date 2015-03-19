@@ -18,10 +18,22 @@ var Header = React.createClass({
             </div>
             <div className="six columns">
               <div className="contactInfo">
-                <p className="email">{this.props.contactData.contact.email}</p>
-                <p className="mobile">{this.props.contactData.contact.cell}</p>
-                <p className="twitter">{this.props.contactData.social.twitter}</p>
-                <p className="linkedin">{this.props.contactData.social.linkedin}</p>
+                <p className="email"> 
+                    <i className="icon ion-email"></i>
+                    {this.props.contactData.contact.email}
+                  </p>
+                  <p className="mobile">
+                    <i className="icon ion-ios-telephone"></i>
+                   {this.props.contactData.contact.cell}
+                  </p>
+                  <p className="twitter">
+                    <i className="icon ion-social-twitter"></i>
+                    {this.props.contactData.social.twitter}
+                  </p>
+                  <p className="linkedin">
+                     <i className="icon ion-social-linkedin"></i>
+                    {this.props.contactData.social.linkedin}
+                  </p>
               </div>
             </div>
           </div>
