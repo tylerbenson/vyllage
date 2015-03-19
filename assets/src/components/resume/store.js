@@ -126,7 +126,7 @@ module.exports = Reflux.createStore({
     //   .post(url)
     //   .send(data)
     //   .end(function (err, res) {
-    //     var index = findindex(this.resume.sections, {documentId: params.documentId});
+    //     var index = findindex(this.resume.sections, {sectionId: params.sectionId});
     //     this.resume.sections[index] = res.body;
     //     this.trigger(this.resume);
     //   });
@@ -147,7 +147,7 @@ module.exports = Reflux.createStore({
       .get(url)
       .end(function (err, res) {
         if (res.ok) {
-          var index = findindex(this.resume.sections, {documentId: params.documentId});
+          var index = findindex(this.resume.sections, {sectionId: params.sectionId});
           this.resume.sections[index].comments = res.body;
         } 
       }.bind(this))
@@ -158,9 +158,19 @@ module.exports = Reflux.createStore({
       .post(url)
       .send(data)
       .end(function (err, res) {
-        var index = findindex(this.resume.sections, {documentId: params.documentId});
+        var index = findindex(this.resume.sections, {sectionId: params.sectionId});
         this.resume.sections[index].comments.unshift(res.body);
       })
+  },
+  onEnableEditMode: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].uiEditMode = true;
+    this.trigger(this.resume);
+  },
+  onDisableEditMode: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].uiEditMode = false;
+    this.trigger(this.resume);
   },
   getInitialState: function () {
     return this.resume;
