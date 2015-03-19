@@ -70,13 +70,9 @@ public class EditorDatabaseConfiguration {
 			TransactionProvider transactionProvider,
 			ExecuteListenerProvider executeListenerProvider) {
 		return new DefaultConfiguration()
-				//
 				.derive(connectionProvider)
-				//
 				.derive(transactionProvider)
-				//
 				.derive(executeListenerProvider)
-				//
 				.derive(SQLDialect.valueOf(env
 						.getRequiredProperty("jooq.sql.dialect")))
 				.set(new Settings().withRenderNameStyle(RenderNameStyle.LOWER));
