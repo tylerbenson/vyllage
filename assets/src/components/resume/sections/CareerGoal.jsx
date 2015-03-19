@@ -4,9 +4,12 @@ var Freeform = require('../freeform');
 
 var CareerGoal = React.createClass({
   render: function () {
-    console.log(this.props.careerGoal)
     return (
-      <Freeform section={this.props.careerGoal} />
+      <article className='career-goal'>
+        <div>
+          <Freeform title='Career Goal' section={this.props.careerGoal} />
+        </div>
+      </article>
     );
   }
 });

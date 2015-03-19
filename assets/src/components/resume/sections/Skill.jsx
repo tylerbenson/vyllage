@@ -1,6 +1,6 @@
 var React = require('react');
 var Header = require('./Header');
-var FreeformContainer = require('../freeform');
+var Freeform = require('../freeform');
 
 var Skills = React.createClass({
   render: function () {
@@ -8,7 +8,7 @@ var Skills = React.createClass({
     var sections = this.props.sections || [];
     if (sections.length > 0) {
       sectionNodes = sections.map(function (section, index) {
-        return <FreeformContainer key={index} freeformData={section} />
+        return <Freeform key={index} section={section} />
       });
     } else {
       sectionNodes = <p className='add-more'>No skills added yet</p>
@@ -17,7 +17,7 @@ var Skills = React.createClass({
       <article className='career-goal'>
         <div className="row">
           <div className="twelve columns">
-            <Header title='skills' type='skill' /> 
+            <Header title='Skills' /> 
             {sectionNodes}
           </div>
         </div>

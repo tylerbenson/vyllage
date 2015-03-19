@@ -17,7 +17,7 @@ var Education = React.createClass({
       <article className='experience forceEditMode'>
         <div className="row">
           <div className="twelve columns">
-            <Header title='education' type='education' /> 
+            <Header title='Education' /> 
             {sectionNodes}
           </div>
         </div>

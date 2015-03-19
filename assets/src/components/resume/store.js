@@ -119,6 +119,7 @@ module.exports = Reflux.createStore({
     //   }.bind(this))
     
     // for temporary use
+    data.sectionId = this.resume.sections.length + 1;
     this.resume.sections.push(data);
     this.trigger(this.resume);
   },
@@ -165,7 +166,6 @@ module.exports = Reflux.createStore({
       })
   },
   onEnableEditMode: function (sectionId) {
-    console.log(sectionId)
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].uiEditMode = true;
     this.trigger(this.resume);

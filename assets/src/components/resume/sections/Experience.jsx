@@ -17,7 +17,7 @@ var Experience = React.createClass({
       <article className='experience forceEditMode'>
         <div className="row">
           <div className="twelve columns">
-            <Header title='experience' type='experience'/> 
+            <Header title='Experience' /> 
             {sectionNodes}
           </div>
         </div>
