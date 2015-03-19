@@ -41,6 +41,7 @@ var CareerGoal = React.createClass({
           className='u-full-width'
           value={this.state.description}
           onChange={this.changeHandler}
+          placeholder='Tell us about your career goals'
         >
         </textarea>
         <a className='button' onClick={this.cancelHandler}>Cancel</a>

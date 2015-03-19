@@ -13,7 +13,7 @@
     [
       {
         "type": "freeform",
-        "title": "career goal",
+        "title": "Career Goal",
         "documentId": 1,
         "sectionId": 123,
         "sectionPosition": 1,
@@ -22,7 +22,7 @@
       },
       {
         "type": "organization",
-        "title": "experience",
+        "title": "Experience",
         "documentId": 1,
         "sectionId": 124,
         "sectionPosition": 2,
@@ -51,7 +51,7 @@
 
     {
       "type": "freeform",
-      "title": "career goal",
+      "title": "Career Goal",
       "documentId": 1,
       "sectionId": 123,
       "sectionPosition": 1,
