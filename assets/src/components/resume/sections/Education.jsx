@@ -1,6 +1,7 @@
 var React = require('react');
 var Header = require('./Header');
 var ArticleContent = require('../organization/article-content');
+var SectionFooter = require('./Footer');
 
 var Education = React.createClass({
   render: function () {
@@ -8,7 +9,12 @@ var Education = React.createClass({
     var sections = this.props.sections || [];
     if (sections.length > 0) {
       sectionNodes = sections.map(function (section, index) {
-        return <ArticleContent  key={index} organizationData={section}/>
+        return (
+          <div>
+            <ArticleContent  key={index} organizationData={section}/>
+            <SectionFooter />
+          </div>
+        );
       })
     } else {
       sectionNodes = <p className='add-more'>No education added yet</p>
