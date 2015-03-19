@@ -17,6 +17,7 @@ var  FreeformEdit = React.createClass({
 	saveHandler: function(e) {
 		var section = this.props.section;
 		section.description = this.state.description;
+		section.uiEditMode = false;
 		actions.putSection(section);
 	},
 	cancelHandler: function(e) {
