@@ -12,8 +12,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.Application;
 import documents.model.DocumentSection;
-import documents.repository.DocumentSectionRepository;
-import documents.repository.ElementNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -52,9 +50,8 @@ public class DocumentSectionRepositoryTest {
 				.save(documentSection);
 
 		Assert.assertNotNull(documentSection);
-		Assert.assertTrue(
-				"Expected id 127, got " + savedDocumentSection.getSectionId(),
-				new Long(127L).equals(savedDocumentSection.getSectionId()));
+		Assert.assertNotNull("Expected id ",
+				savedDocumentSection.getSectionId());
 		Assert.assertTrue(
 				"Expected version 0, got "
 						+ savedDocumentSection.getSectionVersion(),
@@ -62,10 +59,13 @@ public class DocumentSectionRepositoryTest {
 	}
 
 	@Test
-	public void updateDocumentSectionTest() throws JsonProcessingException {
+	public void updateDocumentSectionTest() throws JsonProcessingException,
+			ElementNotFoundException {
 		String highlights = "I was in charge of many people.";
 
-		DocumentSection documentSection = DocumentSection.fromJSON(JSON);
+		DocumentSection documentSection = dsRepository.get(124L);
+		Long sectionVersion = documentSection.getSectionVersion() + 1;
+		// DocumentSection documentSection = DocumentSection.fromJSON(JSON);
 		documentSection.setSectionId(124L);
 
 		documentSection.setHighlights(highlights);
@@ -76,10 +76,9 @@ public class DocumentSectionRepositoryTest {
 
 		Assert.assertNotNull(documentSection);
 		Assert.assertEquals(highlights, savedDocumentSection.getHighlights());
-		Assert.assertTrue(
-				"Expected version 2, got "
-						+ savedDocumentSection.getSectionVersion(),
-				new Long(2L).equals(savedDocumentSection.getSectionVersion()));
+		Assert.assertTrue("Expected version " + sectionVersion + " got "
+				+ savedDocumentSection.getSectionVersion(),
+				sectionVersion.equals(savedDocumentSection.getSectionVersion()));
 	}
 
 	@Test

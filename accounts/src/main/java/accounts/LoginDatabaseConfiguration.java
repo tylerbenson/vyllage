@@ -36,16 +36,12 @@ public class LoginDatabaseConfiguration {
 
 	@Bean
 	public DSLContext dsl(org.jooq.Configuration config) {
-		DSLContext dsl = new DefaultDSLContext(config);
-		return dsl;
+		return new DefaultDSLContext(config);
 	}
 
 	@Bean
 	public DataSourceTransactionManager transactionManager(DataSource dataSource)
 			throws SQLException {
-
-		System.out.println(dataSource.getConnection().getMetaData().getURL());
-
 		return new DataSourceTransactionManager(dataSource);
 	}
 
