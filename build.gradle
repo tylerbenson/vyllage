@@ -114,11 +114,11 @@ configure(dbProjects) {
         url = "jdbc:h2:$buildDir/db/local"
         user = 'sa'
         password = ''
-        schemas = [project.name.toUpperCase()]
+        schemas = ["${project.name.toUpperCase()}"]
         locations = ["classpath:${project.name}/db/h2/migration"]
     }
 
-    flywayMigrate.inputs.dir 'src/main/resources/${project.name}/db/h2/migrate'
+    flywayMigrate.inputs.dir 'src/main/resources/${project.name}/db/'
     flywayMigrate.outputs.dir "$buildDir/db"
 
     project.afterEvaluate {

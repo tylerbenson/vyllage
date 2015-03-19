@@ -37,7 +37,7 @@ public class FlywayConfig {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(this.dataSource);
 		flyway.setLocations(env.getRequiredProperty("flyway.documents"));
-		flyway.setSchemas("DOCUMENT");
+		flyway.setSchemas("DOCUMENTS");
 		return flyway;
 	}
 
