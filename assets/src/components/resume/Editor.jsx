@@ -24,10 +24,8 @@ var ResumeEditor = React.createClass({
     var skillSections = filter(this.state.resume.sections, {type: 'skill'});
     var profileData = this.state.resume.header;
     var contactData = this.state.resume.contact;
-    console.log(this.state.resume)
     return (
       <div>
-<<<<<<< HEAD
         <Header profileData={profileData} contactData={contactData}/>
         <section className="container">
           <CareerGoal sections={careerGoalSections} />
@@ -35,13 +33,6 @@ var ResumeEditor = React.createClass({
           <Education sections={educationSections} />
           <Skill sections={skillSections} />
         </section>
-=======
-        <Header header={this.state.resume.header}/>
-        <CareerGoal careerGoal={careerGoal} />
-        <Experience sections={experienceSections} />
-        <Education sections={educationSections} />
-        <Skill sections={skillSections} />
->>>>>>> Made changes to career goal for new design
       </div>
     );
   }
