@@ -20,7 +20,11 @@ public class Application {
 		if (Application.class.getResource("Application.class").getProtocol()
 				.equals("file")) {
 			// System.setProperty("spring.profiles.active", Profiles.DEBUG);
-			System.out.println(System.getProperty("spring.profiles.active"));
+			String profile = System.getProperty("spring.profiles.active");
+			if (profile != null)
+				System.out.println("Using profile: " + profile);
+			else
+				System.out.println("Using default profile.");
 			System.setProperty("spring.thymeleaf.prefix",
 					"file:///" + System.getProperty("PROJECT_HOME")
 							+ "/assets/public/");

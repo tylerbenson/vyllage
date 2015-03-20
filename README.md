@@ -25,10 +25,10 @@ npm start
 ```
 open [http://localhost:8080](http://localhost:8080)
 
-To build and run as a java app:
+To build and run as a java app without PostgreSQL:
 
 ```
-./gradlew :site:bootRun &
+./gradlew -Dspring.profiles.active=dev site:bootRun &
 cd assets
 npm run watch &
 ```
