@@ -2,7 +2,8 @@
 @import "skeleton-scss/scss/skeleton";
 @import "ionicons/scss/ionicons";
 @import "./components/common/align";
-@import "ionicons/scss/ionicons";
+@import "./components/modal/modal";
+@import "./components/buttons/buttons";
 
 body {
   background: url('../images/background.jpg');
@@ -16,4 +17,9 @@ body {
 //This class is added by react-contenteditable components of contenteditable elements
 .react-contenteditable {
   outline: 0px solid transparent; // Removes border around contenteditable element
+}
+
+.icon {
+  font-size: 16px;
+  padding: 10px;
 }

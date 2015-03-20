@@ -1,4 +1,5 @@
 var React = require('react');
+var DeleteSection = require('../Delete');
 var actions = require('../actions');
 
 var FreeformPreview = React.createClass({
@@ -12,6 +13,7 @@ var FreeformPreview = React.createClass({
       <div className={className}>
         <div className='row'>
           <h4 className='u-pull-left'>{this.props.title}</h4>
+          <DeleteSection className='u-pull-right' sectionId={this.props.section.sectionId} />
           <a className='button u-pull-right' onClick={this.editHandler}>Edit</a>
         </div>
         <p>
