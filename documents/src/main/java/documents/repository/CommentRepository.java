@@ -172,8 +172,6 @@ public class CommentRepository implements IRepository<Comment> {
 					(Integer) record.getValue(1));
 		}
 
-		System.out.println(fetch);
-
 		return sectionComments;
 	}
 
