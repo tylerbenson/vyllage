@@ -1,6 +1,6 @@
 var React = require('react');
 var Header = require('./Header');
-var ArticleContent = require('../organization/article-content');
+var Organization = require('../organization');
 var SectionFooter = require('./Footer');
 
 var Experience = React.createClass({
@@ -11,7 +11,7 @@ var Experience = React.createClass({
       sectionNodes = sections.map(function (section, index) {
         return (
           <div>
-            <ArticleContent  key={index} organizationData={section}/>
+            <Organization  key={index} section={section}/>
             <SectionFooter />
           </div>
         );
