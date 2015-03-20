@@ -138,11 +138,9 @@ module.exports = Reflux.createStore({
     this.trigger(this.resume);
   },
   onDeleteSection: function (params) {
-    var url = urlTemplate.parse(endpoints.resumeSection).expand(params);
-    request
-      .delete(url)
-      .end(function (err, res) {
-      });
+    var index = findindex(this.resume.sections, {sectionId: params.sectionId});
+    this.resume.sections.splice(index, 1);
+    this.trigger(this.resume);
   },
   onGetComments: function (params) {
     var url = urlTemplate.parse(endpoints.resumeComments).expand(params);
