@@ -67,4 +67,21 @@ public class AccountController {
 		return response;
 	}
 
+	@RequestMapping(value = "/reset-password", method = RequestMethod.GET)
+	public String getResetPassword() {
+
+		return "reset-password";
+	}
+
+	@RequestMapping(value = "/reset-password", method = RequestMethod.POST)
+	public String postResetPassword() {
+		// validate email and return error if not in the database.
+		// If submit success:
+		// generate a new password reset link (similar to document share link)
+		// email it to the provided email address.
+		//
+		// Link should log the user in and direct them to the password change
+		// page.
+		return "reset-password";
+	}
 }
