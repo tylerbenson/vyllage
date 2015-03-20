@@ -28,7 +28,7 @@ public class FlywayConfig {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(this.dataSource);
 		flyway.setLocations(env.getRequiredProperty("flyway.connections"));
-		flyway.setSchemas("CONNECTIONS");
+		flyway.setSchemas("connections");
 		return flyway;
 	}
 
@@ -37,7 +37,7 @@ public class FlywayConfig {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(this.dataSource);
 		flyway.setLocations(env.getRequiredProperty("flyway.documents"));
-		flyway.setSchemas("DOCUMENTS");
+		flyway.setSchemas("documents");
 		return flyway;
 	}
 
@@ -46,7 +46,7 @@ public class FlywayConfig {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(this.dataSource);
 		flyway.setLocations(env.getRequiredProperty("flyway.accounts"));
-		flyway.setSchemas("ACCOUNTS");
+		flyway.setSchemas("accounts");
 		return flyway;
 	}
 }
