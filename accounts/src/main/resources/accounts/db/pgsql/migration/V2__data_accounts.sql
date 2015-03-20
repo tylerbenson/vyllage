@@ -22,10 +22,10 @@ insert into accounts.personal_information(user_id, graduation_date, email_update
 --  enabled boolean not null,
 --  expires timestamp not null,
 --  constraint fk_passwords_users foreign key(user_id) references accounts.users(user_id));
-insert into accounts.user_credentials (user_id, password, enabled, expires) values (0, '$2a$10$6reiiqd8i4fte4d/x3.chonlgxghwwmgcngksajyqun0njgdqznxq', true, null);
-insert into accounts.user_credentials (user_id, password, enabled, expires) values (1, '$2a$10$6reiiqd8i4fte4d/x3.chonlgxghwwmgcngksajyqun0njgdqznxq', true, null);
-insert into accounts.user_credentials (user_id, password, enabled, expires) values (2, '$2a$10$6reiiqd8i4fte4d/x3.chonlgxghwwmgcngksajyqun0njgdqznxq', true, null);
-insert into accounts.user_credentials (user_id, password, enabled, expires) values (3, '$2a$10$6reiiqd8i4fte4d/x3.chonlgxghwwmgcngksajyqun0njgdqznxq', true, null);
+insert into accounts.user_credentials (user_id, password, enabled, expires) values (0, '$2a$10$zl4EVU2EuFrqf7vnwPYo4.d4IkgZBgEZQyqm1XpqyOPLW35AHzOWW', true, null);
+insert into accounts.user_credentials (user_id, password, enabled, expires) values (1, '$2a$10$zl4EVU2EuFrqf7vnwPYo4.d4IkgZBgEZQyqm1XpqyOPLW35AHzOWW', true, null);
+insert into accounts.user_credentials (user_id, password, enabled, expires) values (2, '$2a$10$zl4EVU2EuFrqf7vnwPYo4.d4IkgZBgEZQyqm1XpqyOPLW35AHzOWW', true, null);
+insert into accounts.user_credentials (user_id, password, enabled, expires) values (3, '$2a$10$zl4EVU2EuFrqf7vnwPYo4.d4IkgZBgEZQyqm1XpqyOPLW35AHzOWW', true, null);
 
 --create table authorities (
 --  user_name varchar_ignorecase(50) not null,
