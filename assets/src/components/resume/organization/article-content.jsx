@@ -2,8 +2,8 @@ var React = require('react');
 var OrganizationEdit = require('./edit');
 var OrganizationMain = require('./main');
 
-var SectionsStore = require('./store');
-var Actions = require('./actions');
+var SectionsStore = require('../store');
+var Actions = require('../actions');
 
 var ArticleContent = React.createClass({  
 

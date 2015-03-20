@@ -5,7 +5,7 @@ var SectionHeader = React.createClass({
   addSection: function (e) {
     e.preventDefault()
     e.stopPropagation()
-    actions.postSection({type: this.props.type}, {});
+    actions.postSection({title: this.props.title}, {});
   },
   render: function () {
     return  (

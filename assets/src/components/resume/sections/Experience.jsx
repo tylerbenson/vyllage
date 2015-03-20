@@ -1,6 +1,7 @@
 var React = require('react');
 var Header = require('./Header');
 var ArticleContent = require('../organization/article-content');
+var SectionFooter = require('./Footer');
 
 var Experience = React.createClass({
   render: function () {
@@ -8,7 +9,12 @@ var Experience = React.createClass({
     var sections = this.props.sections || [];
     if (sections.length > 0) {
       sectionNodes = sections.map(function (section, index) {
-        return <ArticleContent  key={index} organizationData={section}/>
+        return (
+          <div>
+            <ArticleContent  key={index} organizationData={section}/>
+            <SectionFooter />
+          </div>
+        );
       })
     } else {
       sectionNodes = <p className='add-more'>No experience added yet</p>;
@@ -17,7 +23,7 @@ var Experience = React.createClass({
       <article className='experience forceEditMode'>
         <div className="row">
           <div className="twelve columns">
-            <Header title='experience' type='experience'/> 
+            <Header title='Experience' /> 
             {sectionNodes}
           </div>
         </div>

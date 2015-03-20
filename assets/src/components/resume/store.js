@@ -35,14 +35,16 @@ var resume = {
   sections: [
     {
       "type": "career-goal",
-      "title": "career goal",
+      "title": "Career Goal",
+      "sectionId": 1,
       "sectionPosition": 1,
       "state": "shown",
       "description": "I am a frevid promoter of creating solutions"
     },
     {
       "type": "experience",
-      "title": "experience",
+      "title": "Experience",
+      "sectionId": 2,
       "sectionPosition": 2,
       "state": "shown",
       "organizationName": "",
@@ -117,6 +119,7 @@ module.exports = Reflux.createStore({
     //   }.bind(this))
     
     // for temporary use
+    data.sectionId = this.resume.sections.length + 1;
     this.resume.sections.push(data);
     this.trigger(this.resume);
   },
@@ -126,7 +129,7 @@ module.exports = Reflux.createStore({
     //   .post(url)
     //   .send(data)
     //   .end(function (err, res) {
-    //     var index = findindex(this.resume.sections, {documentId: params.documentId});
+    //     var index = findindex(this.resume.sections, {sectionId: params.sectionId});
     //     this.resume.sections[index] = res.body;
     //     this.trigger(this.resume);
     //   });
@@ -147,7 +150,7 @@ module.exports = Reflux.createStore({
       .get(url)
       .end(function (err, res) {
         if (res.ok) {
-          var index = findindex(this.resume.sections, {documentId: params.documentId});
+          var index = findindex(this.resume.sections, {sectionId: params.sectionId});
           this.resume.sections[index].comments = res.body;
         } 
       }.bind(this))
@@ -158,9 +161,19 @@ module.exports = Reflux.createStore({
       .post(url)
       .send(data)
       .end(function (err, res) {
-        var index = findindex(this.resume.sections, {documentId: params.documentId});
+        var index = findindex(this.resume.sections, {sectionId: params.sectionId});
         this.resume.sections[index].comments.unshift(res.body);
       })
+  },
+  onEnableEditMode: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].uiEditMode = true;
+    this.trigger(this.resume);
+  },
+  onDisableEditMode: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].uiEditMode = false;
+    this.trigger(this.resume);
   },
   getInitialState: function () {
     return this.resume;

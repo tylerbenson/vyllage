@@ -13,5 +13,7 @@ module.exports = Reflux.createActions([
   // comments
   'getComments',
   'postComment',
-
+  // Ui
+  'enableEditMode',
+  'disableEditMode',
 ]);
