@@ -74,6 +74,7 @@ public class ResumeControllerTest {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private void accountNamesMock() {
 		List<AccountNames> accountNames = new ArrayList<>();
 		AccountNames ac = Mockito.mock(AccountNames.class);
