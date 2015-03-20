@@ -27,15 +27,22 @@ var OrganizationEdit = React.createClass({
     return (
       <div>
         <div className='row'>
-          <h4 className='u-pull-left'>{organization.title}</h4>
+          <h4 className='u-pull-left'>
+            <input
+              className='u-full-width'
+              placeholder='Organization Name'
+              value={organization.organizationName}
+              onChange={this.handleChange.bind(this, 'organizationName')}
+            /> 
+          </h4>
           <a className='button u-pull-right' onClick={this.cancelHandler}>Cancel</a>
           <a className='button u-pull-right' onClick={this.saveHandler}>Save</a>
         </div>
         <textarea 
           className='u-full-width'
           placeholder="Organization Description"
-          value={organization.description}
-          onChange={this.handleChange.bind(this, 'description')}>
+          value={organization.organizationDescription}
+          onChange={this.handleChange.bind(this, 'organizationDescription')}>
         </textarea>
         <input
           className='u-full-width'
