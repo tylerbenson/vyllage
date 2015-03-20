@@ -71,9 +71,16 @@ var HeaderContainer = React.createClass({
             <div className="container">
               <div className="row">
                 <div className="twelve columns">
-                  <div className="u-pull-left vyllage-logo">Resume</div>
+                  <div className="u-pull-left vyllage-logo">
+                    <p className="logo-title"> <span> Vyllage</span> <span className="logo-text">  Resume </span></p> 
+                  </div>
                   <div className="u-pull-right">
-                      <p className="username">Nathan B </p>
+                    <div className="header-controls">
+                      <span><i className="icon ion-ios-bell"></i></span>
+                      <span><i className="icon ion-gear-a"></i></span>
+                      <span><img src = "images/empty-profile-icon.png" className="header-img"/></span>
+                      <span className="username">Nathan B </span>
+                    </div>
                   </div>
                 </div>
               </div>
