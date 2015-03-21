@@ -12,8 +12,8 @@ var Footer = require('../footer/footer');
 
 var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
-  componentDidMount: function () {
-    // actions.getResume({documentId: 1});
+  componentWillMount: function () {
+    actions.getResume();
   },
   render: function () {
     var careerGoalSections = filter(this.state.resume.sections, {title: 'Career Goal'});

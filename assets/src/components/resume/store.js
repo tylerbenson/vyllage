@@ -4,82 +4,21 @@ var endpoints = require('../endpoints');
 var urlTemplate = require('url-template');
 var findindex = require('lodash.findindex');
 
-var resume = {
-  header: {
-    firstName: "Nathan",
-    middleName: "M",
-    lastName: "Benson",
-    tagline: "Technology Enthusiast analyzing, building, and expanding solutions"
-  },
-  contact: {
-    "social": {
-      "twitter":"@nben888",
-      "facebook":"natebenson",
-      "linkedin":"www.linkedin.com/natebenson",
-      "visibility":"private"
-    },
-    "contact": {
-      "email":"nathan@vyllage.com",
-      "home":"555-890-2345",
-      "cell":"555-123-2345",
-      "visibility":"private"
-    },
-    "location": {
-      "values":[
-        "1906 NE 151st Cicle, Vancouver WA g8589",
-        "1906 NE 151st Cicle, Vancouver WA g8589"
-      ],
-      "visibility":"private"
-    }
-  },
-  sections: [
-    {
-      "type": "career-goal",
-      "title": "Career Goal",
-      "sectionId": 1,
-      "sectionPosition": 1,
-      "state": "shown",
-      "description": "I am a frevid promoter of creating solutions"
-    },
-    {
-      "type": "experience",
-      "title": "Experience",
-      "sectionId": 2,
-      "sectionPosition": 2,
-      "state": "shown",
-      "organizationName": "",
-      "organizationDescription": "",
-      "role": "",
-      "startDate": "",
-      "endDate": "",
-      "isCurrent": false,
-      "location": "",
-      "roleDescription": "",
-      "highlights": ""
-    }
-  ]
-}
-
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
-    // temporarily asseigned placeholder 
-    this.resume = resume;
-    // this.resume = {}; // uncomment after api call integration
+    this.documentId = window.location.pathname.split('/')[2]
+    this.resume = {}; 
   },
-  onGetResume: function (params) {
-    var url = urlTemplate.parse(endpoints.resume).expand(params);
-    request
-      .get(url)
-      .end(function (err, res) {
-        if (res.ok) {
-          this.resume = res.body;
-          this.trigger(this.resume);
-        } 
-      }.bind(this))
+  onGetResume: function () {
+    this.onGetHeader();
+    this.onGetSections();
   },
-  onGetHeader: function (params) {
-    var url = urlTemplate.parse(endpoints.resumeHeader).expand(params);
+  onGetHeader: function () {
+    var url = urlTemplate
+                .parse(endpoints.resumeHeader)
+                .expand({documentId: this.documentId});
+    console.log(url);
     request
       .get(url)
       .end(function (err, res) {
@@ -94,8 +33,10 @@ module.exports = Reflux.createStore({
     this.resume.header.tagline = tagline;
     this.trigger(this.resume);
   },
-  onGetSections: function (params) {
-    var url = urlTemplate.parse(endpoints.resumeSections).expand(params);
+  onGetSections: function () {
+    var url = urlTemplate
+                .parse(endpoints.resumeSections)
+                .expand({documentId: this.documentId});
     request
       .get(url)
       .end(function (err, res) {
