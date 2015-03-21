@@ -1,3 +1,8 @@
+.container {
+	max-width: $header-width;
+	min-width: 960px;
+}
+
 .header-top {
 	background-color: #E2670D;
 	height: 40px;
@@ -69,38 +74,62 @@
 }
 .header-secondary {
 	background-color: $white;
+	height: 40px;
+	color: #e2670d;
+	font-size: 18px;
+	padding-top: 10px;
+
+	a {
+		padding-right: 30px;
+		color: #e2670d;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+
+	i {
+		padding-right: 8px;
+		font-size: 22px;
+	}
 
 	.mode {
-		color: #E2670D;
-		font-size: 18px;
-		padding-top: 10px;
-	}
-}
-// the rest of code will be refactored according to new design
-header {
-	@include header-grid();
+		text-transform: inherit;
+		margin: 0px;
 
-	.container {
-		height: $header-height;
-		max-width: $header-width;
-		min-width: 960px;
-		
-		.header-profile {
-			margin-top: 12px;
-
-			.ask-advice-btn {
-				@include ask-advice-btn();
-				margin-left: 30px;
-			}
-
-			.ask-advice-btn:hover {
-				border: 1px solid #050404;
-				background-color: #414D36;
-			}
+		.arrow-down {
+		  width: 0;
+		  height: 0;
+		  border-left: 4px solid transparent;
+		  border-right: 4px solid transparent;
+		  border-top: 6px solid #e2670d;
+		  top: 17px;
+		  position: relative;
+		  left: 7px;
+		  float: right;
 		}
 	}
 }
 
+.ask-advice-btn {
+  border: #e2670d solid 2px;
+  border-radius: 5px;
+  color: #e2670d;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all .2s ease;
+  line-height: 22px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  margin: 0px;
+  padding: 0 10px;
+}
+
+.ask-advice-btn:hover {
+	background-color: #e2670d;
+	border-color: #e2670d;
+  color: #fff;
+}
+		
 #menu-container {
 	position: absolute;
 	z-index: 10;

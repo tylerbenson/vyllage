@@ -37,7 +37,7 @@
 }
 
 @mixin ask-advice-btn() {
-	@include button($ask-advice-btn-bkg-color, $white);
+	@include button(#e1660d, $white);
 	border: 1px solid #050505;
 	font-weight: bold;
 	padding: 0 10px;

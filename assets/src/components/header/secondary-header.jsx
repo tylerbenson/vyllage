@@ -8,9 +8,11 @@ var SecondaryHeader = React.createClass({
             <div className="container">
               <div className="row">
                 <div className="twelve columns">
-                  <div className="u-pull-left mode">Edit Mode</div>
+                  <p className="u-pull-left mode"> <i className="icon ion-ios-paper"></i>  Edit Mode  <span className="arrow-down"> </span></p>  
                   <div className="u-pull-right">
-                    <button className="u-pull-left ask-advice-btn" onClick={this.askAdvise}>ask advice</button>
+                   <a className="u-pull-left share"> <i className="icon ion-android-share-alt"></i>  share </a>  
+                   <a className="u-pull-left export"> <i className="icon ion-archive"></i>  export </a>
+                   <button className="u-pull-left ask-advice-btn" onClick={this.askAdvise}> <i className="icon ion-person-stalker"></i>  ask advice</button>
                   </div>
                 </div>
               </div>
