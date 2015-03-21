@@ -7,7 +7,9 @@ var findindex = require('lodash.findindex');
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
-    this.documentId = window.location.pathname.split('/')[2]
+    this.tokenHeader = document.getElementById('meta_header').content,
+    this.tokenValue = document.getElementById('meta_token').content;
+    this.documentId = window.location.pathname.split('/')[2];
     this.resume = {}; 
   },
   onGetResume: function () {
@@ -18,7 +20,6 @@ module.exports = Reflux.createStore({
     var url = urlTemplate
                 .parse(endpoints.resumeHeader)
                 .expand({documentId: this.documentId});
-    console.log(url);
     request
       .get(url)
       .end(function (err, res) {
@@ -29,9 +30,17 @@ module.exports = Reflux.createStore({
       }.bind(this))
   },
   onUpdateTagline: function (tagline) {
-    // implement api call also here
-    this.resume.header.tagline = tagline;
-    this.trigger(this.resume);
+    var url = urlTemplate
+                .parse(endpoints.resumeHeader)
+                .expand({documentId: this.documentId});
+    request
+      .post(url)
+      .set(this.tokenHeader, this.tokenValue) 
+      .send({tagline: tagline})
+      .end(function (err, res) {
+        this.resume.header.tagline = tagline;
+        this.trigger(this.resume);
+      }.bind(this))            
   },
   onGetSections: function () {
     var url = urlTemplate

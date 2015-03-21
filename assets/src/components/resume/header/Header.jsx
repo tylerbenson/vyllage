@@ -7,7 +7,6 @@ var Header = React.createClass({
   render: function() {
     var profileData = this.props.profileData || {};
     var contactData = this.props.contactData || {};
-    console.log(profileData, contactData);
     var tagline = profileData.tagline || '';
     return (
       <section id="resume-contactInfo">

@@ -4,7 +4,6 @@ var path = require('path');
 
 module.exports = {
   debug: true,
-  watch: true,
   devtool: '#inline-source-map',
   entry: {
     'resume.js': './src/resume.jsx',
