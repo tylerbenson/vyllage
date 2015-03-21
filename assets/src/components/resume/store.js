@@ -3,6 +3,7 @@ var request = require('superagent');
 var endpoints = require('../endpoints');
 var urlTemplate = require('url-template');
 var findindex = require('lodash.findindex');
+var omit = require('lodash.omit');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -55,40 +56,41 @@ module.exports = Reflux.createStore({
         } 
       }.bind(this))
   },
-  onPostSection: function (data, params) {
-    // var tokenHeader = document.getElementById('meta_header').content,
-    // var tokenValue = document.getElementById('meta_token').content;
-    // var url = urlTemplate.parse(endpoints.resumeSections).expand(params);
-    // request
-    //   .post(url)
-    //   .set(tokenHeader, tokenValue) 
-    //   .send(data)
-    //   .end(function (err, res) {
-    //     this.resume.sections.push(res.body);
-    //     this.trigger(this.resume);
-    //   }.bind(this))
-    
-    // for temporary use
-    data.sectionId = this.resume.sections.length + 1;
-    this.resume.sections.push(data);
-    this.trigger(this.resume);
+  onPostSection: function (data) {
+    var url = urlTemplate
+                .parse(endpoints.resumeSections)
+                .expand({
+                  documentId: this.documentId,
+                });
+    request
+      .post(url)
+      .set(this.tokenHeader, this.tokenValue) 
+      .send({})
+      .end(function (err, res) {
+        this.resume.sections.push(res.body);
+        this.trigger(this.resume);
+        console.log(err, res.body)
+      }.bind(this))
   },
-  onPutSection: function (data, params) {
-    // var url = urlTemplate.parse(endpoints.resumeSection).expand(params);
-    // request
-    //   .post(url)
-    //   .send(data)
-    //   .end(function (err, res) {
-    //     var index = findindex(this.resume.sections, {sectionId: params.sectionId});
-    //     this.resume.sections[index] = res.body;
-    //     this.trigger(this.resume);
-    //   });
-    var index = findindex(this.resume.sections, {sectionId: data.sectionId});
-    this.resume.sections[index] = data;
-    this.trigger(this.resume);
+  onPutSection: function (data) {
+    var url = urlTemplate
+                .parse(endpoints.resumeSection)
+                .expand({
+                  documentId: this.documentId,
+                  sectionId: data.sectionId
+                });
+    request
+      .put(url)
+      .set(this.tokenHeader, this.tokenValue) 
+      .send(omit(data, 'uiEditMode'))
+      .end(function (err, res) {
+        var index = findindex(this.resume.sections, {sectionId: data.sectionId});
+        this.resume.sections[index] = data;
+        this.trigger(this.resume);
+      }.bind(this));
   },
-  onDeleteSection: function (params) {
-    var index = findindex(this.resume.sections, {sectionId: params.sectionId});
+  onDeleteSection: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections.splice(index, 1);
     this.trigger(this.resume);
   },
@@ -103,13 +105,13 @@ module.exports = Reflux.createStore({
         } 
       }.bind(this))
   },
-  onPostComment: function (params) {
-    var url = urlTemplate.parse(endpoints.resumeComments).expand(params);
+  onPostComment: function (data) {
+    var url = urlTemplate.parse(endpoints.resumeComments).expand(data);
     request
       .post(url)
       .send(data)
       .end(function (err, res) {
-        var index = findindex(this.resume.sections, {sectionId: params.sectionId});
+        var index = findindex(this.resume.sections, {sectionId: data.sectionId});
         this.resume.sections[index].comments.unshift(res.body);
       })
   },

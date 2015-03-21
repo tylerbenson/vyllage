@@ -10,8 +10,8 @@ var Skills = React.createClass({
     if (sections.length > 0) {
       sectionNodes = sections.map(function (section, index) {
         return (
-          <div>
-            <Freeform key={index} section={section} />
+          <div key={index}>
+            <Freeform section={section} />
             <SectionFooter />
           </div>
         )

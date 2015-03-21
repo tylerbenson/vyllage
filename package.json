@@ -12,5 +12,8 @@
   "scripts": {
     "preinstall": "cd assets && npm install --no-optional",
     "postinstall": "cd assets && npm run build"
+  },
+  "dependencies": {
+    "lodash.omit": "^3.0.0"
   }
 }

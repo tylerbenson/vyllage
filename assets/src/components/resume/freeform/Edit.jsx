@@ -11,6 +11,11 @@ var  FreeformEdit = React.createClass({
 			placeholder: 'tell us ....'
 		}
 	},
+	componentWillRecieveProps: function (nextProps) {
+		this.setState({
+			description: nextProps.description
+		});
+	},
 	handleChange: function(e) {
 		e.preventDefault();
 		this.setState({description: e.target.value});
@@ -19,6 +24,7 @@ var  FreeformEdit = React.createClass({
 		var section = this.props.section;
 		section.description = this.state.description;
 		section.uiEditMode = false;
+		console.log('save');
 		actions.putSection(section);
 	},
 	cancelHandler: function(e) {
