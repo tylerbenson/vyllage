@@ -17,10 +17,9 @@ var DeleteSection = React.createClass({
     this.setState({isOpen: true});
   },
   deleteSection: function (e) {
-    console.log(this.props.sectionId)
     e.preventDefault();
     this.setState({isOpen: false});
-    actions.deleteSection({sectionId: this.props.sectionId});
+    actions.deleteSection(this.props.sectionId);
   },
   render: function () {
     return (

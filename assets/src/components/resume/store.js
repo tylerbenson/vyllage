@@ -69,7 +69,6 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         this.resume.sections.push(res.body);
         this.trigger(this.resume);
-        console.log(err, res.body)
       }.bind(this))
   },
   onPutSection: function (data) {
@@ -90,9 +89,22 @@ module.exports = Reflux.createStore({
       }.bind(this));
   },
   onDeleteSection: function (sectionId) {
-    var index = findindex(this.resume.sections, {sectionId: sectionId});
-    this.resume.sections.splice(index, 1);
-    this.trigger(this.resume);
+    var url = urlTemplate
+                .parse(endpoints.resumeSection)
+                .expand({
+                  documentId: this.documentId,
+                  sectionId: sectionId
+                }); 
+    request
+      .del(url)
+      .set(this.tokenHeader, this.tokenValue) 
+      .set('Content-Type', 'application/json')
+      .send({documentId: this.documentId, sectionId: sectionId})
+      .end(function (err, res) {
+        var index = findindex(this.resume.sections, {sectionId: sectionId});
+        this.resume.sections.splice(index, 1);
+        this.trigger(this.resume);
+      }.bind(this));           
   },
   onGetComments: function (params) {
     var url = urlTemplate.parse(endpoints.resumeComments).expand(params);
