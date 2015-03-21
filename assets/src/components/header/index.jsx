@@ -5,11 +5,9 @@ var Menu = React.createClass({
     signOut: function() {
       window.location.pathname = "logout";
     },
-
     account: function () {
       window.location.pathname = "/account/";
     },
-
     render: function() {
       return (
         <div id="menu-container">
@@ -30,7 +28,6 @@ var HeaderContainer = React.createClass({
 
     handleClick: function(){
       var menuContainer = this.refs.menuContainer.getDOMNode();
-
       if(menuContainer.style.display ==='block') {
         menuContainer.style.display ='none'
       } else {
@@ -50,43 +47,26 @@ var HeaderContainer = React.createClass({
     },
     
     render: function() {
-      /*
-       <div className="row">
-          <div className="twelve columns">
-            <div className="u-pull-left header-logo"></div>
-            <div className="u-pull-right header-profile">
-              <img className="u-pull-left header-profile-photo" alt="" src="images/profile-photo.png"/>
-              <span className="u-pull-left header-username" id="account-name">
-                  <p onClick={this.handleClick}>nathan</p>
-              </span>
-              <button className="u-pull-left ask-advice-btn" onClick={this.askAdvise}>ask advice</button>
-            </div>
-          </div>
-        </div>
-        <Menu ref="menuContainer"/>
-        */
       return (
         <div>
-          <div className="row header-top">
+          <div className="header-top">
             <div className="container">
               <div className="row">
                 <div className="twelve columns">
                   <div className="u-pull-left vyllage-logo">
                     <p className="logo-title"> <span> Vyllage</span> <span className="logo-text">  Resume </span></p> 
                   </div>
-                  <div className="u-pull-right">
-                    <div className="header-controls">
-                      <span><i className="icon ion-ios-bell"></i></span>
-                      <span><i className="icon ion-gear-a"></i></span>
-                      <span className="header-img"><i className="icon ion-person"></i></span>
-                      <span className="username">Nathan B <span className="arrow-down"></span></span>
-                    </div>
+                  <div className="u-pull-right header-controls">
+                    <span><i className="icon ion-ios-bell"></i></span>
+                    <span><i className="icon ion-gear-a"></i></span>
+                    <span className="header-img"><i className="icon ion-person"></i></span>
+                    <span className="username" onClick={this.handleClick}>Nathan B <span className="arrow-down"></span></span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="row header-secondary">
+          <div className="header-secondary">
             <div className="container">
               <div className="row">
                 <div className="twelve columns">
@@ -98,6 +78,7 @@ var HeaderContainer = React.createClass({
               </div>
             </div>
           </div>
+          <Menu ref="menuContainer"/>
         </div>
       );
     }
