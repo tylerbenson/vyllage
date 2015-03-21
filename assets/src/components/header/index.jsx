@@ -78,8 +78,8 @@ var HeaderContainer = React.createClass({
                     <div className="header-controls">
                       <span><i className="icon ion-ios-bell"></i></span>
                       <span><i className="icon ion-gear-a"></i></span>
-                      <span><img src = "images/empty-profile-icon.png" className="header-img"/></span>
-                      <span className="username">Nathan B </span>
+                      <span className="header-img"><i className="icon ion-person"></i></span>
+                      <span className="username">Nathan B <span className="arrow-down"></span></span>
                     </div>
                   </div>
                 </div>
