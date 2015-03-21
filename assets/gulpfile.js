@@ -42,12 +42,7 @@ gulp.task('copy-fonts', function () {
     .pipe(gulp.dest('public/fonts'));
 });
 
-gulp.task('copy-test-Sirarpi', function () {
-  return gulp.src(['bower_components/ionicons/css/ionicons.css'])
-    .pipe(gulp.dest('public/ionicons'));
-});
-
-gulp.task('copy', ['copy-images', 'copy-html', 'copy-fonts', 'copy-test-Sirarpi']);
+gulp.task('copy', ['copy-images', 'copy-html', 'copy-fonts']);
 
 gulp.task('styles', function () {
   return gulp.src(['src/**/*.scss'])
