@@ -52,24 +52,27 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         if (res.ok) {
           this.resume.sections = res.body;
+          console.log(res.body);
           this.trigger(this.resume);
         } 
       }.bind(this))
   },
+
   onPostSection: function (data) {
     var url = urlTemplate
                 .parse(endpoints.resumeSections)
                 .expand({
                   documentId: this.documentId,
                 });
+    data.sectionPosition = this.resume.sections.length;
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue) 
-      .send({})
+      .send(data)
       .end(function (err, res) {
         this.resume.sections.push(res.body);
         this.trigger(this.resume);
-      }.bind(this))
+      }.bind(this));
   },
   onPutSection: function (data) {
     var url = urlTemplate
@@ -101,6 +104,7 @@ module.exports = Reflux.createStore({
       .set('Content-Type', 'application/json')
       .send({documentId: this.documentId, sectionId: sectionId})
       .end(function (err, res) {
+        console.log(err, res);
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         this.resume.sections.splice(index, 1);
         this.trigger(this.resume);

@@ -71,6 +71,9 @@
 ## POST /resume/{documentId}/section/*
 + Parameters
   + documentId (string, `1`) - The id of the document.
++ Request
+  + Body
+    {sectionPosition: 5}  
 + Response 200
 
 

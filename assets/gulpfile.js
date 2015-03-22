@@ -121,7 +121,7 @@ gulp.task('watch', ['build'], function () {
   gulp.watch(['src/**/*.scss'], function () {
     runSequence('styles');
   });
-  gulp.watch(['src/**/*.jsx'], function () {
+  gulp.watch(['src/**/*.jsx', 'src/**/*.js'], function () {
     runSequence('react');
   });
   gulp.watch(['src/*.html', 'src/images/*'], function () {
