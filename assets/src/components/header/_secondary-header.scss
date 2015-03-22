@@ -8,19 +8,16 @@
 	.container {
 		background-color: $white;
 	}
-
 	a {
 		padding-right: 30px;
 		color: $header-secondary-text-color;
 		text-transform: uppercase;
 		cursor: pointer;
 	}
-
 	i {
 		padding-right: 8px;
 		font-size: 22px;
 	}
-
 	.mode {
 		text-transform: inherit;
 		margin: 0px;
@@ -32,27 +29,13 @@
 		  float: right;
 		}
 	}
-
 	.ask-advice-btn {
-	  border: $header-secondary-text-color solid 2px;
-	  border-radius: 5px;
-	  color: $header-secondary-text-color;
-	  font-weight: 600;
-	  font-size: 14px;
-	  transition: all .2s ease;
-	  line-height: 22px;
-	  letter-spacing: 2px;
-	  text-decoration: none;
-	  text-transform: uppercase;
+	  @include ask-advice-btn();
 	  margin: 0px;
 	  padding: 0 10px;
 	  top: -4px;
-	  position: relative;
 	}
-
 	.ask-advice-btn:hover {
-		background-color: $header-secondary-text-color;
-		border-color: $header-secondary-text-color;
-	  color: #fff;
+		@include ask-advice-btn-hover();
 	}
 }
