@@ -6,7 +6,6 @@ var SectionFooter = React.createClass({
       <div className='row resume-section-footer'>
         <p className='u-pull-left'>Just updated now</p>
         <a className='u-pull-right'>comments</a> 
-        <a className='u-pull-right'>edits</a> 
       </div>
     );
   }

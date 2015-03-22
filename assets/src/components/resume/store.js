@@ -70,6 +70,7 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue) 
       .send(data)
       .end(function (err, res) {
+        console.log(err, res.body);
         this.resume.sections.push(res.body);
         this.trigger(this.resume);
       }.bind(this));
@@ -83,7 +84,7 @@ module.exports = Reflux.createStore({
                 });
     request
       .put(url)
-      .set(this.tokenHeader, this.tokenValue) 
+      .set(this.tokenHeader, this.tokenValue)
       .send(omit(data, 'uiEditMode'))
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
@@ -104,14 +105,18 @@ module.exports = Reflux.createStore({
       .set('Content-Type', 'application/json')
       .send({documentId: this.documentId, sectionId: sectionId})
       .end(function (err, res) {
-        console.log(err, res);
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         this.resume.sections.splice(index, 1);
         this.trigger(this.resume);
       }.bind(this));           
   },
-  onGetComments: function (params) {
-    var url = urlTemplate.parse(endpoints.resumeComments).expand(params);
+  onGetComments: function (sectionId) {
+    var url = urlTemplate
+                .parse(endpoints.resumeComments)
+                .expand({
+                  documentId: this.documentId,
+                  sectionId: sectionId
+                });
     request
       .get(url)
       .end(function (err, res) {
@@ -122,9 +127,15 @@ module.exports = Reflux.createStore({
       }.bind(this))
   },
   onPostComment: function (data) {
-    var url = urlTemplate.parse(endpoints.resumeComments).expand(data);
+    var url = urlTemplate
+                .parse(endpoints.resumeComments)
+                .expand({
+                  documentId: this.documentId,
+                  sectionId: data.sectionId
+                });
     request
       .post(url)
+      .set(this.tokenHeader, this.tokenValue)
       .send(data)
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
@@ -139,6 +150,16 @@ module.exports = Reflux.createStore({
   onDisableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].uiEditMode = false;
+    this.trigger(this.resume);
+  },
+  onShowComments: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].showComments = true;
+    this.trigger(this.resume);
+  },
+  onHideComments: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].showComments = false;
     this.trigger(this.resume);
   },
   getInitialState: function () {
