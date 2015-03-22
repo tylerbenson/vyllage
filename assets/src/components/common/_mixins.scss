@@ -167,7 +167,6 @@
 	cursor: pointer;
 }
 
-
 // new UI
 @mixin arrowDown($color) {
 	width: 0;
@@ -176,4 +175,31 @@
   border-right: 4px solid transparent;
   border-top: 6px solid $color;
   position: relative;
+}
+
+@mixin arrowUp($color) {
+	width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 10px solid $color;
+  position: relative;
+}
+
+@mixin menu-list() {
+	background-color: $white;
+	width: 170px;
+	list-style-type: none;
+	font-family: 'PT Sans', sans-serif;
+}
+
+@mixin menu-list-item() {
+	border-bottom: 1px solid #D3CFC9;
+	height: 30px;
+	margin-bottom: 0;
+	font-size: 18px;
+	line-height: 24px;
+	padding-top: 10px;
+	padding-left: 15px;
+	cursor: pointer;
 }
