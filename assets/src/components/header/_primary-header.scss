@@ -1,0 +1,69 @@
+.header-top {
+	background-color: #E2670D;
+	height: 40px;
+	color: $white;
+  font-size: 20px;
+
+	.vyllage-logo {
+	  padding-top: 7px;
+	  background: url(../images/logo-white.png) no-repeat ;
+	  padding-left: 35px;
+	  font-size: 16px;
+
+	  .logo-title {
+	  	margin-bottom: 0px;
+	  	font-weight: 700;
+  		letter-spacing: 1.2px;
+
+	  	.logo-text {
+		  	text-transform: uppercase;
+	  	  font-weight: 500;
+	  	  letter-spacing: 1px;
+	  	  color: #f9d0b3;
+		  }
+	  }
+	}
+
+	.header-controls {
+	  padding-top: 6px;
+	  color: #863e09;
+	  span {
+	  	float: left;
+	  	cursor: pointer;
+	  }
+		i {
+			margin-right: 20px;
+		}
+		.header-img {
+			width: 20px;
+		  height: 20px;
+		  border-radius: 50%;
+		  background-color: #863e09;
+		  margin-top: 6px;
+
+			.ion-person {
+			  color: #e2670d;
+			  padding-left: 2px;
+			  position: relative;
+			  top: -6px;
+			}
+		}
+		.username {
+	    color: #863e09;
+		  font-size: 12px;
+		  padding-left: 20px;
+		  padding-top: 5px;
+		  font-weight: 600;
+		}
+		.arrow-down {
+		  width: 0;
+		  height: 0;
+		  border-left: 4px solid transparent;
+		  border-right: 4px solid transparent;
+		  border-top: 6px solid #863e09;
+		  top: 7px;
+		  position: relative;
+		  left: 4px;
+		}
+	}
+}

@@ -1,0 +1,59 @@
+.header-secondary {
+	background-color: $white;
+	height: 40px;
+	color: #e2670d;
+	font-size: 18px;
+	padding-top: 10px;
+
+	a {
+		padding-right: 30px;
+		color: #e2670d;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+
+	i {
+		padding-right: 8px;
+		font-size: 22px;
+	}
+
+	.mode {
+		text-transform: inherit;
+		margin: 0px;
+
+		.arrow-down {
+		  width: 0;
+		  height: 0;
+		  border-left: 4px solid transparent;
+		  border-right: 4px solid transparent;
+		  border-top: 6px solid #e2670d;
+		  top: 17px;
+		  position: relative;
+		  left: 7px;
+		  float: right;
+		}
+	}
+}
+
+.ask-advice-btn {
+  border: #e2670d solid 2px;
+  border-radius: 5px;
+  color: #e2670d;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all .2s ease;
+  line-height: 22px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  margin: 0px;
+  padding: 0 10px;
+  top: -4px;
+  position: relative;
+}
+
+.ask-advice-btn:hover {
+	background-color: #e2670d;
+	border-color: #e2670d;
+  color: #fff;
+}
