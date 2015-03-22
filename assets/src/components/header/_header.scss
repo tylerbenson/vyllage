@@ -1,87 +1,151 @@
+.container {
+	max-width: $header-width;
+	min-width: 960px;
+}
+
 .header-top {
 	background-color: #E2670D;
 	height: 40px;
 	color: $white;
+  font-size: 20px;
 
 	.vyllage-logo {
-		text-transform: uppercase;
-	  padding-top: 10px;
+	  padding-top: 7px;
+	  background: url(../images/logo-white.png) no-repeat ;
+	  padding-left: 35px;
+	  font-size: 16px;
+
+	  .logo-title {
+	  	margin-bottom: 0px;
+	  	font-weight: 700;
+  		letter-spacing: 1.2px;
+
+	  	.logo-text {
+		  	text-transform: uppercase;
+	  	  font-weight: 500;
+	  	  letter-spacing: 1px;
+	  	  color: #f9d0b3;
+		  }
+	  }
 	}
-	.username {
-		padding-top: 10px;
-		color: #616161;
+
+	.header-controls {
+	  padding-top: 6px;
+	  color: #863e09;
+	  span {
+	  	float: left;
+	  	cursor: pointer;
+	  }
+		i {
+			margin-right: 20px;
+		}
+		.header-img {
+			width: 20px;
+		  height: 20px;
+		  border-radius: 50%;
+		  background-color: #863e09;
+		  margin-top: 6px;
+
+			.ion-person {
+			  color: #e2670d;
+			  padding-left: 2px;
+			  position: relative;
+			  top: -6px;
+			}
+		}
+		.username {
+	    color: #863e09;
+		  font-size: 12px;
+		  padding-left: 20px;
+		  padding-top: 5px;
+		  font-weight: 600;
+		}
+		.arrow-down {
+		  width: 0;
+		  height: 0;
+		  border-left: 4px solid transparent;
+		  border-right: 4px solid transparent;
+		  border-top: 6px solid #863e09;
+		  top: 7px;
+		  position: relative;
+		  left: 4px;
+		}
 	}
 }
 .header-secondary {
 	background-color: $white;
+	height: 40px;
+	color: #e2670d;
+	font-size: 18px;
+	padding-top: 10px;
+
+	a {
+		padding-right: 30px;
+		color: #e2670d;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+
+	i {
+		padding-right: 8px;
+		font-size: 22px;
+	}
 
 	.mode {
-		color: #E2670D;
-		font-size: 18px;
-		padding-top: 10px;
+		text-transform: inherit;
+		margin: 0px;
+
+		.arrow-down {
+		  width: 0;
+		  height: 0;
+		  border-left: 4px solid transparent;
+		  border-right: 4px solid transparent;
+		  border-top: 6px solid #e2670d;
+		  top: 17px;
+		  position: relative;
+		  left: 7px;
+		  float: right;
+		}
 	}
 }
-// the rest of code will be refactored according to new design
-header {
-	@include header-grid();
 
-	.container {
-		height: $header-height;
-		max-width: $header-width;
-		min-width: 960px;
+.ask-advice-btn {
+  border: #e2670d solid 2px;
+  border-radius: 5px;
+  color: #e2670d;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all .2s ease;
+  line-height: 22px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  margin: 0px;
+  padding: 0 10px;
+  top: -4px;
+  position: relative;
+}
+
+.ask-advice-btn:hover {
+	background-color: #e2670d;
+	border-color: #e2670d;
+  color: #fff;
+}
 		
-		.header-logo {
-			@include header-logo();
-		}
-
-		.header-profile {
-			margin-top: 12px;
-
-			.header-profile-photo {
-				width: 30px;
-				height: 30px;
-				margin: 5px 3px;
-			}
-
-			.header-username {
-				font-size: 20px;
-				line-height: 28px;
-				margin-top: 5px;
-				margin-left: 5px;
-				cursor: pointer;
-			}
-
-			.header-username:hover {
-				color: #8B8987;
-			}
-
-			.ask-advice-btn {
-				@include ask-advice-btn();
-				margin-left: 30px;
-			}
-
-			.ask-advice-btn:hover {
-				border: 1px solid #050404;
-				background-color: #414D36;
-			}
-		}
-	}
-}
-
 #menu-container {
 	position: absolute;
 	z-index: 10;
-	right: 105px;
-	top: 64px;
+	right: 160px;
+  top: 28px;
 	display: none;
 
 	#triangle-up {
-	    width: 0;
-	    height: 0;
-	    border-left: 15px solid transparent;
-	    border-right: 15px solid transparent;
-	    border-bottom: 10px solid $white;
-	    position: relative;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 10px solid $white;
+    position: relative;
 		left: 80px;
 		top: 2px;
 	}
