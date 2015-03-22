@@ -1,11 +1,9 @@
 .header-top {
-	background-color: $header-primary-bkg-color;
-	color: $white;
-	height: 40px;
+  @include grid($header-primary-bkg, $white, $header-height);
   font-size: 20px;
 
   .container {
-  	background-color: $header-primary-bkg-color;
+  	background-color: $header-primary-bkg;
   }
 	.vyllage-logo {
 	  padding-top: 7px;
@@ -44,7 +42,7 @@
 	  margin-top: 6px;
 	}
 	.ion-person {
-	  color: $header-primary-bkg-color;
+	  color: $header-primary-bkg;
 	  padding-left: 2px;
 	  position: relative;
 	  top: -6px;

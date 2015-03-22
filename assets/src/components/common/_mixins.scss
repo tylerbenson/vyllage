@@ -5,10 +5,10 @@
 	border-radius: 3px;
 }
 
-@mixin header-grid() {
-	background-color: $white;
-	border-top: 1px solid $article-border-color;
-	border-bottom: 2px solid $article-border-color;
+@mixin grid($background-color, $color, $height) {
+	background-color: $background-color;
+	color: $color;
+	height: $height;
 }
 
 @mixin button($backgroundColor, $color){

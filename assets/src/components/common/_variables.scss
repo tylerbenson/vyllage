@@ -1,14 +1,11 @@
 // colors
 $white: #ffffff;
 $article-border-color: #c5c3c2;
-
 $article-btn-bkg-color: #4d322a;
 $share-contact-btn-bkg-color: #ece7e4;
 $ask-advice-btn-bkg-color: #5a6b4b;
-
 $article-controll-link-color: #4d322a;
 $count-btn-bkg-color: #a99994;
-
 $paragraph-edit-bkg-color: #eeebe9;
 $paragraph-edit-border-color: #4d322b;
 
@@ -20,16 +17,15 @@ $cancel-btn-border-clor: #787777;
 $subheader-color: #6F6F6F;
 $link-color: #4f619c;
 
-
 // header styles
-$header-height: 63px;
+$header-height: 40px;
 $header-width: 1040px;
-$header-logo-width: 163px;
-
+$header-primary-text-color: #863e09;
+$header-primary-bkg: #E2670D;
+$header-secondary-text-color: #e2670d;
 
 // content styles
 $main-container-width: 850px;
-
 
 //profile
 $profile-height: 175px;
@@ -39,10 +35,8 @@ $share-info-bkg-color: #ece7e4;
 $share-info-txt-color: #4D322B;
 $share-info-border-color: #A19B9B;
 
-
 // add more blocks
 $add-more-block-height: 70px;
-
 
 //advice request
 $top-bkg-color: #E5E4E2;
@@ -56,13 +50,5 @@ $cancel-btn-color: #4E4C4D;
 //Typography
 $paragraph-font-size: 16px;
 
-//Colors
-
 //Borders
 $border-color: #c5c3c2;
-
-
-// New UI
-$header-primary-text-color: #863e09;
-$header-primary-bkg-color: #E2670D;
-$header-secondary-text-color: #e2670d;

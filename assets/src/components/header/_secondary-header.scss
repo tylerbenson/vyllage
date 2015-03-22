@@ -1,7 +1,5 @@
 .header-secondary {
-	background-color: $white;
-	height: 40px;
-	color: $header-secondary-text-color;
+	@include grid($white,$header-secondary-text-color, $header-height);
 	font-size: 18px;
 	padding-top: 10px;
 	
