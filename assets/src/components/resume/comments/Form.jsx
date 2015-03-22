@@ -1,5 +1,5 @@
 var React = require('react');
-var Actions = require('./actions');
+var actions = require('../actions');
 
 var CommentForm = React.createClass({
   getInitialState: function () {
@@ -11,7 +11,9 @@ var CommentForm = React.createClass({
   },
   commentHandler: function (e) {
     e.preventDefault();
-    Actions.addComment({commentText: this.state.value});
+    actions.addComment({
+      commentText: this.state.value
+    });
     this.setState({value: ''});
   },
   render: function () {

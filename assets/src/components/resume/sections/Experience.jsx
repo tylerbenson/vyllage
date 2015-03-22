@@ -12,7 +12,7 @@ var Experience = React.createClass({
         return (
           <div key={index} >
             <Organization section={section}/>
-            <SectionFooter />
+            <SectionFooter section={section} />
           </div>
         );
       })

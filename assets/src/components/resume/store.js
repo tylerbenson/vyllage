@@ -52,7 +52,6 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         if (res.ok) {
           this.resume.sections = res.body;
-          console.log(res.body);
           this.trigger(this.resume);
         } 
       }.bind(this))
@@ -85,7 +84,7 @@ module.exports = Reflux.createStore({
     request
       .put(url)
       .set(this.tokenHeader, this.tokenValue)
-      .send(omit(data, 'uiEditMode'))
+      .send(omit(data, ['uiEditMode', 'showComments', 'comments']))
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
         this.resume.sections[index] = data;
@@ -160,6 +159,11 @@ module.exports = Reflux.createStore({
   onHideComments: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showComments = false;
+    this.trigger(this.resume);
+  },
+  onToggleComments: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].showComments = !this.resume.sections[index].showComments;
     this.trigger(this.resume);
   },
   getInitialState: function () {

@@ -12,7 +12,7 @@ var Skills = React.createClass({
         return (
           <div key={index}>
             <Freeform section={section} />
-            <SectionFooter />
+            <SectionFooter section={section} />
           </div>
         )
       });

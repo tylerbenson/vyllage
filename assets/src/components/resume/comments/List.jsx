@@ -1,8 +1,16 @@
 var React = require('react');
+var actions = require('../comments');
 
 var CommentList = React.createClass({
+  componentDidMount: function () {
+    actions.getComments(this.props.sectionId);
+  },
+  componentWillReceiveProps: function (nextProps) {
+    actions.getComments(nextProps.sectionId);
+  },
   render: function () {
-    var commentNodes = this.props.comments.map(function (comment, index) {
+    var comments = this.props.comments || [];
+    var commentNodes = comments.map(function (comment, index) {
       return <div key={index} className='comment'>
                 <div className="row">
                     <div className="comment-name">Richard Zielke</div>
