@@ -1,7 +1,13 @@
 #resume-contactInfo {
   background-color: #616161;
   height: 145px;
-  padding-top: 30px;
+  padding-bottom: 30px;  
+
+  .container {
+    background-color: #616161;
+    padding-top: 30px;
+    height: 175px;
+  }
 
 	.profileInfo, .contactInfo {
 		font-family: "PT Sans";

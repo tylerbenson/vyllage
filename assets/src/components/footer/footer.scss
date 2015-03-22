@@ -2,6 +2,10 @@ footer {
 	@include grid($header-primary-bkg, $header-primary-text-color, $footer-height);
   font-size: 16px;
 
+  .container {
+    background-color: $header-primary-bkg;
+  }
+
   .footer-logo {
   	background: url(../images/logo-white.png) no-repeat center;
   	width: 50px;
