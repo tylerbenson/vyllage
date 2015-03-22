@@ -15,7 +15,7 @@ var HeaderContainer = React.createClass({
     }
   },
 
-  export: function() {
+  exportMenu: function() {
     var exportmenu = this.refs.exportmenu.getDOMNode();
     if(exportmenu.style.display ==='block') {
       exportmenu.style.display ='none';
@@ -28,7 +28,7 @@ var HeaderContainer = React.createClass({
     return (
       <div>
         <PrimaryHeader accountMenu={this.accountMenu}/>
-        <SecondaryHeader export={this.export}/>
+        <SecondaryHeader exportMenu={this.exportMenu}/>
         <AccountMenu ref="accountMenu"/>
         <ExportMenu ref="exportmenu"/>
       </div>

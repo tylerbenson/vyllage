@@ -11,20 +11,6 @@
 	border-bottom: 2px solid $article-border-color;
 }
 
-@mixin header-logo() {
-	width: $header-logo-width;
-	height: $header-height;
-	background: url('../images/header-logo.png') no-repeat;
-}
-
-@mixin profile-photo(){
-	width: 135px;
-	height: 135px;
-	margin: 20px;
-	border-radius: 3px;
-	border: 1px solid #202223;
-}
-
 @mixin button($backgroundColor, $color){
 	font-size: 17px;
 	font-weight: inherit;
@@ -41,17 +27,6 @@
 	border: 1px solid #050505;
 	font-weight: bold;
 	padding: 0 10px;
-}
-
-@mixin share-contact-btn() {
-	@include button($share-contact-btn-bkg-color, #a5a3a2);
-	height: 29px;
-	padding: 0 10px;
-	border-top: 1px dotted #878887;
-	border-left: 1px dotted #878887;
-	border-right: 0;
-	border-bottom: 0;
-	border-radius: 0;
 }
 
 @mixin article-btn() {

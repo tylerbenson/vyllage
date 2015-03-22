@@ -2,9 +2,9 @@ var React = require('react');
 
 var SecondaryHeader = React.createClass({  
 
-    export: function() {
-      if(this.props.export) {
-        this.props.export();
+    exportMenu: function() {
+      if(this.props.exportMenu) {
+        this.props.exportMenu();
       }
     },
 
@@ -29,11 +29,21 @@ var SecondaryHeader = React.createClass({
           <div className="container">
             <div className="row">
               <div className="twelve columns">
-                <p className="u-pull-left mode"> <i className="icon ion-document-text"></i>  Edit Mode  <span className="arrow-down"> </span></p>  
+                <p className="u-pull-left mode"> 
+                  <i className="icon ion-document-text"></i>
+                    Edit Mode  
+                  <span className="arrow-down"> </span>
+                </p>  
                 <div className="u-pull-right">
-                 <a className="u-pull-left share" onClick={this.share}> <i className="icon ion-android-share-alt"></i>  share </a>  
-                 <a className="u-pull-left export"  onClick={this.export}><i className="icon ion-archive"></i>  export </a>
-                 <button className="u-pull-left ask-advice-btn" onClick={this.askAdvise}> <i className="icon ion-person-stalker"></i>  ask advice</button>
+                  <a className="u-pull-left share" onClick={this.share}> 
+                    <i className="icon ion-android-share-alt"></i>  share
+                  </a>  
+                  <a className="u-pull-left export"  onClick={this.exportMenu}>
+                    <i className="icon ion-archive"></i>  export 
+                  </a>
+                 <button className="u-pull-left ask-advice-btn" onClick={this.askAdvise}> 
+                    <i className="icon ion-person-stalker"></i>  ask advice
+                  </button>
                 </div>
               </div>
             </div>
