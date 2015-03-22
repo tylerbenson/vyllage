@@ -1,12 +1,16 @@
 .header-top {
-	background-color: #E2670D;
-	height: 40px;
+	background-color: $header-primary-bkg-color;
 	color: $white;
+	height: 40px;
   font-size: 20px;
+
+  .container {
+  	background-color: $header-primary-bkg-color;
+  }
 
 	.vyllage-logo {
 	  padding-top: 7px;
-	  background: url(../images/logo-white.png) no-repeat ;
+	  background: url(../images/logo-white.png) no-repeat;
 	  padding-left: 35px;
 	  font-size: 16px;
 	}
@@ -26,7 +30,7 @@
 
 	.header-controls {
 	  padding-top: 6px;
-	  color: #863e09;
+	  color: $header-primary-text-color;
 
 	  span {
 	  	float: left;
@@ -42,19 +46,19 @@
 		width: 20px;
 	  height: 20px;
 	  border-radius: 50%;
-	  background-color: #863e09;
+	  background-color: $header-primary-text-color;
 	  margin-top: 6px;
 	}
 
 	.ion-person {
-	  color: #e2670d;
+	  color: $header-primary-bkg-color;
 	  padding-left: 2px;
 	  position: relative;
 	  top: -6px;
 	}
 
 	.username {
-    color: #863e09;
+    color: $header-primary-text-color;
 	  font-size: 12px;
 	  padding-left: 20px;
 	  padding-top: 5px;
@@ -62,13 +66,8 @@
 	}
 
 	.arrow-down {
-	  width: 0;
-	  height: 0;
-	  border-left: 4px solid transparent;
-	  border-right: 4px solid transparent;
-	  border-top: 6px solid #863e09;
+	  @include arrowDown($header-primary-text-color);
 	  top: 7px;
-	  position: relative;
 	  left: 4px;
 	}
 }
