@@ -2,8 +2,8 @@ var React = require('react');
 
 var PrimaryHeader = React.createClass({  
 
-  accountMenu: function(){
-    if(this.props.accountMenu){
+  accountMenu: function() {
+    if(this.props.accountMenu) {
       this.props.accountMenu();
     }
   },

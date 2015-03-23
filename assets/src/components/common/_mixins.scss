@@ -23,8 +23,8 @@
 }
 
 @mixin ask-advice-btn() {
-	border: $header-secondary-text-color solid 2px;
-  color: $header-secondary-text-color;
+	border: $yellow-text-color solid 2px;
+  color: $yellow-text-color;
   border-radius: 5px;
   font-weight: 600;
   font-size: 14px;
@@ -37,8 +37,8 @@
 }
 
 @mixin ask-advice-btn-hover() {
-	background-color: $header-secondary-text-color;
-	border-color: $header-secondary-text-color;
+	background-color: $yellow-text-color;
+	border-color: $yellow-text-color;
   color: #fff;
 }
 

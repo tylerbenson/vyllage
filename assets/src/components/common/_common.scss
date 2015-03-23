@@ -2,6 +2,11 @@ body {
 	background: url('../images/background.jpg');
 	font-family: 'PT Sans', sans-serif;
 
+	p {
+		padding: 0;
+		margin: 0;
+	}
+	
 	section.container {
 		margin-top: 30px;
 		width: $main-container-width;

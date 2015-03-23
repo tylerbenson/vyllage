@@ -1,8 +1,13 @@
-// Variables
+.button.edit {
+  width: 60px;
+  height: 26px;
+  border: 1px solid #e2670d;
+  color: #e2670d;
+  font-size: 11px;
+  padding: 0 10px;
+  line-height: 5px;
 
-
-// Mixins
-
-
-// Classes
-
+  .icon {
+	  padding-right: 4px;
+  }
+}
