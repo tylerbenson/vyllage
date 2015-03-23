@@ -14,7 +14,7 @@ var OrganizationPreview = React.createClass({
         <div className='row'>
           <h4 className='u-pull-left'>{organization.organizationName}</h4>
           <DeleteSection className='u-pull-right' sectionId={this.props.section.sectionId} />
-          <a className='button u-pull-right' onClick={this.editHandler}>Edit</a>
+          <a className='button button-inverted u-pull-right' onClick={this.editHandler}>Edit</a>
         </div>
         <p>{organization.organizationDescription}</p>
         <p>{organization.role}</p>

@@ -11,11 +11,13 @@ var CommentForm = React.createClass({
   },
   commentHandler: function (e) {
     e.preventDefault();
-    actions.postComment({
-      sectionId: this.props.sectionId,
-      commentText: this.state.value
-    });
-    this.setState({value: ''});
+    if (this.state.value) {
+      actions.postComment({
+        sectionId: this.props.sectionId,
+        commentText: this.state.value
+      });
+      this.setState({value: ''});
+    }
   },
   render: function () {
     return (
@@ -25,7 +27,7 @@ var CommentForm = React.createClass({
           placeholder='share your advice'
           onChange={this.changeHandler}
           value={this.state.value}></textarea>
-        <button className='button' onClick={this.commentHandler}>send</button>
+        <button className='button button-primary' onClick={this.commentHandler}>Send</button>
       </div>
     );
   }

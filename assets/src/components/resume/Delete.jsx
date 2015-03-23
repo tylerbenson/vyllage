@@ -24,12 +24,16 @@ var DeleteSection = React.createClass({
   render: function () {
     return (
       <div className={this.props.className}>
-        <i className='icon ion-android-delete' onClick={this.onOpen}></i>
+        <button 
+          className='button button-inverted'
+          onClick={this.onOpen}>
+          <i className='icon ion-android-delete'></i>
+        </button>
         <Modal isOpen={this.state.isOpen}> 
           <a className='close-button' onClick={this.onClose}>&times;</a>
           Do you really want to delete this section ?
           <div className='row'>
-            <a className='button' onClick={this.deleteSection}>Delete</a>
+            <a className='button button-inverted' onClick={this.deleteSection}>Delete</a>
             <a className='button' onClick={this.onClose}>Cancel</a>
           </div>
         </Modal>

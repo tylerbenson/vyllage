@@ -12,7 +12,7 @@ var SectionHeader = React.createClass({
       <div className="row">
         <h4 className="u-pull-left resume-section-title"> {this.props.title}</h4>
         <button 
-          className="u-pull-right button"
+          className="u-pull-right button button-inverted"
           onClick={this.addSection}>
           Add
         </button>
