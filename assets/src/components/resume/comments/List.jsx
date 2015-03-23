@@ -1,12 +1,9 @@
 var React = require('react');
-var actions = require('../comments');
+var actions = require('../actions');
 
 var CommentList = React.createClass({
   componentDidMount: function () {
     actions.getComments(this.props.sectionId);
-  },
-  componentWillReceiveProps: function (nextProps) {
-    actions.getComments(nextProps.sectionId);
   },
   render: function () {
     var comments = this.props.comments || [];

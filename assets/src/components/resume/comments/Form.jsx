@@ -11,7 +11,8 @@ var CommentForm = React.createClass({
   },
   commentHandler: function (e) {
     e.preventDefault();
-    actions.addComment({
+    actions.postComment({
+      sectionId: this.props.sectionId,
       commentText: this.state.value
     });
     this.setState({value: ''});

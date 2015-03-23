@@ -4,6 +4,7 @@ var endpoints = require('../endpoints');
 var urlTemplate = require('url-template');
 var findindex = require('lodash.findindex');
 var omit = require('lodash.omit');
+var assign = require('lodash.assign');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -56,7 +57,6 @@ module.exports = Reflux.createStore({
         } 
       }.bind(this))
   },
-
   onPostSection: function (data) {
     var url = urlTemplate
                 .parse(endpoints.resumeSections)
@@ -119,10 +119,9 @@ module.exports = Reflux.createStore({
     request
       .get(url)
       .end(function (err, res) {
-        if (res.ok) {
-          var index = findindex(this.resume.sections, {sectionId: params.sectionId});
-          this.resume.sections[index].comments = res.body;
-        } 
+        var index = findindex(this.resume.sections, {sectionId: sectionId});
+        this.resume.sections[index].comments = res.body;
+        this.trigger(this.resume);
       }.bind(this))
   },
   onPostComment: function (data) {
@@ -132,14 +131,21 @@ module.exports = Reflux.createStore({
                   documentId: this.documentId,
                   sectionId: data.sectionId
                 });
+    // #194 until this issue is fixed         
+    data  = assign({}, data, {
+      userId: 1,
+      userName: "some name",
+      sectionVersion: 1
+    })          
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue)
       .send(data)
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
-        this.resume.sections[index].comments.unshift(res.body);
-      })
+        this.resume.sections[index].comments.push(data);
+        this.trigger(this.resume);
+      }.bind(this))
   },
   onEnableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
