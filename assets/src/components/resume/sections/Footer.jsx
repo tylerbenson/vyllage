@@ -11,7 +11,10 @@ var SectionFooter = React.createClass({
       <div>
         <div className='row resume-section-footer'>
           <p className='u-pull-left'>Just updated now</p>
-          <a className='u-pull-right' onClick={this.clickComments}>comments</a> 
+          <a className='u-pull-right' onClick={this.clickComments}>
+            
+            comments
+          </a> 
         </div>
         <Comments section={this.props.section} />
       </div>

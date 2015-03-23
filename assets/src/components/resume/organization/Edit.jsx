@@ -36,7 +36,12 @@ var OrganizationEdit = React.createClass({
             /> 
           </h4>
           <a className='button u-pull-right' onClick={this.cancelHandler}>Cancel</a>
-          <a className='button u-pull-right' onClick={this.saveHandler}>Save</a>
+          <a 
+            className='button button-inverted u-pull-right'
+            onClick={this.saveHandler}>
+            <i className='icon ion-android-done'></i>
+            Save
+          </a>
         </div>
         <textarea 
           className='u-full-width'

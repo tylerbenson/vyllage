@@ -14,6 +14,7 @@ var SectionHeader = React.createClass({
         <button 
           className="u-pull-right button button-inverted"
           onClick={this.addSection}>
+          <i className='icon ion-plus'></i>
           Add
         </button>
       </div>

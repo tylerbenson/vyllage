@@ -27,7 +27,7 @@ var DeleteSection = React.createClass({
         <button 
           className='button button-inverted'
           onClick={this.onOpen}>
-          <i className='icon ion-android-delete'></i>
+          <i className='icon ion-trash-a'></i>
         </button>
         <Modal isOpen={this.state.isOpen}> 
           <a className='close-button' onClick={this.onClose}>&times;</a>
