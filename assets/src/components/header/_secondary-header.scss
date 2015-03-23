@@ -1,0 +1,39 @@
+.header-secondary {
+	@include grid($white,$header-secondary-text-color, $header-height);
+	font-size: 18px;
+	padding-top: 10px;
+	
+	.container {
+		background-color: $white;
+	}
+	a {
+		padding-right: 30px;
+		color: $header-secondary-text-color;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+	i {
+		padding-right: 8px;
+		font-size: 22px;
+	}
+	.mode {
+		text-transform: inherit;
+		margin: 0px;
+
+		.arrow-down {
+			@include arrowDown($header-secondary-text-color);
+		  top: 17px;
+		  left: 7px;
+		  float: right;
+		}
+	}
+	.ask-advice-btn {
+	  @include ask-advice-btn();
+	  margin: 0px;
+	  padding: 0 10px;
+	  top: -4px;
+	}
+	.ask-advice-btn:hover {
+		@include ask-advice-btn-hover();
+	}
+}

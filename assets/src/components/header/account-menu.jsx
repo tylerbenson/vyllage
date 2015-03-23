@@ -1,6 +1,6 @@
 var React = require('react');
 
-var Menu = React.createClass({  
+var AccountMenu = React.createClass({  
 
     signOut: function() {
       window.location.pathname = "logout";
@@ -10,7 +10,7 @@ var Menu = React.createClass({
     },
     render: function() {
       return (
-        <div id="menu-container">
+        <div id="account-container" className="menu-container">
           <div id='triangle-up'></div>
           <div id="account-menu"> 
             <ul className="account-menu">
@@ -24,6 +24,6 @@ var Menu = React.createClass({
     }
 });
 
-module.exports = Menu;
+module.exports = AccountMenu;
 
 

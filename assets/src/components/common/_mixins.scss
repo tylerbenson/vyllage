@@ -5,24 +5,10 @@
 	border-radius: 3px;
 }
 
-@mixin header-grid() {
-	background-color: $white;
-	border-top: 1px solid $article-border-color;
-	border-bottom: 2px solid $article-border-color;
-}
-
-@mixin header-logo() {
-	width: $header-logo-width;
-	height: $header-height;
-	background: url('../images/header-logo.png') no-repeat;
-}
-
-@mixin profile-photo(){
-	width: 135px;
-	height: 135px;
-	margin: 20px;
-	border-radius: 3px;
-	border: 1px solid #202223;
+@mixin grid($background-color, $color, $height) {
+	background-color: $background-color;
+	color: $color;
+	height: $height;
 }
 
 @mixin button($backgroundColor, $color){
@@ -37,21 +23,23 @@
 }
 
 @mixin ask-advice-btn() {
-	@include button(#e1660d, $white);
-	border: 1px solid #050505;
-	font-weight: bold;
-	padding: 0 10px;
+	border: $header-secondary-text-color solid 2px;
+  color: $header-secondary-text-color;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all .2s ease;
+  line-height: 22px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  position: relative;
 }
 
-@mixin share-contact-btn() {
-	@include button($share-contact-btn-bkg-color, #a5a3a2);
-	height: 29px;
-	padding: 0 10px;
-	border-top: 1px dotted #878887;
-	border-left: 1px dotted #878887;
-	border-right: 0;
-	border-bottom: 0;
-	border-radius: 0;
+@mixin ask-advice-btn-hover() {
+	background-color: $header-secondary-text-color;
+	border-color: $header-secondary-text-color;
+  color: #fff;
 }
 
 @mixin article-btn() {
@@ -176,5 +164,42 @@
 	width:110px;
 	height: 58px;
 	border: 1px solid $fb-btn-bord-color;
+	cursor: pointer;
+}
+
+// new UI
+@mixin arrowDown($color) {
+	width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid $color;
+  position: relative;
+}
+
+@mixin arrowUp($color) {
+	width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 10px solid $color;
+  position: relative;
+}
+
+@mixin menu-list() {
+	background-color: $white;
+	width: 170px;
+	list-style-type: none;
+	font-family: 'PT Sans', sans-serif;
+}
+
+@mixin menu-list-item() {
+	border-bottom: 1px solid #D3CFC9;
+	height: 30px;
+	margin-bottom: 0;
+	font-size: 18px;
+	line-height: 24px;
+	padding-top: 10px;
+	padding-left: 15px;
 	cursor: pointer;
 }

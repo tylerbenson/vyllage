@@ -1,40 +1,39 @@
 var React = require('react');
 var PrimaryHeader = require('./primary-header');
 var SecondaryHeader = require('./secondary-header');
-var Menu =  require('./menu');
-
+var AccountMenu =  require('./account-menu');
+var ExportMenu = require('./export-menu');
 
 var HeaderContainer = React.createClass({  
 
-    handleClick: function(){
-      var menuContainer = this.refs.menuContainer.getDOMNode();
-      if(menuContainer.style.display ==='block') {
-        menuContainer.style.display ='none'
-      } else {
-        menuContainer.style.display ='block'
-      }
-    },
-
-    askAdvise: function() {
-      var pathItems = window.location.pathname.split("/"),
-          documentId;
-      if(pathItems.length > 2) {
-        documentId = pathItems[2];
-      }
-      if(documentId) {
-        window.location.pathname = "resume/"+ documentId + "/ask-advice";
-      }
-    },
-    
-    render: function() {
-      return (
-        <div>
-          <PrimaryHeader />
-          <SecondaryHeader />
-          <Menu ref="menuContainer"/>
-        </div>
-      );
+  accountMenu: function() {
+    var accountMenu = this.refs.accountMenu.getDOMNode();
+    if(accountMenu.style.display ==='block') {
+      accountMenu.style.display ='none';
+    } else {
+      accountMenu.style.display ='block';
     }
+  },
+
+  exportMenu: function() {
+    var exportmenu = this.refs.exportmenu.getDOMNode();
+    if(exportmenu.style.display ==='block') {
+      exportmenu.style.display ='none';
+    } else {
+      exportmenu.style.display ='block';
+    }
+  },
+    
+  render: function() {
+    return (
+      <div>
+        <PrimaryHeader accountMenu={this.accountMenu}/>
+        <SecondaryHeader exportMenu={this.exportMenu}/>
+        <AccountMenu ref="accountMenu"/>
+        <ExportMenu ref="exportmenu"/>
+      </div>
+    );
+  }
 });
 
 React.render(<HeaderContainer />, document.getElementById('header-container'));
