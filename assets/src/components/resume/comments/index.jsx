@@ -8,12 +8,12 @@ var Comments = React.createClass({
     if (section.showComments) {
       return (
         <div>
-          <CommentForm 
-            sectionId={section.sectionId}
-          />
           <CommentList 
             sectionId={section.sectionId}
             comments={section.comments}
+          />
+          <CommentForm 
+            sectionId={section.sectionId}
           />
         </div>
       );
