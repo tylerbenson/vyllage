@@ -20,14 +20,14 @@ var Skills = React.createClass({
       sectionNodes = <p className='add-more'>No skills added yet</p>
     }
     return (
-      <article className='career-goal'>
+      <div className='resume-section'>
         <div className="row">
           <div className="twelve columns">
             <Header title='Skills' /> 
             {sectionNodes}
           </div>
         </div>
-      </article>
+      </div>
     );
   }
 });

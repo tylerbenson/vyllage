@@ -1,9 +1,13 @@
+@import "./components/common/variables";
+@import "./components/common/mixins";
+
 @import "normalize-scss/normalize";
 @import "skeleton-scss/scss/skeleton";
 @import "ionicons/scss/ionicons";
 @import "./components/common/align";
 @import "./components/modal/modal";
 @import "./components/buttons/buttons";
+@import "./components/typography/typography";
 
 body {
   background: url('../images/background.jpg');

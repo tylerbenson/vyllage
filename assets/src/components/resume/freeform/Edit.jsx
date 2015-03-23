@@ -36,7 +36,7 @@ var  FreeformEdit = React.createClass({
 		return (
 			<div>
 				<div className='row'>
-					<h4 className='u-pull-left'>{this.props.title}</h4>
+					<h4 className='u-pull-left resume-section-title'>{this.props.title}</h4>
 					<a className='button u-pull-right' onClick={this.cancelHandler}>Cancel</a>
 					<a className='button u-pull-right' onClick={this.saveHandler}>Save</a>
 				</div>

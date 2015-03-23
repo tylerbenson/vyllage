@@ -20,14 +20,14 @@ var Education = React.createClass({
       sectionNodes = <p className='add-more'>No education added yet</p>
     }
     return (
-      <article className='experience'>
+      <div className='resume-section'>
         <div className="row">
           <div className="twelve columns">
             <Header title='Education' /> 
             {sectionNodes}
           </div>
         </div>
-      </article>
+      </div>
     );
   }
 });

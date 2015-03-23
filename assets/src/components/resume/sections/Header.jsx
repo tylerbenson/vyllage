@@ -9,11 +9,12 @@ var SectionHeader = React.createClass({
   },
   render: function () {
     return  (
-      <div className="u-pull-left full">
-        <button className="u-pull-left article-btn"> {this.props.title} </button>
-        <button className="u-pull-right article-btn addSection-btn"
-                onClick={this.addSection}>
-                {this.props.title}
+      <div className="row">
+        <h4 className="u-pull-left resume-section-title"> {this.props.title}</h4>
+        <button 
+          className="u-pull-right button"
+          onClick={this.addSection}>
+          Add
         </button>
       </div>
     );
