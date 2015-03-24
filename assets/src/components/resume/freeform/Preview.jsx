@@ -1,9 +1,9 @@
 var React = require('react');
 var actions = require('../actions');
+var EditBtn = require('../../buttons/edit');
 
 var FreeformPreview = React.createClass({
   editHandler: function (e) {
-    e.preventDefault();
     actions.enableEditMode(this.props.section.sectionId);
   },
   render: function () {
@@ -11,12 +11,10 @@ var FreeformPreview = React.createClass({
     return (
       <div className={className}>
         <div className='row'>
-          <h4 className='u-pull-left resume-section-title'>{this.props.title}</h4>
-          <a 
-            className='button button-inverted u-pull-right'
-            onClick={this.editHandler}>
-            <i className='icon ion-edit'></i>Edit
-          </a>
+         <div className="twelve columns section-title">
+            <p className='u-pull-left'>{this.props.title}</p>
+            <p className='u-pull-right'><EditBtn editHandler={this.editHandler}/></p>
+          </div>
         </div>
         <p>
           {this.props.section.description}

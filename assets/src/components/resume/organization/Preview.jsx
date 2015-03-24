@@ -1,10 +1,10 @@
 var React = require('react');
 var DeleteSection = require('../Delete');
 var actions = require('../actions');
+var EditBtn = require('../../buttons/edit');
 
 var OrganizationPreview = React.createClass({
   editHandler: function (e) {
-    e.preventDefault();
     actions.enableEditMode(this.props.section.sectionId);
   },
   render: function () {
@@ -12,15 +12,12 @@ var OrganizationPreview = React.createClass({
     return (
       <div>
         <div className='row'>
-          <h4 className='u-pull-left'>{organization.organizationName}</h4>
-          <DeleteSection className='u-pull-right' sectionId={this.props.section.sectionId} />
-          <a 
-            className='button button-inverted u-pull-right'
-            onClick={this.editHandler}>
-            <i className='icon ion-edit'></i>
-            Edit
-          </a>
+         <div className="twelve columns section-title">
+            <p className='u-pull-left'>{organization.organizationName}</p>
+            <p className='u-pull-right'><EditBtn editHandler={this.editHandler}/></p>
+          </div>
         </div>
+       
         <p>{organization.organizationDescription}</p>
         <p>{organization.role}</p>
         <div className='row'>
