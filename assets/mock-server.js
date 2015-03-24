@@ -18,6 +18,7 @@ app.use(webpackMiddleware(webpack(webpackConfig), {
 }));
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 app.use('/css', express.static(path.join(__dirname, 'public/css')));
+app.use('/fonts', express.static(path.join(__dirname, 'public/fonts')));
 
 var walker = walk.walk(path.resolve('./api'), {});
 

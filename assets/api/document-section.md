@@ -60,17 +60,20 @@
     }
 
 
-#Updates the section from the request body (JSON). Returns the saved section.
+# Updates the section from the request body (JSON). Returns the saved section.
 ## PUT /resume/{documentId}/section/{sectionId}*
 + Parameters
   + documentId (string, `1`) - The id of the document.
   + sectionId (string, `1`) - The id of the section.
 + Response 200
 
-#Creates the section from the request body (JSON). Returns the saved section.
+# Creates the section from the request body (JSON). Returns the saved section.
 ## POST /resume/{documentId}/section/*
 + Parameters
   + documentId (string, `1`) - The id of the document.
++ Request
+  + Body
+    {sectionPosition: 5}  
 + Response 200
 
 

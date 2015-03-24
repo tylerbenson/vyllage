@@ -1,5 +1,5 @@
 var React = require('react');
-var Actions = require('./actions');
+var actions = require('../actions');
 
 var CommentForm = React.createClass({
   getInitialState: function () {
@@ -11,14 +11,23 @@ var CommentForm = React.createClass({
   },
   commentHandler: function (e) {
     e.preventDefault();
-    Actions.addComment({commentText: this.state.value});
-    this.setState({value: ''});
+    if (this.state.value) {
+      actions.postComment({
+        sectionId: this.props.sectionId,
+        commentText: this.state.value
+      });
+      this.setState({value: ''});
+    }
   },
   render: function () {
     return (
-      <div className='row comments-form'>
-        <textarea className='twelve columns' onChange={this.changeHandler} value={this.state.value}></textarea>
-        <button className='save-btn u-pull-right' onClick={this.commentHandler}>comment</button>
+      <div className='row comment-form'>
+        <textarea
+          className='offset-by-two seven columns'
+          placeholder='share your advice'
+          onChange={this.changeHandler}
+          value={this.state.value}></textarea>
+        <button className='button button-primary' onClick={this.commentHandler}>Send</button>
       </div>
     );
   }

@@ -5,8 +5,11 @@ var Tagline = React.createClass({
   getInitialState: function () {
     return {
       edit: false,
-      tagline: this.props.tagline
+      tagline: ''
     }
+  },
+  componentWillReceiveProps: function (nextProps) {
+    this.setState({tagline: nextProps.tagline});
   },
   editHandler: function (e) {
     e.preventDefault();
@@ -19,13 +22,15 @@ var Tagline = React.createClass({
   },
   keyPress: function(e) {
     if (e.key === 'Enter') {
-      actions.updateTagline(this.state.tagline);
+      var tagline = this.state.tagline;
+      actions.updateTagline(tagline);
       this.setState({
         edit: false
       })
     }
   },
   renderTaglineForm: function () {
+    // var tagline = this.state.tagline || this.props.tagline;
     return (
         <div>
           <input type="text" className="tagline tagline-edit u-full-width"

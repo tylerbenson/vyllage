@@ -3,83 +3,25 @@ var request = require('superagent');
 var endpoints = require('../endpoints');
 var urlTemplate = require('url-template');
 var findindex = require('lodash.findindex');
-
-var resume = {
-  header: {
-    firstName: "Nathan",
-    middleName: "M",
-    lastName: "Benson",
-    tagline: "Technology Enthusiast analyzing, building, and expanding solutions"
-  },
-  contact: {
-    "social": {
-      "twitter":"@nben888",
-      "facebook":"natebenson",
-      "linkedin":"www.linkedin.com/natebenson",
-      "visibility":"private"
-    },
-    "contact": {
-      "email":"nathan@vyllage.com",
-      "home":"555-890-2345",
-      "cell":"555-123-2345",
-      "visibility":"private"
-    },
-    "location": {
-      "values":[
-        "1906 NE 151st Cicle, Vancouver WA g8589",
-        "1906 NE 151st Cicle, Vancouver WA g8589"
-      ],
-      "visibility":"private"
-    }
-  },
-  sections: [
-    {
-      "type": "career-goal",
-      "title": "Career Goal",
-      "sectionId": 1,
-      "sectionPosition": 1,
-      "state": "shown",
-      "description": "I am a frevid promoter of creating solutions"
-    },
-    {
-      "type": "experience",
-      "title": "Experience",
-      "sectionId": 2,
-      "sectionPosition": 2,
-      "state": "shown",
-      "organizationName": "",
-      "organizationDescription": "",
-      "role": "",
-      "startDate": "",
-      "endDate": "",
-      "isCurrent": false,
-      "location": "",
-      "roleDescription": "",
-      "highlights": ""
-    }
-  ]
-}
+var omit = require('lodash.omit');
+var assign = require('lodash.assign');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
-    // temporarily asseigned placeholder 
-    this.resume = resume;
-    // this.resume = {}; // uncomment after api call integration
+    this.tokenHeader = document.getElementById('meta_header').content,
+    this.tokenValue = document.getElementById('meta_token').content;
+    this.documentId = window.location.pathname.split('/')[2];
+    this.resume = {}; 
   },
-  onGetResume: function (params) {
-    var url = urlTemplate.parse(endpoints.resume).expand(params);
-    request
-      .get(url)
-      .end(function (err, res) {
-        if (res.ok) {
-          this.resume = res.body;
-          this.trigger(this.resume);
-        } 
-      }.bind(this))
+  onGetResume: function () {
+    this.onGetHeader();
+    this.onGetSections();
   },
-  onGetHeader: function (params) {
-    var url = urlTemplate.parse(endpoints.resumeHeader).expand(params);
+  onGetHeader: function () {
+    var url = urlTemplate
+                .parse(endpoints.resumeHeader)
+                .expand({documentId: this.documentId});
     request
       .get(url)
       .end(function (err, res) {
@@ -90,12 +32,22 @@ module.exports = Reflux.createStore({
       }.bind(this))
   },
   onUpdateTagline: function (tagline) {
-    // implement api call also here
-    this.resume.header.tagline = tagline;
-    this.trigger(this.resume);
+    var url = urlTemplate
+                .parse(endpoints.resumeHeader)
+                .expand({documentId: this.documentId});
+    request
+      .post(url)
+      .set(this.tokenHeader, this.tokenValue) 
+      .send({tagline: tagline})
+      .end(function (err, res) {
+        this.resume.header.tagline = tagline;
+        this.trigger(this.resume);
+      }.bind(this))            
   },
-  onGetSections: function (params) {
-    var url = urlTemplate.parse(endpoints.resumeSections).expand(params);
+  onGetSections: function () {
+    var url = urlTemplate
+                .parse(endpoints.resumeSections)
+                .expand({documentId: this.documentId});
     request
       .get(url)
       .end(function (err, res) {
@@ -105,65 +57,95 @@ module.exports = Reflux.createStore({
         } 
       }.bind(this))
   },
-  onPostSection: function (data, params) {
-    // var tokenHeader = document.getElementById('meta_header').content,
-    // var tokenValue = document.getElementById('meta_token').content;
-    // var url = urlTemplate.parse(endpoints.resumeSections).expand(params);
-    // request
-    //   .post(url)
-    //   .set(tokenHeader, tokenValue) 
-    //   .send(data)
-    //   .end(function (err, res) {
-    //     this.resume.sections.push(res.body);
-    //     this.trigger(this.resume);
-    //   }.bind(this))
-    
-    // for temporary use
-    data.sectionId = this.resume.sections.length + 1;
-    this.resume.sections.push(data);
-    this.trigger(this.resume);
-  },
-  onPutSection: function (data, params) {
-    // var url = urlTemplate.parse(endpoints.resumeSection).expand(params);
-    // request
-    //   .post(url)
-    //   .send(data)
-    //   .end(function (err, res) {
-    //     var index = findindex(this.resume.sections, {sectionId: params.sectionId});
-    //     this.resume.sections[index] = res.body;
-    //     this.trigger(this.resume);
-    //   });
-    var index = findindex(this.resume.sections, {sectionId: data.sectionId});
-    this.resume.sections[index] = data;
-    this.trigger(this.resume);
-  },
-  onDeleteSection: function (params) {
-    var url = urlTemplate.parse(endpoints.resumeSection).expand(params);
+  onPostSection: function (data) {
+    var url = urlTemplate
+                .parse(endpoints.resumeSections)
+                .expand({
+                  documentId: this.documentId,
+                });
+    data.sectionPosition = this.resume.sections.length;
     request
-      .delete(url)
+      .post(url)
+      .set(this.tokenHeader, this.tokenValue) 
+      .send(data)
       .end(function (err, res) {
-      });
+        console.log(err, res.body);
+        this.resume.sections.push(res.body);
+        this.trigger(this.resume);
+      }.bind(this));
   },
-  onGetComments: function (params) {
-    var url = urlTemplate.parse(endpoints.resumeComments).expand(params);
+  onPutSection: function (data) {
+    var url = urlTemplate
+                .parse(endpoints.resumeSection)
+                .expand({
+                  documentId: this.documentId,
+                  sectionId: data.sectionId
+                });
+    request
+      .put(url)
+      .set(this.tokenHeader, this.tokenValue)
+      .send(omit(data, ['uiEditMode', 'showComments', 'comments']))
+      .end(function (err, res) {
+        var index = findindex(this.resume.sections, {sectionId: data.sectionId});
+        this.resume.sections[index] = data;
+        this.trigger(this.resume);
+      }.bind(this));
+  },
+  onDeleteSection: function (sectionId) {
+    var url = urlTemplate
+                .parse(endpoints.resumeSection)
+                .expand({
+                  documentId: this.documentId,
+                  sectionId: sectionId
+                }); 
+    request
+      .del(url)
+      .set(this.tokenHeader, this.tokenValue) 
+      .set('Content-Type', 'application/json')
+      .send({documentId: this.documentId, sectionId: sectionId})
+      .end(function (err, res) {
+        var index = findindex(this.resume.sections, {sectionId: sectionId});
+        this.resume.sections.splice(index, 1);
+        this.trigger(this.resume);
+      }.bind(this));           
+  },
+  onGetComments: function (sectionId) {
+    var url = urlTemplate
+                .parse(endpoints.resumeComments)
+                .expand({
+                  documentId: this.documentId,
+                  sectionId: sectionId
+                });
     request
       .get(url)
       .end(function (err, res) {
-        if (res.ok) {
-          var index = findindex(this.resume.sections, {sectionId: params.sectionId});
-          this.resume.sections[index].comments = res.body;
-        } 
+        var index = findindex(this.resume.sections, {sectionId: sectionId});
+        this.resume.sections[index].comments = res.body;
+        this.trigger(this.resume);
       }.bind(this))
   },
-  onPostComment: function (params) {
-    var url = urlTemplate.parse(endpoints.resumeComments).expand(params);
+  onPostComment: function (data) {
+    var url = urlTemplate
+                .parse(endpoints.resumeComments)
+                .expand({
+                  documentId: this.documentId,
+                  sectionId: data.sectionId
+                });
+    // #194 until this issue is fixed         
+    data  = assign({}, data, {
+      userId: 1,
+      userName: "some name",
+      sectionVersion: 1
+    })          
     request
       .post(url)
+      .set(this.tokenHeader, this.tokenValue)
       .send(data)
       .end(function (err, res) {
-        var index = findindex(this.resume.sections, {sectionId: params.sectionId});
-        this.resume.sections[index].comments.unshift(res.body);
-      })
+        var index = findindex(this.resume.sections, {sectionId: data.sectionId});
+        this.resume.sections[index].comments.push(data);
+        this.trigger(this.resume);
+      }.bind(this))
   },
   onEnableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
@@ -173,6 +155,21 @@ module.exports = Reflux.createStore({
   onDisableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].uiEditMode = false;
+    this.trigger(this.resume);
+  },
+  onShowComments: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].showComments = true;
+    this.trigger(this.resume);
+  },
+  onHideComments: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].showComments = false;
+    this.trigger(this.resume);
+  },
+  onToggleComments: function (sectionId) {
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].showComments = !this.resume.sections[index].showComments;
     this.trigger(this.resume);
   },
   getInitialState: function () {

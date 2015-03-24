@@ -2,6 +2,7 @@
 
 var endpoints = {
   resume: '/resume/{documentId}',
+  resumeHeader: '/resume/{documentId}/header',
   resumeSections: '/resume/{documentId}/section',
   resumeSection: '/resume/{documentId}/section/{sectionId}',
   resumeComments: '/resume/{documentId}/section/{sectionId}/comment',

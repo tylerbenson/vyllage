@@ -11,6 +11,11 @@ var  FreeformEdit = React.createClass({
 			placeholder: 'tell us ....'
 		}
 	},
+	componentWillRecieveProps: function (nextProps) {
+		this.setState({
+			description: nextProps.description
+		});
+	},
 	handleChange: function(e) {
 		e.preventDefault();
 		this.setState({description: e.target.value});
@@ -31,9 +36,14 @@ var  FreeformEdit = React.createClass({
 		return (
 			<div>
 				<div className='row'>
-					<h4 className='u-pull-left'>{this.props.title}</h4>
+					<h4 className='u-pull-left resume-section-title'>{this.props.title}</h4>
 					<a className='button u-pull-right' onClick={this.cancelHandler}>Cancel</a>
-					<a className='button u-pull-right' onClick={this.saveHandler}>Save</a>
+					<a 
+						className='button button-inverted u-pull-right'
+						onClick={this.saveHandler}>
+						<i className='icon ion-android-done'></i>
+						Save
+					</a>
 				</div>
 				<textarea className={className} 
 					placeholder={this.props.placeholder}

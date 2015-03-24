@@ -5,15 +5,17 @@ var SectionHeader = React.createClass({
   addSection: function (e) {
     e.preventDefault()
     e.stopPropagation()
-    actions.postSection({title: this.props.title}, {});
+    actions.postSection({title: this.props.title.toLowerCase()});
   },
   render: function () {
     return  (
-      <div className="u-pull-left full">
-        <button className="u-pull-left article-btn"> {this.props.title} </button>
-        <button className="u-pull-right article-btn addSection-btn"
-                onClick={this.addSection}>
-                {this.props.title}
+      <div className="row">
+        <h4 className="u-pull-left resume-section-title"> {this.props.title}</h4>
+        <button 
+          className="u-pull-right button button-inverted"
+          onClick={this.addSection}>
+          <i className='icon ion-plus'></i>
+          Add
         </button>
       </div>
     );

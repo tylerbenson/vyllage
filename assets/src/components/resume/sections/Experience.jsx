@@ -1,6 +1,6 @@
 var React = require('react');
 var Header = require('./Header');
-var ArticleContent = require('../organization/article-content');
+var Organization = require('../organization');
 var SectionFooter = require('./Footer');
 
 var Experience = React.createClass({
@@ -10,9 +10,9 @@ var Experience = React.createClass({
     if (sections.length > 0) {
       sectionNodes = sections.map(function (section, index) {
         return (
-          <div>
-            <ArticleContent  key={index} organizationData={section}/>
-            <SectionFooter />
+          <div key={index} >
+            <Organization section={section}/>
+            <SectionFooter section={section} />
           </div>
         );
       })
@@ -20,14 +20,14 @@ var Experience = React.createClass({
       sectionNodes = <p className='add-more'>No experience added yet</p>;
     }
     return (
-      <article className='experience forceEditMode'>
+      <div className='resume-section'>
         <div className="row">
           <div className="twelve columns">
             <Header title='Experience' /> 
             {sectionNodes}
           </div>
         </div>
-      </article>
+      </div>
     );
   }
 });

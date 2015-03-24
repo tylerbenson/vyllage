@@ -14,6 +14,7 @@
   ],
   "dependencies": {
     "normalize-scss": "~3.0.2",
-    "skeleton-scss": "*"
+    "skeleton-scss": "*",
+    "ionicons": "~2.0.1"
   }
 }

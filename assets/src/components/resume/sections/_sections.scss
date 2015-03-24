@@ -1,5 +1,23 @@
+.resume-section {
+  background: white;
+  padding: 10px;
+  margin: 10px;
+}
+
+.resume-section-title {
+  color: $primary-color;
+}
+
 .resume-section-footer {
   a {
     padding: 10px;
   }
+}
+
+.comment-icon {
+  font-size: 1.2em;
+  padding-right: 10px;
+}
+.comment-count {
+  padding-right: 5px;
 }
