@@ -2,6 +2,9 @@ var React = require('react');
 var classNames = require('classnames');
 var actions = require('../actions');
 
+var SaveBtn = require('../../buttons/save');
+var CancelBtn = require('../../buttons/cancel');
+
 var  FreeformEdit = React.createClass({ 
 	getInitialState: function() {
 		return {description:this.props.section.description}; 
@@ -22,7 +25,6 @@ var  FreeformEdit = React.createClass({
 		actions.putSection(section);
 	},
 	cancelHandler: function(e) {
-		e.preventDefault();
 		this.setState({description:this.props.section.description});
 		actions.disableEditMode(this.props.section.sectionId);
 	},
@@ -31,9 +33,11 @@ var  FreeformEdit = React.createClass({
 		return (
 			<div>
 				<div className='row'>
-					<h4 className='u-pull-left'>{this.props.title}</h4>
-					<a className='button u-pull-right' onClick={this.cancelHandler}>Cancel</a>
-					<a className='button u-pull-right' onClick={this.saveHandler}>Save</a>
+				 <div className="twelve columns section-title">
+						<p className='u-pull-left section-title'>{this.props.title}</p>
+						<div className='u-pull-right'><CancelBtn cancelHandler={this.cancelHandler}/></div>
+						<div className='u-pull-right'><SaveBtn saveHandler={this.saveHandler}/></div>
+					</div>
 				</div>
 				<textarea className={className} 
 					placeholder={this.props.placeholder}

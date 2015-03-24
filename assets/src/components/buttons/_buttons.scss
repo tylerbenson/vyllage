@@ -1,8 +1,36 @@
-// Variables
+.button.edit {
+    @include editBtn();
+    margin-right: 10px;
 
+  .icon {
+	  padding-right: 4px;
+  }
+}
+.button.cancel {
+  @include cancelBtn();
+}
+.number-buttons {
+  color: $yellow-text-color;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 14px;
+  line-height: 18px;
 
-// Mixins
+  .icon {
+    font-size: 20px;
+    line-height: 22px;
+    padding-right: 4px;
+  }
+}
+.number-buttons.comments {
 
-
-// Classes
-
+  .icon {
+    font-size: 18px;
+    position: relative;
+    top: 2px;
+  }
+}
+.number-buttons:hover {
+  color: $yellow-text-color;
+  text-decoration: underline;
+}

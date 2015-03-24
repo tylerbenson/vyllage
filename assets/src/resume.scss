@@ -1,49 +1,40 @@
 @import './components/common/variables';
 @import './components/common/mixins';
 
-  .full {
-    width: 100%;
-  }
+.full {
+  width: 100%;
+}
+.editable, .buttons-container {
+  display: none;
+}
+.nonEditable {
+  display: block;
+}
+.forceEditMode {
 
   .editable, .buttons-container {
-    display: none;
-  }
-
-  .nonEditable {
     display: block;
   }
-
-  .forceEditMode {
-
-    .editable, .buttons-container {
-      display: block;
-    }
-
-    .nonEditable {
-      display: none;
-    }
-  }
-
-  .article-content:hover {
-
-    .main {
-      background: url(../images/edit.png) no-repeat top right;
-
-      > p, > ul , > div.paragraph {
-        @include editParagraph();
-      }
-    }
-  }
-
-  .comments-content {
+  .nonEditable {
     display: none;
   }
+}
+.article-content:hover {
 
+  .main {
+    background: url(../images/edit.png) no-repeat top right;
 
+    > p, > ul , > div.paragraph {
+      @include editParagraph();
+    }
+  }
+}
+.comments-content {
+  display: none;
+}
 .info-blog.edit {
   display: none;
 }
-
 
 @import './components/header/header';
 @import './components/common/common';
@@ -51,6 +42,8 @@
 @import './components/resume/header/header';
 @import './components/resume/comments/comments';
 @import './components/resume/sections/sections';
+@import './components/resume/freeform/freeform';
+@import './components/buttons/buttons';
 @import './components/footer/footer';
 
 

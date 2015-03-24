@@ -1,22 +1,30 @@
 var React = require('react');
 var actions = require('../actions');
+var EditBtn = require('../../buttons/edit');
 
 var FreeformPreview = React.createClass({
+
   editHandler: function (e) {
-    e.preventDefault();
     actions.enableEditMode(this.props.section.sectionId);
   },
+
   render: function () {
     var className = this.props.className + '-preview';
     return (
       <div className={className}>
         <div className='row'>
-          <h4 className='u-pull-left'>{this.props.title}</h4>
-          <a className='button u-pull-right' onClick={this.editHandler}>Edit</a>
+         <div className="twelve columns section-title">
+            <p className='u-pull-left'>{this.props.title}</p>
+            <p className='u-pull-right'><EditBtn editHandler={this.editHandler}/></p>
+          </div>
         </div>
-        <p>
-          {this.props.section.description}
-        </p>
+       <div className='row'>
+         <div className="twelve columns">
+            <p>
+              {this.props.section.description}
+            </p>
+          </div>
+        </div>
       </div>
     );
   }

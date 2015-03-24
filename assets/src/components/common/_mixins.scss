@@ -11,7 +11,7 @@
 	height: $height;
 }
 
-@mixin button($backgroundColor, $color){
+@mixin button-old($backgroundColor, $color){
 	font-size: 17px;
 	font-weight: inherit;
 	line-height: 18px;
@@ -23,8 +23,8 @@
 }
 
 @mixin ask-advice-btn() {
-	border: $header-secondary-text-color solid 2px;
-  color: $header-secondary-text-color;
+	border: $yellow-text-color solid 2px;
+  color: $yellow-text-color;
   border-radius: 5px;
   font-weight: 600;
   font-size: 14px;
@@ -37,13 +37,13 @@
 }
 
 @mixin ask-advice-btn-hover() {
-	background-color: $header-secondary-text-color;
-	border-color: $header-secondary-text-color;
+	background-color: $yellow-text-color;
+	border-color: $yellow-text-color;
   color: #fff;
 }
 
 @mixin article-btn() {
-	@include button($article-btn-bkg-color, $white);
+	@include button-old($article-btn-bkg-color, $white);
 	cursor: initial;
 	border-radius: 2px;
 	padding: 0 10px;
@@ -61,7 +61,7 @@
 	width: 120px;
 	margin: 10px 20px;
 	padding: 0 20px 0 0;
-	@include button(#eeebe9, #5E5757);
+	@include button-old(#eeebe9, #5E5757);
 }
 
 @mixin article-control-links() {
@@ -95,12 +95,12 @@
 }
 
 @mixin saveBtn() {
-	@include button($save-btn-bkg-clor, $white);
+	@include button-old($save-btn-bkg-clor, $white);
 	@include saveCancelBtns($save-btn-border-clor);
 }
 
 @mixin cancelBtn() {
-	@include button($cancel-btn-bkg-clor, #4E4D53);
+	@include button-old($cancel-btn-bkg-clor, #4E4D53);
 	@include saveCancelBtns($cancel-btn-border-clor);
 }
 
@@ -156,7 +156,7 @@
 }
 
 @mixin fbButton() {
-	@include button($fb-btn-bkg-color, $white);
+	@include button-old($fb-btn-bkg-color, $white);
 	font-weight: bold;
 	border-radius: 2px;
 	padding: 4px 0px;
@@ -166,6 +166,8 @@
 	border: 1px solid $fb-btn-bord-color;
 	cursor: pointer;
 }
+
+//code above will be removed after new UI done
 
 // new UI
 @mixin arrowDown($color) {
@@ -202,4 +204,22 @@
 	padding-top: 10px;
 	padding-left: 15px;
 	cursor: pointer;
+}
+
+@mixin button($color, $borderColor) {
+	width: 60px;
+  height: 26px;
+  border: 1px solid $color;
+  color: $borderColor;
+  font-size: 11px;
+  padding: 0 10px;
+  line-height: 5px;
+}
+
+@mixin editBtn() {
+	@include button($yellow-text-color, $yellow-text-color);
+}
+
+@mixin cancelBtn() {
+	@include button($grey-text-color, $grey-text-color);
 }

@@ -1,144 +1,155 @@
 body {
 	background: url('../images/background.jpg');
 	font-family: 'PT Sans', sans-serif;
+}
+p {
+	padding: 0;
+	margin: 0;
+}
+	
+.freeform, .experience {
+  padding: 40px;
+}
+.section-title {
+	color: $yellow-text-color;
+	font-size: 20px;
+}
+section.container {
+	margin-top: 30px;
+	width: $main-container-width;
+	min-width: $main-container-width;
 
-	section.container {
-		margin-top: 30px;
-		width: $main-container-width;
-		min-width: $main-container-width;
+	article.hidden { 
+        display:none; 
+    }
 
-		article.hidden { 
-	        display:none; 
-	    }
-
-	    article.same-section {
-	    	margin-top: -7px;
+    article.same-section {
+	  	margin-top: -7px;
 			border-top: 0px;
 			border-top-right-radius: 0px;
 			border-top-left-radius: 0px;
 			padding-top: 15px;
-	    }
+    }
 
-		article {
-			@include article-grid();
+	article {
+		@include article-grid();
 
-			.main {
-				display: block;
-				padding-right: 20px;
+		.main {
+			display: block;
+			padding-right: 20px;
 
-				> p {
-					display: inline;
-					border: 1px solid transparent;
-				}
-
-				> ul, > div.paragraph {
-				 	border: 1px solid transparent;
-				}
+			> p {
+				display: inline;
+				border: 1px solid transparent;
 			}
 
-			.article-btn {
-				@include article-btn();
-				margin-bottom: 20px;
+			> ul, > div.paragraph {
+			 	border: 1px solid transparent;
 			}
-
-			.addSection-btn {
-				@include addSection-btn();
-			}
-
-			.addSection-btn[disabled] {
-				background-color: #FDFDFF;
-				border: 1px solid rgb(242, 239, 239);
-				cursor: inherit;
-			}
-
-			.article-content {
-				padding: 1px 40px;
-				width: 93%;
-				float: left;
-			}
-
-			.article-divider {
-				width: 100%;
-				clear: both;
-				margin-bottom: 25px;
-				border-top: 1px solid #c5c3c2;
-			}
-
-			.comment-divider {
-				clear: both;
-				margin: 0 40px 40px 40px;
-				border-top: 1px solid #c5c3c2;
-			}
-
-			.divider {
-				border-top: 1px solid #c5c3c2;
-			}
-
-			.article-controll-btns {
-				float: right;
-				margin: 0 40px 6px 0;
-
-				a {
-					@include article-control-links();
-				}
-
-				.count {
-					@include countBtn();
-				}
-			}
-
-			.article-controll-btns.edit {
-				margin-bottom: 0px;
-			}
-
-			.article-controll-btn-wrapper {
-				@include article-controll-btn-wrapper();
-			}
-
-			.comments-content {
-				padding: 0 60px;
-			}
-
-			.add-more-container {
-				height: 62px;
-			}
-
-	  	  	.add-more {
-	  			text-align:center;
-	   			font-size:20px;
-	   			color:#5f605f;
-	   			font-weight:bold;
-	   			margin-top: -30px;
-	  		}
-
-	  		.no-button {
-	  			padding-top: 52px;
-	  		}
-
-	  		.icon-wrapper {
-				cursor:pointer;
-
-	  			.icon {
-		  			float:right;
-		  			margin-top: -25px;
-		  		}
-
-		  		.icon.edit {
-		  			margin-right: -40px;
-		  		}
-		  		.icon.edit-reg{
-		  			margin: 5px -16px 0;
-		  		}
-	  		}
-
-	  		.icon-wrapper-reg {
-	  			float:left;
-	  			margin:43px 25px 0;
-	  		}
-
-	  		.add-section  {
-				height: $add-more-block-height;
-	  		}
 		}
+
+		.article-btn {
+			@include article-btn();
+			margin-bottom: 20px;
+		}
+
+		.addSection-btn {
+			@include addSection-btn();
+		}
+
+		.addSection-btn[disabled] {
+			background-color: #FDFDFF;
+			border: 1px solid rgb(242, 239, 239);
+			cursor: inherit;
+		}
+
+		.article-content {
+			width: 100%;
+			float: left;
+		}
+
+		.article-divider {
+			width: 100%;
+			clear: both;
+			margin-bottom: 25px;
+			border-top: 1px solid #c5c3c2;
+		}
+
+		.comment-divider {
+			clear: both;
+			margin: 0 40px 40px 40px;
+			border-top: 1px solid #c5c3c2;
+		}
+
+		.divider {
+			border-top: 1px solid #c5c3c2;
+		}
+
+		.article-controll-btns {
+			float: right;
+			margin: 0 40px 6px 0;
+
+			a {
+				@include article-control-links();
+			}
+
+			.count {
+				@include countBtn();
+			}
+		}
+
+		.article-controll-btns.edit {
+			margin-bottom: 0px;
+		}
+
+		.article-controll-btn-wrapper {
+			@include article-controll-btn-wrapper();
+		}
+
+		.comments-content {
+			padding: 0 60px;
+		}
+
+		.add-more-container {
+			height: 62px;
+		}
+
+  	  	.add-more {
+  			text-align:center;
+   			font-size:20px;
+   			color:#5f605f;
+   			font-weight:bold;
+   			margin-top: -30px;
+  		}
+
+  		.no-button {
+  			padding-top: 52px;
+  		}
+
+  		.icon-wrapper {
+			cursor:pointer;
+
+  			.icon {
+	  			float:right;
+	  			margin-top: -25px;
+	  		}
+
+	  		.icon.edit {
+	  			margin-right: -40px;
+	  		}
+	  		.icon.edit-reg{
+	  			margin: 5px -16px 0;
+	  		}
+  		}
+
+  		.icon-wrapper-reg {
+  			float:left;
+  			margin:43px 25px 0;
+  		}
+
+  		.add-section  {
+			height: $add-more-block-height;
+  		}
 	}
 }
+

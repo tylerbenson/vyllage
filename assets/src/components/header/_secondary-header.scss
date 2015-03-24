@@ -1,5 +1,5 @@
 .header-secondary {
-	@include grid($white,$header-secondary-text-color, $header-height);
+	@include grid($white,$yellow-text-color, $header-height);
 	font-size: 18px;
 	padding-top: 10px;
 	
@@ -8,7 +8,7 @@
 	}
 	a {
 		padding-right: 30px;
-		color: $header-secondary-text-color;
+		color: $yellow-text-color;
 		text-transform: uppercase;
 		cursor: pointer;
 	}
@@ -21,7 +21,7 @@
 		margin: 0px;
 
 		.arrow-down {
-			@include arrowDown($header-secondary-text-color);
+			@include arrowDown($yellow-text-color);
 		  top: 17px;
 		  left: 7px;
 		  float: right;
