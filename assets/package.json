@@ -9,6 +9,7 @@
     "lodash.findindex": "^3.0.0",
     "lodash.pick": "^3.0.0",
     "lodash.template": "^3.3.0",
+    "lodash.omit": "^3.0.0",
     "react": "^0.12.2",
     "react-contenteditable": "git+https://github.com/lovasoa/react-contenteditable#b969aaf2ce",
     "react-layer-mixin": "^0.1.0",
