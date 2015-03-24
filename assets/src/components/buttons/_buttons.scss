@@ -1,13 +1,26 @@
 .button.edit {
-  width: 60px;
-  height: 26px;
-  border: 1px solid #e2670d;
-  color: #e2670d;
-  font-size: 11px;
-  padding: 0 10px;
-  line-height: 5px;
+    @include editBtn();
+    margin-right: 10px;
 
   .icon {
 	  padding-right: 4px;
   }
+}
+.button.cancel {
+  @include cancelBtn();
+}
+.number-buttons {
+  color: $yellow-text-color;
+  text-decoration: none;
+  margin-right: 10px;
+  font-size: 16px;
+  line-height: 18px;
+
+  .icon {
+    font-size: 20px;
+  }
+}
+.number-buttons:hover {
+  color: $yellow-text-color;
+  text-decoration: underline;
 }

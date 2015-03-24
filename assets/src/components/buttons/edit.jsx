@@ -19,5 +19,3 @@ var EditBtn = React.createClass({
 });
 
 module.exports = EditBtn;
-
-
