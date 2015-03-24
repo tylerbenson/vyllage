@@ -12,12 +12,22 @@
 .number-buttons {
   color: $yellow-text-color;
   text-decoration: none;
-  margin-right: 10px;
-  font-size: 16px;
+  margin-left: 20px;
+  font-size: 14px;
   line-height: 18px;
 
   .icon {
     font-size: 20px;
+    line-height: 22px;
+    padding-right: 4px;
+  }
+}
+.number-buttons.comments {
+
+  .icon {
+    font-size: 18px;
+    position: relative;
+    top: 2px;
   }
 }
 .number-buttons:hover {

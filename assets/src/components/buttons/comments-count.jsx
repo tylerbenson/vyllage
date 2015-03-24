@@ -10,7 +10,7 @@ var CommentsCount = React.createClass({
 
   render: function() {
     return (
-      <a href="#" className="number-buttons">
+      <a href="#" className="number-buttons comments">
         <i className="icon ion-chatbox"></i>
         <span className="number comments"> 0 </span>
         comments
