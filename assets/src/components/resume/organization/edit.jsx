@@ -7,7 +7,9 @@ var EndDate = require('./end-date');
 var Location = require('./location');
 var RoleDescription =require('./role-description');
 var Highlights = require('./highlights');
-var Buttons = require('./buttons');
+
+var SaveBtn = require('../../buttons/save');
+var CancelBtn = require('../../buttons/cancel');
 
 var OrganizationEdit = React.createClass({   
 
@@ -33,12 +35,6 @@ var OrganizationEdit = React.createClass({
 				return true;
 			}  else return false;
 		} else return false;
-	},
-
-	cancel: function () {
-		if(this.props.cancel){
-			this.props.cancel();
-		}
 	},
 
 	updateOrganizationName: function (value){
@@ -84,6 +80,13 @@ var OrganizationEdit = React.createClass({
 	render: function() {
 		return (
 			<div className="editable">
+				<div className='row'>
+					<div className="twelve columns section-title">
+						<p className='u-pull-left'>{this.props.organizationData.title}</p>
+						<div className='u-pull-right'><CancelBtn cancelHandler={this.cancelHandler}/></div>
+						<div className='u-pull-right'><SaveBtn saveHandler={this.saveHandler}/></div>
+					</div>
+				</div>
 				<div>
 					<OrganizationName organizationName={this.props.organizationData.organizationName} updateOrganizationName={this.updateOrganizationName}/>
 					<OrganizationDescription organizationDescription={this.props.organizationData.organizationDescription} updateOrganizationDescription={this.updateOrganizationDescription}/>
@@ -98,8 +101,6 @@ var OrganizationEdit = React.createClass({
 					<RoleDescription roleDescription={this.props.organizationData.roleDescription} updateroleDescription={this.updateroleDescription}/>
 					<Highlights highlights={this.props.organizationData.highlights} updateRoleHighlights={this.updateRoleHighlights} />
 				</div>
-
-				<Buttons ref="buttonContainer" cancel={this.cancel} valid={this.valid} data={this.props.organizationData}/>
 			</div>
 		);
 	}

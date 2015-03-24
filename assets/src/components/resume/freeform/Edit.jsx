@@ -1,6 +1,7 @@
 var React = require('react');
 var classNames = require('classnames');
 var actions = require('../actions');
+
 var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
 
@@ -32,9 +33,11 @@ var  FreeformEdit = React.createClass({
 		return (
 			<div>
 				<div className='row'>
-					<p className='u-pull-left section-title'>{this.props.title}</p>
-					<div className='u-pull-right'><CancelBtn cancelHandler={this.cancelHandler}/></div>
-					<div className='u-pull-right'><SaveBtn saveHandler={this.saveHandler}/></div>
+				 <div className="twelve columns section-title">
+						<p className='u-pull-left section-title'>{this.props.title}</p>
+						<div className='u-pull-right'><CancelBtn cancelHandler={this.cancelHandler}/></div>
+						<div className='u-pull-right'><SaveBtn saveHandler={this.saveHandler}/></div>
+					</div>
 				</div>
 				<textarea className={className} 
 					placeholder={this.props.placeholder}
