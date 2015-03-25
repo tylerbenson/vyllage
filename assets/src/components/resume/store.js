@@ -131,19 +131,16 @@ module.exports = Reflux.createStore({
                   documentId: this.documentId,
                   sectionId: data.sectionId
                 });
-    // #194 until this issue is fixed         
-    data  = assign({}, data, {
-      userId: 1,
-      userName: "some name",
+    data = assign({}, data, {
       sectionVersion: 1
-    })          
+    })
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue)
       .send(data)
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
-        this.resume.sections[index].comments.push(data);
+        this.resume.sections[index].comments.push(res.body);
         this.trigger(this.resume);
       }.bind(this))
   },

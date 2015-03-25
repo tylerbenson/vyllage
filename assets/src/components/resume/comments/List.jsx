@@ -10,7 +10,7 @@ var CommentList = React.createClass({
     var commentNodes = comments.map(function (comment, index) {
       return <div key={index} className='row comment'>
               <div className='offset-by-two seven columns'>
-                <div className="comment-name">Richard Zielke</div>
+                <div className="comment-name">{comment.userName}</div>
                 <div className="comment-text">
                   {comment.commentText}
                 </div>
