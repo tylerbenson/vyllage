@@ -15,11 +15,11 @@ var Settings = React.createClass({
   render: function () {
     var SettingsNode = null;
     if (this.state.activeSettingsType === 'profile') {
-      SettingsNode = <Profile {...this.props} />;
+      SettingsNode = <Profile {...this.props} {...this.state} />;
     } else if (this.state.activeSettingsType === 'account') {
-      SettingsNode = <Account {...this.props} />;
+      SettingsNode = <Account {...this.props} {...this.state} />;
     } else {
-      SettingsNode = <Social {...this.props} />;
+      SettingsNode = <Social {...this.props} {...this.state} />;
     }
     return (
       <section className='container settings'>
