@@ -59,8 +59,10 @@ public class CommentRepository implements IRepository<Comment> {
 
 	@Override
 	public Comment save(Comment comment) {
-		CommentsRecord existingRecord = sql.fetchOne(COMMENTS,
-				COMMENTS.COMMENT_ID.eq(comment.getCommentId()));
+		CommentsRecord existingRecord = null;
+		if (comment.getCommentId() != null)
+			existingRecord = sql.fetchOne(COMMENTS,
+					COMMENTS.COMMENT_ID.eq(comment.getCommentId()));
 
 		if (existingRecord == null) {
 			CommentsRecord newRecord = sql.newRecord(COMMENTS);
@@ -169,8 +171,6 @@ public class CommentRepository implements IRepository<Comment> {
 			sectionComments.put((Long) record.getValue(0),
 					(Integer) record.getValue(1));
 		}
-
-		System.out.println(fetch);
 
 		return sectionComments;
 	}

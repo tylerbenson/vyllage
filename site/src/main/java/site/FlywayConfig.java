@@ -6,6 +6,7 @@ import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 /**
  * Since we're running multiple applications in the same JVM, we need to
@@ -19,12 +20,15 @@ public class FlywayConfig {
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private Environment env;
+
 	@Bean(initMethod = "migrate")
 	public Flyway flywayConnections() {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(this.dataSource);
-		flyway.setLocations("classpath:connections/db/migration");
-		flyway.setSchemas("CONNECTIONS");
+		flyway.setLocations(env.getRequiredProperty("flyway.connections"));
+		flyway.setSchemas("connections");
 		return flyway;
 	}
 
@@ -32,8 +36,8 @@ public class FlywayConfig {
 	public Flyway flywayDocuments() {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(this.dataSource);
-		flyway.setLocations("classpath:documents/db/migration");
-		flyway.setSchemas("DOCUMENTS");
+		flyway.setLocations(env.getRequiredProperty("flyway.documents"));
+		flyway.setSchemas("documents");
 		return flyway;
 	}
 
@@ -41,8 +45,8 @@ public class FlywayConfig {
 	public Flyway flywayAccounts() {
 		Flyway flyway = new Flyway();
 		flyway.setDataSource(this.dataSource);
-		flyway.setLocations("classpath:accounts/db/migration");
-		flyway.setSchemas("ACCOUNTS");
+		flyway.setLocations(env.getRequiredProperty("flyway.accounts"));
+		flyway.setSchemas("accounts");
 		return flyway;
 	}
 }

@@ -32,6 +32,11 @@ To build and run as a java app:
 cd assets
 npm run watch &
 ```
+To build and run using PostgreSQL
+
+./gradlew -Dspring.profiles.active=prod :site:bootRun &
+cd assets
+npm run watch &
 
 Changes to assets will still be picked up dynamically.
 

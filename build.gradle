@@ -104,6 +104,7 @@ configure(dbProjects) {
 
     dependencies {
         compile 'com.h2database:h2'
+		compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
         compile 'org.flywaydb:flyway-core:3.1'
         compile 'org.jooq:jooq:3.5.0'
     }
@@ -113,11 +114,11 @@ configure(dbProjects) {
         url = "jdbc:h2:$buildDir/db/local"
         user = 'sa'
         password = ''
-        schemas = [project.name.toUpperCase()]
-        locations = ["classpath:${project.name}/db/migration"]
+        schemas = ["${project.name.toUpperCase()}"]
+        locations = ["classpath:${project.name}/db/h2/migration"]
     }
 
-    flywayMigrate.inputs.dir 'src/main/resources/db/migrate'
+    flywayMigrate.inputs.dir 'src/main/resources/${project.name}/db/'
     flywayMigrate.outputs.dir "$buildDir/db"
 
     project.afterEvaluate {
