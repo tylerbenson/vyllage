@@ -28,13 +28,17 @@ open [http://localhost:8080](http://localhost:8080)
 To build and run as a java app:
 
 ```
-./gradlew :site:bootRun &
+./gradlew site:bootRun &
 cd assets
 npm run watch &
 ```
 To build and run using PostgreSQL
 
+<<<<<<< HEAD
 ./gradlew -Dspring.profiles.active=prod :site:bootRun &
+=======
+./gradlew -Dspring.profiles.active=prod site:bootRun &
+>>>>>>> branch 'uh-postgre-sql' of https://github.com/natebenson/vyllage.git
 cd assets
 npm run watch &
 
