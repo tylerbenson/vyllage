@@ -1,5 +1,6 @@
 var Reflux = require('reflux');
 var request = require('superagent');
+var assign = require('lodash.assign');
 
 var settings = {
   firstName: 'James',
@@ -18,7 +19,8 @@ var settings = {
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
-    this.settings = settings;
+    this.settings = assign({}, settings);
+    this.localSettings = assign({}, settings);
     this.activeSettingsType = 'profile';
   },
   onGetSettings: function () {
@@ -31,18 +33,15 @@ module.exports = Reflux.createStore({
         }
       });
   },
-  onPutSettings: function () {
-    request
-      .put('/settings')
-      .set('Content-Type', 'application/json')
-      .send(this.settings)
-      .end(function () {
-
-      })
+  onUpdateSettings: function () {
+    this.settings = assign({}, this.localSettings);
+    this.update();
   },
   onChangeSetting: function (key, value) {
-    this.settings[key] = value;
-    this.update();
+    this.localSettings[key] = value;
+  },
+  onCancelSettings: function () {
+    this.localSettings = assign({}, this.settings);
   },
   onAddOther: function (other) {
     this.settings.others = this.settings.others.concat(other);
