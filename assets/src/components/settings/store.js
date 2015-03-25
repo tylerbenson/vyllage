@@ -41,6 +41,10 @@ var settings = {
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
+  init: function () {
+    this.settings = settings;
+    this.activeSettingsType = 'profile';
+  },
   onGetSettings: function () {
     request
       .get('/settings')
@@ -76,14 +80,21 @@ module.exports = Reflux.createStore({
     this.settings.others.splice(index, 1);
     this.update();
   },
+  onSetSettingsType: function (type) {
+    this.activeSettingsType = type;
+    this.update();
+  },
   update: function () {
-    this.onPutSettings();
+    // this.onPutSettings();
     this.trigger({
-      settings: this.settings
+      settings: this.settings,
+      activeSettingsType: this.activeSettingsType
     });
   },
   getInitialState: function () {
-    this.settings = settings;
-    return { settings: this.settings } ;
+    return {
+      settings: this.settings,
+      activeSettingsType: this.activeSettingsType
+    } ;
   }
 })

@@ -1,11 +1,11 @@
 var React = require('react');
 
-var Profile = React.createClass({
+var Social = React.createClass({
   render: function () {
     return (
-      <div>profile</div>
+      <div>social</div>
     );
   }
 });
 
-module.exports = Profile;
+module.exports = Social;

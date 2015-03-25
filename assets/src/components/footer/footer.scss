@@ -1,3 +1,7 @@
+@import '../common/variables';
+@import '../common/mixins';
+
+
 footer {
 	@include grid($header-primary-bkg, $header-primary-text-color, $footer-height);
   font-size: 16px;

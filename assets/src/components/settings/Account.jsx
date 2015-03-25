@@ -3,7 +3,7 @@ var React = require('react');
 var Account = React.createClass({
   render: function () {
     return (
-      <div></div>
+      <div>account</div>
     );
   }
 });
