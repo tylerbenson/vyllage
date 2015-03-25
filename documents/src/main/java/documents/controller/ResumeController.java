@@ -59,11 +59,15 @@ public class ResumeController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String resume(HttpServletRequest request)
 			throws ElementNotFoundException {
-		Long userId = (Long) request.getSession().getAttribute("userId");
+		Long userId = getUserId(request);
 
 		Document documentByUser = documentService.getDocumentByUser(userId);
 
 		return "redirect:/resume/" + documentByUser.getId();
+	}
+
+	private Long getUserId(HttpServletRequest request) {
+		return (Long) request.getSession().getAttribute("userId");
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)
@@ -206,14 +210,24 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void saveCommentsForSection(@PathVariable final Long documentId,
+	public @ResponseBody Comment saveCommentsForSection(
+			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@RequestBody final Comment comment) {
+
+		comment.setUserId(getUserId(request));
 
 		if (comment.getSectionId() == null)
 			comment.setSectionId(sectionId);
 
-		documentService.saveComment(comment);
+		List<AccountNames> names = accountService.getNamesForUsers(
+				Arrays.asList(getUserId(request)), request);
+
+		if (names != null && !names.isEmpty())
+			comment.setUserName(names.get(0).getFirstName() + " "
+					+ names.get(0).getLastName());
+
+		return documentService.saveComment(comment);
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
