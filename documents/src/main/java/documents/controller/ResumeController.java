@@ -157,7 +157,7 @@ public class ResumeController {
 		return documentService.saveDocumentSection(document, body);
 	}
 
-	@RequestMapping(value = "{documentId}/section/{sectiondId}", method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteSection(@PathVariable final Long documentId,
 			@PathVariable final Long sectionId) throws JsonProcessingException,
