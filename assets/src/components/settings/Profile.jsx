@@ -1,5 +1,4 @@
 var React = require('react');
-var actions = require('./actions');
 var Buttons = require('./Buttons');
 var SettingsMixin = require('./mixin');
 
@@ -63,7 +62,7 @@ var Profile = React.createClass({
           onChange={this.changeHandler.bind(this, 'phoneNumber')}
         />
 
-        <Buttons save={this.saveHandler} cancel={this.cancelHandler} />
+        <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'profile')} />
       </form>
     );
   }

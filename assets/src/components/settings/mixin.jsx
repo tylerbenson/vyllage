@@ -10,9 +10,9 @@ module.exports = {
     e.preventDefault();
     actions.updateSettings();
   },
-  cancelHandler: function (e) {
+  cancelHandler: function (name, e) {
     e.preventDefault();
     actions.cancelSettings();
-    this.refs.profile.getDOMNode().reset();
+    this.refs[name].getDOMNode().reset();
   }
 };
