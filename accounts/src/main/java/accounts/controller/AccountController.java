@@ -72,8 +72,23 @@ public class AccountController {
 		return "reset-password";
 	}
 
+	@RequestMapping(value = "/reset-password-change/{resetPassword}", method = RequestMethod.GET)
+	public String changePassword(@PathVariable String resetPassword)
+			throws JsonParseException, JsonMappingException, IOException {
+
+		String encodedString = new String(Base64.getUrlDecoder().decode(
+				resetPassword.getBytes("UTF-8")));
+
+		ResetPasswordLink resetLink = mapper.readValue(encodedString,
+				ResetPasswordLink.class);
+
+		return "reset-password-change";
+	}
+
 	@RequestMapping(value = "/reset-password", method = RequestMethod.POST)
-	public String postResetPassword(@RequestBody ResetPasswordForm resetPassword) {
+	public String postResetPassword(@RequestBody ResetPasswordForm resetPassword)
+			throws JsonProcessingException, UnsupportedEncodingException,
+			EmailException {
 		// validate email and return error if not in the database.
 		if (!isValid(resetPassword))
 			return "reset-password";
@@ -82,13 +97,37 @@ public class AccountController {
 		// generate a new password reset link (similar to document share link)
 		User user = userService.getUserByEmail(resetPassword.getEmail());
 
-		String link = documentLinkService.createResetPasswordLink(user);
+		ResetPasswordLink link = documentLinkService
+				.createResetPasswordLink(user);
+
+		String jsonLink = mapper.writeValueAsString(link);
+
+		String encodedString = Base64.getUrlEncoder().encodeToString(
+				jsonLink.getBytes("UTF-8"));
 
 		// email it to the provided email address.
-		//
+
+		sendEmail(user.getUsername(), encodedString);
+
 		// Link should log the user in and direct them to the password change
 		// page.
-		return "reset-success";
+		return "reset-password-success";
+	}
+
+	protected void sendEmail(String email, String encodedString)
+			throws EmailException {
+		EmailParameters parameters = new EmailParameters(null,
+				"Reset Password", email);
+
+		String txt = env.getProperty("vyllage.domain", "www.vyllage.com")
+				+ "/password-change?resetPassword=" + encodedString;
+
+		EmailContext ctx = new EmailContext(env.getProperty(
+				"change.password.html", "changePassword-email"));
+		ctx.setVariable("passwordLink", txt);
+
+		EmailHTMLBody emailBody = new EmailHTMLBody(txt, ctx);
+		mailService.sendEmail(parameters, emailBody);
 	}
 
 	private boolean isValid(ResetPasswordForm resetPassword) {
