@@ -1,22 +1,10 @@
 var React = require('react');
 var actions = require('./actions');
 var Buttons = require('./Buttons');
+var SettingsMixin = require('./mixin');
 
 var Profile = React.createClass({
-  changeHandler: function (key, e) {
-    actions.changeSetting({
-      [key]: e.target.value
-    });
-  },
-  saveHandler: function (e) {
-    e.preventDefault();
-    actions.updateSettings();
-  },
-  cancelHandler: function (e) {
-    e.preventDefault();
-    actions.cancelSettings();
-    this.refs.profile.getDOMNode().reset();
-  },
+  mixins: [SettingsMixin],
   render: function () {
     var settings = this.props.settings || {};
     return (
