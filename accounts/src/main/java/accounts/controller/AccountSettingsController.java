@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import accounts.model.User;
+import accounts.model.account.AccountNames;
 import accounts.model.account.AccountSettings;
 import accounts.model.account.EmailUpdates;
 import accounts.model.account.PersonalInformation;
@@ -41,10 +43,17 @@ public class AccountSettingsController {
 	@Autowired
 	private UserService userService;
 
+	@ModelAttribute("accountName")
+	public AccountNames accountNames() {
+		User user = getUser();
+		AccountNames name = new AccountNames(user.getUserId(),
+				user.getFirstName(), user.getMiddleName(), user.getLastName());
+		return name;
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String getAccountSettings() throws UserNotFoundException {
-		Long userId = getUserId();
-		User user = userService.getUser(userId);
+		User user = getUser();
 
 		AccountSettings accountSettings = new AccountSettings();
 		accountSettings.setFirstName(user.getFirstName());
@@ -60,7 +69,7 @@ public class AccountSettingsController {
 					.collect(Collectors.joining(", ")));
 
 		PersonalInformation userPersonalInformation = userService
-				.getUserPersonalInformation(userId);
+				.getUserPersonalInformation(user.getUserId());
 
 		accountSettings.setUserPersonalInformation(userPersonalInformation);
 
@@ -136,5 +145,12 @@ public class AccountSettingsController {
 				.getAuthentication();
 
 		return ((User) auth.getPrincipal()).getUserId();
+	}
+
+	private User getUser() {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		return (User) auth.getPrincipal();
 	}
 }

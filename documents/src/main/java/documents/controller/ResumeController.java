@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,15 @@ public class ResumeController {
 
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
+
+	@ModelAttribute("accountName")
+	public AccountNames accountNames(HttpServletRequest request) {
+		Long userId = (Long) request.getSession().getAttribute("userId");
+
+		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
+				Arrays.asList(userId), request);
+		return namesForUsers.get(0);
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String resume(HttpServletRequest request)
