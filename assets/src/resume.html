@@ -18,9 +18,14 @@
 </head>
 
 <body>
-  <div id="header-container"></div>
+	<header>
+ 		<div class="container" id="header-container" th:name="${accountName.firstName}">
+ 		</div>
+ 	</header>
 
-  <div id="resume"></div>
+ 	<section class="container">
+ 		<div id="resume"></div>
+ 	</section>
 
   <script type="text/javascript" src="javascript/base.js"></script>
   <script type="text/javascript" src="javascript/resume.js"></script>
