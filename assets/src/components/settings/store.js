@@ -1,46 +1,29 @@
 var Reflux = require('reflux');
 var request = require('superagent');
+var assign = require('lodash.assign');
 
 var settings = {
-  name: 'Nathan Benson',
-  role: 'student',
-  graduationDate: 'Aug 1, 2015',
-  organization: 'Org Name',
-  facebookAccount: true,
-  emailUpdates: 'weekly',
-  sharedLinks: '',
-  email: {
-    value: ['nben888@gmail.com'],
-    privacy: 'everyone'
-  },
-  phoneNumber: {
-    value: '971.800.1565',
-    privacy: 'none'
-  },
-  address: {
-    value: '1906 NE 151st Cir <br /> Unit 15b <br /> Vancovuer, WA 98686',
-    privacy: 'none'
-  },
-  twitter: {
-    value: '@natespn',
-    privacy: 'everyone'
-  },
-  linkedin: {
-    value: 'www.linkedin.com/natebenson',
-    privacy: 'everyone'
-  },
-  facebook: {
-    value: 'www.facebook.com/natebenson',
-    privacy: 'everyone'
-  },
-  others: [
-    { value: 'www.natecast.com', privacy: 'everyone' }
-  ],
-  lastUpdate: 'Jan 1, 2014'
+  firstName: 'James',
+  middleName: 'T',
+  lastName: 'Franco',
+  role: 'Student',
+  organization: 'Carlton University',
+  address: '883 Pearl Street, Sacramento',
+  phoneNumber: '971-800-1565',
+  email: 'nben888@gmail.com',
+  url:'jamesfranco',
+  twitter: '@natespn',
+  linkedin: 'www.linkedin.com/natebenson',
+  facebook: 'www.facebook.com/natebenson' 
 };
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
+  init: function () {
+    this.settings = assign({}, settings);
+    this.localSettings = assign({}, settings);
+    this.activeSettingsType = 'profile';
+  },
   onGetSettings: function () {
     request
       .get('/settings')
@@ -51,18 +34,15 @@ module.exports = Reflux.createStore({
         }
       });
   },
-  onPutSettings: function () {
-    request
-      .put('/settings')
-      .set('Content-Type', 'application/json')
-      .send(this.settings)
-      .end(function () {
-
-      })
+  onUpdateSettings: function () {
+    this.settings = assign({}, this.localSettings);
+    this.update();
   },
   onChangeSetting: function (key, value) {
-    this.settings[key] = value;
-    this.update();
+    this.localSettings[key] = value;
+  },
+  onCancelSettings: function () {
+    this.localSettings = assign({}, this.settings);
   },
   onAddOther: function (other) {
     this.settings.others = this.settings.others.concat(other);
@@ -76,14 +56,21 @@ module.exports = Reflux.createStore({
     this.settings.others.splice(index, 1);
     this.update();
   },
+  onSetSettingsType: function (type) {
+    this.activeSettingsType = type;
+    this.update();
+  },
   update: function () {
-    this.onPutSettings();
+    // this.onPutSettings();
     this.trigger({
-      settings: this.settings
+      settings: this.settings,
+      activeSettingsType: this.activeSettingsType
     });
   },
   getInitialState: function () {
-    this.settings = settings;
-    return { settings: this.settings } ;
+    return {
+      settings: this.settings,
+      activeSettingsType: this.activeSettingsType
+    } ;
   }
 })

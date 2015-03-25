@@ -27,7 +27,7 @@ var HeaderContainer = React.createClass({
   render: function() {
     return (
       <div>
-        <PrimaryHeader accountMenu={this.accountMenu}/>
+        <PrimaryHeader accountMenu={this.accountMenu} name={this.props.name}/>
         <SecondaryHeader exportMenu={this.exportMenu}/>
         <AccountMenu ref="accountMenu"/>
         <ExportMenu ref="exportmenu"/>

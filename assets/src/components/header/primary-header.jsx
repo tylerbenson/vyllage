@@ -9,6 +9,7 @@ var PrimaryHeader = React.createClass({
   },
 
   render: function() {
+    var name = this.props.name || 'user';
     return (
       <div className="header-top">
         <div className="container">
@@ -26,7 +27,7 @@ var PrimaryHeader = React.createClass({
                   <i className="icon ion-person"></i>
                 </span>
                 <span className="username" onClick={this.accountMenu}>
-                  Nathan B <span className="arrow-down"></span>
+                 {name}<span className="arrow-down"></span>
                 </span>
               </div>
             </div>
