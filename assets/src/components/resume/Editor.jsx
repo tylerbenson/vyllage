@@ -25,6 +25,7 @@ var ResumeEditor = React.createClass({
     var skillSections = filter(this.state.resume.sections, {title: 'skills'});
     var profileData = this.state.resume.header;
     var contactData = this.state.resume.contact;
+    console.log(this.state.resume.sections);
     return (
       <div>
         <Header profileData={profileData} contactData={contactData}/>

@@ -7,8 +7,8 @@ var Skills = React.createClass({
     return (
       <div className='resume-section'>
         <h4 className='resume-section-title'>Skills</h4> 
-        <SkillList />
-        <SkillForm />
+        <SkillList {...this.props}/>
+        <SkillForm {...this.props}/>
       </div>
     );
   }

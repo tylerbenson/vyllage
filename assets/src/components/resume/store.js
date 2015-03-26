@@ -12,7 +12,9 @@ module.exports = Reflux.createStore({
     this.tokenHeader = document.getElementById('meta_header').content,
     this.tokenValue = document.getElementById('meta_token').content;
     this.documentId = window.location.pathname.split('/')[2];
-    this.resume = {}; 
+    this.resume = {
+      sections: []
+    }; 
   },
   onGetResume: function () {
     this.onGetHeader();
@@ -69,12 +71,12 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue) 
       .send(data)
       .end(function (err, res) {
-        console.log(err, res.body);
-        this.resume.sections.push(res.body);
+        this.resume.sections.push(res.body || data); // Remove `|| data after backend api is ready
         this.trigger(this.resume);
       }.bind(this));
   },
   onPutSection: function (data) {
+    console.log(data);
     var url = urlTemplate
                 .parse(endpoints.resumeSection)
                 .expand({
