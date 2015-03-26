@@ -50,7 +50,7 @@
    input[type="text"], input[type="password"] {
       width: 300px;
 		  height: 46px;
-		  border: 1px solid #ADADAD;
+		  border: 1px solid $login-black-txt;
 		  font-size: 18px;
     }
     .sign-in-txt {
@@ -66,14 +66,14 @@
 		  margin-right: 45px;
     }
     .invalid {
-      color:#990000;
+      color: $invalid-txt;
       font-size:20px;
       text-align:center;
       margin-bottom: 0;
     }
     .box-txt {
       font-size:15px;
-      color:#ADADAD;
+      color: $login-black-txt;
       font-weight:400;
       margin-top: 15px;
     }
