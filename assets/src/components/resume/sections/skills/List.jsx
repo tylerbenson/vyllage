@@ -1,18 +1,25 @@
 var React = require('react');
+var actions = require('../../actions');
 
 var SkillsList = React.createClass({
+  deleteSkill: function (sectionId, e) {
+    console.log(sectionId)
+    actions.deleteSection(sectionId);
+  },
   render: function () {
     var sections = this.props.sections || [];
-    var skillNodes = sections.map(function (section) {
+    var skillNodes = sections.map(function (section, index) {
       return (
-        <div>
+        <div key={index} className='skill-item u-float-left'>
           <span className='skill-item'>{section.description}</span>
-          <i className='icon ion-close'></i>
+          <span 
+            className='icon ion-close'
+            onClick={this.deleteSkill.bind(this, section.sectionId)}></span>
         </div>
       );
-    });
+    }.bind(this));
     return (
-      <div className='u-pull-left'>
+      <div className='row'>
         {skillNodes}
       </div>
     );

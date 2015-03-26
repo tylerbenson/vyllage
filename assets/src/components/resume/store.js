@@ -71,7 +71,8 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue) 
       .send(data)
       .end(function (err, res) {
-        this.resume.sections.push(res.body || data); // Remove `|| data after backend api is ready
+        console.log(err, res)
+        this.resume.sections.push(res.body);
         this.trigger(this.resume);
       }.bind(this));
   },
