@@ -43,7 +43,9 @@
       display: inline-block;
       float: right;
 
-      button {
+      button,
+      .button {
+        min-height: 2.3em;
         text-transform: lowercase;
 
         i {

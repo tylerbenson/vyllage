@@ -9,8 +9,9 @@ input[type="reset"] {
   color: $inverted-text-color;
   display: inline-block;
   outline: none;
-  min-height: 2.3em;
+  margin: 2px 0;
   padding: 0.3em 0.9em;
+  text-decoration: none;
   text-transform: uppercase;
   transition: all .2s ease;
 
