@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -112,7 +113,6 @@ public class AccountController {
 			throws JsonProcessingException, UnsupportedEncodingException,
 			EmailException {
 
-		System.out.println("posted");
 		// validate email and return error if not in the database.
 		if (!isValid(resetPassword))
 			return "reset-password";
@@ -144,10 +144,11 @@ public class AccountController {
 		return "reset-password-success";
 	}
 
-	@RequestMapping(value = "/reset-password-change/{resetPassword}", method = RequestMethod.GET)
-	public String changePassword(@PathVariable String resetPassword)
-			throws JsonParseException, JsonMappingException, IOException,
-			UserNotFoundException {
+	@RequestMapping(value = "/reset-password-change", method = RequestMethod.GET)
+	public String changePassword(
+			@RequestParam(value = "resetPassword", required = true) String resetPassword,
+			Model model) throws JsonParseException, JsonMappingException,
+			IOException, UserNotFoundException {
 
 		String encodedString = new String(Base64.getUrlDecoder().decode(
 				resetPassword));
@@ -162,14 +163,20 @@ public class AccountController {
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
+		model.addAttribute("changePasswordForm", new ChangePasswordForm());
+
 		return "reset-password-change";
 	}
 
 	@RequestMapping(value = "/reset-password-change", method = RequestMethod.POST)
-	public String postChangePassword(ChangePasswordForm form) {
+	@PreAuthorize("isAuthenticated()")
+	public String postChangePassword(ChangePasswordForm form, Model model) {
 
-		if (!form.isValid())
+		if (!form.isValid()) {
+			form.setError(true);
+			model.addAttribute("changePasswordForm", form);
 			return "reset-password-change";
+		}
 
 		userService.changePassword(form.getNewPassword());
 
@@ -192,7 +199,7 @@ public class AccountController {
 
 		String txt = "http://"
 				+ env.getProperty("vyllage.domain", "www.vyllage.com")
-				+ "/password-change";
+				+ "/account/reset-password-change/";
 
 		System.out.println(txt);
 
