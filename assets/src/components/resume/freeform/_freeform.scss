@@ -1,5 +1,10 @@
 .freeform {
-  word-wrap:break-word;
+  padding: 40px;
+
+	.section-title {
+		color: $yellow-text-color;
+		font-size: 20px;
+	}
 }
 
 .freeform-preview {

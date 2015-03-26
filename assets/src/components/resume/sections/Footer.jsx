@@ -1,6 +1,9 @@
 var React = require('react');
 var actions = require('../actions');
 var Comments = require('../comments');
+var EditsCount = require('../../buttons/edits-count');
+var CommentsCount = require('../../buttons/comments-count');
+
 
 var SectionFooter = React.createClass({
   clickComments: function () {
@@ -10,13 +13,10 @@ var SectionFooter = React.createClass({
     var commentsCount = null; // this.props.section && this.props.section.comments && this.props.section.comments.length;
     return (
       <div>
-        <div className='row resume-section-footer'>
-          <p className='u-pull-left'>Just updated now</p>
-          <a className='u-pull-right' onClick={this.clickComments}>
-            <i className='icon ion-chatbox comment-icon'></i>
-            <span className='comment-count'>{commentsCount}</span>
-            comments
-          </a> 
+         <div className='row resume-section-footer'>
+          <p className='u-pull-left update-time'>Updated just now</p>
+          <span className='u-pull-right' onClick={this.clickComments}><CommentsCount /></span> 
+          <span className='u-pull-right'><EditsCount commentsCount={commentsCount}/></span> 
         </div>
         <Comments section={this.props.section} />
       </div>

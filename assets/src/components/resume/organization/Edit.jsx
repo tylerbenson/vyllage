@@ -1,6 +1,9 @@
 var React = require('react');
 var actions = require('../actions');
 
+var SaveBtn = require('../../buttons/save');
+var CancelBtn = require('../../buttons/cancel');
+
 var OrganizationEdit = React.createClass({
   getInitialState: function() {
     return { organization:this.props.section }; 
@@ -12,13 +15,11 @@ var OrganizationEdit = React.createClass({
     this.setState({organization: organization});
   },
   saveHandler: function(e) {
-    e.preventDefault();
     var organization = this.state.organization;
     organization.uiEditMode = false;
     actions.putSection(organization);
   },
   cancelHandler: function(e) {
-    e.preventDefault();
     this.setState({organization:this.props.section});
     actions.disableEditMode(this.props.section.sectionId);
   },
@@ -26,22 +27,20 @@ var OrganizationEdit = React.createClass({
     var organization = this.state.organization;
     return (
       <div>
-        <div className='row'>
-          <h4 className='u-pull-left'>
-            <input
-              className='u-full-width'
-              placeholder='Organization Name'
-              value={organization.organizationName}
-              onChange={this.handleChange.bind(this, 'organizationName')}
-            /> 
-          </h4>
-          <a className='button u-pull-right' onClick={this.cancelHandler}>Cancel</a>
-          <a 
-            className='button button-inverted u-pull-right'
-            onClick={this.saveHandler}>
-            <i className='icon ion-android-done'></i>
-            Save
-          </a>
+      <div className='row'>
+         <div className="twelve columns section-title">
+            <p className='u-pull-left section-title'>{this.props.title}</p>
+            <div className='u-pull-right'><CancelBtn cancelHandler={this.cancelHandler}/></div>
+            <div className='u-pull-right'><SaveBtn saveHandler={this.saveHandler}/></div>
+          </div>
+        </div>
+      <div className='row'>
+        <input
+            className='u-full-width'
+            placeholder='Organization Name'
+            value={organization.organizationName}
+            onChange={this.handleChange.bind(this, 'organizationName')}
+          /> 
         </div>
         <textarea 
           className='u-full-width'
