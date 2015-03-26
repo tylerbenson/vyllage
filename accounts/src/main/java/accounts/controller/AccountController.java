@@ -114,7 +114,7 @@ public class AccountController {
 			EmailException {
 
 		// validate email and return error if not in the database.
-		if (!isValid(resetPassword))
+		if (!isEmailValid(resetPassword))
 			return "reset-password";
 
 		// If submit success:
@@ -213,8 +213,10 @@ public class AccountController {
 		mailService.sendEmail(parameters, emailBody);
 	}
 
-	private boolean isValid(ResetPasswordForm resetPassword) {
-		return resetPassword.isValid()
+	private boolean isEmailValid(ResetPasswordForm resetPassword) {
+		boolean isValid = resetPassword.isValid()
 				&& userService.userExists(resetPassword.getEmail());
+		resetPassword.setError(!isValid);
+		return isValid;
 	}
 }

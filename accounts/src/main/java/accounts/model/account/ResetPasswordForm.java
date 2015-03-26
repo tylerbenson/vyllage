@@ -8,6 +8,8 @@ public class ResetPasswordForm {
 
 	private String email;
 
+	private boolean error = false;
+
 	public String getEmail() {
 		return email;
 	}
@@ -18,6 +20,14 @@ public class ResetPasswordForm {
 
 	public boolean isValid() {
 		return EmailValidator.validate(getEmail());
+	}
+
+	public boolean hasErrors() {
+		return error;
+	}
+
+	public void setError(boolean error) {
+		this.error = error;
 	}
 
 }
