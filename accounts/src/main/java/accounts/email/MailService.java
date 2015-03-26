@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.thymeleaf.TemplateEngine;
 
-@Service
+@Service(value = "accountMailService")
 public class MailService {
 
 	@Value("${email.host}")

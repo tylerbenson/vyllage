@@ -1,7 +1,9 @@
 package accounts.model.account;
 
+import lombok.ToString;
 import accounts.service.EmailValidator;
 
+@ToString
 public class ResetPasswordForm {
 
 	private String email;

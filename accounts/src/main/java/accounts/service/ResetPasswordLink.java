@@ -1,5 +1,8 @@
 package accounts.service;
 
+import lombok.ToString;
+
+@ToString
 public class ResetPasswordLink {
 	private Long userId;
 	private String randomPassword;

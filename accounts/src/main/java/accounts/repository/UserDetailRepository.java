@@ -284,6 +284,28 @@ public class UserDetailRepository implements UserDetailsManager {
 				createNewAuthentication(currentUser, newPassword));
 	}
 
+	public void changePassword(String newPassword) {
+		Authentication currentUser = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		if (currentUser == null) {
+			// This would indicate bad coding somewhere
+			throw new AccessDeniedException(
+					"Can't change password as no Authentication object found in context "
+							+ "for current user.");
+		}
+
+		String username = currentUser.getName();
+
+		logger.info("Changing password for user '" + username + "'");
+		Long userId = this.loadUserByUsername(username).getUserId();
+		credentialsRepository.delete(userId);
+		credentialsRepository.save(userId, newPassword);
+
+		SecurityContextHolder.getContext().setAuthentication(
+				createNewAuthentication(currentUser, newPassword));
+	}
+
 	@Override
 	public boolean userExists(String username) {
 		return sql.fetchExists(sql.select().from(USERS)
