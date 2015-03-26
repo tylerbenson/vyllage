@@ -15,26 +15,27 @@
 </head>
 
 <body>
-  <section class="login">
-    <div class="row">
-      <div class="twelve columns">
-        <article>
-          <div class="row">
 
-            <div class="twelve columns">
-              <div>
-                <p>
-                  <img class="logo" src="images/logo-orange.png" alt="logo" />
-                  <span>
-                    <sup class="log">Vyllage 
+  <form th:action="@{/login}" method="post">
+    <section class="login">
+      <div class="row">
+        <div class="twelve columns">
+          <article>
+            <div class="row">
+
+              <div class="twelve columns">
+                <div>
+                  <p>
+                    <img class="logo" src="images/logo-orange.png" alt="logo" />
+                    <span>
+                      <sup class="log">Vyllage 
                         </sup>
-                  </span>
-                </p>
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <form th:action="@{/login}" method="post">
             <div class="row">
               <div class="five columns">
                 <p class="text txt"> He who would do </p>
@@ -54,7 +55,7 @@
                   <label for="exampleEmailInput" class="box-txt">E-email</label>
                   <input type="text" class="input" placeholder="aaronneldeleon@gmail.com" />
                   <label for="exampleEmailInput" class="box-txt">Password</label>
-                  <input class="input" type="text" placeholder="*********" />
+                  <input class="input" type="password" placeholder="*********" />
                   <p> <a href="#">Forgot password? </a>
                   </p>
                   <div>
@@ -66,12 +67,13 @@
                 </div>
               </div>
             </div>
-          </form>
-        </article>
 
+          </article>
+
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </form>
 </body>
 
 </html>
