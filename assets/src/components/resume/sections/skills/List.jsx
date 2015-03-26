@@ -3,7 +3,6 @@ var actions = require('../../actions');
 
 var SkillsList = React.createClass({
   deleteSkill: function (sectionId, e) {
-    console.log(sectionId)
     actions.deleteSection(sectionId);
   },
   render: function () {
