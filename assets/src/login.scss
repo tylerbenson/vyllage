@@ -1,69 +1,109 @@
 @import './components/common/variables';
 @import './components/common/mixins';
 
-.container {
-	background: url('../images/login_bg.jpg') no-repeat;
-	min-height: 550px;
-	width: 100%;
-	max-width: inherit;
+.login {
 
-	.request-btn {
-		color: #fff;
-		border-radius: 0px;
-		border: 1px solid #fff;
-		float: right;
-		margin-right: 28px;
-		margin-top: 28px;
-		height: 44px;
-		line-height: 42px;
-		padding: 0px 14px;
-		font-size: 28px;
-		font-family: 'sans-serif';
-	}
+    background: url('../../images/banner.jpg');
+    min-height: 850px;
+    max-width: inherit;
 
-	.login-content {
-		width: 372px;
-		margin: 0 auto;
-		margin-top: 120px;
+    .log {
+        font-size: 45px;
+        font-weight: 700;
+        color:#fff;
+        margin-left: -10px;  
+    }
 
-		.vyllage-img {
-			background: url('../images/header-logo.png');
-			background-size: contain;
-			height: 138px;
-		}
+    .logo {
+        padding-left:60px;
+        padding-top:40px;
+        height:100px;
+        width:100px;
+    }
 
-		.input {
-			@include loginInputFields();
-		}
+    .text {
+        color:#fff;
+        font-size:45px;
+        margin:0px;
+        padding-left: 60px;
+        line-height: normal;
+    }
 
-		.login-btn {
-			margin-top: 22px;
-			margin-bottom: 73px;
-			width: 372px;
-			height: 62px;
-			border-radius: 0px;
-			border: 1px solid #393D2E;
-			color: #fff;
-			background-color: #5B6C4C;
-			font-family: 'sans-serif';
-			font-size: 28px;
-			text-transform: lowercase;
-		}
-	}
+    .txt {
+        margin-top:70px;
+    }
 
-	.divider-part {
-		background-color: #4A5992;
-		border: 1px solid #414970;
-		height: 83px;
-		border-top: 2px solid #414970;
-		color: #fff;
-		font-family: 'sans-serif';
-		font-size: 30px;
-		line-height: 83px;
+    .seneca {
+        font-size:28px;
+        margin-top:20px;
+        padding-left: 60px;
+        color:#fff;
+        
+    }
 
-		.what-vyllage {
-			text-align: center;
-		}
-	}
+    .u-pull-right {
+        float: right; 
+    }
+    
+    .box {
+        width: 420px;
+        border-radius: 4px;
+        border:1px solid #fff;
+        background: #fff;
+        height: 560px;
+        padding-left: 30px;
+        margin-left: 60px;
+        margin-top:35px;
+
+        a {
+            color:#e9966b;
+            font-size:20px;
+         
+        }
+    
+        .submit {
+            background-color:#e2670d;
+            color:#fff;
+            font-size:20px;
+            font-weight: 400;
+            height:60px;
+            margin-right: 45px;
+        }
+
+        .sign-in {
+            color:#e2670d;
+            font-size:40px;
+            padding-top:25px;
+            text-align:center;
+            margin: 0;
+        }
+
+        .invalid {
+            color:#990000;
+            font-size:20px;
+            text-align:center;
+            margin-bottom: 0;
+        }
+
+        .box-txt {
+            font-size:18px;
+            color:#ADADAD;
+            font-weight:400;
+            margin-top: 15px;
+        }
+
+        .input {
+            width:370px;
+            height:60px;
+            border:2px solid #ADADAD;
+            font-size:18px;
+        }
+
+        .divider {
+            height: 90px;
+            border-bottom: 1px solid #999;
+        }
+    }
+
 }
 

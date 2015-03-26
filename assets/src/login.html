@@ -15,41 +15,63 @@
 </head>
 
 <body>
-  <form th:action="@{/login}" method="post">
-    <section class="container">
+  <section class="login">
+    <div class="row">
+      <div class="twelve columns">
+        <article>
+          <div class="row">
 
-      <article>
-        <div class="row">
-          <div class="twelve column">
-            <button class="request-btn">request invitation</button>
-
-            <div class="login-content">
-              <div class="vyllage-img"></div>
-              <!-- These need to be styled properly -->
-              <div th:if="${param.error}" style="background: white">
-                Invalid email and password.
+            <div class="twelve columns">
+              <div>
+                <p>
+                  <img class="logo" src="images/logo-orange.png" alt="logo" />
+                  <span>
+                    <sup class="log">Vyllage 
+                        </sup>
+                  </span>
+                </p>
               </div>
-              <div th:if="${param.logout}" style="background: white">
-                You have been logged out.
-              </div>
-              <input type="text" class="input email" name="email" placeholder="email" />
-              <input type="password" class="input password" name="password" placeholder="password" />
-              <input type="submit" class="login-btn" value="login" />
             </div>
           </div>
-        </div>
-      </article>
 
-      <article>
-        <div class="row divider-part">
-          <div class="twelve column">
-            <p class="what-vyllage">what is vyllage?</p>
-          </div>
-        </div>
-      </article>
+          <form th:action="@{/login}" method="post">
+            <div class="row">
+              <div class="five columns">
+                <p class="text txt"> He who would do </p>
+                <p class="text">great things, should </p>
+                <p class="text">not attempt them alone</p>
+                <p class="seneca"> - Seneca * AD 55 </p>
+              </div>
 
-    </section>
-  </form>
+              <div class="seven columns">
+                <div class="box">
+
+                  <p class="sign-in">Sign In </p>
+                  <div th:if="${param.error}">
+                    <p class="invalid">Invalid e-mail or password </p>
+                  </div>
+
+                  <label for="exampleEmailInput" class="box-txt">E-email</label>
+                  <input type="text" class="input" placeholder="aaronneldeleon@gmail.com" />
+                  <label for="exampleEmailInput" class="box-txt">Password</label>
+                  <input class="input" type="text" placeholder="*********" />
+                  <p> <a href="#">Forgot password? </a>
+                  </p>
+                  <div>
+                    <input type="submit" class="button submit u-pull-right" value="Submit" />
+                  </div>
+                  <div class="divider"></div>
+                  <p class="box-txt"> Don't have an account? <a href="#">Request for an invite.</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </form>
+        </article>
+
+      </div>
+    </div>
+  </section>
 </body>
 
 </html>
