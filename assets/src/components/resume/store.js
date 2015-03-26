@@ -71,13 +71,11 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue) 
       .send(data)
       .end(function (err, res) {
-        console.log(err, res)
         this.resume.sections.push(res.body);
         this.trigger(this.resume);
       }.bind(this));
   },
   onPutSection: function (data) {
-    console.log(data);
     var url = urlTemplate
                 .parse(endpoints.resumeSection)
                 .expand({

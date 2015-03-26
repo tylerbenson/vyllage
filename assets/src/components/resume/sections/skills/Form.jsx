@@ -4,30 +4,34 @@ var actions = require('../../actions');
 var SkillsForm = React.createClass({
   getInitialState: function () {
     return {
-      skill: ''
+      description: ''
     };
   },
   changeHandler: function (e) {
     this.setState({
-      skill: e.target.value
+      description: e.target.value
     });
   },
+  componentWillReceiveProps: function (nextProps) {
+    if (nextProps.selectedSkill !== null) {
+      this.setState({description: nextProps.skill.description})
+    }
+  },
   updateSection: function (e) {
-    if (this.state.skill) {
-      if (this.props.selectedSkill) {
+    if (this.state.description) {
+      if (this.props.selectedSkill !== null) {
         var skill = this.props.skill;
-        skill.description = this.state.skill;
+        skill.description = this.state.description;
         actions.putSection(skill);
       } else {
         actions.postSection({
           type: 'freeform',
           title: 'skills',
-          description: this.state.skill
+          description: this.state.description
         });
       }
-      this.setState({skill: ''});
-      this.refs.skill.getDOMNode().value = '';
       this.props.setSelectedSkill(null);
+      this.setState({description: ''});
     }
   },
   keyPress: function (e) {
@@ -42,14 +46,14 @@ var SkillsForm = React.createClass({
           ref='skill'
           type='text'
           className='five columns'
-          defaultValue={this.props.skill.description} 
+          value={this.state.description} 
           onChange={this.changeHandler}
           onKeyPress={this.keyPress}
         />
         <a 
           className='button'
           onClick={this.updateSection}>
-            {(this.state.selectedSkill === null) ? 'ADD': 'SAVE' }
+            {(this.props.selectedSkill === null) ? 'ADD': 'SAVE' }
         </a>
       </div>
     );

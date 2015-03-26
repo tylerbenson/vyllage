@@ -11,7 +11,6 @@ var Skills = React.createClass({
   },
   render: function () {
     var skill = (this.state.selectedSkill !== null) ? this.props.sections[this.state.selectedSkill]: {description: ''};
-    console.log(skill, this.state.selectedSkill)
     return (
       <div className='resume-section'>
         <h4 className='resume-section-title'>Skills</h4> 
