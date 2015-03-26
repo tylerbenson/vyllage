@@ -1,0 +1,73 @@
+.section {
+  @include center();
+  & > .content {
+    background: $section-background;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    margin: 0.75em 1em;
+    padding: 0;
+  }
+
+  h1 {
+    display: inline-block;
+  }
+
+  .header {
+    @include cf();
+    padding: 3em 4em 1em 4em;
+    // border-bottom: #eee solid 1px;
+  }
+
+  .fields {
+    padding: 0 3.7em 2em 3.7em;
+  }
+
+  .footer {
+    @include cf();
+    background: $section-footer-background;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top: darken($section-footer-background,3%) solid 1px;
+    font-size: 0.85em;
+    padding: 0.25em 1em;
+
+    .timestamp {
+      color: $section-footer-color;
+      display: inline-block;
+      float: left;
+      font-weight: 300;
+      padding: 0.5em 1em;
+    }
+
+    .actions {
+      display: inline-block;
+      float: right;
+
+      button {
+        text-transform: lowercase;
+
+        i {
+          font-size: 0.9em;
+        }
+      }
+    }
+  }
+
+  textarea {
+    border: none;
+    border-radius: 3px;
+    font-weight: 300;
+    padding: 0 0.4em;
+    width: 100%;
+    // transition: all .2s ease;
+
+    &:focus {
+      background: lighten($footer-background, 76%);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+    }
+  }
+}
+
+.sections {
+  margin: 1em 0;
+}
