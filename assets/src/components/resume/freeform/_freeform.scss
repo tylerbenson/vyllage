@@ -1,10 +1,6 @@
 .freeform {
-  padding: 40px;
-
-	.section-title {
-		color: $yellow-text-color;
-		font-size: 20px;
-	}
+  padding: 20px 40px;
+  border-top: 1px solid $light-grey;
 }
 
 .freeform-preview {

@@ -14,6 +14,7 @@ var OrganizationPreview = React.createClass({
         <div className='row'>
          <div className="twelve columns section-title">
             <p className='u-pull-left'>{organization.organizationName}</p>
+            <DeleteSection className='u-pull-right' sectionId={this.props.section.sectionId} />
             <p className='u-pull-right'><EditBtn editHandler={this.editHandler}/></p>
           </div>
         </div>

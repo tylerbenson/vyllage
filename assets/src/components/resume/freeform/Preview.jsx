@@ -12,7 +12,6 @@ var FreeformPreview = React.createClass({
       <div className={className}>
         <div className='row'>
          <div className="twelve columns section-title">
-            <p className='u-pull-left'>{this.props.title}</p>
             <p className='u-pull-right'><EditBtn editHandler={this.editHandler}/></p>
           </div>
         </div>

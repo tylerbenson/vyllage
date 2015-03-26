@@ -1,11 +1,14 @@
 .resume-section {
   background: white;
   padding: 10px;
-  margin: 10px;
+  margin: 10px 10px 40px;
 }
-
+.header-section-title {
+	color: $yellow-text-color;
+	font-size: 22px;
+	padding: 20px 40px 0px;
+}
 .resume-section-footer {
-
   padding: 0 40px 20px;
 
   .update-time {
@@ -13,5 +16,4 @@
     font-size: 14px;
     line-height: 14px;
   }
-
 }

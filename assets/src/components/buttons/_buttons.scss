@@ -1,13 +1,30 @@
-.button.edit {
-    @include editBtn();
+.button-inverted {
+    @include button-inverted();
     margin-right: 10px;
 
   .icon {
 	  padding-right: 4px;
   }
 }
+.button-inverted:hover {
+   @include ask-advice-btn-hover();
+}
 .button.cancel {
-  @include cancelBtn();
+  @include button-cancel();
+}
+.move-container {
+  position: relative;
+}
+.button.move {
+  width: 90px;
+  position: relative;
+  left: 50%;
+  top: -20px;
+  border-color: $light-grey;
+  background-color: $white;
+}
+.button.delete {
+  width: 26px;
 }
 .number-buttons {
   color: $yellow-text-color;
