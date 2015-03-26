@@ -15,61 +15,44 @@
 </head>
 
 <body>
-
   <form th:action="@{/login}" method="post">
-    <section class="login">
+    <section id="login">
       <div class="row">
-        <div class="twelve columns">
-          <article>
-            <div class="row">
+        <div class="seven columns">
+          <div class="logo">
+            <span> Vyllage </span>
+          </div>
 
-              <div class="twelve columns">
-                <div>
-                  <p>
-                    <img class="logo" src="images/logo-orange.png" alt="logo" />
-                    <span>
-                      <sup class="log">Vyllage 
-                        </sup>
-                    </span>
-                  </p>
-                </div>
-              </div>
+          <div class="description-text">
+            <div class="content">
+              <span> He who would do great things, should not attempt them alone </span>
             </div>
-
-            <div class="row">
-              <div class="five columns">
-                <p class="text txt"> He who would do </p>
-                <p class="text">great things, should </p>
-                <p class="text">not attempt them alone</p>
-                <p class="seneca"> - Seneca * AD 55 </p>
+            <p class="author"> - Seneca &middot; AD 55 </p>
+          </div>
+        </div>
+        <div class="three columns">
+          <div class="login-box">
+            <p class="sign-in-txt">Sign In </p>
+            <div class="login-box-content">
+              <div th:if="${param.error}">
+                <p class="invalid">Invalid e-mail or password </p>
               </div>
+              <label for="email" class="box-txt">E-email</label>
+              <input type="text" class="input email" name="email" placeholder="email" />
 
-              <div class="seven columns">
-                <div class="box">
+              <label for="password" class="box-txt">Password</label>
+              <input type="password" class="input password" name="password" placeholder="password" />
 
-                  <p class="sign-in">Sign In </p>
-                  <div th:if="${param.error}">
-                    <p class="invalid">Invalid e-mail or password </p>
-                  </div>
-
-                  <label for="exampleEmailInput" class="box-txt">E-email</label>
-                  <input type="text" class="input" placeholder="aaronneldeleon@gmail.com" />
-                  <label for="exampleEmailInput" class="box-txt">Password</label>
-                  <input class="input" type="password" placeholder="*********" />
-                  <p> <a href="#">Forgot password? </a>
-                  </p>
-                  <div>
-                    <input type="submit" class="button submit u-pull-right" value="Submit" />
-                  </div>
-                  <div class="divider"></div>
-                  <p class="box-txt"> Don't have an account? <a href="#">Request for an invite.</a>
-                  </p>
-                </div>
+              <p> <a href="#">Forgot password? </a>
+              </p>
+              <div>
+                <input type="submit" class="button submit-btn u-pull-right" value="Submit" />
               </div>
+              <div class="divider"></div>
+              <p class="box-txt"> Don't have an account? <a href="#">Request for an invite.</a>
+              </p>
             </div>
-
-          </article>
-
+          </div>
         </div>
       </div>
     </section>

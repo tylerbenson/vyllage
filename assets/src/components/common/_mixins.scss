@@ -225,3 +225,20 @@
 	border: 1px solid $grey-text-color;
   color: $grey-text-color;
 }
+@mixin submit-btn() {
+  background-color: $yellow-text-color;
+  color: $white;
+  font-size: 16px;
+  font-weight: 400;
+  height: 40px;
+  width: 120px;
+}
+
+@mixin login-box() {
+	width: 350px;
+  height: 450px;
+  border-radius: 4px;
+  border:1px solid $white;
+  background-color: $white;
+  margin-top: 100px;
+}

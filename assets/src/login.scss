@@ -1,109 +1,86 @@
 @import './components/common/variables';
 @import './components/common/mixins';
 
-.login {
+#login {
+  background: url('../../images/banner.jpg') repeat;
+  min-height: 850px;
+ 	min-width: $main-container-width;
+  padding: 60px;
+  color: $white;
 
-    background: url('../../images/banner.jpg');
-    min-height: 850px;
-    max-width: inherit;
+  .logo {
+  	background: url('../../images/logo-orange.png') no-repeat;
+  	span {
+		  padding-left: 40px;
+		  font-size: 34px;
+		  font-weight: 700;
+		  line-height: 48px;
+  	} 
+  }
+  .description-text {
+  	margin-top: 100px;
+  	width: 350px;
 
-    .log {
-        font-size: 45px;
-        font-weight: 700;
-        color:#fff;
-        margin-left: -10px;  
+		.content {
+	  	font-weight: 400;
+	    font-size:36px;
+	    line-height: 46px;
+      letter-spacing: 1.5px;	  
+	  }
+	  .author {
+	  	margin-top: 20px;
+	  	font-weight: 400;
+	    font-size:20px;
+	    line-height: 30px;	    
+	  }
+  }
+ 
+  .login-box {
+  	@include login-box();
+
+  	.login-box-content {
+  		padding-left: 30px;
+  	}
+    a {
+	    color: $yellow-text-color;
+	    font-size: 16px;
+	    line-height: 18px;
     }
 
-    .logo {
-        padding-left:60px;
-        padding-top:40px;
-        height:100px;
-        width:100px;
+   input[type="text"], input[type="password"] {
+      width: 300px;
+		  height: 46px;
+		  border: 1px solid #ADADAD;
+		  font-size: 18px;
     }
-
-    .text {
-        color:#fff;
-        font-size:45px;
-        margin:0px;
-        padding-left: 60px;
-        line-height: normal;
+    .sign-in-txt {
+      color: $yellow-text-color;
+      font-size: 32px;
+      line-height: 32px;
+      padding-top:25px;
+      text-align:center;
+      margin: 0;
     }
-
-    .txt {
-        margin-top:70px;
+    .submit-btn {
+    	@include submit-btn();
+		  margin-right: 45px;
     }
-
-    .seneca {
-        font-size:28px;
-        margin-top:20px;
-        padding-left: 60px;
-        color:#fff;
-        
+    .invalid {
+      color:#990000;
+      font-size:20px;
+      text-align:center;
+      margin-bottom: 0;
     }
-
-    .u-pull-right {
-        float: right; 
+    .box-txt {
+      font-size:15px;
+      color:#ADADAD;
+      font-weight:400;
+      margin-top: 15px;
     }
-    
-    .box {
-        width: 420px;
-        border-radius: 4px;
-        border:1px solid #fff;
-        background: #fff;
-        height: 560px;
-        padding-left: 30px;
-        margin-left: 60px;
-        margin-top:35px;
-
-        a {
-            color:#e9966b;
-            font-size:20px;
-         
-        }
-    
-        .submit {
-            background-color:#e2670d;
-            color:#fff;
-            font-size:20px;
-            font-weight: 400;
-            height:60px;
-            margin-right: 45px;
-        }
-
-        .sign-in {
-            color:#e2670d;
-            font-size:40px;
-            padding-top:25px;
-            text-align:center;
-            margin: 0;
-        }
-
-        .invalid {
-            color:#990000;
-            font-size:20px;
-            text-align:center;
-            margin-bottom: 0;
-        }
-
-        .box-txt {
-            font-size:18px;
-            color:#ADADAD;
-            font-weight:400;
-            margin-top: 15px;
-        }
-
-        .input {
-            width:370px;
-            height:60px;
-            border:2px solid #ADADAD;
-            font-size:18px;
-        }
-
-        .divider {
-            height: 90px;
-            border-bottom: 1px solid #999;
-        }
+    .divider {
+      height: 60px;
+      border-bottom: 1px solid #999;
     }
-
+  }
 }
 
