@@ -15,6 +15,7 @@ create table if not exists accounts.personal_information(
 	graduation_date timestamp,
 	email_updates varchar(15),
 	phone_number varchar(20),
+	address varchar(30),
 	constraint fk_personal_users foreign key(user_id) references accounts.users(user_id));
   
 create table if not exists accounts.user_credentials(

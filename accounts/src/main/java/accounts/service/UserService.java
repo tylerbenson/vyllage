@@ -14,8 +14,9 @@ import accounts.model.OrganizationRole;
 import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
-import accounts.model.account.PersonalInformation;
 import accounts.model.account.AccountNames;
+import accounts.model.account.PersonalInformation;
+import accounts.repository.OrganizationMemberRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.OrganizationRoleRepository;
 import accounts.repository.PersonalInformationRepository;
@@ -36,6 +37,9 @@ public class UserService {
 
 	@Autowired
 	private OrganizationRoleRepository organizationRoleRepository;
+
+	@Autowired
+	private OrganizationMemberRepository organizationMemberRepository;
 
 	@Autowired
 	private UserDetailRepository userRepository;
@@ -148,7 +152,11 @@ public class UserService {
 	}
 
 	public List<AccountNames> getNames(List<Long> userIds) {
-
 		return userRepository.getNames(userIds);
 	}
+
+	public void update(User user) {
+		userRepository.updateUser(user);
+	}
+
 }

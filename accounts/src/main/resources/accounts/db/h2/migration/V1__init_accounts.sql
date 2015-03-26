@@ -15,6 +15,7 @@ create table if not exists ACCOUNTS.personal_information(
 	graduation_date timestamp,
 	email_updates varchar_ignorecase(15),
 	phone_number varchar_ignorecase(20),
+	address varchar_ignorecase(30),
 	constraint fk_personal_users foreign key(user_id) references ACCOUNTS.users(user_id));
   
 create table if not exists ACCOUNTS.user_credentials(

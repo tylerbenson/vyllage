@@ -29,7 +29,7 @@ public class PersonalInformationRepository {
 		pi.setEmailUpdates(record.getEmailUpdates());
 		pi.setGraduationDate(record.getGraduationDate().toLocalDateTime());
 		pi.setPhoneNumber(record.getPhoneNumber());
-
+		pi.setAddress(record.getAddress());
 		return pi;
 	}
 
@@ -47,6 +47,7 @@ public class PersonalInformationRepository {
 		record.setGraduationDate(Timestamp.valueOf(userPersonalInformation
 				.getGraduationDate()));
 		record.setPhoneNumber(userPersonalInformation.getPhoneNumber());
+		record.setAddress(userPersonalInformation.getAddress());
 		record.store();
 	}
 }

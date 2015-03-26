@@ -1,7 +1,5 @@
 package accounts.controller;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -14,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,15 +23,18 @@ import accounts.model.account.AccountNames;
 import accounts.model.account.AccountSettings;
 import accounts.model.account.EmailUpdates;
 import accounts.model.account.PersonalInformation;
+import accounts.model.account.settings.AddressSetting;
+import accounts.model.account.settings.EmailUpdateSetting;
+import accounts.model.account.settings.PhoneNumberSetting;
 import accounts.repository.UserNotFoundException;
 import accounts.service.UserService;
 
 @Controller
-@RequestMapping("account")
+@RequestMapping("account/settings")
 public class AccountSettingsController {
 
 	// private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss.SSS";
-	private static final String MMMM_YYYY_DD = "MMMM yyyy dd HH:mm:ss";
+	// private static final String MMMM_YYYY_DD = "MMMM yyyy dd HH:mm:ss";
 
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger
@@ -76,56 +76,130 @@ public class AccountSettingsController {
 		return "settings";
 	}
 
-	@RequestMapping(value = "phoneNumber/{phoneNumber}", method = RequestMethod.POST)
+	@RequestMapping(value = "names", method = RequestMethod.GET)
+	public @ResponseBody AccountNames getNames() {
+		return accountNames();
+	}
+
+	@RequestMapping(value = "names", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void savePhoneNumber(@PathVariable String phoneNumber) {
+	public void setNames(@RequestBody AccountNames names) {
+		User user = getUser();
+
+		if (names.getFirstName() != null && names.getFirstName().isEmpty())
+			user.setFirstName(names.getFirstName());
+
+		if (names.getMiddleName() != null && names.getMiddleName().isEmpty())
+			user.setMiddleName(names.getMiddleName());
+
+		if (names.getLastName() != null && names.getLastName().isEmpty())
+			user.setLastName(names.getLastName());
+
+		userService.update(user);
+	}
+
+	// @RequestMapping(value = "organization", method = RequestMethod.PUT)
+	// @ResponseStatus(value = HttpStatus.OK)
+	// public void setAddres(@RequestBody OrganizationSetting
+	// organizationSetting) {
+	// User user = getUser();
+	//
+	// }
+
+	@RequestMapping(value = "address", method = RequestMethod.GET)
+	public @ResponseBody AddressSetting getAddres() {
+		Long userId = getUserId();
+		AddressSetting addressSetting = new AddressSetting();
+
+		PersonalInformation userPersonalInformation = userService
+				.getUserPersonalInformation(userId);
+		addressSetting.setValue(userPersonalInformation.getAddress());
+		return addressSetting;
+	}
+
+	@RequestMapping(value = "address", method = RequestMethod.PUT)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void setAddres(@RequestBody AddressSetting address) {
 		Long userId = getUserId();
 
 		PersonalInformation userPersonalInformation = userService
 				.getUserPersonalInformation(userId);
-		userPersonalInformation.setPhoneNumber(phoneNumber);
+		userPersonalInformation.setAddress(address.getValue());
 		userService.savePersonalInformation(userPersonalInformation);
 	}
 
-	@RequestMapping(value = "emailUpdates/{emailUpdates}", method = RequestMethod.POST)
+	@RequestMapping(value = "phoneNumber", method = RequestMethod.GET)
+	public @ResponseBody PhoneNumberSetting getPhoneNumber() {
+		Long userId = getUserId();
+		PhoneNumberSetting phoneNumberSetting = new PhoneNumberSetting();
+
+		PersonalInformation userPersonalInformation = userService
+				.getUserPersonalInformation(userId);
+		phoneNumberSetting.setValue(userPersonalInformation.getPhoneNumber());
+		return phoneNumberSetting;
+	}
+
+	@RequestMapping(value = "phoneNumber", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void saveEmailUpdates(@PathVariable String emailUpdates) {
+	public void savePhoneNumber(@RequestBody PhoneNumberSetting phoneNumber) {
+		Long userId = getUserId();
+
+		PersonalInformation userPersonalInformation = userService
+				.getUserPersonalInformation(userId);
+		userPersonalInformation.setPhoneNumber(phoneNumber.getValue());
+		userService.savePersonalInformation(userPersonalInformation);
+	}
+
+	@RequestMapping(value = "emailUpdates", method = RequestMethod.GET)
+	public @ResponseBody EmailUpdateSetting getEmailUpdates() {
+		Long userId = getUserId();
+		EmailUpdateSetting emailUpdateSetting = new EmailUpdateSetting();
+
+		PersonalInformation userPersonalInformation = userService
+				.getUserPersonalInformation(userId);
+		emailUpdateSetting.setValue(userPersonalInformation.getEmailUpdates());
+		return emailUpdateSetting;
+	}
+
+	@RequestMapping(value = "emailUpdates", method = RequestMethod.PUT)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void saveEmailUpdates(@RequestBody EmailUpdateSetting emailUpdates) {
 		Long userId = getUserId();
 
 		try {
-			EmailUpdates.valueOf(emailUpdates.toUpperCase());
+			EmailUpdates.valueOf(emailUpdates.getValue().toUpperCase());
 		} catch (IllegalArgumentException e) {
 			throw new IllegalArgumentException("Invalid time interval.");
 		}
 
 		PersonalInformation userPersonalInformation = userService
 				.getUserPersonalInformation(userId);
-		userPersonalInformation.setEmailUpdates(emailUpdates);
+		userPersonalInformation.setEmailUpdates(emailUpdates.getValue());
 		userService.savePersonalInformation(userPersonalInformation);
 	}
 
-	@RequestMapping(value = "graduationDate", method = RequestMethod.POST)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void saveGraduationDate(@RequestBody String graduationDate) {
-		Long userId = getUserId();
-
-		PersonalInformation userPersonalInformation = userService
-				.getUserPersonalInformation(userId);
-		// "startDate": "September 2010"
-
-		graduationDate += " 01 00:00:00"; // Can't be parsed if it's incomplete
-
-		LocalDateTime date = LocalDateTime.parse(graduationDate,
-				DateTimeFormatter.ofPattern(MMMM_YYYY_DD));
-
-		// not sure if needed?
-		if (date.isBefore(LocalDateTime.now()))
-			throw new IllegalArgumentException(
-					"Graduation date can't be in the past.");
-
-		userPersonalInformation.setGraduationDate(date);
-		userService.savePersonalInformation(userPersonalInformation);
-	}
+	// @RequestMapping(value = "graduationDate", method = RequestMethod.PUT)
+	// @ResponseStatus(value = HttpStatus.OK)
+	// public void saveGraduationDate(@RequestBody String graduationDate) {
+	// Long userId = getUserId();
+	//
+	// PersonalInformation userPersonalInformation = userService
+	// .getUserPersonalInformation(userId);
+	// // "startDate": "September 2010"
+	//
+	// graduationDate += " 01 00:00:00"; // Can't be parsed if it's incomplete
+	//
+	// LocalDateTime date = LocalDateTime.parse(graduationDate,
+	// DateTimeFormatter.ofPattern(MMMM_YYYY_DD));
+	//
+	// // not sure if needed?
+	// if (date.isBefore(LocalDateTime.now()))
+	// throw new IllegalArgumentException(
+	// "Graduation date can't be in the past.");
+	//
+	// userPersonalInformation.setGraduationDate(date);
+	// userService.savePersonalInformation(userPersonalInformation);
+	// }
 
 	@ExceptionHandler(value = { IllegalArgumentException.class })
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
