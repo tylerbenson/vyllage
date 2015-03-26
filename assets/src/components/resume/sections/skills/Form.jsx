@@ -21,7 +21,11 @@ var SkillsForm = React.createClass({
       });
       this.setState({skill: ''});
     }
-    
+  },
+  keyPress: function (e) {
+    if (e.key === 'Enter') {
+      this.addSection(e);
+    }
   },
   render: function () {
     return (
@@ -31,6 +35,7 @@ var SkillsForm = React.createClass({
           className='five columns'
           value={this.state.skill}
           onChange={this.changeHandler}
+          onKeyPress={this.keyPress}
         />
         <a className='button' onClick={this.addSection}>ADD</a>
       </div>
