@@ -1,0 +1,75 @@
+::selection {
+  background: rgba($primary-color, 0.35);
+}
+::-moz-selection {
+  background: rgba($primary-color, 0.35);
+}
+
+* {
+  color: $text-color;
+  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+html,
+body {
+  background: $body-background;
+  font-size: 18px;
+  height: 100%;
+}
+
+#container {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -3.15em;
+
+  &:after {
+    content: '';
+    display: block;
+    height: 3.15em;
+  }
+}
+
+a {
+  color: $primary-color;
+  transition: all .2s ease;
+  &:hover {
+    color: lighten($primary-color, 3%);
+  }
+}
+
+textarea {
+  line-height: 1.4;
+  outline: none;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.content {
+  @include center();
+  box-sizing: border-box;
+  padding: 0 1em;
+}
+
+.logo {
+  display: inline-block;
+  padding: 0.6em 0;
+
+  img {
+    height: 1.75em;
+  }
+  span {
+    font-size: 1.25em;
+    font-weight: 600;
+    position: relative;
+    bottom: 0.25em;
+  }
+}
+
+.dropdown {
+  @extend .ion-arrow-down-b;
+  font-size: 0.9em;
+  margin-left: 0.5em;
+  position: relative;
+  bottom: 0.3em;
+}

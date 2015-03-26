@@ -1,0 +1,118 @@
+button,
+.button,
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
+  background: $primary-color;
+  border: transparent solid 2px;
+  border-radius: 6px;
+  color: $inverted-text-color;
+  display: inline-block;
+  outline: none;
+  min-height: 2.3em;
+  padding: 0.3em 0.9em;
+  text-transform: uppercase;
+  transition: all .2s ease;
+
+  &:hover {
+    background: lighten($primary-color, 3%);
+    cursor: pointer;
+  }
+
+  & > i {
+    color: $inverted-text-color;
+    font-size: 1.15em;
+    top: 0.2em;
+    margin-right: 0.4em;
+    transition: all .2s ease;
+  }
+
+  &.inverted {
+    background: transparent;
+    color: $primary-color;
+    border-color: $primary-color;
+
+    &:hover {
+      background: $primary-color;
+      color: $inverted-text-color;
+
+      & > i {
+        color: $inverted-text-color;
+      }
+    }
+
+    & > i {
+      color: $primary-color;
+    }
+  }
+
+  &.secondary {
+    background: $secondary-color;
+
+    &:hover {
+      background: lighten($secondary-color, 3%);
+    }
+
+    &.inverted {
+      background: transparent;
+      color: $secondary-color;
+      border-color: $secondary-color;
+
+      &:hover {
+        background: $secondary-color;
+        color: $inverted-text-color;
+
+        & > i {
+          color: $inverted-text-color;
+        }
+      }
+
+      & > i {
+        color: $secondary-color;
+      }
+    }
+  }
+
+  &.embossed {
+    border-color: darken($primary-color, 3%);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.15),
+      inset 0 1px 1px rgba(255,255,255,0.25);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+
+    &:active {
+      background: $primary-color;
+      box-shadow: 0 1px 1px rgba(255,255,255,0.15),
+        inset 0 1px 1px rgba(0,0,0,0.05);
+      transition: none;
+    }
+  }
+
+  &.flat {
+    background: none;
+    border-color: transparent;
+    color: $primary-color;
+
+    & > i {
+      color: $primary-color;
+    }
+
+    &:hover {
+      color: lighten($primary-color, 3%);
+      & > i {
+        color: lighten($primary-color, 3%);
+      }
+    }
+  }
+
+  &.icon {
+    padding: 0.3em 0.7em;
+
+    & > i {
+      margin: 0;
+    }
+  }
+
+  &.small {
+    font-size: 0.75em;
+  }
+}
