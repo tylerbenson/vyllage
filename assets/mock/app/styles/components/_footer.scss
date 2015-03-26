@@ -1,0 +1,16 @@
+footer {
+  @extend .inverted;
+  background: $footer-background;
+  height: 3.15em;
+
+  nav ul li a {
+    color: lighten($footer-background, 18%);
+    font-size: 0.8em;
+    text-transform: uppercase;
+    padding: 1.35em 1em;
+
+    &:hover {
+      color: lighten($footer-background, 27%);
+    }
+  }
+}
