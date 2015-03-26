@@ -3,7 +3,10 @@ var React = require('react');
 var SkillsForm = React.createClass({
   render: function () {
     return (
-      <div></div>
+      <div className='row'>
+        <input type='text' className='five columns' />
+        <a className='button'>ADD</a>
+      </div>
     );
   }
 });

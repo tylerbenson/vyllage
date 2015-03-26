@@ -6,7 +6,7 @@ var filter = require('lodash.filter');
 var CareerGoal = require('./sections/CareerGoal');
 var Experience = require('./sections/Experience');
 var Education = require('./sections/Education');
-var Skill = require('./sections/Skill');
+var Skills = require('./sections/skills');
 var Header = require('./header/Header');
 var Footer = require('../footer/footer');
 
@@ -32,7 +32,7 @@ var ResumeEditor = React.createClass({
           <CareerGoal careerGoal={careerGoal} />
           <Experience sections={experienceSections} />
           <Education sections={educationSections} />
-          <Skill sections={skillSections} />
+          <Skills sections={skillSections} />
         </section>
         <Footer />
       </div>
