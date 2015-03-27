@@ -53,12 +53,6 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         if (res.ok) {
           this.resume.sections = res.body;
-          // Fetch comments for numberOfComments in a section is > 0
-          // this.resume.sections.map(function(section) {
-          //   if (section.numberOfComments > 0) {
-          //     this.onGetComments(section.sectionId)
-          //   }
-          // }.bind(this))
           this.trigger(this.resume);
         } 
       }.bind(this))
@@ -147,6 +141,7 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
         this.resume.sections[index].comments.push(res.body);
+        this.resume.sections[index].numberOfComments += 1;
         this.trigger(this.resume);
       }.bind(this))
   },

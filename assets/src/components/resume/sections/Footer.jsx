@@ -9,7 +9,6 @@ var SectionFooter = React.createClass({
     actions.toggleComments(this.props.section.sectionId);
   },
   render: function () {
-    // var commentsCount = this.props.section && this.props.section.comments && this.props.section.comments.length;
     var numberOfComments = this.props.section && this.props.section.numberOfComments;
     return (
       <div>
