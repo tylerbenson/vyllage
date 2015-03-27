@@ -1,5 +1,6 @@
 package connections.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -36,8 +37,12 @@ public class AdviceRequestController {
 	public @ResponseBody UserFilterResponse getUsers(
 			HttpServletRequest request,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "excludeIds", required = false) final List<Long> excludeIds) {
+			@RequestParam(value = "excludeIds", required = false) List<Long> excludeIds) {
 		Long userId = (Long) request.getSession().getAttribute("userId");
+
+		if (excludeIds == null)
+			excludeIds = new ArrayList<>();
+		excludeIds.add(userId);
 
 		return service.getUsers(request, documentId, userId, excludeIds);
 	}
