@@ -28,7 +28,7 @@
       font-weight: 300;
       padding: 0 0.4em;
       width: 100%;
-      // transition: all .2s ease;
+      transition: none;
 
       &:focus {
         background: lighten($footer-background, 76%);

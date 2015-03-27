@@ -1,7 +1,7 @@
 footer {
   @extend .inverted;
   background: $footer-background;
-  height: 3.15em;
+  height: 3.2em;
 
   nav ul li a {
     color: lighten($footer-background, 18%);

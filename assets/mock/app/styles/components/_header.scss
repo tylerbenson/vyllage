@@ -30,6 +30,20 @@ header {
     position: relative;
     bottom: 0.3em;
   }
+
+  .user {
+    text-align: center;
+    width: 120px;
+
+    .name {
+      max-width: 100px;
+      overflow: hidden;
+      position: relative;
+      text-overflow: ellipsis;
+      top: 0;
+      white-space: pre;
+    }
+  }
 }
 
 .subheader {
