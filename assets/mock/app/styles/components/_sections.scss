@@ -6,6 +6,7 @@
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
     margin: 0.75em 1em;
     padding: 0;
+    position: relative;
   }
 
   h1 {
@@ -52,6 +53,23 @@
           font-size: 0.9em;
         }
       }
+    }
+  }
+
+  .move {
+    background: $inverted-text-color !important;
+    border: none;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    color: $secondary-color !important;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: -0.75em;
+    width: 9em;
+
+    & > i {
+      color: $secondary-color !important;
     }
   }
 
