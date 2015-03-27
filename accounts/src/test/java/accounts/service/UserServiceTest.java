@@ -1,6 +1,5 @@
 package accounts.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.Assert;
@@ -8,6 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,7 +20,7 @@ import accounts.Application;
 import accounts.model.BatchAccount;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
-import accounts.model.account.PersonalInformation;
+import accounts.model.account.settings.AccountSetting;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -127,41 +127,36 @@ public class UserServiceTest {
 
 	@Test
 	public void savePersonalInformation() {
-		PersonalInformation pi = new PersonalInformation();
-		String emailUpdates = "NEVER";
-		String phoneNumber = "123";
-		LocalDateTime now = LocalDateTime.now();
 		Long userId = 1L;
+		String emailUpdates = "emailUpdates";
+		String value = "NEVER";
 
-		pi.setEmailUpdates(emailUpdates);
-		pi.setGraduationDate(now);
-		pi.setPhoneNumber(phoneNumber);
-		pi.setUserId(userId);
+		User u = Mockito.mock(User.class);
+		AccountSetting as = new AccountSetting();
+		as.setName(emailUpdates);
+		as.setUserId(userId);
+		as.setValue(value);
 
-		service.savePersonalInformation(pi);
+		Mockito.when(u.getUserId()).thenReturn(userId);
 
-		PersonalInformation information = service
-				.getUserPersonalInformation(userId);
-		Assert.assertEquals(emailUpdates, information.getEmailUpdates());
-		Assert.assertEquals(phoneNumber, information.getPhoneNumber());
-		Assert.assertEquals(now, information.getGraduationDate());
-		Assert.assertEquals(userId, information.getUserId());
+		service.setAccountSetting(u, as);
+
+		AccountSetting setting = service.getAccountSetting(u, emailUpdates);
+		Assert.assertEquals(emailUpdates, setting.getName());
+		Assert.assertEquals(value, setting.getValue());
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void savePersonalInformationWrongId() {
-		PersonalInformation pi = new PersonalInformation();
+	public void saveAccountSettingWrongId() {
 		Long userId = -1L;
-		LocalDateTime now = LocalDateTime.now();
+		AccountSetting as = new AccountSetting();
+		User u = Mockito.mock(User.class);
 
-		pi.setUserId(userId);
-		pi.setGraduationDate(now);
+		Mockito.when(u.getUserId()).thenReturn(userId);
+		as.setName("data-integrity");
+		as.setUserId(userId);
+		as.setValue("data-integrity");
 
-		service.savePersonalInformation(pi);
-
-		PersonalInformation information = service
-				.getUserPersonalInformation(userId);
-
-		Assert.assertTrue(information == null);
+		service.setAccountSetting(u, as);
 	}
 }

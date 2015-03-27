@@ -11,6 +11,19 @@ public class AccountSetting {
 	private String value;
 	private String privacy;
 
+	public AccountSetting() {
+	}
+
+	public AccountSetting(Long accountSettingId, Long userId, String name,
+			String value, String privacy) {
+		super();
+		this.accountSettingId = accountSettingId;
+		this.userId = userId;
+		this.name = name;
+		this.value = value;
+		this.privacy = privacy;
+	}
+
 	public Long getAccountSettingId() {
 		return accountSettingId;
 	}

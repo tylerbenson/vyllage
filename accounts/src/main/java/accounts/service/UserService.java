@@ -15,13 +15,11 @@ import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
 import accounts.model.account.AccountNames;
-import accounts.model.account.PersonalInformation;
 import accounts.model.account.settings.AccountSetting;
 import accounts.repository.AccountSettingRepository;
 import accounts.repository.OrganizationMemberRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.OrganizationRoleRepository;
-import accounts.repository.PersonalInformationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
@@ -45,9 +43,6 @@ public class UserService {
 
 	@Autowired
 	private UserDetailRepository userRepository;
-
-	@Autowired
-	private PersonalInformationRepository pInformation;
 
 	@Autowired
 	private AccountSettingRepository settingRepository;
@@ -147,15 +142,6 @@ public class UserService {
 		return "users";
 	}
 
-	public PersonalInformation getUserPersonalInformation(Long userId) {
-		return pInformation.get(userId);
-	}
-
-	public void savePersonalInformation(
-			PersonalInformation userPersonalInformation) {
-		pInformation.save(userPersonalInformation);
-	}
-
 	public List<AccountNames> getNames(List<Long> userIds) {
 		return userRepository.getNames(userIds);
 	}
@@ -165,8 +151,7 @@ public class UserService {
 	}
 
 	public List<AccountSetting> getAccountSettings(User user) {
-		// TODO Auto-generated method stub
-		return null;
+		return settingRepository.getAccountSettings(user);
 	}
 
 	public AccountSetting getAccountSetting(User user, String settingName) {
@@ -192,9 +177,78 @@ public class UserService {
 			break;
 
 		default:
-
+			setting = settingRepository.get(user.getUserId(), settingName);
 			break;
 		}
 		return setting;
+	}
+
+	public void setAccountSetting(User user, AccountSetting setting) {
+
+		if (setting.getUserId() == null)
+			setting.setUserId(user.getUserId());
+
+		switch (setting.getName()) {
+		case "firstName":
+			setFirstName(user, setting);
+			settingRepository.set(user.getUserId(), setting);
+			break;
+
+		case "middleName":
+			setMiddleName(user, setting);
+			settingRepository.set(user.getUserId(), setting);
+			break;
+
+		case "lastName":
+			setLastName(user, setting);
+			settingRepository.set(user.getUserId(), setting);
+			break;
+
+		default:
+			settingRepository.set(user.getUserId(), setting);
+			break;
+		}
+	}
+
+	/**
+	 * Updates the user's name.
+	 * 
+	 * @param user
+	 * @param setting
+	 */
+	protected void setFirstName(User user, AccountSetting setting) {
+
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			user.setFirstName(setting.getValue());
+			this.update(user);
+		}
+	}
+
+	/**
+	 * Updates the user's name.
+	 * 
+	 * @param user
+	 * @param setting
+	 */
+	protected void setMiddleName(User user, AccountSetting setting) {
+
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			user.setMiddleName(setting.getValue());
+			this.update(user);
+		}
+	}
+
+	/**
+	 * Updates the user's name.
+	 * 
+	 * @param user
+	 * @param setting
+	 */
+	protected void setLastName(User user, AccountSetting setting) {
+
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			user.setLastName(setting.getValue());
+			this.update(user);
+		}
 	}
 }

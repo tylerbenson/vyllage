@@ -21,17 +21,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import accounts.model.User;
 import accounts.model.account.AccountNames;
-import accounts.model.account.EmailUpdates;
-import accounts.model.account.PersonalInformation;
 import accounts.model.account.settings.AccountSetting;
-import accounts.model.account.settings.AddressSetting;
-import accounts.model.account.settings.EmailUpdateSetting;
-import accounts.model.account.settings.PhoneNumberSetting;
-import accounts.repository.UserNotFoundException;
 import accounts.service.UserService;
 
 @Controller
-@RequestMapping("account/settings")
+@RequestMapping("account")
 public class AccountSettingsController {
 
 	// private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss.SSS";
@@ -44,6 +38,7 @@ public class AccountSettingsController {
 	@Autowired
 	private UserService userService;
 
+	// for header
 	@ModelAttribute("accountName")
 	public AccountNames accountNames() {
 		User user = getUser();
@@ -52,14 +47,13 @@ public class AccountSettingsController {
 		return name;
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String accountSettings() throws UserNotFoundException {
+	@RequestMapping(value = "settings", method = RequestMethod.GET)
+	public String accountSettings() {
 		return "settings";
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	public List<AccountSetting> getAccountSettings()
-			throws UserNotFoundException {
+	@RequestMapping(value = "settings", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<AccountSetting> getAccountSettings() {
 		User user = getUser();
 
 		List<AccountSetting> settings = userService.getAccountSettings(user);
@@ -86,28 +80,34 @@ public class AccountSettingsController {
 		return settings;
 	}
 
-	@RequestMapping(value = "{parameter}", method = RequestMethod.GET)
-	public @ResponseBody AccountSetting getFirstName(
+	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET)
+	public @ResponseBody AccountSetting getAccountSetting(
 			@PathVariable String parameter) {
 		return userService.getAccountSetting(getUser(), parameter);
 	}
 
-	@RequestMapping(value = "names", method = RequestMethod.PUT)
+	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void setNames(@RequestBody AccountNames names) {
-		User user = getUser();
-
-		if (names.getFirstName() != null && names.getFirstName().isEmpty())
-			user.setFirstName(names.getFirstName());
-
-		if (names.getMiddleName() != null && names.getMiddleName().isEmpty())
-			user.setMiddleName(names.getMiddleName());
-
-		if (names.getLastName() != null && names.getLastName().isEmpty())
-			user.setLastName(names.getLastName());
-
-		userService.update(user);
+	public void setAccountSetting(@RequestBody AccountSetting setting) {
+		userService.setAccountSetting(getUser(), setting);
 	}
+
+	// @RequestMapping(value = "names", method = RequestMethod.PUT)
+	// @ResponseStatus(value = HttpStatus.OK)
+	// public void setNames(@RequestBody AccountNames names) {
+	// User user = getUser();
+	//
+	// if (names.getFirstName() != null && names.getFirstName().isEmpty())
+	// user.setFirstName(names.getFirstName());
+	//
+	// if (names.getMiddleName() != null && names.getMiddleName().isEmpty())
+	// user.setMiddleName(names.getMiddleName());
+	//
+	// if (names.getLastName() != null && names.getLastName().isEmpty())
+	// user.setLastName(names.getLastName());
+	//
+	// userService.update(user);
+	// }
 
 	// @RequestMapping(value = "organization", method = RequestMethod.PUT)
 	// @ResponseStatus(value = HttpStatus.OK)
@@ -116,45 +116,6 @@ public class AccountSettingsController {
 	// User user = getUser();
 	//
 	// }
-
-	@RequestMapping(value = "address", method = RequestMethod.PUT)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void setAddres(@RequestBody AddressSetting address) {
-		Long userId = getUserId();
-
-		PersonalInformation userPersonalInformation = userService
-				.getUserPersonalInformation(userId);
-		userPersonalInformation.setAddress(address.getValue());
-		userService.savePersonalInformation(userPersonalInformation);
-	}
-
-	@RequestMapping(value = "phoneNumber", method = RequestMethod.PUT)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void savePhoneNumber(@RequestBody PhoneNumberSetting phoneNumber) {
-		Long userId = getUserId();
-
-		PersonalInformation userPersonalInformation = userService
-				.getUserPersonalInformation(userId);
-		userPersonalInformation.setPhoneNumber(phoneNumber.getValue());
-		userService.savePersonalInformation(userPersonalInformation);
-	}
-
-	@RequestMapping(value = "emailUpdates", method = RequestMethod.PUT)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void saveEmailUpdates(@RequestBody EmailUpdateSetting emailUpdates) {
-		Long userId = getUserId();
-
-		try {
-			EmailUpdates.valueOf(emailUpdates.getValue().toUpperCase());
-		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("Invalid time interval.");
-		}
-
-		PersonalInformation userPersonalInformation = userService
-				.getUserPersonalInformation(userId);
-		userPersonalInformation.setEmailUpdates(emailUpdates.getValue());
-		userService.savePersonalInformation(userPersonalInformation);
-	}
 
 	// @RequestMapping(value = "graduationDate", method = RequestMethod.PUT)
 	// @ResponseStatus(value = HttpStatus.OK)
