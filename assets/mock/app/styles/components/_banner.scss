@@ -14,8 +14,9 @@
     }
     .tagline {
       background: none;
-      color: $tagline-color;
       border: none;
+      color: $tagline-color;
+      padding: 0;
       width: 100%;
     }
     .address {
