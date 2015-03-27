@@ -21,6 +21,7 @@ import accounts.model.BatchAccount;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
 import accounts.model.account.settings.AccountSetting;
+import accounts.repository.UserNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -126,7 +127,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void savePersonalInformation() {
+	public void saveAccountSetting() {
 		Long userId = 1L;
 		String emailUpdates = "emailUpdates";
 		String value = "NEVER";
@@ -144,6 +145,30 @@ public class UserServiceTest {
 		AccountSetting setting = service.getAccountSetting(u, emailUpdates);
 		Assert.assertEquals(emailUpdates, setting.getName());
 		Assert.assertEquals(value, setting.getValue());
+	}
+
+	@Test
+	public void saveAccountSettingFirstName() throws UserNotFoundException {
+		Long userId = 1L;
+		String fieldName = "firstName";
+		String value = "Demogorgon";
+
+		User u = service.getUser(userId);
+		AccountSetting as = new AccountSetting();
+		as.setName(fieldName);
+		as.setUserId(userId);
+		as.setValue(value);
+
+		Mockito.when(u.getUserId()).thenReturn(userId);
+
+		service.setAccountSetting(u, as);
+
+		AccountSetting setting = service.getAccountSetting(u, fieldName);
+		Assert.assertEquals(fieldName, setting.getName());
+		Assert.assertEquals(value, setting.getValue());
+
+		User u2 = service.getUser(userId);
+		Assert.assertEquals(value, u2.getFirstName());
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
