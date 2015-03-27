@@ -49,7 +49,15 @@ insert into documents.document_sections(id, sectionVersion, documentId, position
 	"title": "skills",
 	"sectionId": 126,
 	"sectionPosition": 4,
-	"description": "basket weaving, spear fishing, dominion"
+	"description": "basket weaving"
+}',CURRENT_DATE, CURRENT_DATE);
+
+insert into documents.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(127, 1, 0, 5, '{
+	"type": "freeform",
+	"title": "skills",
+	"sectionId": 127,
+	"sectionPosition": 5,
+	"description": "spear fishing"
 }',CURRENT_DATE, CURRENT_DATE);
 
 insert into documents.comments(comment_id, section_Id, section_Version, user_id, comment_Text, last_Modified) values(0, 124, 1, 3, 'Its a me, Mario!', CURRENT_DATE);
