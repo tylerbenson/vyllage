@@ -45,7 +45,6 @@ module.exports = Reflux.createStore({
       }.bind(this))            
   },
   onGetSections: function () {
-    console.log('aa', document.cookie);
     var url = urlTemplate
                 .parse(endpoints.resumeSections)
                 .expand({documentId: this.documentId});
@@ -55,9 +54,11 @@ module.exports = Reflux.createStore({
         if (res.ok) {
           this.resume.sections = res.body;
           // Fetch comments for numberOfComments in a section is > 0
-          this.resume.sections.map(function(section) {
-
-          })
+          // this.resume.sections.map(function(section) {
+          //   if (section.numberOfComments > 0) {
+          //     this.onGetComments(section.sectionId)
+          //   }
+          // }.bind(this))
           this.trigger(this.resume);
         } 
       }.bind(this))
