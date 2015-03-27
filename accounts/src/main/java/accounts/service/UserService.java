@@ -16,6 +16,8 @@ import accounts.model.User;
 import accounts.model.UserFilterRequest;
 import accounts.model.account.AccountNames;
 import accounts.model.account.PersonalInformation;
+import accounts.model.account.settings.AccountSetting;
+import accounts.repository.AccountSettingRepository;
 import accounts.repository.OrganizationMemberRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.OrganizationRoleRepository;
@@ -46,6 +48,9 @@ public class UserService {
 
 	@Autowired
 	private PersonalInformationRepository pInformation;
+
+	@Autowired
+	private AccountSettingRepository settingRepository;
 
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
@@ -159,4 +164,37 @@ public class UserService {
 		userRepository.updateUser(user);
 	}
 
+	public List<AccountSetting> getAccountSettings(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public AccountSetting getAccountSetting(User user, String settingName) {
+		assert settingName != null;
+		AccountSetting setting = null;
+
+		// it's been a while, it works fine for this.
+		switch (settingName) {
+
+		case "firstName":
+			setting = settingRepository.get(user.getUserId(), settingName);
+			setting.setValue(user.getFirstName());
+			break;
+
+		case "middleName":
+			setting = settingRepository.get(user.getUserId(), settingName);
+			setting.setValue(user.getMiddleName());
+			break;
+
+		case "lastName":
+			setting = settingRepository.get(user.getUserId(), settingName);
+			setting.setValue(user.getLastName());
+			break;
+
+		default:
+
+			break;
+		}
+		return setting;
+	}
 }

@@ -1,9 +1,9 @@
 package accounts.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,9 +21,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import accounts.model.User;
 import accounts.model.account.AccountNames;
-import accounts.model.account.AccountSettings;
 import accounts.model.account.EmailUpdates;
 import accounts.model.account.PersonalInformation;
+import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.AddressSetting;
 import accounts.model.account.settings.EmailUpdateSetting;
 import accounts.model.account.settings.PhoneNumberSetting;
@@ -52,33 +53,43 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String getAccountSettings() throws UserNotFoundException {
-		User user = getUser();
-
-		AccountSettings accountSettings = new AccountSettings();
-		accountSettings.setFirstName(user.getFirstName());
-		accountSettings.setMiddleName(user.getMiddleName());
-		accountSettings.setLastName(user.getLastName());
-		accountSettings.setEmail(user.getUsername());
-		accountSettings.setLastUpdate(user.getLastModified());
-		accountSettings.setMemberSince(user.getDateCreated());
-
-		if (user.getAuthorities() != null && !user.getAuthorities().isEmpty())
-			accountSettings.setRole(user.getAuthorities().stream()
-					.map(r -> r.getAuthority())
-					.collect(Collectors.joining(", ")));
-
-		PersonalInformation userPersonalInformation = userService
-				.getUserPersonalInformation(user.getUserId());
-
-		accountSettings.setUserPersonalInformation(userPersonalInformation);
-
+	public String accountSettings() throws UserNotFoundException {
 		return "settings";
 	}
 
-	@RequestMapping(value = "names", method = RequestMethod.GET)
-	public @ResponseBody AccountNames getNames() {
-		return accountNames();
+	@RequestMapping(method = RequestMethod.GET)
+	public List<AccountSetting> getAccountSettings()
+			throws UserNotFoundException {
+		User user = getUser();
+
+		List<AccountSetting> settings = userService.getAccountSettings(user);
+
+		// AccountSettings accountSettings = new AccountSettings();
+		// accountSettings.setFirstName(user.getFirstName());
+		// accountSettings.setMiddleName(user.getMiddleName());
+		// accountSettings.setLastName(user.getLastName());
+		// accountSettings.setEmail(user.getUsername());
+		// accountSettings.setLastUpdate(user.getLastModified());
+		// accountSettings.setMemberSince(user.getDateCreated());
+		//
+		// if (user.getAuthorities() != null &&
+		// !user.getAuthorities().isEmpty())
+		// accountSettings.setRole(user.getAuthorities().stream()
+		// .map(r -> r.getAuthority())
+		// .collect(Collectors.joining(", ")));
+		//
+		// PersonalInformation userPersonalInformation = userService
+		// .getUserPersonalInformation(user.getUserId());
+		//
+		// accountSettings.setUserPersonalInformation(userPersonalInformation);
+
+		return settings;
+	}
+
+	@RequestMapping(value = "{parameter}", method = RequestMethod.GET)
+	public @ResponseBody AccountSetting getFirstName(
+			@PathVariable String parameter) {
+		return userService.getAccountSetting(getUser(), parameter);
 	}
 
 	@RequestMapping(value = "names", method = RequestMethod.PUT)
@@ -106,17 +117,6 @@ public class AccountSettingsController {
 	//
 	// }
 
-	@RequestMapping(value = "address", method = RequestMethod.GET)
-	public @ResponseBody AddressSetting getAddres() {
-		Long userId = getUserId();
-		AddressSetting addressSetting = new AddressSetting();
-
-		PersonalInformation userPersonalInformation = userService
-				.getUserPersonalInformation(userId);
-		addressSetting.setValue(userPersonalInformation.getAddress());
-		return addressSetting;
-	}
-
 	@RequestMapping(value = "address", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void setAddres(@RequestBody AddressSetting address) {
@@ -128,17 +128,6 @@ public class AccountSettingsController {
 		userService.savePersonalInformation(userPersonalInformation);
 	}
 
-	@RequestMapping(value = "phoneNumber", method = RequestMethod.GET)
-	public @ResponseBody PhoneNumberSetting getPhoneNumber() {
-		Long userId = getUserId();
-		PhoneNumberSetting phoneNumberSetting = new PhoneNumberSetting();
-
-		PersonalInformation userPersonalInformation = userService
-				.getUserPersonalInformation(userId);
-		phoneNumberSetting.setValue(userPersonalInformation.getPhoneNumber());
-		return phoneNumberSetting;
-	}
-
 	@RequestMapping(value = "phoneNumber", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void savePhoneNumber(@RequestBody PhoneNumberSetting phoneNumber) {
@@ -148,17 +137,6 @@ public class AccountSettingsController {
 				.getUserPersonalInformation(userId);
 		userPersonalInformation.setPhoneNumber(phoneNumber.getValue());
 		userService.savePersonalInformation(userPersonalInformation);
-	}
-
-	@RequestMapping(value = "emailUpdates", method = RequestMethod.GET)
-	public @ResponseBody EmailUpdateSetting getEmailUpdates() {
-		Long userId = getUserId();
-		EmailUpdateSetting emailUpdateSetting = new EmailUpdateSetting();
-
-		PersonalInformation userPersonalInformation = userService
-				.getUserPersonalInformation(userId);
-		emailUpdateSetting.setValue(userPersonalInformation.getEmailUpdates());
-		return emailUpdateSetting;
 	}
 
 	@RequestMapping(value = "emailUpdates", method = RequestMethod.PUT)
