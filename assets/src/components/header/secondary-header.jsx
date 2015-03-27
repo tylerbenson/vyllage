@@ -38,8 +38,8 @@ var SecondaryHeader = React.createClass({
                   <a className="u-pull-left share" onClick={this.share}> 
                     <i className="icon ion-android-share-alt"></i>  share
                   </a>  
-                  <a className="u-pull-left export"  onClick={this.exportMenu}>
-                    <i className="icon ion-archive"></i>  export 
+                  <a className="u-pull-left export">
+                    <i className="icon ion-printer"></i>  Print 
                   </a>
                  <button className="u-pull-left ask-advice-btn" onClick={this.askAdvise}> 
                     <i className="icon ion-person-stalker"></i>  ask advice
