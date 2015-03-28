@@ -35,13 +35,19 @@ public class AccountSettingRepository {
 				.collect(Collectors.toList());
 	}
 
-	public AccountSetting get(Long userId, String settingName) {
+	public AccountSetting get(Long userId, String settingName)
+			throws ElementNotFoundException {
 		AccountSetting setting = new AccountSetting();
 
 		AccountSettingRecord settingRecord = sql.fetchOne(
 				ACCOUNT_SETTING,
 				ACCOUNT_SETTING.USER_ID.eq(userId).and(
 						ACCOUNT_SETTING.NAME.eq(settingName)));
+
+		if (settingRecord == null)
+			throw new ElementNotFoundException("The setting with name '"
+					+ settingName + "' for User with id '" + userId
+					+ "' could not be found.");
 
 		setting.setAccountSettingId(settingRecord.getAccountSettingId());
 		setting.setName(settingRecord.getName());

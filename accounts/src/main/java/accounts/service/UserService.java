@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import accounts.model.BatchAccount;
+import accounts.model.Organization;
 import accounts.model.OrganizationRole;
 import accounts.model.Role;
 import accounts.model.User;
@@ -17,6 +18,7 @@ import accounts.model.UserFilterRequest;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.repository.AccountSettingRepository;
+import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationMemberRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.OrganizationRoleRepository;
@@ -154,11 +156,12 @@ public class UserService {
 		return settingRepository.getAccountSettings(user);
 	}
 
-	public AccountSetting getAccountSetting(User user, String settingName) {
+	public AccountSetting getAccountSetting(User user, String settingName)
+			throws ElementNotFoundException {
 		assert settingName != null;
 		AccountSetting setting = null;
 
-		// it's been a while, it works fine for this.
+		// it's been a while since I used one, it works fine for this.
 		switch (settingName) {
 
 		case "firstName":
@@ -176,6 +179,18 @@ public class UserService {
 			setting.setValue(user.getLastName());
 			break;
 
+		case "role":
+			// normal users should always have 1 role only
+			setting = settingRepository.get(user.getUserId(), settingName);
+			setting.setValue(user.getAuthorities().iterator().next()
+					.getAuthority());
+			break;
+		case "organization":
+			// normal users should always have 1 organization only
+			setting = settingRepository.get(user.getUserId(), settingName);
+			setting.setValue(getOrganizationsForUser(user).get(0)
+					.getOrganizationName());
+			break;
 		default:
 			setting = settingRepository.get(user.getUserId(), settingName);
 			break;
@@ -203,11 +218,28 @@ public class UserService {
 			setLastName(user, setting);
 			settingRepository.set(user.getUserId(), setting);
 			break;
-
+		// Role and organization only save the privacy settings, they cannot be
+		// modified
+		// case "role":
+		// break;
+		// case "organization":
+		// break;
 		default:
 			settingRepository.set(user.getUserId(), setting);
 			break;
 		}
+	}
+
+	/**
+	 * Returns the list of organizations a given user belongs too.
+	 * 
+	 * @param user
+	 * @return
+	 */
+	protected List<Organization> getOrganizationsForUser(User user) {
+		String authority = user.getAuthorities().iterator().next()
+				.getAuthority();
+		return organizationRepository.getOrganizationFromAuthority(authority);
 	}
 
 	/**

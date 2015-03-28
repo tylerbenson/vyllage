@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import accounts.model.User;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
+import accounts.repository.ElementNotFoundException;
 import accounts.service.UserService;
 
 @Controller
@@ -47,7 +48,7 @@ public class AccountSettingsController {
 		return name;
 	}
 
-	@RequestMapping(value = "settings", method = RequestMethod.GET)
+	@RequestMapping(value = "settings", method = RequestMethod.GET, produces = "text/html")
 	public String accountSettings() {
 		return "settings";
 	}
@@ -82,7 +83,7 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET)
 	public @ResponseBody AccountSetting getAccountSetting(
-			@PathVariable String parameter) {
+			@PathVariable String parameter) throws ElementNotFoundException {
 		return userService.getAccountSetting(getUser(), parameter);
 	}
 
@@ -91,23 +92,6 @@ public class AccountSettingsController {
 	public void setAccountSetting(@RequestBody AccountSetting setting) {
 		userService.setAccountSetting(getUser(), setting);
 	}
-
-	// @RequestMapping(value = "names", method = RequestMethod.PUT)
-	// @ResponseStatus(value = HttpStatus.OK)
-	// public void setNames(@RequestBody AccountNames names) {
-	// User user = getUser();
-	//
-	// if (names.getFirstName() != null && names.getFirstName().isEmpty())
-	// user.setFirstName(names.getFirstName());
-	//
-	// if (names.getMiddleName() != null && names.getMiddleName().isEmpty())
-	// user.setMiddleName(names.getMiddleName());
-	//
-	// if (names.getLastName() != null && names.getLastName().isEmpty())
-	// user.setLastName(names.getLastName());
-	//
-	// userService.update(user);
-	// }
 
 	// @RequestMapping(value = "organization", method = RequestMethod.PUT)
 	// @ResponseStatus(value = HttpStatus.OK)
@@ -153,6 +137,7 @@ public class AccountSettingsController {
 		return map;
 	}
 
+	@SuppressWarnings("unused")
 	private Long getUserId() {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();

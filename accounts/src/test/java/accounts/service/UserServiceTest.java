@@ -21,6 +21,7 @@ import accounts.model.BatchAccount;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
 import accounts.model.account.settings.AccountSetting;
+import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -127,7 +128,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void saveAccountSetting() {
+	public void saveAccountSetting() throws ElementNotFoundException {
 		Long userId = 1L;
 		String emailUpdates = "emailUpdates";
 		String value = "NEVER";
@@ -148,7 +149,8 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void saveAccountSettingFirstName() throws UserNotFoundException {
+	public void saveAccountSettingFirstName() throws UserNotFoundException,
+			ElementNotFoundException {
 		Long userId = 1L;
 		String fieldName = "firstName";
 		String value = "Demogorgon";
@@ -184,4 +186,5 @@ public class UserServiceTest {
 
 		service.setAccountSetting(u, as);
 	}
+
 }
