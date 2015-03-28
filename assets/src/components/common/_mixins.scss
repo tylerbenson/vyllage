@@ -15,7 +15,6 @@
 	font-size: 17px;
 	font-weight: inherit;
 	line-height: 18px;
-	font-family: 'Arimo', sans-serif;
 	text-transform: inherit;
 	letter-spacing: inherit;
 	color: $color;
@@ -111,7 +110,6 @@
 
 @mixin shareInfo () {
 	background-color: $share-info-bkg-color;
-	font-family: 'PT Sans';
 	color: $share-info-txt-color;
 }
 
@@ -123,7 +121,6 @@
 
 @mixin loginInputFields() {
 	font-size: 28px;
-	font-family: 'sans-serif';
 	height: 66px;
 	padding-left: 32px;
 	width: 372px;
@@ -142,7 +139,6 @@
 }
 
 @mixin rqstKeyWord() {
-	font-family: 'Arimo';
 	font-size: 24px;
 	float: left;
 }
@@ -192,7 +188,6 @@
 	background-color: $white;
 	width: 170px;
 	list-style-type: none;
-	font-family: 'PT Sans', sans-serif;
 }
 
 @mixin menu-list-item() {
