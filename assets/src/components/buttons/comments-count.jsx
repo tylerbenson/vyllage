@@ -3,11 +3,10 @@ var React = require('react');
 var CommentsCount = React.createClass({
   render: function() {
     return (
-      <a className="number-buttons comments">
-        <i className="icon ion-chatbox"></i>
-        <span className="number comments"> {this.props.count} </span>
-        comments
-      </a>
+      <button className="flat" onClick={this.props.onClick}>
+        <i className="ion-chatbox"></i>
+        {this.props.count} comments
+      </button>
     );
   }
 });

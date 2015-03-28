@@ -29,12 +29,12 @@ var ResumeEditor = React.createClass({
       <div>
         <Subheader documentId={this.state.resume.documentId}/>
         <Banner profileData={profileData} contactData={contactData}/>
-        <section className="container">
+        <div className="sections">
           <CareerGoal careerGoal={careerGoal} />
           <Experience sections={experienceSections} />
           <Education sections={educationSections} />
           <Skill sections={skillSections} />
-        </section>
+        </div>
       </div>
     );
   }

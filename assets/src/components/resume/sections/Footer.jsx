@@ -11,12 +11,12 @@ var SectionFooter = React.createClass({
   render: function () {
     var numberOfComments = this.props.section && this.props.section.numberOfComments;
     return (
-      <div>
-         <div className='row resume-section-footer'>
-          <p className='u-pull-left update-time'>Updated just now</p>
-          <span className='u-pull-right' onClick={this.clickComments}>
-            <CommentsCount count={numberOfComments} />
-          </span> 
+      <div className='footer'>
+        <div className='content'>
+          <p className='timestamp'>Updated just now</p>
+          <div className='actions'>
+            <CommentsCount count={numberOfComments} onClick={this.clickComments}/>
+          </div> 
         </div>
         <Comments section={this.props.section} />
       </div>

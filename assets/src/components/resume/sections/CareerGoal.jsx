@@ -7,9 +7,9 @@ var SectionFooter = require('./Footer');
 var CareerGoal = React.createClass({
   render: function () {
     return (
-      <div className='resume-section'>
-        <Header title='Career Goal' /> 
-        <div>
+      <div className='section'>
+        <div className='content'>
+          <Header title='Career Goal' /> 
           <Freeform title='Career Goal' section={this.props.careerGoal} />
           <SectionFooter section={this.props.careerGoal} />
         </div>

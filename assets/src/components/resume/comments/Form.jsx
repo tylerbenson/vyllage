@@ -21,13 +21,15 @@ var CommentForm = React.createClass({
   },
   render: function () {
     return (
-      <div className='row comment-form'>
-        <textarea
-          className='offset-by-two seven columns'
-          placeholder='share your advice'
-          onChange={this.changeHandler}
-          value={this.state.value}></textarea>
-        <button className='button button-primary' onClick={this.commentHandler}>Send</button>
+      <div className='comment-box'>
+        <div className='content'>
+          <textarea
+            rows='1'
+            placeholder='share your advice'
+            onChange={this.changeHandler}
+            value={this.state.value}></textarea>
+          <button onClick={this.commentHandler}>Submit</button>
+        </div>
       </div>
     );
   }

@@ -8,10 +8,13 @@ var CommentList = React.createClass({
   render: function () {
     var comments = this.props.comments || [];
     var commentNodes = comments.map(function (comment, index) {
-      return <div key={index} className='row comment'>
-              <div className='offset-by-two seven columns'>
-                <div className="comment-name">{comment.userName}</div>
-                <div className="comment-text">
+      return <div key={index} className='comment'>
+              <div className='content'>
+                <div className='info'>
+                  <div className="author">{comment.userName}</div>
+                  <div className="timestamp">3 minutes ago</div>
+                </div>  
+                <div className="message">
                   {comment.commentText}
                 </div>
               </div>
@@ -19,7 +22,7 @@ var CommentList = React.createClass({
 
     });
     return (
-      <div className='comment-list-block'>
+      <div>
         {commentNodes}
       </div>
     );

@@ -5,18 +5,13 @@ var Edit = require('./Edit');
 var Freeform = React.createClass({
   getDefaultProps: function () {
     return {
-      className: 'freeform',
       section: {}
     };
   },
   render: function () {
     var uiEditMode = this.props.section.uiEditMode;
     return (
-      <div className ="row">
-        <div className={this.props.className}>
-          {uiEditMode ? <Edit {...this.props} />: <Preview {...this.props}/>}
-        </div>
-      </div>
+      <div></div>
     );
   }
 });
