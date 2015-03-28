@@ -9,7 +9,6 @@ var Experience = require('./sections/Experience');
 var Education = require('./sections/Education');
 var Skill = require('./sections/Skill');
 var Banner = require('./banner');
-var Footer = require('../footer/footer');
 
 var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
@@ -28,7 +27,7 @@ var ResumeEditor = React.createClass({
     var contactData = this.state.resume.contact;
     return (
       <div>
-        <Subheader />
+        <Subheader documentId={this.state.resume.documentId}/>
         <Banner profileData={profileData} contactData={contactData}/>
         <section className="container">
           <CareerGoal careerGoal={careerGoal} />
@@ -36,7 +35,6 @@ var ResumeEditor = React.createClass({
           <Education sections={educationSections} />
           <Skill sections={skillSections} />
         </section>
-        <Footer />
       </div>
     );
   }

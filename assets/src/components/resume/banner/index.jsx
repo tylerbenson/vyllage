@@ -3,7 +3,7 @@ var Headline = require('./Headline');
 var Tagline = require('./Tagline');
 // var actions = require('../actions');
 
-var Header = React.createClass({ 
+var Banner = React.createClass({ 
   render: function() {
     var profileData = this.props.profileData || {};
     var contactData = this.props.contactData || {};
@@ -29,19 +29,19 @@ var Header = React.createClass({
             </div>
           </div>
           <div className="contact">
-            <a href="">
+            <a>
               <i className="ion-email"></i>
               jamesfranco@gmail.com
             </a>
-            <a href="">
+            <a>
               <i className="ion-ios-telephone"></i>
               64 917 3984 598
             </a>
-            <a href="">
+            <a>
               <i className="ion-social-facebook"></i>
               james.franco
             </a>
-            <a href="">
+            <a>
               <i className="ion-social-twitter"></i>
               @thisisjames
             </a>
@@ -52,5 +52,5 @@ var Header = React.createClass({
     }
 });
 
-module.exports = Header;
+module.exports = Banner;
 

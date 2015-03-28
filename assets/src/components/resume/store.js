@@ -12,7 +12,10 @@ module.exports = Reflux.createStore({
     this.tokenHeader = document.getElementById('meta_header').content,
     this.tokenValue = document.getElementById('meta_token').content;
     this.documentId = window.location.pathname.split('/')[2];
-    this.resume = {}; 
+    this.resume = {
+      documentId: this.documentId,
+      sections: []
+    }; 
   },
   onGetResume: function () {
     this.onGetHeader();
