@@ -1,24 +1,17 @@
+@import "./components/common/variables";
+
 @import "normalize-scss/normalize";
-@import "jeet/scss/jeet/index";
-// @import "skeleton-scss/scss/skeleton";
 @import "ionicons/scss/ionicons";
+@import "jeet/scss/jeet/index";
 
-@import "./components/globals/colors";
-@import "./components/globals/utilities";
-@import "./components/globals/defaults";
-@import "./components/globals/typography";
+@import "./components/common/index";
 
-@import "./components/common/align";
 @import "./components/modal/modal";
 @import "./components/buttons/buttons";
-@import "./components/typography/typography";
+@import "./components/header/header";
 
 
 .error {
   color: red;
 } 
 
-//This class is added by react-contenteditable components of contenteditable elements
-.react-contenteditable {
-  outline: 0px solid transparent; // Removes border around contenteditable element
-}

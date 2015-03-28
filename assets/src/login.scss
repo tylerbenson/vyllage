@@ -1,86 +1,86 @@
-@import './components/common/variables';
-@import './components/common/mixins';
+// @import './components/common/variables';
+// @import './components/common/mixins';
 
-#login {
-  background: url('../../images/banner.jpg') repeat;
-  min-height: 850px;
- 	min-width: $main-container-width;
-  padding: 60px;
-  color: $white;
+// #login {
+//   background: url('../../images/banner.jpg') repeat;
+//   min-height: 850px;
+//  	min-width: $main-container-width;
+//   padding: 60px;
+//   color: $white;
 
-  .logo {
-  	background: url('../../images/logo-orange.png') no-repeat;
-  	span {
-		  padding-left: 40px;
-		  font-size: 34px;
-		  font-weight: 700;
-		  line-height: 48px;
-  	} 
-  }
-  .description-text {
-  	margin-top: 100px;
-  	width: 350px;
+//   .logo {
+//   	background: url('../../images/logo-orange.png') no-repeat;
+//   	span {
+// 		  padding-left: 40px;
+// 		  font-size: 34px;
+// 		  font-weight: 700;
+// 		  line-height: 48px;
+//   	} 
+//   }
+//   .description-text {
+//   	margin-top: 100px;
+//   	width: 350px;
 
-		.content {
-	  	font-weight: 400;
-	    font-size:36px;
-	    line-height: 46px;
-      letter-spacing: 1.5px;	  
-	  }
-	  .author {
-	  	margin-top: 20px;
-	  	font-weight: 400;
-	    font-size:20px;
-	    line-height: 30px;	    
-	  }
-  }
+// 		.content {
+// 	  	font-weight: 400;
+// 	    font-size:36px;
+// 	    line-height: 46px;
+//       letter-spacing: 1.5px;	  
+// 	  }
+// 	  .author {
+// 	  	margin-top: 20px;
+// 	  	font-weight: 400;
+// 	    font-size:20px;
+// 	    line-height: 30px;	    
+// 	  }
+//   }
  
-  .login-box {
-  	@include login-box();
+//   .login-box {
+//   	@include login-box();
 
-  	.login-box-content {
-  		padding-left: 30px;
-  	}
-    a {
-	    color: $yellow-text-color;
-	    font-size: 16px;
-	    line-height: 18px;
-    }
+//   	.login-box-content {
+//   		padding-left: 30px;
+//   	}
+//     a {
+// 	    color: $yellow-text-color;
+// 	    font-size: 16px;
+// 	    line-height: 18px;
+//     }
 
-   input[type="text"], input[type="password"] {
-      width: 300px;
-		  height: 46px;
-		  border: 1px solid $login-black-txt;
-		  font-size: 18px;
-    }
-    .sign-in-txt {
-      color: $yellow-text-color;
-      font-size: 32px;
-      line-height: 32px;
-      padding-top:25px;
-      text-align:center;
-      margin: 0;
-    }
-    .submit-btn {
-    	@include submit-btn();
-		  margin-right: 45px;
-    }
-    .invalid {
-      color: $invalid-txt;
-      font-size:20px;
-      text-align:center;
-      margin-bottom: 0;
-    }
-    .box-txt {
-      font-size:15px;
-      color: $login-black-txt;
-      font-weight:400;
-      margin-top: 15px;
-    }
-    .divider {
-      height: 60px;
-      border-bottom: 1px solid #999;
-    }
-  }
-}
+//    input[type="text"], input[type="password"] {
+//       width: 300px;
+// 		  height: 46px;
+// 		  border: 1px solid $login-black-txt;
+// 		  font-size: 18px;
+//     }
+//     .sign-in-txt {
+//       color: $yellow-text-color;
+//       font-size: 32px;
+//       line-height: 32px;
+//       padding-top:25px;
+//       text-align:center;
+//       margin: 0;
+//     }
+//     .submit-btn {
+//     	@include submit-btn();
+// 		  margin-right: 45px;
+//     }
+//     .invalid {
+//       color: $invalid-txt;
+//       font-size:20px;
+//       text-align:center;
+//       margin-bottom: 0;
+//     }
+//     .box-txt {
+//       font-size:15px;
+//       color: $login-black-txt;
+//       font-weight:400;
+//       margin-top: 15px;
+//     }
+//     .divider {
+//       height: 60px;
+//       border-bottom: 1px solid #999;
+//     }
+//   }
+// }
 
