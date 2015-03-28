@@ -16,43 +16,43 @@
 <body>
   <form th:action="@{/login}" method="post">
     <section id="login">
-      <div class="row">
-        <div class="seven columns">
-          <div class="logo">
-            <span> Vyllage </span>
+      <div class="logo">
+        <span> Vyllage </span>
+      </div>
+      <div>
+        <div class="description-text">
+          <div class="content">
+            He who would do great things, should not attempt them alone
           </div>
-
-          <div class="description-text">
-            <div class="content">
-              <span> He who would do great things, should not attempt them alone </span>
-            </div>
-            <p class="author"> - Seneca &middot; AD 55 </p>
-          </div>
+          <div class="author"> - Seneca &middot; AD 55 </div>
         </div>
-        <div class="three columns">
-          <div class="login-box">
-            <p class="sign-in-txt">Sign In </p>
-            <div class="login-box-content">
-              <div th:if="${param.error}">
-                <p class="invalid">Invalid e-mail or password </p>
-              </div>
+        <div class="login-box">
+          <p class="sign-in-txt">Sign In </p>
+          <div class="login-box-content">
+            <div th:if="${param.error}">
+              <p class="invalid">Invalid e-mail or password </p>
+            </div>
+            <div>
               <label for="email" class="box-txt">E-email</label>
               <input type="text" class="input email" name="email" placeholder="email" />
+            </div>
 
+            <div>
               <label for="password" class="box-txt">Password</label>
               <input type="password" class="input password" name="password" placeholder="password" />
-
-              <p> <a href="#">Forgot password? </a>
-              </p>
-              <div>
-                <input type="submit" class="button submit-btn u-pull-right" value="Submit" />
-              </div>
-              <div class="divider"></div>
-              <p class="box-txt"> Don't have an account? <a href="#">Request for an invite.</a>
-              </p>
             </div>
+
+            <p> <a href="#">Forgot password? </a>
+            </p>
+            <div>
+              <input type="submit" class="button pull right" value="Submit" />
+            </div>
+            <div class="divider"></div>
+            <p class="box-txt"> Don't have an account? <a href="#">Request for an invite.</a>
+            </p>
           </div>
         </div>
+
       </div>
     </section>
   </form>
