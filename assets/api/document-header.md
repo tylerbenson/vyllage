@@ -17,7 +17,7 @@
 ## POST /resume/{documentId}/header*
 + Parameters
   + documentId (string, `1`) - The id of the document.
-+ Model (application/json)
++ Body (application/json)
 
   {
     "tagline":"This is my tagline."

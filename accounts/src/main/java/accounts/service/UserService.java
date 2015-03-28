@@ -10,15 +10,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import accounts.model.BatchAccount;
+import accounts.model.Organization;
 import accounts.model.OrganizationRole;
 import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
-import accounts.model.account.PersonalInformation;
 import accounts.model.account.AccountNames;
+import accounts.model.account.settings.AccountSetting;
+import accounts.repository.AccountSettingRepository;
+import accounts.repository.ElementNotFoundException;
+import accounts.repository.OrganizationMemberRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.OrganizationRoleRepository;
-import accounts.repository.PersonalInformationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
@@ -38,10 +41,13 @@ public class UserService {
 	private OrganizationRoleRepository organizationRoleRepository;
 
 	@Autowired
+	private OrganizationMemberRepository organizationMemberRepository;
+
+	@Autowired
 	private UserDetailRepository userRepository;
 
 	@Autowired
-	private PersonalInformationRepository pInformation;
+	private AccountSettingRepository settingRepository;
 
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
@@ -138,17 +144,143 @@ public class UserService {
 		return "users";
 	}
 
-	public PersonalInformation getUserPersonalInformation(Long userId) {
-		return pInformation.get(userId);
-	}
-
-	public void savePersonalInformation(
-			PersonalInformation userPersonalInformation) {
-		pInformation.save(userPersonalInformation);
-	}
-
 	public List<AccountNames> getNames(List<Long> userIds) {
-
 		return userRepository.getNames(userIds);
+	}
+
+	public void update(User user) {
+		userRepository.updateUser(user);
+	}
+
+	public List<AccountSetting> getAccountSettings(User user) {
+		return settingRepository.getAccountSettings(user);
+	}
+
+	public AccountSetting getAccountSetting(User user, String settingName)
+			throws ElementNotFoundException {
+		assert settingName != null;
+		AccountSetting setting = null;
+
+		// it's been a while since I used one, it works fine for this.
+		switch (settingName) {
+
+		case "firstName":
+			setting = settingRepository.get(user.getUserId(), settingName);
+			setting.setValue(user.getFirstName());
+			break;
+
+		case "middleName":
+			setting = settingRepository.get(user.getUserId(), settingName);
+			setting.setValue(user.getMiddleName());
+			break;
+
+		case "lastName":
+			setting = settingRepository.get(user.getUserId(), settingName);
+			setting.setValue(user.getLastName());
+			break;
+
+		case "role":
+			// normal users should always have 1 role only
+			setting = settingRepository.get(user.getUserId(), settingName);
+			setting.setValue(user.getAuthorities().iterator().next()
+					.getAuthority());
+			break;
+		case "organization":
+			// normal users should always have 1 organization only
+			setting = settingRepository.get(user.getUserId(), settingName);
+			setting.setValue(getOrganizationsForUser(user).get(0)
+					.getOrganizationName());
+			break;
+		default:
+			setting = settingRepository.get(user.getUserId(), settingName);
+			break;
+		}
+		return setting;
+	}
+
+	public void setAccountSetting(User user, AccountSetting setting) {
+
+		if (setting.getUserId() == null)
+			setting.setUserId(user.getUserId());
+
+		switch (setting.getName()) {
+		case "firstName":
+			setFirstName(user, setting);
+			settingRepository.set(user.getUserId(), setting);
+			break;
+
+		case "middleName":
+			setMiddleName(user, setting);
+			settingRepository.set(user.getUserId(), setting);
+			break;
+
+		case "lastName":
+			setLastName(user, setting);
+			settingRepository.set(user.getUserId(), setting);
+			break;
+		// Role and organization only save the privacy settings, they cannot be
+		// modified
+		// case "role":
+		// break;
+		// case "organization":
+		// break;
+		default:
+			settingRepository.set(user.getUserId(), setting);
+			break;
+		}
+	}
+
+	/**
+	 * Returns the list of organizations a given user belongs too.
+	 * 
+	 * @param user
+	 * @return
+	 */
+	protected List<Organization> getOrganizationsForUser(User user) {
+		String authority = user.getAuthorities().iterator().next()
+				.getAuthority();
+		return organizationRepository.getOrganizationFromAuthority(authority);
+	}
+
+	/**
+	 * Updates the user's name.
+	 * 
+	 * @param user
+	 * @param setting
+	 */
+	protected void setFirstName(User user, AccountSetting setting) {
+
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			user.setFirstName(setting.getValue());
+			this.update(user);
+		}
+	}
+
+	/**
+	 * Updates the user's name.
+	 * 
+	 * @param user
+	 * @param setting
+	 */
+	protected void setMiddleName(User user, AccountSetting setting) {
+
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			user.setMiddleName(setting.getValue());
+			this.update(user);
+		}
+	}
+
+	/**
+	 * Updates the user's name.
+	 * 
+	 * @param user
+	 * @param setting
+	 */
+	protected void setLastName(User user, AccountSetting setting) {
+
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			user.setLastName(setting.getValue());
+			this.update(user);
+		}
 	}
 }
