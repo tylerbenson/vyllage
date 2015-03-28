@@ -1,69 +1,86 @@
 @import './components/common/variables';
 @import './components/common/mixins';
 
-.container {
-	background: url('../images/login_bg.jpg') no-repeat;
-	min-height: 550px;
-	width: 100%;
-	max-width: inherit;
+#login {
+  background: url('../../images/banner.jpg') repeat;
+  min-height: 850px;
+ 	min-width: $main-container-width;
+  padding: 60px;
+  color: $white;
 
-	.request-btn {
-		color: #fff;
-		border-radius: 0px;
-		border: 1px solid #fff;
-		float: right;
-		margin-right: 28px;
-		margin-top: 28px;
-		height: 44px;
-		line-height: 42px;
-		padding: 0px 14px;
-		font-size: 28px;
-		font-family: 'sans-serif';
-	}
+  .logo {
+  	background: url('../../images/logo-orange.png') no-repeat;
+  	span {
+		  padding-left: 40px;
+		  font-size: 34px;
+		  font-weight: 700;
+		  line-height: 48px;
+  	} 
+  }
+  .description-text {
+  	margin-top: 100px;
+  	width: 350px;
 
-	.login-content {
-		width: 372px;
-		margin: 0 auto;
-		margin-top: 120px;
+		.content {
+	  	font-weight: 400;
+	    font-size:36px;
+	    line-height: 46px;
+      letter-spacing: 1.5px;	  
+	  }
+	  .author {
+	  	margin-top: 20px;
+	  	font-weight: 400;
+	    font-size:20px;
+	    line-height: 30px;	    
+	  }
+  }
+ 
+  .login-box {
+  	@include login-box();
 
-		.vyllage-img {
-			background: url('../images/header-logo.png');
-			background-size: contain;
-			height: 138px;
-		}
+  	.login-box-content {
+  		padding-left: 30px;
+  	}
+    a {
+	    color: $yellow-text-color;
+	    font-size: 16px;
+	    line-height: 18px;
+    }
 
-		.input {
-			@include loginInputFields();
-		}
-
-		.login-btn {
-			margin-top: 22px;
-			margin-bottom: 73px;
-			width: 372px;
-			height: 62px;
-			border-radius: 0px;
-			border: 1px solid #393D2E;
-			color: #fff;
-			background-color: #5B6C4C;
-			font-family: 'sans-serif';
-			font-size: 28px;
-			text-transform: lowercase;
-		}
-	}
-
-	.divider-part {
-		background-color: #4A5992;
-		border: 1px solid #414970;
-		height: 83px;
-		border-top: 2px solid #414970;
-		color: #fff;
-		font-family: 'sans-serif';
-		font-size: 30px;
-		line-height: 83px;
-
-		.what-vyllage {
-			text-align: center;
-		}
-	}
+   input[type="text"], input[type="password"] {
+      width: 300px;
+		  height: 46px;
+		  border: 1px solid $login-black-txt;
+		  font-size: 18px;
+    }
+    .sign-in-txt {
+      color: $yellow-text-color;
+      font-size: 32px;
+      line-height: 32px;
+      padding-top:25px;
+      text-align:center;
+      margin: 0;
+    }
+    .submit-btn {
+    	@include submit-btn();
+		  margin-right: 45px;
+    }
+    .invalid {
+      color: $invalid-txt;
+      font-size:20px;
+      text-align:center;
+      margin-bottom: 0;
+    }
+    .box-txt {
+      font-size:15px;
+      color: $login-black-txt;
+      font-weight:400;
+      margin-top: 15px;
+    }
+    .divider {
+      height: 60px;
+      border-bottom: 1px solid #999;
+    }
+  }
 }
 

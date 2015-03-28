@@ -25,7 +25,7 @@ var DeleteSection = React.createClass({
     return (
       <div className={this.props.className}>
         <button 
-          className='button button-inverted'
+          className='button button-inverted delete'
           onClick={this.onOpen}>
           <i className='icon ion-trash-a'></i>
         </button>

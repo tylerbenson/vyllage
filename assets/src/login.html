@@ -16,38 +16,45 @@
 
 <body>
   <form th:action="@{/login}" method="post">
-    <section class="container">
+    <section id="login">
+      <div class="row">
+        <div class="seven columns">
+          <div class="logo">
+            <span> Vyllage </span>
+          </div>
 
-      <article>
-        <div class="row">
-          <div class="twelve column">
-            <button class="request-btn">request invitation</button>
-
-            <div class="login-content">
-              <div class="vyllage-img"></div>
-              <!-- These need to be styled properly -->
-              <div th:if="${param.error}" style="background: white">
-                Invalid email and password.
+          <div class="description-text">
+            <div class="content">
+              <span> He who would do great things, should not attempt them alone </span>
+            </div>
+            <p class="author"> - Seneca &middot; AD 55 </p>
+          </div>
+        </div>
+        <div class="three columns">
+          <div class="login-box">
+            <p class="sign-in-txt">Sign In </p>
+            <div class="login-box-content">
+              <div th:if="${param.error}">
+                <p class="invalid">Invalid e-mail or password </p>
               </div>
-              <div th:if="${param.logout}" style="background: white">
-                You have been logged out.
-              </div>
+              <label for="email" class="box-txt">E-email</label>
               <input type="text" class="input email" name="email" placeholder="email" />
+
+              <label for="password" class="box-txt">Password</label>
               <input type="password" class="input password" name="password" placeholder="password" />
-              <input type="submit" class="login-btn" value="login" />
+
+              <p> <a href="#">Forgot password? </a>
+              </p>
+              <div>
+                <input type="submit" class="button submit-btn u-pull-right" value="Submit" />
+              </div>
+              <div class="divider"></div>
+              <p class="box-txt"> Don't have an account? <a href="#">Request for an invite.</a>
+              </p>
             </div>
           </div>
         </div>
-      </article>
-
-      <article>
-        <div class="row divider-part">
-          <div class="twelve column">
-            <p class="what-vyllage">what is vyllage?</p>
-          </div>
-        </div>
-      </article>
-
+      </div>
     </section>
   </form>
 </body>
