@@ -11,7 +11,7 @@ var Skills = React.createClass({
       sectionNodes = sections.map(function (section, index) {
         return (
           <div key={index}>
-            <Freeform title='Skills'  section={section} />
+            <Freeform section={section} />
             <SectionFooter section={section} />
           </div>
         )
