@@ -3,12 +3,12 @@ var Reflux = require('reflux');
 var actions = require('./actions');
 var resumeStore = require('./store');
 var filter = require('lodash.filter');
+var Subheader = require('./Subheader');
 var CareerGoal = require('./sections/CareerGoal');
 var Experience = require('./sections/Experience');
 var Education = require('./sections/Education');
 var Skill = require('./sections/Skill');
-var Header = require('./header/Header');
-var Footer = require('../footer/footer');
+var Banner = require('./banner');
 
 var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
@@ -27,14 +27,14 @@ var ResumeEditor = React.createClass({
     var contactData = this.state.resume.contact;
     return (
       <div>
-        <Header profileData={profileData} contactData={contactData}/>
-        <section className="container">
+        <Subheader documentId={this.state.resume.documentId}/>
+        <Banner profileData={profileData} contactData={contactData}/>
+        <div className="sections">
           <CareerGoal careerGoal={careerGoal} />
           <Experience sections={experienceSections} />
           <Education sections={educationSections} />
           <Skill sections={skillSections} />
-        </section>
-        <Footer />
+        </div>
       </div>
     );
   }

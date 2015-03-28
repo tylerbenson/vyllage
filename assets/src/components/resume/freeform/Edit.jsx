@@ -34,20 +34,21 @@ var  FreeformEdit = React.createClass({
 		actions.disableEditMode(this.props.section.sectionId);
 	},
 	render: function() {
-		var className = classNames(this.props.className + '-edit', 'u-full-width');
 		return (
 			<div>
-				<div className='row'>
-				 <div className="twelve columns section-title">
-						<p className='u-pull-left section-title'>{this.props.title}</p>
-						<div className='u-pull-right'><CancelBtn cancelHandler={this.cancelHandler}/></div>
-						<div className='u-pull-right'><SaveBtn saveHandler={this.saveHandler}/></div>
+				<div className='header'>
+					<h1>{this.props.title}</h1>
+					<div className='pull right actions'>	
+						<SaveBtn onClick={this.saveHandler}/>
+						<CancelBtn onClick={this.cancelHandler}/>
 					</div>
 				</div>
-				<textarea className={className} 
-					placeholder={this.props.placeholder}
-					onChange={this.handleChange} value ={this.state.description} >
-				</textarea>
+				<div className='fields'>
+					<textarea 
+						placeholder={this.props.placeholder}
+						onChange={this.handleChange} value ={this.state.description} >
+					</textarea>
+				</div>
 			</div>
 		);
 	}

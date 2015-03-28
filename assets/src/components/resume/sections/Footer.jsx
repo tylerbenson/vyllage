@@ -1,7 +1,6 @@
 var React = require('react');
 var actions = require('../actions');
 var Comments = require('../comments');
-var EditsCount = require('../../buttons/edits-count');
 var CommentsCount = require('../../buttons/comments-count');
 
 
@@ -10,13 +9,14 @@ var SectionFooter = React.createClass({
     actions.toggleComments(this.props.section.sectionId);
   },
   render: function () {
-    var commentsCount = null; // this.props.section && this.props.section.comments && this.props.section.comments.length;
+    var numberOfComments = this.props.section && this.props.section.numberOfComments;
     return (
-      <div>
-         <div className='row resume-section-footer'>
-          <p className='u-pull-left update-time'>Updated just now</p>
-          <span className='u-pull-right' onClick={this.clickComments}><CommentsCount /></span> 
-          <span className='u-pull-right'><EditsCount commentsCount={commentsCount}/></span> 
+      <div className='footer'>
+        <div className='content'>
+          <p className='timestamp'>Updated just now</p>
+          <div className='actions'>
+            <CommentsCount count={numberOfComments} onClick={this.clickComments}/>
+          </div> 
         </div>
         <Comments section={this.props.section} />
       </div>

@@ -1,65 +1,21 @@
+$jeet-max-width: 960px;
+
 // colors
-$white: #ffffff;
-$article-border-color: #c5c3c2;
-$article-btn-bkg-color: #4d322a;
-$share-contact-btn-bkg-color: #ece7e4;
-$ask-advice-btn-bkg-color: #5a6b4b;
-$article-controll-link-color: #4d322a;
-$count-btn-bkg-color: #a99994;
-$paragraph-edit-bkg-color: #eeebe9;
-$paragraph-edit-border-color: #4d322b;
-
-$save-btn-bkg-clor: #4f619c;
-$save-btn-border-clor: #090B12;
-$cancel-btn-bkg-clor: #D6D6D6;
-$cancel-btn-border-clor: #787777;
-
-$subheader-color: #6F6F6F;
-$link-color: #4f619c;
-
-// header styles
-$header-height: 40px;
-$header-width: 1040px;
-$header-primary-text-color: #863e09;
-$logo-text-color: #f9d0b3;
-$header-primary-bkg: #E2670D;
-$yellow-text-color: #e2670d;
-$grey-text-color: #999999;
-
-//footer
-$footer-height: 90px;
-$footer-text-hover: #442107;
-
-// content styles
-$main-container-width: 850px;
-
-//profile
-$profile-height: 175px;
-
-// share, contact parts
-$share-info-bkg-color: #ece7e4;
-$share-info-txt-color: #4D322B;
-$share-info-border-color: #A19B9B;
-
-// add more blocks
-$add-more-block-height: 70px;
-
-//advice request
-$top-bkg-color: #E5E4E2;
-$fb-btn-bkg-color: #4B5C94;
-$fb-btn-bord-color: #3C4A7B;
-$send-btn-bkg-color: #7085D4;
-$cancel-btn-bkg-color: #D6D6D6;
-$cancel-btn-bord-color: #7B797A;
-$cancel-btn-color: #4E4C4D;
-
-//Typography
-$paragraph-font-size: 16px;
-
-//Borders
-$border-color: #c5c3c2;
 $primary-color: #e2670d;
+$secondary-color: #888;
+$text-color: #555;
+$inverted-text-color: #fff;
 
-$light-grey: #EDE7E7;
-$login-black-txt: #ADADAD;
-$invalid-txt:  #990000;
+$header-color: #863e09;
+$page-title-color: #f9d0b3;
+$footer-background: #47382B;
+$mode-color: #A0612D;
+
+$body-background: #f3f3f3;
+
+$banner-background: #574535;
+$tagline-color: #f93;
+
+$section-background: #fff;
+$section-footer-background: #fcfcfc;
+$section-footer-color: #aaa;

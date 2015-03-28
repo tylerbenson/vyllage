@@ -20,12 +20,10 @@ var Education = React.createClass({
       sectionNodes = <p className='add-more'>No education added yet</p>
     }
     return (
-      <div className='resume-section'>
-        <div className="row">
-          <div className="twelve columns">
-            <Header title='Education' /> 
-            {sectionNodes}
-          </div>
+      <div className='section'>
+        <div className='content'>
+          <Header title='Education' /> 
+          {sectionNodes}
         </div>
       </div>
     );

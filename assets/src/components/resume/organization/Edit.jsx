@@ -27,14 +27,14 @@ var OrganizationEdit = React.createClass({
     var organization = this.state.organization;
     return (
       <div>
-      <div className='row'>
-         <div className="twelve columns section-title">
-            <p className='u-pull-left section-title'>{this.props.title}</p>
-            <div className='u-pull-right'><CancelBtn cancelHandler={this.cancelHandler}/></div>
-            <div className='u-pull-right'><SaveBtn saveHandler={this.saveHandler}/></div>
+        <div className='header'>
+          <h1>{this.props.title}</h1>
+          <div className='pull right actions'>  
+            <SaveBtn saveHandler={this.saveHandler}/>
+            <CancelBtn cancelHandler={this.cancelHandler}/>
           </div>
         </div>
-      <div className='row'>
+      <div className='fields'>
         <input
             className='u-full-width'
             placeholder='Organization Name'
@@ -54,26 +54,24 @@ var OrganizationEdit = React.createClass({
           value={organization.role}
           onChange={this.handleChange.bind(this, 'role')}
         /> 
-        <div className='row'>
-          <input
-            className='four columns'
-            placeholder='start date'
-            value={organization.startDate}
-            onChange={this.handleChange.bind(this, 'startDate')}
-          /> 
-          <input
-            className='four columns'
-            placeholder='end date'
-            value={organization.endDate}
-            onChange={this.handleChange.bind(this, 'endDate')}
-          />
-          <input
-            className='four columns'
-            placeholder='location'
-            value={organization.location}
-            onChange={this.handleChange.bind(this, 'location')}
-          />
-        </div>
+        <input
+          className='u-full-width'
+          placeholder='start date'
+          value={organization.startDate}
+          onChange={this.handleChange.bind(this, 'startDate')}
+        /> 
+        <input
+          className='u-full-width'
+          placeholder='end date'
+          value={organization.endDate}
+          onChange={this.handleChange.bind(this, 'endDate')}
+        />
+        <input
+          className='u-full-width'
+          placeholder='location'
+          value={organization.location}
+          onChange={this.handleChange.bind(this, 'location')}
+        />
         <textarea
           className='u-full-width'
           placeholder='highlights'

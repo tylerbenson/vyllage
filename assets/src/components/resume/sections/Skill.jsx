@@ -11,7 +11,7 @@ var Skills = React.createClass({
       sectionNodes = sections.map(function (section, index) {
         return (
           <div key={index}>
-            <Freeform title='Skills'  section={section} />
+            <Freeform section={section} />
             <SectionFooter section={section} />
           </div>
         )
@@ -20,12 +20,10 @@ var Skills = React.createClass({
       sectionNodes = <p className='add-more'>No skills added yet</p>
     }
     return (
-      <div className='resume-section'>
-        <div className="row">
-          <div className="twelve columns">
-            <Header title='Skills' /> 
-            {sectionNodes}
-          </div>
+      <div className='section'>
+        <div className="content">
+          <Header title='Skills' /> 
+          {sectionNodes}
         </div>
       </div>
     );

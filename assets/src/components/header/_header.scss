@@ -1,45 +1,73 @@
-@import '_primary-header';
-@import '_secondary-header';
+header {
+  @extend .inverted;
+  background: $primary-color;
 
-.container {
-	max-width: $header-width;
-	min-width: 960px;
+  nav ul li a {
+    padding: 0.6em;
+    i,
+    span {
+      color: $header-color;
+      transition: all .2s ease;
+    }
+
+    &:hover {
+      i,
+      span {
+        color: darken($header-color, 6%);
+      }
+    }
+  }
+
+  .logo {
+    padding: 0.4em 0;
+    font-size: 0.9em;
+  }
+
+  .page-title {
+    color: $page-title-color;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    position: relative;
+    bottom: 0.3em;
+  }
+
+  .user {
+    text-align: center;
+    width: 120px;
+
+    .name {
+      max-width: 100px;
+      overflow: hidden;
+      position: relative;
+      text-overflow: ellipsis;
+      top: 0;
+      white-space: pre;
+    }
+  }
 }
 
-.menu-container {
-	position: absolute;
-	z-index: 10;
-	display: none;
+.subheader {
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  padding: 0.4em 0.6em 0.45em 0.6em;
 
-	ul {
-		@include menu-list();
-			
-		li {
-			@include menu-list-item();
-		}
-	}
-}
+  .mode {
+    display: inline-block;
+    float: left;
+    font-size: 1.25em;
+    font-weight: 300;
+    margin-top: 0.05em;
 
-#account-container {
-	right: 146px;
-  top: 28px;
+    i {
+      color: $mode-color;
+      font-size: 1.5em;
+      margin-right: 0.25em;
+    }
 
-	#triangle-up {
-   	@include arrowUp($white);
-		left: 80px;
-		top: 2px;
-	}
-}
-
-#export-container {
-	right: 322px;
-  top: 90px;
-
-  ul {
-  	color: $yellow-text-color;
-
-  	i {
-  		padding-right: 20px;
-  	}
+    span {
+      color: $mode-color;
+      position: relative;
+      bottom: 0.15em;
+    }
   }
 }

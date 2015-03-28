@@ -7,7 +7,7 @@ var Comments = React.createClass({
     var section = this.props.section || {};
     if (section.showComments) {
       return (
-        <div>
+        <div className='comments'>
           <CommentList 
             sectionId={section.sectionId}
             comments={section.comments}
