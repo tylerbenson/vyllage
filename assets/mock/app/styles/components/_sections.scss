@@ -1,6 +1,10 @@
+.sections {
+  margin: 1em 0;
+}
+
 .section {
   @include center();
-  & > .content {
+  & > .container {
     background: $section-background;
     border-radius: 5px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
@@ -9,49 +13,47 @@
     position: relative;
   }
 
-  h1 {
-    display: inline-block;
+  .content {
+    padding: 0.5em 4em;
   }
 
   .header {
     @include cf();
     padding: 3em 4em 1em 4em;
-    // border-bottom: #eee solid 1px;
-  }
 
-  .fields {
-    padding: 0 3.7em 2em 3.7em;
-
-    textarea {
-      border: none;
-      border-radius: 3px;
-      font-weight: 300;
-      padding: 0 0.4em;
-      width: 100%;
-      transition: none;
-
-      &:focus {
-        background: lighten($footer-background, 76%);
-        box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
-      }
+    .title {
+      @include column(3/4);
+      text-align: left;
+    }
+    .actions {
+      @include column(1/4);
+      text-align: right;
     }
   }
 
+  textarea {
+    font-weight: 300;
+  }
+
   .footer {
-    @include cf();
     background: $section-footer-background;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     border-top: darken($section-footer-background,3%) solid 1px;
+    margin-top: 2em;
     font-size: 0.85em;
-    padding: 0.25em 0;
+
+    & > .info {
+      @include cf();
+      padding: 0.25em 0.5em;
+    }
 
     .timestamp {
       color: $section-footer-color;
       display: inline-block;
       float: left;
       font-weight: 300;
-      padding: 0.5em 1em;
+      padding: 0.65em 1em;
     }
 
     .actions {
@@ -114,6 +116,7 @@
 
           textarea {
             float: left;
+            padding: 0.2em 0.8em;
             position: relative;
             top: 2px;
             width: 80%;
@@ -121,33 +124,60 @@
 
           button {
             float: right;
+            padding: 0.2em;
+            text-align: center;
             text-transform: inherit;
             width: 19%;
-            text-align: center;
           }
         }
       }
     }
   }
+}
 
-  .move {
-    background: $inverted-text-color !important;
-    border: none;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-    color: $secondary-color !important;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: -0.75em;
-    width: 9em;
+.subsection {
+  border-top: darken($section-footer-background,3%) solid 1px;
+  position: relative;
 
-    & > i {
-      color: $secondary-color !important;
+  & > .content {
+    margin-top: -0.5em;
+    padding: 0 4em 0.5em 4em;
+  }
+
+  .title {
+    font-size: 1.25em;
+    font-weight: 400;
+
+    input {
+      color: $text-color;
+      margin: 2px 0;
     }
   }
 }
 
-.sections {
-  margin: 1em 0;
+.subsubsection {
+  .header {
+    padding: 1em 2em 0 2em;
+
+    .title {
+      h3 {
+        font-size: 0.85em;
+      }
+    }
+  }
+
+  .content {
+    padding: 0 2em;
+  }
+
+  .date {
+    display: inline-block;
+    font-size: 0.9em;
+    width: 6em !important;
+  }
+
+  .location {
+    font-size: 0.9em;
+    margin: 0.5em 0 1em 0;
+  }
 }
