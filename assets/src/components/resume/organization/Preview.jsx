@@ -11,11 +11,13 @@ var OrganizationPreview = React.createClass({
     var organization = this.props.section;
     return (
       <div>
-        <div className='row'>
+        <div className='header'>
          <div className="twelve columns section-title">
-            <p className='u-pull-left'>{organization.organizationName}</p>
-            <DeleteSection className='u-pull-right' sectionId={this.props.section.sectionId} />
-            <p className='u-pull-right'><EditBtn editHandler={this.editHandler}/></p>
+            <h1>{organization.organizationName}</h1>
+            <div className='pull right actions'>
+              <EditBtn editHandler={this.editHandler}/>
+              <DeleteSection sectionId={this.props.section.sectionId} />
+            </div>
           </div>
         </div>
        

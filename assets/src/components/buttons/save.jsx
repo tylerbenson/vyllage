@@ -10,7 +10,7 @@ var SaveBtn = React.createClass({
 
   render: function() {
     return (
-      <button className='button inverted' onClick={this.saveHandler}>
+      <button className='small' onClick={this.saveHandler}>
         <i className="icon ion-checkmark"></i>
         Save
       </button>

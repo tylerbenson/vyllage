@@ -20,7 +20,7 @@ input[type="reset"] {
     cursor: pointer;
   }
 
-  & > i {
+  & > i, span {
     color: $inverted-text-color;
     font-size: 1.15em;
     top: 0.2em;
@@ -37,12 +37,12 @@ input[type="reset"] {
       background: $primary-color;
       color: $inverted-text-color;
 
-      & > i {
+      & > i,span {
         color: $inverted-text-color;
       }
     }
 
-    & > i {
+    & > i,span {
       color: $primary-color;
     }
   }
@@ -63,12 +63,12 @@ input[type="reset"] {
         background: $secondary-color;
         color: $inverted-text-color;
 
-        & > i {
+        & > i,span {
           color: $inverted-text-color;
         }
       }
 
-      & > i {
+      & > i,span {
         color: $secondary-color;
       }
     }
@@ -93,13 +93,13 @@ input[type="reset"] {
     border-color: transparent;
     color: $primary-color;
 
-    & > i {
+    & > i,span {
       color: $primary-color;
     }
 
     &:hover {
       color: lighten($primary-color, 3%);
-      & > i {
+      & > i,span {
         color: lighten($primary-color, 3%);
       }
     }
@@ -123,3 +123,4 @@ a.button {
     color: $inverted-text-color;
   }
 }
+

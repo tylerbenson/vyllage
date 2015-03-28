@@ -10,7 +10,7 @@ var CancelBtn = React.createClass({
 
   render: function() {
     return (
-      <button className='button secondary inverted' onClick={this.cancelHandler}>
+      <button className='small secondary inverted' onClick={this.cancelHandler}>
         Cancel
       </button>
     );

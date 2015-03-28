@@ -10,9 +10,9 @@ var EditBtn = React.createClass({
 
   render: function() {
     return (
-      <button className='button inverted' onClick={this.editHandler}>
-        <i className="icon ion-edit"></i>
-        Edit
+      <button className='small inverted' onClick={this.editHandler}>
+        <i className="ion-edit"></i>
+        {"Edit"}
       </button>
     );
   }

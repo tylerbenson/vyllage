@@ -23,21 +23,24 @@ var DeleteSection = React.createClass({
   },
   render: function () {
     return (
-      <div className={this.props.className}>
+      <div style={{display: 'inline-block'}}>
         <button 
-          className='button button-inverted delete'
+          className='small icon'
           onClick={this.onOpen}>
-          <i className='icon ion-trash-a'></i>
+          <i className='ion-trash-a'></i>
+          
         </button>
         <Modal isOpen={this.state.isOpen}> 
-          <a className='close-button' onClick={this.onClose}>&times;</a>
-          Do you really want to delete this section ?
-          <div className='row'>
-            <a className='button button-inverted' onClick={this.deleteSection}>Delete</a>
-            <a className='button' onClick={this.onClose}>Cancel</a>
+          <div>
+            Do you really want to delete this section ?
+          </div>
+          <div className='pull right actions'>
+            <button className='small inverted' onClick={this.deleteSection}>Delete</button>
+            <button className='small secondary inverted' onClick={this.onClose}>Cancel</button>
           </div>
         </Modal>
       </div>
+
     );
   }
 });
