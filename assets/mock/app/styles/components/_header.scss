@@ -1,0 +1,73 @@
+header {
+  @extend .inverted;
+  background: $primary-color;
+
+  nav ul li a{
+    padding: 0.6em;
+    i,
+    span {
+      color: $header-color;
+      transition: all .2s ease;
+    }
+
+    &:hover {
+      i,
+      span {
+        color: darken($header-color, 6%);
+      }
+    }
+  }
+
+  .logo {
+    padding: 0.4em 0;
+    font-size: 0.9em;
+  }
+
+  .page-title {
+    color: $page-title-color;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    position: relative;
+    bottom: 0.3em;
+  }
+
+  .user {
+    text-align: center;
+    width: 120px;
+
+    .name {
+      max-width: 100px;
+      overflow: hidden;
+      position: relative;
+      text-overflow: ellipsis;
+      top: 0;
+      white-space: pre;
+    }
+  }
+}
+
+.subheader {
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  padding: 0.4em 0.6em 0.45em 0.6em;
+
+  .mode {
+    display: inline-block;
+    float: left;
+    font-size: 1.25em;
+    font-weight: 300;
+    margin-top: 0.05em;
+
+    i {
+      color: $mode-color;
+      font-size: 1.5em;
+      margin-right: 0.25em;
+    }
+
+    span {
+      color: $mode-color;
+      position: relative;
+      bottom: 0.15em;
+    }
+  }
+}

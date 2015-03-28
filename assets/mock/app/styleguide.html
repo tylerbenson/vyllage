@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vyllage | Style Guide</title>
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+  <div id="container">
+    <header>
+      <div class="content">
+        <div class="logo">
+          <img src="images/logo-white.png" alt="Vyllage" />
+          <span>Vyllage</span>
+        </div>
+        <span class="page-title">Style Guide</span>
+      </div>
+    </header>
+
+    <div class="sections">
+      <section class="section">
+        <div class="content">
+          <div class="header">
+            <h1>Buttons</h1>
+          </div>
+          <div class="fields">
+            <p>
+              Buttons can be a <code>button</code> element or anything with a <code>.button</code> class. I leaned towards semantic class naming.
+              Feel free to mix and match the patterns.
+            </p>
+
+            <p>
+              Adding icons is simple. Just use an <code>i</code> tag with the corresponding <a href="http://ionicons.com">Ionicon</a> class name.
+            </p>
+            <p>Lastly, all styles can be found at <code>styles/components/_buttons.scss</code></p>
+            <div>
+              <div class="spaced">
+                <h2>Styling</h2>
+                <button>Button Element</button>
+                <a href="#" class="button">
+                  <i class="ion-edit"></i>
+                  Link with class button
+                </a>
+              </div>
+
+              <div class="spaced">
+                <h2><code>.embossed</code></h2>
+                <button class="embossed">
+                  <i class="ion-person-stalker"></i>
+                  Ask Advice
+                </button>
+              </div>
+
+              <div class="spaced">
+                <h2><code>.secondary</code></h2>
+                <button class="secondary">
+                  Cancel
+                </button>
+              </div>
+
+              <div class="spaced">
+                <h2><code>.inverted</code></h2>
+                <button class="inverted">
+                  Request a Demo
+                </button>
+              </div>
+
+              <div class="spaced">
+                <h2><code>.flat</code></h2>
+                <button class="flat">
+                  <i class="ion-android-share"></i>
+                  Share
+                </button>
+              </div>
+
+              <div class="spaced">
+                <h2><code>.small</code></h2>
+                <button class="small">
+                  Yes
+                </button>
+              </div>
+
+              <div class="spaced">
+                <h2><code>.icon</code></h2>
+                <button class="icon">
+                  <i class="ion-edit"></i>
+                </button>
+              </div>
+
+              <h2>Mixing and Matching!</h2>
+              <div class="spaced">
+                <h2><code>.small secondary .inverted</code></h2>
+                <button class="small secondary inverted">
+                  cancel
+                </button>
+              </div>
+
+              <div class="spaced">
+                <h2><code>.small .inverted</code></h2>
+                <button class="small inverted">
+                  <i class="ion-edit"></i>
+                  Edit
+                </button>
+              </div>
+
+              <div class="spaced">
+                <h2><code>.small .inverted .icon</code></h2>
+                <button class="small inverted icon">
+                  <i class="ion-trash-a"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<footer>
+  <div class="content">
+    <div class="logo">
+      <img src="images/logo-orange.png" alt="Vyllage" />
+      <span>Vyllage</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="http://vyllage.com">www.vyllage.com</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script type="text/javascript" src="../bower_components/autosize/dest/autosize.min.js"></script>
+<script type="text/javascript" src="/scripts/main.js"></script>
+</body>
+</html>
