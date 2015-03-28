@@ -9,7 +9,6 @@ var CareerGoal = React.createClass({
     return (
       <div className='section'>
         <div className='content'>
-          <Header title='Career Goal' /> 
           <Freeform title='Career Goal' section={this.props.careerGoal} />
           <SectionFooter section={this.props.careerGoal} />
         </div>
