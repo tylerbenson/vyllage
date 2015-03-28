@@ -77,9 +77,9 @@ public class AdviceService {
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
 				.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
-				.path("/resume/" + documentId + "/recentUsers");
+				.path("/resume/" + documentId + "/recent-users");
 
-		if (excludeIds.size() > 0)
+		if (excludeIds != null && excludeIds.size() > 0)
 			builder.queryParam(
 					"excludeIds",
 					excludeIds.stream().map(Object::toString)
@@ -102,7 +102,7 @@ public class AdviceService {
 				.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
 				.path("/account/" + userId + "/advisors");
 
-		if (excludeIds.size() > 0)
+		if (excludeIds != null && excludeIds.size() > 0)
 			builder.queryParam(
 					"excludeIds",
 					excludeIds.stream().map(Object::toString)

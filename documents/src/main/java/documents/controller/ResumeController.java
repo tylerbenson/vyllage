@@ -181,7 +181,8 @@ public class ResumeController {
 		List<Long> recentUsersForDocument = documentService
 				.getRecentUsersForDocument(documentId);
 
-		recentUsersForDocument.removeAll(excludeIds);
+		if (excludeIds != null && excludeIds.size() > 0)
+			recentUsersForDocument.removeAll(excludeIds);
 
 		if (recentUsersForDocument.size() == 0)
 			return Arrays.asList();
