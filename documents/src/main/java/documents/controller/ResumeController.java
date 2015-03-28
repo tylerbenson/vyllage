@@ -140,11 +140,7 @@ public class ResumeController {
 			@RequestBody final DocumentSection body)
 			throws JsonProcessingException, ElementNotFoundException {
 
-		// TODO: this needs to be updated to create, not save.
-		// logger.info(body.toString());
 		Document document = documentService.getDocument(documentId);
-		logger.info("document is null? " + (document == null));
-
 		return documentService.saveDocumentSection(document, body);
 	}
 
