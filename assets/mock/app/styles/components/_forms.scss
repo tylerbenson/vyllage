@@ -1,3 +1,18 @@
+::-webkit-input-placeholder {
+   color: lighten($banner-background, 50%);
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: lighten($banner-background, 50%);
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: lighten($banner-background, 50%);
+}
+
+:-ms-input-placeholder {
+   color: lighten($banner-background, 50%);
+}
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -12,4 +27,25 @@ textarea {
   &:focus {
     border-color: lighten($primary-color, 10%);
   }
+
+  &.flat {
+    border: none;
+    border-radius: 3px;
+    font-weight: 300;
+    line-height: 1.4;
+    padding: 0 0.25em;
+    width: 100%;
+    transition: none;
+
+    &:focus {
+      background: lighten($footer-background, 76%);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+    }
+  }
+
+  &.inline {
+    display: inline-block;
+    width: auto;
+  }
+
 }
