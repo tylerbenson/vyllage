@@ -18,7 +18,10 @@
 </head>
 
 <body>
-  <div id="header-container"></div>
+  <header>
+    <div id="header-container" th:name="${accountName.firstName}">
+    </div>
+  </header>
   <div id="resume"></div>
 
   <script type="text/javascript" src="javascript/base.js"></script>
