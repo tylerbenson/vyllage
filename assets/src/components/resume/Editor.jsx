@@ -3,11 +3,12 @@ var Reflux = require('reflux');
 var actions = require('./actions');
 var resumeStore = require('./store');
 var filter = require('lodash.filter');
+var Subheader = require('./Subheader');
 var CareerGoal = require('./sections/CareerGoal');
 var Experience = require('./sections/Experience');
 var Education = require('./sections/Education');
 var Skill = require('./sections/Skill');
-var Header = require('./banner');
+var Banner = require('./banner');
 var Footer = require('../footer/footer');
 
 var ResumeEditor = React.createClass({
@@ -27,7 +28,8 @@ var ResumeEditor = React.createClass({
     var contactData = this.state.resume.contact;
     return (
       <div>
-        <Header profileData={profileData} contactData={contactData}/>
+        <Subheader />
+        <Banner profileData={profileData} contactData={contactData}/>
         <section className="container">
           <CareerGoal careerGoal={careerGoal} />
           <Experience sections={experienceSections} />

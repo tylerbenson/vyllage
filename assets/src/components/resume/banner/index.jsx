@@ -15,7 +15,14 @@ var Header = React.createClass({
             <div className="name">
               James T. Franco
             </div>
-            <textarea disabled placeholder="What's your professional tagline?" className="tagline" rows="1" autocomplete="off">Full-stack Developer &amp; UI/UX Designer</textarea>
+            <textarea 
+              disabled 
+              placeholder="What's your professional tagline?"
+              className="tagline"
+              rows="1"
+              autoComplete="off">
+                Full-stack Developer &amp; UI/UX Designer
+            </textarea>
             <div className="address">
               816 Corinthian Executive Regency,
               Ortigas Ave., Ortigas Center, Pasig City, PH
