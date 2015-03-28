@@ -1,9 +1,13 @@
-@import "./components/common/variables";
-@import "./components/common/mixins";
-
 @import "normalize-scss/normalize";
-@import "skeleton-scss/scss/skeleton";
+@import "jeet/scss/jeet/index";
+// @import "skeleton-scss/scss/skeleton";
 @import "ionicons/scss/ionicons";
+
+@import "./components/globals/colors";
+@import "./components/globals/utilities";
+@import "./components/globals/defaults";
+@import "./components/globals/typography";
+
 @import "./components/common/align";
 @import "./components/modal/modal";
 @import "./components/buttons/buttons";
@@ -17,13 +21,4 @@
 //This class is added by react-contenteditable components of contenteditable elements
 .react-contenteditable {
   outline: 0px solid transparent; // Removes border around contenteditable element
-}
-
-// .icon {
-//   font-size: 16px;
-//   padding: 10px;
-// }
-
-a {
-  cursor: pointer;
 }

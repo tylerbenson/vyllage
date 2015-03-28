@@ -10,7 +10,7 @@ var AddBtn = React.createClass({
 
   render: function() {
     return (
-      <button className='button button-inverted' onClick={this.addSection}>
+      <button className='inverted' onClick={this.addSection}>
         <i className='icon ion-plus'></i>
         Add
       </button>
