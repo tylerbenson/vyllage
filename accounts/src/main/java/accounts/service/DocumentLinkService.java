@@ -38,6 +38,13 @@ public class DocumentLinkService {
 		return doclink;
 	}
 
+	public ResetPasswordLink createResetPasswordLink(User user) {
+		ResetPasswordLink rpl = new ResetPasswordLink();
+		rpl.setRandomPassword(getRandomPassword());
+		rpl.setUserId(user.getUserId());
+		return rpl;
+	}
+
 	private String getRandomPassword() {
 		return RandomStringUtils.randomAlphanumeric(20);
 	}

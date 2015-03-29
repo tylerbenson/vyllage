@@ -283,4 +283,8 @@ public class UserService {
 			this.update(user);
 		}
 	}
+
+	public void changePassword(String newPassword) {
+		userRepository.changePassword(newPassword);
+	}
 }
