@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import documents.model.AccountContact;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
@@ -123,12 +124,25 @@ public class ResumeController {
 		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
 				Arrays.asList(document.getUserId()), request);
 
+		List<AccountContact> accountContactData = accountService
+				.getContactDataForUsers(Arrays.asList(document.getUserId()),
+						request);
+
 		DocumentHeader header = new DocumentHeader();
 		if (namesForUsers != null && namesForUsers.size() > 0) {
 			header.setFirstName(namesForUsers.get(0).getFirstName());
 			header.setMiddleName(namesForUsers.get(0).getMiddleName());
 			header.setLastName(namesForUsers.get(0).getLastName());
 		}
+
+		if (accountContactData != null && accountContactData.size() > 0) {
+			header.setAddress(accountContactData.get(0).getAddress());
+			header.setEmail(accountContactData.get(0).getEmail());
+			header.setPhoneNumber(accountContactData.get(0).getPhoneNumber());
+			header.setTwitter(accountContactData.get(0).getTwitter());
+			header.setLinkedIn(accountContactData.get(0).getLinkedIn());
+		}
+
 		header.setTagline(document.getTagline());
 		return header;
 	}

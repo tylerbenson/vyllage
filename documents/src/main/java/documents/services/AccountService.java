@@ -18,6 +18,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import documents.model.AccountContact;
 import documents.model.AccountNames;
 
 @Service
@@ -68,6 +69,11 @@ public class AccountService {
 			return Arrays.asList(body);
 
 		return Arrays.asList();
+	}
+
+	public List<AccountContact> getContactDataForUsers(List<Long> asList,
+			HttpServletRequest request) {
+		return null;
 	}
 
 }
