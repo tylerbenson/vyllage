@@ -25,3 +25,14 @@
 		{"userId":3,"firstName":"Some","middleName":null,"lastName":"One"}
 	]
 ```
+
+# Retrieve a list of contact data from several users
+## GET /account/contact?userIds=1,2...n
++ RequestParam   
+	+ userIds=0,1,2... comma separated list of user ids to search for
++ Response 200 (application/json)
+```
+	[
+		{"userId":0,"address":"Avenida Siempreviva 123","email":null,"phoneNumber":null,"twitter":null,"linkedIn":null}
+	]
+```

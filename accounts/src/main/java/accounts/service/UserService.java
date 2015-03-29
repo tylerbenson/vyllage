@@ -2,6 +2,9 @@ package accounts.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -15,6 +18,7 @@ import accounts.model.OrganizationRole;
 import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
+import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.repository.AccountSettingRepository;
@@ -154,6 +158,72 @@ public class UserService {
 
 	public List<AccountSetting> getAccountSettings(User user) {
 		return settingRepository.getAccountSettings(user);
+	}
+
+	/**
+	 * Returns account contact information
+	 */
+	public List<AccountContact> getAccountContactForUsers(List<Long> userIds) {
+		List<AccountSetting> accountSettings = settingRepository
+				.getAccountSettings(userIds);
+
+		if (accountSettings == null || accountSettings.size() == 0)
+			return Arrays.asList();
+
+		Map<Long, List<AccountSetting>> map = accountSettings.stream().collect(
+				Collectors.groupingBy((AccountSetting as) -> as.getUserId(),
+						Collectors.mapping((AccountSetting as) -> as,
+								Collectors.toList())));
+
+		return map.entrySet().stream().map(UserService::mapAccountContact)
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Maps a list of contact related account settings into a contact object.
+	 * 
+	 * @param entry
+	 * @return
+	 */
+	protected static AccountContact mapAccountContact(
+			Entry<Long, List<AccountSetting>> entry) {
+		AccountContact ac = new AccountContact();
+
+		Long userId = entry.getKey();
+		Optional<AccountSetting> address = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("address"))
+				.findFirst();
+		Optional<AccountSetting> email = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("email"))
+				.findFirst();
+		Optional<AccountSetting> phoneNumber = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("phoneNumber"))
+				.findFirst();
+		Optional<AccountSetting> twitter = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("twitter"))
+				.findFirst();
+		Optional<AccountSetting> linkedIn = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("linkedIn"))
+				.findFirst();
+
+		ac.setUserId(userId);
+
+		if (address.isPresent())
+			ac.setAddress(address.get().getValue());
+
+		if (email.isPresent())
+			ac.setAddress(email.get().getValue());
+
+		if (phoneNumber.isPresent())
+			ac.setAddress(phoneNumber.get().getValue());
+
+		if (twitter.isPresent())
+			ac.setAddress(twitter.get().getValue());
+
+		if (linkedIn.isPresent())
+			ac.setAddress(linkedIn.get().getValue());
+
+		return ac;
 	}
 
 	public AccountSetting getAccountSetting(User user, String settingName)

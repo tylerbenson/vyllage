@@ -35,6 +35,21 @@ public class AccountSettingRepository {
 				.collect(Collectors.toList());
 	}
 
+	public List<AccountSetting> getAccountSettings(List<Long> ids) {
+		List<Record> result = sql.select().from(ACCOUNT_SETTING)
+				.where(ACCOUNT_SETTING.USER_ID.in(ids)).fetch();
+
+		return result
+				.stream()
+				.map(r -> new AccountSetting(r
+						.getValue(ACCOUNT_SETTING.ACCOUNT_SETTING_ID), r
+						.getValue(ACCOUNT_SETTING.USER_ID), r
+						.getValue(ACCOUNT_SETTING.NAME), r
+						.getValue(ACCOUNT_SETTING.VALUE), r
+						.getValue(ACCOUNT_SETTING.PRIVACY)))
+				.collect(Collectors.toList());
+	}
+
 	public AccountSetting get(Long userId, String settingName)
 			throws ElementNotFoundException {
 		AccountSetting setting = new AccountSetting();
