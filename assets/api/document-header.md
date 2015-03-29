@@ -6,10 +6,15 @@
   + Body
 
     {
-      "firstName": "Nathan",
-      "middleName": "M",
-      "lastName": "Benson",
-      "tagline": "Technology Enthusiast analyzing, building, and expanding solutions"
+    	"firstName":"Luke",
+    	"middleName":"V",
+    	"lastName":"Skywalker",
+    	"tagline":"My tagline.",
+    	"address":"Avenida Siempreviva 123",
+    	"email":null,
+    	"phoneNumber":null,
+    	"twitter":null,
+    	"linkedIn":null
     }
 
 

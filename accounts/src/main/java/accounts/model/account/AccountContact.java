@@ -1,4 +1,4 @@
-package documents.model;
+package accounts.model.account;
 
 import lombok.ToString;
 

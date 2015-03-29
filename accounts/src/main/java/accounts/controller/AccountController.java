@@ -26,6 +26,7 @@ import accounts.email.EmailHTMLBody;
 import accounts.email.EmailParameters;
 import accounts.email.MailService;
 import accounts.model.User;
+import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangePasswordForm;
 import accounts.model.account.ResetPasswordForm;
@@ -218,5 +219,12 @@ public class AccountController {
 				&& userService.userExists(resetPassword.getEmail());
 		resetPassword.setError(!isValid);
 		return isValid;
+	}
+	
+	@RequestMapping(value = "contact", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<AccountContact> getContactInformation(
+			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {
+
+		return userService.getAccountContactForUsers(userIds);
 	}
 }
