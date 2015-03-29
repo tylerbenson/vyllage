@@ -155,19 +155,27 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 
 			newRecord.setSectionversion(newSectionVersion);
 			newRecord.setDocumentid(documentSection.getDocumentId());
+			newRecord.setPosition(documentSection.getSectionPosition());
+			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
+			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
 
 			try {
 				newRecord.setJsondocument(documentSection.asJSON());
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
 			}
-			newRecord.setPosition(documentSection.getSectionPosition());
-			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
-			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
 
-			newRecord.store();
-
+			newRecord.store(); // first to get the Id.
 			documentSection.setSectionId(newRecord.getId());
+
+			try {
+				newRecord.setJsondocument(documentSection.asJSON());
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+
+			newRecord.store(); // second to add the sectionId.
+
 			documentSection.setSectionVersion(newSectionVersion);
 
 		} else {
