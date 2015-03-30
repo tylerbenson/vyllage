@@ -9,8 +9,10 @@ var SectionHeader = React.createClass({
   render: function () {
     return  (
       <div className='header'>
-        <h1>{this.props.title}</h1>
-        <div className="pull right actions">
+        <div className='title'>
+          <h1>{this.props.title}</h1>
+        </div>
+        <div className="actions">
           <AddBtn onClick={this.addSection} /> 
         </div>
       </div>

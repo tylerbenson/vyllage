@@ -12,7 +12,7 @@ var Organization = React.createClass({
   render: function () {
     var uiEditMode = this.props.section.uiEditMode;
     return (
-      <div className ="section">
+      <div className ="subsection">
         <div className={this.props.className}>
           {uiEditMode ? <Edit {...this.props} />: <Preview {...this.props}/>}
         </div>

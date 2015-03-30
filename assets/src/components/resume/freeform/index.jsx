@@ -15,6 +15,9 @@ var Freeform = React.createClass({
       section: {}
     }
   },
+  componentWillRecieveProps: function (nextProps) {
+    this.setState({description: nextProps.section.description});
+  },
   handleChange: function(e) {
     e.preventDefault();
     this.setState({description: e.target.value});
@@ -35,7 +38,7 @@ var Freeform = React.createClass({
   render: function () {
     var uiEditMode = this.props.section.uiEditMode;
     return (
-      <div className='section'>
+      <div className='subsection'>
         <div className='header'>
           <div className='title'>
             <h1>{this.props.title}</h1>

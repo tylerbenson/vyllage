@@ -17,11 +17,11 @@ var Skills = React.createClass({
         )
       });
     } else {
-      sectionNodes = <p className='add-more'>No skills added yet</p>
+      sectionNodes = <p className='content'>No skills added yet</p>
     }
     return (
       <div className='section'>
-        <div className="content">
+        <div className="container">
           <Header title='Skills' /> 
           {sectionNodes}
         </div>

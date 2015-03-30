@@ -17,11 +17,11 @@ var Experience = React.createClass({
         );
       })
     } else {
-      sectionNodes = <p className='add-more'>No experience added yet</p>;
+      sectionNodes = <p className='content'>No experience added yet</p>;
     }
     return (
       <div className='section'>
-        <div className='content'>
+        <div className='container'>
           <Header title='Experience' /> 
           {sectionNodes}
         </div>

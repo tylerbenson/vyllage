@@ -28,13 +28,15 @@ var OrganizationEdit = React.createClass({
     return (
       <div>
         <div className='header'>
-          <h1>{this.props.title}</h1>
-          <div className='pull right actions'>  
+          <div className='title'>
+            <h1>{this.props.title}</h1>
+          </div>
+          <div className='actions'>  
             <SaveBtn saveHandler={this.saveHandler}/>
             <CancelBtn cancelHandler={this.cancelHandler}/>
           </div>
         </div>
-      <div className='fields'>
+      <div className='content'>
         <input
             className='u-full-width'
             placeholder='Organization Name'
