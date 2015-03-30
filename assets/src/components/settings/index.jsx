@@ -12,9 +12,6 @@ var Settings = React.createClass({
   componentWillMount: function () {
     actions.getSettings();
   },
-  componentDidMount: function () {
-    actions.getSettings();
-  },
   render: function () {
     var SettingsNode = null;
     if (this.state.activeSettingsType === 'profile') {
@@ -24,7 +21,6 @@ var Settings = React.createClass({
     } else {
       SettingsNode = <Social {...this.props} {...this.state} />;
     }
-    console.log(this.state);
     return (
       <section className='settings'>
         <SideBar />
