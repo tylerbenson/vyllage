@@ -8,6 +8,9 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -356,5 +359,21 @@ public class UserService {
 
 	public void changePassword(String newPassword) {
 		userRepository.changePassword(newPassword);
+	}
+
+	/**
+	 * Deletes a user and logs him out of the system.
+	 * 
+	 * @param request
+	 * 
+	 * @param userId
+	 * @throws ServletException
+	 */
+	public void delete(HttpServletRequest request, Long userId)
+			throws ServletException {
+		userRepository.deleteUser(userId);
+
+		request.logout();
+
 	}
 }

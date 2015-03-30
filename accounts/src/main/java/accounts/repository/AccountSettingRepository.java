@@ -91,4 +91,9 @@ public class AccountSettingRepository {
 			settingRecord.store();
 		}
 	}
+
+	public void delete(Long userId) {
+		sql.delete(ACCOUNT_SETTING).where(ACCOUNT_SETTING.USER_ID.eq(userId))
+				.execute();
+	}
 }

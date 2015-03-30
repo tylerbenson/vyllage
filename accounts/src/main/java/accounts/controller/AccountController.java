@@ -6,6 +6,9 @@ import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -72,7 +75,7 @@ public class AccountController {
 	@RequestMapping(value = "names", method = RequestMethod.GET, produces = "application/json")
 	// @PreAuthorize("hasAuthority('USER')")
 	public @ResponseBody List<AccountNames> getNames(
-			@RequestParam("userIds") final List<Long> userIds)
+			@RequestParam(value = "userIds", required = true) final List<Long> userIds)
 			throws UserNotFoundException {
 
 		return userService.getNames(userIds);
@@ -101,6 +104,15 @@ public class AccountController {
 				.collect(Collectors.toList());
 
 		return response;
+	}
+
+	@RequestMapping(value = "{userId}/delete")
+	public String deleteUser(HttpServletRequest request,
+			@PathVariable final Long userId) throws ServletException {
+
+		userService.delete(request, userId);
+
+		return "user-deleted";
 	}
 
 	@RequestMapping(value = "reset-password", method = RequestMethod.GET)
@@ -220,7 +232,7 @@ public class AccountController {
 		resetPassword.setError(!isValid);
 		return isValid;
 	}
-	
+
 	@RequestMapping(value = "contact", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountContact> getContactInformation(
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {

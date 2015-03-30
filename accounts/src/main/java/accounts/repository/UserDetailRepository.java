@@ -70,6 +70,8 @@ public class UserDetailRepository implements UserDetailsManager {
 	@Autowired
 	private UserCredentialsRepository credentialsRepository;
 
+	private AccountSettingRepository accountSettingRepository;
+
 	@Autowired
 	private DataSourceTransactionManager txManager;
 
@@ -221,6 +223,9 @@ public class UserDetailRepository implements UserDetailsManager {
 		}
 	}
 
+	/**
+	 * Completely deletes a user.
+	 */
 	@Override
 	// @Transactional
 	public void deleteUser(String username) {
@@ -238,8 +243,37 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			long userId = record.getUserId();
 			credentialsRepository.delete(userId);
+			accountSettingRepository.delete(userId);
 
 			record.delete();
+
+		} catch (Exception e) {
+			logger.fine(e.toString());
+			transaction.rollbackToSavepoint(savepoint);
+		} finally {
+			txManager.commit(transaction);
+		}
+	}
+
+	/**
+	 * Disables user. Deletes credentials. Removes account settings
+	 * 
+	 * 
+	 * @param userId
+	 */
+	public void deleteUser(Long userId) {
+		TransactionStatus transaction = txManager
+				.getTransaction(new DefaultTransactionDefinition());
+
+		Object savepoint = transaction.createSavepoint();
+
+		try {
+
+			sql.update(USERS).set(USERS.ENABLED, false)
+					.where(USERS.USER_ID.eq(userId));
+
+			credentialsRepository.delete(userId);
+			accountSettingRepository.delete(userId);
 
 		} catch (Exception e) {
 			logger.fine(e.toString());
