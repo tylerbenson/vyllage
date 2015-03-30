@@ -42,4 +42,12 @@ public class AuthenticationSecurity extends
 		// .roles("ADMIN", "USER");
 	}
 
+	// @Bean
+	// public DaoAuthenticationProvider daoAuthenticationProvider() {
+	// DaoAuthenticationProvider daoAuth = new DaoAuthenticationProvider();
+	// daoAuth.setUserDetailsService(userDetailRepository);
+	// daoAuth.setPasswordEncoder(new BCryptPasswordEncoder());
+	// return daoAuth;
+	// }
+
 }
