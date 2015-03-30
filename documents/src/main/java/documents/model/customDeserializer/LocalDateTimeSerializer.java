@@ -27,11 +27,11 @@ public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
 		if (date == null)
 			jgen.writeString("");
 
-		logger.info(date.toString());
+		// logger.info(date.toString());
 
 		String dateString = date.format(formatter);
 
-		logger.info(dateString);
+		// logger.info(dateString);
 
 		jgen.writeString(dateString);
 	}
