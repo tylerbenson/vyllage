@@ -1,4 +1,6 @@
 var Reflux = require('reflux');
+var filter = require('lodash.filter');
+var findindex = require('lodash.findindex');
 var request = require('superagent');
 var assign = require('lodash.assign');
 
@@ -22,8 +24,8 @@ module.exports = Reflux.createStore({
   init: function () {
     this.tokenHeader = document.getElementById('meta_header').content,
     this.tokenValue = document.getElementById('meta_token').content;
-    this.settings = {}; //assign({}, settings);
-    this.localSettings = {}; //assign({}, settings);
+    this.settings = [];
+    this.localSettings = [];
     this.activeSettingsType = 'profile';
   },
   onGetSettings: function () {
@@ -35,27 +37,33 @@ module.exports = Reflux.createStore({
       }.bind(this));
   },
   onUpdateSettings: function () {
-    request
-      .post('/account/settings')
+    this.localSettings.forEach(function (setting) {
+      request
+      .put('/account/setting/' + setting.name)
       .set(this.tokenHeader, this.tokenValue)
-      .send(this.localSettings)
+      .send(setting)
       .end(function (err, res) {
-        this.settings = assign({}, this.localSettings);
-        this.update();
+
       }.bind(this))
+    }.bind(this))
+    this.localSettings = [];
   },
-  onChangeSetting: function (key, value) {
-    this.localSettings[key] = value;
+  onChangeSetting: function (setting) {
+    var index = findindex(this.localSettings, {accountSettingId: setting.accountSettingId});
+    if (index) {
+      this.localSettings[index] = setting;
+    } else {
+      this.localSettings.push(setting);
+    }
   },
   onCancelSettings: function () {
-    this.localSettings = assign({}, this.settings);
+    this.localSettings = [];
   },
   onSetSettingsType: function (type) {
     this.activeSettingsType = type;
     this.update();
   },
   update: function () {
-    // this.onPutSettings();
     this.trigger({
       settings: this.settings,
       activeSettingsType: this.activeSettingsType

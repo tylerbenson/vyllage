@@ -2,9 +2,7 @@ var actions = require('./actions');
 
 module.exports = {
   changeHandler: function (key, e) {
-    actions.changeSetting({
-      [key]: e.target.value
-    });
+    actions.changeSetting(key, e.target.value);
   },
   saveHandler: function (e) {
     e.preventDefault();

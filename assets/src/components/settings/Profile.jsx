@@ -7,7 +7,6 @@ var Profile = React.createClass({
   mixins: [SettingsMixin],
   render: function () {
     var settings = this.props.settings || [];
-
     return (
       <form ref='profile' onSubmit={this.saveHandler}>
         <div>
