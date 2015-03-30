@@ -20,10 +20,8 @@ input[type="reset"] {
     cursor: pointer;
   }
 
-  & > i, span {
+  & > i,span {
     color: $inverted-text-color;
-    font-size: 1.15em;
-    top: 0.2em;
     margin-right: 0.4em;
     transition: all .2s ease;
   }
@@ -77,13 +75,13 @@ input[type="reset"] {
   &.embossed {
     border-color: rgba(0,0,0,0.15);
     box-shadow: 0 1px 1px rgba(0,0,0,0.15),
-      inset 0 1px 1px rgba(255,255,255,0.25);
+    inset 0 1px 1px rgba(255,255,255,0.25);
     text-shadow: 0 1px 2px rgba(0,0,0,0.15);
 
     &:active {
       background: $primary-color;
       box-shadow: 0 1px 1px rgba(255,255,255,0.15),
-        inset 0 1px 1px rgba(0,0,0,0.05);
+      inset 0 1px 1px rgba(0,0,0,0.05);
       transition: none;
     }
   }
@@ -103,10 +101,26 @@ input[type="reset"] {
         color: lighten($primary-color, 3%);
       }
     }
+
+    &.secondary {
+      color: $secondary-color;
+
+      & > i,span {
+        color: $secondary-color;
+      }
+
+      &:hover {
+        background: none;
+        color: lighten($secondary-color, 3%);
+        & > i,span {
+          color: lighten($secondary-color, 3%);
+        }
+      }
+    }
   }
 
   &.icon {
-    padding: 0.3em 0.7em;
+    padding: 0.3em 0.6em;
 
     & > i {
       margin: 0;
@@ -116,6 +130,23 @@ input[type="reset"] {
   &.small {
     font-size: 0.75em;
   }
+
+  &.move {
+    background: $inverted-text-color !important;
+    border: darken($section-footer-background,3%) solid 1px !important;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.025);
+    color: $secondary-color !important;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: -0.75em;
+    width: 9em;
+
+    & > i {
+      color: $secondary-color !important;
+    }
+  }
 }
 
 a.button {
@@ -123,4 +154,3 @@ a.button {
     color: $inverted-text-color;
   }
 }
-

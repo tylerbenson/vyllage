@@ -8,7 +8,7 @@ var Modal = React.createClass({
     }
   },
   render: function () {
-    var overlayClasses = classnames({'modal-overlay': this.props.isOpen});
+    var overlayClasses = classnames({'overlay': this.props.isOpen});
     var modalClasses = classnames({'modal': this.props.isOpen});
     return (
       <div className={overlayClasses}>

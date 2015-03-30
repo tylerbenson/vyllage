@@ -1,20 +1,54 @@
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.overlay {
+  background: $modal-overlay-background;
   bottom: 0;
+  // display: none;
+  left: 0;
+  position: fixed;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  overflow: auto;
-  z-index: 9999;
+  top: 0;
+  z-index: 10;
 }
 
 .modal {
-  position: relative;
-  width: 600px;
-  min-height: 100px;
-  margin: 0 auto; 
-  margin-top: 20%;
-  padding: 10px;
-  background-color: white;
+  z-index: 10;
+  border: lighten($secondary-color, 40%) solid 1px;
+  border-radius: 5px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+  display: table;
+  background: $inverted-text-color;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  padding: 2em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 480px;
+
+  .header {
+    @include cf();
+    .title {
+      @include column(3/4);
+    }
+
+    .actions {
+      @include column(1/4);
+      text-align: right;
+
+      button,
+      .button {
+        padding: 0;
+      }
+    }
+  }
+
+  .content {
+    font-weight: 300;
+    padding: 0.5em 0;
+  }
+
+  .footer {
+    text-align: right;
+  }
 }
