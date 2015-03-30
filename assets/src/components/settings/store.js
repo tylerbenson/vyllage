@@ -2,59 +2,53 @@ var Reflux = require('reflux');
 var request = require('superagent');
 var assign = require('lodash.assign');
 
-var settings = {
-  firstName: 'James',
-  middleName: 'T',
-  lastName: 'Franco',
-  role: 'Student',
-  organization: 'Carlton University',
-  address: '883 Pearl Street, Sacramento',
-  phoneNumber: '971-800-1565',
-  email: 'nben888@gmail.com',
-  url:'jamesfranco',
-  twitter: '@natespn',
-  linkedin: 'www.linkedin.com/natebenson',
-  facebook: 'www.facebook.com/natebenson' 
-};
+// var settings = {
+//   firstName: 'James',
+//   middleName: 'T',
+//   lastName: 'Franco',
+//   role: 'Student',
+//   organization: 'Carlton University',
+//   address: '883 Pearl Street, Sacramento',
+//   phoneNumber: '971-800-1565',
+//   email: 'nben888@gmail.com',
+//   url:'jamesfranco',
+//   twitter: '@natespn',
+//   linkedin: 'www.linkedin.com/natebenson',
+//   facebook: 'www.facebook.com/natebenson' 
+// };
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
-    this.settings = assign({}, settings);
-    this.localSettings = assign({}, settings);
+    this.tokenHeader = document.getElementById('meta_header').content,
+    this.tokenValue = document.getElementById('meta_token').content;
+    this.settings = {}; //assign({}, settings);
+    this.localSettings = {}; //assign({}, settings);
     this.activeSettingsType = 'profile';
   },
   onGetSettings: function () {
     request
-      .get('/settings')
+      .get('/account/settings')
       .end(function (err, res) {
-        if (res.status === 200) {
-          // settings is added as default for temporary use. Need to be removed in production 
-          this.settings = res.body || settings;
-        }
-      });
+          this.settings = res.body;
+          this.update();
+      }.bind(this));
   },
   onUpdateSettings: function () {
-    this.settings = assign({}, this.localSettings);
-    this.update();
+    request
+      .post('/account/settings')
+      .set(this.tokenHeader, this.tokenValue)
+      .send(this.localSettings)
+      .end(function (err, res) {
+        this.settings = assign({}, this.localSettings);
+        this.update();
+      }.bind(this))
   },
   onChangeSetting: function (key, value) {
     this.localSettings[key] = value;
   },
   onCancelSettings: function () {
     this.localSettings = assign({}, this.settings);
-  },
-  onAddOther: function (other) {
-    this.settings.others = this.settings.others.concat(other);
-    this.update();
-  },
-  onUpdateOther: function (other, index) {
-    this.settings.others[index] = other;
-    this.update();
-  },
-  onRemoveOther: function (index) {
-    this.settings.others.splice(index, 1);
-    this.update();
   },
   onSetSettingsType: function (type) {
     this.activeSettingsType = type;

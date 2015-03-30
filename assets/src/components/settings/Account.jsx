@@ -9,7 +9,7 @@ var Account = React.createClass({
     return (
       <form ref='account' onSubmit={this.saveHandler}>
         <label>E-mail</label>
-         <input 
+        <input 
           ref='email'
           type='text'
           defaultValue={settings.email}

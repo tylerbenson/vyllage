@@ -1,94 +1,16 @@
-// @import './components/common/variables';
-// @import './components/common/mixins';
-// // $primary-color: #33c3f0;
+@import "./components/common/variables";
 
-// .margin-fix {
-//   margin-left: -10px;
-// }
-
-// .gray-text {
-//   color: $subheader-color;
-// }
-
-// .editable {
-//   border: 1px solid $primary-color;
-//   padding: 5px;
-//   outline: 0;
-//   background-color: #fff;
-// }
-
-// .settings {
-//   padding: 10px;
-//   background: white;
-//   border: 1px solid $border-color;
-//   margin-top: 32px;
-
-//   a {
-//     color: $link-color;
-//     text-decoration: none;
-//     cursor: pointer;
-//   }
-//   input, select {
-//     height: 32px;
-//     margin-bottom: 0px;
-//   }
-
-//   ul {
-//     list-style: none;
-//     margin: 0;
-//   }
-
-// }
-
-// .settings-left {
-//   border-right: 1px solid $border-color;
-//   height: 800px;
-// }
-
-// .settings-right {
- 
-// }
-
-// .topper {
-//   @include topper();
-// }
-// .topper-right {
-//   margin-left: -7%;
-// }
-
-// .settings-name {
-//   text-align: center;
-//   margin: 20px 0 30px 0;
-//   h5 {
-//     margin-bottom: 0;
-//     padding-right: 5px;
-//     display: inline-block;
-//   }
-//   h6 {
-//     color: $subheader-color;
-//   }
-// }
-
-// .settings-profile {
-//   li:nth-child(even) { 
-//     background: $top-bkg-color;
-//   }
-// }
-
-// .settings-profile-item {
-//   padding: 5px;
-// }
-
-// .settings-account {
-// }
-
-// .settings-account-item {
-//   padding: 10px 20px 10px 10px;
-// }
-
-// .settings-last-update {
-//   padding: 10px;
-//   border-right: 1px solid $border-color;
-// }
-
-
+@import "jeet/scss/jeet/index";
+@import "./components/common/utilities";
+.settings {
+  @include cf();
+  .sidebar {
+    @include column(1/4);
+    ul {
+      list-style: none;
+    }
+  }
+  .content {
+    @include column(3/4);
+  }
+}
