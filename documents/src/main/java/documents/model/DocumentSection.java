@@ -2,6 +2,7 @@ package documents.model;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.ToString;
 
@@ -15,6 +16,8 @@ import documents.model.constants.SectionType;
 import documents.model.constants.Visibility;
 import documents.model.customDeserializer.LocalDateDeserializer;
 import documents.model.customDeserializer.LocalDateSerializer;
+import documents.model.customDeserializer.LocalDateTimeDeserializer;
+import documents.model.customDeserializer.LocalDateTimeSerializer;
 
 @JsonIgnoreProperties(value = { "documentId", "sectionVersion" })
 @ToString
@@ -46,6 +49,10 @@ public class DocumentSection {
 
 	private String description;
 	private int numberOfComments;
+
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime lastModified;
 
 	public DocumentSection() {
 	}
@@ -214,6 +221,14 @@ public class DocumentSection {
 
 	public int getNumberOfComments() {
 		return numberOfComments;
+	}
+
+	public LocalDateTime getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(LocalDateTime lastModified) {
+		this.lastModified = lastModified;
 	}
 
 }
