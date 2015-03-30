@@ -11,9 +11,6 @@ var Organization = React.createClass({
       section: this.props.section
     };
   },
-  componentWillReceiveProps: function (e) {
-    this.setState({section: this.props.section});
-  },
   handleChange: function(key, e) {
     e.preventDefault();
     var section = this.state.section;

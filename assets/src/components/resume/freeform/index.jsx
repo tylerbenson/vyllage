@@ -7,7 +7,7 @@ var CancelBtn = require('../../buttons/cancel');
 
 var Freeform = React.createClass({
   getInitialState: function() {
-    return {description:this.props.section.description}; 
+    return {description: this.props.section.description}; 
   },
   getDefaultProps: function () {
     return {
@@ -15,9 +15,9 @@ var Freeform = React.createClass({
       section: {}
     }
   },
-  componentWillRecieveProps: function (nextProps) {
-    this.setState({description: nextProps.section.description});
-  },
+  // componentWillRecieveProps: function (nextProps) {
+  //   this.setState({description: nextProps.section.description});
+  // },
   handleChange: function(e) {
     e.preventDefault();
     this.setState({description: e.target.value});
@@ -37,6 +37,7 @@ var Freeform = React.createClass({
   },
   render: function () {
     var uiEditMode = this.props.section.uiEditMode;
+    console.log(this.state.description);
     return (
       <div className='subsection'>
         <div className='header'>
@@ -54,8 +55,8 @@ var Freeform = React.createClass({
             className="flat"
             rows="1"
             autoComplete="off"
-            placeholder="Tell us more about your career goal.."
-            defaultValue={this.props.section.description}
+            placeholder="Tell us more ..."
+            value={this.state.description}
             onChange={this.handleChange}
           ></textarea>
         </div>

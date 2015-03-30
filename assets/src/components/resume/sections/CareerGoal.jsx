@@ -6,6 +6,7 @@ var SectionFooter = require('./Footer');
 
 var CareerGoal = React.createClass({
   render: function () {
+    console.log(this.props.careerGoal);
     return (
       <div className='section'>
         <div className='container'>
