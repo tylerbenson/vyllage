@@ -1,4 +1,5 @@
 var React = require('react');
+var filter = require('lodash.filter');
 var SettingsMixin = require('./mixin');
 var Buttons = require('./Buttons');
 
@@ -6,13 +7,15 @@ var Account = React.createClass({
   mixins: [SettingsMixin],
   render: function () {
     var settings = this.props.settings || {};
+    var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {value: ''};
     return (
       <form ref='account' onSubmit={this.saveHandler}>
         <label>E-mail</label>
-         <input 
+        <input 
+          key={emailSetting.value || undefined}
           ref='email'
           type='text'
-          defaultValue={settings.email}
+          defaultValue={emailSetting.value}
           onChange={this.changeHandler.bind(this, 'email')}
         /> 
 

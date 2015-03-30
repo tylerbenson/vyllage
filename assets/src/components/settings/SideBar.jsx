@@ -7,7 +7,7 @@ var SideBar = React.createClass({
   },
   render: function () {
     return (
-      <div>
+      <div className='sidebar'>
         <ul>
           <li onClick={this.select.bind(this, 'profile')}>
             <i className='icon ion-person'></i><a>PROFILE</a>
