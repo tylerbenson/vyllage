@@ -107,18 +107,26 @@ public class UserCredentialsRepository {
 	}
 
 	/**
-	 * Determines if the user has any credentials matching the given password
+	 * For link generated passwords only, determines if the given password is
+	 * active.
 	 * 
 	 * @param userId
 	 * @param password
 	 * @return
 	 */
-	public boolean exists(Long userId, String password) {
+	public boolean isActive(Long userId, String password) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		for (UserCredentialsRecord record : sql.fetch(USER_CREDENTIALS,
-				USER_CREDENTIALS.USER_ID.eq(userId))) {
-			if (encoder.matches(password, record.getPassword()))
+		for (UserCredentialsRecord record : sql.fetch(
+				USER_CREDENTIALS,
+				USER_CREDENTIALS.USER_ID.eq(userId)
+						.and(USER_CREDENTIALS.ENABLED.isTrue())
+						.and(USER_CREDENTIALS.EXPIRES.isNotNull()))) {
+
+			if (encoder.matches(password, record.getPassword())
+					&& record.getExpires().toLocalDateTime()
+							.isBefore(LocalDateTime.now())) {
 				return true;
+			}
 		}
 
 		return false;

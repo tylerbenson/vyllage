@@ -57,7 +57,7 @@ public class DocumentLinkController {
 
 		DocumentLink documentLink = mapper.readValue(json, DocumentLink.class);
 
-		if (!documentLinkService.exists(documentLink.getUserId(),
+		if (!documentLinkService.isActive(documentLink.getUserId(),
 				documentLink.getGeneratedPassword()))
 			throw new UserNotFoundException("Invalid link provided.");
 
