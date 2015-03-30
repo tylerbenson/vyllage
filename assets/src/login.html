@@ -14,8 +14,8 @@
 </head>
 
 <body>
-  <form th:action="@{/login}" method="post">
-    <section id="login">
+  <section id="login">
+    <form th:action="@{/login}" method="post">
       <div class="logo">
         <span> Vyllage </span>
       </div>
@@ -27,35 +27,38 @@
           <div class="author"> - Seneca &middot; AD 55 </div>
         </div>
         <div class="login-box">
-          <p class="sign-in-txt">Sign In </p>
-          <div class="login-box-content">
+          <div class="sign-in">
+            <p class="txt">Sign In </p>
             <div th:if="${param.error}">
               <p class="invalid">Invalid e-mail or password </p>
             </div>
+            <!-- if  param.error is false, how to do ??-->
+            <div th:else="${!param.error}">
+              <p>Welcome to the Vyllage</p>
+            </div>
+          </div>
+          <div class="login-box-content">
             <div>
-              <label for="email" class="box-txt">E-email</label>
+              <label for="email" class="label">E-email</label>
               <input type="text" class="input email" name="email" placeholder="email" />
             </div>
-
             <div>
-              <label for="password" class="box-txt">Password</label>
+              <label for="password" class="label">Password</label>
               <input type="password" class="input password" name="password" placeholder="password" />
             </div>
-
-            <p> <a href="#">Forgot password? </a>
-            </p>
-            <div>
-              <input type="submit" class="button pull right" value="Submit" />
+            <div class="forget"> <a href="#">Forgot password? </a> </div>
+            <input type="submit" class="button pull right submit-btn" value="Submit" />
+            <div class="clear"></div>
+            <div class="footer">
+              <p class="label"> Don't have an account? <a href="#">Request for an invite.</a>
+              </p>
             </div>
-            <div class="divider"></div>
-            <p class="box-txt"> Don't have an account? <a href="#">Request for an invite.</a>
-            </p>
           </div>
         </div>
 
       </div>
-    </section>
-  </form>
+    </form>
+  </section>
 </body>
 
 </html>
