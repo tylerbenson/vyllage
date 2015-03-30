@@ -22,7 +22,10 @@
             <li><a href=""><i class="ion-ios-bell"></i></a></li>
             <li><a href=""><i class="ion-gear-a"></i></a></li>
             <li class="dropdown-trigger user">
-              <a href=""><span class="name">James F.</span><i class="caret"></i></a>
+              <a href="">
+                <i class="ion-person avatar"></i>
+                <span class="name">James F.</span><i class="caret"></i>
+              </a>
               <ul class="dropdown-list">
                 <li><a href="">
                   <i class="ion-document"></i>
@@ -226,34 +229,77 @@
                   </div>
                 </div>
                 <div class="content">
-                  <input type="text" class="inline flat date" placeholder="Start Date">
-                  -
-                  <input type="text" class="inline flat date" placeholder="End Date">
-                  <input type="text" class="flat location" placeholder="Location">
-                  <textarea class="flat" rows="3" placeholder="Note at least three (3) notable accomplishments achieved during this position.."></textarea>
-                </div>
-              </section>
+                  <span class="datepicker-trigger">
+                    <input type="text" class="inline flat start date" placeholder="Start Date">
+                    <div class="datepicker">
+                      <div class="header">
+                        <button class="small inverted primary icon">
+                          <i class="ion-arrow-left-c"></i>
+                        </button>
 
-              <section class="subsubsection">
-                <div class="header">
-                  <div class="title">
-                    <h3><input class="flat" type="text" placeholder="Position"></h3>
-                  </div>
-                  <div class="actions">
-                    <button class="small inverted icon">
-                      <i class="ion-plus"></i>
-                    </button>
-                    <button class="small inverted icon">
-                      <i class="ion-trash-a"></i>
-                    </button>
-                  </div>
-                </div>
-                <div class="content">
-                  <input type="text" class="inline flat date" placeholder="Start Date">
+                        <input type="text" class="inline year" placeholder="Year" value="2014">
+
+                        <button class="small inverted primary icon">
+                          <i class="ion-arrow-right-c"></i>
+                        </button>
+                      </div>
+                      <div class="content">
+                        <span class="month">Jan</span>
+                        <span class="month">Feb</span>
+                        <span class="month">Mar</span>
+                        <span class="active month">Apr</span>
+                        <span class="month">May</span>
+                        <span class="month">Jun</span>
+                        <span class="month">Jul</span>
+                        <span class="month">Aug</span>
+                        <span class="month">Sep</span>
+                        <span class="month">Oct</span>
+                        <span class="month">Nov</span>
+                        <span class="month">Dec</span>
+                      </div>
+                      <div class="footer">
+                        <input type="checkbox" class="current">
+                        current position
+                      </div>
+                    </div>
+                  </span>
                   -
-                  <input type="text" class="inline flat date" placeholder="End Date">
+                  <span class="datepicker-trigger">
+                    <input type="text" class="inline flat end date" placeholder="End Date">
+                    <div class="datepicker">
+                      <div class="header">
+                        <button class="small inverted primary icon">
+                          <i class="ion-arrow-left-c"></i>
+                        </button>
+
+                        <input type="text" class="inline year" placeholder="Year" value="2014">
+
+                        <button class="small inverted primary icon">
+                          <i class="ion-arrow-right-c"></i>
+                        </button>
+                      </div>
+                      <div class="content">
+                        <span class="month">Jan</span>
+                        <span class="month">Feb</span>
+                        <span class="month">Mar</span>
+                        <span class="active month">Apr</span>
+                        <span class="month">May</span>
+                        <span class="month">Jun</span>
+                        <span class="month">Jul</span>
+                        <span class="month">Aug</span>
+                        <span class="month">Sep</span>
+                        <span class="month">Oct</span>
+                        <span class="month">Nov</span>
+                        <span class="month">Dec</span>
+                      </div>
+                      <div class="footer">
+                        <input type="checkbox" class="current">
+                        current position
+                      </div>
+                    </div>
+                  </span>
                   <input type="text" class="flat location" placeholder="Location">
-                  <textarea class="flat" rows="3" placeholder="Note at least three (3) notable accomplishments achieved during this position.."></textarea>
+                  <textarea class="flat" rows="2" placeholder="Note at least three (3) notable accomplishments achieved during this position.."></textarea>
                 </div>
               </section>
             </div>
@@ -271,28 +317,29 @@
             </section><!-- .subsection -->
 
             <section class="subsection">
-            <button class="inverted secondary small move">
-              <i class="ion-arrow-move"></i>
-              Move
-            </button>
+              <button class="inverted secondary small move">
+                <i class="ion-arrow-move"></i>
+                Move
+              </button>
 
-            <div class="header">
-              <div class="title">
-                <h2><input class="flat" type="text" placeholder="Company Name"></h2>
+              <div class="header">
+                <div class="title">
+                  <h2><input class="flat" type="text" placeholder="Company Name"></h2>
+                </div>
+                <div class="actions">
+                  <button class="small inverted">
+                    <i class="ion-edit"></i>
+                    Edit
+                  </button>
+                  <button class="small inverted icon">
+                    <i class="ion-trash-a"></i>
+                  </button>
+                </div>
               </div>
-              <div class="actions">
-                <button class="small inverted">
-                  <i class="ion-edit"></i>
-                  Edit
-                </button>
-                <button class="small inverted icon">
-                  <i class="ion-trash-a"></i>
-                </button>
-              </div>
-            </div>
 
-            <div class="content">
-              <textarea class="flat" rows="1" autocomplete="off" placeholder="Company Description"></textarea>
+              <div class="content">
+                <textarea class="flat" rows="1" autocomplete="off" placeholder="Company Description"></textarea>
+
 
               <section class="subsubsection">
                 <div class="header">
@@ -309,79 +356,145 @@
                   </div>
                 </div>
                 <div class="content">
-                  <input type="text" class="inline flat date" placeholder="Start Date">
+                  <span class="datepicker-trigger">
+                    <input type="text" class="inline flat start date" placeholder="Start Date">
+                    <div class="datepicker">
+                      <div class="header">
+                        <button class="small inverted primary icon">
+                          <i class="ion-arrow-left-c"></i>
+                        </button>
+
+                        <input type="text" class="inline year" placeholder="Year" value="2014">
+
+                        <button class="small inverted primary icon">
+                          <i class="ion-arrow-right-c"></i>
+                        </button>
+                      </div>
+                      <div class="content">
+                        <span class="month">Jan</span>
+                        <span class="month">Feb</span>
+                        <span class="month">Mar</span>
+                        <span class="active month">Apr</span>
+                        <span class="month">May</span>
+                        <span class="month">Jun</span>
+                        <span class="month">Jul</span>
+                        <span class="month">Aug</span>
+                        <span class="month">Sep</span>
+                        <span class="month">Oct</span>
+                        <span class="month">Nov</span>
+                        <span class="month">Dec</span>
+                      </div>
+                      <div class="footer">
+                        <input type="checkbox" class="current">
+                        current position
+                      </div>
+                    </div>
+                  </span>
                   -
-                  <input type="text" class="inline flat date" placeholder="End Date">
+                  <span class="datepicker-trigger">
+                    <input type="text" class="inline flat end date" placeholder="End Date">
+                    <div class="datepicker">
+                      <div class="header">
+                        <button class="small inverted primary icon">
+                          <i class="ion-arrow-left-c"></i>
+                        </button>
+
+                        <input type="text" class="inline year" placeholder="Year" value="2014">
+
+                        <button class="small inverted primary icon">
+                          <i class="ion-arrow-right-c"></i>
+                        </button>
+                      </div>
+                      <div class="content">
+                        <span class="month">Jan</span>
+                        <span class="month">Feb</span>
+                        <span class="month">Mar</span>
+                        <span class="active month">Apr</span>
+                        <span class="month">May</span>
+                        <span class="month">Jun</span>
+                        <span class="month">Jul</span>
+                        <span class="month">Aug</span>
+                        <span class="month">Sep</span>
+                        <span class="month">Oct</span>
+                        <span class="month">Nov</span>
+                        <span class="month">Dec</span>
+                      </div>
+                      <div class="footer">
+                        <input type="checkbox" class="current">
+                        current position
+                      </div>
+                    </div>
+                  </span>
                   <input type="text" class="flat location" placeholder="Location">
                   <textarea class="flat" rows="3" placeholder="Note at least three (3) notable accomplishments achieved during this position.."></textarea>
                 </div>
               </section>
-            </div>
-
-            <div class="footer">
-              <div class="info">
-                <div class="timestamp">Updated just now</div>
-                <div class="actions">
-                  <button class="flat">
-                    <i class="ion-chatbox"></i>
-                    0 comments
-                  </button>
-                </div>
               </div>
-            </section><!-- .subsection -->
 
+              <div class="footer">
+                <div class="info">
+                  <div class="timestamp">Updated just now</div>
+                  <div class="actions">
+                    <button class="flat">
+                      <i class="ion-chatbox"></i>
+                      0 comments
+                    </button>
+                  </div>
+                </div>
+              </section><!-- .subsection -->
+
+            </div>
+          </section>
+
+        </div><!-- .sections -->
+      </div><!-- #container -->
+
+      <footer>
+        <div class="content">
+          <div class="logo">
+            <img src="images/logo-orange.png" alt="Vyllage" />
+            <span>Vyllage</span>
           </div>
-        </section>
-
-      </div><!-- .sections -->
-    </div><!-- #container -->
-
-    <footer>
-      <div class="content">
-        <div class="logo">
-          <img src="images/logo-orange.png" alt="Vyllage" />
-          <span>Vyllage</span>
+          <nav>
+            <ul>
+              <li><a href="">Help</a></li>
+              <li><a href="">Careers</a></li>
+              <li><a href="">Terms</a></li>
+              <li><a href="">Privacy</a></li>
+              <li><a href="">Contact Us</a></li>
+            </ul>
+          </nav>
         </div>
-        <nav>
-          <ul>
-            <li><a href="">Help</a></li>
-            <li><a href="">Careers</a></li>
-            <li><a href="">Terms</a></li>
-            <li><a href="">Privacy</a></li>
-            <li><a href="">Contact Us</a></li>
-          </ul>
-        </nav>
-      </div>
-    </footer>
+      </footer>
 
-    <div class="overlay">
-      <div class="modal">
-        <div class="header">
-          <div class="title">
-            <h1>Confirm Delete</h1>
+      <div class="overlay">
+        <div class="modal">
+          <div class="header">
+            <div class="title">
+              <h1>Confirm Delete</h1>
+            </div>
+            <div class="actions">
+              <button class="secondary flat icon">
+                <i class="ion-close"></i>
+              </button>
+            </div>
           </div>
-          <div class="actions">
-            <button class="secondary flat icon">
-              <i class="ion-close"></i>
+          <div class="content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis recusandae, nemo rerum, necessitatibus qui doloribus.</p>
+          </div>
+          <div class="footer">
+            <button class="small inverted">
+              <i class="ion-trash-a"></i>
+              Delete
+            </button>
+            <button class="small inverted secondary">
+              Cancel
             </button>
           </div>
         </div>
-        <div class="content">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis recusandae, nemo rerum, necessitatibus qui doloribus.</p>
-        </div>
-        <div class="footer">
-          <button class="small inverted">
-            <i class="ion-trash-a"></i>
-            Delete
-          </button>
-          <button class="small inverted secondary">
-            Cancel
-          </button>
-        </div>
       </div>
-    </div>
 
-    <script type="text/javascript" src="../bower_components/autosize/dest/autosize.min.js"></script>
-    <script type="text/javascript" src="/scripts/main.js"></script>
-  </body>
-  </html>
+      <script type="text/javascript" src="../bower_components/autosize/dest/autosize.min.js"></script>
+      <script type="text/javascript" src="/scripts/main.js"></script>
+    </body>
+    </html>

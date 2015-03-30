@@ -65,11 +65,3 @@ textarea {
     bottom: 0.25em;
   }
 }
-
-.caret {
-  @extend .ion-arrow-down-b;
-  font-size: 0.9em;
-  margin-left: 0.5em;
-  position: relative;
-  bottom: 0.3em;
-}

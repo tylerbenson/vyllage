@@ -2,6 +2,10 @@
   "name": "mock",
   "private": true,
   "dependencies": {
-    "jquery": "~2.1.1"
+    "jquery": "~2.1.1",
+    "autosize": "~2.0.0",
+    "ionicons": "~2.0.1",
+    "jeet": "~6.1.2",
+    "normalize.css": "~3.0.2"
   }
 }
