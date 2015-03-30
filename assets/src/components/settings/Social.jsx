@@ -1,4 +1,5 @@
 var React = require('react');
+var filter = require('lodash.filter');
 var Buttons = require('./Buttons');
 var SettingsMixin = require('./mixin');
 
@@ -6,6 +7,10 @@ var Social = React.createClass({
   mixins: [SettingsMixin],
   render: function () {
     var settings = this.props.settings || {};
+    var urlSetting = filter(this.props.settings, {name: 'url'})[0] || {value: ''};
+    var facebookSetting = filter(this.props.settings, {name: 'facebook'})[0] || {value: ''};
+    var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {value: ''};
+    var linkedinSetting = filter(this.props.settings, {name: 'linkedin'})[0] || {value: ''};
     return (
       <form ref='social' onSubmit={this.saveHandler}>
         <label>Url</label>
@@ -13,7 +18,7 @@ var Social = React.createClass({
         <input 
           ref='url'
           type='text'
-          defaultValue={settings.url}
+          defaultValue={urlSetting.value}
           onChange={this.changeHandler.bind(this, 'url')}
         /> 
 
@@ -21,7 +26,7 @@ var Social = React.createClass({
         <input 
           ref='facebook'
           type='text'
-          defaultValue={settings.facebook}
+          defaultValue={facebookSetting.value}
           onChange={this.changeHandler.bind(this, 'facebook')}
         /> 
 
@@ -29,7 +34,7 @@ var Social = React.createClass({
         <input 
           ref='twitter'
           type='text'
-          defaultValue={settings.twitter}
+          defaultValue={twitterSetting.value}
           onChange={this.changeHandler.bind(this, 'twitter')}
         />
 
@@ -37,7 +42,7 @@ var Social = React.createClass({
         <input 
           ref='linkedin'
           type='text'
-          defaultValue={settings.linkedin}
+          defaultValue={linkedinSetting.value}
           onChange={this.changeHandler.bind(this, 'linkedin')}
         />
 

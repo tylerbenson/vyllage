@@ -43,14 +43,17 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue)
       .send(setting)
       .end(function (err, res) {
-
+        var index = findindex(this.settings, {name: setting.name});
+        this.settings[index] = setting;
+        this.update();
       }.bind(this))
     }.bind(this))
+
     this.localSettings = [];
   },
   onChangeSetting: function (setting) {
-    var index = findindex(this.localSettings, {accountSettingId: setting.accountSettingId});
-    if (index) {
+    var index = findindex(this.localSettings, {name: setting.name});
+    if (index !== -1) {
       this.localSettings[index] = setting;
     } else {
       this.localSettings.push(setting);

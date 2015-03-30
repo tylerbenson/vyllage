@@ -7,6 +7,13 @@ var Profile = React.createClass({
   mixins: [SettingsMixin],
   render: function () {
     var settings = this.props.settings || [];
+    var firstNameSetting = filter(this.props.settings, {name: 'firstName'})[0];
+    var middleNameSetting = filter(this.props.settings, {name: 'middleName'})[0] || {value: ''};
+    var lastNameSetting = filter(this.props.settings, {name: 'lastName'})[0] || {value: ''};
+    var roleSetting = filter(this.props.settings, {name: 'role'})[0] || {value: ''};
+    var organizationSetting = filter(this.props.settings, {name: 'organization'})[0] || {value: ''};
+    var addressSetting = filter(this.props.settings, {name: 'address'})[0] || {value: ''} ;
+    var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {value: ''};
     return (
       <form ref='profile' onSubmit={this.saveHandler}>
         <div>
@@ -14,7 +21,7 @@ var Profile = React.createClass({
           <input 
             ref='firstName'
             type='text'
-            defaultValue={settings.firstName}
+            defaultValue={firstNameSetting && firstNameSetting.value}
             onChange={this.changeHandler.bind(this, 'firstName')}
           />
         </div>
@@ -24,7 +31,7 @@ var Profile = React.createClass({
           <input 
             ref='middleName'
             type='text'
-            defaultValue={settings.middleName}
+            defaultValue={middleNameSetting.value}
             onChange={this.changeHandler.bind(this, 'middleName')}
           />
         </div>
@@ -34,7 +41,7 @@ var Profile = React.createClass({
           <input 
             ref='lastName'
             type='text'
-            defaultValue={settings.lastName}
+            defaultValue={lastNameSetting.value}
             onChange={this.changeHandler.bind(this, 'lastName')}
           />
         </div>
@@ -44,7 +51,7 @@ var Profile = React.createClass({
           <input
             ref='role'
             type='text'
-            defaultValue={settings.role}
+            defaultValue={roleSetting.value}
             onChange={this.changeHandler.bind(this, 'role')}
           />
         </div>
@@ -54,7 +61,7 @@ var Profile = React.createClass({
           <input 
             ref='organization'
             type='text' 
-            defaultValue={settings.organization}
+            defaultValue={organizationSetting.value}
             onChange={this.changeHandler.bind(this, 'organization')}
           />
         </div>
@@ -63,8 +70,9 @@ var Profile = React.createClass({
           <label>Address</label>
           <textarea 
             ref='address'
+            defaultValue={addressSetting.value}
             onChange={this.changeHandler.bind(this, 'address')}
-          >{settings.address}</textarea>
+          ></textarea>
         </div>
 
         <div>
@@ -72,7 +80,7 @@ var Profile = React.createClass({
           <input
             ref='phoneNumber' 
             type='text'
-            defaultValue={settings.phoneNumber}
+            defaultValue={phoneNumberSetting.value}
             onChange={this.changeHandler.bind(this, 'phoneNumber')}
           />
         </div>

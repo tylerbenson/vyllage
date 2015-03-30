@@ -9,6 +9,9 @@ var Social = require('./Social');
 
 var Settings = React.createClass({
   mixins: [Reflux.connect(SettingsStore)],
+  componentWillMount: function () {
+    actions.getSettings();
+  },
   componentDidMount: function () {
     actions.getSettings();
   },
@@ -21,6 +24,7 @@ var Settings = React.createClass({
     } else {
       SettingsNode = <Social {...this.props} {...this.state} />;
     }
+    console.log(this.state);
     return (
       <section className='settings'>
         <SideBar />
