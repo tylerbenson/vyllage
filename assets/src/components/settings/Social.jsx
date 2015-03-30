@@ -16,6 +16,7 @@ var Social = React.createClass({
         <label>Url</label>
         <span>www.vyllage.com/</span>
         <input 
+          key={urlSetting.value || undefined}
           ref='url'
           type='text'
           defaultValue={urlSetting.value}
@@ -24,6 +25,7 @@ var Social = React.createClass({
 
         <label>Facebook</label>
         <input 
+          key={facebookSetting.value || undefined}
           ref='facebook'
           type='text'
           defaultValue={facebookSetting.value}
@@ -32,6 +34,7 @@ var Social = React.createClass({
 
         <label>Twitter</label>
         <input 
+          key={twitterSetting.value || undefined}
           ref='twitter'
           type='text'
           defaultValue={twitterSetting.value}
@@ -40,6 +43,7 @@ var Social = React.createClass({
 
         <label>Linkedin</label>
         <input 
+          key={linkedinSetting.value || undefined}
           ref='linkedin'
           type='text'
           defaultValue={linkedinSetting.value}

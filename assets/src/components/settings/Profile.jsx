@@ -7,7 +7,7 @@ var Profile = React.createClass({
   mixins: [SettingsMixin],
   render: function () {
     var settings = this.props.settings || [];
-    var firstNameSetting = filter(this.props.settings, {name: 'firstName'})[0];
+    var firstNameSetting = filter(this.props.settings, {name: 'firstName'})[0] || {value: ''};
     var middleNameSetting = filter(this.props.settings, {name: 'middleName'})[0] || {value: ''};
     var lastNameSetting = filter(this.props.settings, {name: 'lastName'})[0] || {value: ''};
     var roleSetting = filter(this.props.settings, {name: 'role'})[0] || {value: ''};
@@ -19,9 +19,10 @@ var Profile = React.createClass({
         <div>
           <label>First name</label>
           <input 
+            key={firstNameSetting.value || undefined}
             ref='firstName'
             type='text'
-            defaultValue={firstNameSetting && firstNameSetting.value}
+            value={firstNameSetting.value}
             onChange={this.changeHandler.bind(this, 'firstName')}
           />
         </div>
@@ -29,6 +30,7 @@ var Profile = React.createClass({
         <div>
           <label>Middle name</label>
           <input 
+            key={middleNameSetting.value || undefined}
             ref='middleName'
             type='text'
             defaultValue={middleNameSetting.value}
@@ -39,6 +41,7 @@ var Profile = React.createClass({
         <div>
           <label>Last name</label>
           <input 
+            key={lastNameSetting.value || undefined}
             ref='lastName'
             type='text'
             defaultValue={lastNameSetting.value}
@@ -49,6 +52,7 @@ var Profile = React.createClass({
         <div>
           <label>Role</label>
           <input
+            key={roleSetting.value || undefined}
             ref='role'
             type='text'
             defaultValue={roleSetting.value}
@@ -59,6 +63,7 @@ var Profile = React.createClass({
         <div>
           <label>Organization Name</label>
           <input 
+            key={organizationSetting.value || undefined}
             ref='organization'
             type='text' 
             defaultValue={organizationSetting.value}
@@ -69,6 +74,7 @@ var Profile = React.createClass({
         <div>
           <label>Address</label>
           <textarea 
+            key={addressSetting.value || undefined}
             ref='address'
             defaultValue={addressSetting.value}
             onChange={this.changeHandler.bind(this, 'address')}
@@ -78,6 +84,7 @@ var Profile = React.createClass({
         <div>
           <label>Contact no</label>
           <input
+            key={phoneNumberSetting.value || undefined}
             ref='phoneNumber' 
             type='text'
             defaultValue={phoneNumberSetting.value}
