@@ -70,6 +70,7 @@ public class UserDetailRepository implements UserDetailsManager {
 	@Autowired
 	private UserCredentialsRepository credentialsRepository;
 
+	@Autowired
 	private AccountSettingRepository accountSettingRepository;
 
 	@Autowired
@@ -155,7 +156,7 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			Assert.notNull(newRecord.getUserId());
 
-			credentialsRepository.save(newRecord.getUserId(),
+			credentialsRepository.create(newRecord.getUserId(),
 					user.getPassword());
 
 			for (GrantedAuthority role : roles) {
@@ -192,7 +193,11 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		try {
 			UsersRecord record = sql.fetchOne(USERS,
-					USERS.USER_NAME.eq(user.getUsername()));
+					USERS.USER_ID.eq(user.getUserId()));
+
+			if (record == null)
+				throw new UsernameNotFoundException("User with userName '"
+						+ user.getUsername() + "' not found.");
 
 			record.setEnabled(user.isEnabled());
 			record.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
@@ -224,7 +229,11 @@ public class UserDetailRepository implements UserDetailsManager {
 	}
 
 	/**
-	 * Completely deletes a user.
+	 * Disables user. Deletes credentials. Deletes account settings. Deletes
+	 * User Roles.
+	 * 
+	 * 
+	 * @param userId
 	 */
 	@Override
 	// @Transactional
@@ -239,44 +248,19 @@ public class UserDetailRepository implements UserDetailsManager {
 					USERS.USER_NAME.eq(username));
 
 			roleRepository.deleteByUserName(username);
-			organizationMemberRepository.deleteByUserId(record.getUserId());
 
 			long userId = record.getUserId();
+			organizationMemberRepository.deleteByUserId(userId);
 			credentialsRepository.delete(userId);
 			accountSettingRepository.delete(userId);
-
-			record.delete();
-
-		} catch (Exception e) {
-			logger.fine(e.toString());
-			transaction.rollbackToSavepoint(savepoint);
-		} finally {
-			txManager.commit(transaction);
-		}
-	}
-
-	/**
-	 * Disables user. Deletes credentials. Removes account settings
-	 * 
-	 * 
-	 * @param userId
-	 */
-	public void deleteUser(Long userId) {
-		TransactionStatus transaction = txManager
-				.getTransaction(new DefaultTransactionDefinition());
-
-		Object savepoint = transaction.createSavepoint();
-
-		try {
 
 			sql.update(USERS).set(USERS.ENABLED, false)
-					.where(USERS.USER_ID.eq(userId));
+					.where(USERS.USER_ID.eq(userId)).execute();
 
-			credentialsRepository.delete(userId);
-			accountSettingRepository.delete(userId);
+			// record.delete();
 
 		} catch (Exception e) {
-			logger.fine(e.toString());
+			logger.info(e.toString());
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
 			txManager.commit(transaction);
@@ -310,14 +294,20 @@ public class UserDetailRepository implements UserDetailsManager {
 		}
 
 		logger.info("Changing password for user '" + username + "'");
+
 		Long userId = this.loadUserByUsername(username).getUserId();
-		credentialsRepository.delete(userId);
-		credentialsRepository.save(userId, newPassword);
+		updateCredential(newPassword, userId);
 
 		SecurityContextHolder.getContext().setAuthentication(
 				createNewAuthentication(currentUser, newPassword));
 	}
 
+	/**
+	 * When the user resets the password we don't have the previous one to
+	 * compare against.
+	 * 
+	 * @param newPassword
+	 */
 	public void changePassword(String newPassword) {
 		Authentication currentUser = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -332,12 +322,20 @@ public class UserDetailRepository implements UserDetailsManager {
 		String username = currentUser.getName();
 
 		logger.info("Changing password for user '" + username + "'");
+
 		Long userId = this.loadUserByUsername(username).getUserId();
-		credentialsRepository.delete(userId);
-		credentialsRepository.save(userId, newPassword);
+		updateCredential(newPassword, userId);
 
 		SecurityContextHolder.getContext().setAuthentication(
 				createNewAuthentication(currentUser, newPassword));
+	}
+
+	private void updateCredential(String newPassword, Long userId) {
+		UserCredential userCredential = credentialsRepository.get(userId);
+		userCredential.setEnabled(true);
+		userCredential.setPassword(newPassword);
+
+		credentialsRepository.update(userCredential);
 	}
 
 	@Override
@@ -411,8 +409,8 @@ public class UserDetailRepository implements UserDetailsManager {
 				Long userId = sql.select().from(USERS)
 						.where(USERS.USER_NAME.eq(user.getUsername()))
 						.fetchOne(USERS.USER_ID);
-				credentialsRepository
-						.save(new Long(userId), user.getPassword());
+				credentialsRepository.create(new Long(userId),
+						user.getPassword());
 			}
 
 		} catch (Exception e) {

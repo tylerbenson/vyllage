@@ -108,7 +108,8 @@ public class AccountController {
 
 	@RequestMapping(value = "{userId}/delete")
 	public String deleteUser(HttpServletRequest request,
-			@PathVariable final Long userId) throws ServletException {
+			@PathVariable final Long userId) throws ServletException,
+			UserNotFoundException {
 
 		userService.delete(request, userId);
 

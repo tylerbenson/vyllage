@@ -62,7 +62,7 @@ public class UserCredentialsRepository {
 	 * @param userId
 	 * @param password
 	 */
-	public void save(Long userId, String password) {
+	public void create(Long userId, String password) {
 		Assert.notNull(userId);
 		Assert.notNull(password);
 		UserCredentialsRecord newRecord = sql.newRecord(USER_CREDENTIALS);
@@ -91,12 +91,13 @@ public class UserCredentialsRepository {
 	}
 
 	/**
-	 * Deletes the user credential used to login, etc.
+	 * Deactivates the user credential used to login, etc.
 	 * 
 	 * @param userId
 	 */
 	public void delete(long userId) {
-		sql.delete(USER_CREDENTIALS)
+		sql.update(USER_CREDENTIALS)
+				.set(USER_CREDENTIALS.ENABLED, false)
 				.where(USER_CREDENTIALS.USER_ID.eq(userId).and(
 						USER_CREDENTIALS.EXPIRES.isNull())).execute();
 	}
@@ -105,6 +106,13 @@ public class UserCredentialsRepository {
 		return new BCryptPasswordEncoder().encode(password);
 	}
 
+	/**
+	 * Determines if the user has any credentials matching the given password
+	 * 
+	 * @param userId
+	 * @param password
+	 * @return
+	 */
 	public boolean exists(Long userId, String password) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		for (UserCredentialsRecord record : sql.fetch(USER_CREDENTIALS,
@@ -114,5 +122,21 @@ public class UserCredentialsRepository {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Updates the credentials the users uses to login, ignores the ones for
+	 * document links.
+	 * 
+	 * @param userCredential
+	 */
+	public void update(UserCredential userCredential) {
+		sql.update(USER_CREDENTIALS)
+				.set(USER_CREDENTIALS.PASSWORD,
+						getEncodedPassword(userCredential.getPassword()))
+				.set(USER_CREDENTIALS.ENABLED, userCredential.isEnabled())
+				.where(USER_CREDENTIALS.USER_ID.eq(userCredential.getUserId())
+						.and(USER_CREDENTIALS.EXPIRES.isNull())).execute();
+
 	}
 }

@@ -368,10 +368,13 @@ public class UserService {
 	 * 
 	 * @param userId
 	 * @throws ServletException
+	 * @throws UserNotFoundException
 	 */
 	public void delete(HttpServletRequest request, Long userId)
-			throws ServletException {
-		userRepository.deleteUser(userId);
+			throws ServletException, UserNotFoundException {
+		User user = userRepository.get(userId);
+
+		userRepository.deleteUser(user.getFirstName());
 
 		request.logout();
 
