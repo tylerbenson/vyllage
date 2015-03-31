@@ -39,7 +39,7 @@ module.exports = Reflux.createStore({
                 .parse(endpoints.resumeHeader)
                 .expand({documentId: this.documentId});
     request
-      .post(url)
+      .put(url)
       .set(this.tokenHeader, this.tokenValue) 
       .send({tagline: tagline})
       .end(function (err, res) {
