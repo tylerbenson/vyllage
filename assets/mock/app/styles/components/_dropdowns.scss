@@ -50,3 +50,60 @@
     }
   }
 }
+
+.autocomplete {
+  background: $inverted-text-color;
+  border-radius: 5px;
+  border: lighten($secondary-color, 35%) solid 1px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: none;
+  font-size: 0.8em;
+  left: 0;
+  list-style-type: none;
+  margin: 0;
+  max-height: 240px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0;
+  position: absolute;
+  top: 110%;
+  width: 15em;
+  z-index: 1;
+
+  li {
+    border-bottom: lighten($secondary-color, 40%) solid 1px;
+    padding: 0.5em 1em;
+
+    &:hover {
+      background: $highlight;
+      cursor: pointer;
+    }
+
+    .name {
+      font-weight: 400;
+    }
+
+    .contact {
+      color: lighten($text-color, 15%);
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      white-space: nowrap;
+
+      & > i {
+        color: lighten($text-color, 15%);
+        display: inline;
+        margin-right: 0.15em;
+      }
+    }
+
+    &.title {
+      background: lighten($secondary-color, 40%);
+      color: lighten($text-color, 15%);
+      font-size: 0.8em;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+  }
+}

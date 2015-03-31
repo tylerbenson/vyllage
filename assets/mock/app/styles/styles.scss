@@ -7,7 +7,7 @@
 @import "globals/defaults";
 @import "globals/typography";
 
-/* COMPONENTS */
+/* Components */
 @import "components/buttons";
 @import "components/forms";
 @import "components/dropdowns";
@@ -18,3 +18,8 @@
 @import "components/footer";
 @import "components/modals";
 @import "components/datepicker";
+
+/* Layouts */
+@import "layouts/resume";
+@import "layouts/ask-advice";
+@import "layouts/settings";
