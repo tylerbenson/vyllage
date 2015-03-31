@@ -9,7 +9,7 @@
     border-radius: 5px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
     margin: 0.75em 1em;
-    padding: 0;
+    padding: 2em 0;
     position: relative;
   }
 
@@ -19,7 +19,7 @@
 
   .header {
     @include cf();
-    padding: 3em 4em 1em 4em;
+    padding: 1em 4em;
 
     .title {
       @include column(3/4);
@@ -139,9 +139,19 @@
   border-top: darken($section-footer-background,3%) solid 1px;
   position: relative;
 
+  & > .header {
+    padding: 2em 4em 0em 4em;
+
+    h2 {
+      color: $mode-color;
+      font-size: 1em;
+      font-weight: 400;
+    }
+  }
+
   & > .content {
     margin-top: -0.5em;
-    padding: 0 4em 0.5em 4em;
+    padding: 0.25em 4em 0.25em 4em;
   }
 
   .title {
@@ -161,7 +171,9 @@
 
     .title {
       h3 {
+        color: $mode-color;
         font-size: 0.85em;
+        font-weight: 400;
       }
     }
   }
