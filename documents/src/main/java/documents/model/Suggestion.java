@@ -4,12 +4,21 @@ import java.time.LocalDateTime;
 
 import lombok.ToString;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import documents.model.customDeserializer.LocalDateTimeDeserializer;
+import documents.model.customDeserializer.LocalDateTimeSerializer;
+
 @ToString
 public class Suggestion {
 	private Long suggestionId;
 	private Long sectionId;
 	private Long sectionVersion;
 	private DocumentSection documentSection;
+
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime lastModified;
 	private Long userId;
 
