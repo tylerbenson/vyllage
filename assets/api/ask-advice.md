@@ -13,6 +13,7 @@
 + Request (application/json)
   + Body
 
+```
     {
       "to": [
         { "firstName": "Bob", "lastName": "Smith", "email": "bob@smith.com" },
@@ -21,6 +22,7 @@
       "subject": "subject text"
       "message": "message of request"
     }
+```
 
 + Response 200 - if the document belongs to the current user
   + Redirect user back to /resume/{documentId}
@@ -35,6 +37,7 @@
   + emailFilter (string, `tyler@`) - Filter to be applied to the email column.
 + Response 200 (application/json)
 
+```
     {
       "recent" : [
         {"firstName": "Tyler", "lastName": "Benson", "userId": 1},
@@ -51,3 +54,4 @@
         {"firstName": "Matt", "lastName": "Moncor", "userId": 10}
       ]
     }
+```
