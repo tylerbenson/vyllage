@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vyllage | Settings</title>
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+  <div id="container" class="settings">
+    <header>
+      <div class="content">
+        <div class="logo">
+          <img src="images/logo-white.png" alt="Vyllage" />
+          <span>Vyllage</span>
+        </div>
+        <span class="page-title">Settings</span>
+        <nav>
+          <ul>
+            <li><a href=""><i class="ion-ios-bell"></i></a></li>
+            <li><a href=""><i class="ion-gear-a"></i></a></li>
+            <li class="dropdown-trigger user">
+              <a href="">
+                <i class="ion-person avatar"></i>
+                <span class="name">James F.</span><i class="caret"></i>
+              </a>
+              <ul class="dropdown-list">
+                <li><a href="">
+                  <i class="ion-document"></i>
+                  Resume
+                </a></li>
+                <li><a href="">
+                  <i class="ion-person-stalker"></i>
+                  Ask Advice
+                </a></li>
+                <li><a href="">
+                  <i class="ion-log-out"></i>
+                  Sign out
+                </a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <div class="sections">
+      <section class="mini section">
+        <div class="container">
+          <div class="sidebar">
+            <a href="#">
+              <i class="ion-person"></i>
+              Profile
+            </a>
+            <a href="#">
+              <i class="ion-key"></i>
+              Account
+            </a>
+            <a href="#" class="active">
+              <i class="ion-social-buffer"></i>
+              Social
+            </a>
+          </div>
+          <div class="content">
+            <label>URL</label>
+            <span>http://www.vyllage.com/</span>
+            <input type="text" class="inline url" value="nelo">
+            <!-- Available classes for message: .error, .warning & .success -->
+            <div class="error message">
+              Sorry, This URL is taken.
+            </div>
+
+            <label>Facebook</label>
+            <a href="">http://facebook.com/neloggs</a>
+
+            <label>Twitter</label>
+            <a href="">@neloggs</a>
+
+            <label>LinkedIn</label>
+            <a href="">@neloggs_pro</a>
+
+            <label>GitHub</label>
+            <a href="">Connect GitHub account..</a>
+
+            <div class="actions">
+              <button>
+                <i class="ion-checkmark"></i>
+                Save
+              </button>
+              <button class="secondary inverted">
+                Cancel
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </div><!--#container-->
+  <footer>
+    <div class="content">
+      <div class="logo">
+        <img src="images/logo-orange.png" alt="Vyllage" />
+        <span>Vyllage</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="">Help</a></li>
+          <li><a href="">Careers</a></li>
+          <li><a href="">Terms</a></li>
+          <li><a href="">Privacy</a></li>
+          <li><a href="">Contact Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <div class="overlay">
+    <div class="modal">
+      <div class="header">
+        <div class="title">
+          <h1>Confirm Delete</h1>
+        </div>
+        <div class="actions">
+          <button class="secondary flat icon">
+            <i class="ion-close"></i>
+          </button>
+        </div>
+      </div>
+      <div class="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis recusandae, nemo rerum, necessitatibus qui doloribus.</p>
+      </div>
+      <div class="footer">
+        <button class="small inverted">
+          <i class="ion-trash-a"></i>
+          Delete
+        </button>
+        <button class="small inverted secondary">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="../bower_components/autosize/dest/autosize.min.js"></script>
+  <script type="text/javascript" src="/scripts/main.js"></script>
+</body>
+</html>
