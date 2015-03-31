@@ -33,7 +33,9 @@
       display: block;
       margin: 1em;
       text-decoration: none;
-
+      input {
+        color: lighten($secondary-color, 30%);
+      }
       &:hover {
         color: lighten($tagline-color, 5%);
 
