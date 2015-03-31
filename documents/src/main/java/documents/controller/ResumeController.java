@@ -45,6 +45,7 @@ public class ResumeController {
 	@Autowired
 	private AccountService accountService;
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
 
