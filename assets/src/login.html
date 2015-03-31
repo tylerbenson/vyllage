@@ -33,7 +33,7 @@
               <p class="invalid">Invalid e-mail or password </p>
             </div>
             <!-- if  param.error is false, how to do ??-->
-            <div th:else="${!param.error}">
+            <div th:if=" not ${param.error}">
               <p>Welcome to the Vyllage</p>
             </div>
           </div>
