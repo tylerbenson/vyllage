@@ -17,12 +17,9 @@ var ResumeEditor = React.createClass({
   },
   render: function () {
     var careerGoalSections = filter(this.state.resume.sections, {title: 'career goal'});
-    // There will be only one career goal section.
-    var careerGoal = careerGoalSections[0];
-
+    var skillSections = filter(this.state.resume.sections, {title: 'skills'});
     var experienceSections = filter(this.state.resume.sections, {title: 'experience'});
     var educationSections = filter(this.state.resume.sections, {title: 'education'});
-    var skillSections = filter(this.state.resume.sections, {title: 'skills'});
     var profileData = this.state.resume.header;
     var contactData = this.state.resume.contact;
     return (
@@ -30,10 +27,10 @@ var ResumeEditor = React.createClass({
         <Subheader documentId={this.state.resume.documentId}/>
         <Banner profileData={profileData} contactData={contactData}/>
         <div className="sections">
-          <CareerGoal careerGoal={careerGoal} />
+          <CareerGoal section={careerGoalSections[0]} />
           <Experience sections={experienceSections} />
           <Education sections={educationSections} />
-          <Skill sections={skillSections} />
+          <Skill section={skillSections[0]} />
         </div>
       </div>
     );

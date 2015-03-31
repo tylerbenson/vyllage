@@ -9,7 +9,7 @@ var CareerGoal = React.createClass({
     return (
       <div className='section'>
         <div className='container'>
-          <Freeform title='Career Goal' section={this.props.careerGoal} />
+          <Freeform title='Career Goal' section={this.props.section} />
         </div>
       </div>
     );
