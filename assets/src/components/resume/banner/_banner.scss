@@ -21,7 +21,7 @@
       width: 100%;
     }
     .address {
-      color: lighten($secondary-color, 30%);
+      color: darken($secondary-color, 30%);
       font-size: 0.85em;
       line-height: 1.4;
     }
@@ -34,7 +34,7 @@
       margin: 1em;
       text-decoration: none;
       input {
-        color: lighten($secondary-color, 30%);
+        color: darken($secondary-color, 30%);
       }
       &:hover {
         color: lighten($tagline-color, 5%);
