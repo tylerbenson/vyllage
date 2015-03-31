@@ -4,21 +4,6 @@ var findindex = require('lodash.findindex');
 var request = require('superagent');
 var assign = require('lodash.assign');
 
-// var settings = {
-//   firstName: 'James',
-//   middleName: 'T',
-//   lastName: 'Franco',
-//   role: 'Student',
-//   organization: 'Carlton University',
-//   address: '883 Pearl Street, Sacramento',
-//   phoneNumber: '971-800-1565',
-//   email: 'nben888@gmail.com',
-//   url:'jamesfranco',
-//   twitter: '@natespn',
-//   linkedin: 'www.linkedin.com/natebenson',
-//   facebook: 'www.facebook.com/natebenson' 
-// };
-
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
