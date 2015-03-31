@@ -2,7 +2,7 @@ var React = require('react');
 var actions = require('../actions');
 var Comments = require('../comments');
 var CommentsCount = require('../../buttons/comments-count');
-
+var moment = require('moment');
 
 var SectionFooter = React.createClass({
   clickComments: function () {
@@ -13,7 +13,7 @@ var SectionFooter = React.createClass({
     return (
       <div className='footer'>
         <div className='content'>
-          <p className='timestamp'>Updated just now</p>
+          <p className='timestamp'>{moment(this.props.section.lastModified).fromNow()}</p>
           <div className='actions'>
             <CommentsCount count={numberOfComments} onClick={this.clickComments}/>
           </div> 

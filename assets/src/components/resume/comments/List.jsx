@@ -12,7 +12,7 @@ var CommentList = React.createClass({
               <div className='content'>
                 <div className='info'>
                   <div className="author">{comment.userName}</div>
-                  <div className="timestamp">3 minutes ago</div>
+                  <div className="timestamp"></div>
                 </div>  
                 <div className="message">
                   {comment.commentText}
