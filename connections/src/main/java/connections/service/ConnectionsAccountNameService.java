@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
-public class AdviceService {
+public class ConnectionsAccountNameService {
 
 	@Autowired
 	private RestTemplate restTemplate;

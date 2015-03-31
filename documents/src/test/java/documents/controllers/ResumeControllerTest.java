@@ -19,7 +19,7 @@ import documents.model.AccountNames;
 import documents.model.Document;
 import documents.model.DocumentSection;
 import documents.repository.ElementNotFoundException;
-import documents.services.AccountService;
+import documents.services.DocumentsAccountService;
 import documents.services.DocumentService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -56,7 +56,7 @@ public class ResumeControllerTest {
 	private DocumentService documentService;
 
 	@Mock
-	private AccountService accountService;
+	private DocumentsAccountService accountService;
 
 	// resume/0/section/124
 	@Test

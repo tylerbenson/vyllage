@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import accounts.email.EmailContext;
 import accounts.email.EmailHTMLBody;
 import accounts.email.EmailParameters;
-import accounts.email.MailService;
+import accounts.email.AccountsMailService;
 import accounts.model.CSRFToken;
 import accounts.model.User;
 import accounts.model.account.AccountContact;
@@ -70,7 +70,7 @@ public class AccountController {
 	private ObjectMapper mapper;
 
 	@Autowired
-	private MailService mailService;
+	private AccountsMailService mailService;
 
 	/**
 	 * Returns a list containing the id, first, middle and last names for an

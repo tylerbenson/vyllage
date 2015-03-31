@@ -40,7 +40,7 @@ public class UserService {
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
 
 	@Autowired
-	private DocumentService documentService;
+	private AccountsDocumentService documentService;
 
 	@Autowired
 	private OrganizationRepository organizationRepository;
