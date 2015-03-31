@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
-import org.jooq.Record3;
+import org.jooq.Record4;
 import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -41,8 +41,9 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
 
-		Result<Record3<String, Long, Long>> existingRecords = sql
-				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION) //
+		Result<Record4<String, Long, Long, Timestamp>> existingRecords = sql
+				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION,
+						s1.LASTMODIFIED) //
 				.from(s1) //
 				.leftOuterJoin(s2) //
 				.on(s1.ID.eq(s2.ID).and(
@@ -68,8 +69,9 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
 
-		Result<Record3<String, Long, Long>> existingRecords = sql
-				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION) //
+		Result<Record4<String, Long, Long, Timestamp>> existingRecords = sql
+				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION,
+						s1.LASTMODIFIED) //
 				.from(s1) //
 				.leftOuterJoin(s2) //
 				.on(s1.ID.eq(s2.ID).and(
@@ -95,8 +97,9 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
 
-		Result<Record3<String, Long, Long>> existingRecords = sql
-				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION)
+		Result<Record4<String, Long, Long, Timestamp>> existingRecords = sql
+				.select(s1.JSONDOCUMENT, s1.DOCUMENTID, s1.SECTIONVERSION,
+						s1.LASTMODIFIED)
 				.from(s1)
 				.leftOuterJoin(s2)
 				.on(s1.ID.eq(s2.ID).and(
@@ -155,19 +158,27 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 
 			newRecord.setSectionversion(newSectionVersion);
 			newRecord.setDocumentid(documentSection.getDocumentId());
+			newRecord.setPosition(documentSection.getSectionPosition());
+			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
+			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
 
 			try {
 				newRecord.setJsondocument(documentSection.asJSON());
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
 			}
-			newRecord.setPosition(documentSection.getSectionPosition());
-			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
-			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
 
-			newRecord.store();
-
+			newRecord.store(); // first to get the Id.
 			documentSection.setSectionId(newRecord.getId());
+
+			try {
+				newRecord.setJsondocument(documentSection.asJSON());
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+
+			newRecord.store(); // second to add the sectionId.
+
 			documentSection.setSectionVersion(newSectionVersion);
 
 		} else {
@@ -220,11 +231,12 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	 * @return
 	 */
 	private static DocumentSection generateDocumentSection(
-			Record3<String, Long, Long> existingRecord) {
+			Record4<String, Long, Long, Timestamp> existingRecord) {
 		DocumentSection fromJSON = DocumentSection.fromJSON(existingRecord
 				.value1());
 		fromJSON.setDocumentId(existingRecord.value2());
 		fromJSON.setSectionVersion(existingRecord.value3());
+		fromJSON.setLastModified(existingRecord.value4().toLocalDateTime());
 		return fromJSON;
 	}
 

@@ -15,6 +15,7 @@
   "dependencies": {
     "normalize-scss": "~3.0.2",
     "skeleton-scss": "*",
-    "ionicons": "~2.0.1"
+    "ionicons": "~2.0.1",
+    "jeet": "~6.1.2"
   }
 }

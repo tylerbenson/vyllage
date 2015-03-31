@@ -10,46 +10,55 @@
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/login.css" />
 
-  <link href='http://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css' />
-  <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
 </head>
 
 <body>
-  <form th:action="@{/login}" method="post">
-    <section class="container">
-
-      <article>
-        <div class="row">
-          <div class="twelve column">
-            <button class="request-btn">request invitation</button>
-
-            <div class="login-content">
-              <div class="vyllage-img"></div>
-              <!-- These need to be styled properly -->
-              <div th:if="${param.error}" style="background: white">
-                Invalid email and password.
-              </div>
-              <div th:if="${param.logout}" style="background: white">
-                You have been logged out.
-              </div>
+  <section id="login">
+    <form th:action="@{/login}" method="post">
+      <div class="logo">
+        <span> Vyllage </span>
+      </div>
+      <div>
+        <div class="description-text">
+          <div class="content">
+            He who would do great things, should not attempt them alone
+          </div>
+          <div class="author"> - Seneca &middot; AD 55 </div>
+        </div>
+        <div class="login-box">
+          <div class="sign-in">
+            <p class="txt">Sign In </p>
+            <div th:if="${param.error}">
+              <p class="invalid">Invalid e-mail or password </p>
+            </div>
+            <!-- if  param.error is false, how to do ??-->
+            <div th:else="${!param.error}">
+              <p>Welcome to the Vyllage</p>
+            </div>
+          </div>
+          <div class="login-box-content">
+            <div>
+              <label for="email" class="label">E-email</label>
               <input type="text" class="input email" name="email" placeholder="email" />
+            </div>
+            <div>
+              <label for="password" class="label">Password</label>
               <input type="password" class="input password" name="password" placeholder="password" />
-              <input type="submit" class="login-btn" value="login" />
+            </div>
+            <div class="forget"> <a href="#">Forgot password? </a> </div>
+            <input type="submit" class="button pull right submit-btn" value="Submit" />
+            <div class="clear"></div>
+            <div class="footer">
+              <p class="label"> Don't have an account? <a href="#">Request for an invite.</a>
+              </p>
             </div>
           </div>
         </div>
-      </article>
 
-      <article>
-        <div class="row divider-part">
-          <div class="twelve column">
-            <p class="what-vyllage">what is vyllage?</p>
-          </div>
-        </div>
-      </article>
-
-    </section>
-  </form>
+      </div>
+    </form>
+  </section>
 </body>
 
 </html>

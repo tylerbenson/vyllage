@@ -6,10 +6,15 @@
   + Body
 
     {
-      "firstName": "Nathan",
-      "middleName": "M",
-      "lastName": "Benson",
-      "tagline": "Technology Enthusiast analyzing, building, and expanding solutions"
+    	"firstName":"Luke",
+    	"middleName":"V",
+    	"lastName":"Skywalker",
+    	"tagline":"My tagline.",
+    	"address":"Avenida Siempreviva 123",
+    	"email":null,
+    	"phoneNumber":null,
+    	"twitter":null,
+    	"linkedIn":null
     }
 
 
@@ -17,7 +22,7 @@
 ## POST /resume/{documentId}/header*
 + Parameters
   + documentId (string, `1`) - The id of the document.
-+ Model (application/json)
++ Body (application/json)
 
   {
     "tagline":"This is my tagline."

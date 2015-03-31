@@ -1,37 +1,39 @@
 var React = require('react');
-var PrimaryHeader = require('./primary-header');
-var SecondaryHeader = require('./secondary-header');
-var AccountMenu =  require('./account-menu');
-var ExportMenu = require('./export-menu');
 
-var HeaderContainer = React.createClass({  
-
-  accountMenu: function() {
-    var accountMenu = this.refs.accountMenu.getDOMNode();
-    if(accountMenu.style.display ==='block') {
-      accountMenu.style.display ='none';
-    } else {
-      accountMenu.style.display ='block';
-    }
-  },
-
-  exportMenu: function() {
-    var exportmenu = this.refs.exportmenu.getDOMNode();
-    if(exportmenu.style.display ==='block') {
-      exportmenu.style.display ='none';
-    } else {
-      exportmenu.style.display ='block';
-    }
-  },
-    
+var HeaderContainer = React.createClass({ 
   render: function() {
+    var name = this.props.name || user;
     return (
-      <div>
-        <PrimaryHeader accountMenu={this.accountMenu}/>
-        <SecondaryHeader exportMenu={this.exportMenu}/>
-        <AccountMenu ref="accountMenu"/>
-        <ExportMenu ref="exportmenu"/>
-      </div>
+        <div className="content">
+          <div className="logo">
+            <img src="images/logo-white.png" alt="Vyllage" />
+            <span>Vyllage</span>
+          </div>
+          <span className="page-title">Resume</span>
+          <nav>
+            <ul>
+              <li><a><i className="ion-ios-bell"></i></a></li>
+              <li><a><i className="ion-gear-a"></i></a></li>
+              <li className="dropdown-trigger user">
+                <a><span className="name">{name}</span><i className="caret"></i></a>
+                <ul className="dropdown-list">
+                  <li><a>
+                    <i className="ion-document"></i>
+                    Resume
+                  </a></li>
+                  <li><a>
+                    <i className="ion-person-stalker"></i>
+                    Ask Advice
+                  </a></li>
+                  <li><a href='/logout'>
+                    <i className="ion-log-out"></i>
+                    Sign out
+                    </a></li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div> 
     );
   }
 });

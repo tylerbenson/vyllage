@@ -1,22 +1,22 @@
 var React = require('react');
 var actions = require('../actions');
 var Comments = require('../comments');
+var CommentsCount = require('../../buttons/comments-count');
+
 
 var SectionFooter = React.createClass({
   clickComments: function () {
     actions.toggleComments(this.props.section.sectionId);
   },
   render: function () {
-    var commentsCount = null; // this.props.section && this.props.section.comments && this.props.section.comments.length;
+    var numberOfComments = this.props.section && this.props.section.numberOfComments;
     return (
-      <div>
-        <div className='row resume-section-footer'>
-          <p className='u-pull-left'>Just updated now</p>
-          <a className='u-pull-right' onClick={this.clickComments}>
-            <i className='icon ion-chatbox comment-icon'></i>
-            <span className='comment-count'>{commentsCount}</span>
-            comments
-          </a> 
+      <div className='footer'>
+        <div className='content'>
+          <p className='timestamp'>Updated just now</p>
+          <div className='actions'>
+            <CommentsCount count={numberOfComments} onClick={this.clickComments}/>
+          </div> 
         </div>
         <Comments section={this.props.section} />
       </div>

@@ -1,0 +1,54 @@
+.banner {
+  @extend .inverted;
+  background: $banner-background;
+  padding: 2em;
+  font-weight: 300;
+
+  .info {
+    @include column(1/2);
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    .name {
+      font-size: 2em;
+    }
+    .tagline {
+      background: none;
+      border: none;
+      color: $tagline-color;
+      margin-bottom: 0.5em;
+      padding: 0;
+      width: 100%;
+    }
+    .address {
+      color: lighten($secondary-color, 30%);
+      font-size: 0.85em;
+      line-height: 1.4;
+    }
+  }
+
+  .contact {
+    @include column(1/2);
+    a {
+      display: block;
+      margin: 1em;
+      text-decoration: none;
+
+      &:hover {
+        color: lighten($tagline-color, 5%);
+
+        i {
+          color: lighten($tagline-color, 5%);
+        }
+      }
+
+      i {
+        display: inline-block;
+        width: 1em;
+        margin-right: 0.5em;
+        text-align: center;
+        transition: all .2s ease;
+      }
+    }
+  }
+}

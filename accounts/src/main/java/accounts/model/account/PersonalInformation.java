@@ -2,6 +2,9 @@ package accounts.model.account;
 
 import java.time.LocalDateTime;
 
+import lombok.ToString;
+
+@ToString
 public class PersonalInformation {
 	private Long userId;
 	private String emailUpdates;

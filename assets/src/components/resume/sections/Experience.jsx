@@ -17,15 +17,13 @@ var Experience = React.createClass({
         );
       })
     } else {
-      sectionNodes = <p className='add-more'>No experience added yet</p>;
+      sectionNodes = <p className='content'>No experience added yet</p>;
     }
     return (
-      <div className='resume-section'>
-        <div className="row">
-          <div className="twelve columns">
-            <Header title='Experience' /> 
-            {sectionNodes}
-          </div>
+      <div className='section'>
+        <div className='container'>
+          <Header title='Experience' /> 
+          {sectionNodes}
         </div>
       </div>
     );

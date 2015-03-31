@@ -17,15 +17,13 @@ var Skills = React.createClass({
         )
       });
     } else {
-      sectionNodes = <p className='add-more'>No skills added yet</p>
+      sectionNodes = <p className='content'>No skills added yet</p>
     }
     return (
-      <div className='resume-section'>
-        <div className="row">
-          <div className="twelve columns">
-            <Header title='Skills' /> 
-            {sectionNodes}
-          </div>
+      <div className='section'>
+        <div className="container">
+          <Header title='Skills' /> 
+          {sectionNodes}
         </div>
       </div>
     );

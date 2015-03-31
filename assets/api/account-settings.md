@@ -1,18 +1,41 @@
-# Save phone number 
-## POST /account/phoneNumber/{phoneNumber}*
+# Get all account setting
+## GET /account/settings*
++ Response (application/json)	
+
+	[
+		{"accountSettingId":0,"userId":0,"name":"emailUpdates","value":"weekly","privacy":"public"},	
+		{"accountSettingId":1,"userId":0,"name":"firstName","value":null,"privacy":"public"},
+		{"accountSettingId":2,"userId":0,"name":"middleName","value":null,"privacy":"public"},
+		{"accountSettingId":3,"userId":0,"name":"lastName","value":null,"privacy":"private"},
+		{"accountSettingId":4,"userId":0,"name":"address","value":"Avenida Siempreviva 123","privacy":"public"}
+	]
+
+# Get account setting
+## GET /account/setting/{setting}*
++ setting: (String, `firstName`) The name of the setting. 
++ Response (application/json)
+	{
+		"accountSettingId":1, 
+		"userId":0,
+		"name":"firstName",
+		"value":"Luke",
+		"privacy":"public"
+	}
+
+# Save account setting 
+## PUT /account/setting/{setting}*
++ Body (application/json)
+	{
+		"accountSettingId":1, 
+		"userId":0,
+		"name":"firstName",
+		"value":"Luke",
+		"privacy":"public"
+	}
 + Response 200
 
-# Save frequency to receive emails
-## POST /account/emailUpdates/{emailUpdates}* 
-+ Parameters  
-	+ emailUpdates (weekly|biweekly|monthly|never)
+### Other settings: 
 
-+ Response 200
++ emailUpdates (weekly|biweekly|monthly|never) 
 
-# Save Graduation Date
-## POST /account/graduationDate/*
-Model (application/json) without {}
-
-"MMMM-yyyy"
-  
-+ Response 200 
+For Role and Organization it's only possible to change their privacy settings.

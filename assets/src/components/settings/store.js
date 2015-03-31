@@ -1,89 +1,81 @@
 var Reflux = require('reflux');
+var filter = require('lodash.filter');
+var findindex = require('lodash.findindex');
 var request = require('superagent');
+var assign = require('lodash.assign');
 
-var settings = {
-  name: 'Nathan Benson',
-  role: 'student',
-  graduationDate: 'Aug 1, 2015',
-  organization: 'Org Name',
-  facebookAccount: true,
-  emailUpdates: 'weekly',
-  sharedLinks: '',
-  email: {
-    value: ['nben888@gmail.com'],
-    privacy: 'everyone'
-  },
-  phoneNumber: {
-    value: '971.800.1565',
-    privacy: 'none'
-  },
-  address: {
-    value: '1906 NE 151st Cir <br /> Unit 15b <br /> Vancovuer, WA 98686',
-    privacy: 'none'
-  },
-  twitter: {
-    value: '@natespn',
-    privacy: 'everyone'
-  },
-  linkedin: {
-    value: 'www.linkedin.com/natebenson',
-    privacy: 'everyone'
-  },
-  facebook: {
-    value: 'www.facebook.com/natebenson',
-    privacy: 'everyone'
-  },
-  others: [
-    { value: 'www.natecast.com', privacy: 'everyone' }
-  ],
-  lastUpdate: 'Jan 1, 2014'
-};
+// var settings = {
+//   firstName: 'James',
+//   middleName: 'T',
+//   lastName: 'Franco',
+//   role: 'Student',
+//   organization: 'Carlton University',
+//   address: '883 Pearl Street, Sacramento',
+//   phoneNumber: '971-800-1565',
+//   email: 'nben888@gmail.com',
+//   url:'jamesfranco',
+//   twitter: '@natespn',
+//   linkedin: 'www.linkedin.com/natebenson',
+//   facebook: 'www.facebook.com/natebenson' 
+// };
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
+  init: function () {
+    this.tokenHeader = document.getElementById('meta_header').content,
+    this.tokenValue = document.getElementById('meta_token').content;
+    this.settings = [];
+    this.localSettings = [];
+    this.activeSettingsType = 'profile';
+  },
   onGetSettings: function () {
     request
-      .get('/settings')
+      .get('/account/settings')
       .end(function (err, res) {
-        if (res.status === 200) {
-          // settings is added as default for temporary use. Need to be removed in production 
-          this.settings = res.body || settings;
-        }
-      });
+          this.settings = res.body;
+          this.update();
+      }.bind(this));
   },
-  onPutSettings: function () {
-    request
-      .put('/settings')
-      .set('Content-Type', 'application/json')
-      .send(this.settings)
-      .end(function () {
+  onUpdateSettings: function () {
+    this.localSettings.forEach(function (setting) {
+      request
+      .put('/account/setting/' + setting.name)
+      .set(this.tokenHeader, this.tokenValue)
+      .send(setting)
+      .end(function (err, res) {
+        var index = findindex(this.settings, {name: setting.name});
+        this.settings[index] = setting;
+        this.update();
+      }.bind(this))
+    }.bind(this))
 
-      })
+    this.localSettings = [];
   },
-  onChangeSetting: function (key, value) {
-    this.settings[key] = value;
-    this.update();
+  onChangeSetting: function (setting) {
+    var index = findindex(this.localSettings, {name: setting.name});
+    if (index !== -1) {
+      this.localSettings[index] = setting;
+    } else {
+      this.localSettings.push(setting);
+    }
   },
-  onAddOther: function (other) {
-    this.settings.others = this.settings.others.concat(other);
-    this.update();
+  onCancelSettings: function () {
+    this.localSettings = [];
   },
-  onUpdateOther: function (other, index) {
-    this.settings.others[index] = other;
-    this.update();
-  },
-  onRemoveOther: function (index) {
-    this.settings.others.splice(index, 1);
+  onSetSettingsType: function (type) {
+    this.activeSettingsType = type;
     this.update();
   },
   update: function () {
-    this.onPutSettings();
     this.trigger({
-      settings: this.settings
+      settings: this.settings,
+      activeSettingsType: this.activeSettingsType
     });
   },
   getInitialState: function () {
-    this.settings = settings;
-    return { settings: this.settings } ;
+    return {
+      settings: this.settings,
+      activeSettingsType: this.activeSettingsType
+    } ;
   }
 })

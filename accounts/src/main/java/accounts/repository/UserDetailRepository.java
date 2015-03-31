@@ -178,7 +178,8 @@ public class UserDetailRepository implements UserDetailsManager {
 
 	@Override
 	// @Transactional
-	public void updateUser(UserDetails user) {
+	public void updateUser(UserDetails userDetails) {
+		User user = (User) userDetails;
 		Assert.notNull(user.getAuthorities());
 		Assert.isTrue(!user.getAuthorities().isEmpty());
 
@@ -193,13 +194,13 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			record.setEnabled(user.isEnabled());
 			record.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
+			record.setFirstName(user.getFirstName());
+			record.setMiddleName(user.getMiddleName());
+			record.setLastName(user.getLastName());
 			record.update();
 
-			credentialsRepository.save(record.getUserId(), user.getPassword());
-
 			roleRepository.deleteByUserName(user.getUsername());
-			organizationMemberRepository.deleteByUserId(((User) user)
-					.getUserId());
+			organizationMemberRepository.deleteByUserId(user.getUserId());
 
 			for (GrantedAuthority authority : user.getAuthorities()) {
 				roleRepository.create((Role) authority);
@@ -213,7 +214,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			}
 
 		} catch (Exception e) {
-			logger.fine(e.toString());
+			logger.info(e.toString());
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
 			txManager.commit(transaction);
@@ -273,6 +274,28 @@ public class UserDetailRepository implements UserDetailsManager {
 		} else {
 			logger.info("No authentication manager set. Password won't be re-checked.");
 		}
+
+		logger.info("Changing password for user '" + username + "'");
+		Long userId = this.loadUserByUsername(username).getUserId();
+		credentialsRepository.delete(userId);
+		credentialsRepository.save(userId, newPassword);
+
+		SecurityContextHolder.getContext().setAuthentication(
+				createNewAuthentication(currentUser, newPassword));
+	}
+
+	public void changePassword(String newPassword) {
+		Authentication currentUser = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		if (currentUser == null) {
+			// This would indicate bad coding somewhere
+			throw new AccessDeniedException(
+					"Can't change password as no Authentication object found in context "
+							+ "for current user.");
+		}
+
+		String username = currentUser.getName();
 
 		logger.info("Changing password for user '" + username + "'");
 		Long userId = this.loadUserByUsername(username).getUserId();

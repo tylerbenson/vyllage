@@ -1,5 +1,5 @@
 
-insert into DOCUMENTS.documents(userId, visibility, tagline, dateCreated, lastModified) values(0, true, 'My tagline.', CURRENT_DATE(), CURRENT_DATE());
+insert into DOCUMENTS.documents(userId, visibility, tagline, dateCreated, lastModified) values(0, true, 'My tagline.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(123, 1, 0, 1, '{
 	"type": "freeform",
@@ -8,7 +8,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"sectionPosition": 1,
 	"state": "shown",
 	"description": "this is my goal statement."
-}',CURRENT_DATE(), CURRENT_DATE());
+}',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(124, 1, 0, 2, '{
 	"type": "experience",
@@ -25,7 +25,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"location": "Portland, Oregon",
 	"roleDescription": "Blah Blah Blah",
 	"highlights": "I was in charge of..."
-}',CURRENT_DATE(), CURRENT_DATE());
+}',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(125, 1, 0, 3, '{
 	"type": "experience",
@@ -42,7 +42,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"location": "Portland, Oregon",
 	"roleDescription": "",
 	"highlights": "GPA 3.84, Summa Cum Laude, Awesome Senior Project"
-}',CURRENT_DATE(), CURRENT_DATE());
+}',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(126, 1, 0, 4, '{
 	"type": "freeform",
@@ -50,10 +50,10 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"sectionId": 126,
 	"sectionPosition": 4,
 	"description": "basket weaving, spear fishing, dominion"
-}',CURRENT_DATE(), CURRENT_DATE());
+}',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(124, 1, 3, 'Its a me, Mario!', CURRENT_DATE());
-insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(126, 1, 0, 'Well played.', CURRENT_DATE());
+insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(124, 1, 3, 'Its a me, Mario!', CURRENT_TIMESTAMP());
+insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(126, 1, 0, 'Well played.', CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.suggestions(section_Id, section_Version, user_id, json_Document, last_Modified) values (124, 1, 0, '{
 	"type": "freeform",
@@ -62,4 +62,4 @@ insert into DOCUMENTS.suggestions(section_Id, section_Version, user_id, json_Doc
 	"sectionPosition": 1,
 	"state": "shown",
 	"description": "this is my AWESOME goal statement."
-}', CURRENT_DATE());
+}', CURRENT_TIMESTAMP());

@@ -8,11 +8,11 @@ var DeleteSection = React.createClass({
       isOpen: false
     }
   },
-  onClose: function (e) {
+  closeModal: function (e) {
     e.preventDefault();
     this.setState({isOpen: false});
   },
-  onOpen: function (e) {
+  openModal: function (e) {
     e.preventDefault();
     this.setState({isOpen: true});
   },
@@ -22,21 +22,38 @@ var DeleteSection = React.createClass({
     actions.deleteSection(this.props.sectionId);
   },
   render: function () {
+
     return (
-      <div className={this.props.className}>
+      <div style={{display: 'inline-block'}}>
         <button 
-          className='button button-inverted'
-          onClick={this.onOpen}>
-          <i className='icon ion-trash-a'></i>
+          className='small icon'
+          onClick={this.openModal}>
+          <i className='ion-trash-a'></i>
         </button>
         <Modal isOpen={this.state.isOpen}> 
-          <a className='close-button' onClick={this.onClose}>&times;</a>
-          Do you really want to delete this section ?
-          <div className='row'>
-            <a className='button button-inverted' onClick={this.deleteSection}>Delete</a>
-            <a className='button' onClick={this.onClose}>Cancel</a>
+          <div className="header">
+            <div className="title">
+              <h1>Confirm Delete</h1>
+            </div>
+            <div className="actions">
+              <button className="secondary flat icon" onClick={this.closeModal}>
+                <i className="ion-close"></i>
+              </button>
+            </div>
           </div>
-        </Modal>
+          <div className="content">
+            <p>Do you want to delete this section ?</p>
+          </div>
+          <div className="footer">
+            <button className="small inverted" onClick={this.deleteSection}>
+              <i className="ion-trash-a"></i>
+              Delete
+            </button>
+            <button className="small inverted secondary" onClick={this.closeModal}>
+              Cancel
+            </button>
+          </div>
+        </Modal>  
       </div>
     );
   }

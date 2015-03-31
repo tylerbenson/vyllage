@@ -1,0 +1,22 @@
+.inverted {
+  * {
+    color: $inverted-text-color;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.pull {
+  &.left {
+    float: left;
+  }
+  &.right {
+    float: right;
+  }
+}
+
+.spaced {
+  margin: 1em 0;
+}
