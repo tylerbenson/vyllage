@@ -1,5 +1,5 @@
 # Get all account setting
-## GET /account/settings*
+## GET /account/setting*
 + Response (application/json)	
 
 ```
