@@ -48,12 +48,12 @@ public class AccountSettingsController {
 		return name;
 	}
 
-	@RequestMapping(value = "settings", method = RequestMethod.GET, produces = "text/html")
+	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "text/html")
 	public String accountSettings() {
 		return "settings";
 	}
 
-	@RequestMapping(value = "settings", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountSetting> getAccountSettings() {
 		User user = getUser();
 
