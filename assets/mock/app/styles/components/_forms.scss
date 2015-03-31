@@ -18,8 +18,10 @@ input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="number"],
+select,
 textarea {
   @extend .full-width;
+  background: $inverted-text-color;
   border: lighten($secondary-color, 30%) solid 1px;
   border-radius: 5px;
   box-sizing: border-box;
@@ -61,5 +63,19 @@ textarea {
 
   &.padded {
     padding: 0.75em 1em;
+  }
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url(../images/caret.png);
+  background-position: 98%;
+  background-repeat: no-repeat;
+  background-size: 1em;
+
+  &.padded {
+    background-position: 96%;
   }
 }
