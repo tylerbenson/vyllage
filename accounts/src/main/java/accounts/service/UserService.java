@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import accounts.model.BatchAccount;
+import accounts.model.CSRFToken;
 import accounts.model.Organization;
 import accounts.model.OrganizationRole;
 import accounts.model.Role;
@@ -352,18 +353,19 @@ public class UserService {
 	 * @param request
 	 * 
 	 * @param userId
+	 * @param token
 	 * @throws ServletException
 	 * @throws UserNotFoundException
 	 */
-	public void delete(HttpServletRequest request, Long userId)
+	public void delete(HttpServletRequest request, Long userId, CSRFToken token)
 			throws ServletException, UserNotFoundException {
 		User user = userRepository.get(userId);
 
 		logger.info("Disabling user.");
-		userRepository.deleteUser(user.getFirstName());
+		userRepository.deleteUser(user.getUsername());
 
 		logger.info("Deleting user documents.");
-		documentService.deleteUsers(request, Arrays.asList(userId));
+		documentService.deleteUsers(request, Arrays.asList(userId), token);
 
 		logger.info("Have a nice day.");
 		request.logout(); // good bye :)

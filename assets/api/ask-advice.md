@@ -11,7 +11,7 @@
 + Parameters
   + documentId (string, `1`) - The id of the document.
 + Request (application/json)
-  + Body
+  ++ Body
 
 ```
     {

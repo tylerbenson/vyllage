@@ -81,13 +81,13 @@ public class AccountSettingsController {
 		return settings;
 	}
 
-	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET)
+	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody AccountSetting getAccountSetting(
 			@PathVariable String parameter) throws ElementNotFoundException {
 		return userService.getAccountSetting(getUser(), parameter);
 	}
 
-	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT)
+	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody AccountSetting setAccountSetting(
 			@RequestBody AccountSetting setting) {

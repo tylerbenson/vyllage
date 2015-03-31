@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
 import java.util.Base64;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +31,7 @@ import accounts.email.EmailContext;
 import accounts.email.EmailHTMLBody;
 import accounts.email.EmailParameters;
 import accounts.email.MailService;
+import accounts.model.CSRFToken;
 import accounts.model.User;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
@@ -49,6 +52,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AccountController {
 
 	private static final int limitForEmptyFilter = 5;
+
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger.getLogger(AccountController.class
+			.getName());
 
 	@Autowired
 	private Environment env;
@@ -107,18 +114,20 @@ public class AccountController {
 		return response;
 	}
 
-	@RequestMapping(value = "{userId}/delete")
+	@RequestMapping(value = "{userId}/delete", method = RequestMethod.DELETE, produces = "application/json")
 	public String deleteUser(HttpServletRequest request,
-			@PathVariable final Long userId) throws ServletException,
-			UserNotFoundException, AccessDeniedException {
+			@PathVariable final Long userId, @RequestBody CSRFToken token)
+			throws ServletException, UserNotFoundException,
+			AccessDeniedException {
 
 		// check that the account to be deleted actually belongs to the current
 		// user
-		if (!getUser().getUserId().equals(userId))
+		if (!getUser().getUserId().equals(userId)) {
+			logger.info("access denied in AccountController.");
 			throw new AccessDeniedException(
 					"You are not authorized to access this resource.");
-
-		userService.delete(request, userId);
+		}
+		userService.delete(request, userId, token);
 
 		return "user-deleted";
 	}

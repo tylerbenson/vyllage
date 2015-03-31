@@ -2,6 +2,7 @@ package accounts.service;
 
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import accounts.model.CSRFToken;
 
 @Service("account.documentService")
 public class DocumentService {
@@ -35,27 +38,29 @@ public class DocumentService {
 	 * Deletes documents from several users.
 	 * 
 	 * @param request
+	 * @param token
 	 */
-	public void deleteUsers(HttpServletRequest request, List<Long> userIds) {
+	public void deleteUsers(HttpServletRequest request, List<Long> userIds,
+			CSRFToken token) {
 		assert userIds != null && !userIds.isEmpty();
 
-		HttpEntity<Object> entity = assembleHeader(request, userIds);
+		HttpEntity<Object> entity = assembleHeader(request, userIds, token);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
 		builder.scheme("http").port(DOCUMENTS_PORT).host(DOCUMENTS_HOST)
 				.path("/document/delete");
 
-		// builder.queryParam("userIds", userIds.stream().map(Object::toString)
-		// .collect(Collectors.joining(",")));
+		builder.queryParam("userIds", userIds.stream().map(Object::toString)
+				.collect(Collectors.joining(",")));
 
-		restTemplate.exchange(builder.build().toUriString(), HttpMethod.POST,
-				entity, Boolean.class).getBody();
+		restTemplate.exchange(builder.build().toUriString(), HttpMethod.DELETE,
+				entity, Void.class).getBody();
 
 	}
 
 	protected HttpEntity<Object> assembleHeader(HttpServletRequest request,
-			List<Long> userIds) {
+			List<Long> userIds, CSRFToken token) {
 		HttpHeaders headers = new HttpHeaders();
 		/*
 		 * TODO There must be a better way to get the right cookie, isn't there?
@@ -63,10 +68,10 @@ public class DocumentService {
 		 */
 		headers.set("Cookie",
 				"JSESSIONID=" + request.getCookies()[0].getValue());
-
+		headers.set("X-CSRF-TOKEN", token.getValue());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		HttpEntity<Object> entity = new HttpEntity<Object>(userIds, headers);
+		HttpEntity<Object> entity = new HttpEntity<Object>(headers);
 		return entity;
 	}
 
