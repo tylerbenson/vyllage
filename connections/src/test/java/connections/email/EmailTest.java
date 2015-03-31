@@ -16,7 +16,7 @@ import connections.Application;
 public class EmailTest {
 
 	@Autowired
-	private MailService service;
+	private ConnectionsMailService service;
 
 	// Replace this with your account to see the email.
 	private String to = "no-reply@vyllage.com";

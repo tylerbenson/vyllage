@@ -18,11 +18,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import accounts.model.CSRFToken;
 
-@Service("account.documentService")
-public class DocumentService {
+@Service
+public class AccountsDocumentService {
 
 	@SuppressWarnings("unused")
-	private final Logger logger = Logger.getLogger(DocumentService.class
+	private final Logger logger = Logger.getLogger(AccountsDocumentService.class
 			.getName());
 
 	@Autowired

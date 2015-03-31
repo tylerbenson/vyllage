@@ -47,7 +47,7 @@ public class DocumentService {
 	private SuggestionRepository suggestionRepository;
 
 	@Autowired
-	private AccountService accountService;
+	private DocumentsAccountService accountService;
 
 	public Document saveDocument(Document document) {
 		logger.info("Saving document " + document);

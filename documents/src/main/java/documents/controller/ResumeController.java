@@ -32,7 +32,7 @@ import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
 import documents.repository.ElementNotFoundException;
-import documents.services.AccountService;
+import documents.services.DocumentsAccountService;
 import documents.services.DocumentService;
 
 @Controller
@@ -43,7 +43,7 @@ public class ResumeController {
 	private DocumentService documentService;
 
 	@Autowired
-	private AccountService accountService;
+	private DocumentsAccountService accountService;
 
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());

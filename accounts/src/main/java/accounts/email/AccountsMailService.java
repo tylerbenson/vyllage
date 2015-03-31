@@ -1,4 +1,4 @@
-package connections.email;
+package accounts.email;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.thymeleaf.TemplateEngine;
 
-@Service
-public class MailService {
+@Service(value = "accountMailService")
+public class AccountsMailService {
 
 	@Value("${email.host}")
 	private String hostName;

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import connections.service.AccountNames;
-import connections.service.AccountService;
-import connections.service.AdviceService;
+import connections.service.ConnectionsAccountService;
+import connections.service.ConnectionsAccountNameService;
 import connections.service.UserFilterResponse;
 
 @Controller
@@ -26,10 +26,10 @@ import connections.service.UserFilterResponse;
 public class AdviceRequestController {
 
 	@Autowired
-	private AdviceService adviceService;
+	private ConnectionsAccountNameService adviceService;
 
 	@Autowired
-	private AccountService accountService;
+	private ConnectionsAccountService accountService;
 
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger
