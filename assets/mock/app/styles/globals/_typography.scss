@@ -11,6 +11,14 @@ h6 {
   &.secondary {
     color: $secondary-color;
   }
+
+  &.flat {
+    color: $text-color;
+  }
+
+  &.strong {
+    font-weight: 400;
+  }
 }
 
 h1 {

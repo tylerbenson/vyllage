@@ -26,6 +26,19 @@ input[type="reset"] {
     transition: all .2s ease;
   }
 
+  &.normal-caps {
+    text-transform: inherit;
+  }
+
+  &.facebook {
+    @extend .normal-caps;
+    background: $facebook-color;
+
+    &:hover {
+      background: lighten($facebook-color, 3%);
+    }
+  }
+
   &.inverted {
     background: transparent;
     color: $primary-color;

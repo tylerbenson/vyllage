@@ -20,7 +20,7 @@ input[type="email"],
 input[type="number"],
 textarea {
   @extend .full-width;
-  border: lighten($secondary-color, 20%) solid 1px;
+  border: lighten($secondary-color, 30%) solid 1px;
   border-radius: 5px;
   box-sizing: border-box;
   outline: none;
@@ -28,7 +28,7 @@ textarea {
   transition: all .2s ease;
 
   &:hover {
-    border-color: lighten($secondary-color, 15%);
+    border-color: lighten($secondary-color, 20%);
   }
 
   &:focus {

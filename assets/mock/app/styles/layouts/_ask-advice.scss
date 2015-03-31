@@ -1,0 +1,115 @@
+.ask-advice {
+  h2 {
+    display: inline-block;
+    font-weight: 400;
+    font-size: 1em;
+  }
+  .section {
+    & > .container {
+      padding: 0;
+    }
+  }
+  .recipients {
+    padding: 2em 4em;
+
+    .list {
+      margin-top: 1em;
+    }
+  }
+  .recipient {
+    background: lighten($secondary-color, 40%);
+    border-radius: 3px;
+    border: lighten($secondary-color, 35%) solid 1px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05),
+      inset 0 1px 1px rgba(255,255,255,0.5);
+    display: inline-block;
+    font-size: 0.9em;
+    margin: 0.25em 0.125em;
+
+    .name {
+      color: lighten($text-color, 10%);
+      display: inline-block;
+      padding: 0.15em 0 0.15em 0.75em;
+    }
+
+    .remove {
+      font-size: 1.15em;
+      padding: 0.15em 0.75em 0.15em 0.5em;
+
+      &:hover i {
+        color: $text-color;
+      }
+    }
+  }
+
+  .to {
+    background: darken($section-footer-background, 1%);
+    padding: 2.5em 4em;
+
+    h2 {
+      @include column(1/10);
+    }
+
+    .form {
+      @include column(9/10);
+
+      .field {
+        display: inline-block;
+        margin: 0.5em 0.25em;
+
+        label {
+          color: lighten($text-color, 10%);
+          display: block;
+          font-size: 0.85em;
+          margin-bottom: 0.25em;
+        }
+
+        input {
+          @extend .inline;
+
+          &.name {
+            width: 10em;
+          }
+
+          &.email {
+            width: 16em;
+          }
+        }
+      }
+
+      .note {
+        color: lighten($text-color, 10%);
+        font-size: 0.9em;
+        margin-top: 0.5em;
+
+        .facebook {
+          margin-left: 0.25em;
+        }
+      }
+    }
+  }
+  .subject {
+    padding: 1.5em 4em;
+    border-bottom: $section-footer-background solid 1px;
+
+    h2 {
+      margin-right: 0.5em;
+    }
+
+    input {
+      width: 85%;
+    }
+  }
+  .message {
+    padding-top: 1.75em;
+
+    textarea {
+      margin-top: 0.5em;
+      white-space: normal;
+    }
+  }
+  .footer {
+    @include cf();
+    padding: 1.5em 4em;
+  }
+}
