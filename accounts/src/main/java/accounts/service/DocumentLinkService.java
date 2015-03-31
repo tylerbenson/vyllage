@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import accounts.model.User;
+import accounts.model.account.ResetPasswordLink;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.UserCredentialsRepository;

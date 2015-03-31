@@ -39,6 +39,9 @@ public class UserService {
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
 
 	@Autowired
+	private DocumentService documentService;
+
+	@Autowired
 	private OrganizationRepository organizationRepository;
 
 	@Autowired
@@ -170,7 +173,7 @@ public class UserService {
 		List<AccountSetting> accountSettings = settingRepository
 				.getAccountSettings(userIds);
 
-		if (accountSettings == null || accountSettings.size() == 0)
+		if (accountSettings == null || accountSettings.isEmpty())
 			return Arrays.asList();
 
 		Map<Long, List<AccountSetting>> map = accountSettings.stream().collect(
@@ -237,21 +240,6 @@ public class UserService {
 		// it's been a while since I used one, it works fine for this.
 		switch (settingName) {
 
-		case "firstName":
-			setting = settingRepository.get(user.getUserId(), settingName);
-			setting.setValue(user.getFirstName());
-			break;
-
-		case "middleName":
-			setting = settingRepository.get(user.getUserId(), settingName);
-			setting.setValue(user.getMiddleName());
-			break;
-
-		case "lastName":
-			setting = settingRepository.get(user.getUserId(), settingName);
-			setting.setValue(user.getLastName());
-			break;
-
 		case "role":
 			// normal users should always have 1 role only
 			setting = settingRepository.get(user.getUserId(), settingName);
@@ -271,7 +259,7 @@ public class UserService {
 		return setting;
 	}
 
-	public void setAccountSetting(User user, AccountSetting setting) {
+	public AccountSetting setAccountSetting(User user, AccountSetting setting) {
 
 		if (setting.getUserId() == null)
 			setting.setUserId(user.getUserId());
@@ -279,27 +267,24 @@ public class UserService {
 		switch (setting.getName()) {
 		case "firstName":
 			setFirstName(user, setting);
-			settingRepository.set(user.getUserId(), setting);
-			break;
+			return settingRepository.set(user.getUserId(), setting);
 
 		case "middleName":
 			setMiddleName(user, setting);
-			settingRepository.set(user.getUserId(), setting);
-			break;
+			return settingRepository.set(user.getUserId(), setting);
 
 		case "lastName":
 			setLastName(user, setting);
-			settingRepository.set(user.getUserId(), setting);
-			break;
-		// Role and organization only save the privacy settings, they cannot be
-		// modified
-		// case "role":
-		// break;
-		// case "organization":
-		// break;
+			return settingRepository.set(user.getUserId(), setting);
+			// Role and organization only save the privacy settings, they cannot
+			// be
+			// modified
+			// case "role":
+			// break;
+			// case "organization":
+			// break;
 		default:
-			settingRepository.set(user.getUserId(), setting);
-			break;
+			return settingRepository.set(user.getUserId(), setting);
 		}
 	}
 
@@ -374,9 +359,14 @@ public class UserService {
 			throws ServletException, UserNotFoundException {
 		User user = userRepository.get(userId);
 
+		logger.info("Disabling user.");
 		userRepository.deleteUser(user.getFirstName());
 
-		request.logout();
+		logger.info("Deleting user documents.");
+		documentService.deleteUsers(request, Arrays.asList(userId));
+
+		logger.info("Have a nice day.");
+		request.logout(); // good bye :)
 
 	}
 }

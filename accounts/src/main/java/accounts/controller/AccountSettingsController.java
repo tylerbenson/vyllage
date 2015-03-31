@@ -89,8 +89,9 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void setAccountSetting(@RequestBody AccountSetting setting) {
-		userService.setAccountSetting(getUser(), setting);
+	public @ResponseBody AccountSetting setAccountSetting(
+			@RequestBody AccountSetting setting) {
+		return userService.setAccountSetting(getUser(), setting);
 	}
 
 	// @RequestMapping(value = "organization", method = RequestMethod.PUT)

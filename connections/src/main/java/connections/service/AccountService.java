@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@Service(value = "connectionsAccountService")
+@Service(value = "connections.AccountService")
 public class AccountService {
 
 	private final Logger logger = Logger.getLogger(AccountService.class

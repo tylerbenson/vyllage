@@ -2,6 +2,7 @@ package accounts.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.AccessDeniedException;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,9 +34,9 @@ import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangePasswordForm;
 import accounts.model.account.ResetPasswordForm;
+import accounts.model.account.ResetPasswordLink;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
-import accounts.service.ResetPasswordLink;
 import accounts.service.UserService;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -109,7 +110,13 @@ public class AccountController {
 	@RequestMapping(value = "{userId}/delete")
 	public String deleteUser(HttpServletRequest request,
 			@PathVariable final Long userId) throws ServletException,
-			UserNotFoundException {
+			UserNotFoundException, AccessDeniedException {
+
+		// check that the account to be deleted actually belongs to the current
+		// user
+		if (!getUser().getUserId().equals(userId))
+			throw new AccessDeniedException(
+					"You are not authorized to access this resource.");
 
 		userService.delete(request, userId);
 
@@ -239,5 +246,12 @@ public class AccountController {
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {
 
 		return userService.getAccountContactForUsers(userIds);
+	}
+
+	private User getUser() {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		return (User) auth.getPrincipal();
 	}
 }

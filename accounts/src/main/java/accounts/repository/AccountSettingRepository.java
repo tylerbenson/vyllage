@@ -3,6 +3,7 @@ package accounts.repository;
 import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
@@ -24,14 +25,7 @@ public class AccountSettingRepository {
 		List<Record> result = sql.select().from(ACCOUNT_SETTING)
 				.where(ACCOUNT_SETTING.USER_ID.eq(user.getUserId())).fetch();
 
-		return result
-				.stream()
-				.map(r -> new AccountSetting(r
-						.getValue(ACCOUNT_SETTING.ACCOUNT_SETTING_ID), r
-						.getValue(ACCOUNT_SETTING.USER_ID), r
-						.getValue(ACCOUNT_SETTING.NAME), r
-						.getValue(ACCOUNT_SETTING.VALUE), r
-						.getValue(ACCOUNT_SETTING.PRIVACY)))
+		return result.stream().map(createAccountSetting())
 				.collect(Collectors.toList());
 	}
 
@@ -39,15 +33,18 @@ public class AccountSettingRepository {
 		List<Record> result = sql.select().from(ACCOUNT_SETTING)
 				.where(ACCOUNT_SETTING.USER_ID.in(ids)).fetch();
 
-		return result
-				.stream()
-				.map(r -> new AccountSetting(r
-						.getValue(ACCOUNT_SETTING.ACCOUNT_SETTING_ID), r
-						.getValue(ACCOUNT_SETTING.USER_ID), r
-						.getValue(ACCOUNT_SETTING.NAME), r
-						.getValue(ACCOUNT_SETTING.VALUE), r
-						.getValue(ACCOUNT_SETTING.PRIVACY)))
+		return result.stream().map(createAccountSetting())
 				.collect(Collectors.toList());
+	}
+
+	private Function<? super Record, ? extends AccountSetting> createAccountSetting() {
+
+		return r -> new AccountSetting(
+				r.getValue(ACCOUNT_SETTING.ACCOUNT_SETTING_ID),
+				r.getValue(ACCOUNT_SETTING.USER_ID),
+				r.getValue(ACCOUNT_SETTING.NAME),
+				r.getValue(ACCOUNT_SETTING.VALUE),
+				r.getValue(ACCOUNT_SETTING.PRIVACY));
 	}
 
 	public AccountSetting get(Long userId, String settingName)
@@ -72,7 +69,7 @@ public class AccountSettingRepository {
 		return setting;
 	}
 
-	public void set(Long userId, AccountSetting setting) {
+	public AccountSetting set(Long userId, AccountSetting setting) {
 		AccountSettingRecord settingRecord = sql.fetchOne(
 				ACCOUNT_SETTING,
 				ACCOUNT_SETTING.USER_ID.eq(userId).and(
@@ -85,11 +82,14 @@ public class AccountSettingRepository {
 			newRecord.setUserId(userId);
 			newRecord.setValue(setting.getValue());
 			newRecord.store();
+			setting.setAccountSettingId(newRecord.getAccountSettingId());
 		} else {
 			settingRecord.setPrivacy(setting.getPrivacy());
 			settingRecord.setValue(setting.getValue());
 			settingRecord.store();
 		}
+
+		return setting;
 	}
 
 	public void delete(Long userId) {
