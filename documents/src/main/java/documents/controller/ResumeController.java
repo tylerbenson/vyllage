@@ -45,6 +45,7 @@ public class ResumeController {
 	@Autowired
 	private AccountService accountService;
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
 
@@ -200,9 +201,9 @@ public class ResumeController {
 		return accountService.getNamesForUsers(recentUsersForDocument, request);
 	}
 
-	@RequestMapping(value = "{documentId}/header", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/header", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void saveHeader(@PathVariable final Long documentId,
+	public void updateHeader(@PathVariable final Long documentId,
 			@RequestBody final DocumentHeader documentHeader)
 			throws ElementNotFoundException {
 

@@ -16,9 +16,9 @@ insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_cre
 --	privacy varchar(15),
 --	constraint fk_account_setting_users foreign key(user_id) references ACCOUNTS.users(user_id));
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'emailUpdates', 'weekly', 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'firstName', null, 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'middleName', null, 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'lastName', null, 'private');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'firstName', 'Luke', 'public');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'middleName', 'V', 'public');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'lastName', 'Skywalker', 'private');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'address', 'Avenida Siempreviva 123', 'public');
 
 

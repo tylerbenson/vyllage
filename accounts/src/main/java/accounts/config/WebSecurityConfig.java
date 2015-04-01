@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
@@ -34,8 +35,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests().anyRequest().authenticated();
 
+		SimpleUrlAuthenticationSuccessHandler successHandler = successHandler();
+		successHandler.setAlwaysUseDefaultTargetUrl(true);
 		http.formLogin().loginPage("/login").usernameParameter("email")
-				.defaultSuccessUrl("/resume/").successHandler(successHandler())
+				.defaultSuccessUrl("/resume/").successHandler(successHandler)
 				.permitAll();
 
 		http.logout()

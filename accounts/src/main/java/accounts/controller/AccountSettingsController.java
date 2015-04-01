@@ -48,12 +48,12 @@ public class AccountSettingsController {
 		return name;
 	}
 
-	@RequestMapping(value = "settings", method = RequestMethod.GET, produces = "text/html")
+	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "text/html")
 	public String accountSettings() {
 		return "settings";
 	}
 
-	@RequestMapping(value = "settings", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountSetting> getAccountSettings() {
 		User user = getUser();
 
@@ -81,16 +81,17 @@ public class AccountSettingsController {
 		return settings;
 	}
 
-	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET)
+	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody AccountSetting getAccountSetting(
 			@PathVariable String parameter) throws ElementNotFoundException {
 		return userService.getAccountSetting(getUser(), parameter);
 	}
 
-	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT)
+	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void setAccountSetting(@RequestBody AccountSetting setting) {
-		userService.setAccountSetting(getUser(), setting);
+	public @ResponseBody AccountSetting setAccountSetting(
+			@RequestBody AccountSetting setting) {
+		return userService.setAccountSetting(getUser(), setting);
 	}
 
 	// @RequestMapping(value = "organization", method = RequestMethod.PUT)

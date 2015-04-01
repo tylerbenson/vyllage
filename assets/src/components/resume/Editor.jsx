@@ -2,6 +2,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var actions = require('./actions');
 var resumeStore = require('./store');
+var settingStore = require('../settings/store');
 var filter = require('lodash.filter');
 var Subheader = require('./Subheader');
 var CareerGoal = require('./sections/CareerGoal');
@@ -11,29 +12,24 @@ var Skill = require('./sections/Skill');
 var Banner = require('./banner');
 
 var ResumeEditor = React.createClass({
-  mixins: [Reflux.connect(resumeStore, 'resume')],
+  mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
   componentWillMount: function () {
     actions.getResume();
   },
   render: function () {
     var careerGoalSections = filter(this.state.resume.sections, {title: 'career goal'});
-    // There will be only one career goal section.
-    var careerGoal = careerGoalSections[0];
-
+    var skillSections = filter(this.state.resume.sections, {title: 'skills'});
     var experienceSections = filter(this.state.resume.sections, {title: 'experience'});
     var educationSections = filter(this.state.resume.sections, {title: 'education'});
-    var skillSections = filter(this.state.resume.sections, {title: 'skills'});
-    var profileData = this.state.resume.header;
-    var contactData = this.state.resume.contact;
     return (
       <div>
         <Subheader documentId={this.state.resume.documentId}/>
-        <Banner profileData={profileData} contactData={contactData}/>
+        <Banner header={this.state.resume.header} />
         <div className="sections">
-          <CareerGoal careerGoal={careerGoal} />
+          <CareerGoal section={careerGoalSections[0]} />
           <Experience sections={experienceSections} />
           <Education sections={educationSections} />
-          <Skill sections={skillSections} />
+          <Skill section={skillSections[0]} />
         </div>
       </div>
     );

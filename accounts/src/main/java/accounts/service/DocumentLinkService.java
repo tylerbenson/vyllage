@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import accounts.model.User;
+import accounts.model.account.ResetPasswordLink;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.UserCredentialsRepository;
@@ -49,7 +50,14 @@ public class DocumentLinkService {
 		return RandomStringUtils.randomAlphanumeric(20);
 	}
 
-	public boolean exists(Long userId, String generatedPassword) {
-		return linkRepository.exists(userId, generatedPassword);
+	/**
+	 * Checks if a given password is active and valid.
+	 * 
+	 * @param userId
+	 * @param generatedPassword
+	 * @return
+	 */
+	public boolean isActive(Long userId, String generatedPassword) {
+		return linkRepository.isActive(userId, generatedPassword);
 	}
 }

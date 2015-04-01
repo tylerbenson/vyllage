@@ -110,10 +110,6 @@ public class DocumentRepository implements IRepository<Document> {
 		return document;
 	}
 
-	public void delete(Document document) {
-		this.delete(document.getId());
-	}
-
 	@Override
 	public void delete(Long documentId) {
 		if (documentId != null) {
@@ -160,6 +156,12 @@ public class DocumentRepository implements IRepository<Document> {
 						r.getValue(sg.USER_ID))).flatMap(l -> l.stream())
 				.distinct().collect(Collectors.toList());
 
+	}
+
+	public void deleteForUser(Long userId) {
+		DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
+				DOCUMENTS.USERID.eq(userId));
+		existingRecord.delete();
 	}
 
 }

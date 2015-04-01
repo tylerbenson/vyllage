@@ -5,6 +5,7 @@
 + Response 200 (application/json)
   + Body
 
+```
     {
     	"firstName":"Luke",
     	"middleName":"V",
@@ -16,16 +17,18 @@
     	"twitter":null,
     	"linkedIn":null
     }
-
+```
 
 # Saves the tagline.
-## POST /resume/{documentId}/header*
+## PUT /resume/{documentId}/header*
 + Parameters
   + documentId (string, `1`) - The id of the document.
 + Body (application/json)
 
+```
   {
     "tagline":"This is my tagline."
   }
+```
 
 + Response 200

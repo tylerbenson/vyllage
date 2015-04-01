@@ -2,9 +2,14 @@ package accounts.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.AccessDeniedException;
 import java.util.Base64;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,14 +31,15 @@ import accounts.email.EmailContext;
 import accounts.email.EmailHTMLBody;
 import accounts.email.EmailParameters;
 import accounts.email.MailService;
+import accounts.model.CSRFToken;
 import accounts.model.User;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangePasswordForm;
 import accounts.model.account.ResetPasswordForm;
+import accounts.model.account.ResetPasswordLink;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
-import accounts.service.ResetPasswordLink;
 import accounts.service.UserService;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -45,6 +52,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AccountController {
 
 	private static final int limitForEmptyFilter = 5;
+
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger.getLogger(AccountController.class
+			.getName());
 
 	@Autowired
 	private Environment env;
@@ -72,7 +83,7 @@ public class AccountController {
 	@RequestMapping(value = "names", method = RequestMethod.GET, produces = "application/json")
 	// @PreAuthorize("hasAuthority('USER')")
 	public @ResponseBody List<AccountNames> getNames(
-			@RequestParam("userIds") final List<Long> userIds)
+			@RequestParam(value = "userIds", required = true) final List<Long> userIds)
 			throws UserNotFoundException {
 
 		return userService.getNames(userIds);
@@ -101,6 +112,24 @@ public class AccountController {
 				.collect(Collectors.toList());
 
 		return response;
+	}
+
+	@RequestMapping(value = "{userId}/delete", method = RequestMethod.DELETE, produces = "application/json")
+	public String deleteUser(HttpServletRequest request,
+			@PathVariable final Long userId, @RequestBody CSRFToken token)
+			throws ServletException, UserNotFoundException,
+			AccessDeniedException {
+
+		// check that the account to be deleted actually belongs to the current
+		// user
+		if (!getUser().getUserId().equals(userId)) {
+			logger.info("access denied in AccountController.");
+			throw new AccessDeniedException(
+					"You are not authorized to access this resource.");
+		}
+		userService.delete(request, userId, token);
+
+		return "user-deleted";
 	}
 
 	@RequestMapping(value = "reset-password", method = RequestMethod.GET)
@@ -220,11 +249,18 @@ public class AccountController {
 		resetPassword.setError(!isValid);
 		return isValid;
 	}
-	
+
 	@RequestMapping(value = "contact", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountContact> getContactInformation(
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {
 
 		return userService.getAccountContactForUsers(userIds);
+	}
+
+	private User getUser() {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		return (User) auth.getPrincipal();
 	}
 }

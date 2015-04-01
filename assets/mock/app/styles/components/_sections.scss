@@ -13,6 +13,10 @@
     position: relative;
   }
 
+  &.mini {
+    width: 720px;
+  }
+
   .content {
     padding: 0.5em 4em;
   }

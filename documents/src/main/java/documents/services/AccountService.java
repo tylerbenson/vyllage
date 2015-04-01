@@ -24,6 +24,7 @@ import documents.model.AccountNames;
 @Service
 public class AccountService {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(AccountService.class
 			.getName());
 

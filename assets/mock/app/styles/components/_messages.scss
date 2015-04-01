@@ -1,0 +1,25 @@
+.message {
+  color: $section-footer-color;
+  font-size: 0.75em;
+  background: $section-footer-background;
+  border-radius: 5px;
+  display: block;
+  margin-top: 0.75em;
+  padding: 0.5em 1em;
+  text-align: center;
+
+  &.error {
+    background: $error-background;
+    color: $error-color;
+  }
+
+  &.warning {
+    background: $highlight;
+    color: #EDB02C;
+  }
+
+  &.success {
+    background: $success-background;
+    color: $success-color;
+  }
+}

@@ -4,6 +4,7 @@ var EditBtn = require('../../buttons/edit');
 var DeleteSection = require('../Delete');
 var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
+var SectionFooter = require('../sections/Footer');
 
 var Freeform = React.createClass({
   getInitialState: function() {
@@ -15,9 +16,6 @@ var Freeform = React.createClass({
       section: {}
     }
   },
-  // componentWillRecieveProps: function (nextProps) {
-  //   this.setState({description: nextProps.section.description});
-  // },
   handleChange: function(e) {
     e.preventDefault();
     this.setState({description: e.target.value});
@@ -37,9 +35,8 @@ var Freeform = React.createClass({
   },
   render: function () {
     var uiEditMode = this.props.section.uiEditMode;
-    console.log(this.state.description);
     return (
-      <div className='subsection'>
+      <div className='section'>
         <div className='header'>
           <div className='title'>
             <h1>{this.props.title}</h1>
@@ -51,15 +48,17 @@ var Freeform = React.createClass({
         </div>
         <div className="content">
           <textarea
+            key={this.props.section.description || undefined}
             disabled={!uiEditMode}
             className="flat"
             rows="1"
             autoComplete="off"
             placeholder="Tell us more ..."
-            value={this.state.description}
+            defaultValue={this.props.section.description}
             onChange={this.handleChange}
           ></textarea>
         </div>
+        <SectionFooter section={this.props.section} />
       </div>
     );
   }
