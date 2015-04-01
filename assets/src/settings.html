@@ -18,11 +18,13 @@
 
 <body>
 
-  <header>
-    <div id="header-container" th:name="${accountName.firstName}">
-    </div>
-  </header>
-  <div id='settings'></div>
+  <div id='container' class="settings">
+    <header>
+      <div id="header-container" th:name="${accountName.firstName}">
+      </div>
+    </header>
+    <div id='settings'></div>
+  </div>
   <script src='javascript/base.js'></script>
   <script src='javascript/settings.js'></script>
 </body>

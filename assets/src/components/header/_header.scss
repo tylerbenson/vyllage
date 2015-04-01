@@ -33,14 +33,18 @@ header {
 
   .user {
     text-align: center;
-    width: 120px;
+    // width: 120px;
+
+    .avatar {
+      margin-right: 0.5em;
+    }
 
     .name {
       max-width: 100px;
       overflow: hidden;
       position: relative;
       text-overflow: ellipsis;
-      top: 0;
+      top: 0.1em;
       white-space: pre;
     }
   }

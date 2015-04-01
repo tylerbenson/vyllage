@@ -18,10 +18,10 @@ var Subheader = React.createClass({
               <i className="ion-document-text"></i>
               Export
             </button>
-            <button className="embossed">
+            <a href={'/resume/' + this.props.documentId + '/ask-advice'} className="button embossed">
               <i className="ion-person-stalker"></i>
               Ask Advice
-            </button>
+            </a>
           </div>
         </div>
       </section>

@@ -2,15 +2,18 @@
 
 @import "jeet/scss/jeet/index";
 @import "./components/common/utilities";
-.settings {
-  @include cf();
-  .sidebar {
-    @include column(1/4);
-    ul {
-      list-style: none;
-    }
-  }
-  .content {
-    @include column(3/4);
-  }
-}
+@import "./components/settings/settings";
+@import "./components/resume/sections/sections";
+
+// .settings {
+//   @include cf();
+//   .sidebar {
+//     @include column(1/4);
+//     ul {
+//       list-style: none;
+//     }
+//   }
+//   .content {
+//     @include column(3/4);
+//   }
+// }
