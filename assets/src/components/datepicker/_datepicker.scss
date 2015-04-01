@@ -1,0 +1,106 @@
+.datepicker-trigger {
+  position: relative;
+
+  & > input:focus + .datepicker {
+    display: inline-block;
+  }
+
+  & > .start + .datepicker > .footer {
+    display: none;
+  }
+}
+
+.date {
+  display: inline-block;
+  font-size: 0.9em;
+  width: 6em !important;
+}
+
+.datepicker {
+  background: $inverted-text-color;
+  border: lighten($secondary-color, 30%) solid 1px;
+  border-radius: 5px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.075);
+  display: inline-block;
+  display: none;
+  left: -60%;
+  position: absolute;
+  text-align: center;
+  top: 160%;
+  width: 12em;
+  z-index: 1;
+
+  &:after, &:before {
+    bottom: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-bottom-color: #fff;
+    border-width: 8px;
+    margin-left: -8px;
+  }
+
+  &:before {
+    border-color: rgba(51, 51, 51, 0);
+    border-bottom-color: lighten($secondary-color, 30%);
+    border-width: 9px;
+    margin-left: -9px;
+  }
+
+  .header {
+    border-bottom: lighten($secondary-color, 40%) solid 1px;
+    padding: 0.5em;
+  }
+  .content {
+    padding: 0.5em;
+  }
+  .footer {
+    border-top: lighten($secondary-color, 40%) solid 1px;
+    margin: 0;
+    padding: 0.75em;
+  }
+
+  input.year {
+    font-size: 0.86em;
+    padding: 0.25em;
+    text-align: center;
+    width: 5em;
+  }
+
+  .month {
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: transparent solid 1px;
+    color: $secondary-color;
+    display: inline-block;
+    font-size: 0.9em;
+    font-weight: 300;
+    margin: 1% 0.25%;
+    padding: 0.35em;
+    width: 25%;
+    transition: all .2s ease;
+
+    &:hover {
+      border-color: $primary-color;
+      color: $primary-color;
+      cursor: pointer;
+    }
+
+    &.active {
+      background: $primary-color;
+      color: $inverted-text-color;
+    }
+  }
+
+  .current {
+    margin-right: 0.5em;
+  }
+}

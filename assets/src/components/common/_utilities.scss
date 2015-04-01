@@ -17,6 +17,14 @@
   }
 }
 
+.caret {
+  @extend .ion-arrow-down-b;
+  font-size: 0.8em;
+  margin-left: 0.75em;
+  position: relative;
+  bottom: 0.25em;
+}
+
 .spaced {
   margin: 1em 0;
 }
