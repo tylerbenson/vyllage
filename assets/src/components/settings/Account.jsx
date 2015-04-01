@@ -9,18 +9,21 @@ var Account = React.createClass({
     var settings = this.props.settings || {};
     var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {value: ''};
     return (
-      <form ref='account' onSubmit={this.saveHandler}>
-        <label>E-mail</label>
-        <input 
-          key={emailSetting.value || undefined}
-          ref='email'
-          type='text'
-          defaultValue={emailSetting.value}
-          onChange={this.changeHandler.bind(this, 'email')}
-        /> 
-
-        <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'account')} />
-      </form>
+      <div className='content'>
+        <form ref='account' onSubmit={this.saveHandler}>
+          <label>E-mail</label>
+          <input 
+            key={emailSetting.value || undefined}
+            ref='email'
+            type='text'
+            className='padded'
+            defaultValue={emailSetting.value}
+            onChange={this.changeHandler.bind(this, 'email')}
+          /> 
+        
+          <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'account')} />
+        </form>
+      </div>
     );
   }
 });

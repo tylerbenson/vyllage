@@ -13,16 +13,25 @@
 :-ms-input-placeholder {
    color: lighten($banner-background, 50%);
 }
+
 input[type="text"],
 input[type="password"],
 input[type="email"],
+input[type="number"],
+select,
 textarea {
-  border: lighten($secondary-color, 20%) solid 1px;
+  @extend .full-width;
+  background: $inverted-text-color;
+  border: lighten($secondary-color, 30%) solid 1px;
   border-radius: 5px;
   box-sizing: border-box;
   outline: none;
-  padding: 0.3em 0.9em;
+  padding: 0.3em 0.6em;
   transition: all .2s ease;
+
+  &:hover {
+    border-color: lighten($secondary-color, 20%);
+  }
 
   &:focus {
     border-color: lighten($primary-color, 10%);
@@ -34,7 +43,6 @@ textarea {
     font-weight: 300;
     line-height: 1.4;
     padding: 0 0.25em;
-    width: 100%;
     transition: none;
 
     &:focus {
@@ -48,8 +56,26 @@ textarea {
     width: auto;
   }
 
+  &.full-width {
+    display: block;
+    width: 100%;
+  }
+
+  &.padded {
+    padding: 0.75em 1em;
+  }
 }
 
-label {
-  display: block;
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url(../images/caret.png);
+  background-position: 98%;
+  background-repeat: no-repeat;
+  background-size: 1em;
+
+  &.padded {
+    background-position: 96%;
+  }
 }

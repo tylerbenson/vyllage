@@ -8,17 +8,15 @@ var SideBar = React.createClass({
   render: function () {
     return (
       <div className='sidebar'>
-        <ul>
-          <li onClick={this.select.bind(this, 'profile')}>
-            <i className='icon ion-person'></i><a>PROFILE</a>
-          </li>
-          <li onClick={this.select.bind(this, 'account')}>
-            <i className='icon ion-key'></i><a>ACCOUNT</a>
-          </li>
-          <li onClick={this.select.bind(this, 'social')}>
-            <i className='icon ion-social-buffer'></i><a>SOCIAL</a>
-          </li>
-        </ul>
+        <a onClick={this.select.bind(this, 'profile')}>
+          <i className='ion-person'></i> PROFILE
+        </a>
+        <a onClick={this.select.bind(this, 'account')}>
+          <i className='ion-key'></i> ACCOUNT
+        </a>
+        <a onClick={this.select.bind(this, 'social')}>
+          <i className='ion-social-buffer'></i> SOCIAL
+        </a>
       </div>
     );
   }
