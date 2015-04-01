@@ -23,7 +23,7 @@ var Profile = React.createClass({
             ref='firstName'
             type='text'
             className='padded'
-            value={firstNameSetting.value}
+            defaultValue={firstNameSetting.value}
             onChange={this.changeHandler.bind(this, 'firstName')}
           />
           
