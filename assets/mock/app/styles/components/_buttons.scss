@@ -30,6 +30,10 @@ input[type="reset"] {
     text-transform: inherit;
   }
 
+  &.padded {
+    padding: 0.75em 1.5em;
+  }
+
   &.facebook {
     @extend .normal-caps;
     background: $facebook-color;
