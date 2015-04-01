@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Account Settings</title>
+  <base href="." th:href="@{/}" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/settings.css" />
+
+  <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
+
+  <meta name="_csrf_token" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+
+<body>
+
+  <header>
+    <div id="header-container">
+    </div>
+  </header>
+  
+	  <label>Your account has been deleted.</label>
+  
+  <script src='javascript/base.js'></script>
+</body>
+
+</html>

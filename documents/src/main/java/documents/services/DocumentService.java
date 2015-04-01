@@ -177,4 +177,13 @@ public class DocumentService {
 		return commentRepository.save(comment);
 	}
 
+	/**
+	 * Deletes all documents from a user.
+	 * 
+	 * @param userId
+	 */
+	public void deleteDocumentsFromUser(Long userId) {
+		documentRepository.deleteForUser(userId);
+	}
+
 }

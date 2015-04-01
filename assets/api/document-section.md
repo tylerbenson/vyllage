@@ -9,7 +9,7 @@
   + documentId (string, `1`) - The id of the document.
 + Response 200 (application/json)
   + Body
-
+```
     [
       {
         "type": "freeform",
@@ -39,7 +39,7 @@
         "highlights": "I was in charge of..."
       }
     ]
-
+```
 
 # Retrieves the specified section. This will rarely be used as getting all sections preferred.
 ## GET /resume/{documentId}/section/{sectionId}*
@@ -48,7 +48,7 @@
   + sectionId (string, `1`) - The id of the section.
 + Response 200 (application/json)
   + Body
-
+```
     {
       "type": "freeform",
       "title": "Career Goal",
@@ -58,7 +58,7 @@
       "state": "shown",
       "description": "this is my goal statement."
     }
-
+```
 
 # Updates the section from the request body (JSON). Returns the saved section.
 ## PUT /resume/{documentId}/section/{sectionId}*
@@ -91,7 +91,7 @@
   + sectionId (string, `1`) - The id of the section. 
 + Response 200 (application/json)
   + Body
- 
+ ```
 	[{	
 		"commentId":0,
 		"otherCommentId":null,
@@ -101,6 +101,7 @@
 		"commentText":"Its a me, Mario!",
 		"userName":"Mario Mario"
 	}]
+```
 
 #Save Comment for a Section
 ## POST {documentId}/section/{sectionId}/comment
@@ -108,7 +109,7 @@
   + documentId (string, `1`) - The id of the document.
   + sectionId (string, `1`) - The id of the section. 
 +Body  
-
+```
 	{	
 		"commentId":null,
 		"otherCommentId":null,
@@ -118,6 +119,8 @@
 		"commentText":"Its a me, Mario!",
 		"userName":"Mario Mario"
 	}
+```
+
  + Response 200
 
 #Save Comment in response to another comment
@@ -128,6 +131,7 @@
   + commentId (string, `1`) - The id of the comment. 
 +Body  
 
+```
 	{	
 		"commentId":null,
 		"otherCommentId":2,
@@ -137,5 +141,7 @@
 		"commentText":"Its a me, Mario!",
 		"userName":"Mario Mario"
 	}
+```
+
  + Response 200
 

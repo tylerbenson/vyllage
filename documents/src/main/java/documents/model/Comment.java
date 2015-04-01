@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 
 import lombok.ToString;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonIgnoreProperties(value = { "lastModified" })
+import documents.model.customDeserializer.LocalDateTimeDeserializer;
+import documents.model.customDeserializer.LocalDateTimeSerializer;
+
 @ToString
 public class Comment {
 	private Long commentId;
@@ -15,6 +18,9 @@ public class Comment {
 	private Long sectionVersion;
 	private Long userId;
 	private String commentText;
+
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime lastModified;
 	private String userName;
 
