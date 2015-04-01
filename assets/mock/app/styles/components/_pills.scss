@@ -14,8 +14,8 @@
   }
 
   &.warning {
-    background: $highlight;
-    color: #EDB02C;
+    background: $warning-background;
+    color: $warning-color;
   }
 
   &.success {
