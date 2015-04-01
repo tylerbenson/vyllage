@@ -38,7 +38,7 @@ public class ResumeControllerIntegTest {
 		DocumentHeader documentHeader = new DocumentHeader();
 		documentHeader.setTagline(tagline);
 
-		controller.saveHeader(document.getId(), documentHeader);
+		controller.updateHeader(document.getId(), documentHeader);
 
 		Document document2 = documentService.getDocument(document.getId());
 

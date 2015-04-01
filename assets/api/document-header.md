@@ -20,7 +20,7 @@
 ```
 
 # Saves the tagline.
-## POST /resume/{documentId}/header*
+## PUT /resume/{documentId}/header*
 + Parameters
   + documentId (string, `1`) - The id of the document.
 + Body (application/json)
