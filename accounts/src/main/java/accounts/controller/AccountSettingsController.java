@@ -1,6 +1,7 @@
 package accounts.controller;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -24,6 +25,9 @@ import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.repository.ElementNotFoundException;
 import accounts.service.UserService;
+import accounts.validation.LengthValidator;
+import accounts.validation.NumberValidator;
+import accounts.validation.SettingValidator;
 
 @Controller
 @RequestMapping("account")
@@ -38,6 +42,14 @@ public class AccountSettingsController {
 
 	@Autowired
 	private UserService userService;
+
+	private Map<String, SettingValidator> validators = new HashMap<>();
+	private List<SettingValidator> validatorsForAll = new LinkedList<>();
+
+	public AccountSettingsController() {
+		validators.put("phoneNumber", new NumberValidator());
+		validatorsForAll.add(new LengthValidator(30));
+	}
 
 	// for header
 	@ModelAttribute("accountName")
@@ -81,6 +93,27 @@ public class AccountSettingsController {
 		return settings;
 	}
 
+	@RequestMapping(value = "setting", method = RequestMethod.PUT, produces = "application/json")
+	public @ResponseBody List<AccountSetting> setAccountSettings(
+			@RequestBody final List<AccountSetting> settings) {
+		User user = getUser();
+
+		settings.stream().map(setting -> {
+			if (validators.containsKey(setting.getName()))
+				validators.get(setting.getName()).validate(setting);
+			return setting;
+		});
+		settings.stream().map(
+				setting -> validatorsForAll.stream().map(
+						v -> v.validate(setting)));
+
+		if (settings.stream().allMatch(
+				setting -> setting.getErrorMessage() != null))
+			return userService.setAccountSettings(user, settings);
+
+		return settings;
+	}
+
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody AccountSetting getAccountSetting(
 			@PathVariable String parameter) throws ElementNotFoundException {
@@ -88,10 +121,18 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
-	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody AccountSetting setAccountSetting(
-			@RequestBody AccountSetting setting) {
-		return userService.setAccountSetting(getUser(), setting);
+			@RequestBody final AccountSetting setting) {
+
+		if (validators.containsKey(setting.getName()))
+			validators.get(setting.getName()).validate(setting);
+
+		validatorsForAll.stream().map(v -> v.validate(setting));
+
+		if (setting.getErrorMessage() != null)
+			return userService.setAccountSetting(getUser(), setting);
+
+		return setting;
 	}
 
 	// @RequestMapping(value = "organization", method = RequestMethod.PUT)

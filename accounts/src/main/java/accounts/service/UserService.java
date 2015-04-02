@@ -33,6 +33,7 @@ import accounts.repository.OrganizationRoleRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
+import accounts.validation.EmailValidator;
 
 @Service
 public class UserService {
@@ -370,5 +371,11 @@ public class UserService {
 		logger.info("Have a nice day.");
 		request.logout(); // good bye :)
 
+	}
+
+	public List<AccountSetting> setAccountSettings(User user,
+			List<AccountSetting> settings) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
