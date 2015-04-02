@@ -26,6 +26,7 @@ import accounts.model.account.settings.AccountSetting;
 import accounts.repository.ElementNotFoundException;
 import accounts.service.UserService;
 import accounts.validation.LengthValidator;
+import accounts.validation.NotNullValidator;
 import accounts.validation.NumberValidator;
 import accounts.validation.SettingValidator;
 
@@ -48,6 +49,7 @@ public class AccountSettingsController {
 
 	public AccountSettingsController() {
 		validators.put("phoneNumber", new NumberValidator());
+		validators.put("firstName", new NotNullValidator());
 		validatorsForAll.add(new LengthValidator(30));
 	}
 
