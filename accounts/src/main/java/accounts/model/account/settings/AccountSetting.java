@@ -1,6 +1,10 @@
 package accounts.model.account.settings;
 
+import javax.validation.constraints.NotNull;
+
 import lombok.ToString;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @ToString
 public class AccountSetting {
@@ -9,7 +13,11 @@ public class AccountSetting {
 	private Long userId;
 	private String name;
 	private String value;
+
+	@NotNull
+	@NotEmpty
 	private String privacy;
+	private String errorMessage;
 
 	public AccountSetting() {
 	}
@@ -62,6 +70,14 @@ public class AccountSetting {
 
 	public void setPrivacy(String privacy) {
 		this.privacy = privacy;
+	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 
 }
