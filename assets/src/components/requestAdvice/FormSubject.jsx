@@ -1,5 +1,4 @@
 var React = require('react');
-var ContentEditable = require("react-contenteditable");
 var Actions = require('./actions');
 
 var FormSubject = React.createClass({
@@ -8,11 +7,14 @@ var FormSubject = React.createClass({
   },
   render: function () {
     return (
-      <div className='request-advice-form-subject'>
-        <div className="one columns">subject:</div>
-        <div className="ten columns">
-          <ContentEditable html={this.props.subject} onChange={this.handleChange}/>
-        </div>
+      <div className='subject content'>
+        <h2>subject:</h2>
+        <input
+          type="text"
+          className="inline flat" 
+          defaultValue="Could you provide me some feedback on my resume?"
+          onChange={this.handleChange}
+        />
       </div>
     );
   }

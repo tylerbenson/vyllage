@@ -1,5 +1,4 @@
 var React = require('react');
-var ContentEditable = require("react-contenteditable");
 var Actions = require('./actions');
 
 var FormBody = React.createClass({
@@ -8,8 +7,14 @@ var FormBody = React.createClass({
   },
   render: function () {
     return (
-      <div className = "messageContent">
-        <ContentEditable html={this.props.message} onChange={this.handleChange}/>
+      <div className="message content">
+        <h2>Message:</h2>
+        <textarea className="flat" onChange={this.handleChange}>
+            I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?
+
+            Thanks,
+            James
+        </textarea>
       </div>
     );
   }

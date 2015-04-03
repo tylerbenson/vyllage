@@ -45,9 +45,11 @@ var RequestAdviceStore = Reflux.createStore({
       .end(function (err, res) {
         if (res.status === 200) {
           this.suggestions = res.body;
+          this.update();
         } else {
           // placeholder suggestions are used for temporary use and should be removed for production
           this.suggestions = suggestions;
+          this.update();
         }
       }.bind(this))
   },

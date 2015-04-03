@@ -16,13 +16,15 @@
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
-<body>
-  <header>
-    <div id="header-container" th:name="${accountName.firstName}">
-    </div>
-  </header>
+<body class='ask-advice'>
+  <div id='container'>
+    <header>
+      <div id="header-container" th:name="${accountName.firstName}">
+      </div>
+    </header>
 
-  <div id="request-advice"></div>
+    <div id="request-advice"></div>
+  </div>
   <script src='javascript/base.js'></script>
   <script src='javascript/requestAdvice.js'></script>
 </body>

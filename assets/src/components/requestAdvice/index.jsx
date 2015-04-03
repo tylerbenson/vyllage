@@ -17,28 +17,26 @@ var Form = React.createClass({
   },
   render: function () {
     return (
-      <section className="container request-advice">
-        <div className="request-advice-header">
-          <p>advice request</p>
-        </div>
-        <div className='row'>
-          <div className='twelve columns'>
-            <form className='request-advice-form' onSubmit={this.submitHandler}>
-              <To {...this.state} />
-              <Subject subject={this.state.subject}/>
-              <div className='offset-by-one nine columns'>
-                <div className='request-advice-form-message'>
-                  <Message message={this.state.message} />
-                  <div className='u-pull-right'>
-                    <button type='submit' className="send-btn" onClick={this.submitHandler}>send</button>
-                    <button className="cancel-btn" onClick={this.cancelHandler}>cancel</button>
-                  </div>
-                </div>
+      <div className="sections">
+        <div className='section'>
+          <div className='container'>
+            <To {...this.state} />
+            <Subject subject={this.state.subject}/>
+            <Message message={this.state.message} />
+            <div className='footer'>
+              <div className='pull right'>
+                <button onClick={this.submitHandler}>
+                  <i className="ion-paper-airplane"></i>
+                  Send
+                </button>
+                <button className="secondary" onClick={this.cancelHandler}>
+                  Cancel
+                </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     );
   }
 });

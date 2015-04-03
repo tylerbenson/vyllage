@@ -10,7 +10,7 @@ var RecipentList = React.createClass({
   editHandler: function (index, e) {
     e.preventDefault();
     Actions.selectRecipient(index);
-  },
+  }, 
   render: function () {
     var nodes = this.props.recipients.map(function (recipient, index) {
       var classes = {
@@ -20,14 +20,23 @@ var RecipentList = React.createClass({
       };
       return (
         <div key={index} className={cx(classes)}>
-          <a onClick={this.editHandler.bind(this, index)}>{recipient.firstName + " " + recipient.lastName}</a>
-          <a onClick={this.removeHandler.bind(this, index)} className='recipient-delete'>x</a>
+          <span className='name' onClick={this.editHandler.bind(this, index)}>
+            {recipient.firstName + " " + recipient.lastName}
+          </span>
+          <button
+            className='flat icon secondary remove' 
+            onClick={this.removeHandler.bind(this, index)}>
+            <i className="ion-android-close"></i>
+          </button>
         </div>
       );
     }.bind(this));
     return (
-      <div className='recipient-list u-cf'>
-        {nodes}
+      <div className='header recipients'>
+        <h2 className="secondary">List of Recipients</h2>
+        <div className='list'>
+          {nodes}
+        </div>
       </div>
     );
   }
