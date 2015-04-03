@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Login</title>
+  <title>Welcome to Vyllage</title>
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,55 +10,73 @@
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/login.css" />
 
-  <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,100' rel='stylesheet' type='text/css' />
 </head>
 
-<body>
-  <section id="login">
-    <form th:action="@{/login}" method="post">
-      <div class="logo">
-        <span> Vyllage </span>
+<body class="login">
+  <div id="container">
+    <header>
+      <div class="content">
+        <div class="logo">
+          <img src="images/logo-orange.png" alt="Vyllage" />
+          <span>Vyllage</span>
+        </div>
       </div>
-      <div>
-        <div class="description-text">
-          <div class="content">
-            He who would do great things, should not attempt them alone
-          </div>
-          <div class="author"> - Seneca &middot; AD 55 </div>
+    </header>
+    <div class="sections">
+      <section class="spiel section">
+        <div class="quote">He who would do great things should not attempt them alone.</div>
+        <div class="author"> — Seneca &bull; AD 55</div>
+      </section>
+      <section class="form section">
+        <div class="container">
+          <form th:action="@{/login}" method="post">
+            <div class="content">
+              <h1 class="centered">Sign In</h1>
+              <div th:if="not ${param.error}">
+                <p class="centered">Welcome to Vyllage</p>
+              </div>
+              <div th:if="${param.error}">
+                <p class="centered error">E-mail or Password invalid.</p>
+              </div>
+              <label>E-mail</label>
+              <input type="text" class="padded" name="email" />
+              <label>Password</label>
+              <input type="password" class="padded" name="password" />
+              <a href="#" class="forgot">Forgot Password?</a>
+              <div class="actions">
+                <button class="padded">Submit</button>
+              </div>
+            </div>
+            <div class="content account">
+              Don't have an account? <a href="#">Request for a demo.</a>
+            </div>
+          </form>
         </div>
-        <div class="login-box">
-          <div class="sign-in">
-            <p class="txt">Sign In </p>
-            <div th:if="${param.error}">
-              <p class="invalid">Invalid e-mail or password </p>
-            </div>
-            <!-- if  param.error is false, how to do ??-->
-            <div th:else="${!param.error}">
-              <p>Welcome to the Vyllage</p>
-            </div>
-          </div>
-          <div class="login-box-content">
-            <div>
-              <label for="email" class="label">E-email</label>
-              <input type="text" class="input email" name="email" placeholder="email" />
-            </div>
-            <div>
-              <label for="password" class="label">Password</label>
-              <input type="password" class="input password" name="password" placeholder="password" />
-            </div>
-            <div class="forget"> <a href="#">Forgot password? </a> </div>
-            <input type="submit" class="button pull right submit-btn" value="Submit" />
-            <div class="clear"></div>
-            <div class="footer">
-              <p class="label"> Don't have an account? <a href="#">Request for an invite.</a>
-              </p>
-            </div>
-          </div>
-        </div>
+      </section>
+    </div>
+    <!-- .sections -->
+  </div>
+  <!-- #container -->
+  <footer>
+    <div class="content">
+      <nav>
+        <ul>
+          <li><a href="">Help</a>
+          </li>
+          <li><a href="">Careers</a>
+          </li>
+          <li><a href="">Terms</a>
+          </li>
+          <li><a href="">Privacy</a>
+          </li>
+          <li><a href="">Contact Us</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
 
-      </div>
-    </form>
-  </section>
 </body>
 
 </html>

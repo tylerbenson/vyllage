@@ -66,6 +66,15 @@ textarea {
   }
 }
 
+label {
+  color: $secondary-color;
+  display: block;
+  font-size: 0.85em;
+  font-weight: 400;
+  margin-bottom: 0.25em;
+  margin-top: 2em;
+}
+
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
