@@ -45,3 +45,14 @@ p {
   line-height: 1.4;
   margin: 0.25em 0;
 }
+.centered {
+  text-align: center;
+}
+
+.error {
+  color: $error-color;
+}
+
+.success {
+  color: $success-color;
+}
