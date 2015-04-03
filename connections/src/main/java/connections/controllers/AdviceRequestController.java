@@ -46,7 +46,7 @@ public class AdviceRequestController {
 
 	@RequestMapping(value = "{documentId}/ask-advice", method = RequestMethod.GET)
 	public String getResume(@PathVariable final Long documentId) {
-		return "requestAdvice";
+		return "askAdvice";
 	}
 
 	@RequestMapping(value = "{documentId}/users", method = RequestMethod.GET)
