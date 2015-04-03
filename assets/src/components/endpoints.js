@@ -6,7 +6,9 @@ var endpoints = {
   resumeSections: '/resume/{documentId}/section',
   resumeSection: '/resume/{documentId}/section/{sectionId}',
   resumeComments: '/resume/{documentId}/section/{sectionId}/comment',
-  resumeComment: '/resume/{documentId}/section/{sectionId}/comment/{commentId}'
+  resumeComment: '/resume/{documentId}/section/{sectionId}/comment/{commentId}',
+  askAdvice: '/resume/{documentId}/ask-advice',
+  askAdviceSuggestions: '/resume/{documentId}/users'
 };
 
 module.exports = endpoints;

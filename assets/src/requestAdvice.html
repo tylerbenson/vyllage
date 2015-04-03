@@ -11,9 +11,8 @@
   <link rel="stylesheet" href="css/requestAdvice.css" />
 
   <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
-
-  <meta name="_csrf_token" th:content="${_csrf.token}" />
-  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
 </head>
 
 <body class='ask-advice'>

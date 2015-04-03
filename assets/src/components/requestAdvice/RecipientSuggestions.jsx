@@ -32,7 +32,8 @@ var Suggesions = React.createClass({
     });
   },
   renderRecentList: function () {
-    return this.props.suggestions.recent.map(function (recipient, index) {
+    var suggestions = this.props.suggestions.recent || [];
+    return suggestions.map(function (recipient, index) {
       var classes = {
         'is-active': this.props.selectedSuggestion === index
       }
@@ -46,7 +47,8 @@ var Suggesions = React.createClass({
     }.bind(this));
   },
   renderRecommendedList: function () {
-    return this.props.suggestions.recent.map(function (recipient, index) {
+    var suggestions = this.props.suggestions.recommended || [];
+    return suggestions.map(function (recipient, index) {
       var classes = {
         'is-active': this.props.selectedSuggestion === this.props.suggestions.recent.length + index
       }

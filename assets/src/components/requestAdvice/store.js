@@ -1,6 +1,8 @@
 var Reflux = require('reflux');
 var assign = require('lodash.assign');
 var request = require('superagent');
+var urlTemplate = require('url-template');
+var endpoints = require('../endpoints');
 
 var suggestions = {
   recent: [
@@ -18,12 +20,29 @@ var suggestions = {
     {"firstName": "Devin", "lastName": "Moncor", "email": "devin.moncor@vyllage.com"},
   ]
 };
-
+ 
 var RequestAdviceStore = Reflux.createStore({
   listenables: require('./actions'),
+  init: function () {
+    this.tokenHeader = document.getElementById('meta_header').content,
+    this.tokenValue = document.getElementById('meta_token').content;
+    this.documentId = window.location.pathname.split('/')[2];
+    this.recipients = [];
+    this.suggestions = {};
+    this.selectedSuggestion = null;
+    this.showSuggestions = false;
+    this.selectedRecipient = null;
+    this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+    this.subject = '';
+    this.message = '';
+  },
   onPostRequestAdvice: function () {
+    var url = urlTemplate
+                .parse(endpoints.askAdvice)
+                .expand({documentId: this.documentId});
     request
-      .post('/request-advice')
+      .post(url)
+      .set(this.tokenHeader, this.tokenValue) 
       .send({
         to: this.recipients,
         subject: this.subject,
@@ -35,20 +54,22 @@ var RequestAdviceStore = Reflux.createStore({
           window.location = '/resume'
         }
       })
-  },
+  }, 
   onGetSuggestions: function () {
+    var url = urlTemplate
+                .parse(endpoints.askAdviceSuggestions)
+                .expand({documentId: this.documentId});
     request
-      .get('/suggestions')
-      .query({firstName: this.recipient.firstName})
-      .query({lastName: this.recipient.lastName})
-      .query({email: this.recipient.email})
+      .get(url)
+      .query({firstNameFilter: this.recipient.firstName})
+      .query({lastNameFilter: this.recipient.lastName})
+      .query({emailFilter: this.recipient.email})
       .end(function (err, res) {
-        if (res.status === 200) {
-          this.suggestions = res.body;
+        if (res.ok) {
+          this.suggestions = res.body || [];
           this.update();
         } else {
-          // placeholder suggestions are used for temporary use and should be removed for production
-          this.suggestions = suggestions;
+          this.suggestions = [];
           this.update();
         }
       }.bind(this))
@@ -144,14 +165,7 @@ var RequestAdviceStore = Reflux.createStore({
     })
   },
   getInitialState: function () {
-    this.recipients = [];
-    this.suggestions = {};
-    this.selectedSuggestion = null;
-    this.showSuggestions = false;
-    this.selectedRecipient = null;
-    this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
-    this.subject = '<p>Could you provide me some feedback on my resume?</p>';
-    this.message = '<p>I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?</p><br/><p>Thanks,</p><p>Nathan</p>';
+    
     return {
       recipients: this.recipients,
       suggestions: this.suggestions,
