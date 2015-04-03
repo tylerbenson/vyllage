@@ -22,12 +22,14 @@ var Settings = React.createClass({
       SettingsNode = <Social {...this.props} {...this.state} />;
     }
     return (
-      <section className='settings'>
-        <SideBar />
-        <div className='content'> 
-          {SettingsNode}
-        </div>
-      </section>  
+      <div className='sections'>
+        <section className='mini section'>
+          <div className='container'>
+            <SideBar />
+            {SettingsNode}
+          </div>
+        </section>
+      </div>  
     );
   }
 });

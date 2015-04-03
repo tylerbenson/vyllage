@@ -41,24 +41,16 @@
           }
         }
 
-        &.active {
-          color: $text-color;
-
-          & > i {
-            color: $text-color;
-          }
-
-          &:after {
-            content: "";
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-top: 12px solid transparent;
-            border-right: 15px solid $inverted-text-color;
-            border-bottom: 12px solid transparent;
-            position: absolute;
-            right: 0;
-          }
+        &.active:after {
+          content: "";
+          display: inline-block;
+          width: 0;
+          height: 0;
+          border-top: 12px solid transparent;
+          border-right: 15px solid $inverted-text-color;
+          border-bottom: 12px solid transparent;
+          position: absolute;
+          right: 0;
         }
       }
     }
@@ -79,6 +71,15 @@
 
       h1 {
         margin-top: 0.75em;
+      }
+
+      label {
+        color: $secondary-color;
+        display: block;
+        font-size: 0.85em;
+        font-weight: 400;
+        margin-bottom: 0.25em;
+        margin-top: 2em;
       }
 
       .url {

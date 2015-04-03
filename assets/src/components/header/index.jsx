@@ -1,6 +1,13 @@
 var React = require('react');
 
 var HeaderContainer = React.createClass({ 
+  getInitialState: function () {
+    return { documentId: '' };
+  },
+  componentDidMount: function () {
+    var documentId = window.location.pathname.split('/')[2];
+    this.setState({documentId: documentId});
+  },
   render: function() {
     var name = this.props.name || user;
     return (
@@ -13,15 +20,15 @@ var HeaderContainer = React.createClass({
           <nav>
             <ul>
               <li><a><i className="ion-ios-bell"></i></a></li>
-              <li><a><i className="ion-gear-a"></i></a></li>
+              <li><a href='/account/setting'><i className="ion-gear-a"></i></a></li>
               <li className="dropdown-trigger user">
                 <a><span className="name">{name}</span><i className="caret"></i></a>
                 <ul className="dropdown-list">
-                  <li><a>
+                  <li><a href={'/resume/' + this.state.documentId}>
                     <i className="ion-document"></i>
                     Resume
                   </a></li>
-                  <li><a>
+                  <li><a href={'/resume/' + this.state.documentId + '/ask-advice'}>
                     <i className="ion-person-stalker"></i>
                     Ask Advice
                   </a></li>
