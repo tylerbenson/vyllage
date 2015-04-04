@@ -1,5 +1,6 @@
 var React = require('react');
 var actions = require('../actions');
+var moment = require('moment');
 
 var CommentList = React.createClass({
   componentDidMount: function () {
@@ -12,7 +13,7 @@ var CommentList = React.createClass({
               <div className='content'>
                 <div className='info'>
                   <div className="author">{comment.userName}</div>
-                  <div className="timestamp"></div>
+                  <div className="timestamp">{moment(comment.lastModified).fromNow()}</div>
                 </div>  
                 <div className="message">
                   {comment.commentText}
