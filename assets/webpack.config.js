@@ -7,7 +7,7 @@ module.exports = {
   devtool: '#inline-source-map',
   entry: {
     'resume.js': './src/resume.jsx',
-    'requestAdvice.js': './src/requestAdvice.jsx',
+    'askAdvice.js': './src/askAdvice.jsx',
     'settings.js': './src/settings.jsx'
   },
   output: {

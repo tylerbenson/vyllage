@@ -32,7 +32,8 @@ var Suggesions = React.createClass({
     });
   },
   renderRecentList: function () {
-    return this.props.suggestions.recent.map(function (recipient, index) {
+    var suggestions = this.props.suggestions.recent || [];
+    return suggestions.map(function (recipient, index) {
       var classes = {
         'is-active': this.props.selectedSuggestion === index
       }
@@ -46,7 +47,8 @@ var Suggesions = React.createClass({
     }.bind(this));
   },
   renderRecommendedList: function () {
-    return this.props.suggestions.recent.map(function (recipient, index) {
+    var suggestions = this.props.suggestions.recommended || [];
+    return suggestions.map(function (recipient, index) {
       var classes = {
         'is-active': this.props.selectedSuggestion === this.props.suggestions.recent.length + index
       }
@@ -65,25 +67,23 @@ var Suggesions = React.createClass({
         position: 'absolute'
       };
       return (
-        <div onMouseDown={this.enterHandler} onMouseUp={this.leaveHanlder}>
-          <div id='suggested-users-list' style={style} className={"suggested-users-list"}>
-            <ul className="">
-              <li className="topper">
-                <p className="topper-text">recent</p>
-              </li>
-              {this.renderRecentList()}
-              <li className="topper">
-                <p className="topper-text">recommended</p>
-              </li>
-              {this.renderRecommendedList()}
-            </ul>  
-          </div>
+        <div onMouseDown={this.enterHandler} onMouseUp={this.leaveHanlder} style={{marginTop: '40px'}}>
+          <ul id='suggested-users-list' style={style} className="autocomplete">
+            <li className="title">
+              Recent
+            </li>
+            {this.renderRecentList()}
+            <li className="title">
+              Recommended
+            </li>
+            {this.renderRecommendedList()}
+          </ul>  
         </div>
       );
     } else {
       return null;
     }
   },
-});
+}); 
 
 module.exports = Suggesions;

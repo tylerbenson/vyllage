@@ -86,8 +86,8 @@ var RecipientEdit = React.createClass({
     var recipient = this.props.recipient;
     return (
       <div onBlur={this.blurHandler} onFocus={this.focusHandler}>
-        <div className='recipient-add'>
-          <div className='three columns'>
+        <div className='form'>
+          <div className='field'>
             <input 
               type='text'
               placeholder='First Name'
@@ -98,7 +98,7 @@ var RecipientEdit = React.createClass({
               autoFocus />
             {this.state.firstNameError? <p className='error'>* required </p>: null}
           </div>
-          <div className='three columns'>
+          <div className='field'>
             <input
               type='text'
               placeholder='Last Name'
@@ -107,7 +107,7 @@ var RecipientEdit = React.createClass({
               onKeyDown={this.keyPress} />
             {this.state.lastNameError? <p className='error'>* required </p>: null}
           </div>
-          <div className='five columns'>
+          <div className='field'>
             <input
               type='email'
               placeholder='E-mail'
@@ -116,10 +116,10 @@ var RecipientEdit = React.createClass({
               onKeyDown={this.keyPress} />
             {this.state.emailError? <p className='error'>* invalid email</p>: null}
           </div>
-          <div className='one columns'>
-            <div className='recipient-button' onClick={this.updateHandler}>
+          <div className='field'>
+            <button className='button' onClick={this.updateHandler}>
               {this.props.selectedRecipient === null? <p>+</p>: <p>&#10004;</p>}
-            </div>
+            </button>
           </div>
         </div> 
       </div>

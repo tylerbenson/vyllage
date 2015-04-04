@@ -8,23 +8,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/requestAdvice.css" />
+  <link rel="stylesheet" href="css/askAdvice.css" />
 
   <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
-
-  <meta name="_csrf_token" th:content="${_csrf.token}" />
-  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
 </head>
 
-<body>
-  <header>
-    <div id="header-container" th:name="${accountName.firstName}">
-    </div>
-  </header>
+<body class='ask-advice'>
+  <div id='container'>
+    <header>
+      <div id="header-container" th:name="${accountName.firstName}">
+      </div>
+    </header>
 
-  <div id="request-advice"></div>
+    <div id="ask-advice"></div>
+  </div>
   <script src='javascript/base.js'></script>
-  <script src='javascript/requestAdvice.js'></script>
+  <script src='javascript/askAdvice.js'></script>
 </body>
 
 </html>
