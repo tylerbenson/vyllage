@@ -38,7 +38,7 @@
       cursor: default;
 
       .name {
-        color: lighten($text-color, 35%);
+        color: lighten($text-color, 20%);
       }
     }
 
@@ -63,11 +63,11 @@
     padding: 2.5em 4em;
 
     h2 {
-      @include column(1/10);
+      @include column(1/11);
     }
 
     .form {
-      @include column(9/10);
+      @include column(10/11);
 
       .field {
         display: inline-block;
@@ -79,17 +79,18 @@
           display: block;
           font-size: 0.85em;
           margin-bottom: 0.25em;
+          margin-top: 0;
         }
 
         input {
           @extend .inline;
 
           &.name {
-            width: 10em;
+            width: 8.5em;
           }
 
           &.email {
-            width: 16em;
+            width: 15.5em;
           }
 
           &:focus {

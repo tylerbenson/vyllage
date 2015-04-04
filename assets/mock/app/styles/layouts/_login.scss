@@ -1,5 +1,6 @@
 .login {
   #container {
+    background-color: $footer-background;
     background-image: url(../images/banner.jpg);
     background-position: center center;
     background-repeat: no-repeat;
@@ -101,5 +102,8 @@
         color: $inverted-text-color;
       }
     }
+  }
+  label {
+    margin-top: 2em;
   }
 }
