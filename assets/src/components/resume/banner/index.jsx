@@ -1,6 +1,5 @@
 var React = require('react');
-var Headline = require('./Headline');
-var Tagline = require('./Tagline');
+var Textarea = require('react-textarea-autosize')
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
 
@@ -38,7 +37,6 @@ var Banner = React.createClass({
   },
   render: function() {
     var header = this.props.header || {}; 
-    console.log(this.state.editMode);
     return (
       <section className='banner'>
         <div className ="content">
@@ -46,7 +44,7 @@ var Banner = React.createClass({
             <div className="name">
               {header.firstName + " " + header.middleName + " " + header.lastName}
             </div>
-            <textarea 
+            <Textarea 
               key={header.tagline || undefined}
               placeholder="What's your professional tagline?"
               className="tagline"
@@ -56,8 +54,8 @@ var Banner = React.createClass({
               onChange={this.handleChange.bind(this, 'tagline')}
               onClick={this.enableEdiMode.bind(this, 'tagline')}
               onBlur={this.disableEdiMode.bind(this, 'tagline')}
-            ></textarea> 
-            <textarea
+            ></Textarea> 
+            <Textarea
               key={header.address || undefined}
               className="address"
               rows="1"
@@ -66,7 +64,7 @@ var Banner = React.createClass({
               onChange={this.handleChange.bind(this, 'address')}
               onClick={this.enableEdiMode.bind(this, 'address')}
               onBlur={this.disableEdiMode.bind(this, 'address')}
-            ></textarea>
+            ></Textarea>
           </div>
           <div className="contact">
             <a>

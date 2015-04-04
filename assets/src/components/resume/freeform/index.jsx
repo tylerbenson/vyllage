@@ -5,6 +5,7 @@ var DeleteSection = require('../Delete');
 var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
 var SectionFooter = require('../sections/Footer');
+var Textarea = require('react-textarea-autosize');
 
 var Freeform = React.createClass({
   getInitialState: function() {
@@ -47,7 +48,7 @@ var Freeform = React.createClass({
           </div>
         </div>
         <div className="content">
-          <textarea
+          <Textarea
             key={this.props.section.description || undefined}
             disabled={!uiEditMode}
             className="flat"
@@ -56,7 +57,7 @@ var Freeform = React.createClass({
             placeholder="Tell us more ..."
             defaultValue={this.props.section.description}
             onChange={this.handleChange}
-          ></textarea>
+          ></Textarea>
         </div>
         <SectionFooter section={this.props.section} />
       </div>

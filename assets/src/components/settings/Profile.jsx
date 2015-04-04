@@ -2,6 +2,7 @@ var React = require('react');
 var filter = require('lodash.filter');
 var Buttons = require('./Buttons');
 var SettingsMixin = require('./mixin');
+var Textarea = require('react-textarea-autosize');
 
 var Profile = React.createClass({
   mixins: [SettingsMixin],
@@ -68,12 +69,12 @@ var Profile = React.createClass({
           />
           
           <label>Address</label>
-          <textarea 
+          <Textarea 
             key={addressSetting.value || undefined}
             ref='address'
             defaultValue={addressSetting.value}
             onChange={this.changeHandler.bind(this, 'address')}
-          ></textarea>
+          ></Textarea>
           
           <label>Contact no</label>
           <input
