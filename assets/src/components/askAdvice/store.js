@@ -3,25 +3,8 @@ var assign = require('lodash.assign');
 var request = require('superagent');
 var urlTemplate = require('url-template');
 var endpoints = require('../endpoints');
-
-var suggestions = {
-  recent: [
-    {"firstName": "Tyler", "lastName": "Benson", "email": "tyler.benson@vyllage.com"},
-    {"firstName": "Nathon", "lastName": "Benson", "email": "nathon.benson@vyllage.com"},
-    {"firstName": "Nick", "lastName": "Disney", "email": "nick.disney@vyllage.com"},
-    {"firstName": "Keith", "lastName": "Biggs", "email": "keith.biggs@vyllage.com"},
-    {"firstName": "Devin", "lastName": "Moncor", "email": "devin.moncor@vyllage.com"}
-  ],
-  recommended: [  
-    {"firstName": "Tyler", "lastName": "Benson", "email": "tyler.benson@vyllage.com"},
-    {"firstName": "Nathon", "lastName": "Benson", "email": "nathon.benson@vyllage.com"},
-    {"firstName": "Nick", "lastName": "Disney", "email": "nick.disney@vyllage.com"},
-    {"firstName": "Keith", "lastName": "Biggs", "email": "keith.biggs@vyllage.com"},
-    {"firstName": "Devin", "lastName": "Moncor", "email": "devin.moncor@vyllage.com"},
-  ]
-};
  
-var RequestAdviceStore = Reflux.createStore({
+var AskAdviceStore = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
     this.tokenHeader = document.getElementById('meta_header').content,
@@ -179,4 +162,4 @@ var RequestAdviceStore = Reflux.createStore({
   }
 });
 
-module.exports = RequestAdviceStore;
+module.exports = AskAdviceStore;

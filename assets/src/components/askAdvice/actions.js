@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 
 module.exports = Reflux.createActions([
-  'postRequestAdvice',
+  'postAskAdvice',
   'getSuggestions',
   'changeRecipient',
   'addRecipient',
