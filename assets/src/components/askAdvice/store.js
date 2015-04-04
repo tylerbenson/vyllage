@@ -19,7 +19,7 @@ var AskAdviceStore = Reflux.createStore({
     this.subject = '';
     this.message = '';
   },
-  onPostRequestAdvice: function () {
+  onPostAskAdvice: function () {
     var url = urlTemplate
                 .parse(endpoints.askAdvice)
                 .expand({documentId: this.documentId});
