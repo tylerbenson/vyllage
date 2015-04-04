@@ -6,7 +6,7 @@ var settingActions = require('../../settings/actions');
 var Banner = React.createClass({ 
   getInitialState: function () {
     return {
-      header: this.props.header,
+      tagline: '',
       editMode: {
         tagline: false,
         address: false,
@@ -18,19 +18,23 @@ var Banner = React.createClass({
     }
   }, 
   enableEdiMode: function (field, e) {
+    e.preventDefault();
     var editMode = this.state.editMode;
     editMode[field] = true;
     this.setState({editMode: editMode});
   },
   disableEdiMode: function (field, e) {
+    e.preventDefault();
     var editMode = this.state.editMode;
     editMode[field] = false;
     this.setState({editMode: editMode});
     settingActions.updateSettings();
+    actions.updateTagline(this.state.tagline);
   }, 
   handleChange: function (field, e) {
+    e.preventDefault();
     if (field === 'tagline') {
-      actions.updateTagline(e.target.value);
+      this.setState({tagline: e.target.value});
     } else {
       settingActions.changeSetting({name: field, value: e.target.value});
     }
@@ -47,7 +51,7 @@ var Banner = React.createClass({
             <Textarea 
               key={header.tagline || undefined}
               placeholder="What's your professional tagline?"
-              className="tagline"
+              className="transparent tagline"
               rows="1"
               autoComplete="off"
               defaultValue={header.tagline}
@@ -57,7 +61,8 @@ var Banner = React.createClass({
             ></Textarea> 
             <Textarea
               key={header.address || undefined}
-              className="address"
+              placeholder="Where is your current location?"
+              className="transparent address"
               rows="1"
               autoComplete="off"
               defaultValue={header.address}
@@ -67,54 +72,62 @@ var Banner = React.createClass({
             ></Textarea>
           </div>
           <div className="contact">
-            <a>
+            <div className='detail'>
               <i className="ion-email"></i>
               <input
+                type='text'
+                placeholder="E-mail Address"
                 key={header.email || undefined}
-                className="email"
+                className="inline transparent"
                 autoComplete="off"
                 defaultValue={header.email}
                 onChange={this.handleChange.bind(this, 'email')}
                 onClick={this.enableEdiMode.bind(this, 'email')}
                 onBlur={this.disableEdiMode.bind(this, 'email')}
               />
-            </a>
-            <a>
+            </div>
+            <div className='detail'>
               <i className="ion-ios-telephone"></i>
               <input
+                type='text'
+                placeholder="Contact Number"
                 key={header.phoneNumber || undefined}
-                className="phoneNumber"
+                className="inline transparent"
                 autoComplete="off"
                 defaultValue={header.phoneNumber}
                 onChange={this.handleChange.bind(this, 'phoneNumber')}
                 onClick={this.enableEdiMode.bind(this, 'phoneNumber')}
                 onBlur={this.disableEdiMode.bind(this, 'phoneNumber')}
               />
-            </a>
-            <a>
+            </div>
+            <div className='detail'>
               <i className="ion-social-linkedin"></i>
               <input
+                type='text'
+                placeholder="Linkedin profile"
                 key={header.linkedin || undefined}
-                className="linkedin"
+                className="inline transparent"
                 autoComplete="off"
                 defaultValue={header.linkedin}
                 onChange={this.handleChange.bind(this, 'linkedin')}
                 onClick={this.enableEdiMode.bind(this, 'linkedin')}
                 onBlur={this.disableEdiMode.bind(this, 'linkedin')}
               />
-            </a>
-            <a>
+            </div>
+            <div className='detail'>
               <i className="ion-social-twitter"></i>
               <input
+                type='text'
+                placeholder="Twitter Handle"
                 key={header.twitter || undefined}
-                className="twitter"
+                className="inline transparent"
                 autoComplete="off"
                 defaultValue={header.twitter}
                 onChange={this.handleChange.bind(this, 'twitter')}
                 onClick={this.enableEdiMode.bind(this, 'twitter')}
                 onBlur={this.disableEdiMode.bind(this, 'twitter')}
               />
-            </a>
+            </div>
           </div>
         </div>
       </section>

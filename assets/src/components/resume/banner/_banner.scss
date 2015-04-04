@@ -11,38 +11,26 @@
 
     .name {
       font-size: 2em;
+      padding: 0 0.3em
     }
     .tagline {
-      background: none;
-      border: none;
       color: $tagline-color;
       margin-bottom: 0.5em;
-      padding: 0;
       width: 100%;
     }
     .address {
-      color: darken($secondary-color, 30%);
+      color: lighten($secondary-color, 30%);
       font-size: 0.85em;
       line-height: 1.4;
+      white-space: normal;
     }
   }
 
   .contact {
     @include column(1/2);
-    a {
+    .detail {
       display: block;
       margin: 1em;
-      text-decoration: none;
-      input {
-        color: darken($secondary-color, 30%);
-      }
-      &:hover {
-        color: lighten($tagline-color, 5%);
-
-        i {
-          color: lighten($tagline-color, 5%);
-        }
-      }
 
       i {
         display: inline-block;
@@ -50,6 +38,22 @@
         margin-right: 0.5em;
         text-align: center;
         transition: all .2s ease;
+      }
+
+      input {
+        min-width: 18em;
+      }
+    }
+
+    a {
+      text-decoration: none;
+
+      &:hover {
+        color: lighten($tagline-color, 5%);
+
+        i {
+          color: lighten($tagline-color, 5%);
+        }
       }
     }
   }
