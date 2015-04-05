@@ -1,16 +1,21 @@
 package accounts.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +33,7 @@ import accounts.service.UserService;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
 import accounts.validation.NumberValidator;
+import accounts.validation.RoleAndOrganizationValidator;
 import accounts.validation.SettingValidator;
 
 @Controller
@@ -44,13 +50,21 @@ public class AccountSettingsController {
 	@Autowired
 	private UserService userService;
 
+	private RoleAndOrganizationValidator roleOrgValidator = new RoleAndOrganizationValidator();
 	private Map<String, SettingValidator> validators = new HashMap<>();
 	private List<SettingValidator> validatorsForAll = new LinkedList<>();
+
+	private Map<String, List<String>> settingValues = new HashMap<>();
 
 	public AccountSettingsController() {
 		validators.put("phoneNumber", new NumberValidator());
 		validators.put("firstName", new NotNullValidator());
 		validatorsForAll.add(new LengthValidator(30));
+
+		settingValues.put("emailUpdates",
+				Arrays.asList("weekly", "biweekly", "monthly", "never"));
+		settingValues.put("privacy",
+				Arrays.asList("private", "public", "organization"));
 	}
 
 	// for header
@@ -109,6 +123,12 @@ public class AccountSettingsController {
 				setting -> validatorsForAll.stream().map(
 						v -> v.validate(setting)));
 
+		roleOrgValidator.validate(settings
+				.stream()
+				.filter(s -> s.getName().equalsIgnoreCase("role")
+						|| s.getName().equalsIgnoreCase("organization"))
+				.collect(Collectors.toList()));
+
 		if (settings.stream().allMatch(
 				setting -> setting.getErrorMessage() != null))
 			return userService.setAccountSettings(user, settings);
@@ -124,7 +144,15 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody AccountSetting setAccountSetting(
-			@RequestBody final AccountSetting setting) {
+			@Valid @RequestBody final AccountSetting setting,
+			BindingResult result) {
+
+		if (result.hasErrors()) {
+			setting.setErrorMessage(result.getFieldErrors().stream()
+					.map(e -> e.getDefaultMessage())
+					.collect(Collectors.joining(",")));
+			return setting;
+		}
 
 		if (validators.containsKey(setting.getName()))
 			validators.get(setting.getName()).validate(setting);
@@ -135,6 +163,16 @@ public class AccountSettingsController {
 			return userService.setAccountSetting(getUser(), setting);
 
 		return setting;
+	}
+
+	@RequestMapping(value = "setting/{parameter}/values", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<String> getAccountSettingValues(
+			@PathVariable String parameter) throws ElementNotFoundException {
+
+		if (!settingValues.containsKey(parameter))
+			throw new ElementNotFoundException("Setting '" + parameter
+					+ "', values not found.");
+		return settingValues.get(parameter);
 	}
 
 	// @RequestMapping(value = "organization", method = RequestMethod.PUT)
