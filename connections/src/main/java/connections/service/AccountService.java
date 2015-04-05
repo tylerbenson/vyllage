@@ -40,13 +40,7 @@ public class AccountService {
 		Assert.notEmpty(userIds);
 
 		HttpHeaders headers = new HttpHeaders();
-		/*
-		 * TODO There must be a better way to get the right cookie, isn't there?
-		 * (This will break if we add more cookies.)
-		 */
-		headers.set("Cookie",
-				"JSESSIONID=" + request.getCookies()[0].getValue());
-
+		headers.set("Cookie", request.getHeader("Cookie"));
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);

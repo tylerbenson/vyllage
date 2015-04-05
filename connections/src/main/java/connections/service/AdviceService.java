@@ -64,10 +64,7 @@ public class AdviceService {
 
 	protected HttpEntity<Object> addCookieToHeader(HttpServletRequest request) {
 		HttpHeaders headers = new HttpHeaders();
-
-		headers.set("Cookie",
-				"JSESSIONID=" + request.getCookies()[0].getValue());
-
+		headers.set("Cookie", request.getHeader("Cookie"));
 		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
 		return entity;
 	}
