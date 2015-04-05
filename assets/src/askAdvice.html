@@ -17,13 +17,10 @@
 
 <body class='ask-advice'>
   <div id='container'>
-    <header>
-      <div id="header-container" th:name="${accountName.firstName}">
-      </div>
-    </header>
-
+    <header id="header-container" th:name="${accountName.firstName}"></header>
     <div id="ask-advice"></div>
   </div>
+  <div id="footer"></div>
   <script src='javascript/base.js'></script>
   <script src='javascript/askAdvice.js'></script>
 </body>

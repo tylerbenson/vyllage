@@ -1,4 +1,5 @@
 var React = require('react');
+var RecipientList = require('./RecipientList');
 var To = require('./FormTo');
 var Subject = require('./FormSubject');
 var Message = require('./FormMessage');
@@ -20,6 +21,9 @@ var Form = React.createClass({
       <div className="sections">
         <div className='section'>
           <div className='container'>
+            <RecipientList 
+              recipients={this.state.recipients}
+              selectedRecipient={this.state.selectedRecipient} />
             <To {...this.state} />
             <Subject subject={this.state.subject}/>
             <Message message={this.state.message} />
