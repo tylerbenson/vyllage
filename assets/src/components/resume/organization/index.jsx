@@ -4,6 +4,7 @@ var EditBtn = require('../../buttons/edit');
 var DeleteSection = require('../Delete');
 var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
+var Textarea = require('react-textarea-autosize');
 
 var Organization = React.createClass({
   getInitialState: function () {
@@ -52,7 +53,7 @@ var Organization = React.createClass({
           </div>
         </div>
         <div className='content'>
-          <textarea
+          <Textarea
             disabled={!uiEditMode}
             className="flat"
             rows="1"
@@ -60,7 +61,7 @@ var Organization = React.createClass({
             placeholder="Company Description"
             defaultValue={section.organizationDescription}
             onChange={this.handleChange.bind(this, 'organizationDescription')}
-          ></textarea>
+          ></Textarea>
           <section className="subsubsection">
             <div className="header">
               <div className="title">
@@ -102,14 +103,14 @@ var Organization = React.createClass({
                 defaultValue={section.location}
                 onChange={this.handleChange.bind(this, 'location')}
               />
-              <textarea
+              <Textarea
                 disabled={!uiEditMode}
                 className="flat"
                 rows="3"
                 placeholder="Note at least three (3) notable accomplishments achieved during this position.."
                 defaultValue={section.highlights}
                 onChange={this.handleChange.bind(this, 'highlights')}
-              ></textarea>
+              ></Textarea>
             </div>
           </section>  
         </div>

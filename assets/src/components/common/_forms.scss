@@ -29,6 +29,10 @@ textarea {
   padding: 0.3em 0.6em;
   transition: all .2s ease;
 
+  &[disabled] {
+    cursor: default;
+  }
+
   &:hover {
     border-color: lighten($secondary-color, 20%);
   }
@@ -51,6 +55,17 @@ textarea {
     }
   }
 
+  &.transparent {
+    background: none;
+    border: none;
+
+    &:focus {
+      background: rgba(0,0,0,0.1);
+      box-shadow: 0 1px 1px rgba(255,255,255,0.1),
+        inset 0 1px 1px rgba(0,0,0,0.1);
+    }
+  }
+
   &.inline {
     display: inline-block;
     width: auto;
@@ -62,6 +77,7 @@ textarea {
   }
 
   &.padded {
+    border-width: 2px;
     padding: 0.75em 1em;
   }
 }

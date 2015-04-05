@@ -1,5 +1,6 @@
 var React = require('react');
 var actions = require('../actions');
+var Textarea = require('react-textarea-autosize');
 
 var CommentForm = React.createClass({
   getInitialState: function () {
@@ -23,11 +24,11 @@ var CommentForm = React.createClass({
     return (
       <div className='comment-box'>
         <div className='content'>
-          <textarea
+          <Textarea
             rows='1'
             placeholder='share your advice'
             onChange={this.changeHandler}
-            value={this.state.value}></textarea>
+            value={this.state.value}></Textarea>
           <button onClick={this.commentHandler}>Submit</button>
         </div>
       </div>
