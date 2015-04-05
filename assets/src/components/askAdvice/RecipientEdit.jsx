@@ -88,9 +88,10 @@ var RecipientEdit = React.createClass({
       <div onBlur={this.blurHandler} onFocus={this.focusHandler}>
         <div className='form'>
           <div className='field'>
+            <label>First Name</label>
             <input 
               type='text'
-              placeholder='First Name'
+              className='name'
               value={recipient.firstName}
               onChange={this.changeHandler.bind(this, 'firstName')}
               onKeyDown={this.keyPress}
@@ -99,26 +100,28 @@ var RecipientEdit = React.createClass({
             {this.state.firstNameError? <p className='error'>* required </p>: null}
           </div>
           <div className='field'>
+            <label>Last Name</label>
             <input
               type='text'
-              placeholder='Last Name'
+              className='name'
               value={recipient.lastName}
               onChange={this.changeHandler.bind(this, 'lastName')}
               onKeyDown={this.keyPress} />
             {this.state.lastNameError? <p className='error'>* required </p>: null}
           </div>
           <div className='field'>
+            <label>E-mail</label>
             <input
               type='email'
-              placeholder='E-mail'
+              className='email'
               value={recipient.email}
               onChange={this.changeHandler.bind(this, 'email')}
               onKeyDown={this.keyPress} />
             {this.state.emailError? <p className='error'>* invalid email</p>: null}
           </div>
           <div className='field'>
-            <button className='button' onClick={this.updateHandler}>
-              {this.props.selectedRecipient === null? <p>+</p>: <p>&#10004;</p>}
+            <button onClick={this.updateHandler}>
+              {this.props.selectedRecipient === null? <i className='ion-plus'></i> : <i className='ion-checkmark'></i>}
             </button>
           </div>
         </div> 
@@ -128,4 +131,3 @@ var RecipientEdit = React.createClass({
 });
 
 module.exports = RecipientEdit;
-

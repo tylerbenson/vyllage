@@ -17,19 +17,37 @@
     }
   }
   .recipient {
-    background: lighten($secondary-color, 40%);
-    border-radius: 3px;
+    background: lighten($secondary-color, 43%);
+    border-radius: 5px;
     border: lighten($secondary-color, 35%) solid 1px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.05),
       inset 0 1px 1px rgba(255,255,255,0.5);
+    cursor: pointer;
     display: inline-block;
     font-size: 0.9em;
+    font-weight: 300;
     margin: 0.25em 0.125em;
+    transition: all .2s ease;
+
+    &:hover {
+      background: lighten($secondary-color, 45%);
+    }
+
+    &.disabled {
+      background: $inverted-text-color;
+      border-color: lighten($secondary-color, 35%);
+      box-shadow: none;
+      cursor: default;
+
+      .name {
+        color: lighten($text-color, 25%);
+      }
+    }
 
     .name {
       color: lighten($text-color, 10%);
       display: inline-block;
-      padding: 0.15em 0 0.15em 0.75em;
+      padding: 0.15em 0 0.5em 0.75em;
     }
 
     .remove {
@@ -37,7 +55,7 @@
       padding: 0.15em 0.75em 0.15em 0.5em;
 
       &:hover i {
-        color: $text-color;
+        color: $primary-color;
       }
     }
   }
@@ -47,11 +65,11 @@
     padding: 2.5em 4em;
 
     h2 {
-      @include column(1/10);
+      @include column(1/17);
     }
 
     .form {
-      @include column(9/10);
+      @include column(16/17);
 
       .field {
         display: inline-block;
@@ -63,17 +81,18 @@
           display: block;
           font-size: 0.85em;
           margin-bottom: 0.25em;
+          margin-top: 0;
         }
 
         input {
           @extend .inline;
 
           &.name {
-            width: 10em;
+            width: 8.5em;
           }
 
           &.email {
-            width: 16em;
+            width: 14em;
           }
 
           &:focus {
@@ -90,7 +109,7 @@
         margin-top: 0.5em;
 
         .facebook {
-          margin-left: 0.25em;
+          margin-left: 0.5em;
         }
       }
     }
