@@ -63,6 +63,7 @@ var AskAdviceStore = Reflux.createStore({
     this.update();
   },
   onAddRecipient: function (recipient) {
+    console.log('add', recipient);
     this.recipients.push(recipient)
     this.selectedRecipient = null;
     this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
@@ -70,6 +71,7 @@ var AskAdviceStore = Reflux.createStore({
     this.update();
   },
   onUpdateRecipient: function (recipient, index) {
+    console.log('update', recipient, index);
     this.recipients[index] = recipient;
     this.selectedRecipient = null;
     this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
@@ -124,7 +126,6 @@ var AskAdviceStore = Reflux.createStore({
   },
   onCloseSuggestions: function () {
     this.showSuggestions = false;
-    this.selectedRecipient = null;
     this.update();
   },
   onUpdateSubject: function (subject) {

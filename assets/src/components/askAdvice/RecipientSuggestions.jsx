@@ -67,7 +67,7 @@ var Suggesions = React.createClass({
         position: 'absolute'
       };
       return (
-        <div onMouseDown={this.enterHandler} onMouseUp={this.leaveHanlder} style={{marginTop: '40px'}}>
+        <div onMouseDown={this.enterHandler} onMouseUp={this.leaveHanlder} style={{marginTop: '70px'}}>
           <ul id='suggested-users-list' style={style} className="autocomplete">
             <li className="title">
               Recent
