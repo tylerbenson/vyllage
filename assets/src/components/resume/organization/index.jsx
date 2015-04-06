@@ -11,7 +11,6 @@ var Organization = React.createClass({
   getInitialState: function () {
     return {
       section: this.props.section,
-      startDateActive: false,
     };
   },
   handleChange: function(key, e) {
@@ -31,18 +30,6 @@ var Organization = React.createClass({
   },
   editHandler: function (e) {
     actions.enableEditMode(this.props.section.sectionId);
-  },
-  openStartDatepicker: function () {
-    this.setState({startDateActive: true});
-  },
-  closeStartDatepicker: function () {
-    this.setState({startDateActive: false});
-  },
-  openEndDatepicker: function () {
-    this.setState({endDateActive: true});
-  },
-  closeEndDatepicker: function () {
-    this.setState({endDateActive: false});
   },
   render: function () {
     var uiEditMode = this.props.section.uiEditMode;
@@ -92,42 +79,31 @@ var Organization = React.createClass({
               </div>
             </div>
             <div className="content">
-              <span className='datepicker-trigger'>
+              <Datepicker 
+                name='startDate'
+                date={section.startDate}
+                setDate={this.handleChange}
+              >
                 <input 
                   disabled={!uiEditMode}
                   type="text"
                   className="inline flat date"
                   placeholder="Start Date"
-                  value={section.startDate}
-                  
-                  onChange={this.handleChange.bind(this, 'startDate')}
                 />
-                <Datepicker 
-                  isOpen={this.state.startDateActive}
-                  open={this.openStartDatepicker}
-                  close={this.closeStartDatepicker}
-                  name='startDate'
-                  setDate={this.handleChange}
-                />
-              </span>
+              </Datepicker>  
               -
-              <span className='datepicker-trigger'>
+              <Datepicker 
+                name='endDate'
+                date={section.endDate}
+                setDate={this.handleChange}
+              >
                 <input 
                   disabled={!uiEditMode}
                   type="text"
                   className="inline flat date"
                   placeholder="End Date"
-                  value={section.endDate}
-                  onFocus={this.openEndDatepicker}
-                  onBlur={this.closeEndDatepicker}
-                  onChange={this.handleChange.bind(this, 'endDate')}
                 />
-                <Datepicker
-                  isOpen={this.state.endDateActive}
-                  name='endDate'
-                  setDate={this.handleChange}
-                />
-              </span>
+              </Datepicker>  
               <input 
                 disabled={!uiEditMode}
                 type="text" 
