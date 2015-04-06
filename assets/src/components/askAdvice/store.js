@@ -124,7 +124,6 @@ var AskAdviceStore = Reflux.createStore({
   },
   onCloseSuggestions: function () {
     this.showSuggestions = false;
-    this.selectedRecipient = null;
     this.update();
   },
   onUpdateSubject: function (subject) {
