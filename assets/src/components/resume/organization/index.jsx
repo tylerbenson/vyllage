@@ -39,9 +39,10 @@ var Organization = React.createClass({
         <div className='header'>
           <div className='title'>
             <h2>
-              <input 
+              <input
                 disabled={!uiEditMode}
                 className='flat'
+                placeholder='Organization Name'
                 type='text'
                 defaultValue={section.organizationName}
                 onChange={this.handleChange.bind(this, 'organizationName')}
@@ -59,7 +60,7 @@ var Organization = React.createClass({
             className="flat"
             rows="1"
             autoComplete="off"
-            placeholder="Company Description"
+            placeholder="Organization Description"
             defaultValue={section.organizationDescription}
             onChange={this.handleChange.bind(this, 'organizationDescription')}
           ></Textarea>
@@ -71,7 +72,7 @@ var Organization = React.createClass({
                     disabled={!uiEditMode}
                     className="flat"
                     type="text"
-                    placeholder="Position"
+                    placeholder="Degree / Position"
                     defaultValue={section.role}
                     onChange={this.handleChange.bind(this, 'role')}
                   />
@@ -79,34 +80,34 @@ var Organization = React.createClass({
               </div>
             </div>
             <div className="content">
-              <Datepicker 
+              <Datepicker
                 name='startDate'
                 date={section.startDate}
                 setDate={this.handleChange}
               >
-                <input 
+                <input
                   disabled={!uiEditMode}
                   type="text"
                   className="inline flat date"
                   placeholder="Start Date"
                 />
-              </Datepicker>  
+              </Datepicker>
               -
-              <Datepicker 
+              <Datepicker
                 name='endDate'
                 date={section.endDate}
                 setDate={this.handleChange}
               >
-                <input 
+                <input
                   disabled={!uiEditMode}
                   type="text"
                   className="inline flat date"
                   placeholder="End Date"
                 />
-              </Datepicker>  
-              <input 
+              </Datepicker>
+              <input
                 disabled={!uiEditMode}
-                type="text" 
+                type="text"
                 className="flat location"
                 placeholder="Location"
                 defaultValue={section.location}
@@ -115,13 +116,13 @@ var Organization = React.createClass({
               <Textarea
                 disabled={!uiEditMode}
                 className="flat"
-                rows="3"
+                rows="1"
                 placeholder="Note at least three (3) notable accomplishments achieved during this position.."
                 defaultValue={section.highlights}
                 onChange={this.handleChange.bind(this, 'highlights')}
               ></Textarea>
             </div>
-          </section>  
+          </section>
         </div>
       </div>
     );
