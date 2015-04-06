@@ -9,24 +9,22 @@ var FormTo = React.createClass({
     return (
       <div className="to content">
         <h2>To:</h2>
-        <div className='form'>
-          <RecipientEdit 
-            recipient={this.props.recipient}
-            recipients={this.props.recipients}
-            suggestions={this.props.suggestions}
-            selectedRecipient={this.props.selectedRecipient}
-            selectedSuggestion={this.props.selectedSuggestion}
-          />
-          <Suggestions
-            show={this.props.showSuggestions}
-            suggestions={this.props.suggestions}
-            selectedSuggestion={this.props.selectedSuggestion}
-          />
-        </div>
+        <RecipientEdit
+          recipient={this.props.recipient}
+          recipients={this.props.recipients}
+          suggestions={this.props.suggestions}
+          selectedRecipient={this.props.selectedRecipient}
+          selectedSuggestion={this.props.selectedSuggestion}
+        />
+        <Suggestions
+          show={this.props.showSuggestions}
+          suggestions={this.props.suggestions}
+          selectedSuggestion={this.props.selectedSuggestion}
+        />
       </div>
     );
   }
 });
- 
+
 
 module.exports = FormTo;

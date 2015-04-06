@@ -8,10 +8,10 @@ var FormSubject = React.createClass({
   render: function () {
     return (
       <div className='subject content'>
-        <h2>subject:</h2>
+        <h2>Subject:</h2>
         <input
           type="text"
-          className="inline flat" 
+          className="inline flat"
           defaultValue="Could you provide me some feedback on my resume?"
           onChange={this.handleChange}
         />

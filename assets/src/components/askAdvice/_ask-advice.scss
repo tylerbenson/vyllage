@@ -9,7 +9,7 @@
       padding: 0;
     }
   }
-  .recipients {
+  .recipients.header {
     padding: 2em 4em;
 
     .list {
@@ -60,12 +60,13 @@
     }
   }
 
-  .to {
+  .to.content {
     background: darken($section-footer-background, 1%);
-    padding: 2.5em 4em;
+    padding: 2em 4em;
 
     h2 {
       @include column(1/17);
+      margin-top: 0.35em;
     }
 
     .form {
@@ -114,7 +115,7 @@
       }
     }
   }
-  .subject {
+  .subject.content {
     padding: 1.5em 4em;
     border-bottom: $section-footer-background solid 1px;
 
@@ -126,7 +127,7 @@
       width: 85%;
     }
   }
-  .message {
+  .message.content {
     padding-top: 1.75em;
 
     textarea {
