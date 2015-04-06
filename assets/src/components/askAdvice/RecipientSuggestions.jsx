@@ -35,13 +35,13 @@ var Suggesions = React.createClass({
     var suggestions = this.props.suggestions.recent || [];
     return suggestions.map(function (recipient, index) {
       var classes = {
-        'is-active': this.props.selectedSuggestion === index
+        'active': this.props.selectedSuggestion === index
       }
       return (
         <li key={index} className={cx(classes)}>
-          <p className='item-text' onClick={this.recentClick.bind(this, index)}>
+          <div className='name' onClick={this.recentClick.bind(this, index)}>
             {recipient.firstName + " " + recipient.lastName}
-          </p>
+          </div>
          </li>
       );
     }.bind(this));
@@ -50,13 +50,13 @@ var Suggesions = React.createClass({
     var suggestions = this.props.suggestions.recommended || [];
     return suggestions.map(function (recipient, index) {
       var classes = {
-        'is-active': this.props.selectedSuggestion === this.props.suggestions.recent.length + index
+        'active': this.props.selectedSuggestion === this.props.suggestions.recent.length + index
       }
       return (
         <li key={this.props.suggestions.recent.length + index} className={cx(classes)}>
-          <p className='item-text' onClick={this.recommendedClick.bind(this, index)}>
+          <div className='name' onClick={this.recommendedClick.bind(this, index)}>
             {recipient.firstName + " " + recipient.lastName}
-          </p>
+          </div>
          </li>
       );
     }.bind(this));

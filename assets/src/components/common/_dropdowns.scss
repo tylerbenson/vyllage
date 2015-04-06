@@ -85,7 +85,7 @@
     border-bottom: lighten($secondary-color, 40%) solid 1px;
     padding: 0.5em 1em;
 
-    &:hover {
+    &:hover, &.active {
       background: $highlight;
       cursor: pointer;
     }
