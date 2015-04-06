@@ -34,7 +34,7 @@ var RecipientEdit = React.createClass({
         Actions.selectSuggestion(this.props.selectedSuggestion);
         this.setState(this.getInitialState());
       }
-    } 
+    }
 
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       this.changeSelectedSuggestion(e);
@@ -70,7 +70,7 @@ var RecipientEdit = React.createClass({
 
     if (e.key === 'ArrowUp') {
       selectedSuggestion = (this.props.selectedSuggestion > 0)? this.props.selectedSuggestion - 1: 0;
-    } 
+    }
     Actions.suggestionIndex(selectedSuggestion);
   },
   blurHandler: function () {
@@ -89,7 +89,7 @@ var RecipientEdit = React.createClass({
         <div className='form'>
           <div className='field'>
             <label>First Name</label>
-            <input 
+            <input
               type='text'
               className='name'
               value={recipient.firstName}
@@ -121,10 +121,10 @@ var RecipientEdit = React.createClass({
           </div>
           <div className='field'>
             <button onClick={this.updateHandler}>
-              {this.props.selectedRecipient === null? <i className='ion-plus'></i> : <i className='ion-checkmark'></i>}
+              {this.props.selectedRecipient === null? <span><i className='ion-plus'></i> Add</span> : <span><i className='ion-checkmark'></i> Save</span>}
             </button>
           </div>
-        </div> 
+        </div>
       </div>
     );
   }

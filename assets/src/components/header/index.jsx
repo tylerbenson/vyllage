@@ -10,16 +10,16 @@ var HeaderContainer = React.createClass({
   },
   render: function() {
     var name = this.props.name || user;
+    var title = this.props.title;
     return (
         <div className="content">
           <div className="logo">
             <img src="images/logo-white.png" alt="Vyllage" />
             <span>Vyllage</span>
           </div>
-          <span className="page-title">Resume</span>
+          <span className="page-title">{title}</span>
           <nav>
             <ul>
-              <li><a><i className="ion-ios-bell"></i></a></li>
               <li><a href='/account/setting'><i className="ion-gear-a"></i></a></li>
               <li className="dropdown-trigger user">
                 <a><i className="avatar ion-person"></i><span className="name">{name}</span><i className="caret"></i></a>
@@ -46,7 +46,8 @@ var HeaderContainer = React.createClass({
 });
 
 var name = document.getElementById('header-container').getAttribute('name');
-React.render(<HeaderContainer name={name}/>, document.getElementById('header-container'));
+var title = document.getElementById('header-container').getAttribute('title');
+React.render(<HeaderContainer title={title} name={name}/>, document.getElementById('header-container'));
 
 module.exports = HeaderContainer;
 

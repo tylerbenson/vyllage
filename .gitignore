@@ -47,4 +47,5 @@ build
 # WEB
 assets/.sass-cache
 assets/public
-
+assets/mock/dist
+assets/mock/.tmp

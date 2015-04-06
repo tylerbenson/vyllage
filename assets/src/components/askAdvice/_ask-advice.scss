@@ -9,11 +9,19 @@
       padding: 0;
     }
   }
-  .recipients {
+  .recipients.header {
     padding: 2em 4em;
 
     .list {
       margin-top: 1em;
+    }
+
+    .empty {
+      color: lighten($section-footer-color, 20%);
+      font-size: 1.15em;
+      font-weight: 300;
+      padding: 0.6em 0.25em;
+      text-align: center;
     }
   }
   .recipient {
@@ -60,12 +68,13 @@
     }
   }
 
-  .to {
+  .to.content {
     background: darken($section-footer-background, 1%);
-    padding: 2.5em 4em;
+    padding: 2em 4em;
 
     h2 {
       @include column(1/17);
+      margin-top: 0.35em;
     }
 
     .form {
@@ -114,7 +123,7 @@
       }
     }
   }
-  .subject {
+  .subject.content {
     padding: 1.5em 4em;
     border-bottom: $section-footer-background solid 1px;
 
@@ -126,7 +135,7 @@
       width: 85%;
     }
   }
-  .message {
+  .message.content {
     padding-top: 1.75em;
 
     textarea {

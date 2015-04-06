@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Home</title>
+  <title>Vyllage | Resume</title>
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,6 +11,7 @@
 
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/resume.css" />
+  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
 
 
   <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
@@ -19,7 +20,7 @@
 
 <body>
   <div id='container'>
-    <header id="header-container" th:name="${accountName.firstName}"></header>
+    <header id="header-container" title="Resume" th:name="${accountName.firstName}"></header>
     <div id="resume"></div>
   </div>
   <div id='footer'></div>
