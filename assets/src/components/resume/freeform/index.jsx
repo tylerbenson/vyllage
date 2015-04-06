@@ -13,7 +13,7 @@ var Freeform = React.createClass({
   },
   getDefaultProps: function () {
     return {
-      placeholder: 'tell us ....',
+      placeholder: 'Tell us more..',
       section: {}
     }
   },
@@ -54,7 +54,7 @@ var Freeform = React.createClass({
             className="flat"
             rows="1"
             autoComplete="off"
-            placeholder="Tell us more ..."
+            placeholder="Tell us more.."
             defaultValue={this.props.section.description}
             onChange={this.handleChange}
           ></Textarea>
