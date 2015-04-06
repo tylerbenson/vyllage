@@ -100,12 +100,12 @@ var Datepicker = React.createClass({
         return (
           <span className={className} onClick={this.selectMonth.bind(this, month)}>
             {month}
-          </span> 
+          </span>
         );
       }.bind(this))
       return (
-        <div 
-          className="datepicker" 
+        <div
+          className="datepicker"
           onMouseEnter={this.enterDatepicker}
           onMouseLeave={this.leaveDatepicker}
         >
@@ -114,7 +114,7 @@ var Datepicker = React.createClass({
               <i className="ion-arrow-left-c"></i>
             </button>
 
-            <span className="inline year">{this.state.year}</span> 
+            <input type="text" className="inline year" placeholder="Year" value={this.state.year} />
 
             <button className="small inverted primary icon" onClick={this.incrementYear}>
               <i className="ion-arrow-right-c"></i>
@@ -123,7 +123,7 @@ var Datepicker = React.createClass({
           <div className="content">
             {monthNodes}
           </div>
-        </div>  
+        </div>
       );
     } else {
       return null;
