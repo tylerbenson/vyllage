@@ -9,11 +9,11 @@ var Textarea = require('react-textarea-autosize');
 
 var Freeform = React.createClass({
   getInitialState: function() {
-    return {description: this.props.section.description}; 
+    return {description: this.props.section.description};
   },
   getDefaultProps: function () {
     return {
-      placeholder: 'tell us ....',
+      placeholder: 'Tell us more..',
       section: {}
     }
   },
@@ -44,7 +44,7 @@ var Freeform = React.createClass({
           </div>
           <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
-            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
+            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: ''}
           </div>
         </div>
         <div className="content">
@@ -54,7 +54,7 @@ var Freeform = React.createClass({
             className="flat"
             rows="1"
             autoComplete="off"
-            placeholder="Tell us more ..."
+            placeholder="Tell us more.."
             defaultValue={this.props.section.description}
             onChange={this.handleChange}
           ></Textarea>

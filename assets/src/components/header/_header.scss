@@ -3,7 +3,9 @@ header {
   background: $primary-color;
 
   nav ul li a{
+    cursor: pointer;
     padding: 0.6em;
+
     i,
     span {
       color: $header-color;
@@ -27,6 +29,7 @@ header {
     color: $page-title-color;
     text-transform: uppercase;
     font-size: 0.9em;
+    margin-left: 0.5em;
     position: relative;
     bottom: 0.3em;
   }

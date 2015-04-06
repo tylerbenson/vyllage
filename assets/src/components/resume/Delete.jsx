@@ -25,12 +25,12 @@ var DeleteSection = React.createClass({
 
     return (
       <div style={{display: 'inline-block'}}>
-        <button 
-          className='small icon'
+        <button
+          className='inverted small icon'
           onClick={this.openModal}>
           <i className='ion-trash-a'></i>
         </button>
-        <Modal isOpen={this.state.isOpen}> 
+        <Modal isOpen={this.state.isOpen}>
           <div className="header">
             <div className="title">
               <h1>Confirm Delete</h1>
@@ -53,7 +53,7 @@ var DeleteSection = React.createClass({
               Cancel
             </button>
           </div>
-        </Modal>  
+        </Modal>
       </div>
     );
   }

@@ -8,6 +8,7 @@
   z-index: 1;
 }
 
+.section .modal,
 .modal {
   border: lighten($secondary-color, 40%) solid 1px;
   border-radius: 5px;
@@ -21,11 +22,14 @@
   padding: 2em;
   position: absolute;
   right: 0;
+  text-align: left;
   top: 0;
   width: 480px;
 
   .header {
     @include cf();
+    padding: 0;
+
     .title {
       @include column(3/4);
     }
@@ -47,6 +51,9 @@
   }
 
   .footer {
+    background: none;
+    border: none;
+    margin-top: 1em;
     text-align: right;
   }
 }

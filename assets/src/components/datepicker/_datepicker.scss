@@ -13,9 +13,18 @@
 .date {
   display: inline-block;
   font-size: 0.9em;
-  width: 6em !important;
+  width: 5em !important;
+
+  &.start {
+    margin-right: 0.25em;
+  }
+
+  &.end {
+    margin-left: 0.25em;
+  }
 }
 
+.section .datepicker,
 .datepicker {
   background: $inverted-text-color;
   border: lighten($secondary-color, 30%) solid 1px;

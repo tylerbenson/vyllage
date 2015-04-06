@@ -9,7 +9,7 @@ input[type="reset"] {
   color: $inverted-text-color;
   display: inline-block;
   outline: none;
-  margin: 2px 0;
+  margin: 2px;
   padding: 0.3em 0.9em;
   text-decoration: none;
   text-transform: uppercase;
@@ -20,9 +20,14 @@ input[type="reset"] {
     cursor: pointer;
   }
 
-  & > i,span {
+  & > i {
     color: $inverted-text-color;
     margin-right: 0.4em;
+    transition: all .2s ease;
+  }
+
+  & > span {
+    color: $inverted-text-color;
     transition: all .2s ease;
   }
 
@@ -108,7 +113,11 @@ input[type="reset"] {
     border-color: transparent;
     color: $primary-color;
 
-    & > i,span {
+    & > i {
+      color: $primary-color;
+    }
+
+    & > span {
       color: $primary-color;
     }
 
