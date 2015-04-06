@@ -14,6 +14,7 @@ module.exports = Reflux.createStore({
     this.documentId = window.location.pathname.split('/')[2];
     this.resume = {
       documentId: this.documentId,
+      header: {},
       sections: []
     }; 
   },

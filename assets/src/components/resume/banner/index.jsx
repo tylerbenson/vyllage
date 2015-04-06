@@ -17,6 +17,11 @@ var Banner = React.createClass({
       }
     }
   }, 
+  componentWillReceiveProps: function (nextProps) {
+    if (nextProps.header.tagline !== this.props.header.tagline) {
+      this.setState({tagline: nextProps.header.tagline});
+    }
+  },
   enableEdiMode: function (field, e) {
     e.preventDefault();
     var editMode = this.state.editMode;
