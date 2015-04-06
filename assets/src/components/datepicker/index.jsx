@@ -9,6 +9,8 @@ var Datepicker = React.createClass({
     var date = new Date();
     return {
       isOpen: false,
+      isFocused: false,
+      onDatepicker: false,
       year: parseInt(moment(date).format('YYYY')),
       month:moment(date).format('MMM'),
       date: this.props.date
@@ -54,16 +56,40 @@ var Datepicker = React.createClass({
   },
   changeHandler: function (e) {
     this.setState({
+      isOpen: true,
       date: e.target.value
     }, function () {
       this.setDate();
     }.bind(this))
   },
+  onFocus: function () {
+    this.setState({
+        isFocused: true,
+        isOpen: true
+    });
+  },
+  onBlur: function () {
+    this.setState({
+        isFocused: false,
+        isOpen: this.state.onDatepicker
+    });
+  },
   showDatepicker: function () {
-    this.setState({isOpen: true});
+    this.setState({isOpen: this.state.isFocused});
   },
   hideDatepicker: function () {
-    this.setState({isOpen: false});
+    if (!this.state.isFocused) {
+      this.setState({isOpen: false});
+    }
+  },
+  enterDatepicker: function () {
+    this.setState({onDatepicker: true})
+  },
+  leaveDatepicker: function () {
+    this.setState({
+      onDatepicker: false,
+      isOpen: false
+    })
   },
   renderDatepicker: function () {
     if (this.state.isOpen) {
@@ -78,7 +104,11 @@ var Datepicker = React.createClass({
         );
       }.bind(this))
       return (
-        <div className="datepicker">
+        <div 
+          className="datepicker" 
+          onMouseEnter={this.enterDatepicker}
+          onMouseLeave={this.leaveDatepicker}
+        >
           <div className="header">
             <button className="small inverted primary icon" onClick={this.decrementYear}>
               <i className="ion-arrow-left-c"></i>
@@ -103,9 +133,11 @@ var Datepicker = React.createClass({
     return (
       <span className='datepicker-trigger'>
         {cloneWithProps(this.props.children, {
-          onFocus: this.showDatepicker,
+          onFocus: this.onFocus,
+          onBlur: this.onBlur,
           value: this.state.date,
-          onChange: this.changeHandler
+          onChange: this.changeHandler,
+          onClick: this.showDatepicker
         })}
         {this.renderDatepicker()}
       </span>
