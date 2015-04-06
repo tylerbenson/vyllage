@@ -27,10 +27,14 @@ create table if not exists accounts.user_credentials(
 
 create unique index ix_username_password on accounts.user_credentials (user_id, password);
   
-create table if not exists accounts.roles (
+create table if not exists accounts.roles(
+	role varchar(50) primary key);
+
+create table if not exists accounts.user_roles (
   user_name varchar(50) not null,
   role varchar(50) not null,
-  constraint fk_roles_users foreign key(user_name) references accounts.users(user_name));
+  constraint fk_roles_users foreign key(user_name) references accounts.users(user_name),
+  constraint fk_user_roles_roles foreign key(role) references accounts.roles(role));
 
 create unique index ix_auth_username on accounts.roles (user_name, role);
 

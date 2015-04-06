@@ -34,7 +34,7 @@ public class User extends org.springframework.security.core.userdetails.User {
 	}
 
 	public User(String userName, String randomPassword,
-			List<Role> defaultAuthoritiesForNewUser) {
+			List<UserRole> defaultAuthoritiesForNewUser) {
 		super(userName, randomPassword, defaultAuthoritiesForNewUser);
 	}
 
@@ -97,7 +97,7 @@ public class User extends org.springframework.security.core.userdetails.User {
 	public LocalDateTime getLastModified() {
 		return lastModified;
 	}
-
+ 
 	public void setLastModified(LocalDateTime lastModified) {
 		this.lastModified = lastModified;
 	}

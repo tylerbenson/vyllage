@@ -87,24 +87,12 @@ public class AccountSettingsController {
 
 		List<AccountSetting> settings = userService.getAccountSettings(user);
 
-		// AccountSettings accountSettings = new AccountSettings();
-		// accountSettings.setFirstName(user.getFirstName());
-		// accountSettings.setMiddleName(user.getMiddleName());
-		// accountSettings.setLastName(user.getLastName());
-		// accountSettings.setEmail(user.getUsername());
-		// accountSettings.setLastUpdate(user.getLastModified());
-		// accountSettings.setMemberSince(user.getDateCreated());
-		//
 		// if (user.getAuthorities() != null &&
 		// !user.getAuthorities().isEmpty())
 		// accountSettings.setRole(user.getAuthorities().stream()
 		// .map(r -> r.getAuthority())
 		// .collect(Collectors.joining(", ")));
 		//
-		// PersonalInformation userPersonalInformation = userService
-		// .getUserPersonalInformation(user.getUserId());
-		//
-		// accountSettings.setUserPersonalInformation(userPersonalInformation);
 
 		return settings;
 	}

@@ -40,6 +40,7 @@ public class UserServiceTest {
 
 		batchAccount.setEmails("uno@gmail.com, dos@test.com, tres@yahoo.com");
 		batchAccount.setOrganization(1L);
+		batchAccount.setRole("STUDENT");
 
 		service.batchCreateUsers(batchAccount);
 
@@ -56,6 +57,7 @@ public class UserServiceTest {
 		batchAccount
 				.setEmails("cuatro@gmail.com; cinco@test.com; seis@yahoo.com");
 		batchAccount.setOrganization(1L);
+		batchAccount.setRole("STUDENT");
 
 		service.batchCreateUsers(batchAccount);
 
@@ -72,6 +74,7 @@ public class UserServiceTest {
 
 		batchAccount.setEmails("siet@gmail.com, , nueve@yahoo.com");
 		batchAccount.setOrganization(1L);
+		batchAccount.setRole("STUDENT");
 
 		service.batchCreateUsers(batchAccount);
 
@@ -86,6 +89,7 @@ public class UserServiceTest {
 
 		batchAccount.setEmails("diez@gmail.com, once.@, doce@yahoo.com");
 		batchAccount.setOrganization(1L);
+		batchAccount.setRole("STUDENT");
 
 		service.batchCreateUsers(batchAccount);
 
