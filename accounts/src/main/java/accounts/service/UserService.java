@@ -18,10 +18,10 @@ import org.springframework.util.Assert;
 import accounts.model.BatchAccount;
 import accounts.model.CSRFToken;
 import accounts.model.Organization;
-import accounts.model.OrganizationRole;
 import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
+import accounts.model.UserRole;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
@@ -33,6 +33,7 @@ import accounts.repository.OrganizationRoleRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
+import accounts.repository.UserRoleRepository;
 import accounts.validation.EmailValidator;
 
 @Service
@@ -46,6 +47,9 @@ public class UserService {
 	@Autowired
 	private OrganizationRepository organizationRepository;
 
+	@Autowired
+	private UserRoleRepository userRoleRepository;
+	
 	@Autowired
 	private RoleRepository roleRepository;
 
@@ -97,15 +101,14 @@ public class UserService {
 			throw new IllegalArgumentException(
 					"Contains invalid email addresses.");
 
-		OrganizationRole organizationRole = organizationRoleRepository
-				.getGroupAuthorityFromGroup(batchAccount.getOrganization());
+		Role organizationRole = roleRepository.get( batchAccount.getRole());
 
 		List<User> users = Arrays
 				.stream(emailSplit)
 				.map(String::trim)
 				.map(s -> new User(s, s, enabled, accountNonExpired,
 						credentialsNonExpired, accountNonLocked,
-						Arrays.asList(new Role(organizationRole.getRole(), s))))
+						Arrays.asList(new UserRole(organizationRole.getRole(), s))))
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
@@ -127,7 +130,7 @@ public class UserService {
 
 		if (!userRepository.userExists(userName)) {
 			User user = new User(userName, userName, true, true, true, true,
-					roleRepository.getDefaultAuthoritiesForNewUser(userName));
+					userRoleRepository.getDefaultAuthoritiesForNewUser(userName));
 			userRepository.createUser(user);
 		}
 		User loadUserByUsername = userRepository.loadUserByUsername(userName);
@@ -146,14 +149,6 @@ public class UserService {
 
 	public List<User> getAdvisors(User loggedUser, int maxsize) {
 		return userRepository.getAdvisors(loggedUser, maxsize);
-	}
-
-	public String getDefaultAuthority() {
-		return "USER";
-	}
-
-	public String getDefaultGroup() {
-		return "users";
 	}
 
 	public List<AccountNames> getNames(List<Long> userIds) {

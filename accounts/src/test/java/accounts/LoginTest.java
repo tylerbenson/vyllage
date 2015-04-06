@@ -25,8 +25,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import accounts.model.Role;
-import accounts.repository.RoleRepository;
+import accounts.model.UserRole;
 import accounts.repository.UserDetailRepository;
+import accounts.repository.UserRoleRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -37,7 +38,7 @@ public class LoginTest {
 	private UserDetailRepository repository;
 
 	@Autowired
-	private RoleRepository authRepo;
+	private UserRoleRepository authRepo;
 
 	@Test
 	public void userExistsTest() {
@@ -61,8 +62,8 @@ public class LoginTest {
 		String oldPassword = "password";
 		String newPassword = "newPassword";
 
-		User user = new User(userName, oldPassword, Arrays.asList(new Role(
-				"changePassword-TEST", userName)));
+		User user = new User(userName, oldPassword, Arrays.asList(new UserRole(
+				"STUDENT", userName)));
 
 		repository.createUser(user);
 
@@ -87,8 +88,8 @@ public class LoginTest {
 		String oldPassword = "password";
 		String newPassword = "newPassword";
 
-		User user = new User(userName, oldPassword, Arrays.asList(new Role(
-				"resetPassword-TEST", userName)));
+		User user = new User(userName, oldPassword, Arrays.asList(new UserRole(
+				"STUDENT", userName)));
 
 		repository.createUser(user);
 
@@ -116,8 +117,8 @@ public class LoginTest {
 		String oldPassword = "password";
 		String newPassword = "newPassword";
 
-		User user = new User(userName, oldPassword, Arrays.asList(new Role(
-				"changePassword-TEST", userName)));
+		User user = new User(userName, oldPassword, Arrays.asList(new UserRole(
+				"STUDENT", userName)));
 
 		repository.createUser(user);
 
@@ -133,7 +134,7 @@ public class LoginTest {
 
 	@Test
 	public void testUserCreatedAndLoadsCorrectly() {
-		GrantedAuthority auth = new Role("TEST", "test");
+		GrantedAuthority auth = new UserRole("STUDENT", "test");
 
 		User user = new User("test", "password", Arrays.asList(auth));
 
@@ -148,7 +149,7 @@ public class LoginTest {
 		Assert.assertTrue(new BCryptPasswordEncoder().matches("password",
 				loadedUser.getPassword()));
 
-		GrantedAuthority auth2 = new Role("TEST", "test2");
+		GrantedAuthority auth2 = new UserRole("STUDENT", "test2");
 
 		User user2 = new User("test2", "password", Arrays.asList(auth2));
 
@@ -169,7 +170,7 @@ public class LoginTest {
 		String username = "long-password";
 		String password = "This is my very long password I made up by myself. 123456";
 
-		GrantedAuthority auth = new Role("TEST", username);
+		GrantedAuthority auth = new UserRole("STUDENT", username);
 		User user = new User(username, password, Arrays.asList(auth));
 
 		repository.createUser(user);
@@ -189,8 +190,8 @@ public class LoginTest {
 	public void testUserDelete() {
 		String userName = "test-delete";
 
-		User user = new User(userName, "password", Arrays.asList(new Role(
-				"TEST", userName)));
+		User user = new User(userName, "password", Arrays.asList(new UserRole(
+				"STUDENT", userName)));
 
 		repository.createUser(user);
 
@@ -236,8 +237,8 @@ public class LoginTest {
 	@Test
 	public void testUserCreateDuplicateAuthoritySavesOnlyOne() {
 		String userName = "test-duplicate-auth";
-		GrantedAuthority auth1 = new Role("USER", userName);
-		GrantedAuthority auth2 = new Role("USER", userName);
+		GrantedAuthority auth1 = new UserRole("STUDENT", userName);
+		GrantedAuthority auth2 = new UserRole("STUDENT", userName);
 
 		User user = new User(userName, "password", Arrays.asList(auth1, auth2));
 
@@ -245,7 +246,7 @@ public class LoginTest {
 
 		UserDetails loadedUser = repository.loadUserByUsername(userName);
 
-		List<Role> roles = authRepo.getByUserName(userName);
+		List<UserRole> roles = authRepo.getByUserName(userName);
 		assertTrue("Found more than 1 authority, "
 				+ loadedUser.getAuthorities().size(), loadedUser
 				.getAuthorities().size() == 1);
