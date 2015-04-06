@@ -10,13 +10,13 @@ var RecipentList = React.createClass({
   editHandler: function (index, e) {
     e.preventDefault();
     Actions.selectRecipient(index);
-  }, 
+  },
   render: function () {
     var nodes = this.props.recipients.map(function (recipient, index) {
       var classes = {
         recipient: true,
         'recipient-selected': this.props.selectedRecipient === index,
-        'recipient-editable': recipient.newRecipient 
+        'recipient-editable': recipient.newRecipient
       };
       return (
         <div key={index} className={cx(classes)}>
@@ -24,7 +24,7 @@ var RecipentList = React.createClass({
             {recipient.firstName + " " + recipient.lastName}
           </span>
           <button
-            className='flat icon secondary remove' 
+            className='flat icon secondary remove'
             onClick={this.removeHandler.bind(this, index)}>
             <i className="ion-android-close"></i>
           </button>
@@ -35,7 +35,7 @@ var RecipentList = React.createClass({
       <div className='header recipients'>
         <h2 className="secondary">List of Recipients</h2>
         <div className='list'>
-          {nodes}
+          {nodes.length>0?nodes:<div className="empty">No recipients added. Please add at least one recipient using the form below.</div>}
         </div>
       </div>
     );
