@@ -5,15 +5,16 @@ var DeleteSection = require('../Delete');
 var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
 var Textarea = require('react-textarea-autosize');
+var Datepicker = require('../../datepicker');
 
 var Organization = React.createClass({
   getInitialState: function () {
     return {
-      section: this.props.section
+      section: this.props.section,
     };
   },
   handleChange: function(key, e) {
-    e.preventDefault();
+    // e.preventDefault();
     var section = this.state.section;
     section[key] = e.target.value;
     this.setState({section: section});
@@ -78,23 +79,31 @@ var Organization = React.createClass({
               </div>
             </div>
             <div className="content">
-              <input 
-                disabled={!uiEditMode}
-                type="text"
-                className="inline flat date"
-                placeholder="Start Date"
-                defaultValue={section.startDate}
-                onChange={this.handleChange.bind(this, 'startDate')}
-              />
+              <Datepicker 
+                name='startDate'
+                date={section.startDate}
+                setDate={this.handleChange}
+              >
+                <input 
+                  disabled={!uiEditMode}
+                  type="text"
+                  className="inline flat date"
+                  placeholder="Start Date"
+                />
+              </Datepicker>  
               -
-              <input 
-                disabled={!uiEditMode}
-                type="text"
-                className="inline flat date"
-                placeholder="End Date"
-                defaultValue={section.endDate}
-                onChange={this.handleChange.bind(this, 'endDate')}
-              />
+              <Datepicker 
+                name='endDate'
+                date={section.endDate}
+                setDate={this.handleChange}
+              >
+                <input 
+                  disabled={!uiEditMode}
+                  type="text"
+                  className="inline flat date"
+                  placeholder="End Date"
+                />
+              </Datepicker>  
               <input 
                 disabled={!uiEditMode}
                 type="text" 

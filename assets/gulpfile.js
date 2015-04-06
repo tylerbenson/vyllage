@@ -110,6 +110,20 @@ gulp.task('react', function (callback) {
   })
 });
 
+gulp.task('dev-react', function (callback) {
+  var myconfig = require('./webpack.config.js');
+  myconfig.watch = true;
+  webpack(myconfig, function (err, stats) {
+    if (err) {
+      throw new gutil.PluginError("webpack:build", err);
+    }
+    gutil.log("[webpack:build]", stats.toString({
+      colors: true
+    }));
+  })
+  callback();
+});
+
 gulp.task('lint', function () {
   return gulp.src('src/**/*.js')
     .pipe(cache('lint'))
@@ -151,7 +165,7 @@ gulp.task('dev-watch', ['dev-build'], function () {
 
 // dev-build excludes the react/jsx compilation, allowing this to be done by the server.
 gulp.task('dev-build', function () {
-  runSequence('clean', 'bower', ['copy', 'styles']);
+  runSequence('clean', 'bower', 'dev-react', ['copy', 'styles']);
 });
 
 gulp.task('default', ['watch']);

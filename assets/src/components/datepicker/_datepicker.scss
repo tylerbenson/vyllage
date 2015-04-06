@@ -22,7 +22,6 @@
   border-radius: 5px;
   box-shadow: 0 1px 1px rgba(0,0,0,0.075);
   display: inline-block;
-  display: none;
   left: -60%;
   position: absolute;
   text-align: center;
@@ -68,7 +67,7 @@
     padding: 0.75em;
   }
 
-  input.year {
+  .year {
     font-size: 0.86em;
     padding: 0.25em;
     text-align: center;
