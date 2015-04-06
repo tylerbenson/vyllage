@@ -9,7 +9,7 @@
     border-radius: 5px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
     margin: 0.75em 1em;
-    padding: 2em 0;
+    padding: 2em 0 0 0;
     position: relative;
   }
 
@@ -47,6 +47,10 @@
     margin-top: 2em;
     font-size: 0.85em;
 
+    .content {
+      padding: 0 1em;
+    }
+
     & > .info {
       @include cf();
       padding: 0.25em 0.5em;
@@ -67,6 +71,7 @@
       button,
       .button {
         min-height: 2.3em;
+        padding: 0.75em 0.25em;
         text-transform: lowercase;
 
         i {
@@ -76,7 +81,7 @@
     }
 
     .comments {
-      & > .comment {
+      .comment {
         border-top: darken($section-footer-background,6%) solid 1px;
         margin: 0;
       }
