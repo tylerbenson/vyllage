@@ -46,7 +46,7 @@ insert into ACCOUNTS.roles ( role ) values ( 'GUEST' );
 --  constraint fk_authorities_users foreign key(user_name) references users(user_name));
 --  create unique index ix_auth_user_name on authorities (user_name,authority);
 insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'email', 'ADMIN' );
-insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'email', 'STUDENT' );
+--insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'email', 'STUDENT' );
 insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'testuser@vyllage.com', 'STUDENT' );
 insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'deana@vyllage.com', 'ADVISOR' );
 insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'mario@toadstool.com', 'ADVISOR' );
