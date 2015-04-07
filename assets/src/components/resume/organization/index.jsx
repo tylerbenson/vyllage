@@ -18,6 +18,9 @@ var Organization = React.createClass({
       section: nextProps.section
     });
   },
+  componentDidUpdate: function() {
+    this.refs.organizationName.getDOMNode().focus();
+  },
   handleChange: function(key, e) {
     // e.preventDefault();
     var section = this.state.section;
@@ -49,6 +52,7 @@ var Organization = React.createClass({
           <div className='title'>
             <h2>
               <input
+                ref='organizationName'
                 disabled={!section.uiEditMode}
                 className='flat'
                 placeholder='Organization Name'

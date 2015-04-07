@@ -17,6 +17,9 @@ var Freeform = React.createClass({
       section: {}
     }
   },
+  componentDidUpdate: function () {
+    this.refs.description.getDOMNode().focus();
+  },
   handleChange: function(e) {
     e.preventDefault();
     this.setState({description: e.target.value});
@@ -49,6 +52,7 @@ var Freeform = React.createClass({
         </div>
         <div className="content">
           <Textarea
+            ref='description'
             key={this.props.section.description || undefined}
             disabled={!uiEditMode}
             className="flat"
