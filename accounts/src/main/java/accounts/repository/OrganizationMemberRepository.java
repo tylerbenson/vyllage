@@ -2,6 +2,8 @@ package accounts.repository;
 
 import static accounts.domain.tables.OrganizationMembers.ORGANIZATION_MEMBERS;
 
+import java.util.List;
+
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -27,5 +29,11 @@ public class OrganizationMemberRepository {
 	public void deleteByUserId(Long userId) {
 		sql.delete(ORGANIZATION_MEMBERS)
 				.where(ORGANIZATION_MEMBERS.USER_ID.eq(userId)).execute();
+	}
+
+	public List<OrganizationMember> getByUserId(Long userId) {
+		return sql.fetch(ORGANIZATION_MEMBERS,
+				ORGANIZATION_MEMBERS.USER_ID.eq(userId)).into(
+				OrganizationMember.class);
 	}
 }
