@@ -148,9 +148,10 @@ public class UserServiceTest {
 
 		service.setAccountSetting(u, as);
 
-		AccountSetting setting = service.getAccountSetting(u, emailUpdates);
-		Assert.assertEquals(emailUpdates, setting.getName());
-		Assert.assertEquals(value, setting.getValue());
+		List<AccountSetting> settings = service.getAccountSetting(u,
+				emailUpdates);
+		Assert.assertEquals(emailUpdates, settings.get(0).getName());
+		Assert.assertEquals(value, settings.get(0).getValue());
 	}
 
 	@Test
@@ -170,9 +171,9 @@ public class UserServiceTest {
 
 		service.setAccountSetting(u, as);
 
-		AccountSetting setting = service.getAccountSetting(u, fieldName);
-		Assert.assertEquals(fieldName, setting.getName());
-		Assert.assertEquals(value, setting.getValue());
+		List<AccountSetting> settings = service.getAccountSetting(u, fieldName);
+		Assert.assertEquals(fieldName, settings.get(0).getName());
+		Assert.assertEquals(value, settings.get(0).getValue());
 
 		User u2 = service.getUser(userId);
 		Assert.assertEquals(value, u2.getFirstName());
