@@ -129,8 +129,14 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody AccountSetting setAccountSetting(
+			@PathVariable String parameter,
 			@Valid @RequestBody final AccountSetting setting,
 			BindingResult result) {
+
+		if (parameter.equalsIgnoreCase("organization")
+				|| parameter.equalsIgnoreCase("role"))
+			throw new UnsupportedOperationException(
+					"Saving of Role/Organization is not supported by this endpoint.");
 
 		if (result.hasErrors()) {
 			setting.setErrorMessage(result.getFieldErrors().stream()
