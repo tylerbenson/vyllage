@@ -17,6 +17,9 @@ var Freeform = React.createClass({
       section: {}
     }
   },
+  componentDidMount: function () {
+    this.refs.description.getDOMNode().focus();
+  },
   componentDidUpdate: function () {
     this.refs.description.getDOMNode().focus();
   },

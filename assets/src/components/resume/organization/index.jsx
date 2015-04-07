@@ -18,6 +18,9 @@ var Organization = React.createClass({
       section: nextProps.section
     });
   },
+  componentDidMount: function() {
+    this.refs.organizationName.getDOMNode().focus();
+  },
   componentDidUpdate: function() {
     this.refs.organizationName.getDOMNode().focus();
   },
