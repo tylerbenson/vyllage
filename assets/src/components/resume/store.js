@@ -73,7 +73,9 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue) 
       .send(data)
       .end(function (err, res) {
-        this.resume.sections.push(res.body);
+        var section = res.body;
+        section.uiEditMode = true;
+        this.resume.sections.push(section);
         this.trigger(this.resume);
       }.bind(this));
   },
