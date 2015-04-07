@@ -3,19 +3,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.ajoberstar:gradle-git:0.6.3'
+        classpath 'org.ajoberstar:gradle-git:1.1.0'
     }
 }
 
-/**
- * Read git branch and commit metadata for later use by other tasks.
- * See http://ajoberstar.org/gradle-git/docs/groovydoc/org/ajoberstar/gradle/git/tasks/GitBranchList.html
- */
-task gitMetadata(type: org.ajoberstar.gradle.git.tasks.GitBranchList) << {
-    ext {
-        branch = workingBranch?.name ?: "detached HEAD"
-        commitId = workingBranch?.commit?.abbreviatedId ?: "unknown"
-        commitTime =  workingBranch?.commit?.time ?
-                new Date(new Integer(workingBranch.commit.time).longValue()*1000L).format("yyyy-MM-dd HH:mm") : "unknown"
-    }
-}
+import org.ajoberstar.grgit.*
+
+ext.repo = Grgit.open(project.file('.'))
+ext.branch = repo.branch?.current?.name ?: "detached HEAD"
+ext.commitId = repo.head().abbreviatedId
+ext.commitTime = repo.head().time ? new Date(new Integer(repo.head().time).longValue()*1000L).format("yyyy-MM-dd HH:mm") : "unknown"

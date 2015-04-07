@@ -3,7 +3,6 @@ springBoot { mainClass = 'documents.Application' }
 
 jar {
 	baseName = 'documents'
-	version = '0.0.1-SNAPSHOT'
 }
 
 dependencies {
