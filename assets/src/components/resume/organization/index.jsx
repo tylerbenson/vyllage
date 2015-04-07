@@ -20,7 +20,6 @@ var Organization = React.createClass({
   },
   handleChange: function(key, e) {
     // e.preventDefault();
-    console.log(e.target.value);
     var section = this.state.section;
     section[key] = e.target.value;
     this.setState({section: section});
