@@ -130,6 +130,7 @@ var Datepicker = React.createClass({
     }
   },
   render: function () {
+    console.log('pick', this.props.date);
     return (
       <span className='datepicker-trigger'>
         {cloneWithProps(this.props.children, {
