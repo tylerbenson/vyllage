@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -47,26 +48,26 @@ public class AccountSettingRepository {
 				r.getValue(ACCOUNT_SETTING.PRIVACY));
 	}
 
-	public AccountSetting get(Long userId, String settingName)
+	public List<AccountSetting> get(Long userId, String settingName)
 			throws ElementNotFoundException {
-		AccountSetting setting = new AccountSetting();
 
-		AccountSettingRecord settingRecord = sql.fetchOne(
+		Result<AccountSettingRecord> settingRecords = sql.fetch(
 				ACCOUNT_SETTING,
 				ACCOUNT_SETTING.USER_ID.eq(userId).and(
 						ACCOUNT_SETTING.NAME.eq(settingName)));
 
-		if (settingRecord == null)
+		if (settingRecords == null)
 			throw new ElementNotFoundException("The setting with name '"
 					+ settingName + "' for User with id '" + userId
 					+ "' could not be found.");
 
-		setting.setAccountSettingId(settingRecord.getAccountSettingId());
-		setting.setName(settingRecord.getName());
-		setting.setPrivacy(settingRecord.getPrivacy());
-		setting.setValue(settingRecord.getValue());
-		setting.setUserId(settingRecord.getUserId());
-		return setting;
+		return settingRecords
+				.stream()
+				.map(settingRecord -> new AccountSetting(settingRecord
+						.getAccountSettingId(), settingRecord.getUserId(),
+						settingRecord.getName(), settingRecord.getValue(),
+						settingRecord.getPrivacy()))
+				.collect(Collectors.toList());
 	}
 
 	public AccountSetting set(Long userId, AccountSetting setting) {
@@ -95,5 +96,11 @@ public class AccountSettingRepository {
 	public void delete(Long userId) {
 		sql.delete(ACCOUNT_SETTING).where(ACCOUNT_SETTING.USER_ID.eq(userId))
 				.execute();
+	}
+
+	public void deleteByName(Long userId, String name) {
+		sql.delete(ACCOUNT_SETTING)
+				.where(ACCOUNT_SETTING.USER_ID.eq(userId).and(
+						ACCOUNT_SETTING.NAME.eq(name))).execute();
 	}
 }

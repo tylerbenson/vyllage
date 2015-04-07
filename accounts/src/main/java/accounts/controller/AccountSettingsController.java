@@ -25,15 +25,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import accounts.constants.Roles;
 import accounts.model.User;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.repository.ElementNotFoundException;
+import accounts.repository.OrganizationRepository;
 import accounts.service.UserService;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
 import accounts.validation.NumberValidator;
-import accounts.validation.RoleAndOrganizationValidator;
 import accounts.validation.SettingValidator;
 
 @Controller
@@ -50,7 +51,9 @@ public class AccountSettingsController {
 	@Autowired
 	private UserService userService;
 
-	private RoleAndOrganizationValidator roleOrgValidator = new RoleAndOrganizationValidator();
+	@Autowired
+	private OrganizationRepository organizationRepository;
+
 	private Map<String, SettingValidator> validators = new HashMap<>();
 	private List<SettingValidator> validatorsForAll = new LinkedList<>();
 
@@ -111,12 +114,6 @@ public class AccountSettingsController {
 				setting -> validatorsForAll.stream().map(
 						v -> v.validate(setting)));
 
-		roleOrgValidator.validate(settings
-				.stream()
-				.filter(s -> s.getName().equalsIgnoreCase("role")
-						|| s.getName().equalsIgnoreCase("organization"))
-				.collect(Collectors.toList()));
-
 		if (settings.stream().allMatch(
 				setting -> setting.getErrorMessage() != null))
 			return userService.setAccountSettings(user, settings);
@@ -125,7 +122,7 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody AccountSetting getAccountSetting(
+	public @ResponseBody List<AccountSetting> getAccountSetting(
 			@PathVariable String parameter) throws ElementNotFoundException {
 		return userService.getAccountSetting(getUser(), parameter);
 	}
@@ -157,19 +154,31 @@ public class AccountSettingsController {
 	public @ResponseBody List<String> getAccountSettingValues(
 			@PathVariable String parameter) throws ElementNotFoundException {
 
+		if (parameter.equalsIgnoreCase("organization"))
+			return organizationRepository.getAll().stream()
+					.map(o -> o.getOrganizationName())
+					.collect(Collectors.toList());
+
+		if (parameter.equalsIgnoreCase("role")) {
+			if (getUser()
+					.getAuthorities()
+					.stream()
+					.anyMatch(
+							ur -> ur.getAuthority().equalsIgnoreCase(
+									Roles.STUDENT.name()))) {
+				return Arrays.asList(Roles.STUDENT.name(), Roles.ALUMNI.name());
+			} else {
+				return Arrays.asList(Roles.values()).stream()
+						.map(e -> e.toString()).collect(Collectors.toList());
+			}
+		}
+
 		if (!settingValues.containsKey(parameter))
 			throw new ElementNotFoundException("Setting '" + parameter
 					+ "', values not found.");
+
 		return settingValues.get(parameter);
 	}
-
-	// @RequestMapping(value = "organization", method = RequestMethod.PUT)
-	// @ResponseStatus(value = HttpStatus.OK)
-	// public void setAddres(@RequestBody OrganizationSetting
-	// organizationSetting) {
-	// User user = getUser();
-	//
-	// }
 
 	// @RequestMapping(value = "graduationDate", method = RequestMethod.PUT)
 	// @ResponseStatus(value = HttpStatus.OK)

@@ -114,7 +114,8 @@ public class User extends org.springframework.security.core.userdetails.User {
 		return organizationMember;
 	}
 
-	public void setOrganizationMember(List<OrganizationMember> organizationMember) {
+	public void setOrganizationMember(
+			List<OrganizationMember> organizationMember) {
 		this.organizationMember = organizationMember;
 	}
 

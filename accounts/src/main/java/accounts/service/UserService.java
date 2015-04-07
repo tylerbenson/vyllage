@@ -142,7 +142,8 @@ public class UserService {
 					userRoleRepository
 							.getDefaultAuthoritiesForNewUser(userName),
 					((User) SecurityContextHolder.getContext()
-							.getAuthentication()).getOrganizationMember());
+							.getAuthentication().getPrincipal())
+							.getOrganizationMember());
 			userRepository.createUser(user);
 		}
 		User loadUserByUsername = userRepository.loadUserByUsername(userName);
@@ -173,6 +174,179 @@ public class UserService {
 
 	public List<AccountSetting> getAccountSettings(User user) {
 		return settingRepository.getAccountSettings(user);
+	}
+
+	public List<AccountSetting> getAccountSetting(final User user,
+			final String settingName) throws ElementNotFoundException {
+		assert settingName != null;
+
+		return settingRepository.get(user.getUserId(), settingName);
+	}
+
+	public AccountSetting setAccountSetting(final User user,
+			AccountSetting setting) {
+
+		if (setting.getUserId() == null)
+			setting.setUserId(user.getUserId());
+
+		switch (setting.getName()) {
+		case "firstName":
+			setFirstName(user, setting);
+			return settingRepository.set(user.getUserId(), setting);
+
+		case "middleName":
+			setMiddleName(user, setting);
+			return settingRepository.set(user.getUserId(), setting);
+
+		case "lastName":
+			setLastName(user, setting);
+			return settingRepository.set(user.getUserId(), setting);
+		default:
+			return settingRepository.set(user.getUserId(), setting);
+		}
+	}
+
+	public List<AccountSetting> setAccountSettings(final User user,
+			List<AccountSetting> settings) {
+
+		List<AccountSetting> savedSettings = new ArrayList<>();
+
+		savedSettings.addAll(settings
+				.stream()
+				.filter(set -> !set.getName().equalsIgnoreCase("role")
+						|| !set.getName().equalsIgnoreCase("organization"))
+				.map(set -> setAccountSetting(user, set))
+				.collect(Collectors.toList()));
+
+		// set organizations
+		savedSettings.addAll(setOrganizations(
+				user,
+				settings.stream()
+						.filter(set -> set.getName().equalsIgnoreCase(
+								"organization")).collect(Collectors.toList())));
+
+		// set roles
+		savedSettings.addAll(setRoles(
+				user,
+				settings.stream()
+						.filter(set -> set.getName().equalsIgnoreCase("role"))
+						.collect(Collectors.toList())));
+
+		return settings;
+	}
+
+	private List<AccountSetting> setRoles(User user,
+			List<AccountSetting> newRoles) {
+
+		// create new role relationship
+		List<UserRole> userRoles = newRoles.stream()
+				.map(set -> new UserRole(set.getValue(), user.getUsername()))
+				.collect(Collectors.toList());
+
+		// save user roles
+		// authorities are immutable in Spring's user details.
+
+		User user2 = new User(user.getUserId(), user.getFirstName(),
+				user.getMiddleName(), user.getLastName(), user.getUsername(),
+				user.getPassword(), user.isEnabled(),
+				user.isAccountNonExpired(), user.isCredentialsNonExpired(),
+				user.isAccountNonLocked(), userRoles,
+				user.getOrganizationMember(), user.getDateCreated(),
+				user.getLastModified());
+
+		this.update(user2);
+
+		// delete current roles, they will be replaced with the new
+		// ones.
+		settingRepository.deleteByName(user.getUserId(), "role");
+
+		// saving and returning the new settings
+		return newRoles.stream().map(set -> setAccountSetting(user, set))
+				.collect(Collectors.toList());
+	}
+
+	protected List<AccountSetting> setOrganizations(User user,
+			List<AccountSetting> newOrganizations) {
+
+		// create new organization relationship
+		List<OrganizationMember> organizationMembers = newOrganizations
+				.stream()
+				.map(set -> new OrganizationMember(organizationRepository
+						.getByName(set.getValue()).getOrganizationId(), user
+						.getUserId())).collect(Collectors.toList());
+
+		// save user organizations
+		user.setOrganizationMember(organizationMembers);
+
+		this.update(user);
+
+		// delete current organizations, they will be replaced with the new
+		// ones.
+		settingRepository.deleteByName(user.getUserId(), "organization");
+
+		// saving and returning the new settings
+		return newOrganizations.stream()
+				.map(set -> setAccountSetting(user, set))
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Returns the list of organizations a given user belongs too.
+	 * 
+	 * @param user
+	 * @return
+	 */
+	protected List<Organization> getOrganizationsForUser(User user) {
+		return organizationMemberRepository.getByUserId(user.getUserId())
+				.stream()
+				.map(om -> organizationRepository.get(om.getOrganizationId()))
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Updates the user's name.
+	 * 
+	 * @param user
+	 * @param setting
+	 */
+	protected void setFirstName(User user, AccountSetting setting) {
+
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			user.setFirstName(setting.getValue());
+			this.update(user);
+		}
+	}
+
+	/**
+	 * Updates the user's name.
+	 * 
+	 * @param user
+	 * @param setting
+	 */
+	protected void setMiddleName(User user, AccountSetting setting) {
+
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			user.setMiddleName(setting.getValue());
+			this.update(user);
+		}
+	}
+
+	/**
+	 * Updates the user's name.
+	 * 
+	 * @param user
+	 * @param setting
+	 */
+	protected void setLastName(User user, AccountSetting setting) {
+
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			user.setLastName(setting.getValue());
+			this.update(user);
+		}
+	}
+
+	public void changePassword(String newPassword) {
+		userRepository.changePassword(newPassword);
 	}
 
 	/**
@@ -239,141 +413,6 @@ public class UserService {
 			ac.setAddress(linkedIn.get().getValue());
 
 		return ac;
-	}
-
-	public AccountSetting getAccountSetting(final User user, String settingName)
-			throws ElementNotFoundException {
-		assert settingName != null;
-		AccountSetting setting = null;
-
-		// it's been a while since I used one, it works fine for this.
-		switch (settingName) {
-
-		case "role":
-			// normal users should always have 1 role only
-			setting = settingRepository.get(user.getUserId(), settingName);
-			setting.setValue(user.getAuthorities().iterator().next()
-					.getAuthority());
-			break;
-		case "organization":
-			// normal users should always have 1 organization only
-			setting = settingRepository.get(user.getUserId(), settingName);
-			setting.setValue(getOrganizationsForUser(user).get(0)
-					.getOrganizationName());
-			break;
-		default:
-			setting = settingRepository.get(user.getUserId(), settingName);
-			break;
-		}
-		return setting;
-	}
-
-	public AccountSetting setAccountSetting(final User user,
-			AccountSetting setting) {
-
-		if (setting.getUserId() == null)
-			setting.setUserId(user.getUserId());
-
-		switch (setting.getName()) {
-		case "firstName":
-			setFirstName(user, setting);
-			return settingRepository.set(user.getUserId(), setting);
-
-		case "middleName":
-			setMiddleName(user, setting);
-			return settingRepository.set(user.getUserId(), setting);
-
-		case "lastName":
-			setLastName(user, setting);
-			return settingRepository.set(user.getUserId(), setting);
-		default:
-			return settingRepository.set(user.getUserId(), setting);
-		}
-	}
-
-	/**
-	 * Updates the user roles.
-	 * 
-	 * @param user
-	 * @param setting
-	 */
-	protected void setRole(User user, AccountSetting setting) {
-
-	}
-
-	public List<AccountSetting> setAccountSettings(final User user,
-			List<AccountSetting> settings) {
-
-		List<AccountSetting> savedSettings = new ArrayList<>();
-
-		savedSettings.addAll(settings
-				.stream()
-				.filter(set -> !set.getName().equalsIgnoreCase("role")
-						|| !set.getName().equalsIgnoreCase("organization"))
-				.map(set -> setAccountSetting(user, set))
-				.collect(Collectors.toList()));
-
-		// get roles and organizations
-
-		return settings;
-	}
-
-	/**
-	 * Returns the list of organizations a given user belongs too.
-	 * 
-	 * @param user
-	 * @return
-	 */
-	protected List<Organization> getOrganizationsForUser(User user) {
-		String authority = user.getAuthorities().iterator().next()
-				.getAuthority();
-		return organizationRepository.getOrganizationFromAuthority(authority);
-	}
-
-	/**
-	 * Updates the user's name.
-	 * 
-	 * @param user
-	 * @param setting
-	 */
-	protected void setFirstName(User user, AccountSetting setting) {
-
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			user.setFirstName(setting.getValue());
-			this.update(user);
-		}
-	}
-
-	/**
-	 * Updates the user's name.
-	 * 
-	 * @param user
-	 * @param setting
-	 */
-	protected void setMiddleName(User user, AccountSetting setting) {
-
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			user.setMiddleName(setting.getValue());
-			this.update(user);
-		}
-	}
-
-	/**
-	 * Updates the user's name.
-	 * 
-	 * @param user
-	 * @param setting
-	 */
-	protected void setLastName(User user, AccountSetting setting) {
-
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			user.setLastName(setting.getValue());
-			this.update(user);
-		}
-	}
-
-	public void changePassword(String newPassword) {
-		userRepository.changePassword(newPassword);
 	}
 
 	/**
