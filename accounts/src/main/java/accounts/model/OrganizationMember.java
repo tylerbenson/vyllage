@@ -7,8 +7,8 @@ public class OrganizationMember {
 	public OrganizationMember() {
 	}
 
-	public OrganizationMember(Long group_id, Long userId) {
-		this.organizationId = group_id;
+	public OrganizationMember(Long organizationId, Long userId) {
+		this.organizationId = organizationId;
 		this.userId = userId;
 	}
 

@@ -1,5 +1,6 @@
 package accounts.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +13,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import accounts.model.BatchAccount;
 import accounts.model.CSRFToken;
 import accounts.model.Organization;
+import accounts.model.OrganizationMember;
 import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
@@ -49,7 +52,7 @@ public class UserService {
 
 	@Autowired
 	private UserRoleRepository userRoleRepository;
-	
+
 	@Autowired
 	private RoleRepository roleRepository;
 
@@ -86,6 +89,7 @@ public class UserService {
 		final boolean accountNonLocked = true;
 
 		Assert.notNull(batchAccount.getOrganization());
+		Assert.notNull(batchAccount.getRole());
 		Assert.notNull(batchAccount.getEmails());
 
 		String[] emailSplit = batchAccount.getEmails()
@@ -101,14 +105,16 @@ public class UserService {
 			throw new IllegalArgumentException(
 					"Contains invalid email addresses.");
 
-		Role organizationRole = roleRepository.get( batchAccount.getRole());
+		Role role = roleRepository.get(batchAccount.getRole());
 
 		List<User> users = Arrays
 				.stream(emailSplit)
 				.map(String::trim)
 				.map(s -> new User(s, s, enabled, accountNonExpired,
-						credentialsNonExpired, accountNonLocked,
-						Arrays.asList(new UserRole(organizationRole.getRole(), s))))
+						credentialsNonExpired, accountNonLocked, Arrays
+								.asList(new UserRole(role.getRole(), s)),
+						Arrays.asList(new OrganizationMember(batchAccount
+								.getOrganization(), null))))
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
@@ -128,9 +134,15 @@ public class UserService {
 			throw new IllegalArgumentException(
 					"Contains invalid email addresses.");
 
+		// assigns current user's Organizations
+		// assigns default role.
+		// TODO: add random password for account
 		if (!userRepository.userExists(userName)) {
 			User user = new User(userName, userName, true, true, true, true,
-					userRoleRepository.getDefaultAuthoritiesForNewUser(userName));
+					userRoleRepository
+							.getDefaultAuthoritiesForNewUser(userName),
+					((User) SecurityContextHolder.getContext()
+							.getAuthentication()).getOrganizationMember());
 			userRepository.createUser(user);
 		}
 		User loadUserByUsername = userRepository.loadUserByUsername(userName);
@@ -229,7 +241,7 @@ public class UserService {
 		return ac;
 	}
 
-	public AccountSetting getAccountSetting(User user, String settingName)
+	public AccountSetting getAccountSetting(final User user, String settingName)
 			throws ElementNotFoundException {
 		assert settingName != null;
 		AccountSetting setting = null;
@@ -256,7 +268,8 @@ public class UserService {
 		return setting;
 	}
 
-	public AccountSetting setAccountSetting(User user, AccountSetting setting) {
+	public AccountSetting setAccountSetting(final User user,
+			AccountSetting setting) {
 
 		if (setting.getUserId() == null)
 			setting.setUserId(user.getUserId());
@@ -273,16 +286,36 @@ public class UserService {
 		case "lastName":
 			setLastName(user, setting);
 			return settingRepository.set(user.getUserId(), setting);
-			// Role and organization only save the privacy settings, they cannot
-			// be
-			// modified
-			// case "role":
-			// break;
-			// case "organization":
-			// break;
 		default:
 			return settingRepository.set(user.getUserId(), setting);
 		}
+	}
+
+	/**
+	 * Updates the user roles.
+	 * 
+	 * @param user
+	 * @param setting
+	 */
+	protected void setRole(User user, AccountSetting setting) {
+
+	}
+
+	public List<AccountSetting> setAccountSettings(final User user,
+			List<AccountSetting> settings) {
+
+		List<AccountSetting> savedSettings = new ArrayList<>();
+
+		savedSettings.addAll(settings
+				.stream()
+				.filter(set -> !set.getName().equalsIgnoreCase("role")
+						|| !set.getName().equalsIgnoreCase("organization"))
+				.map(set -> setAccountSetting(user, set))
+				.collect(Collectors.toList()));
+
+		// get roles and organizations
+
+		return settings;
 	}
 
 	/**
@@ -368,9 +401,4 @@ public class UserService {
 
 	}
 
-	public List<AccountSetting> setAccountSettings(User user,
-			List<AccountSetting> settings) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
