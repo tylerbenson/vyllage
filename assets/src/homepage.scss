@@ -1,0 +1,320 @@
+* {
+  font-family: "Raleway", Helvetica, Arial, sans-serif;
+}
+
+html, body {
+  margin: 0;
+}
+
+.section {
+  padding: 3em;
+}
+
+#about {
+  background-color: #47382b;
+  background-image: url(../images/banner.jpg);
+  background-size: cover;
+  color: #fff;
+
+  &.college {
+    background-image: url(../images/seats.jpg);
+    padding-bottom: 5em;
+  }
+}
+
+.content {
+  margin: auto;
+  position: relative;
+  width: 1024px;
+}
+
+.links {
+  display: inline-block;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.links li {
+  display: inline-block;
+}
+
+.links a {
+  color: #fff;
+  display: inline-block;
+  font-weight: 100;
+  font-size: 0.85em;
+  letter-spacing: 2px;
+  padding: 1em 1.5em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color .2s ease;
+}
+
+.links a:hover {
+  color: #e2670d;
+}
+
+.links a.sign-up {
+  border: #e2670d solid 2px;
+  border-radius: 5px;
+  color: #e2670d;
+  font-weight: 500;
+  transition: all .2s ease;
+}
+
+.links a.sign-up:hover {
+  background-color: #e2670d;
+  color: #fff;
+}
+
+.logo {
+  display: inline-block;
+}
+
+.logo img {
+  height: 45px;
+}
+
+.logo span {
+  font-size: 1.75em;
+  font-weight: 500;
+  position: relative;
+  bottom: 0.35em;
+}
+
+#about h1 {
+  font-size: 2.75em;
+  font-weight: 100;
+  letter-spacing: 5px;
+  margin-top: 3.5em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+#about p {
+  font-size: 1.35em;
+  font-weight: 100;
+  line-height: 1.4;
+  margin: auto;
+  text-align: center;
+}
+
+#about .button {
+  background: #e2670d;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  display: block;
+  width: 180px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: 500;
+  letter-spacing: 2px;
+  margin: auto;
+  margin-top: 6em;
+  padding: 1.75em;
+  text-transform: uppercase;
+}
+
+#caret {
+  display: block;
+  margin: 7em auto 1em auto;
+  text-align: center;
+}
+
+#caret img {
+  opacity: 0.25;
+  width: 30px;
+}
+
+#how-it-works h1 {
+  color: #e2670d;
+  font-weight: 100;
+  font-size: 2em;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+#how-it-works p {
+  color: #333;
+  font-size: 1.25em;
+}
+
+#how-it-works ul {
+  list-style-type: none;
+  margin-top: 5em;
+  padding: 0;
+  text-align: center;
+}
+
+#how-it-works li {
+  display: inline-block;
+  padding: 0 3%;
+  text-align: center;
+  width: 27%;
+}
+
+#how-it-works .number {
+  background-color: #e2670d;
+  border-radius: 50%;
+  color: #fff;
+  display: inline-block;
+  font-size: 1.25em;
+  padding: 0.45em;
+  width: 25px;
+  text-align: center;
+}
+
+#how-it-works h2 {
+  font-size: 1.25em;
+  text-transform: uppercase;
+}
+
+#how-it-works ul p {
+  color: #333;
+  font-size: 1.15em;
+  line-height: 1.4;
+  margin-top: 1.5em;
+}
+
+p {
+  max-width: 720px !important;
+}
+
+.feature h1 {
+  color: #666666;
+  font-size: 1.75em;
+  font-weight: 100;
+  text-transform: uppercase;
+}
+
+.feature p {
+  color: #666666;
+  font-size: 1.25em;
+  font-weight: 100;
+  letter-spacing: 1px;
+  line-height: 1.4;
+}
+
+.feature .spiel {
+  padding-bottom: 1em;
+}
+
+.feature .quote img {
+  border-radius: 50%;
+  border: #fff solid 2px;
+}
+
+.feature .testimony p {
+  color: #999999;
+  font-style: italic;
+  font-size: 1em;
+}
+
+.feature .name {
+  color: #666666;
+}
+
+.feature .university {
+  color: #e2670d;
+  text-transform: uppercase;
+}
+
+.feature .text,
+.feature .image {
+  display: inline-block;
+  width: 50%;
+}
+
+.feature {
+  background: #f6f6f6;
+  overflow: hidden;
+  padding: 5.5em 3em 8em 3em;
+  height: 28em;
+  position: relative;
+}
+
+.feature .image img {
+  position: absolute;
+  top: 0;
+  right: -25%;
+  height: 490px;
+  z-index: 1;
+}
+
+#build .text {
+  margin-top: 7em;
+}
+
+#share .text {
+  margin-top: 5em;
+}
+
+#collaborate .text {
+  margin-top: 4em;
+}
+
+#serve .text {
+  margin-top: 3em;
+}
+
+#follow .text {
+  margin-top: 4em;
+}
+
+.feature .testimony {
+  display: inline-block;
+  padding-left: 1em;
+  width: 70%;
+}
+
+.feature .quote img {
+  position: relative;
+  bottom: 4.5em;
+}
+
+.feature .quote {
+  border-top: #eeeeee solid 1px;
+  padding-top: 1.5em;
+}
+
+.feature:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.feature:nth-child(even) .text {
+  position: relative;
+  left: 50%;
+}
+
+.feature:nth-child(even) .image img {
+  right: auto;
+  left: -25%;
+}
+
+#sign-up {
+  background-color: #47382b;
+  color: #fff;
+  padding: 3em 0;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: 100;
+
+  a {
+    color: #BF9A7A;
+    text-decoration: none;
+  }
+}
+
+#footer {
+  background-color: #312921;
+
+  .logo {
+    color: #fff;
+  }
+}
