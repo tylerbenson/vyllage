@@ -13,6 +13,17 @@ var Organization = React.createClass({
       section: this.props.section,
     };
   },
+  componentWillReceiveProps: function (nextProps) {
+    this.setState({
+      section: nextProps.section
+    });
+  },
+  componentDidMount: function() {
+    this.refs.organizationName.getDOMNode().focus();
+  },
+  componentDidUpdate: function() {
+    this.refs.organizationName.getDOMNode().focus();
+  },
   handleChange: function(key, e) {
     // e.preventDefault();
     var section = this.state.section;
@@ -31,16 +42,21 @@ var Organization = React.createClass({
   editHandler: function (e) {
     actions.enableEditMode(this.props.section.sectionId);
   },
+  endDateCheckbox: function (e) {
+    var section = this.state.section;
+    section.endDate = (section.endDate === 'Present')? '': 'Present';
+    this.setState({section: section});
+  },
   render: function () {
-    var uiEditMode = this.props.section.uiEditMode;
-    var section = this.props.section;
+    var section = this.state.section;
     return (
       <div className ="subsection">
         <div className='header'>
           <div className='title'>
             <h2>
               <input
-                disabled={!uiEditMode}
+                ref='organizationName'
+                disabled={!section.uiEditMode}
                 className='flat'
                 placeholder='Organization Name'
                 type='text'
@@ -50,13 +66,13 @@ var Organization = React.createClass({
             </h2>
           </div>
           <div className="actions">
-            {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
-            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
+            {section.uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
+            {section.uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
           </div>
         </div>
         <div className='content'>
           <Textarea
-            disabled={!uiEditMode}
+            disabled={!section.uiEditMode}
             className="flat"
             rows="1"
             autoComplete="off"
@@ -69,7 +85,7 @@ var Organization = React.createClass({
               <div className="title">
                 <h3>
                   <input
-                    disabled={!uiEditMode}
+                    disabled={!section.uiEditMode}
                     className="flat"
                     type="text"
                     placeholder="Degree / Position"
@@ -86,7 +102,7 @@ var Organization = React.createClass({
                 setDate={this.handleChange}
               >
                 <input
-                  disabled={!uiEditMode}
+                  disabled={!section.uiEditMode}
                   type="text"
                   className="inline flat date"
                   placeholder="Start Date"
@@ -99,14 +115,22 @@ var Organization = React.createClass({
                 setDate={this.handleChange}
               >
                 <input
-                  disabled={!uiEditMode}
+                  disabled={!section.uiEditMode}
                   type="text"
                   className="inline flat date"
                   placeholder="End Date"
                 />
               </Datepicker>
+              {section.uiEditMode? <span><input
+                disabled={!section.uiEditMode}
+                type="checkbox"
+                className="inline flat"
+                name='endDate'
+                checked={section.endDate === 'Present'}
+                onChange={this.endDateCheckbox}
+              /> Currently I am here</span>: null}
               <input
-                disabled={!uiEditMode}
+                disabled={!section.uiEditMode}
                 type="text"
                 className="flat location"
                 placeholder="Location"
@@ -114,7 +138,7 @@ var Organization = React.createClass({
                 onChange={this.handleChange.bind(this, 'location')}
               />
               <Textarea
-                disabled={!uiEditMode}
+                disabled={!section.uiEditMode}
                 className="flat"
                 rows="1"
                 placeholder="Note at least three (3) notable accomplishments achieved during this position.."

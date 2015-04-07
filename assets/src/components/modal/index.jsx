@@ -7,12 +7,16 @@ var Modal = React.createClass({
       isOpen: false,
     }
   },
+  stopPropagation: function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  },
   render: function () {
     var overlayClasses = classnames({'overlay': this.props.isOpen});
     var modalClasses = classnames({'modal': this.props.isOpen});
     return (
-      <div className={overlayClasses}>
-        <div className={modalClasses}>
+      <div className={overlayClasses} onClick={this.props.close}>
+        <div className={modalClasses} onClick={this.stopPropagation}>
           {this.props.isOpen? this.props.children: null}
         </div>
       </div>

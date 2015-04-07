@@ -30,7 +30,7 @@ var DeleteSection = React.createClass({
           onClick={this.openModal}>
           <i className='ion-trash-a'></i>
         </button>
-        <Modal isOpen={this.state.isOpen}>
+        <Modal isOpen={this.state.isOpen} close={this.closeModal}>
           <div className="header">
             <div className="title">
               <h1>Confirm Delete</h1>
