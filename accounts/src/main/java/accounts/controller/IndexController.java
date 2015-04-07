@@ -14,7 +14,12 @@ public class IndexController {
 			.getName());
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String getResume() {
-		return "navigation";
+	public String getIndex() {
+		return "index";
+	}
+
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public String postIndex() {
+		return "index";
 	}
 }
