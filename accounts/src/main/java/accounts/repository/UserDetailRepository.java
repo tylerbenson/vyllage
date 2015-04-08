@@ -384,8 +384,10 @@ public class UserDetailRepository implements UserDetailsManager {
 						credentialsRepository.get(record.getUserId())
 								.getPassword(), record.getEnabled(),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, roleRepository.getByUserName(record
-								.getUserName()), record.getDateCreated()
+						accountNonLocked, userRoleRepository
+								.getByUserName(record.getUserName()),
+						organizationMemberRepository.getByUserId(record
+								.getUserId()), record.getDateCreated()
 								.toLocalDateTime(), record.getLastModified()
 								.toLocalDateTime()))
 				.collect(Collectors.toList());
