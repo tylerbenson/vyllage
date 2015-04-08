@@ -13,7 +13,8 @@ input[type="reset"] {
   padding: 0.3em 0.9em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: all .2s ease;
+  transition: background .2s ease,
+     color .2s ease;
 
   &:hover {
     background: lighten($primary-color, 3%);
@@ -23,12 +24,12 @@ input[type="reset"] {
   i {
     color: $inverted-text-color;
     margin-right: 0.4em;
-    transition: all .2s ease;
+    transition: color .2s ease;
   }
 
   span {
     color: $inverted-text-color;
-    transition: all .2s ease;
+    transition: color .2s ease;
   }
 
   &.normal-caps {
