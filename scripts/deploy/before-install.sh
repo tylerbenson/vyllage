@@ -9,5 +9,6 @@ sudo chmod -R 777 /opt/vyllage
 
 /usr/bin/supervisorctl reread
 
-touch /opt/vyllage/blank.jar
-rm /opt/vyllage/*.jar
+rm /opt/vyllage/*.jar || true
+rm /opt/vyllage/appspec.yml || true
+rm -r /opt/vyllage/scripts || true

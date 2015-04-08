@@ -22,7 +22,7 @@ os: linux
 #   "files" section altogether. A blank or incomplete "files" section
 #   may cause associated deployments to fail.
 files:
-  - source: /site-*.jar
+  - source: /
     destination: /opt/vyllage/
 # For deployments to Amazon Linux and Ubuntu Server instances,
 #   you can specify a "permissions"
