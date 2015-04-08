@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cp supervisord.conf /etc/supervisor/
-cp vyllage.conf /etc/supervisor/conf.d/
+cp scripts/supervisord.conf /etc/supervisor/
+cp scripts/vyllage.conf /etc/supervisor/conf.d/
