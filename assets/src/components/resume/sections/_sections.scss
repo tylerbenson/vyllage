@@ -21,6 +21,14 @@
     padding: 0.5em 4em;
   }
 
+  .empty {
+    color: lighten($banner-background, 50%);
+    font-size: 1.15em;
+    padding-bottom: 3em;
+    padding-top: 0;
+    text-align: center;
+  }
+
   .header {
     @include cf();
     padding: 1em 4em;
