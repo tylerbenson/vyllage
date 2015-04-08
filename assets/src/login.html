@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Welcome to Vyllage</title>
+  <title>Vyllage | Log In</title>
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,7 +33,7 @@
         <div class="container">
           <form th:action="@{/login}" method="post">
             <div class="content">
-              <h1 class="centered">Sign In</h1>
+              <h1 class="centered">Log In</h1>
               <div th:if="not ${param.error}">
                 <p class="centered">Welcome to Vyllage</p>
               </div>
@@ -44,7 +44,7 @@
               <input type="text" class="padded" name="email" />
               <label>Password</label>
               <input type="password" class="padded" name="password" />
-              <a href="account/reset-password" class="forgot">Forgot Password?</a>
+              <a href="/account/reset-password" class="forgot">Forgot Password?</a>
               <div class="actions">
                 <button class="padded">Submit</button>
               </div>
