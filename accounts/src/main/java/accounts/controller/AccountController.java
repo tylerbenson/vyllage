@@ -33,7 +33,6 @@ import accounts.email.EmailParameters;
 import accounts.email.MailService;
 import accounts.model.CSRFToken;
 import accounts.model.User;
-import accounts.model.UserEmail;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangePasswordForm;
@@ -111,30 +110,6 @@ public class AccountController {
 						.getMiddleName(), u.getLastName()))
 				.collect(Collectors.toList());
 
-		return response;
-	}
-
-	/**
-	 * Returns a list of emails for a list of users.
-	 * 
-	 * @param userIds
-	 * @return
-	 * @throws UserNotFoundException
-	 */
-	@RequestMapping(value = "email", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<UserEmail> getAdvisorsForUser(
-			@RequestParam(value = "userIds", required = true) final List<Long> userIds)
-			throws UserNotFoundException {
-
-		assert userIds != null && !userIds.isEmpty();
-
-		// currently the username is the email.
-		List<UserEmail> response = userService.getUsers(userIds).stream()
-				.map(u -> new UserEmail(u.getUserId(), u.getUsername()))
-				.collect(Collectors.toList());
-
-		if (response == null)
-			throw new UserNotFoundException("No users found.");
 		return response;
 	}
 

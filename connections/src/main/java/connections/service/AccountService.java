@@ -18,10 +18,10 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import connections.model.AccountContact;
 import connections.model.AccountNames;
-import connections.model.UserEmail;
 
-@Service("connectionsAccountService")
+@Service("connections.AccountService")
 public class AccountService {
 
 	@SuppressWarnings("unused")
@@ -62,21 +62,22 @@ public class AccountService {
 		return Arrays.asList();
 	}
 
-	public List<UserEmail> getEmailsForUsers(HttpServletRequest request,
-			List<Long> userIds) {
+	public List<AccountContact> getContactDataForUsers(
+			HttpServletRequest request, List<Long> userIds) {
 
 		HttpEntity<Object> entity = createHeader(request);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
 		builder.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
-				.path("/account/email");
+				.path("/account/contact");
 
 		builder.queryParam("userIds", userIds.stream().map(Object::toString)
 				.collect(Collectors.joining(",")));
 
-		UserEmail[] body = restTemplate.exchange(builder.build().toUriString(),
-				HttpMethod.GET, entity, UserEmail[].class).getBody();
+		AccountContact[] body = restTemplate.exchange(
+				builder.build().toUriString(), HttpMethod.GET, entity,
+				AccountContact[].class).getBody();
 
 		if (body != null)
 			return Arrays.asList(body);

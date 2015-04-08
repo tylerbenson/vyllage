@@ -395,6 +395,18 @@ public class UserService {
 				.filter(as -> as.getName().equalsIgnoreCase("linkedIn"))
 				.findFirst();
 
+		Optional<AccountSetting> firstName = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("firstName"))
+				.findFirst();
+
+		Optional<AccountSetting> middleName = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("middleName"))
+				.findFirst();
+
+		Optional<AccountSetting> lastName = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("lastName"))
+				.findFirst();
+
 		ac.setUserId(userId);
 
 		if (address.isPresent())
@@ -411,6 +423,15 @@ public class UserService {
 
 		if (linkedIn.isPresent())
 			ac.setLinkedIn(linkedIn.get().getValue());
+
+		if (firstName.isPresent())
+			ac.setAddress(linkedIn.get().getValue());
+
+		if (middleName.isPresent())
+			ac.setAddress(linkedIn.get().getValue());
+
+		if (lastName.isPresent())
+			ac.setAddress(linkedIn.get().getValue());
 
 		return ac;
 	}

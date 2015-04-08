@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import connections.model.AccountContact;
 import connections.model.AccountNames;
-import connections.model.UserEmail;
+import connections.model.AdviceRequest;
+import connections.model.NotRegisteredUser;
 import connections.model.UserFilterResponse;
 import connections.service.AccountService;
 import connections.service.AdviceService;
@@ -55,12 +58,25 @@ public class AdviceRequestController {
 	@RequestMapping(value = "{documentId}/ask-advice", method = RequestMethod.POST)
 	public String askAdvice(HttpServletRequest request,
 			@PathVariable final Long documentId,
-			@RequestBody List<AccountNames> users) {
+			@RequestBody List<AccountNames> users,
+			@RequestBody List<NotRegisteredUser> notRegisteredUsers)
+			throws EmailException {
 
-		List<UserEmail> emailsForUsers = accountService.getEmailsForUsers(
-				request,
-				users.stream().map(u -> u.getUserId())
-						.collect(Collectors.toList()));
+		String firstName = (String) request.getSession().getAttribute(
+				"userFirstName");
+
+		// get emails for registered users
+		List<AccountContact> emailsFromRegisteredUsers = accountService
+				.getContactDataForUsers(
+						request,
+						users.stream().map(u -> u.getUserId())
+								.collect(Collectors.toList()));
+
+		AdviceRequest adviceRequest = new AdviceRequest();
+		adviceRequest.setRegisteredUsersContatData(emailsFromRegisteredUsers);
+		adviceRequest.setNotRegisteredUsers(notRegisteredUsers);
+		adviceRequest.setSenderName(firstName);
+		adviceService.sendRequestAdviceEmail(adviceRequest);
 
 		return "askAdvice";
 	}
