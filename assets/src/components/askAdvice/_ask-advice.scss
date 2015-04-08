@@ -110,6 +110,19 @@
             }
           }
         }
+        .error {
+          color: $error-color;
+          font-size: 0.8em;
+          padding: 0.1em 0.2em;
+          position: absolute;
+
+          i {
+            bottom: 1px;
+            color: $error-color;
+            margin-right: 0.5em;
+            position: relative;
+          }
+        }
       }
 
       .note {

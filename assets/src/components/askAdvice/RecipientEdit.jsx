@@ -85,7 +85,7 @@ var RecipientEdit = React.createClass({
   render: function () {
     var recipient = this.props.recipient;
     return (
-      <div onBlur={this.blurHandler} onFocus={this.focusHandler}>
+      <div onBlur={this.blurHandler}>
         <div className='form'>
           <div className='field'>
             <label>First Name</label>
@@ -94,10 +94,11 @@ var RecipientEdit = React.createClass({
               className='name'
               value={recipient.firstName}
               onChange={this.changeHandler.bind(this, 'firstName')}
+              onFocus={this.focusHandler}
               onKeyDown={this.keyPress}
               autoComplete='off'
               autoFocus />
-            {this.state.firstNameError? <p className='error'>* required </p>: null}
+            {this.state.firstNameError? <p className='error'><i className='ion-android-warning'></i>Required field.</p>: null}
           </div>
           <div className='field'>
             <label>Last Name</label>
@@ -106,8 +107,9 @@ var RecipientEdit = React.createClass({
               className='name'
               value={recipient.lastName}
               onChange={this.changeHandler.bind(this, 'lastName')}
+              onFocus={this.focusHandler}
               onKeyDown={this.keyPress} />
-            {this.state.lastNameError? <p className='error'>* required </p>: null}
+            {this.state.lastNameError? <p className='error'><i className='ion-android-warning'></i>Required field.</p>: null}
           </div>
           <div className='field'>
             <label>E-mail</label>
@@ -116,8 +118,9 @@ var RecipientEdit = React.createClass({
               className='email'
               value={recipient.email}
               onChange={this.changeHandler.bind(this, 'email')}
+              onFocus={this.focusHandler}
               onKeyDown={this.keyPress} />
-            {this.state.emailError? <p className='error'>* invalid email</p>: null}
+            {this.state.emailError? <p className='error'><i className='ion-android-warning'></i>Invalid e-mail address.</p>: null}
           </div>
           <div className='field'>
             <button onClick={this.updateHandler}>
