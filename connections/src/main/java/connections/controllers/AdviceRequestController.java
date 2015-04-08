@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,15 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import connections.service.AccountNames;
+import connections.model.AccountNames;
+import connections.model.UserEmail;
+import connections.model.UserFilterResponse;
 import connections.service.AccountService;
 import connections.service.AdviceService;
-import connections.service.UserFilterResponse;
 
 @Controller
 @RequestMapping("resume")
@@ -40,12 +43,25 @@ public class AdviceRequestController {
 		Long userId = (Long) request.getSession().getAttribute("userId");
 
 		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
-				Arrays.asList(userId), request);
+				request, Arrays.asList(userId));
 		return namesForUsers.get(0);
 	}
 
 	@RequestMapping(value = "{documentId}/ask-advice", method = RequestMethod.GET)
-	public String getResume(@PathVariable final Long documentId) {
+	public String askAdvice(@PathVariable final Long documentId) {
+		return "askAdvice";
+	}
+
+	@RequestMapping(value = "{documentId}/ask-advice", method = RequestMethod.POST)
+	public String askAdvice(HttpServletRequest request,
+			@PathVariable final Long documentId,
+			@RequestBody List<AccountNames> users) {
+
+		List<UserEmail> emailsForUsers = accountService.getEmailsForUsers(
+				request,
+				users.stream().map(u -> u.getUserId())
+						.collect(Collectors.toList()));
+
 		return "askAdvice";
 	}
 

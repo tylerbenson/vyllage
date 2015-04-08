@@ -439,5 +439,9 @@ public class UserService {
 		request.logout(); // good bye :)
 
 	}
+	
+	public List<User> getUsers(List<Long> userIds) {
 
+		return userRepository.getAll(userIds);
+	}
 }

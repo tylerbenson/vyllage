@@ -370,6 +370,27 @@ public class UserDetailRepository implements UserDetailsManager {
 				.collect(Collectors.toList());
 	}
 
+	public List<User> getAll(List<Long> userIds) {
+		final boolean accountNonExpired = true;
+		final boolean credentialsNonExpired = true;
+		final boolean accountNonLocked = true;
+
+		return sql
+				.fetch(USERS, USERS.USER_ID.in(userIds))
+				.stream()
+				.map((UsersRecord record) -> new User(record.getUserId(),
+						record.getFirstName(), record.getMiddleName(), record
+								.getLastName(), record.getUserName(),
+						credentialsRepository.get(record.getUserId())
+								.getPassword(), record.getEnabled(),
+						accountNonExpired, credentialsNonExpired,
+						accountNonLocked, roleRepository.getByUserName(record
+								.getUserName()), record.getDateCreated()
+								.toLocalDateTime(), record.getLastModified()
+								.toLocalDateTime()))
+				.collect(Collectors.toList());
+	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	// @Transactional
 	public void saveUsers(List<User> users) {
@@ -557,4 +578,5 @@ public class UserDetailRepository implements UserDetailsManager {
 						.getValue(USERS.LAST_NAME)))
 				.collect(Collectors.toList());
 	}
+
 }

@@ -38,6 +38,7 @@ import accounts.model.account.AccountNames;
 import accounts.model.account.ChangePasswordForm;
 import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
+import accounts.model.account.UserEmail;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
@@ -80,7 +81,7 @@ public class AccountController {
 	 * @throws UserNotFoundException
 	 */
 	@RequestMapping(value = "names", method = RequestMethod.GET, produces = "application/json")
-	// @PreAuthorize("hasAuthority('USER')")
+	// @PreAuthorize("hasAuthority('...')")
 	public @ResponseBody List<AccountNames> getNames(
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds)
 			throws UserNotFoundException {
@@ -110,6 +111,30 @@ public class AccountController {
 						.getMiddleName(), u.getLastName()))
 				.collect(Collectors.toList());
 
+		return response;
+	}
+
+	/**
+	 * Returns a list of emails for a list of users.
+	 * 
+	 * @param userIds
+	 * @return
+	 * @throws UserNotFoundException
+	 */
+	@RequestMapping(value = "email", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<UserEmail> getAdvisorsForUser(
+			@RequestParam(value = "userIds", required = true) final List<Long> userIds)
+			throws UserNotFoundException {
+
+		assert userIds != null && !userIds.isEmpty();
+
+		// currently the username is the email.
+		List<UserEmail> response = userService.getUsers(userIds).stream()
+				.map(u -> new UserEmail(u.getUserId(), u.getUsername()))
+				.collect(Collectors.toList());
+
+		if (response == null)
+			throw new UserNotFoundException("No users found.");
 		return response;
 	}
 

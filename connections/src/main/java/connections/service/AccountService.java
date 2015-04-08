@@ -18,6 +18,9 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import connections.model.AccountNames;
+import connections.model.UserEmail;
+
 @Service("connectionsAccountService")
 public class AccountService {
 
@@ -34,16 +37,12 @@ public class AccountService {
 	@Value("${accounts.port:8080}")
 	private final Integer ACCOUNTS_PORT = null;
 
-	public List<AccountNames> getNamesForUsers(List<Long> userIds,
-			HttpServletRequest request) {
+	public List<AccountNames> getNamesForUsers(HttpServletRequest request,
+			List<Long> userIds) {
 		Assert.notNull(userIds);
 		Assert.notEmpty(userIds);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Cookie", request.getHeader("Cookie"));
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
+		HttpEntity<Object> entity = createHeader(request);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -61,6 +60,37 @@ public class AccountService {
 			return Arrays.asList(body);
 
 		return Arrays.asList();
+	}
+
+	public List<UserEmail> getEmailsForUsers(HttpServletRequest request,
+			List<Long> userIds) {
+
+		HttpEntity<Object> entity = createHeader(request);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
+				.path("/account/email");
+
+		builder.queryParam("userIds", userIds.stream().map(Object::toString)
+				.collect(Collectors.joining(",")));
+
+		UserEmail[] body = restTemplate.exchange(builder.build().toUriString(),
+				HttpMethod.GET, entity, UserEmail[].class).getBody();
+
+		if (body != null)
+			return Arrays.asList(body);
+
+		return Arrays.asList();
+	}
+
+	protected HttpEntity<Object> createHeader(HttpServletRequest request) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Cookie", request.getHeader("Cookie"));
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
+		return entity;
 	}
 
 }
