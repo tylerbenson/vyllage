@@ -60,6 +60,7 @@ var Profile = React.createClass({
           
           <label>Organization Name</label>
           <input 
+            disabled={true}
             key={organizationSetting.value || undefined}
             ref='organization'
             type='text' 
