@@ -9,7 +9,10 @@ var Textarea = require('react-textarea-autosize');
 
 var Freeform = React.createClass({
   getInitialState: function() {
-    return {description: this.props.section.description};
+    return {
+      description: this.props.section.description,
+      uiEditMode: false
+    };
   },
   getDefaultProps: function () {
     return {
@@ -18,9 +21,6 @@ var Freeform = React.createClass({
     }
   },
   componentDidMount: function () {
-    this.refs.description.getDOMNode().focus();
-  },
-  componentDidUpdate: function () {
     this.refs.description.getDOMNode().focus();
   },
   handleChange: function(e) {
@@ -34,14 +34,22 @@ var Freeform = React.createClass({
     actions.putSection(section);
   },
   cancelHandler: function(e) {
-    this.setState({description:this.props.section.description});
-    actions.disableEditMode(this.props.section.sectionId);
+    this.setState({
+      description:this.props.section.description,
+      uiEditMode: false
+    });
+    // actions.disableEditMode(this.props.section.sectionId);
   },
   editHandler: function (e) {
-    actions.enableEditMode(this.props.section.sectionId);
+    this.setState({
+      uiEditMode: true
+    }, function () {
+      this.refs.description.getDOMNode().focus();
+    });
+    // actions.enableEditMode(this.props.section.sectionId);
   },
   render: function () {
-    var uiEditMode = this.props.section.uiEditMode;
+    var uiEditMode = this.state.uiEditMode;
     return (
       <div className='section'>
         <div className='header'>
