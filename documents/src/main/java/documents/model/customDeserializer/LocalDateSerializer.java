@@ -13,24 +13,26 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 public class LocalDateSerializer extends JsonSerializer<LocalDate> {
 
 	@SuppressWarnings("unused")
-	private final Logger logger = Logger.getLogger(LocalDateSerializer.class.getName());
-	
-	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
-	
+	private final Logger logger = Logger.getLogger(LocalDateSerializer.class
+			.getName());
+
+	private final DateTimeFormatter formatter = DateTimeFormatter
+			.ofPattern("MMM yyyy");
+
 	@Override
 	public void serialize(LocalDate date, JsonGenerator jgen,
 			SerializerProvider provider) throws IOException,
 			JsonProcessingException {
-		
-		if(date == null)
+
+		if (date == null)
 			jgen.writeString("");
-		
-		//logger.info(date.toString());
-		
-		String dateString =  date.format(formatter);
-		
-		//logger.info(dateString);
-		
+
+		// logger.info(date.toString());
+
+		String dateString = date.format(formatter);
+
+		// logger.info(dateString);
+
 		jgen.writeString(dateString);
 	}
 
