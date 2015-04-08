@@ -10,29 +10,31 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
-public class LocalDateDeserializer extends JsonDeserializer<LocalDate>  {
-	
+public class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
+
 	@SuppressWarnings("unused")
-	private final Logger logger = Logger.getLogger(LocalDateDeserializer.class.getName());
-	
+	private final Logger logger = Logger.getLogger(LocalDateDeserializer.class
+			.getName());
+
 	@Override
 	public LocalDate deserialize(JsonParser jp, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
-		
-		//logger.info("Parsing date " + jp.getText());
-		
-        String dateString = jp.getText();
-        
-        if(dateString == null || dateString.isEmpty())
-        	return null;
-        dateString += " 01"; //TODO: without the dd part it cannot be parsed into a valid date.
-        
-        //logger.info(dateString);
-        
-        LocalDate date = LocalDate.parse(dateString,
-				DateTimeFormatter.ofPattern("MMMM yyyy dd"));
-        
-        return date;
+
+		// logger.info("Parsing date " + jp.getText());
+
+		String dateString = jp.getText();
+
+		if (dateString == null || dateString.isEmpty())
+			return null;
+		dateString += " 01"; // TODO: without the dd part it cannot be parsed
+								// into a valid date.
+
+		// logger.info(dateString);
+
+		LocalDate date = LocalDate.parse(dateString,
+				DateTimeFormatter.ofPattern("MMM yyyy dd"));
+
+		return date;
 	}
 
 }

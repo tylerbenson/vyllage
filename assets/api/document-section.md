@@ -31,7 +31,7 @@
         "organizationDescription": "Blah Blah Blah.",
         "role": "Manager, Local Accounts",
         "numberOfComments":1
-        "startDate": "September 2010",
+        "startDate": "Sep 2010",
         "endDate": "",
         "isCurrent": true,
         "location": "Portland, Oregon",
