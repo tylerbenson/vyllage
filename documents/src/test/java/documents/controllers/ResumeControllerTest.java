@@ -31,7 +31,7 @@ public class ResumeControllerTest {
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
 			+ "\"role\": \"Manager, Local Accounts\","
-			+ "\"startDate\": \"September 2010\"," + "\"endDate\": \"\","
+			+ "\"startDate\": \"Sep 2010\"," + "\"endDate\": \"\","
 			+ "\"isCurrent\": true," + "\"location\": \"Portland, Oregon\","
 			+ "\"roleDescription\": \"Blah Blah Blah\","
 			+ "\"highlights\": \"I was in charge of...\"" + "}";
