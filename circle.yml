@@ -17,3 +17,8 @@ deployment:
             bucket: vyllage-deployments
             key_pattern: vyllage-{BUILD_NUM}-{SHORT_COMMIT}
         deployment_group: prod
+
+  staging:
+    branch: master
+    heroku:
+      appname: vyllage
