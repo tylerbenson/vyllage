@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import accounts.Application;
+import accounts.constants.Roles;
 import accounts.model.BatchAccount;
 import accounts.model.User;
 import accounts.model.UserFilterRequest;
@@ -40,6 +41,7 @@ public class UserServiceTest {
 
 		batchAccount.setEmails("uno@gmail.com, dos@test.com, tres@yahoo.com");
 		batchAccount.setOrganization(1L);
+		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
 		service.batchCreateUsers(batchAccount);
 
@@ -56,6 +58,7 @@ public class UserServiceTest {
 		batchAccount
 				.setEmails("cuatro@gmail.com; cinco@test.com; seis@yahoo.com");
 		batchAccount.setOrganization(1L);
+		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
 		service.batchCreateUsers(batchAccount);
 
@@ -72,6 +75,7 @@ public class UserServiceTest {
 
 		batchAccount.setEmails("siet@gmail.com, , nueve@yahoo.com");
 		batchAccount.setOrganization(1L);
+		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
 		service.batchCreateUsers(batchAccount);
 
@@ -86,6 +90,7 @@ public class UserServiceTest {
 
 		batchAccount.setEmails("diez@gmail.com, once.@, doce@yahoo.com");
 		batchAccount.setOrganization(1L);
+		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
 		service.batchCreateUsers(batchAccount);
 
@@ -143,9 +148,10 @@ public class UserServiceTest {
 
 		service.setAccountSetting(u, as);
 
-		AccountSetting setting = service.getAccountSetting(u, emailUpdates);
-		Assert.assertEquals(emailUpdates, setting.getName());
-		Assert.assertEquals(value, setting.getValue());
+		List<AccountSetting> settings = service.getAccountSetting(u,
+				emailUpdates);
+		Assert.assertEquals(emailUpdates, settings.get(0).getName());
+		Assert.assertEquals(value, settings.get(0).getValue());
 	}
 
 	@Test
@@ -165,9 +171,9 @@ public class UserServiceTest {
 
 		service.setAccountSetting(u, as);
 
-		AccountSetting setting = service.getAccountSetting(u, fieldName);
-		Assert.assertEquals(fieldName, setting.getName());
-		Assert.assertEquals(value, setting.getValue());
+		List<AccountSetting> settings = service.getAccountSetting(u, fieldName);
+		Assert.assertEquals(fieldName, settings.get(0).getName());
+		Assert.assertEquals(value, settings.get(0).getValue());
 
 		User u2 = service.getUser(userId);
 		Assert.assertEquals(value, u2.getFirstName());

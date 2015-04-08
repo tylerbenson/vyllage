@@ -37,17 +37,6 @@ public class AuthenticationSecurity extends
 			throws Exception {
 		auth.userDetailsService(userDetailRepository).passwordEncoder(
 				new BCryptPasswordEncoder());
-		// auth.inMemoryAuthentication().withUser("email")
-		// .password(new BCryptPasswordEncoder().encode("password"))
-		// .roles("ADMIN", "USER");
 	}
-
-	// @Bean
-	// public DaoAuthenticationProvider daoAuthenticationProvider() {
-	// DaoAuthenticationProvider daoAuth = new DaoAuthenticationProvider();
-	// daoAuth.setUserDetailsService(userDetailRepository);
-	// daoAuth.setPasswordEncoder(new BCryptPasswordEncoder());
-	// return daoAuth;
-	// }
 
 }

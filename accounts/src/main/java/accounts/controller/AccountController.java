@@ -53,7 +53,6 @@ public class AccountController {
 
 	private static final int limitForEmptyFilter = 5;
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(AccountController.class
 			.getName());
 

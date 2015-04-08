@@ -1,5 +1,7 @@
 package accounts.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -11,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import accounts.model.BatchAccount;
+import accounts.model.Organization;
 import accounts.model.User;
 import accounts.model.account.AccountNames;
 import accounts.repository.OrganizationRepository;
+import accounts.repository.OrganizationRoleRepository;
+import accounts.repository.RoleRepository;
 import accounts.service.UserService;
 
 @Controller
@@ -22,8 +27,14 @@ public class AdminUserController {
 	@Autowired
 	private UserService service;
 
+	@Autowired 
+	private RoleRepository roleRepository;
+	
 	@Autowired
 	private OrganizationRepository organizationRepository;
+	
+	@Autowired
+	private OrganizationRoleRepository organizationRoleRepository;
 
 	@ModelAttribute("accountName")
 	public AccountNames accountNames() {
@@ -66,7 +77,11 @@ public class AdminUserController {
 	}
 
 	private void prepareBatch(Model model) {
-		model.addAttribute("organizations", organizationRepository.getAll());
+		List<Organization> allOrganizations = organizationRepository.getAll();
+		model.addAttribute("organizations", allOrganizations);
+		//default to the first one.
+		model.addAttribute("roles", organizationRoleRepository.getRolesForOrganization(allOrganizations.get(0).getOrganizationId()));
+		
 		model.addAttribute("batchAccount", new BatchAccount());
 	}
 

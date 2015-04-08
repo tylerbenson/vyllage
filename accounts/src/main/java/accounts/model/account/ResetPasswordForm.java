@@ -1,11 +1,15 @@
 package accounts.model.account;
 
 import lombok.ToString;
-import accounts.service.EmailValidator;
+
+import org.hibernate.validator.constraints.Email;
+
+import accounts.validation.EmailValidator;
 
 @ToString
 public class ResetPasswordForm {
 
+	@Email
 	private String email;
 
 	private boolean error = false;
