@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/natebenson/vyllage.svg?style=svg&circle-token=094629387a9966730f9e7b4f904da02a05322c60)](https://circleci.com/gh/natebenson/vyllage)
+
 # Vyllage
 
 ## Initial Setup
