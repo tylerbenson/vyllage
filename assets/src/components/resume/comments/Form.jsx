@@ -26,7 +26,7 @@ var CommentForm = React.createClass({
         <div className='content'>
           <Textarea
             rows='1'
-            placeholder='share your advice'
+            placeholder='Share your advice..'
             onChange={this.changeHandler}
             value={this.state.value}></Textarea>
           <button onClick={this.commentHandler}>Submit</button>
