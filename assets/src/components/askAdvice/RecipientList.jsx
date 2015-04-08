@@ -35,7 +35,7 @@ var RecipentList = React.createClass({
       <div className='header recipients'>
         <h2 className="secondary">List of Recipients</h2>
         <div className='list'>
-          {nodes.length>0?nodes:<div className="empty">No recipients added. Please add at least one recipient using the form below.</div>}
+          {nodes.length>0?nodes:<div className="empty">No recipients yet. Start adding people below.</div>}
         </div>
       </div>
     );
