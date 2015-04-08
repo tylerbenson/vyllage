@@ -3,3 +3,17 @@ machine:
     version: oraclejdk8
   node:
     version: 0.12.0
+
+deployment:
+  production:
+    branch: master
+    codedeploy:
+      vyllage:
+        application_root: $CIRCLE_ARTIFACTS
+        region: us-west-2
+        revision_location:
+          revision_type: S3
+          s3_location:
+            bucket: vyllage-deployments
+            key_pattern: vyllage-{BUILD_NUM}-{SHORT_COMMIT}
+        deployment_group: prod
