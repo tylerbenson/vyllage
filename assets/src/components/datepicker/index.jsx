@@ -1,6 +1,5 @@
 var React = require('react');
 var moment = require('moment');
-// var Modernizr = require('modernizr');
 var classnames = require('classnames');
 var cloneWithProps = require('react/lib/cloneWithProps');
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
