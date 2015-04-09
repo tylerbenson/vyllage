@@ -6,12 +6,12 @@ var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
 var Textarea = require('react-textarea-autosize');
 var Datepicker = require('../../datepicker');
-var assign 
+var assign = require('lodash.assign')
 
 var Organization = React.createClass({
   getInitialState: function () {
     return {
-      section: this.props.section,
+      section: assign({}, this.props.section),
       uiEditMode: this.props.section.newSection,
       newSection: this.props.section.newSection
     };
@@ -73,7 +73,7 @@ var Organization = React.createClass({
                 className='flat'
                 placeholder='Organization Name'
                 type='text'
-                defaultValue={section.organizationName}
+                value={section.organizationName}
                 onChange={this.handleChange.bind(this, 'organizationName')}
              />
             </h2>
@@ -90,7 +90,7 @@ var Organization = React.createClass({
             rows="1"
             autoComplete="off"
             placeholder="Organization Description"
-            defaultValue={section.organizationDescription}
+            value={section.organizationDescription}
             onChange={this.handleChange.bind(this, 'organizationDescription')}
           ></Textarea>
           <section className="subsubsection">
@@ -102,7 +102,7 @@ var Organization = React.createClass({
                     className="flat"
                     type="text"
                     placeholder="Degree / Position"
-                    defaultValue={section.role}
+                    value={section.role}
                     onChange={this.handleChange.bind(this, 'role')}
                   />
                 </h3>
@@ -147,7 +147,7 @@ var Organization = React.createClass({
                 type="text"
                 className="flat location"
                 placeholder="Location"
-                defaultValue={section.location}
+                value={section.location}
                 onChange={this.handleChange.bind(this, 'location')}
               />
               <Textarea
@@ -155,7 +155,7 @@ var Organization = React.createClass({
                 className="flat"
                 rows="1"
                 placeholder="Note at least three (3) notable accomplishments achieved during this position.."
-                defaultValue={section.highlights}
+                value={section.highlights}
                 onChange={this.handleChange.bind(this, 'highlights')}
               ></Textarea>
             </div>
