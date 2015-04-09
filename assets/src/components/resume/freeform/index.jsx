@@ -9,7 +9,10 @@ var Textarea = require('react-textarea-autosize');
 
 var Freeform = React.createClass({
   getInitialState: function() {
-    return {description: this.props.section.description};
+    return {
+      description: this.props.section.description,
+      uiEditMode: false
+    };
   },
   getDefaultProps: function () {
     return {
@@ -17,10 +20,12 @@ var Freeform = React.createClass({
       section: {}
     }
   },
-  componentDidMount: function () {
-    this.refs.description.getDOMNode().focus();
+  componentWillReceiveProps: function (nextProps) {
+    this.setState({
+      description: nextProps.section.description,
+    });
   },
-  componentDidUpdate: function () {
+  componentDidMount: function () {
     this.refs.description.getDOMNode().focus();
   },
   handleChange: function(e) {
@@ -30,18 +35,26 @@ var Freeform = React.createClass({
   saveHandler: function(e) {
     var section = this.props.section;
     section.description = this.state.description;
-    section.uiEditMode = false;
     actions.putSection(section);
+    this.setState({
+      uiEditMode: false
+    })
   },
   cancelHandler: function(e) {
-    this.setState({description:this.props.section.description});
-    actions.disableEditMode(this.props.section.sectionId);
+    this.setState({
+      description:this.props.section.description,
+      uiEditMode: false
+    });
   },
   editHandler: function (e) {
-    actions.enableEditMode(this.props.section.sectionId);
+    this.setState({
+      uiEditMode: true
+    }, function () {
+      this.refs.description.getDOMNode().focus();
+    });
   },
   render: function () {
-    var uiEditMode = this.props.section.uiEditMode;
+    var uiEditMode = this.state.uiEditMode;
     return (
       <div className='section'>
         <div className='header'>
@@ -56,13 +69,12 @@ var Freeform = React.createClass({
         <div className="content">
           <Textarea
             ref='description'
-            key={this.props.section.description || undefined}
             disabled={!uiEditMode}
             className="flat"
             rows="1"
             autoComplete="off"
             placeholder="Tell us more.."
-            defaultValue={this.props.section.description}
+            value={this.state.description}
             onChange={this.handleChange}
           ></Textarea>
         </div>

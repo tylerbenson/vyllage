@@ -3,6 +3,7 @@ var filter = require('lodash.filter');
 var Buttons = require('./Buttons');
 var SettingsMixin = require('./mixin');
 var Textarea = require('react-textarea-autosize');
+var Datepicker = require('../datepicker');
 
 var Profile = React.createClass({
   mixins: [SettingsMixin],
@@ -15,6 +16,7 @@ var Profile = React.createClass({
     var organizationSetting = filter(this.props.settings, {name: 'organization'})[0] || {value: ''};
     var addressSetting = filter(this.props.settings, {name: 'address'})[0] || {value: ''} ;
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {value: ''};
+    var graduationDateSetting = filter(this.props.settings, {name: 'graduationDate'})[0] || {value: ''};
     return (
       <div className='content'>
         <form ref='profile' onSubmit={this.saveHandler}>
@@ -50,6 +52,7 @@ var Profile = React.createClass({
           
           <label>Role</label>
           <input
+            disabled={true}
             key={roleSetting.value || undefined}
             ref='role'
             type='text'
@@ -60,6 +63,7 @@ var Profile = React.createClass({
           
           <label>Organization Name</label>
           <input 
+            disabled={true}
             key={organizationSetting.value || undefined}
             ref='organization'
             type='text' 
@@ -67,6 +71,18 @@ var Profile = React.createClass({
             defaultValue={organizationSetting.value}
             onChange={this.changeHandler.bind(this, 'organization')}
           />
+          <label>Graduation Date</label>
+          <Datepicker
+            name='graduationDate'
+            date={graduationDateSetting.value}
+            setDate={this.changeHandler}
+          >
+            <input 
+              type='text' 
+              className='padded'
+              autoComplete={false}
+            />
+          </Datepicker>
           
           <label>Address</label>
           <Textarea 

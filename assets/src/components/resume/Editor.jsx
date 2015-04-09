@@ -10,6 +10,7 @@ var Experience = require('./sections/Experience');
 var Education = require('./sections/Education');
 var Skill = require('./sections/Skill');
 var Banner = require('./banner');
+var sortby = require('lodash.sortby');
 
 var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
@@ -19,8 +20,8 @@ var ResumeEditor = React.createClass({
   render: function () {
     var careerGoalSections = filter(this.state.resume.sections, {title: 'career goal'});
     var skillSections = filter(this.state.resume.sections, {title: 'skills'});
-    var experienceSections = filter(this.state.resume.sections, {title: 'experience'});
-    var educationSections = filter(this.state.resume.sections, {title: 'education'});
+    var experienceSections = sortby(filter(this.state.resume.sections, {title: 'experience'}), 'sectionPostion').reverse();
+    var educationSections = sortby(filter(this.state.resume.sections, {title: 'education'}), 'sectionPostion').reverse();
     return (
       <div>
         <Subheader documentId={this.state.resume.documentId}/>

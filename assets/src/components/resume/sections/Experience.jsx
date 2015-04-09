@@ -10,7 +10,7 @@ var Experience = React.createClass({
     if (sections.length > 0) {
       sectionNodes = sections.map(function (section, index) {
         return (
-          <div key={index} >
+          <div key={section.sectionId} >
             <Organization section={section}/>
             <SectionFooter section={section} />
           </div>
@@ -22,7 +22,7 @@ var Experience = React.createClass({
     return (
       <div className='section'>
         <div className='container'>
-          <Header title='Experience' />
+          <Header title='Experience' type='experience' />
           {sectionNodes}
         </div>
       </div>

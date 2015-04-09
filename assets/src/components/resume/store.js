@@ -5,6 +5,7 @@ var urlTemplate = require('url-template');
 var findindex = require('lodash.findindex');
 var omit = require('lodash.omit');
 var assign = require('lodash.assign');
+var max = require('lodash.max');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -14,9 +15,17 @@ module.exports = Reflux.createStore({
     this.documentId = window.location.pathname.split('/')[2];
     this.resume = {
       documentId: this.documentId,
-      header: {},
+      header: {
+        firstName: '',
+        middleName: '',
+        lastName: ''
+      },
       sections: []
     }; 
+  },
+  getMaxSectionPostion: function () {
+    var section = max(this.resume.sections, 'sectionPosition');
+    return section.sectionPosition;
   },
   onGetResume: function () {
     this.onGetHeader();
@@ -67,14 +76,14 @@ module.exports = Reflux.createStore({
                 .expand({
                   documentId: this.documentId,
                 });
-    data.sectionPosition = this.resume.sections.length;
+    data.sectionPosition = this.getMaxSectionPostion() + 1;
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue) 
       .send(data)
       .end(function (err, res) {
-        var section = res.body;
-        section.uiEditMode = true;
+        var section = assign({}, res.body);
+        section.newSection = true;  // To indicate a section is newly created
         this.resume.sections.push(section);
         this.trigger(this.resume);
       }.bind(this));
@@ -89,10 +98,10 @@ module.exports = Reflux.createStore({
     request
       .put(url)
       .set(this.tokenHeader, this.tokenValue)
-      .send(omit(data, ['uiEditMode', 'showComments', 'comments']))
+      .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection']))
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
-        this.resume.sections[index] = data;
+        this.resume.sections[index] = res.body;
         this.trigger(this.resume);
       }.bind(this));
   },

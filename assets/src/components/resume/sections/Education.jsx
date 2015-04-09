@@ -10,7 +10,7 @@ var Education = React.createClass({
     if (sections.length > 0) {
       sectionNodes = sections.map(function (section, index) {
         return (
-          <div key={index}>
+          <div key={section.sectionId}>
             <Organization section={section}/>
             <SectionFooter section={section} />
           </div>
@@ -22,7 +22,7 @@ var Education = React.createClass({
     return (
       <div className='section'>
         <div className='container'>
-          <Header title='Education' />
+          <Header title='Education' type='experience' />
           {sectionNodes}
         </div>
       </div>
