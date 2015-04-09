@@ -17,10 +17,8 @@ var Organization = React.createClass({
     };
   },
   componentWillReceiveProps: function (nextProps) {
-    console.log('org', nextProps.section, this.state.uiEditMode)
     this.setState({
       section: nextProps.section,
-      uiEditMode: nextProps.section.newSection || this.state.uiEditMode
     });
   },
   componentDidMount: function() {
@@ -40,10 +38,15 @@ var Organization = React.createClass({
     });
   },
   cancelHandler: function(e) {
-    this.setState({
-      section: this.props.section,
-      uiEditMode: false
-    });
+    var section = this.props.section;
+    if (section.newSection) {
+      actions.deleteSection(section.sectionId);
+    } else {
+      this.setState({
+        section: this.props.section,
+        uiEditMode: false
+      });
+    }
   },
   editHandler: function (e) {
     this.setState({
