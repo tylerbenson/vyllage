@@ -8,6 +8,7 @@
     "lodash.assign": "^3.0.0",
     "lodash.filter": "^3.0.0",
     "lodash.findindex": "^3.0.0",
+    "lodash.max": "^3.2.0",
     "lodash.omit": "^3.0.0",
     "lodash.pick": "^3.0.0",
     "lodash.template": "^3.3.0",

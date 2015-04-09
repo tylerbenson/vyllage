@@ -5,6 +5,7 @@ var urlTemplate = require('url-template');
 var findindex = require('lodash.findindex');
 var omit = require('lodash.omit');
 var assign = require('lodash.assign');
+var max = require('lodash.max');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -21,6 +22,10 @@ module.exports = Reflux.createStore({
       },
       sections: []
     }; 
+  },
+  getMaxSectionPostion: function () {
+    var section = max(this.resume.sections, 'sectionPosition');
+    return section.sectionPosition;
   },
   onGetResume: function () {
     this.onGetHeader();
@@ -71,7 +76,7 @@ module.exports = Reflux.createStore({
                 .expand({
                   documentId: this.documentId,
                 });
-    data.sectionPosition = this.resume.sections.length + 1;
+    data.sectionPosition = this.getMaxSectionPostion() + 1;
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue) 
