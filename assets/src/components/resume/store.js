@@ -82,8 +82,8 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue) 
       .send(data)
       .end(function (err, res) {
-        var section = res.body;
-        section.uiEditMode = true;
+        var section = assign({}, res.body);
+        section.newSection = true;  // To indicate a section is newly created
         this.resume.sections.push(section);
         this.trigger(this.resume);
       }.bind(this));
@@ -98,10 +98,10 @@ module.exports = Reflux.createStore({
     request
       .put(url)
       .set(this.tokenHeader, this.tokenValue)
-      .send(omit(data, ['uiEditMode', 'showComments', 'comments']))
+      .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection']))
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
-        this.resume.sections[index] = data;
+        this.resume.sections[index] = res.body;
         this.trigger(this.resume);
       }.bind(this));
   },

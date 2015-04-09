@@ -12,12 +12,15 @@ var Organization = React.createClass({
   getInitialState: function () {
     return {
       section: this.props.section,
-      uiEditMode: false
+      uiEditMode: this.props.section.newSection,
+      newSection: this.props.section.newSection
     };
   },
   componentWillReceiveProps: function (nextProps) {
+    console.log('org', nextProps.section, this.state.uiEditMode)
     this.setState({
       section: nextProps.section,
+      uiEditMode: nextProps.section.newSection || this.state.uiEditMode
     });
   },
   componentDidMount: function() {
