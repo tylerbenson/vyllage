@@ -69,13 +69,12 @@ var Freeform = React.createClass({
         <div className="content">
           <Textarea
             ref='description'
-            key={this.props.section.description || undefined}
             disabled={!uiEditMode}
             className="flat"
             rows="1"
             autoComplete="off"
             placeholder="Tell us more.."
-            defaultValue={this.props.section.description}
+            value={this.state.description}
             onChange={this.handleChange}
           ></Textarea>
         </div>
