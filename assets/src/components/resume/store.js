@@ -71,7 +71,7 @@ module.exports = Reflux.createStore({
                 .expand({
                   documentId: this.documentId,
                 });
-    data.sectionPosition = this.resume.sections.length;
+    data.sectionPosition = this.resume.sections.length + 1;
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue) 
@@ -79,7 +79,7 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var section = res.body;
         section.uiEditMode = true;
-        this.resume.sections.push(section);
+        this.resume.sections.unshift(section);
         this.trigger(this.resume);
       }.bind(this));
   },
