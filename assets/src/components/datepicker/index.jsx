@@ -1,5 +1,6 @@
 var React = require('react');
 var moment = require('moment');
+// var Modernizr = require('modernizr');
 var classnames = require('classnames');
 var cloneWithProps = require('react/lib/cloneWithProps');
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -107,9 +108,14 @@ var Datepicker = React.createClass({
           active: this.state.month === month
         });
         return (
-          <span className={className} onClick={this.selectMonth.bind(this, month)}>
+          <a 
+            key={index}
+            className={className}
+            onClick={!Modernizr.touch ? this.selectMonth.bind(this, month): null}
+            onTouchStart={Modernizr.touch ? this.selectMonth.bind(this, month): null}
+          >
             {month}
-          </span>
+          </a>
         );
       }.bind(this))
       return (
