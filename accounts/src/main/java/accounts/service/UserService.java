@@ -41,7 +41,6 @@ import accounts.validation.EmailValidator;
 
 @Service
 public class UserService {
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
 
 	@Autowired

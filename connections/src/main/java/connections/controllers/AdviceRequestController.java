@@ -73,10 +73,11 @@ public class AdviceRequestController {
 								.collect(Collectors.toList()));
 
 		AdviceRequest adviceRequest = new AdviceRequest();
-		adviceRequest.setRegisteredUsersContatData(emailsFromRegisteredUsers);
+		adviceRequest.setDocumentId(documentId);
+		adviceRequest.setRegisteredUsersContactData(emailsFromRegisteredUsers);
 		adviceRequest.setNotRegisteredUsers(notRegisteredUsers);
 		adviceRequest.setSenderName(firstName);
-		adviceService.sendRequestAdviceEmail(adviceRequest);
+		adviceService.sendRequestAdviceEmail(request, adviceRequest);
 
 		return "askAdvice";
 	}

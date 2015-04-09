@@ -1,5 +1,6 @@
 package connections.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.ToString;
@@ -13,11 +14,17 @@ public class AdviceRequest {
 
 	private String senderName;
 
-	public List<AccountContact> getRegisteredUsersContatData() {
+	private Long userId;
+
+	private Long documentId;
+
+	private LocalDateTime linkExpirationDate;
+
+	public List<AccountContact> getRegisteredUsersContactData() {
 		return registeredUsersContactData;
 	}
 
-	public void setRegisteredUsersContatData(
+	public void setRegisteredUsersContactData(
 			List<AccountContact> registeredUsers) {
 		this.registeredUsersContactData = registeredUsers;
 	}
@@ -36,6 +43,30 @@ public class AdviceRequest {
 
 	public String getSenderName() {
 		return this.senderName;
+	}
+
+	public Long getUserId() {
+		return this.userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Long getDocumentId() {
+		return documentId;
+	}
+
+	public void setDocumentId(Long documentId) {
+		this.documentId = documentId;
+	}
+
+	public LocalDateTime getLinkExpirationDate() {
+		return linkExpirationDate;
+	}
+
+	public void setLinkExpirationDate(LocalDateTime linkExpirationDate) {
+		this.linkExpirationDate = linkExpirationDate;
 	}
 
 }

@@ -1,6 +1,9 @@
 package accounts.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +79,7 @@ public class DocumentLinkController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public @ResponseBody String create(
 			@RequestBody DocumentLinkRequest linkRequest)
-			throws JsonProcessingException, UserNotFoundException {
+			throws JsonProcessingException {
 
 		DocumentLink documentLink = documentLinkService.createLink(linkRequest);
 
@@ -85,5 +88,32 @@ public class DocumentLinkController {
 		String safeString = linkEncryptor.encrypt(json);
 
 		return "/link/advice/" + safeString;
+	}
+
+	/**
+	 * 
+	 * @param linkRequest
+	 * @return map containing the user's email as key and the generated link as
+	 *         value.
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value = "/create-many", method = RequestMethod.POST)
+	public @ResponseBody Map<String, String> massCreate(
+			@RequestBody List<DocumentLinkRequest> linkRequest)
+			throws JsonProcessingException {
+
+		Map<String, String> links = new HashMap<>();
+
+		for (DocumentLinkRequest documentLinkRequest : linkRequest) {
+			DocumentLink documentLink = documentLinkService
+					.createLink(documentLinkRequest);
+
+			String json = mapper.writeValueAsString(documentLink);
+
+			String safeString = "/link/advice/" + linkEncryptor.encrypt(json);
+			links.put(documentLinkRequest.getEmail(), safeString);
+		}
+
+		return links;
 	}
 }
