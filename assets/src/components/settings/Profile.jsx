@@ -50,6 +50,7 @@ var Profile = React.createClass({
           
           <label>Role</label>
           <input
+            disabled={true}
             key={roleSetting.value || undefined}
             ref='role'
             type='text'
