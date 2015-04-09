@@ -31,15 +31,16 @@ var Organization = React.createClass({
   },
   saveHandler: function(e) {
     var section = this.state.section;
-    section.uiEditMode = false;
     actions.putSection(section);
+    this.setState({
+      uiEditMode: false
+    });
   },
   cancelHandler: function(e) {
     this.setState({
       section: this.props.section,
       uiEditMode: false
     });
-    // actions.disableEditMode(this.props.section.sectionId);
   },
   editHandler: function (e) {
     this.setState({
@@ -47,7 +48,6 @@ var Organization = React.createClass({
     }, function () {
       this.refs.organizationName.getDOMNode().focus();
     });
-    // actions.enableEditMode(this.props.section.sectionId);
   },
   endDateCheckbox: function (e) {
     var section = this.state.section;

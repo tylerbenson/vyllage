@@ -20,6 +20,11 @@ var Freeform = React.createClass({
       section: {}
     }
   },
+  componentWillReceiveProps: function (nextProps) {
+    this.setState({
+      description: nextProps.section.description,
+    });
+  },
   componentDidMount: function () {
     this.refs.description.getDOMNode().focus();
   },
@@ -30,15 +35,16 @@ var Freeform = React.createClass({
   saveHandler: function(e) {
     var section = this.props.section;
     section.description = this.state.description;
-    section.uiEditMode = false;
     actions.putSection(section);
+    this.setState({
+      uiEditMode: false
+    })
   },
   cancelHandler: function(e) {
     this.setState({
       description:this.props.section.description,
       uiEditMode: false
     });
-    // actions.disableEditMode(this.props.section.sectionId);
   },
   editHandler: function (e) {
     this.setState({
@@ -46,7 +52,6 @@ var Freeform = React.createClass({
     }, function () {
       this.refs.description.getDOMNode().focus();
     });
-    // actions.enableEditMode(this.props.section.sectionId);
   },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
