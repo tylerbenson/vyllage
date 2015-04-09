@@ -22,7 +22,7 @@ var Experience = React.createClass({
     return (
       <div className='section'>
         <div className='container'>
-          <Header title='Experience' />
+          <Header title='Experience' type='experience' />
           {sectionNodes}
         </div>
       </div>

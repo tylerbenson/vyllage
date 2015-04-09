@@ -79,7 +79,7 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var section = res.body;
         section.uiEditMode = true;
-        this.resume.sections.unshift(section);
+        this.resume.sections.push(section);
         this.trigger(this.resume);
       }.bind(this));
   },

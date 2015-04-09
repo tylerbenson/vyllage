@@ -22,7 +22,7 @@ var Education = React.createClass({
     return (
       <div className='section'>
         <div className='container'>
-          <Header title='Education' />
+          <Header title='Education' type='experience' />
           {sectionNodes}
         </div>
       </div>
