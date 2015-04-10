@@ -16,14 +16,14 @@ module.exports = {
     filename: '[name]'
   },
   module: {
-    loaders: [
-      {
-        test: /\.js|jsx$/,
-        exclude: /lodash|node_modules/,
-        loaders: ['babel']
-      },
-      {test:/\.json$/, loader: 'json'}
-   ],
+    loaders: [{
+      test: /\.js|jsx$/,
+      exclude: /lodash|node_modules/,
+      loaders: ['babel']
+    }, {
+      test: /\.json$/,
+      loader: 'json'
+    }],
   },
   resolve: {
     alias: {},
