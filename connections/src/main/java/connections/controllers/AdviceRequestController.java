@@ -4,22 +4,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import connections.service.AccountNames;
+import connections.model.AccountContact;
+import connections.model.AccountNames;
+import connections.model.AdviceRequest;
+import connections.model.AdviceRequestParameter;
+import connections.model.UserFilterResponse;
 import connections.service.AccountService;
 import connections.service.AdviceService;
-import connections.service.UserFilterResponse;
 
 @Controller
 @RequestMapping("resume")
@@ -40,12 +46,43 @@ public class AdviceRequestController {
 		Long userId = (Long) request.getSession().getAttribute("userId");
 
 		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
-				Arrays.asList(userId), request);
+				request, Arrays.asList(userId));
 		return namesForUsers.get(0);
 	}
 
 	@RequestMapping(value = "{documentId}/ask-advice", method = RequestMethod.GET)
-	public String getResume(@PathVariable final Long documentId) {
+	public String askAdvice(@PathVariable final Long documentId) {
+		return "askAdvice";
+	}
+
+	@RequestMapping(value = "{documentId}/ask-advice", method = RequestMethod.POST)
+	public String askAdvice(HttpServletRequest request,
+			@PathVariable final Long documentId,
+			@RequestBody AdviceRequest adviceRequest) throws EmailException {
+
+		String firstName = (String) request.getSession().getAttribute(
+				"userFirstName");
+
+		// get emails for registered users
+		List<AccountContact> emailsFromRegisteredUsers = accountService
+				.getContactDataForUsers(
+						request,
+						adviceRequest.getUsers().stream()
+								.map(u -> u.getUserId())
+								.collect(Collectors.toList()));
+
+		System.out.println("registered emails " + emailsFromRegisteredUsers);
+
+		AdviceRequestParameter adviceRequestParameters = new AdviceRequestParameter();
+		adviceRequestParameters.setDocumentId(documentId);
+		adviceRequestParameters.setCSRFToken(adviceRequest.getCSRFToken());
+		adviceRequestParameters
+				.setRegisteredUsersContactData(emailsFromRegisteredUsers);
+		adviceRequestParameters.setNotRegisteredUsers(adviceRequest
+				.getNotRegisteredUsers());
+		adviceRequestParameters.setSenderName(firstName);
+		adviceService.sendRequestAdviceEmail(request, adviceRequestParameters);
+
 		return "askAdvice";
 	}
 

@@ -41,7 +41,6 @@ import accounts.validation.EmailValidator;
 
 @Service
 public class UserService {
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
 
 	@Autowired
@@ -395,6 +394,18 @@ public class UserService {
 				.filter(as -> as.getName().equalsIgnoreCase("linkedIn"))
 				.findFirst();
 
+		Optional<AccountSetting> firstName = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("firstName"))
+				.findFirst();
+
+		Optional<AccountSetting> middleName = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("middleName"))
+				.findFirst();
+
+		Optional<AccountSetting> lastName = entry.getValue().stream()
+				.filter(as -> as.getName().equalsIgnoreCase("lastName"))
+				.findFirst();
+
 		ac.setUserId(userId);
 
 		if (address.isPresent())
@@ -411,6 +422,15 @@ public class UserService {
 
 		if (linkedIn.isPresent())
 			ac.setLinkedIn(linkedIn.get().getValue());
+
+		if (firstName.isPresent())
+			ac.setFirstName(firstName.get().getValue());
+
+		if (middleName.isPresent())
+			ac.setMiddleName(middleName.get().getValue());
+
+		if (lastName.isPresent())
+			ac.setLastName(lastName.get().getValue());
 
 		return ac;
 	}
@@ -439,5 +459,9 @@ public class UserService {
 		request.logout(); // good bye :)
 
 	}
+	
+	public List<User> getUsers(List<Long> userIds) {
 
+		return userRepository.getAll(userIds);
+	}
 }

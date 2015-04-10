@@ -1,4 +1,4 @@
-package accounts.model.account;
+package connections.model;
 
 import lombok.ToString;
 

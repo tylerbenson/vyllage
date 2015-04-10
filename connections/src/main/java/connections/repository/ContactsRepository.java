@@ -48,14 +48,14 @@ public class ContactsRepository implements IRepository<Contact> {
 	public Contact save(Contact contact) {
 
 		ContactsRecord existingRecord = sql.fetchOne(CONTACTS,
-				CONTACTS.ID.eq(contact.getId()));
+				CONTACTS.ID.eq(contact.getUserId()));
 
 		if (existingRecord == null) {
 			ContactsRecord newRecord = sql.newRecord(CONTACTS);
 			newRecord.setUsername(contact.getUserName());
 
 			newRecord.store();
-			contact.setId(newRecord.getId());
+			contact.setUserId(newRecord.getId());
 
 		} else {
 
@@ -81,7 +81,7 @@ public class ContactsRepository implements IRepository<Contact> {
 
 	private Contact recordToContact(ContactsRecord contactsRecord) {
 		Contact contact = new Contact();
-		contact.setId(contactsRecord.getId());
+		contact.setUserId(contactsRecord.getId());
 		contact.setUserName(contactsRecord.getUsername());
 		return contact;
 	}
