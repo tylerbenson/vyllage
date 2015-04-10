@@ -74,6 +74,17 @@
         margin-top: 0.75em;
       }
 
+      .datepicker-trigger {
+        width: 100%;
+
+        .datepicker {
+          left: 0;
+          margin: auto;
+          right: 0;
+          top: 122%;
+        }
+      }
+
       label {
         color: $secondary-color;
         display: block;

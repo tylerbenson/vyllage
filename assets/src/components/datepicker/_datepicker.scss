@@ -1,4 +1,5 @@
 .datepicker-trigger {
+  display: inline-block;
   position: relative;
 
   & > input:focus + .datepicker {
@@ -31,7 +32,7 @@
   border-radius: 5px;
   box-shadow: 0 1px 1px rgba(0,0,0,0.075);
   display: inline-block;
-  left: -60%;
+  left: -4em;
   position: absolute;
   text-align: center;
   top: 160%;
