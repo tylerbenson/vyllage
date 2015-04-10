@@ -19,7 +19,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"organizationName": "DeVry Education Group",
 	"organizationDescription": "Blah Blah Blah.",
 	"role": "Manager, Local Accounts",
-	"startDate": "September 2010",
+	"startDate": "Sep 2010",
 	"endDate": "",
 	"isCurrent": true,
 	"location": "Portland, Oregon",
@@ -36,8 +36,8 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"organizationName": "Keller Graduate School of Management",
 	"organizationDescription": "Blah Blah Blah.",
 	"role": "Masters of Project Management",
-	"startDate": "September 2010",
-	"endDate": "September 2012",
+	"startDate": "Sep 2010",
+	"endDate": "Sep 2012",
 	"isCurrent": false,
 	"location": "Portland, Oregon",
 	"roleDescription": "",
@@ -53,7 +53,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(124, 1, 3, 'Its a me, Mario!', CURRENT_TIMESTAMP());
-insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(126, 1, 0, 'Well played.', CURRENT_TIMESTAMP());
+insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(126, 1, 2, 'Well played.', CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.suggestions(section_Id, section_Version, user_id, json_Document, last_Modified) values (124, 1, 0, '{
 	"type": "freeform",

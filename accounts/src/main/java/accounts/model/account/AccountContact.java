@@ -10,6 +10,9 @@ public class AccountContact {
 	private String phoneNumber;
 	private String twitter;
 	private String linkedIn;
+	private String firstName;
+	private String middleName;
+	private String lastName;
 
 	public AccountContact(Long userId, String address, String email,
 			String phoneNumber, String twitter, String linkedIn) {
@@ -71,5 +74,29 @@ public class AccountContact {
 
 	public void setLinkedIn(String linkedIn) {
 		this.linkedIn = linkedIn;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 }

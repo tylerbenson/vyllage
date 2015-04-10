@@ -15,9 +15,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import documents.model.Document;
 import documents.model.DocumentSection;
-import documents.repository.DocumentSectionRepository;
-import documents.repository.ElementNotFoundException;
-import documents.repository.IRepository;
 import documents.services.DocumentService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,7 +26,7 @@ public class DocumentServiceTest {
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
 			+ "\"role\": \"Manager, Local Accounts\","
-			+ "\"startDate\": \"September 2010\"," + "\"endDate\": \"\","
+			+ "\"startDate\": \"Sep 2010\"," + "\"endDate\": \"\","
 			+ "\"isCurrent\": true," + "\"location\": \"Portland, Oregon\","
 			+ "\"roleDescription\": \"Blah Blah Blah\","
 			+ "\"highlights\": \"I was in charge of...\"" + "}";

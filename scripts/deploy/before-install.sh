@@ -1,4 +1,14 @@
 #!/bin/bash
 
-cp supervisord.conf /etc/supervisor/
-cp vyllage.conf /etc/supervisor/conf.d/
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd -P "$( dirname "$SOURCE" )" && pwd )"
+sudo cp $DIR/../supervisord.conf /etc/supervisor/
+sudo cp $DIR/../vyllage.conf /etc/supervisor/conf.d/
+
+sudo mkdir -p /opt/vyllage/log/
+sudo chmod -R 777 /opt/vyllage
+
+/usr/bin/supervisorctl reread
+
+rm /opt/vyllage/*.jar || true
+rm /opt/vyllage/appspec.yml || true
+rm -r /opt/vyllage/scripts || true

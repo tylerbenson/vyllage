@@ -23,6 +23,12 @@ public class OrganizationRepository {
 				.fetchOne(ORGANIZATIONS, ORGANIZATIONS.ORGANIZATION_ID.eq(id))
 				.into(Organization.class);
 	}
+	
+	public Organization getByName(String name) {
+		return sql
+				.fetchOne(ORGANIZATIONS, ORGANIZATIONS.ORGANIZATION_NAME.eq(name))
+				.into(Organization.class);
+	}
 
 	public List<Organization> getAll() {
 		return sql.select().from(ORGANIZATIONS).fetch().into(Organization.class);
@@ -40,4 +46,6 @@ public class OrganizationRepository {
 		 * g.id;
 		 */
 	}
+
+	
 }

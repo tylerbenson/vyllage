@@ -23,7 +23,7 @@ os: linux
 #   may cause associated deployments to fail.
 files:
   - source: /
-    destination: /vyllage/
+    destination: /opt/vyllage/
 # For deployments to Amazon Linux and Ubuntu Server instances,
 #   you can specify a "permissions"
 #   section here that describes special permissions to apply to the files
@@ -79,23 +79,28 @@ hooks:
   ApplicationStop:
     - location: scripts/deploy/stop.sh
       timeout: 30
+      runas: ubuntu
 # During the BeforeInstall deployment lifecycle event, run the commands
 #   in the script specified in "location".
   BeforeInstall:
     - location: scripts/deploy/before-install.sh
       timeout: 5
+      runas: ubuntu
 # During the AfterInstall deployment lifecycle event, run the commands
 #   in the script specified in "location".
   AfterInstall:
     - location: scripts/deploy/after-install.sh
       timeout: 5
+      runas: ubuntu
 # During the ApplicationInstall deployment lifecycle event, run the commands
 #   in the script specified in "location".
   ApplicationStart:
     - location: scripts/deploy/start.sh
-      timeout: 30
+      timeout: 45
+      runas: ubuntu
 # During the ValidateService deployment lifecycle event, run the commands
 #   in the script specified in "location".
   ValidateService:
     - location: scripts/deploy/validate.sh
       timeout: 5
+      runas: ubuntu

@@ -18,7 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import accounts.model.CSRFToken;
 
-@Service("accountsDocumentService")
+@Service("accounts.DocumentService")
 public class DocumentService {
 
 	@SuppressWarnings("unused")

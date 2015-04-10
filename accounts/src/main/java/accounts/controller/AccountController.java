@@ -53,7 +53,6 @@ public class AccountController {
 
 	private static final int limitForEmptyFilter = 5;
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(AccountController.class
 			.getName());
 
@@ -81,7 +80,7 @@ public class AccountController {
 	 * @throws UserNotFoundException
 	 */
 	@RequestMapping(value = "names", method = RequestMethod.GET, produces = "application/json")
-	// @PreAuthorize("hasAuthority('USER')")
+	// @PreAuthorize("hasAuthority('...')")
 	public @ResponseBody List<AccountNames> getNames(
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds)
 			throws UserNotFoundException {
@@ -231,10 +230,8 @@ public class AccountController {
 				+ env.getProperty("vyllage.domain", "www.vyllage.com")
 				+ "/account/reset-password-change/";
 
-		System.out.println(txt);
-
 		EmailContext ctx = new EmailContext(env.getProperty(
-				"change.password.html", "changePassword-email"));
+				"change.password.html", "email-changePassword"));
 		ctx.setVariable("userName", userName);
 		ctx.setVariable("url", txt);
 		ctx.setVariable("encodedLink", encodedString);

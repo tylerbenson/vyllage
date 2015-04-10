@@ -4,7 +4,9 @@ var AddBtn = require('../../buttons/add');
 
 var SectionHeader = React.createClass({
   addSection: function (e) {
-    actions.postSection({title: this.props.title.toLowerCase()});
+    actions.postSection({
+      title: this.props.title.toLowerCase(),
+    });
   },
   render: function () {
     return  (

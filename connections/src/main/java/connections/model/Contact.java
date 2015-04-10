@@ -4,15 +4,16 @@ import lombok.ToString;
 
 @ToString
 public class Contact {
-	private Long id;
+	private Long userId;
 	private String userName;
+	private String email;
 
-	public Long getId() {
-		return id;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getUserName() {
@@ -21,5 +22,13 @@ public class Contact {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

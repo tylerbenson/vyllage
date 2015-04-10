@@ -1,6 +1,7 @@
 package accounts.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class User extends org.springframework.security.core.userdetails.User {
 
 	private LocalDateTime lastModified;
 
+	private List<OrganizationMember> organizationMember = new ArrayList<>();
+
 	/**
 	 * 
 	 */
@@ -28,14 +31,17 @@ public class User extends org.springframework.security.core.userdetails.User {
 	public User(String username, String password, boolean enabled,
 			boolean accountNonExpired, boolean credentialsNonExpired,
 			boolean accountNonLocked,
-			Collection<? extends GrantedAuthority> authorities) {
+			Collection<? extends GrantedAuthority> roles,
+			List<OrganizationMember> organizationMember) {
 		super(username, password, enabled, accountNonExpired,
-				credentialsNonExpired, accountNonLocked, authorities);
+				credentialsNonExpired, accountNonLocked, roles);
+		this.setOrganizationMember(organizationMember);
 	}
 
-	public User(String userName, String randomPassword,
-			List<Role> defaultAuthoritiesForNewUser) {
-		super(userName, randomPassword, defaultAuthoritiesForNewUser);
+	public User(String userName, String randomPassword, List<UserRole> roles,
+			List<OrganizationMember> organizationMember) {
+		super(userName, randomPassword, roles);
+		this.setOrganizationMember(organizationMember);
 	}
 
 	public User(Long userId, String firstName, String middleName,
@@ -43,6 +49,7 @@ public class User extends org.springframework.security.core.userdetails.User {
 			boolean accountNonExpired, boolean credentialsNonExpired,
 			boolean accountNonLocked,
 			Collection<? extends GrantedAuthority> authorities,
+			List<OrganizationMember> organizationMember,
 			LocalDateTime dateCreated, LocalDateTime lastModified) {
 		super(username, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, authorities);
@@ -52,6 +59,7 @@ public class User extends org.springframework.security.core.userdetails.User {
 		this.lastName = lastName;
 		this.dateCreated = dateCreated;
 		this.lastModified = lastModified;
+		this.setOrganizationMember(organizationMember);
 	}
 
 	public Long getUserId() {
@@ -100,6 +108,15 @@ public class User extends org.springframework.security.core.userdetails.User {
 
 	public void setLastModified(LocalDateTime lastModified) {
 		this.lastModified = lastModified;
+	}
+
+	public List<OrganizationMember> getOrganizationMember() {
+		return organizationMember;
+	}
+
+	public void setOrganizationMember(
+			List<OrganizationMember> organizationMember) {
+		this.organizationMember = organizationMember;
 	}
 
 }

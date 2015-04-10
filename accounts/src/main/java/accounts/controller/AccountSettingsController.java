@@ -1,15 +1,21 @@
 package accounts.controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +25,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import accounts.constants.Roles;
 import accounts.model.User;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.repository.ElementNotFoundException;
+import accounts.repository.OrganizationRepository;
 import accounts.service.UserService;
+import accounts.validation.LengthValidator;
+import accounts.validation.NotNullValidator;
+import accounts.validation.NumberValidator;
+import accounts.validation.SettingValidator;
 
 @Controller
 @RequestMapping("account")
@@ -38,6 +50,25 @@ public class AccountSettingsController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private OrganizationRepository organizationRepository;
+
+	private Map<String, SettingValidator> validators = new HashMap<>();
+	private List<SettingValidator> validatorsForAll = new LinkedList<>();
+
+	private Map<String, List<String>> settingValues = new HashMap<>();
+
+	public AccountSettingsController() {
+		validators.put("phoneNumber", new NumberValidator());
+		validators.put("firstName", new NotNullValidator());
+		validatorsForAll.add(new LengthValidator(30));
+
+		settingValues.put("emailUpdates",
+				Arrays.asList("weekly", "biweekly", "monthly", "never"));
+		settingValues.put("privacy",
+				Arrays.asList("private", "public", "organization"));
+	}
 
 	// for header
 	@ModelAttribute("accountName")
@@ -59,48 +90,101 @@ public class AccountSettingsController {
 
 		List<AccountSetting> settings = userService.getAccountSettings(user);
 
-		// AccountSettings accountSettings = new AccountSettings();
-		// accountSettings.setFirstName(user.getFirstName());
-		// accountSettings.setMiddleName(user.getMiddleName());
-		// accountSettings.setLastName(user.getLastName());
-		// accountSettings.setEmail(user.getUsername());
-		// accountSettings.setLastUpdate(user.getLastModified());
-		// accountSettings.setMemberSince(user.getDateCreated());
-		//
 		// if (user.getAuthorities() != null &&
 		// !user.getAuthorities().isEmpty())
 		// accountSettings.setRole(user.getAuthorities().stream()
 		// .map(r -> r.getAuthority())
 		// .collect(Collectors.joining(", ")));
 		//
-		// PersonalInformation userPersonalInformation = userService
-		// .getUserPersonalInformation(user.getUserId());
-		//
-		// accountSettings.setUserPersonalInformation(userPersonalInformation);
+
+		return settings;
+	}
+
+	@RequestMapping(value = "setting", method = RequestMethod.PUT, produces = "application/json")
+	public @ResponseBody List<AccountSetting> setAccountSettings(
+			@RequestBody final List<AccountSetting> settings) {
+		User user = getUser();
+
+		settings.stream().map(setting -> {
+			if (validators.containsKey(setting.getName()))
+				validators.get(setting.getName()).validate(setting);
+			return setting;
+		});
+		settings.stream().map(
+				setting -> validatorsForAll.stream().map(
+						v -> v.validate(setting)));
+
+		if (settings.stream().allMatch(
+				setting -> setting.getErrorMessage() != null))
+			return userService.setAccountSettings(user, settings);
 
 		return settings;
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody AccountSetting getAccountSetting(
+	public @ResponseBody List<AccountSetting> getAccountSetting(
 			@PathVariable String parameter) throws ElementNotFoundException {
 		return userService.getAccountSetting(getUser(), parameter);
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
-	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody AccountSetting setAccountSetting(
-			@RequestBody AccountSetting setting) {
-		return userService.setAccountSetting(getUser(), setting);
+			@PathVariable String parameter,
+			@Valid @RequestBody final AccountSetting setting,
+			BindingResult result) {
+
+		if (parameter.equalsIgnoreCase("organization")
+				|| parameter.equalsIgnoreCase("role"))
+			throw new UnsupportedOperationException(
+					"Saving of Role/Organization is not supported by this endpoint.");
+
+		if (result.hasErrors()) {
+			setting.setErrorMessage(result.getFieldErrors().stream()
+					.map(e -> e.getDefaultMessage())
+					.collect(Collectors.joining(",")));
+			return setting;
+		}
+
+		if (validators.containsKey(setting.getName()))
+			validators.get(setting.getName()).validate(setting);
+
+		validatorsForAll.stream().map(v -> v.validate(setting));
+
+		if (setting.getErrorMessage() != null)
+			return userService.setAccountSetting(getUser(), setting);
+
+		return setting;
 	}
 
-	// @RequestMapping(value = "organization", method = RequestMethod.PUT)
-	// @ResponseStatus(value = HttpStatus.OK)
-	// public void setAddres(@RequestBody OrganizationSetting
-	// organizationSetting) {
-	// User user = getUser();
-	//
-	// }
+	@RequestMapping(value = "setting/{parameter}/values", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<String> getAccountSettingValues(
+			@PathVariable String parameter) throws ElementNotFoundException {
+
+		if (parameter.equalsIgnoreCase("organization"))
+			return organizationRepository.getAll().stream()
+					.map(o -> o.getOrganizationName())
+					.collect(Collectors.toList());
+
+		if (parameter.equalsIgnoreCase("role")) {
+			if (getUser()
+					.getAuthorities()
+					.stream()
+					.anyMatch(
+							ur -> ur.getAuthority().equalsIgnoreCase(
+									Roles.STUDENT.name()))) {
+				return Arrays.asList(Roles.STUDENT.name(), Roles.ALUMNI.name());
+			} else {
+				return Arrays.asList(Roles.values()).stream()
+						.map(e -> e.toString()).collect(Collectors.toList());
+			}
+		}
+
+		if (!settingValues.containsKey(parameter))
+			throw new ElementNotFoundException("Setting '" + parameter
+					+ "', values not found.");
+
+		return settingValues.get(parameter);
+	}
 
 	// @RequestMapping(value = "graduationDate", method = RequestMethod.PUT)
 	// @ResponseStatus(value = HttpStatus.OK)

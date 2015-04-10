@@ -34,7 +34,7 @@ configure(subprojects) {
 }
 
 configure(rootProject) {
-    apply from: 'gradle/gitMetadata.gradle'
+    //apply from: 'gradle/gitMetadata.gradle'
 }
 
 configure(javaProjects) {
@@ -83,12 +83,12 @@ configure(javaProjects) {
 
 configure(bootProjects) {
     apply plugin: 'spring-boot'
-    apply from: "$gradleDir/writeGitPropertiesFile.gradle"
+    //apply from: "$gradleDir/writeGitPropertiesFile.gradle"
 
-    bootRun.dependsOn writeGitPropertiesFile
+    //bootRun.dependsOn writeGitPropertiesFile
     springBoot.backupSource = false
 
-    version = commitId
+    version = "0.0.1-SNAPSHOT" //commitId
 
     applicationDefaultJvmArgs = [
             // Set PROJECT_HOME env variable to the root. This allows to register an additional

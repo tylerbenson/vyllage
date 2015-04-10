@@ -2,7 +2,7 @@ package accounts.repository;
 
 import static accounts.domain.tables.OrganizationMembers.ORGANIZATION_MEMBERS;
 import static accounts.domain.tables.Organizations.ORGANIZATIONS;
-import static accounts.domain.tables.Roles.ROLES;
+import static accounts.domain.tables.UserRoles.USER_ROLES;
 import static accounts.domain.tables.Users.USERS;
 
 import java.sql.Timestamp;
@@ -35,15 +35,15 @@ import org.springframework.util.Assert;
 
 import accounts.domain.tables.OrganizationMembers;
 import accounts.domain.tables.Organizations;
-import accounts.domain.tables.Roles;
+import accounts.domain.tables.UserRoles;
 import accounts.domain.tables.Users;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.Organization;
 import accounts.model.OrganizationMember;
-import accounts.model.Role;
 import accounts.model.User;
 import accounts.model.UserCredential;
 import accounts.model.UserFilterRequest;
+import accounts.model.UserRole;
 import accounts.model.account.AccountNames;
 
 @Repository
@@ -59,7 +59,7 @@ public class UserDetailRepository implements UserDetailsManager {
 	private DSLContext sql;
 
 	@Autowired
-	private RoleRepository roleRepository;
+	private UserRoleRepository userRoleRepository;
 
 	@Autowired
 	private OrganizationRepository organizationRepository;
@@ -113,7 +113,11 @@ public class UserDetailRepository implements UserDetailsManager {
 		// TODO: eventually we'll need these fields in the database.
 		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
 
-		List<Role> roles = roleRepository.getByUserName(record.getUserName());
+		List<UserRole> roles = userRoleRepository.getByUserName(record
+				.getUserName());
+
+		List<OrganizationMember> organizations = organizationMemberRepository
+				.getByUserId(record.getUserId());
 
 		UserCredential credential = credentialsRepository.get(record
 				.getUserId());
@@ -122,7 +126,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				record.getMiddleName(), record.getLastName(),
 				record.getUserName(), credential.getPassword(),
 				record.getEnabled(), accountNonExpired, credentialsNonExpired,
-				accountNonLocked, roles, record.getDateCreated()
+				accountNonLocked, roles, organizations, record.getDateCreated()
 						.toLocalDateTime(), record.getLastModified()
 						.toLocalDateTime());
 		return user;
@@ -137,7 +141,7 @@ public class UserDetailRepository implements UserDetailsManager {
 		if (user.getAuthorities() != null || user.getAuthorities().size() > 0)
 			roles = user.getAuthorities();
 		else
-			roles = roleRepository.getDefaultAuthoritiesForNewUser(user
+			roles = userRoleRepository.getDefaultAuthoritiesForNewUser(user
 					.getUsername());
 
 		TransactionStatus transaction = txManager
@@ -160,7 +164,7 @@ public class UserDetailRepository implements UserDetailsManager {
 					user.getPassword());
 
 			for (GrantedAuthority role : roles) {
-				roleRepository.create((Role) role);
+				userRoleRepository.create((UserRole) role);
 				for (Organization organization : organizationRepository
 						.getOrganizationFromAuthority(role.getAuthority())) {
 					organizationMemberRepository.create(new OrganizationMember(
@@ -206,17 +210,15 @@ public class UserDetailRepository implements UserDetailsManager {
 			record.setLastName(user.getLastName());
 			record.update();
 
-			roleRepository.deleteByUserName(user.getUsername());
+			userRoleRepository.deleteByUserName(user.getUsername());
 			organizationMemberRepository.deleteByUserId(user.getUserId());
 
 			for (GrantedAuthority authority : user.getAuthorities()) {
-				roleRepository.create((Role) authority);
+				userRoleRepository.create((UserRole) authority);
 
-				for (Organization organization : organizationRepository
-						.getOrganizationFromAuthority(authority.getAuthority())) {
-					organizationMemberRepository.create(new OrganizationMember(
-							organization.getOrganizationId(), record
-									.getUserId()));
+				for (OrganizationMember organizationMember : user
+						.getOrganizationMember()) {
+					organizationMemberRepository.create(organizationMember);
 				}
 			}
 
@@ -247,7 +249,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			UsersRecord record = sql.fetchOne(USERS,
 					USERS.USER_NAME.eq(username));
 
-			roleRepository.deleteByUserName(username);
+			userRoleRepository.deleteByUserName(username);
 
 			long userId = record.getUserId();
 			organizationMemberRepository.deleteByUserId(userId);
@@ -359,8 +361,33 @@ public class UserDetailRepository implements UserDetailsManager {
 						credentialsRepository.get(record.getUserId())
 								.getPassword(), record.getEnabled(),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, roleRepository.getByUserName(record
-								.getUserName()), record.getDateCreated()
+						accountNonLocked, userRoleRepository
+								.getByUserName(record.getUserName()),
+						organizationMemberRepository.getByUserId(record
+								.getUserId()), record.getDateCreated()
+								.toLocalDateTime(), record.getLastModified()
+								.toLocalDateTime()))
+				.collect(Collectors.toList());
+	}
+
+	public List<User> getAll(List<Long> userIds) {
+		final boolean accountNonExpired = true;
+		final boolean credentialsNonExpired = true;
+		final boolean accountNonLocked = true;
+
+		return sql
+				.fetch(USERS, USERS.USER_ID.in(userIds))
+				.stream()
+				.map((UsersRecord record) -> new User(record.getUserId(),
+						record.getFirstName(), record.getMiddleName(), record
+								.getLastName(), record.getUserName(),
+						credentialsRepository.get(record.getUserId())
+								.getPassword(), record.getEnabled(),
+						accountNonExpired, credentialsNonExpired,
+						accountNonLocked, userRoleRepository
+								.getByUserName(record.getUserName()),
+						organizationMemberRepository.getByUserId(record
+								.getUserId()), record.getDateCreated()
 								.toLocalDateTime(), record.getLastModified()
 								.toLocalDateTime()))
 				.collect(Collectors.toList());
@@ -388,14 +415,16 @@ public class UserDetailRepository implements UserDetailsManager {
 		// for!
 		for (User user : users) {
 			for (GrantedAuthority authority : user.getAuthorities()) {
-				collect.add(sql.insertInto(ROLES, ROLES.USER_NAME, ROLES.ROLE)
-						.values(user.getUsername(), authority.getAuthority()));
-				for (Organization organization : organizationRepository
-						.getOrganizationFromAuthority(authority.getAuthority())) {
+				collect.add(sql.insertInto(USER_ROLES, USER_ROLES.USER_NAME,
+						USER_ROLES.ROLE).values(user.getUsername(),
+						authority.getAuthority()));
+				for (OrganizationMember organizationMember : user
+						.getOrganizationMember()) {
 					sql.insertInto(ORGANIZATION_MEMBERS,
 							ORGANIZATION_MEMBERS.ORGANIZATION_ID,
 							ORGANIZATION_MEMBERS.USER_ID).values(
-							organization.getOrganizationId(), user.getUserId());
+							organizationMember.getOrganizationId(),
+							user.getUserId());
 				}
 
 			}
@@ -453,7 +482,7 @@ public class UserDetailRepository implements UserDetailsManager {
 		 * 
 		 */
 		Users u = USERS.as("u");
-		Roles a = ROLES.as("a");
+		UserRoles a = USER_ROLES.as("a");
 		OrganizationMembers gm = ORGANIZATION_MEMBERS.as("gm");
 		Organizations g = ORGANIZATIONS.as("g");
 
@@ -494,7 +523,7 @@ public class UserDetailRepository implements UserDetailsManager {
 		 * 
 		 */
 		Users u = USERS.as("u");
-		Roles a = ROLES.as("a");
+		UserRoles a = USER_ROLES.as("a");
 		OrganizationMembers gm = ORGANIZATION_MEMBERS.as("gm");
 		Organizations g = ORGANIZATIONS.as("g");
 
@@ -526,9 +555,12 @@ public class UserDetailRepository implements UserDetailsManager {
 						.getValue(USERS.USER_NAME), credentialsRepository.get(
 						ur.getValue(USERS.USER_ID)).getPassword(), ur
 						.getValue(USERS.ENABLED), accountNonExpired,
-						credentialsNonExpired, accountNonLocked, roleRepository
-								.getByUserName(ur.getValue(USERS.USER_NAME)),
-						ur.getValue(USERS.DATE_CREATED).toLocalDateTime(), ur
+						credentialsNonExpired, accountNonLocked,
+						userRoleRepository.getByUserName(ur
+								.getValue(USERS.USER_NAME)),
+						organizationMemberRepository.getByUserId(ur
+								.getValue(USERS.USER_ID)), ur.getValue(
+								USERS.DATE_CREATED).toLocalDateTime(), ur
 								.getValue(USERS.LAST_MODIFIED)
 								.toLocalDateTime()))
 				.collect(Collectors.toList());
@@ -548,4 +580,5 @@ public class UserDetailRepository implements UserDetailsManager {
 						.getValue(USERS.LAST_NAME)))
 				.collect(Collectors.toList());
 	}
+
 }
