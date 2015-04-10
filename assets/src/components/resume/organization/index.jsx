@@ -62,6 +62,7 @@ var Organization = React.createClass({
   },
   render: function () {
     var section = this.state.section;
+    var placeholders = this.props.placeholders || {};
     return (
       <div className ="subsection">
         <div className='header'>
@@ -101,7 +102,7 @@ var Organization = React.createClass({
                     disabled={!this.state.uiEditMode}
                     className="flat"
                     type="text"
-                    placeholder="Degree / Position"
+                    placeholder={placeholders.role || "Degree / Position"}
                     value={section.role}
                     onChange={this.handleChange.bind(this, 'role')}
                   />
