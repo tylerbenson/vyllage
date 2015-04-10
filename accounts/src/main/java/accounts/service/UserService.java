@@ -401,16 +401,16 @@ public class UserService {
 			ac.setAddress(address.get().getValue());
 
 		if (email.isPresent())
-			ac.setAddress(email.get().getValue());
+			ac.setEmail(email.get().getValue());
 
 		if (phoneNumber.isPresent())
-			ac.setAddress(phoneNumber.get().getValue());
+			ac.setPhoneNumber(phoneNumber.get().getValue());
 
 		if (twitter.isPresent())
-			ac.setAddress(twitter.get().getValue());
+			ac.setTwitter(twitter.get().getValue());
 
 		if (linkedIn.isPresent())
-			ac.setAddress(linkedIn.get().getValue());
+			ac.setLinkedIn(linkedIn.get().getValue());
 
 		return ac;
 	}
