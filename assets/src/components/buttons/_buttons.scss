@@ -17,8 +17,12 @@ input[type="reset"] {
      color .2s ease;
 
   &:hover {
-    background: lighten($primary-color, 3%);
+    background: lighten($primary-color, 8%);
     cursor: pointer;
+  }
+
+  &:active {
+    background: darken($primary-color, 3%);
   }
 
   i {
@@ -45,7 +49,11 @@ input[type="reset"] {
     background: $facebook-color;
 
     &:hover {
-      background: lighten($facebook-color, 3%);
+      background: lighten($facebook-color, 8%);
+    }
+
+    &:active {
+      background: darken($facebook-color, 3%);
     }
   }
 
@@ -54,13 +62,19 @@ input[type="reset"] {
     color: $primary-color;
     border-color: $primary-color;
 
-    &:hover {
+    &:hover,
+    &:active {
       background: $primary-color;
       color: $inverted-text-color;
 
       i, span {
         color: $inverted-text-color;
       }
+    }
+
+    &:active {
+      background: darken($primary-color, 3%);
+      border-color: darken($primary-color, 3%);
     }
 
     i, span {
@@ -72,7 +86,11 @@ input[type="reset"] {
     background: $secondary-color;
 
     &:hover {
-      background: lighten($secondary-color, 3%);
+      background: lighten($secondary-color, 8%);
+    }
+
+    &:hover {
+      background: darken($secondary-color, 3%);
     }
 
     &.inverted {
@@ -89,6 +107,12 @@ input[type="reset"] {
         }
       }
 
+      &:active {
+        background: darken($secondary-color, 3%);
+        border-color: darken($secondary-color, 3%);
+        color: $inverted-text-color !important;
+      }
+
       i,span {
         color: $secondary-color;
       }
@@ -100,6 +124,10 @@ input[type="reset"] {
     box-shadow: 0 1px 1px rgba(0,0,0,0.15),
     inset 0 1px 1px rgba(255,255,255,0.25);
     text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+
+    &:hover {
+      border-color: rgba(0,0,0,0.08);
+    }
 
     &:active {
       background: $primary-color;
@@ -123,9 +151,16 @@ input[type="reset"] {
     }
 
     &:hover {
-      color: lighten($primary-color, 3%);
+      color: lighten($primary-color, 8%);
       i,span {
-        color: lighten($primary-color, 3%);
+        color: lighten($primary-color, 8%);
+      }
+    }
+
+    &:active {
+      color: darken($primary-color, 3%);
+      i,span {
+        color: darken($primary-color, 3%);
       }
     }
 
@@ -138,9 +173,17 @@ input[type="reset"] {
 
       &:hover {
         background: none;
-        color: lighten($secondary-color, 3%);
+        color: lighten($secondary-color, 8%);
         i,span {
-          color: lighten($secondary-color, 3%);
+          color: lighten($secondary-color, 8%);
+        }
+      }
+
+      &:active {
+        background: none;
+        color: darken($secondary-color, 3%);
+        i,span {
+          color: darken($secondary-color, 3%);
         }
       }
     }
@@ -160,7 +203,7 @@ input[type="reset"] {
 
   &.move {
     background: $inverted-text-color !important;
-    border: darken($section-footer-background,3%) solid 1px !important;
+    border: darken($section-footer-background,8%) solid 1px !important;
     box-shadow: 0 1px 1px rgba(0,0,0,0.025);
     color: $secondary-color !important;
     cursor: move;
