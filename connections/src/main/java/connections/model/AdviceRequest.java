@@ -1,32 +1,18 @@
 package connections.model;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import lombok.ToString;
-
-@ToString
 public class AdviceRequest {
-
-	private List<AccountContact> registeredUsersContactData;
-
+	private CSRFToken CSRFToken;
+	private List<AccountNames> users;
 	private List<NotRegisteredUser> notRegisteredUsers;
 
-	private String senderName;
-
-	private Long userId;
-
-	private Long documentId;
-
-	private LocalDateTime linkExpirationDate;
-
-	public List<AccountContact> getRegisteredUsersContactData() {
-		return registeredUsersContactData;
+	public List<AccountNames> getUsers() {
+		return users;
 	}
 
-	public void setRegisteredUsersContactData(
-			List<AccountContact> registeredUsers) {
-		this.registeredUsersContactData = registeredUsers;
+	public void setUsers(List<AccountNames> users) {
+		this.users = users;
 	}
 
 	public List<NotRegisteredUser> getNotRegisteredUsers() {
@@ -37,36 +23,11 @@ public class AdviceRequest {
 		this.notRegisteredUsers = notRegisteredUsers;
 	}
 
-	public void setSenderName(String senderName) {
-		this.senderName = senderName;
+	public CSRFToken getCSRFToken() {
+		return CSRFToken;
 	}
 
-	public String getSenderName() {
-		return this.senderName;
+	public void setCSRFToken(CSRFToken cSRFToken) {
+		CSRFToken = cSRFToken;
 	}
-
-	public Long getUserId() {
-		return this.userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public Long getDocumentId() {
-		return documentId;
-	}
-
-	public void setDocumentId(Long documentId) {
-		this.documentId = documentId;
-	}
-
-	public LocalDateTime getLinkExpirationDate() {
-		return linkExpirationDate;
-	}
-
-	public void setLinkExpirationDate(LocalDateTime linkExpirationDate) {
-		this.linkExpirationDate = linkExpirationDate;
-	}
-
 }

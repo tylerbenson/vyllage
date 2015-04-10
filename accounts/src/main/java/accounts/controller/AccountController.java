@@ -230,10 +230,8 @@ public class AccountController {
 				+ env.getProperty("vyllage.domain", "www.vyllage.com")
 				+ "/account/reset-password-change/";
 
-		System.out.println(txt);
-
 		EmailContext ctx = new EmailContext(env.getProperty(
-				"change.password.html", "changePassword-email"));
+				"change.password.html", "email-changePassword"));
 		ctx.setVariable("userName", userName);
 		ctx.setVariable("url", txt);
 		ctx.setVariable("encodedLink", encodedString);

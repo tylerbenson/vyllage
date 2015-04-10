@@ -424,13 +424,13 @@ public class UserService {
 			ac.setLinkedIn(linkedIn.get().getValue());
 
 		if (firstName.isPresent())
-			ac.setAddress(linkedIn.get().getValue());
+			ac.setFirstName(firstName.get().getValue());
 
 		if (middleName.isPresent())
-			ac.setAddress(linkedIn.get().getValue());
+			ac.setMiddleName(middleName.get().getValue());
 
 		if (lastName.isPresent())
-			ac.setAddress(linkedIn.get().getValue());
+			ac.setLastName(lastName.get().getValue());
 
 		return ac;
 	}

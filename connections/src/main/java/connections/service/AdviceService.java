@@ -9,9 +9,12 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.ToString;
+
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,13 +30,16 @@ import connections.email.EmailParameters;
 import connections.email.MailService;
 import connections.model.AccountContact;
 import connections.model.AccountNames;
-import connections.model.AdviceRequest;
+import connections.model.AdviceRequestParameter;
 import connections.model.DocumentLinkRequest;
 import connections.model.NotRegisteredUser;
 import connections.model.UserFilterResponse;
 
 @Service
 public class AdviceService {
+
+	@Autowired
+	private Environment env;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -135,7 +141,7 @@ public class AdviceService {
 	}
 
 	public void sendRequestAdviceEmail(HttpServletRequest request,
-			AdviceRequest adviceRequest) throws EmailException {
+			AdviceRequestParameter adviceRequest) throws EmailException {
 
 		String from = "no-reply@vyllage.com";
 		String subject = "Could you provide me some feedback on my resume?";
@@ -168,7 +174,8 @@ public class AdviceService {
 	}
 
 	private List<Email> prepareMailsForRegisteredUsers(
-			Map<String, String> links, String msg, AdviceRequest adviceRequest) {
+			Map<String, String> links, String msg,
+			AdviceRequestParameter adviceRequest) {
 
 		List<Email> bodies = new ArrayList<>();
 
@@ -179,7 +186,12 @@ public class AdviceService {
 			EmailContext ctx = new EmailContext("email-advice-request");
 			ctx.setVariable("recipientName", accountContact.getFirstName());
 			ctx.setVariable("senderName", adviceRequest.getSenderName());
-			ctx.setVariable("link", links.get(accountContact.getEmail()));
+			ctx.setVariable(
+					"link",
+					"http://"
+							+ env.getProperty("vyllage.domain",
+									"www.vyllage.com")
+							+ links.get(accountContact.getEmail()));
 
 			EmailHTMLBody emailBody = new EmailHTMLBody(msg, ctx);
 
@@ -193,12 +205,15 @@ public class AdviceService {
 	}
 
 	private Map<String, String> generateLinksForRegisteredUsers(
-			HttpServletRequest request, Long userId, AdviceRequest adviceRequest) {
+			HttpServletRequest request, Long userId,
+			AdviceRequestParameter adviceRequest) {
 
 		List<DocumentLinkRequest> requestBody = new ArrayList<>();
 
 		for (AccountContact accountContact : adviceRequest
 				.getRegisteredUsersContactData()) {
+
+			System.out.println(accountContact);
 			DocumentLinkRequest linkRequest = new DocumentLinkRequest();
 			linkRequest.setDocumentId(adviceRequest.getDocumentId());
 			linkRequest.setDocumentType("resume");
@@ -212,9 +227,11 @@ public class AdviceService {
 			linkRequest.setEmail(accountContact.getEmail());
 
 			requestBody.add(linkRequest);
+			System.out.println(requestBody);
 		}
 
-		HttpEntity<Object> entity = createHeader(requestBody, request);
+		HttpEntity<Object> entity = createHeader(requestBody, request,
+				adviceRequest);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -230,7 +247,7 @@ public class AdviceService {
 	}
 
 	private List<Email> prepareMailsForNonRegisteredUsers(String msg,
-			AdviceRequest adviceRequest) {
+			AdviceRequestParameter adviceRequest) {
 
 		List<Email> bodies = new ArrayList<>();
 
@@ -253,8 +270,9 @@ public class AdviceService {
 	}
 
 	protected HttpEntity<Object> createHeader(Object object,
-			HttpServletRequest request) {
+			HttpServletRequest request, AdviceRequestParameter adviceRequest) {
 		HttpHeaders headers = new HttpHeaders();
+		headers.set("X-CSRF-TOKEN", adviceRequest.getCSRFToken().getValue());
 		headers.set("Cookie", request.getHeader("Cookie"));
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -262,6 +280,7 @@ public class AdviceService {
 		return entity;
 	}
 
+	@ToString
 	protected class Email {
 		private String to;
 		private EmailHTMLBody body;

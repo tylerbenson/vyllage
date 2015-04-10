@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import connections.model.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
-import connections.model.NotRegisteredUser;
+import connections.model.AdviceRequestParameter;
 import connections.model.UserFilterResponse;
 import connections.service.AccountService;
 import connections.service.AdviceService;
@@ -58,9 +58,7 @@ public class AdviceRequestController {
 	@RequestMapping(value = "{documentId}/ask-advice", method = RequestMethod.POST)
 	public String askAdvice(HttpServletRequest request,
 			@PathVariable final Long documentId,
-			@RequestBody List<AccountNames> users,
-			@RequestBody List<NotRegisteredUser> notRegisteredUsers)
-			throws EmailException {
+			@RequestBody AdviceRequest adviceRequest) throws EmailException {
 
 		String firstName = (String) request.getSession().getAttribute(
 				"userFirstName");
@@ -69,15 +67,21 @@ public class AdviceRequestController {
 		List<AccountContact> emailsFromRegisteredUsers = accountService
 				.getContactDataForUsers(
 						request,
-						users.stream().map(u -> u.getUserId())
+						adviceRequest.getUsers().stream()
+								.map(u -> u.getUserId())
 								.collect(Collectors.toList()));
 
-		AdviceRequest adviceRequest = new AdviceRequest();
-		adviceRequest.setDocumentId(documentId);
-		adviceRequest.setRegisteredUsersContactData(emailsFromRegisteredUsers);
-		adviceRequest.setNotRegisteredUsers(notRegisteredUsers);
-		adviceRequest.setSenderName(firstName);
-		adviceService.sendRequestAdviceEmail(request, adviceRequest);
+		System.out.println("registered emails " + emailsFromRegisteredUsers);
+
+		AdviceRequestParameter adviceRequestParameters = new AdviceRequestParameter();
+		adviceRequestParameters.setDocumentId(documentId);
+		adviceRequestParameters.setCSRFToken(adviceRequest.getCSRFToken());
+		adviceRequestParameters
+				.setRegisteredUsersContactData(emailsFromRegisteredUsers);
+		adviceRequestParameters.setNotRegisteredUsers(adviceRequest
+				.getNotRegisteredUsers());
+		adviceRequestParameters.setSenderName(firstName);
+		adviceService.sendRequestAdviceEmail(request, adviceRequestParameters);
 
 		return "askAdvice";
 	}

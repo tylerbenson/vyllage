@@ -103,14 +103,18 @@ public class DocumentLinkController {
 			throws JsonProcessingException {
 
 		Map<String, String> links = new HashMap<>();
-
+		System.out.println("linkrequests " + linkRequest);
 		for (DocumentLinkRequest documentLinkRequest : linkRequest) {
+			System.out.println(documentLinkRequest);
+
 			DocumentLink documentLink = documentLinkService
 					.createLink(documentLinkRequest);
 
 			String json = mapper.writeValueAsString(documentLink);
 
-			String safeString = "/link/advice/" + linkEncryptor.encrypt(json);
+			String safeString = "resume/" + documentLinkRequest.getDocumentId()
+					+ "/" + linkEncryptor.encrypt(json);
+			System.out.println(safeString);
 			links.put(documentLinkRequest.getEmail(), safeString);
 		}
 
