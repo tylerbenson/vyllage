@@ -3,6 +3,7 @@ var assign = require('lodash.assign');
 var request = require('superagent');
 var urlTemplate = require('url-template');
 var endpoints = require('../endpoints');
+var difference = require('lodash.difference');
  
 var AskAdviceStore = Reflux.createStore({
   listenables: require('./actions'),
@@ -18,6 +19,11 @@ var AskAdviceStore = Reflux.createStore({
     this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
     this.subject = '';
     this.message = '';
+  },
+  getRecipientUsersList: function () {
+    return this.recipients.map(function (recipient) {
+      return recipient.userId;
+    })
   },
   onPostAskAdvice: function () {
     var url = urlTemplate
@@ -49,10 +55,24 @@ var AskAdviceStore = Reflux.createStore({
       .query({emailFilter: this.recipient.email})
       .end(function (err, res) {
         if (res.ok) {
-          this.suggestions = res.body || [];
+          var alreadyAddedRecipents = this.getRecipientUsersList();
+          var suggestions = {};
+          suggestions.recent = [];
+          suggestions.recommended = [];
+          res.body.recent.forEach(function (suggestion) {
+            if (alreadyAddedRecipents.indexOf(suggestion.userId) === -1) {
+              suggestions.recent.push(suggestion);
+            }
+          });
+          res.body.recommended.forEach(function (suggestion) {
+            if (alreadyAddedRecipents.indexOf(suggestion.userId) === -1) {
+              suggestions.recommended.push(suggestion);
+            }
+          });
+          this.suggestions = suggestions;
           this.update();
         } else {
-          this.suggestions = [];
+          this.suggestions = {};
           this.update();
         }
       }.bind(this))
