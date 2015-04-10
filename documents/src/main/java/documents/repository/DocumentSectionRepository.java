@@ -4,6 +4,7 @@ import static documents.domain.tables.DocumentSections.DOCUMENT_SECTIONS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -159,8 +160,10 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 			newRecord.setSectionversion(newSectionVersion);
 			newRecord.setDocumentid(documentSection.getDocumentId());
 			newRecord.setPosition(documentSection.getSectionPosition());
-			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
-			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
+			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
+					.of("UTC"))));
+			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
+					.now(ZoneId.of("UTC"))));
 
 			try {
 				newRecord.setJsondocument(documentSection.asJSON());
@@ -198,10 +201,10 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 				e.printStackTrace();
 			}
 			existingRecord.setPosition(documentSection.getSectionPosition());
-			existingRecord
-					.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
+			existingRecord.setDatecreated(Timestamp.valueOf(LocalDateTime
+					.now(ZoneId.of("UTC"))));
 			existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
-					.now()));
+					.now(ZoneId.of("UTC"))));
 
 			existingRecord.store();
 			documentSection.setSectionVersion(nextVersion);
