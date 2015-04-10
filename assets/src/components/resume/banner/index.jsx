@@ -12,7 +12,7 @@ var Banner = React.createClass({
         address: false,
         email: false,
         twitter: false,
-        linkedin: false,
+        linkedIn: false,
         phoneNumber: false
       }
     }
@@ -41,7 +41,7 @@ var Banner = React.createClass({
     if (field === 'tagline') {
       this.setState({tagline: e.target.value});
     } else {
-      settingActions.changeSetting({name: field, value: e.target.value});
+      settingActions.changeSetting({name: field, value: e.target.value, privacy: "private"});
     }
   },
   render: function() {
@@ -109,14 +109,14 @@ var Banner = React.createClass({
               <i className="ion-social-linkedin"></i>
               <input
                 type='text'
-                placeholder="Linkedin profile"
-                key={header.linkedin || undefined}
+                placeholder="LinkedIn profile"
+                key={header.linkedIn || undefined}
                 className="inline transparent"
                 autoComplete="off"
-                defaultValue={header.linkedin}
-                onChange={this.handleChange.bind(this, 'linkedin')}
-                onClick={this.enableEdiMode.bind(this, 'linkedin')}
-                onBlur={this.disableEdiMode.bind(this, 'linkedin')}
+                defaultValue={header.linkedIn}
+                onChange={this.handleChange.bind(this, 'linkedIn')}
+                onClick={this.enableEdiMode.bind(this, 'linkedIn')}
+                onBlur={this.disableEdiMode.bind(this, 'linkedIn')}
               />
             </div>
             <div className='detail'>

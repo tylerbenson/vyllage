@@ -5,13 +5,16 @@ var SectionFooter = require('./Footer');
 
 var Experience = React.createClass({
   render: function () {
+    var placeholders = {
+      role: 'Position'
+    };
     var sectionNodes;
     var sections = this.props.sections || [];
     if (sections.length > 0) {
       sectionNodes = sections.map(function (section, index) {
         return (
           <div key={section.sectionId} >
-            <Organization section={section}/>
+            <Organization section={section} placeholders={placeholders}/>
             <SectionFooter section={section} />
           </div>
         );
