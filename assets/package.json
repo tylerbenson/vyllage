@@ -52,6 +52,7 @@
     "gulp-watch": "^3.0.0",
     "http-server": "^0.7.5",
     "jshint": "2.1",
+    "json-loader": "^0.5.1",
     "jsx-loader": "^0.12.2",
     "run-sequence": "^1.0.2",
     "webpack": "^1.5.3",
