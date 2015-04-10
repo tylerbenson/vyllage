@@ -109,6 +109,14 @@ var Organization = React.createClass({
               </div>
             </div>
             <div className="content">
+              <Textarea
+                disabled={!this.state.uiEditMode}
+                className="flat"
+                rows="1"
+                placeholder="Role Description"
+                value={section.roleDescription}
+                onChange={this.handleChange.bind(this, 'roleDescription')}
+              ></Textarea>
               <Datepicker
                 name='startDate'
                 date={section.startDate}
