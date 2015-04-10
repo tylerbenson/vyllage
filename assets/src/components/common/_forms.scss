@@ -29,16 +29,17 @@ textarea {
   padding: 0.3em 0.6em;
   transition: border .2s ease;
 
-  &[disabled] {
-    cursor: default;
-  }
-
   &:hover {
     border-color: lighten($secondary-color, 20%);
   }
 
   &:focus {
     border-color: lighten($primary-color, 10%);
+  }
+
+  &[disabled] {
+    border-color: transparent;
+    cursor: default;
   }
 
   &.flat {
@@ -79,6 +80,10 @@ textarea {
   &.padded {
     border-width: 2px;
     padding: 0.75em 1em;
+
+    &[disabled] {
+      background: lighten($secondary-color, 43%);
+    }
   }
 }
 

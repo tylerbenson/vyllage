@@ -45,7 +45,8 @@ var Datepicker = React.createClass({
       this.setDate();
     }.bind(this));
   },
-  incrementYear: function () {
+  incrementYear: function (e) {
+    e.preventDefault();
     var year = this.state.year + 1;
     this.setState({
       year: year,
@@ -54,7 +55,8 @@ var Datepicker = React.createClass({
       this.setDate();
     }.bind(this));
   },
-  decrementYear: function () {
+  decrementYear: function (e) {
+    e.preventDefault();
     var year = this.state.year - 1;
     this.setState({
       year: year,
@@ -107,7 +109,12 @@ var Datepicker = React.createClass({
           active: this.state.month === month
         });
         return (
-          <span className={className} onClick={this.selectMonth.bind(this, month)}>
+          <span
+            key={index}
+            className={className}
+            onClick={!Modernizr.touch ? this.selectMonth.bind(this, month): null}
+            onTouchStart={Modernizr.touch ? this.selectMonth.bind(this, month): null}
+          >
             {month}
           </span>
         );

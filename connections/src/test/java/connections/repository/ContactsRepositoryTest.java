@@ -26,7 +26,7 @@ public class ContactsRepositoryTest {
 		Contact contact = repository.get(1L);
 
 		Assert.assertNotNull(contact);
-		Assert.assertTrue(contact.getId().equals(1L));
+		Assert.assertTrue(contact.getUserId().equals(1L));
 	}
 
 	@Test
@@ -45,7 +45,7 @@ public class ContactsRepositoryTest {
 		contact = repository.save(contact);
 
 		Assert.assertNotNull("Contact was not saved. ", contact);
-		Assert.assertNotNull("Contact was not saved. ", contact.getId());
+		Assert.assertNotNull("Contact was not saved. ", contact.getUserId());
 		Assert.assertNotNull("Contact was not saved. ", contact.getUserName());
 	}
 
@@ -56,7 +56,7 @@ public class ContactsRepositoryTest {
 		contact.setUserName("test!");
 
 		contact = repository.save(contact);
-		Assert.assertNotNull("Contact was not saved. ", contact.getId());
+		Assert.assertNotNull("Contact was not saved. ", contact.getUserId());
 		Assert.assertEquals("Contact was not saved. ", "test!",
 				contact.getUserName());
 
@@ -65,7 +65,7 @@ public class ContactsRepositoryTest {
 		contact = repository.save(contact);
 
 		Assert.assertNotNull("Contact was not updated. ", contact);
-		Assert.assertNotNull("Contact was not updated. ", contact.getId());
+		Assert.assertNotNull("Contact was not updated. ", contact.getUserId());
 		Assert.assertEquals("Contact was not updated. ", "update!",
 				contact.getUserName());
 

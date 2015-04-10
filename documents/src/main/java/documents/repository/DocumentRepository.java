@@ -7,6 +7,7 @@ import static documents.domain.tables.Suggestions.SUGGESTIONS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,8 +82,10 @@ public class DocumentRepository implements IRepository<Document> {
 			DocumentsRecord newRecord = sql.newRecord(DOCUMENTS);
 
 			newRecord.setUserid(document.getUserId());
-			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now()));
-			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime.now()));
+			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
+					.of("UTC"))));
+			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
+					.now(ZoneId.of("UTC"))));
 			newRecord.setVisibility(document.getVisibility());
 			newRecord.setTagline(document.getTagline());
 
@@ -97,7 +100,7 @@ public class DocumentRepository implements IRepository<Document> {
 
 			existingRecord.setUserid(document.getUserId());
 			existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
-					.now()));
+					.now(ZoneId.of("UTC"))));
 			existingRecord.setVisibility(document.getVisibility());
 			existingRecord.setTagline(document.getTagline());
 			existingRecord.update();

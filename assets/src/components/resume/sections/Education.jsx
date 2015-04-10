@@ -5,13 +5,16 @@ var SectionFooter = require('./Footer');
 
 var Education = React.createClass({
   render: function () {
+    var placeholders = {
+      role: "Degree"
+    };
     var sectionNodes
     var sections = this.props.sections || [];
     if (sections.length > 0) {
       sectionNodes = sections.map(function (section, index) {
         return (
-          <div key={index}>
-            <Organization section={section}/>
+          <div key={section.sectionId}>
+            <Organization section={section} placeholders={placeholders} />
             <SectionFooter section={section} />
           </div>
         );
@@ -22,7 +25,7 @@ var Education = React.createClass({
     return (
       <div className='section'>
         <div className='container'>
-          <Header title='Education' />
+          <Header title='Education' type='experience' />
           {sectionNodes}
         </div>
       </div>

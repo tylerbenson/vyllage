@@ -115,7 +115,7 @@ public class AccountSettingsController {
 						v -> v.validate(setting)));
 
 		if (settings.stream().allMatch(
-				setting -> setting.getErrorMessage() != null))
+				setting -> setting.getErrorMessage() == null))
 			return userService.setAccountSettings(user, settings);
 
 		return settings;
@@ -150,7 +150,7 @@ public class AccountSettingsController {
 
 		validatorsForAll.stream().map(v -> v.validate(setting));
 
-		if (setting.getErrorMessage() != null)
+		if (setting.getErrorMessage() == null)
 			return userService.setAccountSetting(getUser(), setting);
 
 		return setting;

@@ -19,13 +19,15 @@ var Suggesions = React.createClass({
       isFocused: false,
     });
   },
-  recentClick: function (index) {
+  recentClick: function (index, e) {
+    e.preventDefault();
     Actions.selectRecentSuggestion(index);
     this.setState({
       isFocused: false,
     });
   },
-  recommendedClick: function (index) {
+  recommendedClick: function (index, e) {
+    e.preventDefault();
     Actions.selectRecommendedSuggestion(index);
     this.setState({
       isFocused: false,
@@ -39,7 +41,11 @@ var Suggesions = React.createClass({
       }
       return (
         <li key={index} className={cx(classes)}>
-          <div className='name' onClick={this.recentClick.bind(this, index)}>
+          <div
+            className='name'
+            onClick={!Modernizr.touch? this.recentClick.bind(this, index): null}
+            onTouchStart={Modernizr.touch? this.recentClick.bind(this, index): null}
+          >
             {recipient.firstName + " " + recipient.lastName}
           </div>
          </li>
@@ -54,7 +60,11 @@ var Suggesions = React.createClass({
       }
       return (
         <li key={this.props.suggestions.recent.length + index} className={cx(classes)}>
-          <div className='name' onClick={this.recommendedClick.bind(this, index)}>
+          <div 
+            className='name'
+            onClick={!Modernizr.touch? this.recommendedClick.bind(this, index): null}
+            onTouchStart={Modernizr.touch? this.recommendedClick.bind(this, index): null}
+          >
             {recipient.firstName + " " + recipient.lastName}
           </div>
          </li>
@@ -62,20 +72,29 @@ var Suggesions = React.createClass({
     }.bind(this));
   },
   render: function () {
-    if (this.props.show || this.state.isFocused) {
+    var recent = this.props.suggestions.recent || [];
+    var recommended = this.props.suggestions.recommended || [];
+    var suggestionCount = recent.length + recommended.length;
+    if ((this.props.show || this.state.isFocused) && (suggestionCount > 0)) {
       var style = {
         position: 'absolute'
       };
       return (
-        <div onMouseDown={this.enterHandler} onMouseUp={this.leaveHanlder} style={{marginTop: '70px'}}>
+        <div 
+          onMouseDown={!Modernizr.touch? this.enterHandler: null}
+          onMouseUp={!Modernizr.touch? this.leaveHanlder: null}
+          onTouchStart={Modernizr.touch? this.enterHandler: null}
+          onTouchEnd={Modernizr.touch? this.leaveHanlder: null}
+          style={{marginTop: '70px'}}
+        >
           <ul id='suggested-users-list' style={style} className="autocomplete">
-            <li className="title">
+            {(recent.length > 0) ? <li className="title">
               Recent
-            </li>
+            </li>: null}
             {this.renderRecentList()}
-            <li className="title">
+            {(recommended.length > 0) ? <li className="title">
               Recommended
-            </li>
+            </li>: null}
             {this.renderRecommendedList()}
           </ul>  
         </div>

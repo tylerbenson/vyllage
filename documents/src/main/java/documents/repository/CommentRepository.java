@@ -5,6 +5,7 @@ import static documents.domain.tables.DocumentSections.DOCUMENT_SECTIONS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +73,8 @@ public class CommentRepository implements IRepository<Comment> {
 			newRecord.setSectionId(comment.getSectionId());
 			newRecord.setSectionVersion(comment.getSectionVersion());
 			newRecord.setUserId(comment.getUserId());
-			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
+			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
+					.now(ZoneId.of("UTC"))));
 
 			newRecord.store();
 			comment.setCommentId(newRecord.getCommentId());
@@ -85,7 +87,7 @@ public class CommentRepository implements IRepository<Comment> {
 			existingRecord.setSectionVersion(comment.getSectionVersion());
 			existingRecord.setUserId(comment.getUserId());
 			existingRecord.setLastModified(Timestamp.valueOf(LocalDateTime
-					.now()));
+					.now(ZoneId.of("UTC"))));
 
 			existingRecord.update();
 		}
