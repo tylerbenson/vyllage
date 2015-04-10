@@ -7,6 +7,7 @@ import static accounts.domain.tables.Users.USERS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
@@ -154,8 +155,10 @@ public class UserDetailRepository implements UserDetailsManager {
 			UsersRecord newRecord = sql.newRecord(USERS);
 			newRecord.setUserName(user.getUsername());
 			newRecord.setEnabled(user.isEnabled());
-			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now()));
-			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
+			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
+					.of("UTC"))));
+			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
+					.now(ZoneId.of("UTC"))));
 			newRecord.store();
 
 			Assert.notNull(newRecord.getUserId());
@@ -204,7 +207,8 @@ public class UserDetailRepository implements UserDetailsManager {
 						+ user.getUsername() + "' not found.");
 
 			record.setEnabled(user.isEnabled());
-			record.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
+			record.setLastModified(Timestamp.valueOf(LocalDateTime.now(ZoneId
+					.of("UTC"))));
 			record.setFirstName(user.getFirstName());
 			record.setMiddleName(user.getMiddleName());
 			record.setLastName(user.getLastName());
@@ -385,8 +389,8 @@ public class UserDetailRepository implements UserDetailsManager {
 				.map(u -> sql.insertInto(USERS, USERS.USER_NAME, USERS.ENABLED,
 						USERS.DATE_CREATED, USERS.LAST_MODIFIED).values(
 						u.getUsername(), enabled,
-						Timestamp.valueOf(LocalDateTime.now()),
-						Timestamp.valueOf(LocalDateTime.now()))
+						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))),
+						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))))
 
 				).collect(Collectors.toList());
 		// for!
