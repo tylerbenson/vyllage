@@ -1,19 +1,17 @@
 package site;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-@Configuration
+@SpringBootApplication
 @ComponentScan(basePackageClasses = { connections.Application.class,
 		documents.Application.class, accounts.Application.class,
 		Application.class })
 @PropertySource("classpath:/connections/application.properties")
 @PropertySource("classpath:/documents/application.properties")
 @PropertySource("classpath:/accounts/application.properties")
-@EnableAutoConfiguration
 public class Application {
 
 	public static void main(String[] args) {
