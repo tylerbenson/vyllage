@@ -12,7 +12,8 @@ header {
       transition: all .2s ease;
     }
 
-    &:hover {
+    &:hover,
+    &:focus {
       i,
       span {
         color: darken($header-color, 6%);
