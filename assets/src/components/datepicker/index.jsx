@@ -109,7 +109,7 @@ var Datepicker = React.createClass({
           active: this.state.month === month
         });
         return (
-          <span 
+          <span
             key={index}
             className={className}
             onClick={!Modernizr.touch ? this.selectMonth.bind(this, month): null}
