@@ -62,21 +62,20 @@ public class AdviceService {
 	public UserFilterResponse getUsers(HttpServletRequest request,
 			Long documentId, Long userId, List<Long> excludeIds) {
 		UserFilterResponse response = new UserFilterResponse();
-		// get recent users from Documents:
-		// send my user id
-		// receive map<userId, FirstName>
-		// add each pair into the filter response
 
 		Assert.notNull(userId);
 
 		HttpEntity<Object> entity = addCookieToHeader(request);
 
+		// Returns a list of names and ids of users that have the role 'Advisor'
+		// within my organization.
 		List<AccountNames> advisors = getAdvisors(userId, entity, excludeIds);
 
 		Assert.notNull(advisors);
 
 		response.setRecommended(advisors);
 
+		// Returns a list of names and ids of users that commented on my resume.
 		List<AccountNames> recentUsers = getRecentUsers(documentId, entity,
 				excludeIds);
 
