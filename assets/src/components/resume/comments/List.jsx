@@ -1,10 +1,13 @@
 var React = require('react');
 var actions = require('../actions');
-var moment = require('moment');
+var moment = require('moment-timezone');
+var jstz = require('jstimezonedetect')
 
 var CommentList = React.createClass({
   componentDidMount: function () {
     actions.getComments(this.props.sectionId);
+    var timezone = jstz.jstz.determine();
+    this.timezoneName = timezone.name();
   },
   render: function () {
     var comments = this.props.comments || [];
@@ -13,7 +16,7 @@ var CommentList = React.createClass({
               <div className='content'>
                 <div className='info'>
                   <div className="author">{comment.userName}</div>
-                  <div className="timestamp">{moment(comment.lastModified).fromNow()}</div>
+                  <div className="timestamp">{moment(comment.lastModified).tz(this.timezoneName).fromNow()}</div>
                 </div>  
                 <div className="message">
                   {comment.commentText}
@@ -21,7 +24,7 @@ var CommentList = React.createClass({
               </div>
              </div>           
 
-    });
+    }.bind(this));
     return (
       <div>
         {commentNodes}

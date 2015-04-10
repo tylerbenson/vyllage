@@ -10,7 +10,7 @@ var Social = React.createClass({
     var urlSetting = filter(this.props.settings, {name: 'url'})[0] || {value: ''};
     var facebookSetting = filter(this.props.settings, {name: 'facebook'})[0] || {value: ''};
     var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {value: ''};
-    var linkedinSetting = filter(this.props.settings, {name: 'linkedin'})[0] || {value: ''};
+    var linkedInSetting = filter(this.props.settings, {name: 'linkedIn'})[0] || {value: ''};
     return (
       <div className='content'>
         <form ref='social' onSubmit={this.saveHandler}>
@@ -45,14 +45,14 @@ var Social = React.createClass({
             onChange={this.changeHandler.bind(this, 'twitter')}
           />
         
-          <label>Linkedin</label>
+          <label>LinkedIn</label>
           <input 
-            key={linkedinSetting.value || undefined}
-            ref='linkedin'
+            key={linkedInSetting.value || undefined}
+            ref='linkedIn'
             type='text'
             className='padded'
-            defaultValue={linkedinSetting.value}
-            onChange={this.changeHandler.bind(this, 'linkedin')}
+            defaultValue={linkedInSetting.value}
+            onChange={this.changeHandler.bind(this, 'linkedIn')}
           />
         
           <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'social')} />

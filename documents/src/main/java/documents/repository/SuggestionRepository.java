@@ -4,6 +4,7 @@ import static documents.domain.tables.Suggestions.SUGGESTIONS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -73,7 +74,8 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 		}
 
 		newRecord.setUserId(suggestion.getUserId());
-		newRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
+		newRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now(ZoneId
+				.of("UTC"))));
 
 		newRecord.store();
 		suggestion.setSuggestionId(newRecord.getSuggestionId());
@@ -99,7 +101,8 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 		}
 
 		existingRecord.setUserId(suggestion.getUserId());
-		existingRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now()));
+		existingRecord.setLastModified(Timestamp.valueOf(LocalDateTime
+				.now(ZoneId.of("UTC"))));
 
 		existingRecord.update();
 

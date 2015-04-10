@@ -72,7 +72,10 @@ var Suggesions = React.createClass({
     }.bind(this));
   },
   render: function () {
-    if (this.props.show || this.state.isFocused) {
+    var recent = this.props.suggestions.recent || [];
+    var recommended = this.props.suggestions.recommended || [];
+    var suggestionCount = recent.length + recommended.length;
+    if ((this.props.show || this.state.isFocused) && (suggestionCount > 0)) {
       var style = {
         position: 'absolute'
       };
@@ -85,13 +88,13 @@ var Suggesions = React.createClass({
           style={{marginTop: '70px'}}
         >
           <ul id='suggested-users-list' style={style} className="autocomplete">
-            <li className="title">
+            {(recent.length > 0) ? <li className="title">
               Recent
-            </li>
+            </li>: null}
             {this.renderRecentList()}
-            <li className="title">
+            {(recommended.length > 0) ? <li className="title">
               Recommended
-            </li>
+            </li>: null}
             {this.renderRecommendedList()}
           </ul>  
         </div>
