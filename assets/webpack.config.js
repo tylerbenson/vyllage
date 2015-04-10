@@ -16,15 +16,18 @@ module.exports = {
     filename: '[name]'
   },
   module: {
-    loaders: [{
-      test: /\.js|jsx$/,
-      exclude: /lodash|node_modules/,
-      loaders: ['babel']
-    }, ],
+    loaders: [
+      {
+        test: /\.js|jsx$/,
+        exclude: /lodash|node_modules/,
+        loaders: ['babel']
+      },
+      {test:/\.json$/, loader: 'json'}
+   ],
   },
   resolve: {
     alias: {},
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['', '.js', '.jsx', 'json'],
     modulesDirectories: ["node_modules", "bower_components"]
   },
   plugins: [
