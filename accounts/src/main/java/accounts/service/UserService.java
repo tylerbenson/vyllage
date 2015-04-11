@@ -28,6 +28,7 @@ import accounts.model.UserRole;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AccountSettingRepository;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationMemberRepository;
@@ -120,32 +121,36 @@ public class UserService {
 	}
 
 	/**
-	 * Process a link request, if the user doesn't exist, creates one with a
-	 * random password.
+	 * Process a link request, creates new user with a random password.
 	 * 
 	 * @param linkRequest
 	 * @return link response
 	 */
-	public User createUser(String userName) {
+	public User createUser(DocumentLinkRequest linkRequest) {
 		boolean invalid = false;
 
-		if (EmailValidator.validate(userName) == invalid)
+		if (EmailValidator.validate(linkRequest.getEmail()) == invalid)
 			throw new IllegalArgumentException(
-					"Contains invalid email addresses.");
+					"Contains invalid email address.");
 
 		// assigns current user's Organizations
 		// assigns default role.
 		// TODO: add random password for account
-		if (!userRepository.userExists(userName)) {
-			User user = new User(userName, userName, true, true, true, true,
-					userRoleRepository
-							.getDefaultAuthoritiesForNewUser(userName),
-					((User) SecurityContextHolder.getContext()
-							.getAuthentication().getPrincipal())
-							.getOrganizationMember());
-			userRepository.createUser(user);
-		}
-		User loadUserByUsername = userRepository.loadUserByUsername(userName);
+		User user = new User(null, linkRequest.getFirstName(), null,
+				linkRequest.getLastName(), linkRequest.getEmail(),
+				linkRequest.getEmail(), true, true, true, true,
+				userRoleRepository.getDefaultAuthoritiesForNewUser(linkRequest
+						.getEmail()),
+				((User) SecurityContextHolder.getContext().getAuthentication()
+						.getPrincipal()).getOrganizationMember(), null, null);
+		userRepository.createUser(user);
+
+		User loadUserByUsername = userRepository.loadUserByUsername(linkRequest
+				.getEmail());
+
+		// TODO send email with the username and password
+		// if(linkRequest.sendRegistrationMail()
+		// send mail
 
 		return loadUserByUsername;
 	}
@@ -459,7 +464,7 @@ public class UserService {
 		request.logout(); // good bye :)
 
 	}
-	
+
 	public List<User> getUsers(List<Long> userIds) {
 
 		return userRepository.getAll(userIds);

@@ -18,7 +18,10 @@ import connections.model.customDeserializer.LocalDateTimeSerializer;
  */
 @ToString
 public class DocumentLinkRequest {
-	private String name;
+
+	private String firstName;
+
+	private String lastName;
 
 	private String email;
 
@@ -26,20 +29,30 @@ public class DocumentLinkRequest {
 
 	private String documentType;
 
+	private boolean sendRegistrationMail = false;
+
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime expirationDate;
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 	public String getEmail() {
 		return email;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public void setEmail(String email) {
@@ -69,4 +82,13 @@ public class DocumentLinkRequest {
 	public void setExpirationDate(LocalDateTime expirationDate) {
 		this.expirationDate = expirationDate;
 	}
+
+	public boolean sendRegistrationMail() {
+		return sendRegistrationMail;
+	}
+
+	public void setSendRegistrationMail(boolean sendRegistrationMail) {
+		this.sendRegistrationMail = sendRegistrationMail;
+	}
+
 }

@@ -31,13 +31,9 @@ public class AddUserAuthenticationSuccessHandler extends
 		User user = (User) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 
-		request.getSession().setAttribute("userId", user.getUserId());
-
-		request.getSession().setAttribute("userFirstName", user.getFirstName());
-
-		request.getSession().setAttribute("userLastNameName",
-				user.getLastName());
+		SessionHelper.addUserDataToSession(request, user);
 
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
+
 }
