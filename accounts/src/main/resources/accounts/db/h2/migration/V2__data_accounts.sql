@@ -3,7 +3,7 @@
 --  password varchar_ignorecase(60) not null,
 --  enabled boolean not null);
 --NOTE: password == '$2a$10$6REiiQD8i4FTE4D/X3.chOnlgxghwWMGcngksAjyQun0njGDQznxq'
-insert into ACCOUNTS.users ( user_name, first_Name, middle_name, last_name, enabled, date_created, last_modified) values ( 'aaronnoeldeleon@gmail.com', 'Luke', 'V', 'Skywalker', true, CURRENT_DATE(), CURRENT_DATE());
+insert into ACCOUNTS.users ( user_name, first_Name, middle_name, last_name, enabled, date_created, last_modified) values ( 'email', 'Luke', 'V', 'Skywalker', true, CURRENT_DATE(), CURRENT_DATE());
 insert into ACCOUNTS.users ( user_name, enabled, date_created, last_modified ) values ( 'testuser@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE());
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'deana@vyllage.com', 'Deana', 'Troi', true, CURRENT_DATE(), CURRENT_DATE() );
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'mario@toadstool.com', 'Mario', 'Mario', true, CURRENT_DATE(), CURRENT_DATE() );
@@ -47,8 +47,8 @@ insert into ACCOUNTS.roles ( role ) values ( 'GUEST' );
 --  authority varchar_ignorecase(50) not null,
 --  constraint fk_authorities_users foreign key(user_name) references users(user_name));
 --  create unique index ix_auth_user_name on authorities (user_name,authority);
-insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'aaronnoeldeleon@gmail.com', 'ADMIN' );
---insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'aaronnoeldeleon@gmail.com', 'STUDENT' );
+insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'email', 'ADMIN' );
+--insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'email', 'STUDENT' );
 insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'testuser@vyllage.com', 'STUDENT' );
 insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'deana@vyllage.com', 'ADVISOR' );
 insert into ACCOUNTS.user_roles ( user_name, role ) values ( 'mario@toadstool.com', 'ADVISOR' );
