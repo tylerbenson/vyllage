@@ -10,6 +10,7 @@ public class AccountContact {
 	private String phoneNumber;
 	private String twitter;
 	private String linkedIn;
+
 	private String firstName;
 	private String middleName;
 	private String lastName;

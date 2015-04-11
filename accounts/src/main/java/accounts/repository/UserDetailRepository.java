@@ -135,8 +135,8 @@ public class UserDetailRepository implements UserDetailsManager {
 
 	@Override
 	// @Transactional
-	public void createUser(UserDetails user) {
-
+	public void createUser(UserDetails userDetails) {
+		User user = (User) userDetails;
 		Collection<? extends GrantedAuthority> roles;
 
 		if (user.getAuthorities() != null || user.getAuthorities().size() > 0)
@@ -154,6 +154,9 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			UsersRecord newRecord = sql.newRecord(USERS);
 			newRecord.setUserName(user.getUsername());
+			newRecord.setFirstName(user.getFirstName());
+			newRecord.setMiddleName(user.getMiddleName());
+			newRecord.setLastName(user.getLastName());
 			newRecord.setEnabled(user.isEnabled());
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
