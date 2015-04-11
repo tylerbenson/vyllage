@@ -17,7 +17,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import accounts.constants.Roles;
+import accounts.model.User;
 import accounts.model.UserRole;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserRoleRepository;
@@ -61,9 +61,15 @@ public class LoginTest {
 		String userName = "changePassword";
 		String oldPassword = "password";
 		String newPassword = "newPassword";
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
 
-		User user = new User(userName, oldPassword, Arrays.asList(new UserRole(
-				Roles.STUDENT.name().toUpperCase(), userName)));
+		User user = new User(userName, oldPassword, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked,
+				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
+						userName)), null);
 
 		repository.createUser(user);
 
@@ -87,9 +93,15 @@ public class LoginTest {
 		String userName = "resetPassword";
 		String oldPassword = "password";
 		String newPassword = "newPassword";
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
 
-		User user = new User(userName, oldPassword, Arrays.asList(new UserRole(
-				Roles.STUDENT.name().toUpperCase(), userName)));
+		User user = new User(userName, oldPassword, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked,
+				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
+						userName)), null);
 
 		repository.createUser(user);
 
@@ -105,7 +117,7 @@ public class LoginTest {
 
 		Assert.assertNotNull(loadedUser);
 		Assert.assertNotNull(loadedUser.getPassword());
-		System.out.println(((accounts.model.User) loadedUser).getUserId() + " "
+		System.out.println(loadedUser.getUserId() + " "
 				+ loadedUser.getPassword());
 		Assert.assertTrue(new BCryptPasswordEncoder().matches(newPassword,
 				loadedUser.getPassword()));
@@ -116,9 +128,15 @@ public class LoginTest {
 		String userName = "changePassword";
 		String oldPassword = "password";
 		String newPassword = "newPassword";
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
 
-		User user = new User(userName, oldPassword, Arrays.asList(new UserRole(
-				Roles.STUDENT.name().toUpperCase(), userName)));
+		User user = new User(userName, oldPassword, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked,
+				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
+						userName)), null);
 
 		repository.createUser(user);
 
@@ -134,51 +152,72 @@ public class LoginTest {
 
 	@Test
 	public void testUserCreatedAndLoadsCorrectly() {
-		GrantedAuthority auth = new UserRole(
-				Roles.STUDENT.name().toUpperCase(), "test");
+		String userName = "test";
+		String oldPassword = "password";
 
-		User user = new User("test", "password", Arrays.asList(auth));
+		GrantedAuthority auth = new UserRole(
+				Roles.STUDENT.name().toUpperCase(), userName);
+
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+
+		User user = new User(userName, oldPassword, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked, Arrays.asList(auth),
+				null);
 
 		repository.createUser(user);
 
-		UserDetails loadedUser = repository.loadUserByUsername("test");
+		UserDetails loadedUser = repository.loadUserByUsername(userName);
 
 		assertNotNull("User is null.", loadedUser);
 		assertEquals("User is different.", user, loadedUser);
 		assertTrue("Authorities not found.", loadedUser.getAuthorities()
 				.contains(auth));
-		Assert.assertTrue(new BCryptPasswordEncoder().matches("password",
+		Assert.assertTrue(new BCryptPasswordEncoder().matches(oldPassword,
 				loadedUser.getPassword()));
 
+		String userName2 = "test2";
 		GrantedAuthority auth2 = new UserRole(Roles.STUDENT.name()
-				.toUpperCase(), "test2");
+				.toUpperCase(), userName2);
 
-		User user2 = new User("test2", "password", Arrays.asList(auth2));
+		User user2 = new User(userName2, oldPassword, enabled,
+				accountNonExpired, credentialsNonExpired, accountNonLocked,
+				Arrays.asList(auth2), null);
 
 		repository.createUser(user2);
 
-		UserDetails loadedUser2 = repository.loadUserByUsername("test2");
+		UserDetails loadedUser2 = repository.loadUserByUsername(userName2);
 
 		assertNotNull("User is null.", loadedUser2);
 		assertEquals("User is different.", user2, loadedUser2);
 		assertTrue("Authorities not found.", loadedUser2.getAuthorities()
 				.contains(auth));
-		Assert.assertTrue(new BCryptPasswordEncoder().matches("password",
+		Assert.assertTrue(new BCryptPasswordEncoder().matches(oldPassword,
 				loadedUser.getPassword()));
 	}
 
 	@Test
 	public void testUserCreatedWithVeryLongPasswordAndLoadsCorrectly() {
-		String username = "long-password";
+		String userName = "long-password";
 		String password = "This is my very long password I made up by myself. 123456";
 
 		GrantedAuthority auth = new UserRole(
-				Roles.STUDENT.name().toUpperCase(), username);
-		User user = new User(username, password, Arrays.asList(auth));
+				Roles.STUDENT.name().toUpperCase(), userName);
+
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+
+		User user = new User(userName, password, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked, Arrays.asList(auth),
+				null);
 
 		repository.createUser(user);
 
-		UserDetails loadedUser = repository.loadUserByUsername(username);
+		UserDetails loadedUser = repository.loadUserByUsername(userName);
 
 		assertNotNull("User is null.", loadedUser);
 		assertEquals("User is different.", user, loadedUser);
@@ -192,9 +231,17 @@ public class LoginTest {
 	@Test
 	public void testUserDelete() {
 		String userName = "test-delete";
+		String password = "password";
 
-		User user = new User(userName, "password", Arrays.asList(new UserRole(
-				Roles.STUDENT.name().toUpperCase(), userName)));
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+
+		User user = new User(userName, password, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked,
+				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
+						userName)), null);
 
 		repository.createUser(user);
 
@@ -240,12 +287,20 @@ public class LoginTest {
 	@Test
 	public void testUserCreateDuplicateAuthoritySavesOnlyOne() {
 		String userName = "test-duplicate-auth";
+		String password = "password";
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+
 		GrantedAuthority auth1 = new UserRole(Roles.STUDENT.name()
 				.toUpperCase(), userName);
 		GrantedAuthority auth2 = new UserRole(Roles.STUDENT.name()
 				.toUpperCase(), userName);
 
-		User user = new User(userName, "password", Arrays.asList(auth1, auth2));
+		User user = new User(userName, password, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked, Arrays.asList(auth1,
+						auth2), null);
 
 		repository.createUser(user);
 

@@ -124,7 +124,7 @@ public class UserCredentialsRepository {
 
 			if (encoder.matches(password, record.getPassword())
 					&& record.getExpires().toLocalDateTime()
-							.isBefore(LocalDateTime.now())) {
+							.isAfter(LocalDateTime.now())) {
 				return true;
 			}
 		}

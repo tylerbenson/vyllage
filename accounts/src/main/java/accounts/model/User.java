@@ -38,12 +38,6 @@ public class User extends org.springframework.security.core.userdetails.User {
 		this.setOrganizationMember(organizationMember);
 	}
 
-	public User(String userName, String randomPassword, List<UserRole> roles,
-			List<OrganizationMember> organizationMember) {
-		super(userName, randomPassword, roles);
-		this.setOrganizationMember(organizationMember);
-	}
-
 	public User(Long userId, String firstName, String middleName,
 			String lastName, String username, String password, boolean enabled,
 			boolean accountNonExpired, boolean credentialsNonExpired,
