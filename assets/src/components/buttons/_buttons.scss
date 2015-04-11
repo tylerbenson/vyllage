@@ -42,6 +42,12 @@ input[type="reset"] {
 
   &.padded {
     padding: 0.75em 1.5em;
+
+    i {
+      bottom: 1px;
+      margin-right: 0.75em;
+      position: relative;
+    }
   }
 
   &.facebook {

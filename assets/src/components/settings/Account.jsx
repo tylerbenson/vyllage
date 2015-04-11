@@ -22,7 +22,7 @@ var Account = React.createClass({
           />
 
           <label>Password</label>
-          <a className="secondary padded inverted button" href='account/reset-password'>
+          <a className="secondary padded inverted normal-caps button" href='account/reset-password'>
             <i className="ion-locked"></i>
             Reset Password
           </a>
