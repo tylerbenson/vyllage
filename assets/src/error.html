@@ -29,9 +29,8 @@
         <p>We're working to fix this. Please head back to the <a href="/">homepage</a> for now.</p>
       </div>
       <div class="content">
-        <div class="timestamp" th:text="${timestamp}"> </div>
-
         <th:block th:if="${displayWebError}">
+          <div class="timestamp" th:text="${timestamp}"> </div>
           <div class="exception">
             <div class="row" th:if="${exception != null}">
               <h2 th:text="'Exception: ' + ${exception}"> java.lang.NullpointerExcetion </h2>
