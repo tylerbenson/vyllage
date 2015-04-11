@@ -13,14 +13,14 @@
       margin-right: 0;
 
       a {
-        border-bottom: darken($section-footer-background, 6%) solid 1px;
+        border-bottom: rgba(0,0,0,0.03) solid 1px;
         color: $secondary-color;
         cursor: pointer;
         display: block;
-        padding: 1.81em 1em;
+        font-size: 1.1em;
+        padding: 1.8em 1em;
         position: relative;
         text-decoration: none;
-        text-transform: uppercase;
         transition: all .2s ease;
 
         i {
@@ -30,7 +30,7 @@
           position: relative;
           top: 2px;
           text-align: center;
-          width: 1.5em;
+          width: 1.7em;
           transition: all .2s ease;
         }
 
@@ -42,16 +42,34 @@
           }
         }
 
-        &.active:after {
-          content: "";
-          display: inline-block;
-          width: 0;
-          height: 0;
-          border-top: 12px solid transparent;
-          border-right: 15px solid $inverted-text-color;
-          border-bottom: 12px solid transparent;
-          position: absolute;
-          right: 0;
+        &:first-child {
+          border-top-left-radius: 5px;
+
+          &.active {
+            box-shadow: none;
+          }
+        }
+
+        &.active {
+          background: lighten($banner-background, 65%);
+          border-color: lighten($banner-background, 62%);
+          box-shadow: 0 -1px 0 lighten($banner-background, 62%);
+
+          i, span {
+            color: lighten($banner-background, 10%);
+          }
+
+          &:after {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-top: 12px solid transparent;
+            border-right: 15px solid $inverted-text-color;
+            border-bottom: 12px solid transparent;
+            position: absolute;
+            right: 0;
+          }
         }
       }
     }
@@ -72,6 +90,17 @@
 
       h1 {
         margin-top: 0.75em;
+      }
+
+      .datepicker-trigger {
+        width: 100%;
+
+        .datepicker {
+          left: 0;
+          margin: auto;
+          right: 0;
+          top: 122%;
+        }
       }
 
       label {

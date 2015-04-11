@@ -53,8 +53,12 @@
         }
       }
       .container {
-        margin: 0;
+        margin-top: -1.5em;
         padding: 0;
+
+        &.reset {
+          margin-top: 1.5em;
+        }
       }
       h1 {
         font-size: 2em;
@@ -84,13 +88,14 @@
   }
   header {
     background: none;
-    padding: 3em 1em;
+    padding: 2em 1em;
   }
   .logo {
     font-size: 1.5em;
   }
   footer {
     background: none;
+    height: 3.1em;
     a {
       color: rgba($inverted-text-color, 0.35);
       &:hover {

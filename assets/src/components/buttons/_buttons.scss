@@ -16,7 +16,7 @@ input[type="reset"] {
   transition: background .2s ease,
      color .2s ease;
 
-  &:hover {
+  &:hover,&:focus {
     background: lighten($primary-color, 8%);
     cursor: pointer;
   }
@@ -42,13 +42,19 @@ input[type="reset"] {
 
   &.padded {
     padding: 0.75em 1.5em;
+
+    i {
+      bottom: 1px;
+      margin-right: 0.75em;
+      position: relative;
+    }
   }
 
   &.facebook {
     @extend .normal-caps;
     background: $facebook-color;
 
-    &:hover {
+    &:hover,&:focus {
       background: lighten($facebook-color, 8%);
     }
 
@@ -62,7 +68,7 @@ input[type="reset"] {
     color: $primary-color;
     border-color: $primary-color;
 
-    &:hover,
+    &:hover,&:focus,
     &:active {
       background: $primary-color;
       color: $inverted-text-color;
@@ -85,11 +91,11 @@ input[type="reset"] {
   &.secondary {
     background: $secondary-color;
 
-    &:hover {
+    &:hover,&:focus {
       background: lighten($secondary-color, 8%);
     }
 
-    &:hover {
+    &:hover,&:focus {
       background: darken($secondary-color, 3%);
     }
 
@@ -98,7 +104,7 @@ input[type="reset"] {
       color: $secondary-color;
       border-color: $secondary-color;
 
-      &:hover {
+      &:hover,&:focus {
         background: $secondary-color;
         color: $inverted-text-color;
 
@@ -125,7 +131,7 @@ input[type="reset"] {
     inset 0 1px 1px rgba(255,255,255,0.25);
     text-shadow: 0 1px 2px rgba(0,0,0,0.15);
 
-    &:hover {
+    &:hover,&:focus {
       border-color: rgba(0,0,0,0.08);
     }
 
@@ -150,7 +156,7 @@ input[type="reset"] {
       color: $primary-color;
     }
 
-    &:hover {
+    &:hover,&:focus {
       color: lighten($primary-color, 8%);
       i,span {
         color: lighten($primary-color, 8%);
@@ -171,7 +177,7 @@ input[type="reset"] {
         color: $secondary-color;
       }
 
-      &:hover {
+      &:hover,&:focus {
         background: none;
         color: lighten($secondary-color, 8%);
         i,span {
@@ -221,7 +227,7 @@ input[type="reset"] {
 }
 
 a.button {
-  &:hover {
+  &:hover,&:focus {
     color: $inverted-text-color;
   }
 }

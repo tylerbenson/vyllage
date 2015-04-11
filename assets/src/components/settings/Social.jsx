@@ -14,7 +14,7 @@ var Social = React.createClass({
     return (
       <div className='content'>
         <form ref='social' onSubmit={this.saveHandler}>
-          <label>Url</label>
+          <label>URL</label>
           <span>www.vyllage.com/</span>
           <input
             key={urlSetting.value || undefined}

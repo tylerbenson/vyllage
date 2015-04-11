@@ -12,7 +12,8 @@ header {
       transition: all .2s ease;
     }
 
-    &:hover {
+    &:hover,
+    &:focus {
       i,
       span {
         color: darken($header-color, 6%);
@@ -76,5 +77,9 @@ header {
       position: relative;
       bottom: 0.15em;
     }
+  }
+
+  .embossed {
+    margin-left: 0.75em;
   }
 }

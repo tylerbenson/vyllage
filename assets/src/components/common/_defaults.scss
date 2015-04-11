@@ -32,8 +32,9 @@ body {
 
 a {
   color: $primary-color;
+  outline: none;
   transition: all .2s ease;
-  &:hover {
+  &:hover, &:focus {
     color: lighten($primary-color, 3%);
   }
 }

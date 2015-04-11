@@ -6,9 +6,9 @@
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/error.css" />
-  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/error.css" />
+  <link rel="shortcut icon" type="image/png" href="/images/logo-orange.png" />
 
   <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
 </head>
@@ -29,9 +29,8 @@
         <p>We're working to fix this. Please head back to the <a href="/">homepage</a> for now.</p>
       </div>
       <div class="content">
-        <div class="timestamp" th:text="${timestamp}"> </div>
-
         <th:block th:if="${displayWebError}">
+          <div class="timestamp" th:text="${timestamp}"> </div>
           <div class="exception">
             <div class="row" th:if="${exception != null}">
               <h2 th:text="'Exception: ' + ${exception}"> java.lang.NullpointerExcetion </h2>
