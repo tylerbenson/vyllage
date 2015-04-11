@@ -12,15 +12,21 @@ var Account = React.createClass({
       <div className='content'>
         <form ref='account' onSubmit={this.saveHandler}>
           <label>E-mail</label>
-          <input 
+          <input
             key={emailSetting.value || undefined}
             ref='email'
             type='text'
             className='padded'
             defaultValue={emailSetting.value}
             onChange={this.changeHandler.bind(this, 'email')}
-          /> 
-        
+          />
+
+          <label>Password</label>
+          <a className="secondary padded inverted button" href='account/reset-password'>
+            <i className="ion-locked"></i>
+            Reset Password
+          </a>
+
           <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'account')} />
         </form>
       </div>
