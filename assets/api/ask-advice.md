@@ -15,10 +15,9 @@
 
 ```
     {
-      "to": [
-        { "firstName": "Bob", "lastName": "Smith", "email": "bob@smith.com" },
-        { "userId": 432 }
-      ]
+      "csrftoken":"71625f7a-4520-407f-b673-b0ed79e1a678",
+ 	  "users":[{"userId":4,"firstName":"Carlos","middleName":null,"lastName":"Gagliardi"}],
+      "notRegisteredUsers":[{"firstName":"Carlos","lastName":"Gagliardi","email":"carlos.uh@gmail.com"}],
       "subject": "subject text"
       "message": "message of request"
     }

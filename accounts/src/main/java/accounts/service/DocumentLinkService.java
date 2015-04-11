@@ -25,7 +25,12 @@ public class DocumentLinkService {
 	private UserService userService;
 
 	public DocumentLink createLink(DocumentLinkRequest linkRequest) {
-		User user = userService.createUser(linkRequest.getEmail());
+
+		User user = null;
+		if (userService.userExists(linkRequest.getEmail()))
+			user = userService.getUser(linkRequest.getEmail());
+		else
+			user = userService.createUser(linkRequest);
 
 		DocumentLink doclink = new DocumentLink();
 		doclink.setUserId(user.getUserId());
@@ -35,6 +40,8 @@ public class DocumentLinkService {
 
 		linkRepository.createDocumentLinkPassword(doclink,
 				linkRequest.getExpirationDate());
+
+		System.out.println(doclink);
 
 		return doclink;
 	}

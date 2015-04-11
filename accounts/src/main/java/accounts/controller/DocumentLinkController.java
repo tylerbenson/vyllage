@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import accounts.config.SessionHelper;
 import accounts.model.User;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
@@ -52,7 +55,8 @@ public class DocumentLinkController {
 	private Encryptor linkEncryptor;
 
 	@RequestMapping(value = "/advice/{encodedDocumentLink}", method = RequestMethod.GET)
-	public String sharedLinkLogin(@PathVariable String encodedDocumentLink)
+	public String sharedLinkLogin(HttpServletRequest request,
+			@PathVariable String encodedDocumentLink)
 			throws JsonParseException, JsonMappingException, IOException,
 			UserNotFoundException {
 
@@ -68,6 +72,8 @@ public class DocumentLinkController {
 
 		Authentication auth = new UsernamePasswordAuthenticationToken(
 				user.getUsername(), user.getPassword(), user.getAuthorities());
+
+		SessionHelper.addUserDataToSession(request, user);
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
@@ -112,8 +118,7 @@ public class DocumentLinkController {
 
 			String json = mapper.writeValueAsString(documentLink);
 
-			String safeString = "resume/" + documentLinkRequest.getDocumentId()
-					+ "/" + linkEncryptor.encrypt(json);
+			String safeString = "link/advice/" + linkEncryptor.encrypt(json);
 			System.out.println(safeString);
 			links.put(documentLinkRequest.getEmail(), safeString);
 		}
