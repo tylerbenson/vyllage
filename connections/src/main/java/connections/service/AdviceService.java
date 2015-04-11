@@ -151,7 +151,7 @@ public class AdviceService {
 		Map<String, String> linksForRegisteredUsers = generateLinksForRegisteredUsers(
 				request, adviceRequest.getUserId(), adviceRequest);
 
-		Map<String, String> linksForNonRegisteredUsers = generateLinksForRegisteredUsers(
+		Map<String, String> linksForNonRegisteredUsers = generateLinksForNonRegisteredUsers(
 				request, adviceRequest.getUserId(), adviceRequest);
 
 		// prepare emails
@@ -175,38 +175,7 @@ public class AdviceService {
 
 	}
 
-	private List<Email> prepareMailsForRegisteredUsers(
-			Map<String, String> links, String msg,
-			AdviceRequestParameter adviceRequest) {
-
-		List<Email> bodies = new ArrayList<>();
-
-		for (AccountContact accountContact : adviceRequest
-				.getRegisteredUsersContactData()) {
-			Email email = new Email();
-
-			EmailContext ctx = new EmailContext("email-advice-request");
-			ctx.setVariable("recipientName", accountContact.getFirstName());
-			ctx.setVariable("senderName", adviceRequest.getSenderName());
-			ctx.setVariable(
-					"link",
-					"http://"
-							+ env.getProperty("vyllage.domain",
-									"www.vyllage.com")
-							+ links.get(accountContact.getEmail()));
-
-			EmailHTMLBody emailBody = new EmailHTMLBody(msg, ctx);
-
-			email.setBody(emailBody);
-			email.setTo(accountContact.getEmail());
-
-			bodies.add(email);
-		}
-
-		return bodies;
-	}
-
-	private Map<String, String> generateLinksForRegisteredUsers(
+	protected Map<String, String> generateLinksForRegisteredUsers(
 			HttpServletRequest request, Long userId,
 			AdviceRequestParameter adviceRequest) {
 
@@ -215,7 +184,6 @@ public class AdviceService {
 		for (AccountContact accountContact : adviceRequest
 				.getRegisteredUsersContactData()) {
 
-			System.out.println(accountContact);
 			DocumentLinkRequest linkRequest = new DocumentLinkRequest();
 			linkRequest.setDocumentId(adviceRequest.getDocumentId());
 			linkRequest.setDocumentType("resume");
@@ -225,11 +193,9 @@ public class AdviceService {
 							.getLinkExpirationDate() : LocalDateTime.now()
 							.plusDays(30L));
 
-			linkRequest.setName(accountContact.getEmail());
 			linkRequest.setEmail(accountContact.getEmail());
 
 			requestBody.add(linkRequest);
-			System.out.println(requestBody);
 		}
 
 		HttpEntity<Object> entity = createHeader(requestBody, request,
@@ -248,6 +214,79 @@ public class AdviceService {
 		return responseBody;
 	}
 
+	protected Map<String, String> generateLinksForNonRegisteredUsers(
+			HttpServletRequest request, Long userId,
+			AdviceRequestParameter adviceRequest) {
+
+		List<DocumentLinkRequest> requestBody = new ArrayList<>();
+
+		for (NotRegisteredUser notRegisteredUser : adviceRequest
+				.getNotRegisteredUsers()) {
+			DocumentLinkRequest linkRequest = new DocumentLinkRequest();
+			linkRequest.setDocumentId(adviceRequest.getDocumentId());
+			linkRequest.setDocumentType("resume");
+
+			linkRequest
+					.setExpirationDate(adviceRequest.getLinkExpirationDate() != null ? adviceRequest
+							.getLinkExpirationDate() : LocalDateTime.now()
+							.plusDays(30L));
+
+			// to create the user
+			linkRequest.setFirstName(notRegisteredUser.getFirstName());
+			linkRequest.setLastName(notRegisteredUser.getLastName());
+			linkRequest.setEmail(notRegisteredUser.getEmail());
+
+			requestBody.add(linkRequest);
+		}
+
+		HttpEntity<Object> entity = createHeader(requestBody, request,
+				adviceRequest);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
+				.path("/link/create-many");
+
+		@SuppressWarnings("unchecked")
+		Map<String, String> responseBody = restTemplate.exchange(
+				builder.build().toUriString(), HttpMethod.POST, entity,
+				Map.class).getBody();
+
+		return responseBody;
+	}
+
+	private List<Email> prepareMailsForRegisteredUsers(
+			Map<String, String> linksForRegisteredUsers, String msg,
+			AdviceRequestParameter adviceRequest) {
+
+		List<Email> bodies = new ArrayList<>();
+
+		for (AccountContact accountContact : adviceRequest
+				.getRegisteredUsersContactData()) {
+			Email email = new Email();
+
+			EmailContext ctx = new EmailContext("email-advice-request");
+			ctx.setVariable("recipientName", accountContact.getFirstName());
+			ctx.setVariable("senderName", adviceRequest.getSenderName());
+			ctx.setVariable(
+					"link",
+					"http://"
+							+ env.getProperty("vyllage.domain",
+									"www.vyllage.com")
+							+ linksForRegisteredUsers.get(accountContact
+									.getEmail()));
+
+			EmailHTMLBody emailBody = new EmailHTMLBody(msg, ctx);
+
+			email.setBody(emailBody);
+			email.setTo(accountContact.getEmail());
+
+			bodies.add(email);
+		}
+
+		return bodies;
+	}
+
 	private List<Email> prepareMailsForNonRegisteredUsers(
 			Map<String, String> linksForNonRegisteredUsers, String msg,
 			AdviceRequestParameter adviceRequest) {
@@ -260,7 +299,12 @@ public class AdviceService {
 			EmailContext ctx = new EmailContext("email-advice-request");
 			ctx.setVariable("recipientName", user.getFirstName());
 			ctx.setVariable("senderName", adviceRequest.getSenderName());
-			ctx.setVariable("link", "");
+			ctx.setVariable(
+					"link",
+					"http://"
+							+ env.getProperty("vyllage.domain",
+									"www.vyllage.com")
+							+ linksForNonRegisteredUsers.get(user.getEmail()));
 
 			EmailHTMLBody emailBody = new EmailHTMLBody(msg, ctx);
 
