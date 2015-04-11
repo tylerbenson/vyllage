@@ -142,9 +142,9 @@ public class AdviceService {
 	public void sendRequestAdviceEmail(HttpServletRequest request,
 			AdviceRequestParameter adviceRequest) throws EmailException {
 
-		String from = "no-reply@vyllage.com";
-		String subject = "Could you provide me some feedback on my resume?";
-		String noHTMLmsg = "I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?";
+		String from = env.getProperty("email.from", "no-reply@vyllage.com");
+		String subject = adviceRequest.getSubject();
+		String noHTMLmsg = adviceRequest.getMessage();
 		EmailParameters parameters = null;
 
 		// generate document links
@@ -268,6 +268,7 @@ public class AdviceService {
 			EmailContext ctx = new EmailContext("email-advice-request");
 			ctx.setVariable("recipientName", accountContact.getFirstName());
 			ctx.setVariable("senderName", adviceRequest.getSenderName());
+			ctx.setVariable("message", adviceRequest.getMessage());
 			ctx.setVariable(
 					"link",
 					"http://"
@@ -299,6 +300,7 @@ public class AdviceService {
 			EmailContext ctx = new EmailContext("email-advice-request");
 			ctx.setVariable("recipientName", user.getFirstName());
 			ctx.setVariable("senderName", adviceRequest.getSenderName());
+			ctx.setVariable("message", adviceRequest.getMessage());
 			ctx.setVariable(
 					"link",
 					"http://"

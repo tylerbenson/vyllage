@@ -81,9 +81,11 @@ public class AdviceRequestController {
 		adviceRequestParameters.setNotRegisteredUsers(adviceRequest
 				.getNotRegisteredUsers());
 		adviceRequestParameters.setSenderName(firstName);
+		adviceRequestParameters.setSubject(adviceRequest.getSubject());
+		adviceRequestParameters.setMessage(adviceRequest.getMessage());
 		adviceService.sendRequestAdviceEmail(request, adviceRequestParameters);
 
-		return "askAdvice";
+		return "redirect:/resume/" + documentId;
 	}
 
 	@RequestMapping(value = "{documentId}/users", method = RequestMethod.GET)
