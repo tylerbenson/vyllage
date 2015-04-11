@@ -37,15 +37,15 @@
 
   p {
     font-size: 1.35em;
+
+    a:hover {
+      border-bottom: $primary-color dashed 1px;
+    }
   }
 
   a {
     text-decoration: none;
     transition: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 
   .timestamp {
@@ -81,6 +81,10 @@
 
     .logo {
       float: left;
+
+      span {
+        display: none;
+      }
     }
 
     nav ul li a {
