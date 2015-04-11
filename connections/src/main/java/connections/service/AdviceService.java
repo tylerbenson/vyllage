@@ -144,19 +144,22 @@ public class AdviceService {
 
 		String from = "no-reply@vyllage.com";
 		String subject = "Could you provide me some feedback on my resume?";
-		String msg = "I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?";
+		String noHTMLmsg = "I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?";
 		EmailParameters parameters = null;
 
 		// generate document links
-		Map<String, String> links = generateLinksForRegisteredUsers(request,
-				adviceRequest.getUserId(), adviceRequest);
+		Map<String, String> linksForRegisteredUsers = generateLinksForRegisteredUsers(
+				request, adviceRequest.getUserId(), adviceRequest);
+
+		Map<String, String> linksForNonRegisteredUsers = generateLinksForRegisteredUsers(
+				request, adviceRequest.getUserId(), adviceRequest);
 
 		// prepare emails
 		List<Email> mailsForRegisteredUsers = prepareMailsForRegisteredUsers(
-				links, msg, adviceRequest);
+				linksForRegisteredUsers, noHTMLmsg, adviceRequest);
 
 		List<Email> prepareMailsForNonRegisteredUsers = prepareMailsForNonRegisteredUsers(
-				msg, adviceRequest);
+				linksForNonRegisteredUsers, noHTMLmsg, adviceRequest);
 
 		// send email to registered users
 		for (Email email : mailsForRegisteredUsers) {
@@ -245,7 +248,8 @@ public class AdviceService {
 		return responseBody;
 	}
 
-	private List<Email> prepareMailsForNonRegisteredUsers(String msg,
+	private List<Email> prepareMailsForNonRegisteredUsers(
+			Map<String, String> linksForNonRegisteredUsers, String msg,
 			AdviceRequestParameter adviceRequest) {
 
 		List<Email> bodies = new ArrayList<>();
