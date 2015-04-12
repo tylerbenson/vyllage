@@ -1,13 +1,10 @@
 var React = require('react');
 var actions = require('../actions');
-var moment = require('moment-timezone');
-var jstz = require('jstimezonedetect')
+var moment = require('moment');
 
 var CommentList = React.createClass({
   componentDidMount: function () {
     actions.getComments(this.props.sectionId);
-    var timezone = jstz.jstz.determine();
-    this.timezoneName = timezone.name();
   },
   render: function () {
     var comments = this.props.comments || [];

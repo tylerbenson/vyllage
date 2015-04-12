@@ -15,19 +15,12 @@ var SectionFooter = React.createClass({
   hideComments: function () {
     actions.hideComments(this.props.section.sectionId);
   },
-  // componentDidMount: function () {
-  //   var html = document.querySelector('html');
-  //   html.addEventListener('click', this.hideComments);
-  // },
-  // componentWillUnmount: function () {
-  //   document.body.removeEventListener('click', this.hideComments);
-  // },
   render: function () {
     var numberOfComments = this.props.section && this.props.section.numberOfComments;
     return (
       <div className='footer' onClick={this.stopPropagation}>
         <div className='content'>
-          <p className='timestamp'>{moment(this.props.section.lastModified).fromNow()}</p>
+          <p className='timestamp'>{moment.utc(this.props.section.lastModified).fromNow()}</p>
           <div className='actions'>
             <CommentsCount count={numberOfComments} onClick={this.clickComments}/>
           </div> 
