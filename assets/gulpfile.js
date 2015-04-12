@@ -7,7 +7,7 @@ var gutil = require('gulp-util');
 var jshint = require('gulp-jshint');
 var livereload = require('gulp-livereload');
 var minifyCSS = require('gulp-minify-css');
-var autoprefixer   = require('gulp-autoprefixer');
+var autoprefixer = require('gulp-autoprefixer');
 var path = require('path');
 var prettify = require('gulp-jsbeautifier');
 var rename = require('gulp-rename');
@@ -105,7 +105,9 @@ gulp.task('react', function (callback) {
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
-      compress: { drop_console: true }
+      compress: {
+        drop_console: true
+      }
     })
   );
   return webpack(webpackConfig, function (err, stats) {
