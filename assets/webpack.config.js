@@ -3,8 +3,6 @@ var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var path = require('path');
 
 module.exports = {
-  debug: true,
-  devtool: '#inline-source-map',
   entry: {
     'resume.js': './src/resume.jsx',
     'askAdvice.js': './src/askAdvice.jsx',
