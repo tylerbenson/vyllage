@@ -5,7 +5,6 @@
   "dependencies": {
     "autosize": "^2.0.0",
     "classnames": "^1.2.0",
-    "json-loader": "^0.5.1",
     "jstimezonedetect": "^1.0.5",
     "lodash.assign": "^3.0.0",
     "lodash.difference": "^3.1.0",
