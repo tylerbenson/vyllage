@@ -27,7 +27,7 @@ var SectionFooter = React.createClass({
     return (
       <div className='footer' onClick={this.stopPropagation}>
         <div className='content'>
-          <p className='timestamp'>{moment(this.props.section.lastModified).fromNow()}</p>
+          <p className='timestamp'>{moment.utc(this.props.section.lastModified).fromNow()}</p>
           <div className='actions'>
             <CommentsCount count={numberOfComments} onClick={this.clickComments}/>
           </div> 
