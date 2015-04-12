@@ -15,6 +15,8 @@ var sass = require('gulp-sass');
 var watch = require('gulp-watch');
 var webpack = require('webpack');
 
+var argv = require('minimist')(process.argv.slice(2));
+
 gulp.task('clean', function () {
   del(['./public', './build'], function (err) {
     console.log('cleaned build directories')
@@ -51,19 +53,10 @@ gulp.task('styles', function () {
       errLogToConsole: true,
       outputStyle: 'expanded'
     }))
+    .pipe(argv.minify ? minifyCSS(): gutil.noop())
     .pipe(flatten())
     .pipe(gulp.dest('public/css'))
 });
-
-// gulp.task('minify-css', ['styles'], function() {
-//     return gulp.src(['src/css/*.css', '!src/css/libs/*.css'])
-//         .pipe(minifyCSS({keepBreaks:false}))
-//         .pipe(rename(function (path) {
-//             path.extname = ".min.css"
-//         })).pipe(flatten())
-//         .pipe(gulp.dest('src/css/min'))
-//         .pipe(livereload());
-// });
 
 gulp.task('prettify-html', function () {
   return gulp.src('src/*.html')
