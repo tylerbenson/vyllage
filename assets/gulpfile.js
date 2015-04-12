@@ -7,6 +7,7 @@ var gutil = require('gulp-util');
 var jshint = require('gulp-jshint');
 var livereload = require('gulp-livereload');
 var minifyCSS = require('gulp-minify-css');
+var autoprefixer   = require('gulp-autoprefixer');
 var path = require('path');
 var prettify = require('gulp-jsbeautifier');
 var rename = require('gulp-rename');
@@ -15,7 +16,7 @@ var sass = require('gulp-sass');
 var watch = require('gulp-watch');
 var webpack = require('webpack');
 
-var argv = require('minimist')(process.argv.slice(2));
+// var argv = require('minimist')(process.argv.slice(2));
 
 gulp.task('clean', function () {
   del(['./public', './build'], function (err) {
@@ -53,7 +54,10 @@ gulp.task('styles', function () {
       errLogToConsole: true,
       outputStyle: 'expanded'
     }))
-    .pipe(argv.minify ? minifyCSS(): gutil.noop())
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions', 'ie 9']
+    }))
+    .pipe(minifyCSS())
     .pipe(flatten())
     .pipe(gulp.dest('public/css'))
 });
@@ -92,7 +96,19 @@ gulp.task('prettify-js', function () {
 });
 
 gulp.task('react', function (callback) {
-  return webpack(require('./webpack.config.js'), function (err, stats) {
+  var webpackConfig = require('./webpack.config.js');
+  webpackConfig.plugins = webpackConfig.plugins.concat(
+    new webpack.DefinePlugin({
+      "process.env": {
+        "NODE_ENV": JSON.stringify("production")
+      }
+    }),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: { drop_console: true }
+    })
+  );
+  return webpack(webpackConfig, function (err, stats) {
     if (err) {
       throw new gutil.PluginError("webpack:build", err);
     }
@@ -106,6 +122,8 @@ gulp.task('react', function (callback) {
 gulp.task('dev-react', function (callback) {
   var myconfig = require('./webpack.config.js');
   myconfig.watch = true;
+  myconfig.debug = true;
+  myconfig.devtool = '#inline-source-map';
   webpack(myconfig, function (err, stats) {
     if (err) {
       throw new gutil.PluginError("webpack:build", err);
