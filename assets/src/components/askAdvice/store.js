@@ -3,7 +3,6 @@ var assign = require('lodash.assign');
 var request = require('superagent');
 var urlTemplate = require('url-template');
 var endpoints = require('../endpoints');
-var difference = require('lodash.difference');
  
 var AskAdviceStore = Reflux.createStore({
   listenables: require('./actions'),
