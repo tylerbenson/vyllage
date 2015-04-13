@@ -38,7 +38,8 @@
     transition: all .2s ease;
 
     &:hover {
-      background: lighten($secondary-color, 45%);
+      border-color: lighten($primary-color, 40%);
+      background: lighten($primary-color, 50%);
     }
 
     &.disabled {
