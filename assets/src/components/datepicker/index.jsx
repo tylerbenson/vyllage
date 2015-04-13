@@ -2,13 +2,18 @@ var React = require('react');
 var moment = require('moment');
 var classnames = require('classnames');
 var cloneWithProps = require('react/lib/cloneWithProps');
+var LayerMixin = require('react-layer-mixin');
+var Tether = require('tether/tether');
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 var Datepicker = React.createClass({
+  mixins: [LayerMixin],
   getInitialState: function () {
     var date = new Date();
     return {
       isOpen: false,
+      top: '-9999px',
+      left: '-9999px',
       isFocused: false,
       onDatepicker: false,
       year: parseInt(moment(date).format('YYYY')),
@@ -92,13 +97,25 @@ var Datepicker = React.createClass({
         isOpen: this.state.onDatepicker
     });
   },
-  showDatepicker: function () {
-    this.setState({isOpen: this.state.isFocused});
+  showDatepicker: function (e) {
+    this.setState({
+      isOpen: this.state.isFocused,
+    });
   },
   hideDatepicker: function () {
     if (!this.state.isFocused) {
-      this.setState({isOpen: false});
+      this.setState({
+        isOpen: false
+      });
     }
+  },
+  tetherElement: function () {
+    this.tether = new Tether({
+      element: this._layer,
+      target: this.getDOMNode(),
+      attachment: 'top center',
+      targetAttachment: 'bottom left',
+    });
   },
   enterDatepicker: function () {
     this.setState({onDatepicker: true})
@@ -109,7 +126,14 @@ var Datepicker = React.createClass({
       isOpen: false
     })
   },
-  renderDatepicker: function () {
+  componentDidUpdate: function () {
+    if (this.state.isOpen) {
+      this.tetherElement();
+    } else {
+      this.tether && this.tether.destroy();
+    }
+  },
+  renderLayer: function () {
     if (this.state.isOpen) {
       var isCurrent = this.state.date===null;
       var monthNodes = months.map(function (month, index) {
@@ -166,7 +190,7 @@ var Datepicker = React.createClass({
       value = value!==null?value:'Present';
     }
     return (
-      <span className='datepicker-trigger'>
+      <div className='datepicker-trigger'>
         {cloneWithProps(this.props.children, {
           onFocus: this.onFocus,
           onBlur: this.onBlur,
@@ -174,8 +198,7 @@ var Datepicker = React.createClass({
           onChange: this.changeHandler,
           onClick: this.showDatepicker
         })}
-        {this.renderDatepicker()}
-      </span>
+      </div>
     );
   }
 });
