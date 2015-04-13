@@ -67,7 +67,6 @@ public class AdviceRequestController {
 
 		System.out.println(adviceRequest);
 
-		// TODO: add error message.
 		if (adviceRequest == null
 				|| ((adviceRequest.getUsers() == null || adviceRequest
 						.getUsers().isEmpty()) && (adviceRequest
