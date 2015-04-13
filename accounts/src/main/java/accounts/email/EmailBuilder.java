@@ -1,4 +1,4 @@
-package accounts.service;
+package accounts.email;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,11 +6,6 @@ import java.util.Map;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import accounts.email.EmailContext;
-import accounts.email.EmailHTMLBody;
-import accounts.email.EmailParameters;
-import accounts.email.MailService;
 
 @Service
 public class EmailBuilder {

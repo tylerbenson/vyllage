@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import accounts.email.EmailBuilder;
 import accounts.model.BatchAccount;
 import accounts.model.CSRFToken;
 import accounts.model.Organization;
@@ -509,5 +510,9 @@ public class UserService {
 	public List<User> getUsers(List<Long> userIds) {
 
 		return userRepository.getAll(userIds);
+	}
+
+	public void setEmailBuilder(EmailBuilder emailBuilder) {
+		this.emailBuilder = emailBuilder;
 	}
 }

@@ -1,5 +1,6 @@
 package connections.email;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -18,6 +19,11 @@ public class EmailTest {
 
 	// Replace this with your account to see the email.
 	private String to = "no-reply@vyllage.com";
+
+	@Test
+	public void test() {
+
+	}
 
 	// Uncomment to test.
 	// @Test

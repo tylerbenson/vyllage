@@ -30,6 +30,7 @@ import accounts.repository.UserNotFoundException;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 public class UserServiceTest {
+
 	@Autowired
 	private UserService service;
 
@@ -45,6 +46,7 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
+		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("uno@gmail.com"));
@@ -63,6 +65,7 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
+		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
@@ -80,6 +83,7 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
+		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertFalse(service.userExists("siet@gmail.com"));
@@ -96,6 +100,7 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
+		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertFalse(service.userExists("diez@gmail.com"));

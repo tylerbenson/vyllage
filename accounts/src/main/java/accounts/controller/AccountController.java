@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import accounts.email.EmailBuilder;
 import accounts.email.MailService;
 import accounts.model.CSRFToken;
 import accounts.model.User;
@@ -37,7 +38,6 @@ import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
-import accounts.service.EmailBuilder;
 import accounts.service.UserService;
 
 import com.fasterxml.jackson.core.JsonParseException;
