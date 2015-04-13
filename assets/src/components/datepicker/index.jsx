@@ -139,6 +139,12 @@ var Datepicker = React.createClass({
           <div className="content">
             {monthNodes}
           </div>
+          {(this.props.name=="endDate")?
+          <div className="footer">
+            <input type="checkbox" className="current" />
+            current position
+          </div>
+          :null}
         </div>
       );
     } else {
