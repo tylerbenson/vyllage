@@ -2,7 +2,9 @@ package connections.controllers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -10,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import connections.model.AccountContact;
 import connections.model.AccountNames;
@@ -108,6 +113,19 @@ public class AdviceRequestController {
 		excludeIds.add(userId);
 
 		return adviceService.getUsers(request, documentId, userId, excludeIds);
+	}
+
+	@ExceptionHandler(value = { IllegalArgumentException.class })
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public @ResponseBody Map<String, Object> handleIllegalArgumentException(
+			Exception ex) {
+		Map<String, Object> map = new HashMap<>();
+		if (ex.getCause() != null) {
+			map.put("error", ex.getCause().getMessage());
+		} else {
+			map.put("error", ex.getMessage());
+		}
+		return map;
 	}
 
 }
