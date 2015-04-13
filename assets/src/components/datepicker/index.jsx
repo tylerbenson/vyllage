@@ -162,7 +162,7 @@ var Datepicker = React.createClass({
               <i className="ion-arrow-left-c"></i>
             </button>
 
-            <input type="text" className="inline year" placeholder="Year" value={this.state.year} onChange={this.setYear} />
+            <input type="text" className="year" placeholder="Year" value={this.state.year} onChange={this.setYear} />
 
             <button className="small inverted primary icon" onClick={this.incrementYear}>
               <i className="ion-arrow-right-c"></i>

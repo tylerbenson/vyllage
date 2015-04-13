@@ -1,14 +1,6 @@
 .datepicker-trigger {
   display: inline-block;
   position: relative;
-
-  & > input:focus + .datepicker {
-    display: inline-block;
-  }
-
-  & > .start + .datepicker > .footer {
-    display: none;
-  }
 }
 
 .date {
@@ -107,6 +99,7 @@
   }
 
   .year {
+    display: inline-block;
     font-size: 0.86em;
     padding: 0.25em;
     text-align: center;
