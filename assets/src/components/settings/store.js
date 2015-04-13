@@ -29,7 +29,11 @@ module.exports = Reflux.createStore({
       .send(setting)
       .end(function (err, res) {
         var index = findindex(this.settings, {name: setting.name});
-        this.settings[index] = setting;
+        if (index === -1) {
+          this.settings.push(res.body);
+        } else {
+          this.settings[index] = res.body;
+        }
         this.update();
       }.bind(this))
     }.bind(this))
