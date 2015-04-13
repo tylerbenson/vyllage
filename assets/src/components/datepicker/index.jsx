@@ -78,13 +78,13 @@ var Datepicker = React.createClass({
       this.setDate();
     }.bind(this));
   },
-  setCurrent: function(e) {
-    var date = e.target.checked?null:this.state.month + ' ' + this.state.year;
-    this.setState({
-      isOpen: true,
-      date: date
-    });
-  },
+  // setCurrent: function(e) {
+  //   var date = e.target.checked? null: this.state.month + ' ' + this.state.year;
+  //   this.setState({
+  //     isOpen: true,
+  //     date: date
+  //   });
+  // },
   onFocus: function () {
     this.setState({
         isFocused: true,
@@ -135,7 +135,7 @@ var Datepicker = React.createClass({
   },
   renderLayer: function () {
     if (this.state.isOpen) {
-      var isCurrent = this.state.date===null;
+      var isCurrent = this.props.isCurrent;
       var monthNodes = months.map(function (month, index) {
         var className = classnames('month', {
           active: this.state.month === month
@@ -171,9 +171,9 @@ var Datepicker = React.createClass({
           <div className={(isCurrent?'disabled':'') + ' content'}>
             {monthNodes}
           </div>
-          {(this.props.name=="endDate")?
+          {(this.props.name==="endDate")?
           <div className={(isCurrent?'enabled':'') + ' footer'}>
-            <input type="checkbox" className="current" checked={this.state.date===null} onChange={this.setCurrent} />
+            <input type="checkbox" className="current" checked={this.props.isCurrent} onChange={this.props.toggleCurrent} />
             current position
           </div>
           :null}
@@ -184,17 +184,12 @@ var Datepicker = React.createClass({
     }
   },
   render: function () {
-    var isEndDate = this.props.name === "endDate";
-    var value = this.state.date;
-    if(isEndDate) {
-      value = value!==null?value:'Present';
-    }
     return (
       <div className='datepicker-trigger'>
         {cloneWithProps(this.props.children, {
           onFocus: this.onFocus,
           onBlur: this.onBlur,
-          value: this.state.date!==null?this.state.date:'Present',
+          value: this.state.date,
           onChange: this.changeHandler,
           onClick: this.showDatepicker
         })}
