@@ -118,18 +118,16 @@ public class UserService {
 
 		Role role = roleRepository.get(batchAccount.getRole());
 
-		String randomPassword = randomPasswordGenerator.getRandomPassword();
-
 		// note, for organization member there's no userId until it's saved.
 		List<User> users = Arrays
 				.stream(emailSplit)
 				.map(String::trim)
-				.map(s -> new User(s, randomPassword, enabled,
-						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, Arrays.asList(new UserRole(role
-								.getRole(), s)), Arrays
-								.asList(new OrganizationMember(batchAccount
-										.getOrganization(), null))))
+				.map(s -> new User(s, randomPasswordGenerator
+						.getRandomPassword(), enabled, accountNonExpired,
+						credentialsNonExpired, accountNonLocked, Arrays
+								.asList(new UserRole(role.getRole(), s)),
+						Arrays.asList(new OrganizationMember(batchAccount
+								.getOrganization(), null))))
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
