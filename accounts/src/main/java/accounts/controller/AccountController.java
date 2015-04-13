@@ -27,9 +27,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import accounts.email.EmailContext;
-import accounts.email.EmailHTMLBody;
-import accounts.email.EmailParameters;
 import accounts.email.MailService;
 import accounts.model.CSRFToken;
 import accounts.model.User;
@@ -40,6 +37,7 @@ import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
+import accounts.service.EmailBuilder;
 import accounts.service.UserService;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -70,6 +68,9 @@ public class AccountController {
 
 	@Autowired
 	private MailService mailService;
+
+	@Autowired
+	private EmailBuilder emailBuilder;
 
 	/**
 	 * Returns a list containing the id, first, middle and last names for an
@@ -223,21 +224,33 @@ public class AccountController {
 
 	protected void sendEmail(String email, String encodedString, String userName)
 			throws EmailException {
-		EmailParameters parameters = new EmailParameters("Reset Password",
-				email);
+		// EmailParameters parameters = new EmailParameters(env.getProperty(
+		// "email.userName", "no-reply@vyllage.com"), "Reset Password",
+		// email);
 
 		String txt = "http://"
 				+ env.getProperty("vyllage.domain", "www.vyllage.com")
 				+ "/account/reset-password-change/";
 
-		EmailContext ctx = new EmailContext(env.getProperty(
-				"change.password.html", "email-changePassword"));
-		ctx.setVariable("userName", userName);
-		ctx.setVariable("url", txt);
-		ctx.setVariable("encodedLink", encodedString);
+		// EmailContext ctx = new EmailContext(env.getProperty(
+		// "change.password.html", "email-changePassword"));
+		// ctx.setVariable("userName", userName);
+		// ctx.setVariable("url", txt);
+		// ctx.setVariable("encodedLink", encodedString);
 
-		EmailHTMLBody emailBody = new EmailHTMLBody(txt, ctx);
-		mailService.sendEmail(parameters, emailBody);
+		// EmailHTMLBody emailBody = new EmailHTMLBody(txt, ctx);
+		// mailService.sendEmail(parameters, emailBody);
+
+		emailBuilder
+				.from(env.getProperty("email.userName", "no-reply@vyllage.com"))
+				.subject("Reset Password")
+				.to(email)
+				.templateName(
+						env.getProperty("change.password.html",
+								"email-changePassword")).setNoHtmlMessage(txt)
+				.addTemplateVariable("userName", userName)
+				.addTemplateVariable("url", txt)
+				.addTemplateVariable("encodedLink", encodedString).send();
 	}
 
 	private boolean isEmailValid(ResetPasswordForm resetPassword) {

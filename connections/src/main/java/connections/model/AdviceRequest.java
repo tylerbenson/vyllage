@@ -2,6 +2,9 @@ package connections.model;
 
 import java.util.List;
 
+import lombok.ToString;
+
+@ToString
 public class AdviceRequest {
 
 	private CSRFToken CSRFToken;

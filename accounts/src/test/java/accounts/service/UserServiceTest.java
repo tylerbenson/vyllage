@@ -2,6 +2,7 @@ package accounts.service;
 
 import java.util.List;
 
+import org.apache.commons.mail.EmailException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,7 +37,8 @@ public class UserServiceTest {
 	public ExpectedException exception = ExpectedException.none();
 
 	@Test
-	public void createUserBatchTest() {
+	public void createUserBatchTest() throws IllegalArgumentException,
+			EmailException {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount.setEmails("uno@gmail.com, dos@test.com, tres@yahoo.com");
@@ -52,7 +54,8 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void createUserBatchWrongSeparatorTest() {
+	public void createUserBatchWrongSeparatorTest()
+			throws IllegalArgumentException, EmailException {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount
@@ -70,7 +73,7 @@ public class UserServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void createUserBatchEmptyUserNameTest()
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, EmailException {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount.setEmails("siet@gmail.com, , nueve@yahoo.com");
@@ -85,7 +88,8 @@ public class UserServiceTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void createUserBatchBadEmailTest() throws IllegalArgumentException {
+	public void createUserBatchBadEmailTest() throws IllegalArgumentException,
+			EmailException {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount.setEmails("diez@gmail.com, once.@, doce@yahoo.com");

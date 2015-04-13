@@ -18,14 +18,4 @@ public class EmailParameters {
 		Assert.notNull(to);
 	}
 
-	public EmailParameters(String subject, String to) {
-		super();
-		this.from = null;
-		this.subject = subject;
-		this.to = to;
-
-		Assert.notNull(subject);
-		Assert.notNull(to);
-	}
-
 }

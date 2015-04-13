@@ -60,18 +60,26 @@ public class AdviceRequestController {
 			@PathVariable final Long documentId,
 			@RequestBody AdviceRequest adviceRequest) throws EmailException {
 
+		System.out.println(adviceRequest);
+
+		// TODO: add error message.
+		if (adviceRequest == null
+				|| ((adviceRequest.getUsers() == null || adviceRequest
+						.getUsers().isEmpty()) && (adviceRequest
+						.getNotRegisteredUsers() == null || adviceRequest
+						.getNotRegisteredUsers().isEmpty())))
+			throw new IllegalArgumentException("No user or email provided.");
+
 		String firstName = (String) request.getSession().getAttribute(
 				"userFirstName");
 
 		// get emails for registered users
-		List<AccountContact> emailsFromRegisteredUsers = accountService
-				.getContactDataForUsers(
-						request,
-						adviceRequest.getUsers().stream()
-								.map(u -> u.getUserId())
-								.collect(Collectors.toList()));
-
-		System.out.println("registered emails " + emailsFromRegisteredUsers);
+		List<AccountContact> emailsFromRegisteredUsers = new ArrayList<>();
+		if (!adviceRequest.getUsers().isEmpty())
+			emailsFromRegisteredUsers = accountService.getContactDataForUsers(
+					request,
+					adviceRequest.getUsers().stream().map(u -> u.getUserId())
+							.collect(Collectors.toList()));
 
 		AdviceRequestParameter adviceRequestParameters = new AdviceRequestParameter();
 		adviceRequestParameters.setDocumentId(documentId);
