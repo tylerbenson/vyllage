@@ -67,15 +67,28 @@
   .header {
     border-bottom: lighten($secondary-color, 40%) solid 1px;
     padding: 0.5em;
+
+    &.disabled {
+      display: none;
+    }
   }
   .content {
     padding: 0.5em !important;
     width: 100% !important;
+
+    &.disabled {
+      display: none;
+    }
   }
   .footer {
     border-top: lighten($secondary-color, 40%) solid 1px;
     margin: 0;
     padding: 0.75em;
+
+    &.enabled {
+      border-radius: 5px;
+      border-top: none;
+    }
   }
 
   .year {

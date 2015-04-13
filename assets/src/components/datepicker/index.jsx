@@ -111,6 +111,7 @@ var Datepicker = React.createClass({
   },
   renderDatepicker: function () {
     if (this.state.isOpen) {
+      var isCurrent = this.state.date===null;
       var monthNodes = months.map(function (month, index) {
         var className = classnames('month', {
           active: this.state.month === month
@@ -125,14 +126,14 @@ var Datepicker = React.createClass({
             {month}
           </span>
         );
-      }.bind(this))
+      }.bind(this));
       return (
         <div
           className="datepicker"
           onMouseEnter={this.enterDatepicker}
           onMouseLeave={this.leaveDatepicker}
         >
-          <div className="header">
+          <div className={(isCurrent?'disabled':'') + ' header'}>
             <button className="small inverted primary icon" onClick={this.decrementYear}>
               <i className="ion-arrow-left-c"></i>
             </button>
@@ -143,11 +144,11 @@ var Datepicker = React.createClass({
               <i className="ion-arrow-right-c"></i>
             </button>
           </div>
-          <div className="content">
+          <div className={(isCurrent?'disabled':'') + ' content'}>
             {monthNodes}
           </div>
           {(this.props.name=="endDate")?
-          <div className="footer">
+          <div className={(isCurrent?'enabled':'') + ' footer'}>
             <input type="checkbox" className="current" checked={this.state.date===null} onChange={this.setCurrent} />
             current position
           </div>
