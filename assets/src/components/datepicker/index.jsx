@@ -157,7 +157,7 @@ var Datepicker = React.createClass({
         {cloneWithProps(this.props.children, {
           onFocus: this.onFocus,
           onBlur: this.onBlur,
-          value: this.state.date,
+          value: this.state.date!==null?this.state.date:'Present',
           onChange: this.changeHandler,
           onClick: this.showDatepicker
         })}
