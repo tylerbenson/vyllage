@@ -55,11 +55,6 @@ var Organization = React.createClass({
       this.refs.organizationName.getDOMNode().focus();
     });
   },
-  endDateCheckbox: function (e) {
-    var section = this.state.section;
-    section.endDate = (section.endDate === 'Present')? '': 'Present';
-    this.setState({section: section});
-  },
   render: function () {
     var section = this.state.section;
     var placeholders = this.props.placeholders || {};
@@ -143,14 +138,6 @@ var Organization = React.createClass({
                   placeholder="End Date"
                 />
               </Datepicker>
-              {this.state.uiEditMode? <span><input
-                disabled={!this.state.uiEditMode}
-                type="checkbox"
-                className="inline flat"
-                name='endDate'
-                checked={section.endDate === 'Present'}
-                onChange={this.endDateCheckbox}
-              /> Currently I am here</span>: null}
               <input
                 disabled={!this.state.uiEditMode}
                 type="text"

@@ -71,7 +71,14 @@ var Datepicker = React.createClass({
       date: e.target.value
     }, function () {
       this.setDate();
-    }.bind(this))
+    }.bind(this));
+  },
+  setCurrent: function(e) {
+    var date = e.target.checked?null:this.state.month + ' ' + this.state.year;
+    this.setState({
+      isOpen: true,
+      date: date
+    });
   },
   onFocus: function () {
     this.setState({
@@ -141,7 +148,7 @@ var Datepicker = React.createClass({
           </div>
           {(this.props.name=="endDate")?
           <div className="footer">
-            <input type="checkbox" className="current" />
+            <input type="checkbox" className="current" checked={this.state.date===null} onChange={this.setCurrent} />
             current position
           </div>
           :null}
@@ -152,6 +159,11 @@ var Datepicker = React.createClass({
     }
   },
   render: function () {
+    var isEndDate = this.props.name === "endDate";
+    var value = this.state.date;
+    if(isEndDate) {
+      value = value!==null?value:'Present';
+    }
     return (
       <span className='datepicker-trigger'>
         {cloneWithProps(this.props.children, {
