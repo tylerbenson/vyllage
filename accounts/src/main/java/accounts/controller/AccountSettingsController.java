@@ -29,9 +29,11 @@ import accounts.constants.Roles;
 import accounts.model.User;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.service.UserService;
+import accounts.validation.EmailSettingValidator;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
 import accounts.validation.NumberValidator;
@@ -62,12 +64,16 @@ public class AccountSettingsController {
 	public AccountSettingsController() {
 		validators.put("phoneNumber", new NumberValidator());
 		validators.put("firstName", new NotNullValidator());
+		validators.put("email", new EmailSettingValidator());
 		validatorsForAll.add(new LengthValidator(30));
 
 		settingValues.put("emailUpdates",
 				Arrays.asList("weekly", "biweekly", "monthly", "never"));
-		settingValues.put("privacy",
-				Arrays.asList("private", "public", "organization"));
+		settingValues.put(
+				"privacy",
+				Arrays.asList(Privacy.values()).stream()
+						.map(e -> e.toString().toLowerCase())
+						.collect(Collectors.toList()));
 	}
 
 	// for header

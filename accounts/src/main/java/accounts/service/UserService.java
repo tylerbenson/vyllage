@@ -247,6 +247,10 @@ public class UserService {
 		case "lastName":
 			setLastName(user, setting);
 			return settingRepository.set(user.getUserId(), setting);
+
+		case "email":
+			setEmail(user, setting);
+			return settingRepository.set(user.getUserId(), setting);
 		default:
 			return settingRepository.set(user.getUserId(), setting);
 		}
@@ -389,6 +393,22 @@ public class UserService {
 			user.setLastName(setting.getValue());
 			this.update(user);
 		}
+	}
+
+	// changes the username and email...
+	protected void setEmail(User user, AccountSetting setting) {
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			// username is final...
+			User newUser = new User(user.getUserId(), user.getFirstName(),
+					user.getMiddleName(), user.getLastName(),
+					setting.getValue(), user.getPassword(), user.isEnabled(),
+					user.isAccountNonExpired(), user.isCredentialsNonExpired(),
+					user.isAccountNonLocked(), user.getAuthorities(),
+					user.getOrganizationMember(), user.getDateCreated(),
+					user.getLastModified());
+			this.update(newUser);
+		}
+
 	}
 
 	public void changePassword(String newPassword) {

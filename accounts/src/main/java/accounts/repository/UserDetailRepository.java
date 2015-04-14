@@ -1,5 +1,6 @@
 package accounts.repository;
 
+import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
 import static accounts.domain.tables.OrganizationMembers.ORGANIZATION_MEMBERS;
 import static accounts.domain.tables.Organizations.ORGANIZATIONS;
 import static accounts.domain.tables.UserRoles.USER_ROLES;
@@ -8,12 +9,14 @@ import static accounts.domain.tables.Users.USERS;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
+import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
@@ -38,6 +41,7 @@ import accounts.domain.tables.OrganizationMembers;
 import accounts.domain.tables.Organizations;
 import accounts.domain.tables.UserRoles;
 import accounts.domain.tables.Users;
+import accounts.domain.tables.records.OrganizationMembersRecord;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.Organization;
 import accounts.model.OrganizationMember;
@@ -46,6 +50,8 @@ import accounts.model.UserCredential;
 import accounts.model.UserFilterRequest;
 import accounts.model.UserRole;
 import accounts.model.account.AccountNames;
+import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.Privacy;
 
 @Repository
 public class UserDetailRepository implements UserDetailsManager {
@@ -171,12 +177,71 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			for (GrantedAuthority role : roles) {
 				userRoleRepository.create((UserRole) role);
+
+				AccountSetting roleSetting = new AccountSetting();
+				roleSetting.setName("role");
+				roleSetting.setUserId(newRecord.getUserId());
+				roleSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+				roleSetting.setValue(role.getAuthority());
+				accountSettingRepository
+						.set(newRecord.getUserId(), roleSetting);
+
 				for (Organization organization : organizationRepository
 						.getOrganizationFromAuthority(role.getAuthority())) {
 					organizationMemberRepository.create(new OrganizationMember(
 							organization.getOrganizationId(), newRecord
 									.getUserId()));
+
+					AccountSetting organizationSetting = new AccountSetting();
+					organizationSetting.setName("organization");
+					organizationSetting.setUserId(newRecord.getUserId());
+					organizationSetting.setPrivacy(Privacy.PRIVATE.name()
+							.toLowerCase());
+					organizationSetting.setValue(organization
+							.getOrganizationName());
+					accountSettingRepository.set(newRecord.getUserId(),
+							roleSetting);
 				}
+			}
+
+			AccountSetting emailSetting = new AccountSetting();
+			emailSetting.setName("email");
+			emailSetting.setUserId(newRecord.getUserId());
+			emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+			emailSetting.setValue(user.getUsername());
+			accountSettingRepository.set(newRecord.getUserId(), emailSetting);
+
+			if (user.getFirstName() != null) {
+				AccountSetting firstNameSetting = new AccountSetting();
+				firstNameSetting.setName("firstName");
+				firstNameSetting.setUserId(newRecord.getUserId());
+				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				firstNameSetting.setValue(user.getFirstName());
+				accountSettingRepository.set(newRecord.getUserId(),
+						firstNameSetting);
+			}
+
+			if (user.getMiddleName() != null) {
+				AccountSetting firstNameSetting = new AccountSetting();
+				firstNameSetting.setName("middleName");
+				firstNameSetting.setUserId(newRecord.getUserId());
+				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				firstNameSetting.setValue(user.getMiddleName());
+				accountSettingRepository.set(newRecord.getUserId(),
+						firstNameSetting);
+			}
+
+			if (user.getLastName() != null) {
+				AccountSetting firstNameSetting = new AccountSetting();
+				firstNameSetting.setName("lastName");
+				firstNameSetting.setUserId(newRecord.getUserId());
+				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				firstNameSetting.setValue(user.getLastName());
+				accountSettingRepository.set(newRecord.getUserId(),
+						firstNameSetting);
 			}
 
 		} catch (Exception e) {
@@ -400,6 +465,29 @@ public class UserDetailRepository implements UserDetailsManager {
 				.collect(Collectors.toList());
 	}
 
+	public List<User> getAllByUserName(List<String> userNames) {
+		final boolean accountNonExpired = true;
+		final boolean credentialsNonExpired = true;
+		final boolean accountNonLocked = true;
+
+		return sql
+				.fetch(USERS, USERS.USER_NAME.in(userNames))
+				.stream()
+				.map((UsersRecord record) -> new User(record.getUserId(),
+						record.getFirstName(), record.getMiddleName(), record
+								.getLastName(), record.getUserName(),
+						credentialsRepository.get(record.getUserId())
+								.getPassword(), record.getEnabled(),
+						accountNonExpired, credentialsNonExpired,
+						accountNonLocked, userRoleRepository
+								.getByUserName(record.getUserName()),
+						organizationMemberRepository.getByUserId(record
+								.getUserId()), record.getDateCreated()
+								.toLocalDateTime(), record.getLastModified()
+								.toLocalDateTime()))
+				.collect(Collectors.toList());
+	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	// @Transactional
 	public void saveUsers(List<User> users) {
@@ -410,7 +498,7 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		Object savepoint = transaction.createSavepoint();
 
-		List collect = users
+		List userBatch = users
 				.stream()
 				.map(u -> sql.insertInto(USERS, USERS.USER_NAME, USERS.ENABLED,
 						USERS.DATE_CREATED, USERS.LAST_MODIFIED).values(
@@ -422,32 +510,101 @@ public class UserDetailRepository implements UserDetailsManager {
 		// for!
 		for (User user : users) {
 			for (GrantedAuthority authority : user.getAuthorities()) {
-				collect.add(sql.insertInto(USER_ROLES, USER_ROLES.USER_NAME,
+				userBatch.add(sql.insertInto(USER_ROLES, USER_ROLES.USER_NAME,
 						USER_ROLES.ROLE).values(user.getUsername(),
 						authority.getAuthority()));
-				for (OrganizationMember organizationMember : user
-						.getOrganizationMember()) {
-					sql.insertInto(ORGANIZATION_MEMBERS,
-							ORGANIZATION_MEMBERS.ORGANIZATION_ID,
-							ORGANIZATION_MEMBERS.USER_ID).values(
-							organizationMember.getOrganizationId(),
-							user.getUserId());
-				}
-
 			}
 		}
 
 		try {
-			sql.batch(collect).execute();
+			sql.batch(userBatch).execute();
+
+			List<InsertValuesStep2<OrganizationMembersRecord, Long, Long>> organizationMemberBatch = new ArrayList();
+			List userSettingsBatch = new ArrayList();
 
 			// hmm, well, we won't be inserting THAT many users...
+			// there should be a better way
+			users.stream().forEach(
+					u -> u.setUserId(sql.select().from(USERS)
+							.where(USERS.USER_NAME.eq(u.getUsername()))
+							.fetchOne(USERS.USER_ID)));
+
 			for (User user : users) {
-				Long userId = sql.select().from(USERS)
-						.where(USERS.USER_NAME.eq(user.getUsername()))
-						.fetchOne(USERS.USER_ID);
-				credentialsRepository.create(new Long(userId),
+				// Long userId = sql.select().from(USERS)
+				// .where(USERS.USER_NAME.eq(user.getUsername()))
+				// .fetchOne(USERS.USER_ID);
+
+				credentialsRepository.create(user.getUserId(),
 						user.getPassword());
+
+				// for (GrantedAuthority authority : user.getAuthorities()) {
+				// sql.insertInto(USER_ROLES, USER_ROLES.USER_ID,
+				// USER_ROLES.ROLE).values(user.getUserId(),
+				// authority.getAuthority());
+				// }
+
+				for (OrganizationMember organizationMember : user
+						.getOrganizationMember()) {
+					organizationMemberBatch.add(sql.insertInto(
+							ORGANIZATION_MEMBERS,
+							ORGANIZATION_MEMBERS.ORGANIZATION_ID,
+							ORGANIZATION_MEMBERS.USER_ID).values(
+							organizationMember.getOrganizationId(),
+							user.getUserId()));
+
+					// organization setting
+					userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
+							.values(user.getUserId(),
+									"organization",
+									organizationRepository.get(
+											organizationMember
+													.getOrganizationId())
+											.getOrganizationName(),
+									Privacy.PRIVATE.name().toLowerCase()));
+
+				}
+
+				// create other user settings
+				// email
+				userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
+						user.getUserId(), "email", user.getUsername(),
+						Privacy.PRIVATE.name().toLowerCase()));
+
+				if (user.getFirstName() != null) {
+					userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
+							.values(user.getUserId(), "firstName",
+									user.getFirstName(),
+									Privacy.PRIVATE.name().toLowerCase()));
+				}
+
+				if (user.getMiddleName() != null) {
+					userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
+							.values(user.getUserId(), "middleName",
+									user.getMiddleName(),
+									Privacy.PRIVATE.name().toLowerCase()));
+				}
+
+				if (user.getLastName() != null) {
+					userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
+							.values(user.getUserId(), "lastName",
+									user.getLastName(),
+									Privacy.PRIVATE.name().toLowerCase()));
+				}
+
 			}
+
+			sql.batch(organizationMemberBatch).execute();
+			sql.batch(userSettingsBatch).execute();
 
 		} catch (Exception e) {
 			logger.info(e.toString());
