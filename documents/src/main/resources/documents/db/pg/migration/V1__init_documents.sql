@@ -1,12 +1,12 @@
 create schema if not exists documents;
   	
 create table if not exists documents.documents(
-	id bigserial primary key,
-	userid bigint not null,
+	document_id bigserial primary key,
+	user_id bigint not null,
 	tagline varchar(50),
   	visibility boolean not null,
-  	datecreated timestamp not null,
-  	lastmodified timestamp not null);
+  	date_created timestamp not null,
+  	last_modified timestamp not null);
   	
 create table if not exists documents.document_sections(
 	id bigserial not null,
@@ -17,7 +17,7 @@ create table if not exists documents.document_sections(
   	datecreated timestamp not null,
   	lastmodified timestamp not null,
   	primary key (id, sectionversion),
-  	constraint fk_section_documents foreign key(documentid) references documents.documents(id) );
+  	constraint fk_section_documents foreign key(documentid) references documents.documents(document_id) );
   	
 create table if not exists documents.comments(
 	comment_id bigserial primary key,

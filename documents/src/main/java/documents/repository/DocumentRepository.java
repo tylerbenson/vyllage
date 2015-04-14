@@ -37,7 +37,8 @@ public class DocumentRepository implements IRepository<Document> {
 
 	@Override
 	public Document get(Long id) throws ElementNotFoundException {
-		DocumentsRecord record = sql.fetchOne(DOCUMENTS, DOCUMENTS.ID.eq(id));
+		DocumentsRecord record = sql.fetchOne(DOCUMENTS,
+				DOCUMENTS.DOCUMENT_ID.eq(id));
 		logger.info("Searching document with id " + id);
 
 		if (record == null)
@@ -61,11 +62,11 @@ public class DocumentRepository implements IRepository<Document> {
 	private Document recordToDocument(DocumentsRecord documentsRecord) {
 		Document document = new Document();
 
-		document.setId(documentsRecord.getId());
-		document.setUserId(documentsRecord.getUserid());
-		document.setDateCreated(documentsRecord.getDatecreated()
+		document.setDocumentId(documentsRecord.getDocumentId());
+		document.setUserId(documentsRecord.getUserId());
+		document.setDateCreated(documentsRecord.getDateCreated()
 				.toLocalDateTime());
-		document.setLastModified(documentsRecord.getLastmodified()
+		document.setLastModified(documentsRecord.getLastModified()
 				.toLocalDateTime());
 		document.setVisibility(documentsRecord.getVisibility());
 		document.setTagline(documentsRecord.getTagline());
@@ -76,35 +77,35 @@ public class DocumentRepository implements IRepository<Document> {
 	public Document save(Document document) {
 
 		DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
-				DOCUMENTS.ID.eq(document.getId()));
+				DOCUMENTS.DOCUMENT_ID.eq(document.getDocumentId()));
 
 		if (existingRecord == null) {
 			DocumentsRecord newRecord = sql.newRecord(DOCUMENTS);
 
-			newRecord.setUserid(document.getUserId());
-			newRecord.setDatecreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
+			newRecord.setUserId(document.getUserId());
+			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
-			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
+			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
 					.now(ZoneId.of("UTC"))));
 			newRecord.setVisibility(document.getVisibility());
 			newRecord.setTagline(document.getTagline());
 
 			newRecord.store();
-			document.setId(newRecord.getId());
-			document.setDateCreated(newRecord.getDatecreated()
+			document.setDocumentId(newRecord.getDocumentId());
+			document.setDateCreated(newRecord.getDateCreated()
 					.toLocalDateTime());
-			document.setLastModified(newRecord.getLastmodified()
+			document.setLastModified(newRecord.getLastModified()
 					.toLocalDateTime());
 
 		} else {
 
-			existingRecord.setUserid(document.getUserId());
-			existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
+			existingRecord.setUserId(document.getUserId());
+			existingRecord.setLastModified(Timestamp.valueOf(LocalDateTime
 					.now(ZoneId.of("UTC"))));
 			existingRecord.setVisibility(document.getVisibility());
 			existingRecord.setTagline(document.getTagline());
 			existingRecord.update();
-			document.setLastModified(existingRecord.getLastmodified()
+			document.setLastModified(existingRecord.getLastModified()
 					.toLocalDateTime());
 		}
 
@@ -117,7 +118,7 @@ public class DocumentRepository implements IRepository<Document> {
 	public void delete(Long documentId) {
 		if (documentId != null) {
 			DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
-					DOCUMENTS.ID.eq(documentId));
+					DOCUMENTS.DOCUMENT_ID.eq(documentId));
 			existingRecord.delete();
 		}
 	}
@@ -125,7 +126,7 @@ public class DocumentRepository implements IRepository<Document> {
 	public Document getDocumentByUser(Long userId)
 			throws ElementNotFoundException {
 		DocumentsRecord record = sql.fetchOne(DOCUMENTS,
-				DOCUMENTS.USERID.eq(userId));
+				DOCUMENTS.USER_ID.eq(userId));
 		logger.info("Searching document with userid " + userId);
 
 		if (record == null)
@@ -163,8 +164,7 @@ public class DocumentRepository implements IRepository<Document> {
 
 	public void deleteForUser(Long userId) {
 		DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
-				DOCUMENTS.USERID.eq(userId));
+				DOCUMENTS.USER_ID.eq(userId));
 		existingRecord.delete();
 	}
-
 }

@@ -1,5 +1,5 @@
 
-insert into documents.documents(id, userId, visibility, tagline, dateCreated, lastModified) values(0, 0, true, 'My tagline.', CURRENT_DATE, CURRENT_DATE);
+insert into documents.documents(document_id, user_id, visibility, tagline, date_created, last_modified) values(0, 0, true, 'My tagline.', CURRENT_DATE, CURRENT_DATE);
 
 insert into documents.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(123, 1, 0, 1, '{
 	"type": "freeform",

@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @ToString
 public class Document {
-	private Long id;
+	private Long documentId;
 	private String tagline;
 	private Long userId;
 	private Boolean visibility;
@@ -29,12 +29,12 @@ public class Document {
 		this.visibility = visibility;
 	}
 
-	public Long getId() {
-		return this.id;
+	public Long getDocumentId() {
+		return this.documentId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setDocumentId(Long id) {
+		this.documentId = id;
 	}
 
 	public void setDateCreated(LocalDateTime dateCreated) {
