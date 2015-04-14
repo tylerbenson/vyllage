@@ -47,6 +47,16 @@ public class AdviceRequestController {
 
 		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
 				request, Arrays.asList(userId));
+
+		if (namesForUsers.isEmpty()) {
+			AccountNames an = new AccountNames();
+			an.setUserId(userId);
+			an.setFirstName("");
+			an.setLastName("");
+			an.setMiddleName("");
+			return an;
+		}
+
 		return namesForUsers.get(0);
 	}
 
