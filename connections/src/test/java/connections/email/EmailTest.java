@@ -1,6 +1,5 @@
 package connections.email;
 
-import org.apache.commons.mail.EmailException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,30 +21,35 @@ public class EmailTest {
 	private String to = "no-reply@vyllage.com";
 
 	@Test
-	public void simpleTextTest() throws EmailException {
-		String from = "no-reply@vyllage.com";
-		String subject = "TestMail";
-		String msg = "This is a test mail ... :-)";
-		EmailParameters parameters = new EmailParameters(from, subject, to);
+	public void test() {
 
-		EmailBody emailBody = new EmailBody(msg);
-
-		service.sendEmail(parameters, emailBody);
 	}
 
-	@Test
-	public void htmlTest() throws EmailException {
-		String from = "no-reply@vyllage.com";
-		String subject = "TestMail";
-		String msg = "This is a test mail ... :-)";
-		EmailParameters parameters = new EmailParameters(from, subject, to);
-
-		EmailContext ctx = new EmailContext("email");
-		ctx.setVariable("text", "World!");
-
-		EmailHTMLBody emailBody = new EmailHTMLBody(msg, ctx);
-
-		service.sendEmail(parameters, emailBody);
-	}
+	// @Test
+	// public void simpleTextTest() throws EmailException {
+	// String from = "no-reply@vyllage.com";
+	// String subject = "TestMail";
+	// String msg = "This is a test mail ... :-)";
+	// EmailParameters parameters = new EmailParameters(from, subject, to);
+	//
+	// EmailBody emailBody = new EmailBody(msg);
+	//
+	// service.sendEmail(parameters, emailBody);
+	// }
+	//
+	// @Test
+	// public void htmlTest() throws EmailException {
+	// String from = "no-reply@vyllage.com";
+	// String subject = "TestMail";
+	// String msg = "This is a test mail ... :-)";
+	// EmailParameters parameters = new EmailParameters(from, subject, to);
+	//
+	// EmailContext ctx = new EmailContext("email");
+	// ctx.setVariable("text", "World!");
+	//
+	// EmailHTMLBody emailBody = new EmailHTMLBody(msg, ctx);
+	//
+	// service.sendEmail(parameters, emailBody);
+	// }
 
 }
