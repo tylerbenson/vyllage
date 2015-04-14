@@ -9,7 +9,7 @@ var HeaderContainer = React.createClass({
     this.setState({documentId: documentId});
   },
   render: function() {
-    var name = this.props.name || user;
+    var name = this.props.name || 'user';
     var title = this.props.title;
     return (
         <div className="content">
