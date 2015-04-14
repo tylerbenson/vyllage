@@ -148,29 +148,33 @@ public class AdviceService {
 		EmailParameters parameters = null;
 
 		// generate document links
-		Map<String, String> linksForRegisteredUsers = generateLinksForRegisteredUsers(
-				request, adviceRequest.getUserId(), adviceRequest);
+		if (!adviceRequest.getRegisteredUsersContactData().isEmpty()) {
+			Map<String, String> linksForRegisteredUsers = generateLinksForRegisteredUsers(
+					request, adviceRequest.getUserId(), adviceRequest);
 
-		Map<String, String> linksForNonRegisteredUsers = generateLinksForNonRegisteredUsers(
-				request, adviceRequest.getUserId(), adviceRequest);
+			// prepare emails
+			List<Email> mailsForRegisteredUsers = prepareMailsForRegisteredUsers(
+					linksForRegisteredUsers, noHTMLmsg, adviceRequest);
 
-		// prepare emails
-		List<Email> mailsForRegisteredUsers = prepareMailsForRegisteredUsers(
-				linksForRegisteredUsers, noHTMLmsg, adviceRequest);
-
-		List<Email> prepareMailsForNonRegisteredUsers = prepareMailsForNonRegisteredUsers(
-				linksForNonRegisteredUsers, noHTMLmsg, adviceRequest);
-
-		// send email to registered users
-		for (Email email : mailsForRegisteredUsers) {
-			parameters = new EmailParameters(from, subject, email.getTo());
-			mailService.sendEmail(parameters, email.getBody());
+			// send email to registered users
+			for (Email email : mailsForRegisteredUsers) {
+				parameters = new EmailParameters(from, subject, email.getTo());
+				mailService.sendEmail(parameters, email.getBody());
+			}
 		}
 
-		// send email to added users
-		for (Email email : prepareMailsForNonRegisteredUsers) {
-			parameters = new EmailParameters(from, subject, email.getTo());
-			mailService.sendEmail(parameters, email.getBody());
+		if (!adviceRequest.getNotRegisteredUsers().isEmpty()) {
+			Map<String, String> linksForNonRegisteredUsers = generateLinksForNonRegisteredUsers(
+					request, adviceRequest.getUserId(), adviceRequest);
+
+			List<Email> prepareMailsForNonRegisteredUsers = prepareMailsForNonRegisteredUsers(
+					linksForNonRegisteredUsers, noHTMLmsg, adviceRequest);
+
+			// send email to added users
+			for (Email email : prepareMailsForNonRegisteredUsers) {
+				parameters = new EmailParameters(from, subject, email.getTo());
+				mailService.sendEmail(parameters, email.getBody());
+			}
 		}
 
 	}

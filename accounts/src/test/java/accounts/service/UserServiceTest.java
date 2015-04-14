@@ -2,6 +2,7 @@ package accounts.service;
 
 import java.util.List;
 
+import org.apache.commons.mail.EmailException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,6 +30,7 @@ import accounts.repository.UserNotFoundException;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 public class UserServiceTest {
+
 	@Autowired
 	private UserService service;
 
@@ -36,13 +38,15 @@ public class UserServiceTest {
 	public ExpectedException exception = ExpectedException.none();
 
 	@Test
-	public void createUserBatchTest() {
+	public void createUserBatchTest() throws IllegalArgumentException,
+			EmailException {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount.setEmails("uno@gmail.com, dos@test.com, tres@yahoo.com");
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
+		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("uno@gmail.com"));
@@ -52,7 +56,8 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void createUserBatchWrongSeparatorTest() {
+	public void createUserBatchWrongSeparatorTest()
+			throws IllegalArgumentException, EmailException {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount
@@ -60,6 +65,7 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
+		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
@@ -70,13 +76,14 @@ public class UserServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void createUserBatchEmptyUserNameTest()
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, EmailException {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount.setEmails("siet@gmail.com, , nueve@yahoo.com");
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
+		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertFalse(service.userExists("siet@gmail.com"));
@@ -85,13 +92,15 @@ public class UserServiceTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void createUserBatchBadEmailTest() throws IllegalArgumentException {
+	public void createUserBatchBadEmailTest() throws IllegalArgumentException,
+			EmailException {
 		BatchAccount batchAccount = new BatchAccount();
 
 		batchAccount.setEmails("diez@gmail.com, once.@, doce@yahoo.com");
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
 
+		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertFalse(service.userExists("diez@gmail.com"));

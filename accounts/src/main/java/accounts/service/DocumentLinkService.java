@@ -2,7 +2,7 @@ package accounts.service;
 
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +21,15 @@ public class DocumentLinkService {
 
 	@Autowired
 	private UserCredentialsRepository linkRepository;
+
 	@Autowired
 	private UserService userService;
 
-	public DocumentLink createLink(DocumentLinkRequest linkRequest) {
+	@Autowired
+	private RandomPasswordGenerator randomPasswordGenerator;
+
+	public DocumentLink createLink(DocumentLinkRequest linkRequest)
+			throws EmailException {
 
 		User user = null;
 		if (userService.userExists(linkRequest.getEmail()))
@@ -34,7 +39,8 @@ public class DocumentLinkService {
 
 		DocumentLink doclink = new DocumentLink();
 		doclink.setUserId(user.getUserId());
-		doclink.setGeneratedPassword(getRandomPassword());
+		doclink.setGeneratedPassword(randomPasswordGenerator
+				.getRandomPassword());
 		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
 
@@ -48,13 +54,9 @@ public class DocumentLinkService {
 
 	public ResetPasswordLink createResetPasswordLink(User user) {
 		ResetPasswordLink rpl = new ResetPasswordLink();
-		rpl.setRandomPassword(getRandomPassword());
+		rpl.setRandomPassword(randomPasswordGenerator.getRandomPassword());
 		rpl.setUserId(user.getUserId());
 		return rpl;
-	}
-
-	private String getRandomPassword() {
-		return RandomStringUtils.randomAlphanumeric(20);
 	}
 
 	/**

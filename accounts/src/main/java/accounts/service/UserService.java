@@ -12,11 +12,14 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import accounts.email.EmailBuilder;
 import accounts.model.BatchAccount;
 import accounts.model.CSRFToken;
 import accounts.model.Organization;
@@ -68,6 +71,15 @@ public class UserService {
 	@Autowired
 	private AccountSettingRepository settingRepository;
 
+	@Autowired
+	private RandomPasswordGenerator randomPasswordGenerator;
+
+	@Autowired
+	private EmailBuilder emailBuilder;
+
+	@Autowired
+	private Environment env;
+
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
 	}
@@ -81,7 +93,7 @@ public class UserService {
 	}
 
 	public void batchCreateUsers(BatchAccount batchAccount)
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, EmailException {
 
 		final boolean enabled = true;
 		final boolean accountNonExpired = true;
@@ -107,10 +119,12 @@ public class UserService {
 
 		Role role = roleRepository.get(batchAccount.getRole());
 
+		// note, for organization member there's no userId until it's saved.
 		List<User> users = Arrays
 				.stream(emailSplit)
 				.map(String::trim)
-				.map(s -> new User(s, s, enabled, accountNonExpired,
+				.map(s -> new User(s, randomPasswordGenerator
+						.getRandomPassword(), enabled, accountNonExpired,
 						credentialsNonExpired, accountNonLocked, Arrays
 								.asList(new UserRole(role.getRole(), s)),
 						Arrays.asList(new OrganizationMember(batchAccount
@@ -118,6 +132,20 @@ public class UserService {
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
+
+		// send mails
+		for (User user : users) {
+			emailBuilder
+					.to(user.getUsername())
+					.from(env.getProperty("email.userName",
+							"no-reply@vyllage.com"))
+					.subject("Account Creation - Vyllage.com")
+					.setNoHtmlMessage(
+							"Your account has been created successfuly. \\n Your password is: "
+									+ user.getPassword())
+					.templateName("email-account-created")
+					.addTemplateVariable("password", user.getPassword()).send();
+		}
 	}
 
 	/**
@@ -125,8 +153,10 @@ public class UserService {
 	 * 
 	 * @param linkRequest
 	 * @return link response
+	 * @throws EmailException
 	 */
-	public User createUser(DocumentLinkRequest linkRequest) {
+	public User createUser(DocumentLinkRequest linkRequest)
+			throws EmailException {
 		boolean invalid = false;
 
 		if (EmailValidator.validate(linkRequest.getEmail()) == invalid)
@@ -135,10 +165,11 @@ public class UserService {
 
 		// assigns current user's Organizations
 		// assigns default role.
-		// TODO: add random password for account
+		String randomPassword = randomPasswordGenerator.getRandomPassword();
+
 		User user = new User(null, linkRequest.getFirstName(), null,
 				linkRequest.getLastName(), linkRequest.getEmail(),
-				linkRequest.getEmail(), true, true, true, true,
+				randomPassword, true, true, true, true,
 				userRoleRepository.getDefaultAuthoritiesForNewUser(linkRequest
 						.getEmail()),
 				((User) SecurityContextHolder.getContext().getAuthentication()
@@ -148,9 +179,20 @@ public class UserService {
 		User loadUserByUsername = userRepository.loadUserByUsername(linkRequest
 				.getEmail());
 
-		// TODO send email with the username and password
-		// if(linkRequest.sendRegistrationMail()
-		// send mail
+		if (linkRequest.sendRegistrationMail()) {
+			// send mail
+
+			emailBuilder
+					.to(linkRequest.getEmail())
+					.from(env.getProperty("email.userName",
+							"no-reply@vyllage.com"))
+					.subject("Account Creation")
+					.setNoHtmlMessage(
+							"Your account has been created successfuly. \\n Your password is: "
+									+ randomPassword)
+					.templateName("email-account-created")
+					.addTemplateVariable("password", randomPassword).send();
+		}
 
 		return loadUserByUsername;
 	}
@@ -468,5 +510,9 @@ public class UserService {
 	public List<User> getUsers(List<Long> userIds) {
 
 		return userRepository.getAll(userIds);
+	}
+
+	public void setEmailBuilder(EmailBuilder emailBuilder) {
+		this.emailBuilder = emailBuilder;
 	}
 }
