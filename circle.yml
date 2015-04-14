@@ -15,5 +15,5 @@ deployment:
           revision_type: S3
           s3_location:
             bucket: vyllage-deployments
-            key_pattern: vyllage-{BUILD_NUM}-{SHORT_COMMIT}
+            key_pattern: vyllage-{BUILD_NUM}-{SHORT_COMMIT}.zip
         deployment_group: prod
