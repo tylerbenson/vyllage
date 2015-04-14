@@ -2,6 +2,7 @@ var React = require('react');
 var filter = require('lodash.filter');
 var SettingsMixin = require('./mixin');
 var Buttons = require('./Buttons');
+var DeleteAccount = require('./DeleteAccount');
 
 var Account = React.createClass({
   mixins: [SettingsMixin],
@@ -21,11 +22,12 @@ var Account = React.createClass({
             onChange={this.changeHandler.bind(this, 'email')}
           />
 
-          <label>Password</label>
-          <a className="secondary padded inverted normal-caps button" href='account/reset-password'>
+          <a href='account/reset-password'>
             <i className="ion-locked"></i>
             Reset Password
           </a>
+
+          <DeleteAccount />
 
           <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'account')} />
         </form>
