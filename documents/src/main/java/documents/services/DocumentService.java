@@ -67,18 +67,18 @@ public class DocumentService {
 
 		logger.info("Saving document section: "
 				+ documentSection.getSectionId() + " from document "
-				+ document.getId());
+				+ document.getDocumentId());
 
 		try {
-			documentRepository.get(document.getId());
+			documentRepository.get(document.getDocumentId());
 
 		} catch (ElementNotFoundException e) {
-			logger.info("Document with id" + document.getId()
+			logger.info("Document with id" + document.getDocumentId()
 					+ "not found, saving document first.");
 			document = this.saveDocument(document);
 		}
 
-		documentSection.setDocumentId(document.getId());
+		documentSection.setDocumentId(document.getDocumentId());
 
 		return documentSectionRepository.save(documentSection);
 
@@ -106,7 +106,7 @@ public class DocumentService {
 	 */
 	public List<DocumentSection> getDocumentSections(Document document)
 			throws ElementNotFoundException {
-		return getDocumentSections(document.getId());
+		return getDocumentSections(document.getDocumentId());
 	}
 
 	/**
@@ -130,9 +130,22 @@ public class DocumentService {
 		documentSectionRepository.delete(sectionId);
 	}
 
-	public Document getDocumentByUser(Long userId)
-			throws ElementNotFoundException {
-		return documentRepository.getDocumentByUser(userId);
+	public Document getDocumentByUser(Long userId) {
+
+		Document document = null;
+		try {
+			document = documentRepository.getDocumentByUser(userId);
+
+		} catch (ElementNotFoundException e) {
+			// no document found for this user, creating one...
+
+			Document newDocument = new Document();
+			newDocument.setUserId(userId);
+			newDocument.setVisibility(true);
+			document = documentRepository.save(newDocument);
+		}
+
+		return document;
 	}
 
 	public List<Long> getRecentUsersForDocument(Long documentId) {

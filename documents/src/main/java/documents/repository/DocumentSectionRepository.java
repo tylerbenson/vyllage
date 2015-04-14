@@ -128,7 +128,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	public List<DocumentSection> getDocumentSections(Document document)
 			throws ElementNotFoundException {
 
-		return this.getDocumentSections(document.getId());
+		return this.getDocumentSections(document.getDocumentId());
 	}
 
 	// TODO: check for concurrency problems!

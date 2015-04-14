@@ -65,7 +65,7 @@ public class ResumeController {
 
 		Document documentByUser = documentService.getDocumentByUser(userId);
 
-		return "redirect:/resume/" + documentByUser.getId();
+		return "redirect:/resume/" + documentByUser.getDocumentId();
 	}
 
 	private Long getUserId(HttpServletRequest request) {

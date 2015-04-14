@@ -28,7 +28,7 @@ public class DocumentRepositoryTest {
 		Document document = repository.get(0L);
 
 		Assert.assertNotNull("Document is null.", document);
-		Assert.assertTrue(document.getId().equals(0L));
+		Assert.assertTrue(document.getDocumentId().equals(0L));
 	}
 
 	@Test
@@ -41,8 +41,8 @@ public class DocumentRepositoryTest {
 
 		Assert.assertNotNull("Document1 is null.", doc1);
 		Assert.assertNotNull("Document2 is null.", doc2);
-		Assert.assertTrue(doc1.getId() != null);
-		Assert.assertTrue(doc2.getId() != null);
+		Assert.assertTrue(doc1.getDocumentId() != null);
+		Assert.assertTrue(doc2.getDocumentId() != null);
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -51,9 +51,9 @@ public class DocumentRepositoryTest {
 		Document document = generateDocument();
 
 		document = repository.save(document);
-		Long id = document.getId();
+		Long id = document.getDocumentId();
 
-		repository.delete(document.getId());
+		repository.delete(document.getDocumentId());
 
 		document = repository.get(id);
 
