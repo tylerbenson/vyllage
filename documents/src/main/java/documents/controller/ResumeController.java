@@ -55,6 +55,16 @@ public class ResumeController {
 
 		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
 				Arrays.asList(userId), request);
+
+		if (namesForUsers.isEmpty()) {
+			AccountNames an = new AccountNames();
+			an.setUserId(userId);
+			an.setFirstName("");
+			an.setLastName("");
+			an.setMiddleName("");
+			return an;
+		}
+
 		return namesForUsers.get(0);
 	}
 
@@ -65,7 +75,7 @@ public class ResumeController {
 
 		Document documentByUser = documentService.getDocumentByUser(userId);
 
-		return "redirect:/resume/" + documentByUser.getId();
+		return "redirect:/resume/" + documentByUser.getDocumentId();
 	}
 
 	private Long getUserId(HttpServletRequest request) {

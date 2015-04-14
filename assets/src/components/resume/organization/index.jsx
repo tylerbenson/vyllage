@@ -30,6 +30,11 @@ var Organization = React.createClass({
     section[key] = e.target.value;
     this.setState({section: section});
   },
+  toggleCurrent: function () {
+    var section = this.state.section;
+    section.isCurrent = !section.isCurrent;
+    this.setState({section: section});
+  },
   saveHandler: function(e) {
     var section = this.state.section;
     actions.putSection(section);
@@ -54,11 +59,6 @@ var Organization = React.createClass({
     }, function () {
       this.refs.organizationName.getDOMNode().focus();
     });
-  },
-  endDateCheckbox: function (e) {
-    var section = this.state.section;
-    section.endDate = (section.endDate === 'Present')? '': 'Present';
-    this.setState({section: section});
   },
   render: function () {
     var section = this.state.section;
@@ -133,8 +133,10 @@ var Organization = React.createClass({
               -
               <Datepicker
                 name='endDate'
-                date={section.endDate}
+                date={section.isCurrent? "Present": section.endDate}
                 setDate={this.handleChange}
+                isCurrent={section.isCurrent}
+                toggleCurrent={this.toggleCurrent}
               >
                 <input
                   disabled={!this.state.uiEditMode}
@@ -143,14 +145,6 @@ var Organization = React.createClass({
                   placeholder="End Date"
                 />
               </Datepicker>
-              {this.state.uiEditMode? <span><input
-                disabled={!this.state.uiEditMode}
-                type="checkbox"
-                className="inline flat"
-                name='endDate'
-                checked={section.endDate === 'Present'}
-                onChange={this.endDateCheckbox}
-              /> Currently I am here</span>: null}
               <input
                 disabled={!this.state.uiEditMode}
                 type="text"

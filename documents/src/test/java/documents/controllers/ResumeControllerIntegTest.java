@@ -38,9 +38,9 @@ public class ResumeControllerIntegTest {
 		DocumentHeader documentHeader = new DocumentHeader();
 		documentHeader.setTagline(tagline);
 
-		controller.updateHeader(document.getId(), documentHeader);
+		controller.updateHeader(document.getDocumentId(), documentHeader);
 
-		Document document2 = documentService.getDocument(document.getId());
+		Document document2 = documentService.getDocument(document.getDocumentId());
 
 		Assert.assertEquals("Taglines are different.", tagline,
 				document2.getTagline());

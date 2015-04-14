@@ -16,7 +16,8 @@ var RecipentList = React.createClass({
       var classes = {
         recipient: true,
         'recipient-selected': this.props.selectedRecipient === index,
-        'recipient-editable': recipient.newRecipient
+        'recipient-editable': recipient.newRecipient,
+        'disabled': !recipient.newRecipient
       };
       return (
         <div key={index} className={cx(classes)}>

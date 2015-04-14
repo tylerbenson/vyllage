@@ -83,8 +83,7 @@ public class AccountController {
 	@RequestMapping(value = "names", method = RequestMethod.GET, produces = "application/json")
 	// @PreAuthorize("hasAuthority('...')")
 	public @ResponseBody List<AccountNames> getNames(
-			@RequestParam(value = "userIds", required = true) final List<Long> userIds)
-			throws UserNotFoundException {
+			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {
 
 		return userService.getNames(userIds);
 	}

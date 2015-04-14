@@ -1,4 +1,4 @@
-package documents.controller;
+package accounts.controller;
 
 import java.util.Map;
 
@@ -18,6 +18,10 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import accounts.model.User;
+import accounts.repository.UserNotFoundException;
+import accounts.service.UserService;
+
 @Controller
 public class ErrorHandlerController implements ErrorController {
 
@@ -28,6 +32,9 @@ public class ErrorHandlerController implements ErrorController {
 
 	@Value("${display.weberror.authority}")
 	private String authority;
+
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public String getErrorPath() {
@@ -43,22 +50,26 @@ public class ErrorHandlerController implements ErrorController {
 	}
 
 	@RequestMapping(value = PATH, produces = "text/html")
-	public ModelAndView errorHtml(HttpServletRequest request) {
-		// Authentication currentUser = SecurityContextHolder.getContext()
-		// .getAuthentication();
+	public ModelAndView errorHtml(HttpServletRequest request)
+			throws UserNotFoundException {
+		Long userId = (Long) request.getSession().getAttribute("userId");
+
+		User currentUser = userService.getUser(userId);
 
 		Map<String, Object> body = getErrorAttributes(request, true);
 
-		// if (displayWebError
-		// || currentUser != null
-		// && currentUser.getAuthorities() != null
-		// && currentUser
-		// .getAuthorities()
-		// .stream()
-		// .anyMatch(
-		// a -> authority.equalsIgnoreCase(a
-		// .getAuthority())))
-		body.put("displayWebError", true);
+		if (displayWebError
+				&& currentUser != null
+				&& currentUser.getAuthorities() != null
+				&& currentUser
+						.getAuthorities()
+						.stream()
+						.anyMatch(
+								a -> authority.equalsIgnoreCase(a
+										.getAuthority())))
+			body.put("displayWebError", true);
+		else
+			body.put("displayWebError", false);
 
 		return new ModelAndView("error", body);
 	}

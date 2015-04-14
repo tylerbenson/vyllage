@@ -1,14 +1,6 @@
 .datepicker-trigger {
   display: inline-block;
   position: relative;
-
-  & > input:focus + .datepicker {
-    display: inline-block;
-  }
-
-  & > .start + .datepicker > .footer {
-    display: none;
-  }
 }
 
 .date {
@@ -31,7 +23,6 @@
   border: lighten($secondary-color, 30%) solid 1px;
   border-radius: 5px;
   box-shadow: 0 1px 1px rgba(0,0,0,0.075);
-  display: inline-block;
   left: -4em;
   position: absolute;
   text-align: center;
@@ -67,10 +58,38 @@
   .header {
     border-bottom: lighten($secondary-color, 40%) solid 1px;
     padding: 0.5em;
+
+    &.disabled {
+      pointer-events: none;
+      button {
+        border-color: lighten($secondary-color, 35%) !important;
+        i {
+          color: lighten($secondary-color, 35%) !important;
+        }
+      }
+      input {
+        background: lighten($secondary-color, 35%) !important;
+        border: none;
+        color: $inverted-text-color;
+        transition: all .2s ease;
+      }
+    }
   }
   .content {
     padding: 0.5em !important;
     width: 100% !important;
+
+    &.disabled {
+      pointer-events: none;
+      .month {
+        color: lighten($secondary-color, 25%);
+        &.active {
+          background: lighten($secondary-color, 35%);
+          color: $inverted-text-color;
+        }
+      }
+      // display: none;
+    }
   }
   .footer {
     border-top: lighten($secondary-color, 40%) solid 1px;
@@ -79,6 +98,7 @@
   }
 
   .year {
+    display: inline-block;
     font-size: 0.86em;
     padding: 0.25em;
     text-align: center;
