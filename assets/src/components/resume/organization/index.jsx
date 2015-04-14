@@ -30,6 +30,11 @@ var Organization = React.createClass({
     section[key] = e.target.value;
     this.setState({section: section});
   },
+  toggleCurrent: function () {
+    var section = this.state.section;
+    section.isCurrent = !section.isCurrent;
+    this.setState({section: section});
+  },
   saveHandler: function(e) {
     var section = this.state.section;
     actions.putSection(section);
@@ -128,8 +133,10 @@ var Organization = React.createClass({
               -
               <Datepicker
                 name='endDate'
-                date={section.endDate}
+                date={section.isCurrent? "Present": section.endDate}
                 setDate={this.handleChange}
+                isCurrent={section.isCurrent}
+                toggleCurrent={this.toggleCurrent}
               >
                 <input
                   disabled={!this.state.uiEditMode}

@@ -1,14 +1,6 @@
 .datepicker-trigger {
   display: inline-block;
   position: relative;
-
-  & > input:focus + .datepicker {
-    display: inline-block;
-  }
-
-  & > .start + .datepicker > .footer {
-    display: none;
-  }
 }
 
 .date {
@@ -31,7 +23,6 @@
   border: lighten($secondary-color, 30%) solid 1px;
   border-radius: 5px;
   box-shadow: 0 1px 1px rgba(0,0,0,0.075);
-  display: inline-block;
   left: -4em;
   position: absolute;
   text-align: center;
@@ -107,6 +98,7 @@
   }
 
   .year {
+    display: inline-block;
     font-size: 0.86em;
     padding: 0.25em;
     text-align: center;
