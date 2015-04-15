@@ -38,6 +38,7 @@ module.exports = Reflux.createStore({
                 .expand({documentId: this.documentId});
     request
       .get(url)
+      .set('Accept', 'application/json')
       .end(function (err, res) {
         if (res.ok) {
           this.resume.header = res.body;
@@ -64,6 +65,7 @@ module.exports = Reflux.createStore({
                 .expand({documentId: this.documentId});
     request
       .get(url)
+      .set('Accept', 'application/json')
       .end(function (err, res) {
         if (res.ok) {
           this.resume.sections = res.body;
