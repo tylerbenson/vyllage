@@ -26,7 +26,6 @@ import accounts.model.Organization;
 import accounts.model.OrganizationMember;
 import accounts.model.Role;
 import accounts.model.User;
-import accounts.model.UserFilterRequest;
 import accounts.model.UserRole;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
@@ -204,13 +203,9 @@ public class UserService {
 		return userRepository.get(userId);
 	}
 
-	public List<User> getAdvisors(UserFilterRequest filter, User loggedUser,
+	public List<User> getAdvisors(User loggedUser, Map<String, String> filters,
 			int maxsize) {
-		return userRepository.getAdvisors(filter, loggedUser, maxsize);
-	}
-
-	public List<User> getAdvisors(User loggedUser, int maxsize) {
-		return userRepository.getAdvisors(loggedUser, maxsize);
+		return userRepository.getAdvisors(loggedUser, filters, maxsize);
 	}
 
 	public List<AccountNames> getNames(List<Long> userIds) {

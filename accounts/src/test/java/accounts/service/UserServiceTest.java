@@ -1,6 +1,8 @@
 package accounts.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.junit.Assert;
@@ -21,7 +23,6 @@ import accounts.Application;
 import accounts.constants.Roles;
 import accounts.model.BatchAccount;
 import accounts.model.User;
-import accounts.model.UserFilterRequest;
 import accounts.model.account.settings.AccountSetting;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
@@ -118,7 +119,7 @@ public class UserServiceTest {
 
 		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 
-		List<User> advisors = service.getAdvisors(user, 5);
+		List<User> advisors = service.getAdvisors(user, null, 5);
 
 		Assert.assertFalse(advisors.isEmpty());
 	}
@@ -128,15 +129,16 @@ public class UserServiceTest {
 
 		User user = service.getUser("email");
 
-		UserFilterRequest userFilter = new UserFilterRequest();
-		userFilter.setUserName("ean");
+		Map<String, String> filters = new HashMap<>();
+
+		filters.put("email", "ean");
 
 		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
 				user, user.getPassword(), user.getAuthorities());
 
 		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 
-		List<User> advisors = service.getAdvisors(userFilter, user, 5);
+		List<User> advisors = service.getAdvisors(user, filters, 5);
 
 		Assert.assertFalse(advisors.isEmpty());
 	}

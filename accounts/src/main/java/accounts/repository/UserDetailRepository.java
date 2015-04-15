@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,6 @@ import accounts.model.Organization;
 import accounts.model.OrganizationMember;
 import accounts.model.User;
 import accounts.model.UserCredential;
-import accounts.model.UserFilterRequest;
 import accounts.model.UserRole;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
@@ -617,59 +617,30 @@ public class UserDetailRepository implements UserDetailsManager {
 		return newAuthentication;
 	}
 
-	public List<User> getAdvisors(UserFilterRequest filter, User loggedUser,
+	/**
+	 * Searches for advisors filtering by firstName, lastName and email. Filters
+	 * are optional.
+	 * 
+	 * @param loggedUser
+	 * @param filters
+	 * @param limit
+	 * @return
+	 */
+	public List<User> getAdvisors(User loggedUser, Map<String, String> filters,
 			int limit) {
 		final boolean accountNonExpired = true;
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
 
-		Organization organization = sql.fetchOne(ORGANIZATION_MEMBERS,
-				ORGANIZATION_MEMBERS.USER_ID.eq(loggedUser.getUserId())).into(
-				Organization.class);
-
-		String username = filter.getUserName();
-		Long groupId = organization.getOrganizationId();
-
-		/**
-		 * select u.* from accounts.users u where username in ( select
-		 * gm.username from accounts.group_members gm join accounts.groups g on
-		 * gm.group_id = g.id where g.id = 0) and username in (select username
-		 * from accounts.authorities where authority like 'ADVISOR');
-		 * 
-		 */
-		Users u = USERS.as("u");
-		UserRoles a = USER_ROLES.as("a");
-		OrganizationMembers gm = ORGANIZATION_MEMBERS.as("gm");
-		Organizations g = ORGANIZATIONS.as("g");
-
-		SelectConditionStep<Record1<Long>> usernamesFromSameGroup = sql
-				.select(gm.USER_ID).from(gm).join(g)
-				.on(gm.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
-				.where(g.ORGANIZATION_ID.eq(groupId));
-
-		SelectConditionStep<Record1<Long>> advisorIds = sql.select(a.USER_ID)
-				.from(a).where(a.ROLE.like("ADVISOR"));
-
-		Result<Record> records = sql.select().from(u)
-				.where(u.USER_ID.in(usernamesFromSameGroup))
-				.and(u.USER_ID.in(advisorIds))
-				.and(u.USER_NAME.like("%" + username + "%")).limit(limit)
+		Result<Record1<Long>> organizationRecordsIds = sql
+				.select(ORGANIZATION_MEMBERS.ORGANIZATION_ID)
+				.from(ORGANIZATION_MEMBERS)
+				.where(ORGANIZATION_MEMBERS.USER_ID.eq(loggedUser.getUserId()))
 				.fetch();
 
-		return advisorRecordsToUser(accountNonExpired, credentialsNonExpired,
-				accountNonLocked, records);
-	}
-
-	public List<User> getAdvisors(User loggedUser, int limit) {
-		final boolean accountNonExpired = true;
-		final boolean credentialsNonExpired = true;
-		final boolean accountNonLocked = true;
-
-		Organization organization = sql.fetchOne(ORGANIZATION_MEMBERS,
-				ORGANIZATION_MEMBERS.USER_ID.eq(loggedUser.getUserId())).into(
-				Organization.class);
-
-		Long groupId = organization.getOrganizationId();
+		List<Long> organizationIds = organizationRecordsIds.stream()
+				.map(r -> r.getValue(ORGANIZATION_MEMBERS.ORGANIZATION_ID))
+				.collect(Collectors.toList());
 
 		/**
 		 * select u.* from accounts.users u where username in ( select
@@ -686,14 +657,29 @@ public class UserDetailRepository implements UserDetailsManager {
 		SelectConditionStep<Record1<Long>> usernamesFromSameGroup = sql
 				.select(gm.USER_ID).from(gm).join(g)
 				.on(gm.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
-				.where(g.ORGANIZATION_ID.eq(groupId));
+				.where(g.ORGANIZATION_ID.in(organizationIds));
 
 		SelectConditionStep<Record1<Long>> advisorIds = sql.select(a.USER_ID)
 				.from(a).where(a.ROLE.like("ADVISOR"));
 
-		Result<Record> records = sql.select().from(u)
+		SelectConditionStep<Record> select = sql.select().from(u)
 				.where(u.USER_ID.in(usernamesFromSameGroup))
-				.and(u.USER_ID.in(advisorIds)).limit(limit).fetch();
+				.and(u.USER_ID.in(advisorIds));
+
+		if (filters != null) {
+
+			if (filters.containsKey("firstName"))
+				select.and(u.FIRST_NAME.like("%" + filters.get("firstName")
+						+ "%"));
+
+			if (filters.containsKey("lastName"))
+				select.and(u.LAST_NAME.like("%" + filters.get("lastName") + "%"));
+
+			if (filters.containsKey("email"))
+				select.and(u.USER_NAME.like("%" + filters.get("email") + "%"));
+		}
+
+		Result<Record> records = select.limit(limit).fetch();
 
 		return advisorRecordsToUser(accountNonExpired, credentialsNonExpired,
 				accountNonLocked, records);

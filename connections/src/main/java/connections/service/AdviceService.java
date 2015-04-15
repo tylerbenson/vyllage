@@ -60,7 +60,8 @@ public class AdviceService {
 	private final Integer DOCUMENTS_PORT = null;
 
 	public UserFilterResponse getUsers(HttpServletRequest request,
-			Long documentId, Long userId, List<Long> excludeIds) {
+			Long documentId, Long userId, List<Long> excludeIds,
+			String firstNameFilter, String lastNameFilter, String emailFilter) {
 		UserFilterResponse response = new UserFilterResponse();
 
 		Assert.notNull(userId);
@@ -69,7 +70,8 @@ public class AdviceService {
 
 		// Returns a list of names and ids of users that have the role 'Advisor'
 		// within my organization.
-		List<AccountNames> advisors = getAdvisors(userId, entity, excludeIds);
+		List<AccountNames> advisors = getAdvisors(userId, entity, excludeIds,
+				firstNameFilter, lastNameFilter, emailFilter);
 
 		Assert.notNull(advisors);
 
@@ -117,7 +119,8 @@ public class AdviceService {
 	}
 
 	protected List<AccountNames> getAdvisors(Long userId,
-			HttpEntity<Object> entity, List<Long> excludeIds) {
+			HttpEntity<Object> entity, List<Long> excludeIds,
+			String firstNameFilter, String lastNameFilter, String emailFilter) {
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
 				.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
@@ -128,6 +131,15 @@ public class AdviceService {
 					"excludeIds",
 					excludeIds.stream().map(Object::toString)
 							.collect(Collectors.joining(",")));
+
+		if (firstNameFilter != null && !firstNameFilter.isEmpty())
+			builder.queryParam("firstNameFilter", firstNameFilter);
+
+		if (lastNameFilter != null && !lastNameFilter.isEmpty())
+			builder.queryParam("lastNameFilter", lastNameFilter);
+
+		if (emailFilter != null && !emailFilter.isEmpty())
+			builder.queryParam("emailFilter", emailFilter);
 
 		AccountNames[] body = restTemplate.exchange(
 				builder.build().toUriString(), HttpMethod.GET, entity,

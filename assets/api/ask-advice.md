@@ -16,8 +16,8 @@
 ```
     {
       "csrftoken":"71625f7a-4520-407f-b673-b0ed79e1a678",
- 	  "users":[{"userId":4,"firstName":"Carlos","middleName":null,"lastName":"Gagliardi"}],
-      "notRegisteredUsers":[{"firstName":"Carlos","lastName":"Gagliardi","email":"carlos.uh@gmail.com"}],
+ 	  "users":[{"userId":4,"firstName":"aName","middleName":null,"lastName":"aLastName"}],
+      "notRegisteredUsers":[{"firstName":"aName","lastName":"aLastName","email":"anemail@gmail.com"}],
       "subject": "subject text"
       "message": "message of request"
     }
@@ -39,18 +39,18 @@
 ```
     {
       "recent" : [
-        {"firstName": "Tyler", "lastName": "Benson", "userId": 1},
-        {"firstName": "Nathan", "lastName": "Benson", "userId": 2},
-        {"firstName": "Nick", "lastName": "Disney", "userId": 3},
-        {"firstName": "Keith", "lastName": "Biggs", "userId": 4},
-        {"firstName": "Devin", "lastName": "Moncor", "userId": 5}
+        {"firstName": "Tyler", "middleName":"Middle", "lastName": "Benson", "userId": 1},
+        {"firstName": "Nathan", "middleName":"Middle", "lastName": "Benson", "userId": 2},
+        {"firstName": "Nick", "middleName":"Middle", "lastName": "Disney", "userId": 3},
+        {"firstName": "Keith", "middleName":"Middle", "lastName": "Biggs", "userId": 4},
+        {"firstName": "Devin", "middleName":"Middle", "lastName": "Moncor", "userId": 5}
       ],
       "recommended": [
-        {"firstName": "Ashley", "lastName": "Benson", "userId": 6},
-        {"firstName": "Doug", "lastName": "Benson", "userId": 7},
-        {"firstName": "Duane", "lastName": "Disney", "userId": 8},
-        {"firstName": "Rick", "lastName": "Biggs", "userId": 9},
-        {"firstName": "Matt", "lastName": "Moncor", "userId": 10}
+        {"firstName": "Ashley", "middleName":"Middle", "lastName": "Benson", "userId": 6},
+        {"firstName": "Doug", "middleName":"Middle", "lastName": "Benson", "userId": 7},
+        {"firstName": "Duane", "middleName":"Middle", "lastName": "Disney", "userId": 8},
+        {"firstName": "Rick", "middleName":"Middle", "lastName": "Biggs", "userId": 9},
+        {"firstName": "Matt", "middleName":"Middle", "lastName": "Moncor", "userId": 10}
       ]
     }
 ```
