@@ -166,7 +166,7 @@ public class AccountController {
 
 		// email it to the provided email address.
 
-		sendEmail(user.getUsername(), encodedString, user.getFirstName());
+		sendResetPasswordEmail(user.getUsername(), encodedString, user.getFirstName());
 
 		// Link should log the user in and direct them to the password change
 		// page.
@@ -221,24 +221,12 @@ public class AccountController {
 		return "password-change-success";
 	}
 
-	protected void sendEmail(String email, String encodedString, String userName)
+	protected void sendResetPasswordEmail(String email, String encodedString, String userName)
 			throws EmailException {
-		// EmailParameters parameters = new EmailParameters(env.getProperty(
-		// "email.userName", "no-reply@vyllage.com"), "Reset Password",
-		// email);
 
 		String txt = "http://"
 				+ env.getProperty("vyllage.domain", "www.vyllage.com")
 				+ "/account/reset-password-change/";
-
-		// EmailContext ctx = new EmailContext(env.getProperty(
-		// "change.password.html", "email-changePassword"));
-		// ctx.setVariable("userName", userName);
-		// ctx.setVariable("url", txt);
-		// ctx.setVariable("encodedLink", encodedString);
-
-		// EmailHTMLBody emailBody = new EmailHTMLBody(txt, ctx);
-		// mailService.sendEmail(parameters, emailBody);
 
 		emailBuilder
 				.from(env.getProperty("email.userName", "no-reply@vyllage.com"))

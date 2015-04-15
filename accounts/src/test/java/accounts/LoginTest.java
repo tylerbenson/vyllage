@@ -69,7 +69,7 @@ public class LoginTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
-						userName)), null);
+						null)), null);
 
 		repository.createUser(user);
 
@@ -101,7 +101,7 @@ public class LoginTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
-						userName)), null);
+						null)), null);
 
 		repository.createUser(user);
 
@@ -136,7 +136,7 @@ public class LoginTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
-						userName)), null);
+						null)), null);
 
 		repository.createUser(user);
 
@@ -156,7 +156,7 @@ public class LoginTest {
 		String oldPassword = "password";
 
 		GrantedAuthority auth = new UserRole(
-				Roles.STUDENT.name().toUpperCase(), userName);
+				Roles.STUDENT.name().toUpperCase(), null);
 
 		boolean enabled = true;
 		boolean accountNonExpired = true;
@@ -180,7 +180,7 @@ public class LoginTest {
 
 		String userName2 = "test2";
 		GrantedAuthority auth2 = new UserRole(Roles.STUDENT.name()
-				.toUpperCase(), userName2);
+				.toUpperCase(), null);
 
 		User user2 = new User(userName2, oldPassword, enabled,
 				accountNonExpired, credentialsNonExpired, accountNonLocked,
@@ -204,7 +204,7 @@ public class LoginTest {
 		String password = "This is my very long password I made up by myself. 123456";
 
 		GrantedAuthority auth = new UserRole(
-				Roles.STUDENT.name().toUpperCase(), userName);
+				Roles.STUDENT.name().toUpperCase(), null);
 
 		boolean enabled = true;
 		boolean accountNonExpired = true;
@@ -241,12 +241,11 @@ public class LoginTest {
 		User user = new User(userName, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
-						userName)), null);
+						null)), null);
 
 		repository.createUser(user);
 
-		accounts.model.User loadUserByUsername = repository
-				.loadUserByUsername(userName);
+		User loadUserByUsername = repository.loadUserByUsername(userName);
 
 		assertNotNull(loadUserByUsername);
 
@@ -259,7 +258,7 @@ public class LoginTest {
 		assertFalse("User is enabled.", deletedUser.isEnabled());
 
 		assertTrue("Found Roles for user " + userName,
-				authRepo.getByUserName(userName).isEmpty());
+				authRepo.getByUserId(loadUserByUsername.getUserId()).isEmpty());
 
 	}
 
@@ -294,9 +293,9 @@ public class LoginTest {
 		boolean accountNonLocked = true;
 
 		GrantedAuthority auth1 = new UserRole(Roles.STUDENT.name()
-				.toUpperCase(), userName);
+				.toUpperCase(), null);
 		GrantedAuthority auth2 = new UserRole(Roles.STUDENT.name()
-				.toUpperCase(), userName);
+				.toUpperCase(), null);
 
 		User user = new User(userName, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth1,
@@ -304,9 +303,9 @@ public class LoginTest {
 
 		repository.createUser(user);
 
-		UserDetails loadedUser = repository.loadUserByUsername(userName);
+		User loadedUser = repository.loadUserByUsername(userName);
 
-		List<UserRole> roles = authRepo.getByUserName(userName);
+		List<UserRole> roles = authRepo.getByUserId(loadedUser.getUserId());
 		assertTrue("Found more than 1 authority, "
 				+ loadedUser.getAuthorities().size(), loadedUser
 				.getAuthorities().size() == 1);

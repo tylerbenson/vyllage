@@ -21,16 +21,16 @@ public class UserRoleRepository {
 	@Autowired
 	private DSLContext sql;
 
-	public List<UserRole> getByUserName(String userName) {
+	public List<UserRole> getByUserId(Long userId) {
 		Result<UserRolesRecord> records = sql.fetch(USER_ROLES,
-				USER_ROLES.USER_NAME.eq(userName));
+				USER_ROLES.USER_ID.eq(userId));
 
 		return records.stream().map(UserRole::new).collect(Collectors.toList());
 	}
 
 	public void create(UserRole role) {
 		UserRolesRecord auth = sql.newRecord(USER_ROLES);
-		auth.setUserName(role.getUserName());
+		auth.setUserId(role.getUserId());
 		auth.setRole(role.getAuthority());
 		auth.insert();
 	}
@@ -41,13 +41,17 @@ public class UserRoleRepository {
 		return records.stream().map(UserRole::new).collect(Collectors.toList());
 	}
 
-	public void deleteByUserName(String userName) {
-		sql.delete(USER_ROLES).where(USER_ROLES.USER_NAME.eq(userName))
-				.execute();
+	public void deleteByUserId(Long userId) {
+		sql.delete(USER_ROLES).where(USER_ROLES.USER_ID.eq(userId)).execute();
 	}
 
-	public List<UserRole> getDefaultAuthoritiesForNewUser(String userName) {
-		UserRole auth = new UserRole(Roles.GUEST.name().toUpperCase(), userName);
+	/**
+	 * Creates a new userRole without userid.
+	 * 
+	 * @return
+	 */
+	public List<UserRole> getDefaultAuthoritiesForNewUser() {
+		UserRole auth = new UserRole(Roles.GUEST.name().toUpperCase(), null);
 		return Arrays.asList(auth);
 	}
 

@@ -119,14 +119,15 @@ public class UserService {
 
 		Role role = roleRepository.get(batchAccount.getRole());
 
-		// note, for organization member there's no userId until it's saved.
+		// note, for organization member and role there's no userId until it's
+		// saved.
 		List<User> users = Arrays
 				.stream(emailSplit)
 				.map(String::trim)
 				.map(s -> new User(s, randomPasswordGenerator
 						.getRandomPassword(), enabled, accountNonExpired,
 						credentialsNonExpired, accountNonLocked, Arrays
-								.asList(new UserRole(role.getRole(), s)),
+								.asList(new UserRole(role.getRole(), null)),
 						Arrays.asList(new OrganizationMember(batchAccount
 								.getOrganization(), null))))
 				.collect(Collectors.toList());
@@ -167,11 +168,13 @@ public class UserService {
 		// assigns default role.
 		String randomPassword = randomPasswordGenerator.getRandomPassword();
 
+		List<UserRole> defaultAuthoritiesForNewUser = userRoleRepository
+				.getDefaultAuthoritiesForNewUser();
+
 		User user = new User(null, linkRequest.getFirstName(), null,
 				linkRequest.getLastName(), linkRequest.getEmail(),
 				randomPassword, true, true, true, true,
-				userRoleRepository.getDefaultAuthoritiesForNewUser(linkRequest
-						.getEmail()),
+				defaultAuthoritiesForNewUser,
 				((User) SecurityContextHolder.getContext().getAuthentication()
 						.getPrincipal()).getOrganizationMember(), null, null);
 		userRepository.createUser(user);
@@ -214,6 +217,10 @@ public class UserService {
 		return userRepository.getNames(userIds);
 	}
 
+	/**
+	 * Updates the user data, roles and organizations. DOES NOT CHANGE USER
+	 * PASSWORD.
+	 */
 	public void update(User user) {
 		userRepository.updateUser(user);
 	}
@@ -246,6 +253,10 @@ public class UserService {
 
 		case "lastName":
 			setLastName(user, setting);
+			return settingRepository.set(user.getUserId(), setting);
+
+		case "email":
+			setEmail(user, setting);
 			return settingRepository.set(user.getUserId(), setting);
 		default:
 			return settingRepository.set(user.getUserId(), setting);
@@ -286,7 +297,7 @@ public class UserService {
 
 		// create new role relationship
 		List<UserRole> userRoles = newRoles.stream()
-				.map(set -> new UserRole(set.getValue(), user.getUsername()))
+				.map(set -> new UserRole(set.getValue(), user.getUserId()))
 				.collect(Collectors.toList());
 
 		// save user roles
@@ -389,6 +400,24 @@ public class UserService {
 			user.setLastName(setting.getValue());
 			this.update(user);
 		}
+	}
+
+	// changes the username and email...
+	protected void setEmail(User user, AccountSetting setting) {
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			// username is final...
+			// password is erased after the user logins but we need something
+			// here, even if we won't change it
+			User newUser = new User(user.getUserId(), user.getFirstName(),
+					user.getMiddleName(), user.getLastName(),
+					setting.getValue(), "a password we don't care about",
+					user.isEnabled(), user.isAccountNonExpired(),
+					user.isCredentialsNonExpired(), user.isAccountNonLocked(),
+					user.getAuthorities(), user.getOrganizationMember(),
+					user.getDateCreated(), user.getLastModified());
+			this.update(newUser);
+		}
+
 	}
 
 	public void changePassword(String newPassword) {

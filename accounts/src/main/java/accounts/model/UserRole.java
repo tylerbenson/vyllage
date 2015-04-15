@@ -1,10 +1,12 @@
 package accounts.model;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import org.springframework.security.core.GrantedAuthority;
+
 import accounts.domain.tables.records.UserRolesRecord;
+
 @ToString
 @EqualsAndHashCode
 public class UserRole implements GrantedAuthority {
@@ -13,17 +15,17 @@ public class UserRole implements GrantedAuthority {
 	 */
 	private static final long serialVersionUID = 6420872157496814372L;
 	private final String role;
-	private final String userName;
+	private Long userId;
 
-	public UserRole(String role, String userName) {
+	public UserRole(String role, Long userId) {
 		this.role = role;
-		this.userName = userName;
+		this.userId = userId;
 
 	}
 
 	public UserRole(UserRolesRecord record) {
 		this.role = record.getRole();
-		this.userName = record.getUserName();
+		this.userId = record.getUserId();
 	}
 
 	@Override
@@ -31,7 +33,11 @@ public class UserRole implements GrantedAuthority {
 		return this.role;
 	}
 
-	public String getUserName() {
-		return userName;
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
