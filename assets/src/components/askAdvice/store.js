@@ -49,6 +49,7 @@ var AskAdviceStore = Reflux.createStore({
                 .expand({documentId: this.documentId});
     request
       .get(url)
+      .set('Accept', 'application/json')
       .query({firstNameFilter: this.recipient.firstName})
       .query({lastNameFilter: this.recipient.lastName})
       .query({emailFilter: this.recipient.email})

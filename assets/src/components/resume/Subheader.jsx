@@ -19,7 +19,7 @@ var Subheader = React.createClass({
               Export
             </a>
             */}
-            <a href={'/resume/' + this.props.documentId + '/ask-advice'} className="button embossed">
+            <a href='/ask-advice' className="button embossed">
               <i className="ion-person-stalker"></i>
               Ask Advice
             </a>

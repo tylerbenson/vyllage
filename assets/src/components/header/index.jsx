@@ -24,11 +24,11 @@ var HeaderContainer = React.createClass({
               <li className="dropdown-trigger user">
                 <a><i className="avatar ion-person"></i><span className="name">{name}</span><i className="caret"></i></a>
                 <ul className="dropdown-list">
-                  <li><a href={'/resume/' + this.state.documentId}>
+                  <li><a href='/resume'>
                     <i className="ion-document"></i>
                     Resume
                   </a></li>
-                  <li><a href={'/resume/' + this.state.documentId + '/ask-advice'}>
+                  <li><a href='/ask-advice'>
                     <i className="ion-person-stalker"></i>
                     Ask Advice
                   </a></li>
