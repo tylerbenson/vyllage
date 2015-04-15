@@ -29,6 +29,7 @@ import accounts.constants.Roles;
 import accounts.model.User;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
@@ -67,8 +68,11 @@ public class AccountSettingsController {
 		validators.put("email", new EmailSettingValidator());
 		validatorsForAll.add(new LengthValidator(30));
 
-		settingValues.put("emailUpdates",
-				Arrays.asList("weekly", "biweekly", "monthly", "never"));
+		settingValues.put(
+				"emailUpdates",
+				Arrays.asList(EmailFrequencyUpdates.values()).stream()
+						.map(e -> e.toString().toLowerCase())
+						.collect(Collectors.toList()));
 		settingValues.put(
 				"privacy",
 				Arrays.asList(Privacy.values()).stream()

@@ -49,6 +49,7 @@ import accounts.model.UserFilterRequest;
 import accounts.model.UserRole;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
 
 @Repository
@@ -208,6 +209,16 @@ public class UserDetailRepository implements UserDetailsManager {
 			emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
 			emailSetting.setValue(user.getUsername());
 			accountSettingRepository.set(newRecord.getUserId(), emailSetting);
+
+			AccountSetting emailUpdatesSetting = new AccountSetting();
+			emailUpdatesSetting.setName("emailUpdates");
+			emailUpdatesSetting.setUserId(newRecord.getUserId());
+			emailUpdatesSetting
+					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+			emailUpdatesSetting.setValue(EmailFrequencyUpdates.NEVER.name()
+					.toLowerCase());
+			accountSettingRepository.set(newRecord.getUserId(),
+					emailUpdatesSetting);
 
 			if (user.getFirstName() != null) {
 				AccountSetting firstNameSetting = new AccountSetting();
@@ -546,6 +557,14 @@ public class UserDetailRepository implements UserDetailsManager {
 						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
 						user.getUserId(), "email", user.getUsername(),
+						Privacy.PRIVATE.name().toLowerCase()));
+
+				// email frequency updates
+				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
+						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
+						user.getUserId(), "emailUpdates",
+						EmailFrequencyUpdates.NEVER.name().toLowerCase(),
 						Privacy.PRIVATE.name().toLowerCase()));
 
 				if (user.getFirstName() != null) {
