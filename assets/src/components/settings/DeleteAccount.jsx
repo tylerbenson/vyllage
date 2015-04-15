@@ -24,9 +24,10 @@ var DeleteAccount = React.createClass({
     return (
       <div style={{display: 'inline-block'}}>
         <button
-          className='inverted small icon'
+          className='flat small secondary'
           onClick={this.openModal}>
           <i className='ion-trash-a'></i>
+          Delete Account
         </button>
         <Modal isOpen={this.state.isOpen} close={this.closeModal}>
           <div className="header">

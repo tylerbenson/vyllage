@@ -22,10 +22,15 @@ var Account = React.createClass({
             onChange={this.changeHandler.bind(this, 'email')}
           />
 
-          <a href='account/reset-password'>
-            <i className="ion-locked"></i>
-            Reset Password
-          </a>
+          <div className="hr"></div>
+
+          <label>Other</label>
+          <div>
+            <a className="flat small secondary button" href='account/reset-password'>
+              <i className="ion-locked"></i>
+              Reset Password
+            </a>
+          </div>
 
           <DeleteAccount />
 

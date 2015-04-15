@@ -120,6 +120,11 @@
         float: right;
         margin-top: 4em;
       }
+
+      .hr {
+        border-bottom: lighten($secondary-color, 40%) solid 1px;
+        margin: 3em -1em 2em -1em;
+      }
     }
   }
 }
