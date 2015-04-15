@@ -1,5 +1,6 @@
 package accounts.repository;
 
+import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
 import static accounts.domain.tables.OrganizationMembers.ORGANIZATION_MEMBERS;
 import static accounts.domain.tables.Organizations.ORGANIZATIONS;
 import static accounts.domain.tables.UserRoles.USER_ROLES;
@@ -8,6 +9,7 @@ import static accounts.domain.tables.Users.USERS;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
@@ -46,6 +48,9 @@ import accounts.model.UserCredential;
 import accounts.model.UserFilterRequest;
 import accounts.model.UserRole;
 import accounts.model.account.AccountNames;
+import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.EmailFrequencyUpdates;
+import accounts.model.account.settings.Privacy;
 
 @Repository
 public class UserDetailRepository implements UserDetailsManager {
@@ -114,8 +119,8 @@ public class UserDetailRepository implements UserDetailsManager {
 		// TODO: eventually we'll need these fields in the database.
 		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
 
-		List<UserRole> roles = userRoleRepository.getByUserName(record
-				.getUserName());
+		List<UserRole> roles = userRoleRepository.getByUserId(record
+				.getUserId());
 
 		List<OrganizationMember> organizations = organizationMemberRepository
 				.getByUserId(record.getUserId());
@@ -142,8 +147,7 @@ public class UserDetailRepository implements UserDetailsManager {
 		if (user.getAuthorities() != null || user.getAuthorities().size() > 0)
 			roles = user.getAuthorities();
 		else
-			roles = userRoleRepository.getDefaultAuthoritiesForNewUser(user
-					.getUsername());
+			roles = userRoleRepository.getDefaultAuthoritiesForNewUser();
 
 		TransactionStatus transaction = txManager
 				.getTransaction(new DefaultTransactionDefinition());
@@ -170,13 +174,83 @@ public class UserDetailRepository implements UserDetailsManager {
 					user.getPassword());
 
 			for (GrantedAuthority role : roles) {
+				((UserRole) role).setUserId(newRecord.getUserId());
 				userRoleRepository.create((UserRole) role);
+
+				AccountSetting roleSetting = new AccountSetting();
+				roleSetting.setName("role");
+				roleSetting.setUserId(newRecord.getUserId());
+				roleSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+				roleSetting.setValue(role.getAuthority());
+				accountSettingRepository
+						.set(newRecord.getUserId(), roleSetting);
+
 				for (Organization organization : organizationRepository
 						.getOrganizationFromAuthority(role.getAuthority())) {
 					organizationMemberRepository.create(new OrganizationMember(
 							organization.getOrganizationId(), newRecord
 									.getUserId()));
+
+					AccountSetting organizationSetting = new AccountSetting();
+					organizationSetting.setName("organization");
+					organizationSetting.setUserId(newRecord.getUserId());
+					organizationSetting.setPrivacy(Privacy.PRIVATE.name()
+							.toLowerCase());
+					organizationSetting.setValue(organization
+							.getOrganizationName());
+					accountSettingRepository.set(newRecord.getUserId(),
+							roleSetting);
 				}
+			}
+
+			AccountSetting emailSetting = new AccountSetting();
+			emailSetting.setName("email");
+			emailSetting.setUserId(newRecord.getUserId());
+			emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+			emailSetting.setValue(user.getUsername());
+			accountSettingRepository.set(newRecord.getUserId(), emailSetting);
+
+			AccountSetting emailUpdatesSetting = new AccountSetting();
+			emailUpdatesSetting.setName("emailUpdates");
+			emailUpdatesSetting.setUserId(newRecord.getUserId());
+			emailUpdatesSetting
+					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+			emailUpdatesSetting.setValue(EmailFrequencyUpdates.NEVER.name()
+					.toLowerCase());
+			accountSettingRepository.set(newRecord.getUserId(),
+					emailUpdatesSetting);
+
+			if (user.getFirstName() != null) {
+				AccountSetting firstNameSetting = new AccountSetting();
+				firstNameSetting.setName("firstName");
+				firstNameSetting.setUserId(newRecord.getUserId());
+				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				firstNameSetting.setValue(user.getFirstName());
+				accountSettingRepository.set(newRecord.getUserId(),
+						firstNameSetting);
+			}
+
+			if (user.getMiddleName() != null) {
+				AccountSetting firstNameSetting = new AccountSetting();
+				firstNameSetting.setName("middleName");
+				firstNameSetting.setUserId(newRecord.getUserId());
+				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				firstNameSetting.setValue(user.getMiddleName());
+				accountSettingRepository.set(newRecord.getUserId(),
+						firstNameSetting);
+			}
+
+			if (user.getLastName() != null) {
+				AccountSetting firstNameSetting = new AccountSetting();
+				firstNameSetting.setName("lastName");
+				firstNameSetting.setUserId(newRecord.getUserId());
+				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				firstNameSetting.setValue(user.getLastName());
+				accountSettingRepository.set(newRecord.getUserId(),
+						firstNameSetting);
 			}
 
 		} catch (Exception e) {
@@ -189,6 +263,10 @@ public class UserDetailRepository implements UserDetailsManager {
 		}
 	}
 
+	/**
+	 * Updates the user data, roles and organizations. DOES NOT CHANGE USER
+	 * PASSWORD.
+	 */
 	@Override
 	// @Transactional
 	public void updateUser(UserDetails userDetails) {
@@ -208,7 +286,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			if (record == null)
 				throw new UsernameNotFoundException("User with userName '"
 						+ user.getUsername() + "' not found.");
-
+			record.setUserName(user.getUsername());
 			record.setEnabled(user.isEnabled());
 			record.setLastModified(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
@@ -217,7 +295,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			record.setLastName(user.getLastName());
 			record.update();
 
-			userRoleRepository.deleteByUserName(user.getUsername());
+			userRoleRepository.deleteByUserId(user.getUserId());
 			organizationMemberRepository.deleteByUserId(user.getUserId());
 
 			for (GrantedAuthority authority : user.getAuthorities()) {
@@ -256,7 +334,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			UsersRecord record = sql.fetchOne(USERS,
 					USERS.USER_NAME.eq(username));
 
-			userRoleRepository.deleteByUserName(username);
+			userRoleRepository.deleteByUserId(record.getUserId());
 
 			long userId = record.getUserId();
 			organizationMemberRepository.deleteByUserId(userId);
@@ -266,6 +344,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			sql.update(USERS).set(USERS.ENABLED, false)
 					.where(USERS.USER_ID.eq(userId)).execute();
 
+			// user is not deleted
 			// record.delete();
 
 		} catch (Exception e) {
@@ -368,12 +447,11 @@ public class UserDetailRepository implements UserDetailsManager {
 						credentialsRepository.get(record.getUserId())
 								.getPassword(), record.getEnabled(),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, userRoleRepository
-								.getByUserName(record.getUserName()),
-						organizationMemberRepository.getByUserId(record
-								.getUserId()), record.getDateCreated()
-								.toLocalDateTime(), record.getLastModified()
-								.toLocalDateTime()))
+						accountNonLocked, userRoleRepository.getByUserId(record
+								.getUserId()), organizationMemberRepository
+								.getByUserId(record.getUserId()), record
+								.getDateCreated().toLocalDateTime(), record
+								.getLastModified().toLocalDateTime()))
 				.collect(Collectors.toList());
 	}
 
@@ -391,12 +469,11 @@ public class UserDetailRepository implements UserDetailsManager {
 						credentialsRepository.get(record.getUserId())
 								.getPassword(), record.getEnabled(),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, userRoleRepository
-								.getByUserName(record.getUserName()),
-						organizationMemberRepository.getByUserId(record
-								.getUserId()), record.getDateCreated()
-								.toLocalDateTime(), record.getLastModified()
-								.toLocalDateTime()))
+						accountNonLocked, userRoleRepository.getByUserId(record
+								.getUserId()), organizationMemberRepository
+								.getByUserId(record.getUserId()), record
+								.getDateCreated().toLocalDateTime(), record
+								.getLastModified().toLocalDateTime()))
 				.collect(Collectors.toList());
 	}
 
@@ -410,7 +487,7 @@ public class UserDetailRepository implements UserDetailsManager {
 
 		Object savepoint = transaction.createSavepoint();
 
-		List collect = users
+		List userBatch = users
 				.stream()
 				.map(u -> sql.insertInto(USERS, USERS.USER_NAME, USERS.ENABLED,
 						USERS.DATE_CREATED, USERS.LAST_MODIFIED).values(
@@ -419,35 +496,107 @@ public class UserDetailRepository implements UserDetailsManager {
 						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))))
 
 				).collect(Collectors.toList());
-		// for!
-		for (User user : users) {
-			for (GrantedAuthority authority : user.getAuthorities()) {
-				collect.add(sql.insertInto(USER_ROLES, USER_ROLES.USER_NAME,
-						USER_ROLES.ROLE).values(user.getUsername(),
-						authority.getAuthority()));
+
+		try {
+			sql.batch(userBatch).execute();
+
+			List otherInserts = new ArrayList();
+
+			// hmm, well, we won't be inserting THAT many users...
+			// there should be a better way
+			users.stream().forEach(
+					u -> u.setUserId(sql.select().from(USERS)
+							.where(USERS.USER_NAME.eq(u.getUsername()))
+							.fetchOne(USERS.USER_ID)));
+
+			for (User user : users) {
+
+				credentialsRepository.create(user.getUserId(),
+						user.getPassword());
+
+				for (GrantedAuthority authority : user.getAuthorities()) {
+					otherInserts.add(sql.insertInto(USER_ROLES,
+							USER_ROLES.USER_ID, USER_ROLES.ROLE).values(
+							user.getUserId(), authority.getAuthority()));
+
+					// role setting
+					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
+							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
+							.values(user.getUserId(), "role",
+									authority.getAuthority(),
+									Privacy.PRIVATE.name().toLowerCase()));
+
+				}
+
 				for (OrganizationMember organizationMember : user
 						.getOrganizationMember()) {
-					sql.insertInto(ORGANIZATION_MEMBERS,
+					otherInserts.add(sql.insertInto(ORGANIZATION_MEMBERS,
 							ORGANIZATION_MEMBERS.ORGANIZATION_ID,
 							ORGANIZATION_MEMBERS.USER_ID).values(
 							organizationMember.getOrganizationId(),
-							user.getUserId());
+							user.getUserId()));
+
+					// organization setting
+					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
+							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
+							.values(user.getUserId(),
+									"organization",
+									organizationRepository.get(
+											organizationMember
+													.getOrganizationId())
+											.getOrganizationName(),
+									Privacy.PRIVATE.name().toLowerCase()));
+
+				}
+
+				// create other user settings
+				// email
+				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
+						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
+						user.getUserId(), "email", user.getUsername(),
+						Privacy.PRIVATE.name().toLowerCase()));
+
+				// email frequency updates
+				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
+						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
+						user.getUserId(), "emailUpdates",
+						EmailFrequencyUpdates.NEVER.name().toLowerCase(),
+						Privacy.PRIVATE.name().toLowerCase()));
+
+				if (user.getFirstName() != null) {
+					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
+							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
+							.values(user.getUserId(), "firstName",
+									user.getFirstName(),
+									Privacy.PRIVATE.name().toLowerCase()));
+				}
+
+				if (user.getMiddleName() != null) {
+					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
+							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
+							.values(user.getUserId(), "middleName",
+									user.getMiddleName(),
+									Privacy.PRIVATE.name().toLowerCase()));
+				}
+
+				if (user.getLastName() != null) {
+					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
+							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
+							.values(user.getUserId(), "lastName",
+									user.getLastName(),
+									Privacy.PRIVATE.name().toLowerCase()));
 				}
 
 			}
-		}
 
-		try {
-			sql.batch(collect).execute();
-
-			// hmm, well, we won't be inserting THAT many users...
-			for (User user : users) {
-				Long userId = sql.select().from(USERS)
-						.where(USERS.USER_NAME.eq(user.getUsername()))
-						.fetchOne(USERS.USER_ID);
-				credentialsRepository.create(new Long(userId),
-						user.getPassword());
-			}
+			sql.batch(otherInserts).execute();
 
 		} catch (Exception e) {
 			logger.info(e.toString());
@@ -498,12 +647,12 @@ public class UserDetailRepository implements UserDetailsManager {
 				.on(gm.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
 				.where(g.ORGANIZATION_ID.eq(groupId));
 
-		SelectConditionStep<Record1<String>> advisorUsernames = sql
-				.select(a.USER_NAME).from(a).where(a.ROLE.like("ADVISOR"));
+		SelectConditionStep<Record1<Long>> advisorIds = sql.select(a.USER_ID)
+				.from(a).where(a.ROLE.like("ADVISOR"));
 
 		Result<Record> records = sql.select().from(u)
 				.where(u.USER_ID.in(usernamesFromSameGroup))
-				.and(u.USER_NAME.in(advisorUsernames))
+				.and(u.USER_ID.in(advisorIds))
 				.and(u.USER_NAME.like("%" + username + "%")).limit(limit)
 				.fetch();
 
@@ -539,12 +688,12 @@ public class UserDetailRepository implements UserDetailsManager {
 				.on(gm.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
 				.where(g.ORGANIZATION_ID.eq(groupId));
 
-		SelectConditionStep<Record1<String>> advisorUsernames = sql
-				.select(a.USER_NAME).from(a).where(a.ROLE.like("ADVISOR"));
+		SelectConditionStep<Record1<Long>> advisorIds = sql.select(a.USER_ID)
+				.from(a).where(a.ROLE.like("ADVISOR"));
 
 		Result<Record> records = sql.select().from(u)
 				.where(u.USER_ID.in(usernamesFromSameGroup))
-				.and(u.USER_NAME.in(advisorUsernames)).limit(limit).fetch();
+				.and(u.USER_ID.in(advisorIds)).limit(limit).fetch();
 
 		return advisorRecordsToUser(accountNonExpired, credentialsNonExpired,
 				accountNonLocked, records);
@@ -563,8 +712,8 @@ public class UserDetailRepository implements UserDetailsManager {
 						ur.getValue(USERS.USER_ID)).getPassword(), ur
 						.getValue(USERS.ENABLED), accountNonExpired,
 						credentialsNonExpired, accountNonLocked,
-						userRoleRepository.getByUserName(ur
-								.getValue(USERS.USER_NAME)),
+						userRoleRepository.getByUserId(ur
+								.getValue(USERS.USER_ID)),
 						organizationMemberRepository.getByUserId(ur
 								.getValue(USERS.USER_ID)), ur.getValue(
 								USERS.DATE_CREATED).toLocalDateTime(), ur

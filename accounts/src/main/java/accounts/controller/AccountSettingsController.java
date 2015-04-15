@@ -29,9 +29,12 @@ import accounts.constants.Roles;
 import accounts.model.User;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.EmailFrequencyUpdates;
+import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.service.UserService;
+import accounts.validation.EmailSettingValidator;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
 import accounts.validation.NumberValidator;
@@ -62,12 +65,19 @@ public class AccountSettingsController {
 	public AccountSettingsController() {
 		validators.put("phoneNumber", new NumberValidator());
 		validators.put("firstName", new NotNullValidator());
+		validators.put("email", new EmailSettingValidator());
 		validatorsForAll.add(new LengthValidator(30));
 
-		settingValues.put("emailUpdates",
-				Arrays.asList("weekly", "biweekly", "monthly", "never"));
-		settingValues.put("privacy",
-				Arrays.asList("private", "public", "organization"));
+		settingValues.put(
+				"emailUpdates",
+				Arrays.asList(EmailFrequencyUpdates.values()).stream()
+						.map(e -> e.toString().toLowerCase())
+						.collect(Collectors.toList()));
+		settingValues.put(
+				"privacy",
+				Arrays.asList(Privacy.values()).stream()
+						.map(e -> e.toString().toLowerCase())
+						.collect(Collectors.toList()));
 	}
 
 	// for header
@@ -86,16 +96,9 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountSetting> getAccountSettings() {
-		User user = getUser();
 
-		List<AccountSetting> settings = userService.getAccountSettings(user);
-
-		// if (user.getAuthorities() != null &&
-		// !user.getAuthorities().isEmpty())
-		// accountSettings.setRole(user.getAuthorities().stream()
-		// .map(r -> r.getAuthority())
-		// .collect(Collectors.joining(", ")));
-		//
+		List<AccountSetting> settings = userService
+				.getAccountSettings(getUser());
 
 		return settings;
 	}
@@ -110,6 +113,7 @@ public class AccountSettingsController {
 				validators.get(setting.getName()).validate(setting);
 			return setting;
 		});
+
 		settings.stream().map(
 				setting -> validatorsForAll.stream().map(
 						v -> v.validate(setting)));

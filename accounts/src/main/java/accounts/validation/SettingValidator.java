@@ -1,5 +1,7 @@
 package accounts.validation;
 
+import org.springframework.util.Assert;
+
 import accounts.model.account.settings.AccountSetting;
 
 public abstract class SettingValidator {
@@ -13,7 +15,7 @@ public abstract class SettingValidator {
 	 * @param message
 	 */
 	protected void setErrorMessage(AccountSetting setting, String message) {
-		assert message != null;
+		Assert.isTrue(message != null, "Error Message cannot be null");
 		if (setting.getErrorMessage() != null)
 			setting.setErrorMessage(setting.getErrorMessage() + ", " + message);
 		else

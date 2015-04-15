@@ -122,9 +122,11 @@ public class UserCredentialsRepository {
 						.and(USER_CREDENTIALS.ENABLED.isTrue())
 						.and(USER_CREDENTIALS.EXPIRES.isNotNull()))) {
 
+			// the password is active if the encoder matches and the expiration
+			// current date is before the expiration date.
 			if (encoder.matches(password, record.getPassword())
-					&& record.getExpires().toLocalDateTime()
-							.isAfter(LocalDateTime.now())) {
+					&& LocalDateTime.now().isBefore(
+							record.getExpires().toLocalDateTime())) {
 				return true;
 			}
 		}

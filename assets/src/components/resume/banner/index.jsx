@@ -51,7 +51,7 @@ var Banner = React.createClass({
         <div className ="content">
           <div className="info">
             <div className="name">
-              {header.firstName + " " + header.middleName + " " + header.lastName}
+              {(header.firstName || '') + " " + (header.middleName || '') + " " + (header.lastName || '')}
             </div>
             <Textarea 
               key={header.tagline || undefined}

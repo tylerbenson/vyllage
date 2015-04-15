@@ -2,14 +2,11 @@ package accounts.validation;
 
 import java.text.MessageFormat;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import accounts.model.account.settings.AccountSetting;
 
 public class LengthValidator extends SettingValidator {
 
-	@Value("${error.length:Up to {0} characters allowed.}")
-	public final String errorMessage = null;
+	public final String errorMessage = "Up to {0} characters allowed.";
 
 	public final int length;
 

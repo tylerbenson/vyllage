@@ -2,6 +2,7 @@ package accounts.controller;
 
 import java.util.List;
 
+import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -27,12 +28,12 @@ public class AdminUserController {
 	@Autowired
 	private UserService service;
 
-	@Autowired 
+	@Autowired
 	private RoleRepository roleRepository;
-	
+
 	@Autowired
 	private OrganizationRepository organizationRepository;
-	
+
 	@Autowired
 	private OrganizationRoleRepository organizationRoleRepository;
 
@@ -54,7 +55,8 @@ public class AdminUserController {
 
 	@RequestMapping(value = "/user/createBatch", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String batchAccountCreation(BatchAccount batch, Model model) {
+	public String batchAccountCreation(BatchAccount batch, Model model)
+			throws IllegalArgumentException, EmailException {
 
 		if (batch.hasErrors()) {
 			prepareBatchError(
@@ -79,9 +81,11 @@ public class AdminUserController {
 	private void prepareBatch(Model model) {
 		List<Organization> allOrganizations = organizationRepository.getAll();
 		model.addAttribute("organizations", allOrganizations);
-		//default to the first one.
-		model.addAttribute("roles", organizationRoleRepository.getRolesForOrganization(allOrganizations.get(0).getOrganizationId()));
-		
+		// default to the first one.
+		model.addAttribute("roles", organizationRoleRepository
+				.getRolesForOrganization(allOrganizations.get(0)
+						.getOrganizationId()));
+
 		model.addAttribute("batchAccount", new BatchAccount());
 	}
 

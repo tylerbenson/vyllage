@@ -12,11 +12,14 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import accounts.email.EmailBuilder;
 import accounts.model.BatchAccount;
 import accounts.model.CSRFToken;
 import accounts.model.Organization;
@@ -68,6 +71,15 @@ public class UserService {
 	@Autowired
 	private AccountSettingRepository settingRepository;
 
+	@Autowired
+	private RandomPasswordGenerator randomPasswordGenerator;
+
+	@Autowired
+	private EmailBuilder emailBuilder;
+
+	@Autowired
+	private Environment env;
+
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
 	}
@@ -81,7 +93,7 @@ public class UserService {
 	}
 
 	public void batchCreateUsers(BatchAccount batchAccount)
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, EmailException {
 
 		final boolean enabled = true;
 		final boolean accountNonExpired = true;
@@ -107,17 +119,34 @@ public class UserService {
 
 		Role role = roleRepository.get(batchAccount.getRole());
 
+		// note, for organization member and role there's no userId until it's
+		// saved.
 		List<User> users = Arrays
 				.stream(emailSplit)
 				.map(String::trim)
-				.map(s -> new User(s, s, enabled, accountNonExpired,
+				.map(s -> new User(s, randomPasswordGenerator
+						.getRandomPassword(), enabled, accountNonExpired,
 						credentialsNonExpired, accountNonLocked, Arrays
-								.asList(new UserRole(role.getRole(), s)),
+								.asList(new UserRole(role.getRole(), null)),
 						Arrays.asList(new OrganizationMember(batchAccount
 								.getOrganization(), null))))
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
+
+		// send mails
+		for (User user : users) {
+			emailBuilder
+					.to(user.getUsername())
+					.from(env.getProperty("email.userName",
+							"no-reply@vyllage.com"))
+					.subject("Account Creation - Vyllage.com")
+					.setNoHtmlMessage(
+							"Your account has been created successfuly. \\n Your password is: "
+									+ user.getPassword())
+					.templateName("email-account-created")
+					.addTemplateVariable("password", user.getPassword()).send();
+		}
 	}
 
 	/**
@@ -125,8 +154,10 @@ public class UserService {
 	 * 
 	 * @param linkRequest
 	 * @return link response
+	 * @throws EmailException
 	 */
-	public User createUser(DocumentLinkRequest linkRequest) {
+	public User createUser(DocumentLinkRequest linkRequest)
+			throws EmailException {
 		boolean invalid = false;
 
 		if (EmailValidator.validate(linkRequest.getEmail()) == invalid)
@@ -135,12 +166,15 @@ public class UserService {
 
 		// assigns current user's Organizations
 		// assigns default role.
-		// TODO: add random password for account
+		String randomPassword = randomPasswordGenerator.getRandomPassword();
+
+		List<UserRole> defaultAuthoritiesForNewUser = userRoleRepository
+				.getDefaultAuthoritiesForNewUser();
+
 		User user = new User(null, linkRequest.getFirstName(), null,
 				linkRequest.getLastName(), linkRequest.getEmail(),
-				linkRequest.getEmail(), true, true, true, true,
-				userRoleRepository.getDefaultAuthoritiesForNewUser(linkRequest
-						.getEmail()),
+				randomPassword, true, true, true, true,
+				defaultAuthoritiesForNewUser,
 				((User) SecurityContextHolder.getContext().getAuthentication()
 						.getPrincipal()).getOrganizationMember(), null, null);
 		userRepository.createUser(user);
@@ -148,9 +182,20 @@ public class UserService {
 		User loadUserByUsername = userRepository.loadUserByUsername(linkRequest
 				.getEmail());
 
-		// TODO send email with the username and password
-		// if(linkRequest.sendRegistrationMail()
-		// send mail
+		if (linkRequest.sendRegistrationMail()) {
+			// send mail
+
+			emailBuilder
+					.to(linkRequest.getEmail())
+					.from(env.getProperty("email.userName",
+							"no-reply@vyllage.com"))
+					.subject("Account Creation")
+					.setNoHtmlMessage(
+							"Your account has been created successfuly. \\n Your password is: "
+									+ randomPassword)
+					.templateName("email-account-created")
+					.addTemplateVariable("password", randomPassword).send();
+		}
 
 		return loadUserByUsername;
 	}
@@ -172,6 +217,10 @@ public class UserService {
 		return userRepository.getNames(userIds);
 	}
 
+	/**
+	 * Updates the user data, roles and organizations. DOES NOT CHANGE USER
+	 * PASSWORD.
+	 */
 	public void update(User user) {
 		userRepository.updateUser(user);
 	}
@@ -204,6 +253,10 @@ public class UserService {
 
 		case "lastName":
 			setLastName(user, setting);
+			return settingRepository.set(user.getUserId(), setting);
+
+		case "email":
+			setEmail(user, setting);
 			return settingRepository.set(user.getUserId(), setting);
 		default:
 			return settingRepository.set(user.getUserId(), setting);
@@ -244,7 +297,7 @@ public class UserService {
 
 		// create new role relationship
 		List<UserRole> userRoles = newRoles.stream()
-				.map(set -> new UserRole(set.getValue(), user.getUsername()))
+				.map(set -> new UserRole(set.getValue(), user.getUserId()))
 				.collect(Collectors.toList());
 
 		// save user roles
@@ -347,6 +400,24 @@ public class UserService {
 			user.setLastName(setting.getValue());
 			this.update(user);
 		}
+	}
+
+	// changes the username and email...
+	protected void setEmail(User user, AccountSetting setting) {
+		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
+			// username is final...
+			// password is erased after the user logins but we need something
+			// here, even if we won't change it
+			User newUser = new User(user.getUserId(), user.getFirstName(),
+					user.getMiddleName(), user.getLastName(),
+					setting.getValue(), "a password we don't care about",
+					user.isEnabled(), user.isAccountNonExpired(),
+					user.isCredentialsNonExpired(), user.isAccountNonLocked(),
+					user.getAuthorities(), user.getOrganizationMember(),
+					user.getDateCreated(), user.getLastModified());
+			this.update(newUser);
+		}
+
 	}
 
 	public void changePassword(String newPassword) {
@@ -468,5 +539,9 @@ public class UserService {
 	public List<User> getUsers(List<Long> userIds) {
 
 		return userRepository.getAll(userIds);
+	}
+
+	public void setEmailBuilder(EmailBuilder emailBuilder) {
+		this.emailBuilder = emailBuilder;
 	}
 }

@@ -25,6 +25,7 @@ public class EmailTest {
 
 	}
 
+	// Uncomment to test.
 	// @Test
 	// public void simpleTextTest() throws EmailException {
 	// String from = "no-reply@vyllage.com";

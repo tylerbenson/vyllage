@@ -2,7 +2,6 @@ package accounts.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.AccessDeniedException;
 import java.util.Base64;
 import java.util.List;
 import java.util.logging.Logger;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,10 +26,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import accounts.email.EmailContext;
-import accounts.email.EmailHTMLBody;
-import accounts.email.EmailParameters;
+import accounts.email.EmailBuilder;
 import accounts.email.MailService;
 import accounts.model.CSRFToken;
 import accounts.model.User;
@@ -70,6 +69,9 @@ public class AccountController {
 
 	@Autowired
 	private MailService mailService;
+
+	@Autowired
+	private EmailBuilder emailBuilder;
 
 	/**
 	 * Returns a list containing the id, first, middle and last names for an
@@ -112,21 +114,22 @@ public class AccountController {
 		return response;
 	}
 
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void deleteUser(HttpServletRequest request,
+			@RequestBody CSRFToken token) throws ServletException,
+			UserNotFoundException {
+
+		userService.delete(request, getUser().getUserId(), token);
+	}
+
 	@RequestMapping(value = "{userId}/delete", method = RequestMethod.DELETE, produces = "application/json")
-	public String deleteUser(HttpServletRequest request,
-			@PathVariable final Long userId, @RequestBody CSRFToken token)
-			throws ServletException, UserNotFoundException,
-			AccessDeniedException {
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String adminDeleteUser(HttpServletRequest request,
+			@PathVariable Long userId, @RequestBody CSRFToken token)
+			throws ServletException, UserNotFoundException {
 
-		// check that the account to be deleted actually belongs to the current
-		// user
-		if (!getUser().getUserId().equals(userId)) {
-			logger.info("access denied in AccountController.");
-			throw new AccessDeniedException(
-					"You are not authorized to access this resource.");
-		}
 		userService.delete(request, userId, token);
-
 		return "user-deleted";
 	}
 
@@ -165,7 +168,8 @@ public class AccountController {
 
 		// email it to the provided email address.
 
-		sendEmail(user.getUsername(), encodedString, user.getFirstName());
+		sendResetPasswordEmail(user.getUsername(), encodedString,
+				user.getFirstName());
 
 		// Link should log the user in and direct them to the password change
 		// page.
@@ -220,23 +224,23 @@ public class AccountController {
 		return "password-change-success";
 	}
 
-	protected void sendEmail(String email, String encodedString, String userName)
-			throws EmailException {
-		EmailParameters parameters = new EmailParameters("Reset Password",
-				email);
+	protected void sendResetPasswordEmail(String email, String encodedString,
+			String userName) throws EmailException {
 
 		String txt = "http://"
 				+ env.getProperty("vyllage.domain", "www.vyllage.com")
 				+ "/account/reset-password-change/";
 
-		EmailContext ctx = new EmailContext(env.getProperty(
-				"change.password.html", "email-changePassword"));
-		ctx.setVariable("userName", userName);
-		ctx.setVariable("url", txt);
-		ctx.setVariable("encodedLink", encodedString);
-
-		EmailHTMLBody emailBody = new EmailHTMLBody(txt, ctx);
-		mailService.sendEmail(parameters, emailBody);
+		emailBuilder
+				.from(env.getProperty("email.userName", "no-reply@vyllage.com"))
+				.subject("Reset Password")
+				.to(email)
+				.templateName(
+						env.getProperty("change.password.html",
+								"email-changePassword")).setNoHtmlMessage(txt)
+				.addTemplateVariable("userName", userName)
+				.addTemplateVariable("url", txt)
+				.addTemplateVariable("encodedLink", encodedString).send();
 	}
 
 	private boolean isEmailValid(ResetPasswordForm resetPassword) {

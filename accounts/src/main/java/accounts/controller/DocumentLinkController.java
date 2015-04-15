@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -85,7 +86,7 @@ public class DocumentLinkController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public @ResponseBody String create(
 			@RequestBody DocumentLinkRequest linkRequest)
-			throws JsonProcessingException {
+			throws JsonProcessingException, EmailException {
 
 		DocumentLink documentLink = documentLinkService.createLink(linkRequest);
 
@@ -102,11 +103,12 @@ public class DocumentLinkController {
 	 * @return map containing the user's email as key and the generated link as
 	 *         value.
 	 * @throws JsonProcessingException
+	 * @throws EmailException
 	 */
 	@RequestMapping(value = "/create-many", method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> massCreate(
 			@RequestBody List<DocumentLinkRequest> linkRequest)
-			throws JsonProcessingException {
+			throws JsonProcessingException, EmailException {
 
 		Map<String, String> links = new HashMap<>();
 		System.out.println("linkrequests " + linkRequest);

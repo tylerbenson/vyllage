@@ -42,7 +42,7 @@ var Datepicker = React.createClass({
     }.bind(this));
   },
   setYear: function (e) {
-    var year = parseInt(e.target.value);
+    var year = parseInt(e.target.value) || '';
     this.setState({
       year: year,
       date: this.state.month + ' ' + year
