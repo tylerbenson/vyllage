@@ -128,7 +128,8 @@ public class AccountController {
 		return response;
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
+	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,
+			RequestMethod.POST }, produces = "application/json")
 	public String deleteUser(HttpServletRequest request,
 			@RequestBody CSRFToken token) throws ServletException,
 			UserNotFoundException {
