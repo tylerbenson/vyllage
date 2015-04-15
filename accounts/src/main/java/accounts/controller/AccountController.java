@@ -2,7 +2,6 @@ package accounts.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.AccessDeniedException;
 import java.util.Base64;
 import java.util.List;
 import java.util.logging.Logger;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import accounts.email.EmailBuilder;
 import accounts.email.MailService;
@@ -114,12 +115,21 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
-	public String deleteUser(HttpServletRequest request,
+	@ResponseStatus(value = HttpStatus.OK)
+	public void deleteUser(HttpServletRequest request,
 			@RequestBody CSRFToken token) throws ServletException,
-			UserNotFoundException, AccessDeniedException {
+			UserNotFoundException {
 
 		userService.delete(request, getUser().getUserId(), token);
+	}
 
+	@RequestMapping(value = "{userId}/delete", method = RequestMethod.DELETE, produces = "application/json")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String adminDeleteUser(HttpServletRequest request,
+			@PathVariable Long userId, @RequestBody CSRFToken token)
+			throws ServletException, UserNotFoundException {
+
+		userService.delete(request, userId, token);
 		return "user-deleted";
 	}
 
