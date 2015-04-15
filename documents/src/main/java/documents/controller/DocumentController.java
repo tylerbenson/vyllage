@@ -1,6 +1,7 @@
 package documents.controller;
 
 import java.nio.file.AccessDeniedException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import documents.model.Document;
 import documents.services.DocumentService;
 
 @Controller
@@ -57,6 +59,17 @@ public class DocumentController {
 			documentService.deleteDocumentsFromUser(userId);
 		}
 
+	}
+
+	@RequestMapping(value = "user", method = RequestMethod.GET, consumes = "application/json")
+	public @ResponseBody List<Long> getDocumentsForUser(
+			@RequestParam(value = "userId") Long userId) {
+
+		Document documentByUser = documentService.getDocumentByUser(userId);
+
+		// TODO: currently the user only has one document, this might change in
+		// the future but for now we return the document id the user has
+		return Arrays.asList(documentByUser.getDocumentId());
 	}
 
 	@ExceptionHandler(value = { AccessDeniedException.class })

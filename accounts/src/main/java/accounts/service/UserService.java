@@ -170,13 +170,22 @@ public class UserService {
 
 		List<UserRole> defaultAuthoritiesForNewUser = userRoleRepository
 				.getDefaultAuthoritiesForNewUser();
+		
+		List<OrganizationMember> organizationMemberList = ((User) SecurityContextHolder
+				.getContext().getAuthentication().getPrincipal())
+				.getOrganizationMember();
+		
+		List<OrganizationMember> newOrganizationMember = new ArrayList<>();
+
+		for (OrganizationMember organizationMember : organizationMemberList) {
+			newOrganizationMember.add(new OrganizationMember(organizationMember
+					.getOrganizationId(), null));
+		}
 
 		User user = new User(null, linkRequest.getFirstName(), null,
 				linkRequest.getLastName(), linkRequest.getEmail(),
 				randomPassword, true, true, true, true,
-				defaultAuthoritiesForNewUser,
-				((User) SecurityContextHolder.getContext().getAuthentication()
-						.getPrincipal()).getOrganizationMember(), null, null);
+				defaultAuthoritiesForNewUser, newOrganizationMember, null, null);
 		userRepository.createUser(user);
 
 		User loadUserByUsername = userRepository.loadUserByUsername(linkRequest

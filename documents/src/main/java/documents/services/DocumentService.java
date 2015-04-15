@@ -130,6 +130,12 @@ public class DocumentService {
 		documentSectionRepository.delete(sectionId);
 	}
 
+	/**
+	 * Returns the user's document, if it can't find one creates it.
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	public Document getDocumentByUser(Long userId) {
 
 		Document document = null;

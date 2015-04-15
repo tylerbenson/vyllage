@@ -34,6 +34,7 @@ import connections.model.AdviceRequestParameter;
 import connections.model.DocumentLinkRequest;
 import connections.model.NotRegisteredUser;
 import connections.model.UserFilterResponse;
+import connections.repository.ElementNotFoundException;
 
 @Service
 public class AdviceService {
@@ -65,7 +66,7 @@ public class AdviceService {
 
 		Assert.notNull(userId);
 
-		HttpEntity<Object> entity = addCookieToHeader(request);
+		HttpEntity<Object> entity = createHeader(request);
 
 		// Returns a list of names and ids of users that have the role 'Advisor'
 		// within my organization.
@@ -84,13 +85,6 @@ public class AdviceService {
 		response.setRecent(recentUsers);
 
 		return response;
-	}
-
-	protected HttpEntity<Object> addCookieToHeader(HttpServletRequest request) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Cookie", request.getHeader("Cookie"));
-		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
-		return entity;
 	}
 
 	protected List<AccountNames> getRecentUsers(Long documentId,
@@ -331,6 +325,48 @@ public class AdviceService {
 
 		HttpEntity<Object> entity = new HttpEntity<Object>(object, headers);
 		return entity;
+	}
+
+	protected HttpEntity<Object> createHeader(HttpServletRequest request) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Cookie", request.getHeader("Cookie"));
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
+		return entity;
+	}
+
+	/**
+	 * Returns the user document Id.
+	 * 
+	 * @param request
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws ElementNotFoundException
+	 */
+	public Long getUserDocumentId(HttpServletRequest request, Long userId)
+			throws ElementNotFoundException {
+
+		HttpEntity<Object> entity = createHeader(request);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http").port(DOCUMENTS_PORT).host(DOCUMENTS_HOST)
+				.path("/document/user").queryParam("userId", userId);
+
+		@SuppressWarnings("unchecked")
+		List<Integer> responseBody = restTemplate.exchange(
+				builder.build().toUriString(), HttpMethod.GET, entity,
+				List.class).getBody();
+
+		if (responseBody.isEmpty())
+			throw new ElementNotFoundException(
+					"No documents found for user with id '" + userId + "'");
+
+		// TODO: currently the user only has one document, this might change in
+		// the future but for now we return the first document id he has
+		return new Long(responseBody.get(0));
 	}
 
 	@ToString
