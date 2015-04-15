@@ -2,7 +2,6 @@ package accounts.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.AccessDeniedException;
 import java.util.Base64;
 import java.util.List;
 import java.util.logging.Logger;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import accounts.email.EmailBuilder;
 import accounts.email.MailService;
@@ -113,21 +114,22 @@ public class AccountController {
 		return response;
 	}
 
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void deleteUser(HttpServletRequest request,
+			@RequestBody CSRFToken token) throws ServletException,
+			UserNotFoundException {
+
+		userService.delete(request, getUser().getUserId(), token);
+	}
+
 	@RequestMapping(value = "{userId}/delete", method = RequestMethod.DELETE, produces = "application/json")
-	public String deleteUser(HttpServletRequest request,
-			@PathVariable final Long userId, @RequestBody CSRFToken token)
-			throws ServletException, UserNotFoundException,
-			AccessDeniedException {
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String adminDeleteUser(HttpServletRequest request,
+			@PathVariable Long userId, @RequestBody CSRFToken token)
+			throws ServletException, UserNotFoundException {
 
-		// check that the account to be deleted actually belongs to the current
-		// user
-		if (!getUser().getUserId().equals(userId)) {
-			logger.info("access denied in AccountController.");
-			throw new AccessDeniedException(
-					"You are not authorized to access this resource.");
-		}
 		userService.delete(request, userId, token);
-
 		return "user-deleted";
 	}
 
@@ -166,7 +168,8 @@ public class AccountController {
 
 		// email it to the provided email address.
 
-		sendResetPasswordEmail(user.getUsername(), encodedString, user.getFirstName());
+		sendResetPasswordEmail(user.getUsername(), encodedString,
+				user.getFirstName());
 
 		// Link should log the user in and direct them to the password change
 		// page.
@@ -221,8 +224,8 @@ public class AccountController {
 		return "password-change-success";
 	}
 
-	protected void sendResetPasswordEmail(String email, String encodedString, String userName)
-			throws EmailException {
+	protected void sendResetPasswordEmail(String email, String encodedString,
+			String userName) throws EmailException {
 
 		String txt = "http://"
 				+ env.getProperty("vyllage.domain", "www.vyllage.com")

@@ -38,9 +38,8 @@
 ```
 
 # Delete a user account and remove his documents.
-## DELETE /account/{userId}/delete
+## DELETE /account/delete
 + Parameters
-	++ userId  (string, `1`) - The id of the user.
 	++ Body:
 ```
 		{"value" : _csfr.token}
