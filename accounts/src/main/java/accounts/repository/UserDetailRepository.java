@@ -189,9 +189,8 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			for (OrganizationMember organizationMember : user
 					.getOrganizationMember()) {
-				organizationMemberRepository.create(new OrganizationMember(
-						organizationMember.getOrganizationId(), newRecord
-								.getUserId()));
+				organizationMember.setUserId(newRecord.getUserId());
+				organizationMemberRepository.create(organizationMember);
 
 				AccountSetting organizationSetting = new AccountSetting();
 				organizationSetting.setName("organization");
@@ -256,7 +255,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			}
 
 		} catch (Exception e) {
-			logger.info(e.toString());
+			e.printStackTrace();
 			transaction.rollbackToSavepoint(savepoint);
 
 		} finally {

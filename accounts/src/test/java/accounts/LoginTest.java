@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import accounts.constants.Roles;
+import accounts.model.OrganizationMember;
 import accounts.model.User;
 import accounts.model.UserRole;
 import accounts.repository.UserDetailRepository;
@@ -66,10 +67,12 @@ public class LoginTest {
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 
+		OrganizationMember organizationMember = new OrganizationMember(0L, null);
+
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
-						null)), null);
+						null)), Arrays.asList(organizationMember));
 
 		repository.createUser(user);
 
@@ -98,10 +101,12 @@ public class LoginTest {
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 
+		OrganizationMember organizationMember = new OrganizationMember(0L, null);
+
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
-						null)), null);
+						null)), Arrays.asList(organizationMember));
 
 		repository.createUser(user);
 
@@ -133,10 +138,12 @@ public class LoginTest {
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 
+		OrganizationMember organizationMember = new OrganizationMember(0L, null);
+
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
-						null)), null);
+						null)), Arrays.asList(organizationMember));
 
 		repository.createUser(user);
 
@@ -158,6 +165,8 @@ public class LoginTest {
 		GrantedAuthority auth = new UserRole(
 				Roles.STUDENT.name().toUpperCase(), null);
 
+		OrganizationMember organizationMember = new OrganizationMember(0L, null);
+
 		boolean enabled = true;
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
@@ -165,11 +174,11 @@ public class LoginTest {
 
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth),
-				null);
+				Arrays.asList(organizationMember));
 
 		repository.createUser(user);
 
-		UserDetails loadedUser = repository.loadUserByUsername(userName);
+		User loadedUser = repository.loadUserByUsername(userName);
 
 		assertNotNull("User is null.", loadedUser);
 		assertEquals("User is different.", user, loadedUser);
@@ -181,19 +190,23 @@ public class LoginTest {
 		String userName2 = "test2";
 		GrantedAuthority auth2 = new UserRole(Roles.STUDENT.name()
 				.toUpperCase(), null);
+		OrganizationMember organizationMember2 = new OrganizationMember(0L,
+				null);
 
 		User user2 = new User(userName2, oldPassword, enabled,
 				accountNonExpired, credentialsNonExpired, accountNonLocked,
-				Arrays.asList(auth2), null);
+				Arrays.asList(auth2), Arrays.asList(organizationMember2));
 
 		repository.createUser(user2);
 
-		UserDetails loadedUser2 = repository.loadUserByUsername(userName2);
+		User loadedUser2 = repository.loadUserByUsername(userName2);
 
 		assertNotNull("User is null.", loadedUser2);
 		assertEquals("User is different.", user2, loadedUser2);
 		assertTrue("Authorities not found.", loadedUser2.getAuthorities()
 				.contains(auth));
+		assertTrue("Organizations not found.", loadedUser2
+				.getOrganizationMember().contains(organizationMember2));
 		Assert.assertTrue(new BCryptPasswordEncoder().matches(oldPassword,
 				loadedUser.getPassword()));
 	}
@@ -206,6 +219,8 @@ public class LoginTest {
 		GrantedAuthority auth = new UserRole(
 				Roles.STUDENT.name().toUpperCase(), null);
 
+		OrganizationMember organizationMember = new OrganizationMember(0L, null);
+
 		boolean enabled = true;
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
@@ -213,16 +228,18 @@ public class LoginTest {
 
 		User user = new User(userName, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth),
-				null);
+				Arrays.asList(organizationMember));
 
 		repository.createUser(user);
 
-		UserDetails loadedUser = repository.loadUserByUsername(userName);
+		User loadedUser = repository.loadUserByUsername(userName);
 
 		assertNotNull("User is null.", loadedUser);
 		assertEquals("User is different.", user, loadedUser);
 		assertTrue("Authorities not found.", loadedUser.getAuthorities()
 				.contains(auth));
+		assertTrue("Organizations not found.", loadedUser
+				.getOrganizationMember().contains(organizationMember));
 		Assert.assertTrue(new BCryptPasswordEncoder().matches(password,
 				loadedUser.getPassword()));
 
@@ -238,10 +255,12 @@ public class LoginTest {
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 
+		OrganizationMember organizationMember = new OrganizationMember(0L, null);
+
 		User user = new User(userName, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
-						null)), null);
+						null)), Arrays.asList(organizationMember));
 
 		repository.createUser(user);
 
@@ -292,6 +311,8 @@ public class LoginTest {
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 
+		OrganizationMember organizationMember = new OrganizationMember(0L, null);
+
 		GrantedAuthority auth1 = new UserRole(Roles.STUDENT.name()
 				.toUpperCase(), null);
 		GrantedAuthority auth2 = new UserRole(Roles.STUDENT.name()
@@ -299,7 +320,7 @@ public class LoginTest {
 
 		User user = new User(userName, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth1,
-						auth2), null);
+						auth2), Arrays.asList(organizationMember));
 
 		repository.createUser(user);
 
