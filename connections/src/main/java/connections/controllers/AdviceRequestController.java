@@ -29,6 +29,7 @@ import connections.model.AccountNames;
 import connections.model.AdviceRequest;
 import connections.model.AdviceRequestParameter;
 import connections.model.UserFilterResponse;
+import connections.repository.ElementNotFoundException;
 import connections.service.AccountService;
 import connections.service.AdviceService;
 
@@ -65,24 +66,21 @@ public class AdviceRequestController {
 		return namesForUsers.get(0);
 	}
 
-	@RequestMapping(value = "{documentId}/ask-advice", method = RequestMethod.GET)
-	public String askAdvice(@PathVariable final Long documentId) {
+	@RequestMapping(value = "ask-advice", method = RequestMethod.GET)
+	public String askAdvice() {
 		return "askAdvice";
 	}
 
-	@RequestMapping(value = "{documentId}/ask-advice", method = RequestMethod.POST)
+	@RequestMapping(value = "ask-advice", method = RequestMethod.POST)
 	public String askAdvice(HttpServletRequest request,
-			@PathVariable final Long documentId,
-			@RequestBody AdviceRequest adviceRequest) throws EmailException {
+			@RequestBody AdviceRequest adviceRequest) throws EmailException,
+			ElementNotFoundException {
 
-		System.out.println(adviceRequest);
+		validateAdviceRequest(adviceRequest);
 
-		if (adviceRequest == null
-				|| ((adviceRequest.getUsers() == null || adviceRequest
-						.getUsers().isEmpty()) && (adviceRequest
-						.getNotRegisteredUsers() == null || adviceRequest
-						.getNotRegisteredUsers().isEmpty())))
-			throw new IllegalArgumentException("No user or email provided.");
+		Long userId = (Long) request.getSession().getAttribute("userId");
+
+		Long documentId = adviceService.getUserDocumentId(request, userId);
 
 		String firstName = (String) request.getSession().getAttribute(
 				"userFirstName");
@@ -108,6 +106,15 @@ public class AdviceRequestController {
 		adviceService.sendRequestAdviceEmail(request, adviceRequestParameters);
 
 		return "redirect:/resume/" + documentId;
+	}
+
+	protected void validateAdviceRequest(AdviceRequest adviceRequest) {
+		if (adviceRequest == null
+				|| ((adviceRequest.getUsers() == null || adviceRequest
+						.getUsers().isEmpty()) && (adviceRequest
+						.getNotRegisteredUsers() == null || adviceRequest
+						.getNotRegisteredUsers().isEmpty())))
+			throw new IllegalArgumentException("No user or email provided.");
 	}
 
 	@RequestMapping(value = "{documentId}/users", method = RequestMethod.GET)

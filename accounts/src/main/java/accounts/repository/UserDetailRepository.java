@@ -185,22 +185,23 @@ public class UserDetailRepository implements UserDetailsManager {
 				accountSettingRepository
 						.set(newRecord.getUserId(), roleSetting);
 
-				for (Organization organization : organizationRepository
-						.getOrganizationFromAuthority(role.getAuthority())) {
-					organizationMemberRepository.create(new OrganizationMember(
-							organization.getOrganizationId(), newRecord
-									.getUserId()));
+			}
 
-					AccountSetting organizationSetting = new AccountSetting();
-					organizationSetting.setName("organization");
-					organizationSetting.setUserId(newRecord.getUserId());
-					organizationSetting.setPrivacy(Privacy.PRIVATE.name()
-							.toLowerCase());
-					organizationSetting.setValue(organization
-							.getOrganizationName());
-					accountSettingRepository.set(newRecord.getUserId(),
-							roleSetting);
-				}
+			for (OrganizationMember organizationMember : user
+					.getOrganizationMember()) {
+				organizationMember.setUserId(newRecord.getUserId());
+				organizationMemberRepository.create(organizationMember);
+
+				AccountSetting organizationSetting = new AccountSetting();
+				organizationSetting.setName("organization");
+				organizationSetting.setUserId(newRecord.getUserId());
+				organizationSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				organizationSetting.setValue(organizationRepository.get(
+						organizationMember.getOrganizationId())
+						.getOrganizationName());
+				accountSettingRepository.set(newRecord.getUserId(),
+						organizationSetting);
 			}
 
 			AccountSetting emailSetting = new AccountSetting();
@@ -232,29 +233,29 @@ public class UserDetailRepository implements UserDetailsManager {
 			}
 
 			if (user.getMiddleName() != null) {
-				AccountSetting firstNameSetting = new AccountSetting();
-				firstNameSetting.setName("middleName");
-				firstNameSetting.setUserId(newRecord.getUserId());
-				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
+				AccountSetting middleNameSetting = new AccountSetting();
+				middleNameSetting.setName("middleName");
+				middleNameSetting.setUserId(newRecord.getUserId());
+				middleNameSetting.setPrivacy(Privacy.PRIVATE.name()
 						.toLowerCase());
-				firstNameSetting.setValue(user.getMiddleName());
+				middleNameSetting.setValue(user.getMiddleName());
 				accountSettingRepository.set(newRecord.getUserId(),
-						firstNameSetting);
+						middleNameSetting);
 			}
 
 			if (user.getLastName() != null) {
-				AccountSetting firstNameSetting = new AccountSetting();
-				firstNameSetting.setName("lastName");
-				firstNameSetting.setUserId(newRecord.getUserId());
-				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
-						.toLowerCase());
-				firstNameSetting.setValue(user.getLastName());
+				AccountSetting lastNameSetting = new AccountSetting();
+				lastNameSetting.setName("lastName");
+				lastNameSetting.setUserId(newRecord.getUserId());
+				lastNameSetting
+						.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+				lastNameSetting.setValue(user.getLastName());
 				accountSettingRepository.set(newRecord.getUserId(),
-						firstNameSetting);
+						lastNameSetting);
 			}
 
 		} catch (Exception e) {
-			logger.info(e.toString());
+			e.printStackTrace();
 			transaction.rollbackToSavepoint(savepoint);
 
 		} finally {

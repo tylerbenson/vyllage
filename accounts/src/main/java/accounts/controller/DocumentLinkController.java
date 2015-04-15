@@ -71,8 +71,8 @@ public class DocumentLinkController {
 
 		User user = userService.getUser(documentLink.getUserId());
 
-		Authentication auth = new UsernamePasswordAuthenticationToken(
-				user.getUsername(), user.getPassword(), user.getAuthorities());
+		Authentication auth = new UsernamePasswordAuthenticationToken(user,
+				user.getPassword(), user.getAuthorities());
 
 		SessionHelper.addUserDataToSession(request, user);
 
@@ -120,7 +120,7 @@ public class DocumentLinkController {
 
 			String json = mapper.writeValueAsString(documentLink);
 
-			String safeString = "link/advice/" + linkEncryptor.encrypt(json);
+			String safeString = "/link/advice/" + linkEncryptor.encrypt(json);
 			System.out.println(safeString);
 			links.put(documentLinkRequest.getEmail(), safeString);
 		}
