@@ -31,12 +31,12 @@ create table if not exists accounts.roles(
 	role varchar(50) primary key);
 
 create table if not exists accounts.user_roles (
-  user_name varchar(50) not null,
+  user_id bigint not null,
   role varchar(50) not null,
-  constraint fk_roles_users foreign key(user_name) references accounts.users(user_name),
+  constraint fk_roles_users foreign key(user_id) references accounts.users(user_id),
   constraint fk_user_roles_roles foreign key(role) references accounts.roles(role));
 
-create unique index ix_auth_username on accounts.user_roles (user_name, role);
+create unique index ix_auth_username on accounts.user_roles (user_id, role);
 
 create table if not exists accounts.organizations (
   organization_id bigserial primary key,

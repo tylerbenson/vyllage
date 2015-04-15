@@ -119,14 +119,15 @@ public class UserService {
 
 		Role role = roleRepository.get(batchAccount.getRole());
 
-		// note, for organization member there's no userId until it's saved.
+		// note, for organization member and role there's no userId until it's
+		// saved.
 		List<User> users = Arrays
 				.stream(emailSplit)
 				.map(String::trim)
 				.map(s -> new User(s, randomPasswordGenerator
 						.getRandomPassword(), enabled, accountNonExpired,
 						credentialsNonExpired, accountNonLocked, Arrays
-								.asList(new UserRole(role.getRole(), s)),
+								.asList(new UserRole(role.getRole(), null)),
 						Arrays.asList(new OrganizationMember(batchAccount
 								.getOrganization(), null))))
 				.collect(Collectors.toList());
@@ -167,11 +168,13 @@ public class UserService {
 		// assigns default role.
 		String randomPassword = randomPasswordGenerator.getRandomPassword();
 
+		List<UserRole> defaultAuthoritiesForNewUser = userRoleRepository
+				.getDefaultAuthoritiesForNewUser();
+
 		User user = new User(null, linkRequest.getFirstName(), null,
 				linkRequest.getLastName(), linkRequest.getEmail(),
 				randomPassword, true, true, true, true,
-				userRoleRepository.getDefaultAuthoritiesForNewUser(linkRequest
-						.getEmail()),
+				defaultAuthoritiesForNewUser,
 				((User) SecurityContextHolder.getContext().getAuthentication()
 						.getPrincipal()).getOrganizationMember(), null, null);
 		userRepository.createUser(user);
@@ -290,7 +293,7 @@ public class UserService {
 
 		// create new role relationship
 		List<UserRole> userRoles = newRoles.stream()
-				.map(set -> new UserRole(set.getValue(), user.getUsername()))
+				.map(set -> new UserRole(set.getValue(), user.getUserId()))
 				.collect(Collectors.toList());
 
 		// save user roles
