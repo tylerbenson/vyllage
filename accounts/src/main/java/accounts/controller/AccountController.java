@@ -113,20 +113,12 @@ public class AccountController {
 		return response;
 	}
 
-	@RequestMapping(value = "{userId}/delete", method = RequestMethod.DELETE, produces = "application/json")
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
 	public String deleteUser(HttpServletRequest request,
-			@PathVariable final Long userId, @RequestBody CSRFToken token)
-			throws ServletException, UserNotFoundException,
-			AccessDeniedException {
+			@RequestBody CSRFToken token) throws ServletException,
+			UserNotFoundException, AccessDeniedException {
 
-		// check that the account to be deleted actually belongs to the current
-		// user
-		if (!getUser().getUserId().equals(userId)) {
-			logger.info("access denied in AccountController.");
-			throw new AccessDeniedException(
-					"You are not authorized to access this resource.");
-		}
-		userService.delete(request, userId, token);
+		userService.delete(request, getUser().getUserId(), token);
 
 		return "user-deleted";
 	}
@@ -166,7 +158,8 @@ public class AccountController {
 
 		// email it to the provided email address.
 
-		sendResetPasswordEmail(user.getUsername(), encodedString, user.getFirstName());
+		sendResetPasswordEmail(user.getUsername(), encodedString,
+				user.getFirstName());
 
 		// Link should log the user in and direct them to the password change
 		// page.
@@ -221,8 +214,8 @@ public class AccountController {
 		return "password-change-success";
 	}
 
-	protected void sendResetPasswordEmail(String email, String encodedString, String userName)
-			throws EmailException {
+	protected void sendResetPasswordEmail(String email, String encodedString,
+			String userName) throws EmailException {
 
 		String txt = "http://"
 				+ env.getProperty("vyllage.domain", "www.vyllage.com")
