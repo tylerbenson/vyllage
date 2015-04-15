@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import accounts.email.EmailBuilder;
 import accounts.email.MailService;
@@ -131,12 +129,13 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = "application/json")
-	@ResponseStatus(value = HttpStatus.OK)
-	public void deleteUser(HttpServletRequest request,
+	public String deleteUser(HttpServletRequest request,
 			@RequestBody CSRFToken token) throws ServletException,
 			UserNotFoundException {
 
 		userService.delete(request, getUser().getUserId(), token);
+
+		return "user-deleted";
 	}
 
 	@RequestMapping(value = "{userId}/delete", method = RequestMethod.DELETE, produces = "application/json")
