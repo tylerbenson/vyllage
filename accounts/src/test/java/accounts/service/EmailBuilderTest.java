@@ -4,6 +4,9 @@ import org.apache.commons.mail.EmailException;
 
 import accounts.email.EmailBuilder;
 
+/**
+ * Mock class for the email builder.
+ */
 public class EmailBuilderTest extends EmailBuilder {
 
 	@Override

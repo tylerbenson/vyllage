@@ -10,7 +10,7 @@ public class EmailSettingValidator extends SettingValidator {
 	public AccountSetting validate(AccountSetting setting) {
 
 		if (setting.getValue() == null || setting.getValue().isEmpty()
-				|| EmailValidator.validate(setting.getValue()))
+				|| !EmailValidator.validate(setting.getValue()))
 			setErrorMessage(setting, errorMessage);
 
 		return setting;
