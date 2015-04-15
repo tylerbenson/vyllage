@@ -29,7 +29,7 @@
 
 
 # Get suggestions for adding suggestions
-## GET /users?firstNameFilter={firstNameFilter}&lastNameFilter={lastNameFilter}&emailFilter={emailFilter}
+## GET /resume/{documentId}/users?firstNameFilter={firstNameFilter}&lastNameFilter={lastNameFilter}&emailFilter={emailFilter}
 + Parameters
   + firstNameFilter (string, `Ty`) - Filter to be applied to the first name column.
   + lastNameFilter (string, `Ben`) - Filter to be applied to the last name column.
