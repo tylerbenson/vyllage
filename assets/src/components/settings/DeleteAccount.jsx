@@ -5,7 +5,8 @@ var actions = require('./actions');
 var DeleteAccount = React.createClass({
   getInitialState: function () {
     return {
-      isOpen: false
+      isOpen: false,
+      isDeleted: false
     }
   },
   closeModal: function (e) {
@@ -16,9 +17,20 @@ var DeleteAccount = React.createClass({
     e.preventDefault();
     this.setState({isOpen: true});
   },
-  deleteSection: function (e) {
-    e.preventDefault();
-    this.setState({isOpen: false});
+  deleteAccount: function (e) {
+    var self = this;
+    actions.deleteAccount(function(){
+      self.setState({
+        isOpen: false,
+        isDeleted: true
+      });
+    });
+  },
+  redirectToLogin: function(){
+    this.setState({
+      isDeleted: false
+    });
+    window.location = "/login";
   },
   render: function () {
     return (
@@ -41,15 +53,36 @@ var DeleteAccount = React.createClass({
             </div>
           </div>
           <div className="content">
-            <p>Do you want to delete this section ?</p>
+            <p>Are you sure you want to delete your account?</p>
           </div>
           <div className="footer">
-            <button className="small inverted" onClick={this.deleteSection}>
+            <button className="small inverted" onClick={this.deleteAccount}>
               <i className="ion-trash-a"></i>
               Delete
             </button>
             <button className="small inverted secondary" onClick={this.closeModal}>
               Cancel
+            </button>
+          </div>
+        </Modal>
+        <Modal isOpen={this.state.isDeleted} close={this.redirectToLogin}>
+          <div className="header">
+            <div className="title">
+              <h1>Account Deleted</h1>
+            </div>
+            <div className="actions">
+              <button className="secondary flat icon" onClick={this.redirectToLogin}>
+                <i className="ion-close"></i>
+              </button>
+            </div>
+          </div>
+          <div className="content">
+            <p>Your account was successfully deleted, closing this modal will redirect you to the login page.</p>
+          </div>
+          <div className="footer">
+            <button className="small inverted" onClick={this.redirectToLogin}>
+              <i className="ion-checkmark"></i>
+              Okay
             </button>
           </div>
         </Modal>
