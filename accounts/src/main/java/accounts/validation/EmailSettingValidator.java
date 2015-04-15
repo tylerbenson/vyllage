@@ -1,13 +1,10 @@
 package accounts.validation;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import accounts.model.account.settings.AccountSetting;
 
 public class EmailSettingValidator extends SettingValidator {
 
-	@Value("${error.invalid.email:Invalid email address.}")
-	public final String errorMessage = null;
+	public final String errorMessage = "Invalid email address.";
 
 	@Override
 	public AccountSetting validate(AccountSetting setting) {
@@ -16,7 +13,7 @@ public class EmailSettingValidator extends SettingValidator {
 				|| EmailValidator.validate(setting.getValue()))
 			setErrorMessage(setting, errorMessage);
 
-		return null;
+		return setting;
 	}
 
 }

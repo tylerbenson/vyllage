@@ -217,6 +217,10 @@ public class UserService {
 		return userRepository.getNames(userIds);
 	}
 
+	/**
+	 * Updates the user data, roles and organizations. DOES NOT CHANGE USER
+	 * PASSWORD.
+	 */
 	public void update(User user) {
 		userRepository.updateUser(user);
 	}
@@ -402,13 +406,15 @@ public class UserService {
 	protected void setEmail(User user, AccountSetting setting) {
 		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
 			// username is final...
+			// password is erased after the user logins but we need something
+			// here, even if we won't change it
 			User newUser = new User(user.getUserId(), user.getFirstName(),
 					user.getMiddleName(), user.getLastName(),
-					setting.getValue(), user.getPassword(), user.isEnabled(),
-					user.isAccountNonExpired(), user.isCredentialsNonExpired(),
-					user.isAccountNonLocked(), user.getAuthorities(),
-					user.getOrganizationMember(), user.getDateCreated(),
-					user.getLastModified());
+					setting.getValue(), "a password we don't care about",
+					user.isEnabled(), user.isAccountNonExpired(),
+					user.isCredentialsNonExpired(), user.isAccountNonLocked(),
+					user.getAuthorities(), user.getOrganizationMember(),
+					user.getDateCreated(), user.getLastModified());
 			this.update(newUser);
 		}
 

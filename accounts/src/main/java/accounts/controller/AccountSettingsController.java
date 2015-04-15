@@ -92,16 +92,9 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountSetting> getAccountSettings() {
-		User user = getUser();
 
-		List<AccountSetting> settings = userService.getAccountSettings(user);
-
-		// if (user.getAuthorities() != null &&
-		// !user.getAuthorities().isEmpty())
-		// accountSettings.setRole(user.getAuthorities().stream()
-		// .map(r -> r.getAuthority())
-		// .collect(Collectors.joining(", ")));
-		//
+		List<AccountSetting> settings = userService
+				.getAccountSettings(getUser());
 
 		return settings;
 	}
@@ -116,6 +109,7 @@ public class AccountSettingsController {
 				validators.get(setting.getName()).validate(setting);
 			return setting;
 		});
+
 		settings.stream().map(
 				setting -> validatorsForAll.stream().map(
 						v -> v.validate(setting)));

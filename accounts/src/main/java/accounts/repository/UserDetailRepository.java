@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
-import org.jooq.InsertValuesStep2;
 import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
@@ -41,8 +40,6 @@ import accounts.domain.tables.OrganizationMembers;
 import accounts.domain.tables.Organizations;
 import accounts.domain.tables.UserRoles;
 import accounts.domain.tables.Users;
-import accounts.domain.tables.records.OrganizationMembersRecord;
-import accounts.domain.tables.records.UserRolesRecord;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.Organization;
 import accounts.model.OrganizationMember;
@@ -255,6 +252,10 @@ public class UserDetailRepository implements UserDetailsManager {
 		}
 	}
 
+	/**
+	 * Updates the user data, roles and organizations. DOES NOT CHANGE USER
+	 * PASSWORD.
+	 */
 	@Override
 	// @Transactional
 	public void updateUser(UserDetails userDetails) {
@@ -274,7 +275,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			if (record == null)
 				throw new UsernameNotFoundException("User with userName '"
 						+ user.getUsername() + "' not found.");
-
+			record.setUserName(user.getUsername());
 			record.setEnabled(user.isEnabled());
 			record.setLastModified(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
@@ -485,20 +486,10 @@ public class UserDetailRepository implements UserDetailsManager {
 
 				).collect(Collectors.toList());
 
-		// for (User user : users) {
-		// for (GrantedAuthority authority : user.getAuthorities()) {
-		// userBatch.add(sql.insertInto(USER_ROLES, USER_ROLES.USER_NAME,
-		// USER_ROLES.ROLE).values(user.getUsername(),
-		// authority.getAuthority()));
-		// }
-		// }
-
 		try {
 			sql.batch(userBatch).execute();
 
-			List<InsertValuesStep2<UserRolesRecord, Long, String>> userRoles = new ArrayList<>();
-			List<InsertValuesStep2<OrganizationMembersRecord, Long, Long>> organizationMemberBatch = new ArrayList<>();
-			List userSettingsBatch = new ArrayList();
+			List otherInserts = new ArrayList();
 
 			// hmm, well, we won't be inserting THAT many users...
 			// there should be a better way
@@ -513,12 +504,12 @@ public class UserDetailRepository implements UserDetailsManager {
 						user.getPassword());
 
 				for (GrantedAuthority authority : user.getAuthorities()) {
-					userRoles.add(sql.insertInto(USER_ROLES,
+					otherInserts.add(sql.insertInto(USER_ROLES,
 							USER_ROLES.USER_ID, USER_ROLES.ROLE).values(
 							user.getUserId(), authority.getAuthority()));
 
 					// role setting
-					userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
 							.values(user.getUserId(), "role",
@@ -529,15 +520,14 @@ public class UserDetailRepository implements UserDetailsManager {
 
 				for (OrganizationMember organizationMember : user
 						.getOrganizationMember()) {
-					organizationMemberBatch.add(sql.insertInto(
-							ORGANIZATION_MEMBERS,
+					otherInserts.add(sql.insertInto(ORGANIZATION_MEMBERS,
 							ORGANIZATION_MEMBERS.ORGANIZATION_ID,
 							ORGANIZATION_MEMBERS.USER_ID).values(
 							organizationMember.getOrganizationId(),
 							user.getUserId()));
 
 					// organization setting
-					userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
 							.values(user.getUserId(),
@@ -552,14 +542,14 @@ public class UserDetailRepository implements UserDetailsManager {
 
 				// create other user settings
 				// email
-				userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
 						user.getUserId(), "email", user.getUsername(),
 						Privacy.PRIVATE.name().toLowerCase()));
 
 				if (user.getFirstName() != null) {
-					userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
 							.values(user.getUserId(), "firstName",
@@ -568,7 +558,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				}
 
 				if (user.getMiddleName() != null) {
-					userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
 							.values(user.getUserId(), "middleName",
@@ -577,7 +567,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				}
 
 				if (user.getLastName() != null) {
-					userSettingsBatch.add(sql.insertInto(ACCOUNT_SETTING,
+					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
 							.values(user.getUserId(), "lastName",
@@ -587,9 +577,7 @@ public class UserDetailRepository implements UserDetailsManager {
 
 			}
 
-			sql.batch(userRoles).execute();
-			sql.batch(organizationMemberBatch).execute();
-			sql.batch(userSettingsBatch).execute();
+			sql.batch(otherInserts).execute();
 
 		} catch (Exception e) {
 			logger.info(e.toString());
