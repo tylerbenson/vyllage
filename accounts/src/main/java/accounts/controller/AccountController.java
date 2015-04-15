@@ -3,7 +3,9 @@ package accounts.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -99,12 +101,26 @@ public class AccountController {
 	@RequestMapping(value = "{userId}/advisors", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountNames> getAdvisorsForUser(
 			@PathVariable final Long userId,
-			@RequestParam(value = "excludeIds", required = false) final List<Long> excludeIds)
+			@RequestParam(value = "excludeIds", required = false) final List<Long> excludeIds,
+			@RequestParam(value = "firstNameFilter", required = false) String firstNameFilter,
+			@RequestParam(value = "lastNameFilter", required = false) String lastNameFilter,
+			@RequestParam(value = "emailFilter", required = false) String emailFilter)
 			throws UserNotFoundException {
 		User user = userService.getUser(userId);
 
+		Map<String, String> filters = new HashMap<>();
+
+		if (firstNameFilter != null)
+			filters.put("firstName", firstNameFilter);
+
+		if (lastNameFilter != null)
+			filters.put("lastName", lastNameFilter);
+
+		if (emailFilter != null)
+			filters.put("email", emailFilter);
+
 		List<AccountNames> response = userService
-				.getAdvisors(user, limitForEmptyFilter)
+				.getAdvisors(user, filters, limitForEmptyFilter)
 				.stream()
 				.filter(u -> !excludeIds.contains(u.getUserId()))
 				.map(u -> new AccountNames(u.getUserId(), u.getFirstName(), u

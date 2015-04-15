@@ -114,14 +114,21 @@ public class AdviceRequestController {
 	public @ResponseBody UserFilterResponse getUsers(
 			HttpServletRequest request,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "excludeIds", required = false) List<Long> excludeIds) {
+			@RequestParam(value = "excludeIds", required = false) List<Long> excludeIds,
+			@RequestParam(value = "firstNameFilter", required = false) String firstNameFilter,
+			@RequestParam(value = "lastNameFilter", required = false) String lastNameFilter,
+			@RequestParam(value = "emailFilter", required = false) String emailFilter) {
 		Long userId = (Long) request.getSession().getAttribute("userId");
 
+		// excluding logged in user
 		if (excludeIds == null)
 			excludeIds = new ArrayList<>();
 		excludeIds.add(userId);
 
-		return adviceService.getUsers(request, documentId, userId, excludeIds);
+		//
+
+		return adviceService.getUsers(request, documentId, userId, excludeIds,
+				firstNameFilter, lastNameFilter, emailFilter);
 	}
 
 	@ExceptionHandler(value = { IllegalArgumentException.class })
