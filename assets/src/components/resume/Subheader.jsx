@@ -10,11 +10,10 @@ var Subheader = React.createClass({
             <span>Edit Mode</span>
           </div>
           <div className="pull right">
-            <button className="flat">
+            {/*<button className="flat">
               <i className="ion-android-share-alt"></i>
               Share
             </button>
-            {/*
             <a href="javascript:window.print()" className="flat button">
               <i className="ion-document-text"></i>
               Export

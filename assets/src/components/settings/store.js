@@ -15,11 +15,11 @@ module.exports = Reflux.createStore({
   },
   onGetSettings: function () {
     request
-      .get('/account/setting')
-      .end(function (err, res) {
-          this.settings = res.body;
-          this.update();
-      }.bind(this));
+    .get('/account/setting')
+    .end(function (err, res) {
+      this.settings = res.body;
+      this.update();
+    }.bind(this));
   },
   onUpdateSettings: function () {
     this.localSettings.forEach(function (setting) {
@@ -54,6 +54,17 @@ module.exports = Reflux.createStore({
   onSetSettingsType: function (type) {
     this.activeSettingsType = type;
     this.update();
+  },
+  onDeleteAccount: function(cb){
+    request
+      .del('account/delete')
+      .send({value:this.tokenValue})
+      .set(this.tokenHeader, this.tokenValue)
+      .end(function (err, res) {
+        if(res.ok){
+          cb();
+        }
+      });
   },
   update: function () {
     this.trigger({

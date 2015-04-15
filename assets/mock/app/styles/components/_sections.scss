@@ -151,21 +151,21 @@
       font-size: 1em;
       font-weight: 400;
     }
+
+    .title {
+      font-size: 1.25em;
+      font-weight: 400;
+
+      input {
+        color: $text-color;
+        margin: 2px 0;
+      }
+    }
   }
 
   & > .content {
     margin-top: -0.5em;
     padding: 0.25em 4em 0.25em 4em;
-  }
-
-  .title {
-    font-size: 1.25em;
-    font-weight: 400;
-
-    input {
-      color: $text-color;
-      margin: 2px 0;
-    }
   }
 }
 

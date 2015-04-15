@@ -12,8 +12,8 @@ var Datepicker = React.createClass({
     var date = new Date();
     return {
       isOpen: false,
-      top: '-9999px',
-      left: '-9999px',
+      top: '-9999em',
+      left: '-9999em',
       isFocused: false,
       onDatepicker: false,
       year: parseInt(moment(date).format('YYYY')),
