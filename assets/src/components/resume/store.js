@@ -25,7 +25,8 @@ module.exports = Reflux.createStore({
   },
   getMaxSectionPostion: function () {
     var section = max(this.resume.sections, 'sectionPosition');
-    return section.sectionPosition;
+    // Return 0 if sections is empty
+    return (section !== -Infinity) ? section.sectionPosition: 0;
   },
   onGetResume: function () {
     this.onGetHeader();
