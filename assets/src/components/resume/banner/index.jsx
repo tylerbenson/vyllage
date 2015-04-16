@@ -3,7 +3,7 @@ var Textarea = require('react-textarea-autosize')
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
 
-var Banner = React.createClass({ 
+var Banner = React.createClass({
   getInitialState: function () {
     return {
       tagline: '',
@@ -16,7 +16,7 @@ var Banner = React.createClass({
         phoneNumber: false
       }
     }
-  }, 
+  },
   componentWillReceiveProps: function (nextProps) {
     if (nextProps.header.tagline !== this.props.header.tagline) {
       this.setState({tagline: nextProps.header.tagline});
@@ -35,7 +35,7 @@ var Banner = React.createClass({
     this.setState({editMode: editMode});
     settingActions.updateSettings();
     actions.updateTagline(this.state.tagline);
-  }, 
+  },
   handleChange: function (field, e) {
     e.preventDefault();
     if (field === 'tagline') {
@@ -45,7 +45,7 @@ var Banner = React.createClass({
     }
   },
   render: function() {
-    var header = this.props.header || {}; 
+    var header = this.props.header || {};
     return (
       <section className='banner'>
         <div className ="content">
@@ -53,7 +53,7 @@ var Banner = React.createClass({
             <div className="name">
               {(header.firstName || '') + " " + (header.middleName || '') + " " + (header.lastName || '')}
             </div>
-            <Textarea 
+            <Textarea
               key={header.tagline || undefined}
               placeholder="What's your professional tagline?"
               className="transparent tagline"
@@ -63,7 +63,7 @@ var Banner = React.createClass({
               onChange={this.handleChange.bind(this, 'tagline')}
               onClick={this.enableEdiMode.bind(this, 'tagline')}
               onBlur={this.disableEdiMode.bind(this, 'tagline')}
-            ></Textarea> 
+            ></Textarea>
             <Textarea
               key={header.address || undefined}
               placeholder="Where is your current location?"
@@ -80,6 +80,7 @@ var Banner = React.createClass({
             <div className='detail'>
               <i className="ion-email"></i>
               <input
+                required
                 type='text'
                 placeholder="E-mail Address"
                 key={header.email || undefined}
@@ -94,6 +95,7 @@ var Banner = React.createClass({
             <div className='detail'>
               <i className="ion-ios-telephone"></i>
               <input
+                required
                 type='text'
                 placeholder="Contact Number"
                 key={header.phoneNumber || undefined}
@@ -108,6 +110,7 @@ var Banner = React.createClass({
             <div className='detail'>
               <i className="ion-social-linkedin"></i>
               <input
+                required
                 type='text'
                 placeholder="LinkedIn profile"
                 key={header.linkedIn || undefined}
@@ -122,6 +125,7 @@ var Banner = React.createClass({
             <div className='detail'>
               <i className="ion-social-twitter"></i>
               <input
+                required
                 type='text'
                 placeholder="Twitter Handle"
                 key={header.twitter || undefined}
