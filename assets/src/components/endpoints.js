@@ -8,7 +8,7 @@ var endpoints = {
   resumeComments: '/resume/{documentId}/section/{sectionId}/comment',
   resumeComment: '/resume/{documentId}/section/{sectionId}/comment/{commentId}',
   askAdvice: '/resume/ask-advice',
-  askAdviceSuggestions: '/resume/{documentId}/users'
+  askAdviceSuggestions: '/resume/users'
 };
 
 module.exports = endpoints;

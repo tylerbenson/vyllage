@@ -26,11 +26,8 @@ var AskAdviceStore = Reflux.createStore({
     })
   },
   onPostAskAdvice: function () {
-    var url = urlTemplate
-                .parse(endpoints.askAdvice)
-                .expand({documentId: this.documentId});
     request
-      .post(url)
+      .post(endpoints.askAdvice)
       .set(this.tokenHeader, this.tokenValue) 
       .send({
         csrftoken: this.tokenValue,

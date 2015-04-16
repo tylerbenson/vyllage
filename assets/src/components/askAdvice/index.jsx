@@ -17,12 +17,14 @@ var Form = React.createClass({
     window.location = '/resume';
   },
   render: function () {
+    console.log(this.state);
     return (
       <div className="sections">
         <div className='section'>
           <div className='container'>
             <RecipientList 
-              recipients={this.state.recipients}
+              users={this.state.users}
+              notRegisteredUsers={this.state.notRegisteredUsers}
               selectedRecipient={this.state.selectedRecipient} />
             <To {...this.state} />
             <Subject subject={this.state.subject}/>

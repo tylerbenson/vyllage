@@ -3,40 +3,66 @@ var cx = require('react/lib/cx');
 var Actions = require('./actions');
 
 var RecipentList = React.createClass({
-  removeHandler: function (index, e) {
+  removeUserRecipientHandler: function (index, e) {
     e.preventDefault();
-    Actions.removeRecipient(index);
+    Actions.removeUserRecipient(index);
+  },
+  removeNotRegisteredUserRecipientHandler: function (index, e) {
+    e.preventDefault();
+    Actions.removeNotRegisteredUserRecipient(index);
   },
   editHandler: function (index, e) {
     e.preventDefault();
     Actions.selectRecipient(index);
   },
-  render: function () {
-    var nodes = this.props.recipients.map(function (recipient, index) {
+  renderUserRecipients: function () {
+    return this.props.users.map(function (recipient, index) {
       var classes = {
         recipient: true,
-        'recipient-selected': this.props.selectedRecipient === index,
-        'recipient-editable': recipient.newRecipient,
-        'disabled': !recipient.newRecipient
+        disabled: true
       };
       return (
-        <div key={index} className={cx(classes)}>
-          <span className='name' onClick={this.editHandler.bind(this, index)}>
+        <div key={recipient} className={cx(classes)}>
+          <span className='name'>
             {recipient.firstName + " " + recipient.lastName}
           </span>
           <button
             className='flat icon secondary remove'
-            onClick={this.removeHandler.bind(this, index)}>
+            onClick={this.removeUserRecipientHandler.bind(this, index)}>
             <i className="ion-android-close"></i>
           </button>
         </div>
       );
     }.bind(this));
+  },
+  renderNotRegisteredUsers: function () {
+    return this.props.notRegisteredUsers.map(function (recipient, index) {
+      var classes = {
+        recipient: true,
+        'recipient-editable': true,
+      };
+      return (
+        <div key={recipient} className={cx(classes)}>
+          <span className='name' onClick={this.editHandler.bind(this, index)}>
+            {recipient.firstName + " " + recipient.lastName}
+          </span>
+          <button
+            className='flat icon secondary remove'
+            onClick={this.removeNotRegisteredUserRecipientHandler.bind(this, index)}>
+            <i className="ion-android-close"></i>
+          </button>
+        </div>
+      );
+    }.bind(this));
+  },
+  render: function () {
     return (
       <div className='header recipients'>
         <h2 className="secondary">List of Recipients</h2>
         <div className='list'>
-          {nodes.length>0?nodes:<div className="empty">No recipients yet. Start adding people below.</div>}
+          {this.renderUserRecipients()}
+          {this.renderNotRegisteredUsers()}
+          {this.props.users.length || this.props.notRegisteredUsers.length? null: <div className="empty">No recipients yet. Start adding people below.</div>}
         </div>
       </div>
     );
