@@ -1,5 +1,5 @@
 # Endpoint for loading the request advice form
-## GET /resume/{documentId}/ask-advice
+## GET /resume/ask-advice
 + Parameters
   + documentId (string, `1`) - The id of the document.
 + Response 200 (text/html) - if the document belongs to the current user
@@ -7,7 +7,7 @@
 + Response 403 - if the document does not belong to the current user
 
 # Endpoint for submitting the request advice form
-## POST /resume/{documentId}/ask-advice
+## POST /resume/ask-advice
 + Parameters
   + documentId (string, `1`) - The id of the document.
 + Request (application/json)
@@ -29,7 +29,7 @@
 
 
 # Get suggestions for adding suggestions
-## GET /resume/{documentId}/users?firstNameFilter={firstNameFilter}&lastNameFilter={lastNameFilter}&emailFilter={emailFilter}
+## GET /resume/users?firstNameFilter={firstNameFilter}&lastNameFilter={lastNameFilter}&emailFilter={emailFilter}
 + Parameters
   + firstNameFilter (string, `Ty`) - Filter to be applied to the first name column.
   + lastNameFilter (string, `Ben`) - Filter to be applied to the last name column.

@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -117,14 +116,14 @@ public class AdviceRequestController {
 			throw new IllegalArgumentException("No user or email provided.");
 	}
 
-	@RequestMapping(value = "{documentId}/users", method = RequestMethod.GET)
+	@RequestMapping(value = "users", method = RequestMethod.GET)
 	public @ResponseBody UserFilterResponse getUsers(
 			HttpServletRequest request,
-			@PathVariable final Long documentId,
 			@RequestParam(value = "excludeIds", required = false) List<Long> excludeIds,
 			@RequestParam(value = "firstNameFilter", required = false) String firstNameFilter,
 			@RequestParam(value = "lastNameFilter", required = false) String lastNameFilter,
-			@RequestParam(value = "emailFilter", required = false) String emailFilter) {
+			@RequestParam(value = "emailFilter", required = false) String emailFilter)
+			throws ElementNotFoundException {
 		Long userId = (Long) request.getSession().getAttribute("userId");
 
 		// excluding logged in user
@@ -132,7 +131,7 @@ public class AdviceRequestController {
 			excludeIds = new ArrayList<>();
 		excludeIds.add(userId);
 
-		//
+		Long documentId = adviceService.getUserDocumentId(request, userId);
 
 		return adviceService.getUsers(request, documentId, userId, excludeIds,
 				firstNameFilter, lastNameFilter, emailFilter);
