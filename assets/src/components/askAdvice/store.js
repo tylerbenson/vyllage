@@ -36,7 +36,7 @@ var AskAdviceStore = Reflux.createStore({
       })
     request
       .post(endpoints.askAdvice)
-      // .set(this.tokenHeader, this.tokenValue) 
+      .set(this.tokenHeader, this.tokenValue) 
       .send({
         csrftoken: this.tokenValue,
         users: this.users,
