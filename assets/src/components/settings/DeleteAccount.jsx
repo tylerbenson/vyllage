@@ -17,7 +17,7 @@ var DeleteAccount = React.createClass({
     this.setState({isOpen: true});
   },
   handleSubmit: function(e){
-    this.refs.deleteForm.getDOMNode().submit();
+    document.getElementById('deleteForm').submit();
   },
   render: function () {
     return (
@@ -43,17 +43,13 @@ var DeleteAccount = React.createClass({
             <p>Are you sure you want to delete your account?</p>
           </div>
           <div className="footer">
-            <form ref="deleteForm" method="post" action="/account/delete">
-              <input type="hidden" name="value" value={document.getElementById('meta_token').content} />
-              <input type="hidden" name="_method" value="delete" />
-              <button onClick={this.handleSubmit} className="small inverted">
-                <i className="ion-trash-a"></i>
-                Delete
-              </button>
-              <button className="small inverted secondary" onClick={this.closeModal}>
-                Cancel
-              </button>
-            </form>
+            <button onClick={this.handleSubmit} className="small inverted">
+              <i className="ion-trash-a"></i>
+              Delete
+            </button>
+            <button className="small inverted secondary" onClick={this.closeModal}>
+              Cancel
+            </button>
           </div>
         </Modal>
       </div>
