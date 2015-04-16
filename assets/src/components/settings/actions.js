@@ -9,6 +9,5 @@ module.exports = Reflux.createActions([
   'removeSetting',
   'addOther',
   'updateOther',
-  'removeOther',
-  'deleteAccount'
+  'removeOther'
 ]);

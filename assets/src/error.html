@@ -30,7 +30,7 @@
       </div>
       <div class="content">
         <th:block th:if="${displayWebError}">
-          <div class="timestamp" th:text="${timestamp}"> </div>
+          <div class="timestamp" th:if="${exception != null}" th:text="${timestamp}"> </div>
           <div class="exception">
             <div class="row" th:if="${exception != null}">
               <h2 th:text="'Exception: ' + ${exception}"> java.lang.NullpointerExcetion </h2>
