@@ -1,0 +1,17 @@
+@media print {
+	header,
+	footer,
+	.subheader,
+	.footer,
+	button,
+	.button {
+		display: none;
+	}
+
+	.section > .container {
+		box-shadow: none;
+	}
+	.subsection {
+		border: none;
+	}
+}
