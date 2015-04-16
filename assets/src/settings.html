@@ -23,9 +23,8 @@
   <div id='container' class="settings">
     <header id="header-container" title="Settings" th:name="${accountName.firstName}">
     </header>
-    <form id="deleteForm" method="post" action="/account/delete">
-      <input type="hidden" name="value" th:value="${_csrf.token}" />
-      <input type="hidden" name="_method" value="delete" />
+    <form id="deleteForm" th:method="post" action="#" th:action="@{/account/delete}">
+<!--     This form was intentionally left blank. -->
     </form>
     <div id='settings'></div>
   </div>

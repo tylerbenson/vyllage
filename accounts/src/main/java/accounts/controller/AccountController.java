@@ -39,6 +39,7 @@ import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
+import accounts.service.TokenHelper;
 import accounts.service.UserService;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -129,10 +130,12 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,
-			RequestMethod.POST }, produces = "application/json")
-	public String deleteUser(HttpServletRequest request,
-			@RequestBody CSRFToken token) throws ServletException,
-			UserNotFoundException {
+			RequestMethod.POST }, consumes = "application/x-www-form-urlencoded;charset=UTF-8", produces = "txt/html")
+	public String deleteUser(HttpServletRequest request)
+			throws ServletException, UserNotFoundException {
+
+		CSRFToken token = new CSRFToken();
+		token.setValue(TokenHelper.getToken(request).getToken());
 
 		userService.delete(request, getUser().getUserId(), token);
 
