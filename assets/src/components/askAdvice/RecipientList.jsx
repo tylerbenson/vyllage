@@ -22,7 +22,7 @@ var RecipentList = React.createClass({
         disabled: true
       };
       return (
-        <div key={recipient} className={cx(classes)}>
+        <div key={index} className={cx(classes)}>
           <span className='name'>
             {recipient.firstName + " " + recipient.lastName}
           </span>
@@ -39,10 +39,12 @@ var RecipentList = React.createClass({
     return this.props.notRegisteredUsers.map(function (recipient, index) {
       var classes = {
         recipient: true,
+        'recipient-selected': this.props.selectedRecipient === index,
         'recipient-editable': true,
       };
+      // nru prefix is used to create different keys compare to renderUserRecipients
       return (
-        <div key={recipient} className={cx(classes)}>
+        <div key={'nru' + index} className={cx(classes)}>
           <span className='name' onClick={this.editHandler.bind(this, index)}>
             {recipient.firstName + " " + recipient.lastName}
           </span>
