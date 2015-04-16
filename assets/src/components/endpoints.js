@@ -7,7 +7,7 @@ var endpoints = {
   resumeSection: '/resume/{documentId}/section/{sectionId}',
   resumeComments: '/resume/{documentId}/section/{sectionId}/comment',
   resumeComment: '/resume/{documentId}/section/{sectionId}/comment/{commentId}',
-  askAdvice: '/resume/{documentId}/ask-advice',
+  askAdvice: '/resume/ask-advice',
   askAdviceSuggestions: '/resume/{documentId}/users'
 };
 

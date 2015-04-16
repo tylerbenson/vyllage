@@ -10,7 +10,8 @@ var AskAdviceStore = Reflux.createStore({
     this.tokenHeader = document.getElementById('meta_header').content,
     this.tokenValue = document.getElementById('meta_token').content;
     this.documentId = window.location.pathname.split('/')[2];
-    this.recipients = [];
+    this.notRegisteredUsers = [];
+    this.users = [];
     this.suggestions = {};
     this.selectedSuggestion = null;
     this.showSuggestions = false;
@@ -20,7 +21,7 @@ var AskAdviceStore = Reflux.createStore({
     this.message = '';
   },
   getRecipientUsersList: function () {
-    return this.recipients.map(function (recipient) {
+    return this.users.map(function (recipient) {
       return recipient.userId;
     })
   },
@@ -32,7 +33,9 @@ var AskAdviceStore = Reflux.createStore({
       .post(url)
       .set(this.tokenHeader, this.tokenValue) 
       .send({
-        to: this.recipients,
+        csrftoken: this.tokenValue,
+        users: this.users,
+        notRegisteredUsers: this.notRegisteredUsers,
         subject: this.subject,
         message: this.message
       })
@@ -83,35 +86,36 @@ var AskAdviceStore = Reflux.createStore({
     this.update();
   },
   onAddRecipient: function (recipient) {
-    this.recipients.push(recipient)
+    this.notRegisteredUsers.push(recipient)
     this.selectedRecipient = null;
     this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
     this.showSuggestions = false;
     this.update();
   },
   onUpdateRecipient: function (recipient, index) {
-    this.recipients[index] = recipient;
+    this.notRegisteredUsers[index] = recipient;
     this.selectedRecipient = null;
     this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
     this.showSuggestions = false;
     this.update();
   },
-  onRemoveRecipient: function (index) {
-    this.recipients.splice(index, 1);
+  onRemoveUserRecipient: function (index) {
+    this.users.splice(index, 1);
+    this.selectedRecipient = null;
+    this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+    this.showSuggestions = false;
+    this.update();
+  },
+  onRemoveNotRegisteredUserRecipient: function (index) {
+    this.notRegisteredUsers.splice(index, 1);
     this.selectedRecipient = null;
     this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
     this.showSuggestions = false;
     this.update();
   },
   onSelectRecipient: function (index) {
-    var recipient = assign({}, this.recipients[index]);
-    if (recipient.newRecipient) {
-      this.selectedRecipient = index;
-      this.recipient = recipient;
-    } else {
-      this.selectedRecipient = null;
-      this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
-    }
+    this.selectedRecipient = index;
+    this.recipient = assign({}, this.notRegisteredUsers[index]);
     this.update();
   },
   onSuggestionIndex: function (index) {
@@ -127,13 +131,13 @@ var AskAdviceStore = Reflux.createStore({
     this.update();
   },
   onSelectRecentSuggestion: function (index) {
-    this.recipients.push(this.suggestions.recent[index]);
+    this.users.push(this.suggestions.recent[index]);
     this.selectedRecipient = null;
     this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
     this.update();
   },
   onSelectRecommendedSuggestion: function (index) {
-    this.recipients.push(this.suggestions.recommended[index]);
+    this.users.push(this.suggestions.recommended[index]);
     this.selectedRecipient = null;
     this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
     this.update();
@@ -156,7 +160,8 @@ var AskAdviceStore = Reflux.createStore({
   },
   update: function () {
     this.trigger({
-      recipients: this.recipients,
+      users: this.users,
+      notRegisteredUsers: this.notRegisteredUsers,
       suggestions: this.suggestions,
       selectedSuggestion: this.selectedSuggestion,
       showSuggestions: this.showSuggestions,
@@ -169,7 +174,8 @@ var AskAdviceStore = Reflux.createStore({
   getInitialState: function () {
     
     return {
-      recipients: this.recipients,
+      users: this.users,
+      notRegisteredUsers: this.notRegisteredUsers,
       suggestions: this.suggestions,
       selectedSuggestion: this.selectedSuggestion,
       showSuggestions: this.showSuggestions,
