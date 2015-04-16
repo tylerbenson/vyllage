@@ -3,13 +3,14 @@ var assign = require('lodash.assign');
 var request = require('superagent');
 var urlTemplate = require('url-template');
 var endpoints = require('../endpoints');
- 
+var firstName = document.getElementById('header-container').getAttribute('name');
+
 var AskAdviceStore = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
     this.tokenHeader = document.getElementById('meta_header').content,
     this.tokenValue = document.getElementById('meta_token').content;
-    this.documentId = window.location.pathname.split('/')[2];
+    // this.documentId = window.location.pathname.split('/')[2];
     this.notRegisteredUsers = [];
     this.users = [];
     this.suggestions = {};
@@ -17,8 +18,8 @@ var AskAdviceStore = Reflux.createStore({
     this.showSuggestions = false;
     this.selectedRecipient = null;
     this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
-    this.subject = '';
-    this.message = '';
+    this.subject = "Could you provide me some feedback on my resume?";
+    this.message = "I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?\n\nThanks,\n" + firstName;
   },
   getRecipientUsersList: function () {
     return this.users.map(function (recipient) {
@@ -26,9 +27,16 @@ var AskAdviceStore = Reflux.createStore({
     })
   },
   onPostAskAdvice: function () {
+    console.log({
+        csrftoken: this.tokenValue,
+        users: this.users,
+        notRegisteredUsers: this.notRegisteredUsers,
+        subject: this.subject,
+        message: this.message
+      })
     request
       .post(endpoints.askAdvice)
-      .set(this.tokenHeader, this.tokenValue) 
+      // .set(this.tokenHeader, this.tokenValue) 
       .send({
         csrftoken: this.tokenValue,
         users: this.users,
@@ -37,18 +45,15 @@ var AskAdviceStore = Reflux.createStore({
         message: this.message
       })
       .end(function (err, res) {
+        console.log(err);
         if (res.status === 200) {
-          // Update the actual redirect location for production
           window.location = '/resume'
         }
       })
   }, 
   onGetSuggestions: function () {
-    var url = urlTemplate
-                .parse(endpoints.askAdviceSuggestions)
-                .expand({documentId: this.documentId});
     request
-      .get(url)
+      .get(endpoints.askAdviceSuggestions)
       .set('Accept', 'application/json')
       .query({firstNameFilter: this.recipient.firstName})
       .query({lastNameFilter: this.recipient.lastName})

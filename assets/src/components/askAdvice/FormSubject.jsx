@@ -12,7 +12,7 @@ var FormSubject = React.createClass({
         <input
           type="text"
           className="inline flat"
-          defaultValue="Could you provide me some feedback on my resume?"
+          defaultValue={this.props.subject}
           onChange={this.handleChange}
         />
       </div>
