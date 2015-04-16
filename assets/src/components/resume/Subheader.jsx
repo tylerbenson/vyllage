@@ -14,11 +14,11 @@ var Subheader = React.createClass({
               <i className="ion-android-share-alt"></i>
               Share
             </button>
-            <a href="javascript:window.print()" className="flat button">
-              <i className="ion-document-text"></i>
-              Export
-            </a>
             */}
+            <a href="javascript:window.print()" className="flat button">
+              <i className="ion-printer"></i>
+              Print
+            </a>
             <a href='/ask-advice' className="button embossed">
               <i className="ion-person-stalker"></i>
               Ask Advice
