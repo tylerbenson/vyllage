@@ -130,7 +130,7 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,
-			RequestMethod.POST }, consumes = "application/x-www-form-urlencoded;charset=UTF-8", produces = "txt/html")
+			RequestMethod.POST }, consumes = "application/x-www-form-urlencoded;charset=UTF-8", produces = "text/html")
 	public String deleteUser(HttpServletRequest request)
 			throws ServletException, UserNotFoundException {
 
