@@ -2,30 +2,62 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Account Settings</title>
+  <title>Vyllage | Account Deleted</title>
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/settings.css" />
+  <link rel="stylesheet" href="css/login.css" />
+  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
 
-  <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,100' rel='stylesheet' type='text/css' />
 
-  <meta name="_csrf_token" th:content="${_csrf.token}" />
-  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <style>
+  .login #container {
+    background-image: url(images/banner-2.jpg);
+  }
+  </style>
 </head>
 
-<body>
-
-  <header>
-    <div id="header-container">
+<body class="login">
+  <div id="container">
+    <header>
+      <div class="content">
+        <div class="logo">
+          <img src="images/logo-orange.png" alt="Vyllage" />
+          <span>Vyllage</span>
+        </div>
+      </div>
+    </header>
+    <div class="sections">
+      <section class="spiel section">
+        <div class="quote">We're sorry to see you go. If you have any concern, feel free to e-mail us at <a href="mailto:hello@vyllage.com">hello@vyllage.com</a></div>
+        <div class="author">You can also go back to the <a href="/">homepage</a>.</div>
+      </section>
     </div>
-  </header>
+    <!-- .sections -->
+  </div>
+  <!-- #container -->
+  <footer>
+    <div class="content">
+      <nav>
+        <ul>
+          <li><a href="">Help</a>
+          </li>
+          <li><a href="">Careers</a>
+          </li>
+          <li><a href="">Terms</a>
+          </li>
+          <li><a href="">Privacy</a>
+          </li>
+          <li><a href="">Contact Us</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
 
-  <label>Your account has been deleted.</label>
-
-  <script src='javascript/base.js'></script>
 </body>
 
 </html>

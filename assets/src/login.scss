@@ -7,6 +7,7 @@
 
 .login {
   #container {
+    background-color: $footer-background;
     background-image: url(../images/banner.jpg);
     background-position: center center;
     background-repeat: no-repeat;
@@ -31,6 +32,14 @@
     .spiel {
       @extend .inverted;
       padding: 0 1em;
+      a {
+        color: lighten($primary-color, 15%);
+        text-decoration: none;
+
+        &:hover {
+          color: lighten($primary-color, 20%);
+        }
+      }
       .quote {
         font-size: 2.5em;
         font-weight: 100;
