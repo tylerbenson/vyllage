@@ -21,6 +21,7 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SuggestionRepository;
+import documents.services.aspect.CheckOwner;
 
 /**
  * This service takes care of saving, retrieving and manipulating documents.
@@ -49,6 +50,7 @@ public class DocumentService {
 	@Autowired
 	private AccountService accountService;
 
+	@CheckOwner
 	public Document saveDocument(Document document) {
 		logger.info("Saving document " + document);
 		return documentRepository.save(document);
@@ -62,23 +64,23 @@ public class DocumentService {
 	 * @return the saved document
 	 * @throws
 	 */
-	public DocumentSection saveDocumentSection(Document document,
-			DocumentSection documentSection) {
+	@CheckOwner
+	public DocumentSection saveDocumentSection(DocumentSection documentSection) {
 
-		logger.info("Saving document section: "
-				+ documentSection.getSectionId() + " from document "
-				+ document.getDocumentId());
+		// logger.info("Saving document section: "
+		// + documentSection.getSectionId() + " from document "
+		// + document.getDocumentId());
+		//
+		// try {
+		// documentRepository.get(document.getDocumentId());
+		//
+		// } catch (ElementNotFoundException e) {
+		// logger.info("Document with id" + document.getDocumentId()
+		// + "not found, saving document first.");
+		// document = this.saveDocument(document);
+		// }
 
-		try {
-			documentRepository.get(document.getDocumentId());
-
-		} catch (ElementNotFoundException e) {
-			logger.info("Document with id" + document.getDocumentId()
-					+ "not found, saving document first.");
-			document = this.saveDocument(document);
-		}
-
-		documentSection.setDocumentId(document.getDocumentId());
+		// documentSection.setDocumentId(document.getDocumentId());
 
 		return documentSectionRepository.save(documentSection);
 

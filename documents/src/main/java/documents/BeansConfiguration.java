@@ -12,4 +12,19 @@ public class BeansConfiguration {
 		return restTemplate;
 	}
 
+	// @Bean
+	// public PermissionEvaluator permissionEvaluator(AclService aclService) {
+	// return new AclPermissionEvaluator(aclService);
+	// }
+	//
+	// @Bean
+	// public DefaultMethodSecurityExpressionHandler
+	// defaultMethodSecurityExpressionHandler(
+	// PermissionEvaluator permissionEvaluator) {
+	// DefaultMethodSecurityExpressionHandler exp = new
+	// DefaultMethodSecurityExpressionHandler();
+	// exp.setPermissionEvaluator(permissionEvaluator);
+	// return exp;
+	// }
+
 }

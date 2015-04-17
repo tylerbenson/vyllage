@@ -39,3 +39,53 @@ create table if not exists DOCUMENTS.suggestions(
 	constraint fk_suggestions_document_sections foreign key(section_id, section_version) references DOCUMENTS.document_sections(id, sectionVersion) on delete cascade);
 
 
+CREATE TABLE IF NOT EXISTS DOCUMENTS.acl_sid (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  principal INT(1) NOT NULL,
+  sid varchar(100) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY unique_uk_1 (sid, principal)
+);
+
+CREATE TABLE IF NOT EXISTS DOCUMENTS.acl_class (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  clazz varchar(255) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY unique_uk_2 (clazz)
+);
+
+CREATE TABLE IF NOT EXISTS DOCUMENTS.acl_entry (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  acl_object_identity bigint(20) NOT NULL,
+  ace_order int(11) NOT NULL,
+  sid bigint(20) NOT NULL,
+  mask int(11) NOT NULL,
+  granting tinyint(1) NOT NULL,
+  audit_success tinyint(1) NOT NULL,
+  audit_failure tinyint(1) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY unique_uk_4 (acl_object_identity,ace_order),
+  UNIQUE KEY foreign_fk_5 (sid)
+);
+
+CREATE TABLE IF NOT EXISTS DOCUMENTS.acl_object_identity (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  object_id_class bigint(20) NOT NULL,
+  object_id_identity bigint(20) NOT NULL,
+  parent_object bigint(20) DEFAULT NULL,
+  owner_sid bigint(20) DEFAULT NULL,
+  entries_inheriting tinyint(1) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY unique_uk_3 (object_id_class, object_id_identity),
+  UNIQUE KEY foreign_fk_1 (parent_object),
+  UNIQUE KEY foreign_fk_3 (owner_sid)
+);
+
+--ALTER TABLE DOCUMENTS.acl_entry 
+--  ADD CONSTRAINT foreign_fk_4 FOREIGN KEY (acl_object_identity) REFERENCES DOCUMENTS.acl_object_identity (id),
+--  ADD CONSTRAINT foreign_fk_5 FOREIGN KEY (sid) REFERENCES DOCUMENTS.acl_sid (id);
+ 
+--ALTER TABLE DOCUMENTS.acl_object_identity
+--  ADD CONSTRAINT foreign_fk_1 FOREIGN KEY (parent_object) REFERENCES DOCUMENTS.acl_object_identity (id),
+--  ADD CONSTRAINT foreign_fk_2 FOREIGN KEY (object_id_class) REFERENCES DOCUMENTS.acl_class (id),
+--  ADD CONSTRAINT foreign_fk_3 FOREIGN KEY (owner_sid) REFERENCES DOCUMENTS.acl_sid (id);

@@ -185,24 +185,26 @@ public class ResumeController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody DocumentSection createSection(
 			@PathVariable final Long documentId,
-			@RequestBody final DocumentSection body)
+			@RequestBody final DocumentSection documentSection)
 			throws JsonProcessingException, ElementNotFoundException {
 
-		Document document = documentService.getDocument(documentId);
-		return documentService.saveDocumentSection(document, body);
+		// Document document = documentService.getDocument(documentId);
+		documentSection.setDocumentId(documentId);
+		return documentService.saveDocumentSection(documentSection);
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
+	// @PreAuthorize("hasPermission(#documentId, 'WRITE')")
 	public @ResponseBody DocumentSection saveSection(
 			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
-			@RequestBody final DocumentSection body)
+			@RequestBody final DocumentSection documentSection)
 			throws JsonProcessingException, ElementNotFoundException {
 
-		Document document = documentService.getDocument(documentId);
-
-		return documentService.saveDocumentSection(document, body);
+		// Document document = documentService.getDocument(documentId);
+		documentSection.setDocumentId(documentId);
+		return documentService.saveDocumentSection(documentSection);
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.DELETE, consumes = "application/json")
