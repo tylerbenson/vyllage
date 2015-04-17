@@ -16,6 +16,8 @@ public class DocumentHeader {
 	private String twitter;
 	private String linkedIn;
 
+	private boolean owner = false;
+
 	public DocumentHeader() {
 	}
 
@@ -89,6 +91,14 @@ public class DocumentHeader {
 
 	public void setLinkedIn(String linkedIn) {
 		this.linkedIn = linkedIn;
+	}
+
+	public boolean isOwner() {
+		return owner;
+	}
+
+	public void setOwner(boolean owner) {
+		this.owner = owner;
 	}
 
 }
