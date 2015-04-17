@@ -71,14 +71,14 @@ public class ResumeController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String resume(HttpServletRequest request)
 			throws ElementNotFoundException {
-		Long userId = getUserId(request);
+		Long userId = getUserIdFromSession(request);
 
 		Document documentByUser = documentService.getDocumentByUser(userId);
 
 		return "redirect:/resume/" + documentByUser.getDocumentId();
 	}
 
-	private Long getUserId(HttpServletRequest request) {
+	private Long getUserIdFromSession(HttpServletRequest request) {
 		return (Long) request.getSession().getAttribute("userId");
 	}
 
@@ -130,7 +130,14 @@ public class ResumeController {
 			throws JsonProcessingException, IOException,
 			ElementNotFoundException {
 
+		Long userId = getUserIdFromSession(request);
 		Document document = documentService.getDocument(documentId);
+
+		DocumentHeader header = new DocumentHeader();
+
+		if (document.getUserId().equals(userId)) {
+			header.setOwner(true);
+		}
 
 		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
 				Arrays.asList(document.getUserId()), request);
@@ -139,7 +146,6 @@ public class ResumeController {
 				.getContactDataForUsers(Arrays.asList(document.getUserId()),
 						request);
 
-		DocumentHeader header = new DocumentHeader();
 		if (namesForUsers != null && namesForUsers.size() > 0) {
 			header.setFirstName(namesForUsers.get(0).getFirstName());
 			header.setMiddleName(namesForUsers.get(0).getMiddleName());
@@ -237,13 +243,13 @@ public class ResumeController {
 			@PathVariable final Long sectionId,
 			@RequestBody final Comment comment) {
 
-		comment.setUserId(getUserId(request));
+		comment.setUserId(getUserIdFromSession(request));
 
 		if (comment.getSectionId() == null)
 			comment.setSectionId(sectionId);
 
 		List<AccountNames> names = accountService.getNamesForUsers(
-				Arrays.asList(getUserId(request)), request);
+				Arrays.asList(getUserIdFromSession(request)), request);
 
 		if (names != null && !names.isEmpty())
 			comment.setUserName(names.get(0).getFirstName() + " "
