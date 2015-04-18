@@ -57,6 +57,7 @@ var Banner = React.createClass({
             </div>
             {(header.owner || header.tagline)? <Textarea
               key={header.tagline || undefined}
+              disabled={!header.owner}
               placeholder="What's your professional tagline?"
               className="transparent tagline"
               rows="1"
@@ -68,6 +69,7 @@ var Banner = React.createClass({
             ></Textarea>: null}
             {(header.owner || header.address)? <Textarea
               key={header.address || undefined}
+              disabled={!header.owner}
               placeholder="Where is your current location?"
               className="transparent address"
               rows="1"
@@ -85,6 +87,7 @@ var Banner = React.createClass({
                 required
                 type='text'
                 placeholder="E-mail Address"
+                disabled={!header.owner}
                 key={header.email || undefined}
                 className="inline transparent"
                 autoComplete="off"
@@ -100,6 +103,7 @@ var Banner = React.createClass({
                 required
                 type='text'
                 placeholder="Contact Number"
+                disabled={!header.owner}
                 key={header.phoneNumber || undefined}
                 className="inline transparent"
                 autoComplete="off"
@@ -115,6 +119,7 @@ var Banner = React.createClass({
                 required
                 type='text'
                 placeholder="LinkedIn profile"
+                disabled={!header.owner}
                 key={header.linkedIn || undefined}
                 className="inline transparent"
                 autoComplete="off"
@@ -130,6 +135,7 @@ var Banner = React.createClass({
                 required
                 type='text'
                 placeholder="Twitter Handle"
+                disabled={!header.owner}
                 key={header.twitter || undefined}
                 className="inline transparent"
                 autoComplete="off"
