@@ -24,9 +24,11 @@ var Banner = React.createClass({
   },
   enableEdiMode: function (field, e) {
     e.preventDefault();
-    var editMode = this.state.editMode;
-    editMode[field] = true;
-    this.setState({editMode: editMode});
+    if (this.props.header.owner) {
+      var editMode = this.state.editMode;
+      editMode[field] = true;
+      this.setState({editMode: editMode});
+    }
   },
   disableEdiMode: function (field, e) {
     e.preventDefault();
@@ -53,7 +55,7 @@ var Banner = React.createClass({
             <div className="name">
               {(header.firstName || '') + " " + (header.middleName || '') + " " + (header.lastName || '')}
             </div>
-            <Textarea
+            {header.owner || header.tagline}? <Textarea
               key={header.tagline || undefined}
               placeholder="What's your professional tagline?"
               className="transparent tagline"
@@ -63,7 +65,7 @@ var Banner = React.createClass({
               onChange={this.handleChange.bind(this, 'tagline')}
               onClick={this.enableEdiMode.bind(this, 'tagline')}
               onBlur={this.disableEdiMode.bind(this, 'tagline')}
-            ></Textarea>
+            ></Textarea>: null}
             <Textarea
               key={header.address || undefined}
               placeholder="Where is your current location?"
