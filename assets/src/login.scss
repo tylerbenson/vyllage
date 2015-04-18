@@ -18,7 +18,8 @@
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    margin: 0.75em 1em;
+    margin: 0.75em auto;
+    max-width: 480px;
     padding: 2em 0;
     position: relative;
   }
@@ -109,6 +110,34 @@
       color: rgba($inverted-text-color, 0.35);
       &:hover {
         color: $inverted-text-color;
+      }
+    }
+  }
+}
+
+@media (max-width: $medium-portrait) {
+  .login {
+    header {
+      padding: 1em;
+      text-align: center;
+    }
+    footer {
+      .content {
+        nav {
+          float: none;
+          margin: auto;
+          width: 100%;
+          text-align: center;
+        }
+      }
+    }
+    .sections {
+      .spiel {
+        display: none;
+      }
+      .section {
+        @include column(1);
+        margin-top: 2em;
       }
     }
   }

@@ -1,3 +1,6 @@
+@import "./components/common/variables";
+@import "jeet/scss/jeet/index";
+
 * {
   font-family: "Raleway", Helvetica, Arial, sans-serif;
 }
@@ -25,7 +28,7 @@ html, body {
 .content {
   margin: auto;
   position: relative;
-  width: 1024px;
+  max-width: 1024px;
 }
 
 .links {
