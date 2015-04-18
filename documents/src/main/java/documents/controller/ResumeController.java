@@ -68,6 +68,23 @@ public class ResumeController {
 		return namesForUsers.get(0);
 	}
 
+	@ModelAttribute("intercom")
+	public AccountContact intercom(HttpServletRequest request) {
+		Long userId = (Long) request.getSession().getAttribute("userId");
+
+		List<AccountContact> contactDataForUsers = accountService
+				.getContactDataForUsers(request, Arrays.asList(userId));
+
+		if (contactDataForUsers.isEmpty()) {
+			AccountContact ac = new AccountContact();
+			ac.setEmail("");
+			ac.setUserId(null);
+			return ac;
+		}
+
+		return contactDataForUsers.get(0);
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String resume(HttpServletRequest request)
 			throws ElementNotFoundException {
@@ -143,8 +160,8 @@ public class ResumeController {
 				Arrays.asList(document.getUserId()), request);
 
 		List<AccountContact> accountContactData = accountService
-				.getContactDataForUsers(Arrays.asList(document.getUserId()),
-						request);
+				.getContactDataForUsers(request,
+						Arrays.asList(document.getUserId()));
 
 		if (namesForUsers != null && namesForUsers.size() > 0) {
 			header.setFirstName(namesForUsers.get(0).getFirstName());

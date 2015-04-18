@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import accounts.constants.Roles;
 import accounts.model.User;
+import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
@@ -61,6 +63,23 @@ public class AccountSettingsController {
 	private List<SettingValidator> validatorsForAll = new LinkedList<>();
 
 	private Map<String, List<String>> settingValues = new HashMap<>();
+
+	@ModelAttribute("intercom")
+	public AccountContact intercom(HttpServletRequest request) {
+		Long userId = (Long) request.getSession().getAttribute("userId");
+
+		List<AccountContact> contactDataForUsers = userService
+				.getAccountContactForUsers(Arrays.asList(userId));
+
+		if (contactDataForUsers.isEmpty()) {
+			AccountContact ac = new AccountContact();
+			ac.setEmail("");
+			ac.setUserId(null);
+			return ac;
+		}
+
+		return contactDataForUsers.get(0);
+	}
 
 	public AccountSettingsController() {
 		validators.put("phoneNumber", new NumberValidator());
