@@ -2,15 +2,44 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
+  <link rel="stylesheet" href="css/email.css" />
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
 </head>
 
 <body>
-  <h1>Hello, </h1>
+  <div id="container">
+    <div class="header">
+      <img src="images/logo.png" alt="Logo" />
+    </div>
+    <div class="content">
+      <h1 th:if="${userName} not null" th:text="'Hello ' + ${userName} + ',"></h1>
+      <h1 th:if="${userName} == null" th:text="'Hello,'"></h1>
 
-  <p th:text="'Your password is: ' + ${password}">
-  </p>
+      <p>You are receiving this because an account on
+        <a href="http://vyllage.com">Vyllage</a> has been created for you. <a href="http://vyllage.com/login">Sign In</a>        with this e-mail and the following password:
+      </p>
 
-  <a href="http://www.vyllage.com">www.vyllage.com</a>
+      <p>
+        <strong>Password:</strong>
+        <code th:text="${password}">asdflkasjdflkasjfoasidf0asd87f</code>
+      </p>
+    </div>
+
+    <div class="signature">
+      <div class="message">See you there,</div>
+      <img src="/images/signature.png" alt="Signature">
+    </div>
+
+    <div class="footer">
+      <span class="pull left">
+        E-mail us at
+        <a href="mailto:hello@vyllage.com">hello@vyllage.com</a>.
+      </span>
+
+      <a class="pull right" href="http://www.vyllage.com">www.vyllage.com</a>
+    </div>
+  </div>
 </body>
 
 </html>

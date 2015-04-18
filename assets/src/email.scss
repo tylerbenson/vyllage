@@ -1,0 +1,97 @@
+@import "jeet/scss/jeet/index";
+@import "./components/common/colors";
+@import "./components/common/variables";
+@import "./components/common/typography";
+@import "./components/common/forms";
+@import "./components/common/defaults";
+@import "./components/common/utilities";
+
+#container {
+	@include center();
+	background: $inverted-text-color;
+	border-radius: 5px;
+	box-shadow: 0 1px 1px rgba(0,0,0,0.25);
+	box-sizing: border-box;
+	margin: 1em auto;
+	max-width: 720px;
+	min-height: auto;
+	padding: 2.5em 3em;
+	position: relative;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: $text-color;
+	font-weight: 400;
+}
+
+code {
+	display: inline-block;
+	border-radius: 3px;
+	padding: 0.15em 0.3em;
+	background: lighten($section-footer-color, 25%);
+	font-family: monospace;
+	font-weight: 100;
+}
+
+.header {
+	border-bottom: #eee solid 1px;
+	text-align: center;
+	padding-bottom: 32px;
+
+	img {
+		display: inline-block;
+		height: 64px;
+	}
+}
+
+.content {
+	padding: 2.5em 1em 1em 1em;
+
+	p {
+		margin: 1.25em 0;
+	}
+
+	a {
+		border-bottom: $primary-color dashed 1px;
+		text-decoration: none;
+
+		&:hover {
+			border-bottom: $primary-color solid 1px;
+		}
+	}
+}
+
+.signature {
+	padding: 1em 1em 0 1em;
+	img {
+		height: 48px;
+		opacity: 0.75;
+	}
+}
+
+.footer {
+	background: $section-footer-background;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-top: darken($section-footer-background, 3%) solid 1px;
+	font-size: 0.8em;
+	text-align: center;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 1em 2em;
+	text-align: center;
+
+	a {
+		text-decoration: none;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
