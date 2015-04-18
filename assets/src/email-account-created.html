@@ -2,22 +2,23 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
-  <link rel="stylesheet" href="css/email.css" />
+  <link rel="shortcut icon" type="image/png" href="http://prod.vyllage.com/images/logo-orange.png" />
+  <link rel="stylesheet" href="http://prod.vyllage.com/css/email.css" />
   <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
 </head>
 
 <body>
   <div id="container">
     <div class="header">
-      <img src="images/logo.png" alt="Logo" />
+      <img src="http://prod.vyllage.com/images/logo.png" alt="Logo" />
     </div>
     <div class="content">
-      <h1 th:if="${userName} not null" th:text="'Hello ' + ${userName} + ',"></h1>
-      <h1 th:if="${userName} == null" th:text="'Hello,'"></h1>
+      <h1>Hello
+        <span th:if="${userName} != null" th:text="${userName}"></span>,
+      </h1>
 
       <p>You are receiving this because an account on
-        <a href="http://vyllage.com">Vyllage</a> has been created for you. <a href="http://vyllage.com/login">Sign In</a>        with this e-mail and the following password:
+        <a href="http://vyllage.com">Vyllage</a> has been created for you. <a href="http://prod.vyllage.com/login">Sign In</a>        with this e-mail and the following password:
       </p>
 
       <p>
@@ -28,7 +29,7 @@
 
     <div class="signature">
       <div class="message">See you there,</div>
-      <img src="/images/signature.png" alt="Signature">
+      <img src="http://prod.vyllage.com//images/signature.png" alt="Signature" />
     </div>
 
     <div class="footer">

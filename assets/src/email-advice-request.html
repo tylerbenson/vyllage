@@ -2,18 +2,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
-  <link rel="stylesheet" href="css/email.css" />
+  <link rel="shortcut icon" type="image/png" href="http://prod.vyllage.com/images/logo-orange.png" />
+  <link rel="stylesheet" href="http://prod.vyllage.com/css/email.css" />
   <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
 </head>
 
 <body>
   <div id="container">
     <div class="header">
-      <img src="images/logo.png" alt="Logo" />
+      <img src="http://prod.vyllage.com/images/logo.png" alt="Logo" />
     </div>
     <div class="content">
-      <h1 th:text="'Hello ' + ${recipientName}"></h1>
+      <h1>Hello
+        <span th:if="${recipientName} != null" th:text="${recipientName}"></span>,
+      </h1>
 
       <p th:text="${message}"></p>
 
@@ -22,7 +24,7 @@
 
     <div class="signature">
       <div class="message">Cheers,</div>
-      <img src="/images/signature.png" alt="Signature">
+      <img src="http://prod.vyllage.com/images/signature.png" alt="Signature" />
     </div>
 
     <div class="footer">
