@@ -136,7 +136,7 @@ var Organization = React.createClass({
                   placeholder="Start Date"
                 />
               </Datepicker>
-              {uiEditMode || section.startDate ? '-': null}
+              {(uiEditMode || (section.startDate && (section.endDate || section.isCurrent)))? '-': null}
               <Datepicker
                 name='endDate'
                 date={section.isCurrent? "Present": section.endDate}
@@ -146,7 +146,7 @@ var Organization = React.createClass({
               >
                 <input
                   disabled={!uiEditMode}
-                  style={uiEditMode || section.endDate ? {}: {display: 'none'}}
+                  style={uiEditMode || section.endDate || section.isCurrent ? {}: {display: 'none'}}
                   type="text"
                   className="inline flat date"
                   placeholder="End Date"
