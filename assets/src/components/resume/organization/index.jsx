@@ -81,10 +81,10 @@ var Organization = React.createClass({
              />
             </h2>
           </div>
-          <div className="actions">
+          {this.props.owner? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
             {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
-          </div>
+          </div>: null}
         </div>
         <div className='content'>
           <Textarea

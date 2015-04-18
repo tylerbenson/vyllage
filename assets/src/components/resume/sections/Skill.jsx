@@ -7,7 +7,7 @@ var Skills = React.createClass({
     return (
       <div className='section'>
         <div className="container">
-          <Freeform title='Skills' section={this.props.section} />
+          <Freeform title='Skills' section={this.props.section} owner={this.props.owner} />
         </div>
       </div>
     );
