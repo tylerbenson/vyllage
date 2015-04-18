@@ -62,8 +62,8 @@ public class AccountService {
 		return Arrays.asList();
 	}
 
-	public List<AccountContact> getContactDataForUsers(List<Long> userIds,
-			HttpServletRequest request) {
+	public List<AccountContact> getContactDataForUsers(
+			HttpServletRequest request, List<Long> userIds) {
 		Assert.notNull(userIds);
 		Assert.notEmpty(userIds);
 

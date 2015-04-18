@@ -65,6 +65,23 @@ public class AdviceRequestController {
 		return namesForUsers.get(0);
 	}
 
+	@ModelAttribute("intercom")
+	public AccountContact intercom(HttpServletRequest request) {
+		Long userId = (Long) request.getSession().getAttribute("userId");
+
+		List<AccountContact> contactDataForUsers = accountService
+				.getContactDataForUsers(request, Arrays.asList(userId));
+
+		if (contactDataForUsers.isEmpty()) {
+			AccountContact ac = new AccountContact();
+			ac.setEmail("");
+			ac.setUserId(null);
+			return ac;
+		}
+
+		return contactDataForUsers.get(0);
+	}
+
 	@RequestMapping(value = "ask-advice", method = RequestMethod.GET)
 	public String askAdvice() {
 		return "askAdvice";
