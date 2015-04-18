@@ -3,8 +3,12 @@ package documents.controllers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -32,6 +36,14 @@ public class ResumeControllerIntegTest {
 
 		Document document = generateDocument();
 
+		Authentication authentication = Mockito.mock(Authentication.class);
+		// Mockito.whens() for your authorization object
+		// Mockito.when(authentication.getPrincipal())
+		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+		Mockito.when(securityContext.getAuthentication()).thenReturn(
+				authentication);
+		SecurityContextHolder.setContext(securityContext);
+
 		document = documentService.saveDocument(document);
 
 		String tagline = "aeiou";
@@ -40,7 +52,8 @@ public class ResumeControllerIntegTest {
 
 		controller.updateHeader(document.getDocumentId(), documentHeader);
 
-		Document document2 = documentService.getDocument(document.getDocumentId());
+		Document document2 = documentService.getDocument(document
+				.getDocumentId());
 
 		Assert.assertEquals("Taglines are different.", tagline,
 				document2.getTagline());

@@ -9,6 +9,8 @@ import javax.crypto.NoSuchPaddingException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import accounts.service.Encryptor;
+
 public class LinkEncryptorTest {
 
 	@Test

@@ -36,6 +36,8 @@ import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.service.UserService;
+import accounts.service.aspects.CheckOwner;
+import accounts.service.aspects.CheckPrivacy;
 import accounts.validation.EmailSettingValidator;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
@@ -114,6 +116,7 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "application/json")
+	@CheckPrivacy
 	public @ResponseBody List<AccountSetting> getAccountSettings() {
 
 		List<AccountSetting> settings = userService
@@ -123,6 +126,7 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.PUT, produces = "application/json")
+	@CheckOwner
 	public @ResponseBody List<AccountSetting> setAccountSettings(
 			@RequestBody final List<AccountSetting> settings) {
 		User user = getUser();
@@ -145,12 +149,14 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
+	@CheckPrivacy
 	public @ResponseBody List<AccountSetting> getAccountSetting(
 			@PathVariable String parameter) throws ElementNotFoundException {
 		return userService.getAccountSetting(getUser(), parameter);
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
+	@CheckOwner
 	public @ResponseBody AccountSetting setAccountSetting(
 			@PathVariable String parameter,
 			@Valid @RequestBody final AccountSetting setting,

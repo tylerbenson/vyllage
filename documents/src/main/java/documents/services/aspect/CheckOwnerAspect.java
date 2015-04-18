@@ -14,7 +14,7 @@ import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 
 @Aspect
-@Component
+@Component("documents.CheckOwnerAspect")
 public class CheckOwnerAspect {
 
 	@Autowired

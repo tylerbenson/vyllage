@@ -26,6 +26,7 @@ import accounts.model.User;
 import accounts.model.account.settings.AccountSetting;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
+import accounts.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)

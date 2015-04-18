@@ -169,11 +169,11 @@ public class UserService {
 
 		List<UserRole> defaultAuthoritiesForNewUser = userRoleRepository
 				.getDefaultAuthoritiesForNewUser();
-		
+
 		List<OrganizationMember> organizationMemberList = ((User) SecurityContextHolder
 				.getContext().getAuthentication().getPrincipal())
 				.getOrganizationMember();
-		
+
 		List<OrganizationMember> newOrganizationMember = new ArrayList<>();
 
 		for (OrganizationMember organizationMember : organizationMemberList) {
@@ -357,9 +357,8 @@ public class UserService {
 	 * @param user
 	 * @return
 	 */
-	protected List<Organization> getOrganizationsForUser(User user) {
-		return organizationMemberRepository.getByUserId(user.getUserId())
-				.stream()
+	public List<Organization> getOrganizationsForUser(User user) {
+		return user.getOrganizationMember().stream()
 				.map(om -> organizationRepository.get(om.getOrganizationId()))
 				.collect(Collectors.toList());
 	}
