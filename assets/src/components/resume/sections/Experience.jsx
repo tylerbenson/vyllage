@@ -14,11 +14,11 @@ var Experience = React.createClass({
       sectionNodes = sections.map(function (section, index) {
         return (
           <div key={section.sectionId} >
-            <Organization section={section} placeholders={placeholders}/>
+            <Organization section={section} placeholders={placeholders} owner={this.props.owner} />
             <SectionFooter section={section} />
           </div>
         );
-      })
+      }.bind(this))
     } else {
       sectionNodes = <p className='content empty'>No experience added yet</p>;
     }

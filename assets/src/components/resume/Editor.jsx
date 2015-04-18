@@ -27,10 +27,10 @@ var ResumeEditor = React.createClass({
         <Subheader documentId={this.state.resume.documentId}/>
         <Banner header={this.state.resume.header} />
         <div className="sections">
-          <CareerGoal section={careerGoalSections[0]} />
-          <Experience sections={experienceSections} />
-          <Education sections={educationSections} />
-          <Skill section={skillSections[0]} />
+          <CareerGoal section={careerGoalSections[0]} owner={this.state.resume.header.owner} />
+          <Experience sections={experienceSections} owner={this.state.resume.header.owner} />
+          <Education sections={educationSections} owner={this.state.resume.header.owner} />
+          <Skill section={skillSections[0]} owner={this.state.resume.header.owner} />
         </div>
       </div>
     );

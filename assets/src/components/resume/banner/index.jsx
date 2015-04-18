@@ -24,9 +24,11 @@ var Banner = React.createClass({
   },
   enableEdiMode: function (field, e) {
     e.preventDefault();
-    var editMode = this.state.editMode;
-    editMode[field] = true;
-    this.setState({editMode: editMode});
+    if (this.props.header.owner) {
+      var editMode = this.state.editMode;
+      editMode[field] = true;
+      this.setState({editMode: editMode});
+    }
   },
   disableEdiMode: function (field, e) {
     e.preventDefault();
@@ -53,8 +55,9 @@ var Banner = React.createClass({
             <div className="name">
               {(header.firstName || '') + " " + (header.middleName || '') + " " + (header.lastName || '')}
             </div>
-            <Textarea
+            {(header.owner || header.tagline)? <Textarea
               key={header.tagline || undefined}
+              disabled={!header.owner}
               placeholder="What's your professional tagline?"
               className="transparent tagline"
               rows="1"
@@ -63,9 +66,10 @@ var Banner = React.createClass({
               onChange={this.handleChange.bind(this, 'tagline')}
               onClick={this.enableEdiMode.bind(this, 'tagline')}
               onBlur={this.disableEdiMode.bind(this, 'tagline')}
-            ></Textarea>
-            <Textarea
+            ></Textarea>: null}
+            {(header.owner || header.address)? <Textarea
               key={header.address || undefined}
+              disabled={!header.owner}
               placeholder="Where is your current location?"
               className="transparent address"
               rows="1"
@@ -74,15 +78,16 @@ var Banner = React.createClass({
               onChange={this.handleChange.bind(this, 'address')}
               onClick={this.enableEdiMode.bind(this, 'address')}
               onBlur={this.disableEdiMode.bind(this, 'address')}
-            ></Textarea>
+            ></Textarea>: null}
           </div>
           <div className="contact">
-            <div className='detail'>
+            {(header.owner || header.email)? <div className='detail'>
               <i className="ion-email"></i>
               <input
                 required
                 type='text'
                 placeholder="E-mail Address"
+                disabled={!header.owner}
                 key={header.email || undefined}
                 className="inline transparent"
                 autoComplete="off"
@@ -91,13 +96,14 @@ var Banner = React.createClass({
                 onClick={this.enableEdiMode.bind(this, 'email')}
                 onBlur={this.disableEdiMode.bind(this, 'email')}
               />
-            </div>
-            <div className='detail'>
+            </div>: null}
+            {(header.owner || header.phoneNumber)? <div className='detail'>
               <i className="ion-ios-telephone"></i>
               <input
                 required
                 type='text'
                 placeholder="Contact Number"
+                disabled={!header.owner}
                 key={header.phoneNumber || undefined}
                 className="inline transparent"
                 autoComplete="off"
@@ -106,13 +112,14 @@ var Banner = React.createClass({
                 onClick={this.enableEdiMode.bind(this, 'phoneNumber')}
                 onBlur={this.disableEdiMode.bind(this, 'phoneNumber')}
               />
-            </div>
-            <div className='detail'>
+            </div>: null}
+            {(header.owner || header.linkedIn)? <div className='detail'>
               <i className="ion-social-linkedin"></i>
               <input
                 required
                 type='text'
                 placeholder="LinkedIn profile"
+                disabled={!header.owner}
                 key={header.linkedIn || undefined}
                 className="inline transparent"
                 autoComplete="off"
@@ -121,13 +128,14 @@ var Banner = React.createClass({
                 onClick={this.enableEdiMode.bind(this, 'linkedIn')}
                 onBlur={this.disableEdiMode.bind(this, 'linkedIn')}
               />
-            </div>
-            <div className='detail'>
+            </div>: null}
+            {(header.owner || header.twitter)? <div className='detail'>
               <i className="ion-social-twitter"></i>
               <input
                 required
                 type='text'
                 placeholder="Twitter Handle"
+                disabled={!header.owner}
                 key={header.twitter || undefined}
                 className="inline transparent"
                 autoComplete="off"
@@ -136,7 +144,7 @@ var Banner = React.createClass({
                 onClick={this.enableEdiMode.bind(this, 'twitter')}
                 onBlur={this.disableEdiMode.bind(this, 'twitter')}
               />
-            </div>
+            </div>: null}
           </div>
         </div>
       </section>
