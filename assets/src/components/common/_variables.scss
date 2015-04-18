@@ -1,3 +1,11 @@
 $jeet-max-width: 960px;
 
+// Breakpoints
+$large-portrait: 768px;
+$large-landscape: 1048px;
+$medium-portrait: 640px;
+$medium-landscape: 960px;
+$small-portrait: 240px;
+$small-landscape: 320px;
+
 @import "./colors";
