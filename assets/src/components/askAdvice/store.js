@@ -12,6 +12,7 @@ var AskAdviceStore = Reflux.createStore({
     this.tokenValue = document.getElementById('meta_token').content;
     // this.documentId = window.location.pathname.split('/')[2];
     this.notRegisteredUsers = [];
+    this.processing= false;
     this.users = [];
     this.suggestions = {};
     this.selectedSuggestion = null;
@@ -27,13 +28,8 @@ var AskAdviceStore = Reflux.createStore({
     })
   },
   onPostAskAdvice: function () {
-    console.log({
-        csrftoken: this.tokenValue,
-        users: this.users,
-        notRegisteredUsers: this.notRegisteredUsers,
-        subject: this.subject,
-        message: this.message
-      })
+    this.processing = true;
+    this.update();
     request
       .post(endpoints.askAdvice)
       .set(this.tokenHeader, this.tokenValue) 
@@ -45,11 +41,12 @@ var AskAdviceStore = Reflux.createStore({
         message: this.message
       })
       .end(function (err, res) {
-        console.log(err);
         if (res.status === 200) {
           window.location = '/resume'
+          this.processing = false;
+          this.update();
         }
-      })
+      }.bind(this))
   }, 
   onGetSuggestions: function () {
     request
@@ -170,7 +167,8 @@ var AskAdviceStore = Reflux.createStore({
       selectedRecipient: this.selectedRecipient,
       recipient: this.recipient,
       subject: this.subject,
-      message: this.message
+      message: this.message,
+      processing: this.processing
     })
   },
   getInitialState: function () {
@@ -185,6 +183,7 @@ var AskAdviceStore = Reflux.createStore({
       recipient: this.recipient,
       subject: this.subject,
       message: this.message,
+      processing: this.processing
     }
   }
 });

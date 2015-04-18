@@ -6,6 +6,7 @@ var Message = require('./FormMessage');
 var Reflux = require('reflux');
 var AskAdviceStore = require('./store');
 var Actions = require('./actions');
+var Modal = require('../modal');
 
 var Form = React.createClass({
   mixins: [Reflux.connect(AskAdviceStore)],
@@ -39,6 +40,10 @@ var Form = React.createClass({
                 </button>
               </div>
             </div>
+            <Modal isOpen={this.state.processing}>
+              <p>We are sending this request to the added recipients.</p>
+              <p>Please wait</p>
+            </Modal>
           </div>
         </div>
       </div>
