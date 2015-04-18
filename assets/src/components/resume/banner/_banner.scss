@@ -15,7 +15,6 @@
     }
     .tagline {
       color: $tagline-color;
-      margin-bottom: 0.5em;
       width: 100%;
     }
     .address {
@@ -53,6 +52,48 @@
 
         i {
           color: lighten($tagline-color, 5%);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $medium-portrait) {
+  .banner {
+    text-align: center;
+    .info {
+      @include column(1);
+      .name,
+      textarea {
+        text-align: center;
+      }
+    }
+    .contact {
+      @include column(1);
+      background: rgba(0,0,0,0.1);
+      border-radius: 5px;
+      display: inline-block;
+      font-size: 0.85em;
+      float: none;
+      width: auto;
+      margin: auto;
+      padding: 0 0.5em;
+      .detail {
+        text-align: center;
+        margin: 0.75em 1em;
+      }
+    }
+  }
+
+  .header {
+    .actions {
+      button,
+      .button {
+        span {
+          display: none;
+        }
+        i {
+          margin: 0;
         }
       }
     }

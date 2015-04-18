@@ -119,3 +119,10 @@
     }
   }
 }
+
+@media (max-width: $medium-portrait) {
+  .dropdown-list {
+    left: auto;
+    right: 0;
+  }
+}
