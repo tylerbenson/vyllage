@@ -19,7 +19,7 @@
         var s = d.createElement('script');
         s.type = 'text/javascript';
         s.async = true;
-        s.src = 'https://widget.intercom.io/widget/dtqkoq5u';
+        s.src = 'https://widget.intercom.io/widget/g503rj0r';
         var x = d.getElementsByTagName('script')[0];
         x.parentNode.insertBefore(s, x);
       }
@@ -34,6 +34,6 @@
 window.intercomSettings = {
   name: document.getElementById('header-container').getAttribute('name'),
   email: document.getElementById('meta_email').getAttribute('content'),
-  created_at: 1429371686,
-  app_id: "dtqkoq5u"
+  created_at: document.getElementById('meta_created_at').getAttribute('content'),
+  app_id: "g503rj0r"
 };
