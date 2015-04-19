@@ -253,11 +253,8 @@ public class AccountController {
 
 		emailBuilder
 				.from(env.getProperty("email.userName", "no-reply@vyllage.com"))
-				.subject("Reset Password")
-				.to(email)
-				.templateName(
-						env.getProperty("change.password.html",
-								"email-changePassword")).setNoHtmlMessage(txt)
+				.subject("Reset Password").to(email)
+				.templateName("email-change-password").setNoHtmlMessage(txt)
 				.addTemplateVariable("userName", userName)
 				.addTemplateVariable("url", txt)
 				.addTemplateVariable("encodedLink", encodedString).send();

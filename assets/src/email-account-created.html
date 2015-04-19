@@ -2,15 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <link rel="shortcut icon" type="image/png" href="http://prod.vyllage.com/images/logo-orange.png" />
-  <link rel="stylesheet" href="http://prod.vyllage.com/css/email.css" />
+  <link rel="shortcut icon" type="image/png" th:href="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/logo-orange.png}"
+  />
+  <link rel="stylesheet" th:href="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__/css/email.css}"
+  />
   <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
 </head>
 
 <body>
   <div id="container">
     <div class="header">
-      <img src="http://prod.vyllage.com/images/logo.png" alt="Logo" />
+      <img th:src="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/logo.png}" alt="Logo" />
     </div>
     <div class="content">
       <h1>Hello
@@ -18,18 +20,20 @@
       </h1>
 
       <p>You are receiving this because an account on
-        <a href="http://vyllage.com">Vyllage</a> has been created for you. <a href="http://prod.vyllage.com/login">Sign In</a>        with this e-mail and the following password:
+        <a th:href="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__}">Vyllage</a> has been created
+        for you. <a th:href="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}">Sign In</a>        with this e-mail and the following password:
       </p>
 
       <p>
         <strong>Password:</strong>
-        <code th:text="${password}">asdflkasjdflkasjfoasidf0asd87f</code>
+        <code th:text="${password}">Error. Contact support!</code>
       </p>
     </div>
 
     <div class="signature">
       <div class="message">See you there,</div>
-      <img src="http://prod.vyllage.com/images/signature.png" alt="Signature" />
+      <img th:src="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/signature.png}" alt="Signature"
+      />
     </div>
 
     <div class="footer">
@@ -38,7 +42,7 @@
         <a href="mailto:hello@vyllage.com">hello@vyllage.com</a>.
       </span>
 
-      <a class="pull right" href="http://www.vyllage.com">www.vyllage.com</a>
+      <a class="pull right" th:href="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__}" th:text="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__}">www.vyllage.com</a>
     </div>
   </div>
 </body>

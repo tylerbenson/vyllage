@@ -33,4 +33,19 @@ public class IndexController {
 	public String postIndex() {
 		return "index";
 	}
+
+	@RequestMapping("/email-account-created")
+	public String emailAccountCreated() {
+		return "email-account-created";
+	}
+
+	@RequestMapping("/email-advice-request")
+	public String emailAdviceRequest() {
+		return "email-advice-request";
+	}
+
+	@RequestMapping("/email-change-password")
+	public String emailChangePassword() {
+		return "email-change-password";
+	}
 }
