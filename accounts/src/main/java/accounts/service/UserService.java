@@ -1,5 +1,6 @@
 package accounts.service;
 
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -169,11 +170,11 @@ public class UserService {
 
 		List<UserRole> defaultAuthoritiesForNewUser = userRoleRepository
 				.getDefaultAuthoritiesForNewUser();
-		
+
 		List<OrganizationMember> organizationMemberList = ((User) SecurityContextHolder
 				.getContext().getAuthentication().getPrincipal())
 				.getOrganizationMember();
-		
+
 		List<OrganizationMember> newOrganizationMember = new ArrayList<>();
 
 		for (OrganizationMember organizationMember : organizationMemberList) {
@@ -443,8 +444,21 @@ public class UserService {
 						Collectors.mapping((AccountSetting as) -> as,
 								Collectors.toList())));
 
-		return map.entrySet().stream().map(UserService::mapAccountContact)
-				.collect(Collectors.toList());
+		return map
+				.entrySet()
+				.stream()
+				.map(UserService::mapAccountContact)
+				.map(ac -> {
+					// hmmm, this should never happen...
+					try {
+						ac.setRegisteredOn(this.getUser(ac.getUserId())
+								.getDateCreated().toInstant(ZoneOffset.UTC)
+								.getEpochSecond());
+					} catch (UserNotFoundException e) {
+						e.printStackTrace();
+					}
+					return ac;
+				}).collect(Collectors.toList());
 	}
 
 	/**

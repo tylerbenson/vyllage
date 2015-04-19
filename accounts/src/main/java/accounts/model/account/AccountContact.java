@@ -10,9 +10,13 @@ public class AccountContact {
 	private String phoneNumber;
 	private String twitter;
 	private String linkedIn;
+
 	private String firstName;
 	private String middleName;
 	private String lastName;
+
+	// for intercom...
+	private Long registeredOn;
 
 	public AccountContact(Long userId, String address, String email,
 			String phoneNumber, String twitter, String linkedIn) {
@@ -99,4 +103,13 @@ public class AccountContact {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	public Long getRegisteredOn() {
+		return registeredOn;
+	}
+
+	public void setRegisteredOn(Long registeredOn) {
+		this.registeredOn = registeredOn;
+	}
+
 }
