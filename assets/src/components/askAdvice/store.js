@@ -18,7 +18,7 @@ var AskAdviceStore = Reflux.createStore({
     this.selectedSuggestion = null;
     this.showSuggestions = false;
     this.selectedRecipient = null;
-    this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+    this.recipient = {firstName: "", lastName: "", email: ""};
     this.subject = "Could you provide me some feedback on my resume?";
     this.message = "I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?\n\nThanks,\n" + firstName;
   },
@@ -30,6 +30,7 @@ var AskAdviceStore = Reflux.createStore({
   onPostAskAdvice: function () {
     this.processing = true;
     this.update();
+    console.log(this.users, this.notRegisteredUsers)
     request
       .post(endpoints.askAdvice)
       .set(this.tokenHeader, this.tokenValue) 
@@ -41,6 +42,7 @@ var AskAdviceStore = Reflux.createStore({
         message: this.message
       })
       .end(function (err, res) {
+        console.log(err, res)
         if (res.status === 200) {
           window.location = '/resume'
           this.processing = false;
@@ -87,28 +89,28 @@ var AskAdviceStore = Reflux.createStore({
   onAddRecipient: function (recipient) {
     this.notRegisteredUsers.push(recipient)
     this.selectedRecipient = null;
-    this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+    this.recipient = {firstName: "", lastName: "", email: ""};
     this.showSuggestions = false;
     this.update();
   },
   onUpdateRecipient: function (recipient, index) {
     this.notRegisteredUsers[index] = recipient;
     this.selectedRecipient = null;
-    this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+    this.recipient = {firstName: "", lastName: "", email: ""};
     this.showSuggestions = false;
     this.update();
   },
   onRemoveUserRecipient: function (index) {
     this.users.splice(index, 1);
     this.selectedRecipient = null;
-    this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+    this.recipient = {firstName: "", lastName: "", email: ""};
     this.showSuggestions = false;
     this.update();
   },
   onRemoveNotRegisteredUserRecipient: function (index) {
     this.notRegisteredUsers.splice(index, 1);
     this.selectedRecipient = null;
-    this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+    this.recipient = {firstName: "", lastName: "", email: ""};
     this.showSuggestions = false;
     this.update();
   },
@@ -132,13 +134,13 @@ var AskAdviceStore = Reflux.createStore({
   onSelectRecentSuggestion: function (index) {
     this.users.push(this.suggestions.recent[index]);
     this.selectedRecipient = null;
-    this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+    this.recipient = {firstName: "", lastName: "", email: ""};
     this.update();
   },
   onSelectRecommendedSuggestion: function (index) {
     this.users.push(this.suggestions.recommended[index]);
     this.selectedRecipient = null;
-    this.recipient = {firstName: "", lastName: "", email: "", newRecipient: true};
+    this.recipient = {firstName: "", lastName: "", email: ""};
     this.update();
   },
   onOpenSuggestions: function () {
