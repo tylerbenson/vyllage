@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 @Service("accountsMailService")
 public class MailService {
@@ -30,7 +30,7 @@ public class MailService {
 	private String from;
 
 	@Autowired
-	private TemplateEngine templateEngine;
+	private SpringTemplateEngine templateEngine;
 
 	/**
 	 * Sends a simple text mail.
