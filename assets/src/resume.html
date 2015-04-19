@@ -6,19 +6,19 @@
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
-
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/resume.css" />
-  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
   <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
   <meta name="email" th:content="${intercom.email}" id="meta_email" />
   <meta name="userId" th:content="${intercom.userId}" id="meta_user" />
   <meta name="registeredOn" th:content="${intercom.registeredOn}" id="meta_created_at" />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/resume.css" />
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
+  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+
 </head>
 
 <body>
@@ -27,9 +27,10 @@
     <div id="resume"></div>
   </div>
   <div id='footer'></div>
-
   <script type="text/javascript" src="javascript/base.js"></script>
   <script type="text/javascript" src="javascript/resume.js"></script>
+
+
 </body>
 
 </html>
