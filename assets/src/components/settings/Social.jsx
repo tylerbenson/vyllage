@@ -7,23 +7,13 @@ var Social = React.createClass({
   mixins: [SettingsMixin],
   render: function () {
     var settings = this.props.settings || {};
-    var urlSetting = filter(this.props.settings, {name: 'url'})[0] || {value: ''};
+    // var urlSetting = filter(this.props.settings, {name: 'url'})[0] || {value: ''};
     var facebookSetting = filter(this.props.settings, {name: 'facebook'})[0] || {value: ''};
     var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {value: ''};
     var linkedInSetting = filter(this.props.settings, {name: 'linkedIn'})[0] || {value: ''};
     return (
       <div className='content'>
         <form ref='social' onSubmit={this.saveHandler}>
-          <label>Vyllage Handle</label>
-          <span className="tip">www.vyllage.com/<em>handle</em></span>
-          <input
-            key={urlSetting.value || undefined}
-            ref='url'
-            type='text'
-            className='padded'
-            defaultValue={urlSetting.value}
-            onChange={this.changeHandler.bind(this, 'url')}
-          />
 
           <label>Facebook</label>
           <input
@@ -63,3 +53,14 @@ var Social = React.createClass({
 });
 
 module.exports = Social;
+
+// <label>Vyllage Handle</label>
+// <span className="tip">www.vyllage.com/<em>handle</em></span>
+// <input
+//   key={urlSetting.value || undefined}
+//   ref='url'
+//   type='text'
+//   className='padded'
+//   defaultValue={urlSetting.value}
+//   onChange={this.changeHandler.bind(this, 'url')}
+// />
