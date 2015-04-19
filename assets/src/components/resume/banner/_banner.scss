@@ -30,6 +30,7 @@
     .detail {
       display: block;
       margin: 1em;
+      white-space: nowrap;
 
       i {
         display: inline-block;
@@ -89,11 +90,19 @@
     .actions {
       button,
       .button {
+        padding: 0.35em 0.6em 0.3em 0.6em;
+        font-size: 0.85em;
         span {
           display: none;
         }
         i {
           margin: 0;
+        }
+
+        &.cancel {
+          i {
+            display: inline;
+          }
         }
       }
     }

@@ -14,3 +14,28 @@ footer {
     }
   }
 }
+
+@media (max-width: $medium-portrait) {
+  footer {
+    font-size: 14px;
+    height: 44px;
+    nav ul li a {
+      padding: 1.35em 0.75em;
+    }
+  }
+}
+
+@media (max-width: $small-landscape) {
+  footer {
+    .logo {
+      display: none;
+    }
+    nav {
+      float: none;
+      margin: auto;
+      white-space: nowrap;
+      width: 100%;
+      text-align: center;
+    }
+  }
+}

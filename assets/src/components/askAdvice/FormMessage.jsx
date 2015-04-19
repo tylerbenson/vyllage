@@ -1,5 +1,6 @@
 var React = require('react');
 var Actions = require('./actions');
+var Textarea = require('react-textarea-autosize');
 
 var FormBody = React.createClass({
   handleChange: function(e) {
@@ -9,7 +10,7 @@ var FormBody = React.createClass({
     return (
       <div className="message content">
         <h2>Message:</h2>
-        <textarea className="flat" rows="5" defaultValue={this.props.message} onChange={this.handleChange}></textarea>
+        <Textarea className="flat" rows="5" defaultValue={this.props.message} onChange={this.handleChange}></Textarea>
       </div>
     );
   }

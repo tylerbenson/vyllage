@@ -82,9 +82,13 @@
         border-bottom: lighten($secondary-color, 30%) solid 1px;
         padding: 2em 3em;
         &.account{
+          font-size: 0.85em;
           border-bottom: none;
           padding: 1.5em;
           text-align: center;
+          a {
+            margin-left: 0.25em;
+          }
         }
       }
       input {
@@ -124,10 +128,16 @@
     footer {
       .content {
         nav {
+          font-size: 0.8em;
           float: none;
           margin: auto;
           width: 100%;
           text-align: center;
+          white-space: nowrap;
+
+          a {
+            padding: 0 0.75em;
+          }
         }
       }
     }
@@ -138,6 +148,11 @@
       .section {
         @include column(1);
         margin-top: 2em;
+        padding: 0 1em;
+
+        .content {
+          padding: 2em;
+        }
       }
     }
   }

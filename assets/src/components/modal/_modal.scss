@@ -34,6 +34,7 @@
       @include column(3/4);
       font-size: 1.25em;
       font-weight: 400;
+      white-space: nowrap;
     }
 
     .actions {
@@ -57,5 +58,12 @@
     border: none;
     margin-top: 1em;
     text-align: right;
+  }
+}
+
+@media (max-width: $medium-portrait) {
+  .section .modal,
+  .modal {
+    width: 320px
   }
 }

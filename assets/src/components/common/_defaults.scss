@@ -66,3 +66,21 @@ textarea {
     bottom: 0.25em;
   }
 }
+
+@media (max-width: $medium-portrait) {
+  body {
+    font-size: 16px;
+  }
+  #container {
+    margin-bottom: -44px;
+    &:after {
+      height: 44px;
+    }
+  }
+}
+
+@media (max-width: $small-landscape) {
+  body {
+    font-size: 14px;
+  }
+}

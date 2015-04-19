@@ -14,13 +14,13 @@ var Social = React.createClass({
     return (
       <div className='content'>
         <form ref='social' onSubmit={this.saveHandler}>
-          <label>URL</label>
-          <span>www.vyllage.com/</span>
+          <label>Vyllage Handle</label>
+          <span className="tip">www.vyllage.com/<em>handle</em></span>
           <input
             key={urlSetting.value || undefined}
             ref='url'
             type='text'
-            className='inline url'
+            className='padded'
             defaultValue={urlSetting.value}
             onChange={this.changeHandler.bind(this, 'url')}
           />

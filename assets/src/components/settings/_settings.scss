@@ -113,6 +113,16 @@
         margin-top: 2em;
       }
 
+      span.tip {
+        display: block;
+        font-size: 0.85em;
+        margin-bottom: 0.5em;
+
+        em {
+          color: $secondary-color;
+        }
+      }
+
       .url {
         width: 9.5em;
       }
