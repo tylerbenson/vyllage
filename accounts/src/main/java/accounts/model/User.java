@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import lombok.ToString;
+
 import org.springframework.security.core.GrantedAuthority;
 
+@ToString
 public class User extends org.springframework.security.core.userdetails.User {
 
 	private Long userId;

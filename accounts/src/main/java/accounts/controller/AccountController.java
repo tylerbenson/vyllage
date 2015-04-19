@@ -271,7 +271,8 @@ public class AccountController {
 	public @ResponseBody List<AccountContact> getContactInformation(
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {
 
-		return userService.getAccountContactForUsers(userIds);
+		return userService.getAccountContactForUsers(userService
+				.getAccountSettings(userIds));
 	}
 
 	private User getUser() {

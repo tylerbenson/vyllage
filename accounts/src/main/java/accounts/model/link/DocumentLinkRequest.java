@@ -28,7 +28,7 @@ public class DocumentLinkRequest {
 
 	private String documentType;
 
-	private boolean sendRegistrationMail = true;
+	private boolean sendRegistrationMail;
 
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)

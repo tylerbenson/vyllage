@@ -36,6 +36,7 @@ import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.service.UserService;
+import accounts.service.aspects.CheckOwner;
 import accounts.validation.EmailSettingValidator;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
@@ -69,7 +70,8 @@ public class AccountSettingsController {
 		Long userId = (Long) request.getSession().getAttribute("userId");
 
 		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(Arrays.asList(userId));
+				.getAccountContactForUsers(userService
+						.getAccountSettings(Arrays.asList(userId)));
 
 		if (contactDataForUsers.isEmpty()) {
 			AccountContact ac = new AccountContact();
@@ -122,6 +124,7 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.PUT, produces = "application/json")
+	@CheckOwner
 	public @ResponseBody List<AccountSetting> setAccountSettings(
 			@RequestBody final List<AccountSetting> settings) {
 		User user = getUser();
@@ -150,6 +153,7 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
+	@CheckOwner
 	public @ResponseBody AccountSetting setAccountSetting(
 			@PathVariable String parameter,
 			@Valid @RequestBody final AccountSetting setting,

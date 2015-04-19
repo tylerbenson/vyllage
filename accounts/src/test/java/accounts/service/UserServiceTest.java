@@ -24,6 +24,7 @@ import accounts.constants.Roles;
 import accounts.model.BatchAccount;
 import accounts.model.User;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
 
@@ -154,6 +155,7 @@ public class UserServiceTest {
 		as.setName(emailUpdates);
 		as.setUserId(userId);
 		as.setValue(value);
+		as.setPrivacy(Privacy.PUBLIC.name());
 
 		Mockito.when(u.getUserId()).thenReturn(userId);
 
@@ -177,6 +179,7 @@ public class UserServiceTest {
 		as.setName(fieldName);
 		as.setUserId(userId);
 		as.setValue(value);
+		as.setPrivacy(Privacy.PUBLIC.name());
 
 		Mockito.when(u.getUserId()).thenReturn(userId);
 
@@ -200,6 +203,7 @@ public class UserServiceTest {
 		as.setName("data-integrity");
 		as.setUserId(userId);
 		as.setValue("data-integrity");
+		as.setPrivacy(Privacy.PUBLIC.name());
 
 		service.setAccountSetting(u, as);
 	}

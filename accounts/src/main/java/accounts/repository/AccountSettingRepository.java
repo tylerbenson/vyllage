@@ -30,6 +30,13 @@ public class AccountSettingRepository {
 				.collect(Collectors.toList());
 	}
 
+	/**
+	 * Retrieves account settings based on user user ids.
+	 * 
+	 * @param User
+	 *            ids
+	 * @return
+	 */
 	public List<AccountSetting> getAccountSettings(List<Long> ids) {
 		List<Record> result = sql.select().from(ACCOUNT_SETTING)
 				.where(ACCOUNT_SETTING.USER_ID.in(ids)).fetch();

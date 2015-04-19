@@ -7,9 +7,10 @@ jar {
 
 dependencies {
 	compile parent.javascriptProjects.findAll { it != project}
-
-	//    compile("org.springframework.boot:spring-boot-starter-security")
-	//    compile("org.springframework.boot:spring-boot-starter-aop")
+	compile 'org.springframework.security:spring-security-acl:3.2.7.RELEASE'
+	
+	    compile("org.springframework.boot:spring-boot-starter-security")
+	compile("org.springframework.boot:spring-boot-starter-aop")
 	compile("org.springframework.boot:spring-boot-starter-jdbc")
 	//    compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	//    compile("org.springframework.boot:spring-boot-starter-web")

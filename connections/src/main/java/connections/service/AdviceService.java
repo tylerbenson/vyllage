@@ -233,6 +233,7 @@ public class AdviceService {
 		for (NotRegisteredUser notRegisteredUser : adviceRequest
 				.getNotRegisteredUsers()) {
 			DocumentLinkRequest linkRequest = new DocumentLinkRequest();
+			linkRequest.setSendRegistrationMail(false);
 			linkRequest.setDocumentId(adviceRequest.getDocumentId());
 			linkRequest.setDocumentType("resume");
 

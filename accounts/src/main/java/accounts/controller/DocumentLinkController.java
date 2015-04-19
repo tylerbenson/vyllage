@@ -88,6 +88,8 @@ public class DocumentLinkController {
 			@RequestBody DocumentLinkRequest linkRequest)
 			throws JsonProcessingException, EmailException {
 
+		linkRequest.setSendRegistrationMail(true);
+
 		DocumentLink documentLink = documentLinkService.createLink(linkRequest);
 
 		String json = mapper.writeValueAsString(documentLink);

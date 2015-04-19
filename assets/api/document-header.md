@@ -15,7 +15,8 @@
     	"email":null,
     	"phoneNumber":null,
     	"twitter":null,
-    	"linkedIn":null
+    	"linkedIn":null,
+    	"owner"true
     }
 ```
 

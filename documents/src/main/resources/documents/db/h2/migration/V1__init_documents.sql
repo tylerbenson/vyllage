@@ -37,5 +37,3 @@ create table if not exists DOCUMENTS.suggestions(
 	json_document varchar(4096) not null,
  	last_modified timestamp not null,
 	constraint fk_suggestions_document_sections foreign key(section_id, section_version) references DOCUMENTS.document_sections(id, sectionVersion) on delete cascade);
-
-
