@@ -77,7 +77,6 @@ public class AccountSettingsController {
 			ac.setUserId(null);
 			return ac;
 		}
-
 		return contactDataForUsers.get(0);
 	}
 
