@@ -138,6 +138,7 @@
             padding: 0.2em 0.8em;
             box-sizing: inherit;
             position: relative;
+            min-height: 1.9em !important;
             top: 2px;
             width: 77%;
           }
@@ -209,17 +210,22 @@
 }
 
 @media (max-width: $medium-portrait) {
-  .sections {
-    font-size: 14px;
-  }
   .section {
     & > .container {
       margin: 0.5em 1em;
       padding: 1em 0 0;
     }
-    .content,
-    .content.subject {
+    .content {
       padding: 0.75em 2.5em;
+
+      &.subject,
+      &.to {
+        padding: 1.5em 2.5em;
+        input {
+          margin: 0.15em 0;
+          width: 100%;
+        }
+      }
 
       &.empty {
         padding-bottom: 2em;
@@ -228,6 +234,10 @@
 
     .header {
       padding: 0.75em 2.5em;
+
+      &.recipients {
+        padding: 1.5em 2.5em;
+      }
     }
 
     .footer {

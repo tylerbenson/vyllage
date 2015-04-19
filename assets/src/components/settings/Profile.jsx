@@ -93,7 +93,7 @@ var Profile = React.createClass({
             onChange={this.changeHandler.bind(this, 'address')}
           ></Textarea>
 
-          <label>Contact no</label>
+          <label>Contact No.</label>
           <input
             key={phoneNumberSetting.value || undefined}
             ref='phoneNumber'

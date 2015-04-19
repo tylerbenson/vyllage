@@ -75,6 +75,7 @@
 
     h2 {
       @include column(1/17);
+      margin-bottom: 0.35em;
       margin-top: 0.35em;
     }
 
@@ -147,6 +148,7 @@
 
     input {
       width: 85%;
+      padding: 0;
     }
   }
   .message.content {
@@ -182,6 +184,40 @@
         i {
           display: inline;
           margin: 0;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $small-landscape) {
+  .ask-advice {
+    .to.content {
+      h2 {
+        @include column(1);
+      }
+      .form {
+        .field {
+          display: block;
+          width: 100%;
+          input {
+            width: 100% !important;
+          }
+          &:nth-child(3) {
+            margin-top: 0;
+          }
+
+          button,
+          .button {
+            span {
+              display: inline;
+            }
+          }
+
+          .error {
+            right: 0;
+            top: 0;
+          }
         }
       }
     }
