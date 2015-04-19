@@ -205,3 +205,25 @@
     margin: 0.5em 0 1em 0;
   }
 }
+
+@media (max-width: $medium-portrait) {
+  .sections {
+    font-size: 14px;
+  }
+  .section {
+    & > .container {
+      padding: 1em 0 0;
+    }
+    .content {
+      padding: 0.5em 2.5em;
+
+      &.empty {
+        padding-bottom: 2em;
+      }
+    }
+
+    .header {
+      padding: 0.5em 2.5em;
+    }
+  }
+}

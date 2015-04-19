@@ -83,3 +83,19 @@ header {
     margin-left: 0.75em;
   }
 }
+
+@media (max-width: $medium-portrait) {
+  .subheader {
+    font-size: 14px;
+    .print {
+      i {
+        margin: -0.4em 0 0 -0.4em;
+        font-size: 1.5em;
+        position: absolute;
+      }
+      span {
+        display: none;
+      }
+    }
+  }
+}

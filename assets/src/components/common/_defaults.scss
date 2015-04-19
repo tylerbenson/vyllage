@@ -67,6 +67,15 @@ textarea {
   }
 }
 
+@media (max-width: $medium-portrait) {
+  #container {
+    margin-bottom: -44px;
+    &:after {
+      height: 44px;
+    }
+  }
+}
+
 @media (max-width: $small-landscape) {
   body {
     font-size: 14px;

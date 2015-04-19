@@ -15,7 +15,7 @@ var Subheader = React.createClass({
               Share
             </button>
             */}
-            <a href="javascript:window.print()" className="flat button">
+            <a href="javascript:window.print()" className="flat print button">
               <i className="ion-printer"></i>
               Print
             </a>
