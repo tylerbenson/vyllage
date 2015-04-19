@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Configuration
+@Configuration(value = "accounts.BeansConfiguration")
 public class BeansConfiguration {
 
 	@Bean
