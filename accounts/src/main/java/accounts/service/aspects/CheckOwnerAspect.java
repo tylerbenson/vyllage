@@ -16,37 +16,36 @@ import accounts.model.account.settings.AccountSetting;
 @Component("accounts.CheckOwnerAspect")
 public class CheckOwnerAspect {
 
-	@Before("execution(* *(..)) && @annotation(CheckOwner)")
-	public void checkOwner(JoinPoint joinPoint) throws AccessDeniedException {
+	@Before("execution(* *(..)) && args(settings) && @annotation(CheckOwner)")
+	public void checkOwnerMany(JoinPoint joinPoint,
+			List<AccountSetting> settings) throws AccessDeniedException {
 
-		Object[] args = joinPoint.getArgs();
-
-		if (args != null) {
+		if (settings != null && !settings.isEmpty()) {
 			User user = (User) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
 
-			if (args[0] != null && args[0] instanceof List) {
-				// check all ids
-				@SuppressWarnings("unchecked")
-				List<AccountSetting> settings = (List<AccountSetting>) args[0];
-				if (!settings.stream()
-						.allMatch(
-								setting -> user.getUserId().equals(
-										setting.getUserId())))
-					throw new AccessDeniedException(
-							"You are not authorized to access these settings.");
+			// check all ids
+			if (!settings.stream().allMatch(
+					setting -> user.getUserId().equals(setting.getUserId())))
+				throw new AccessDeniedException(
+						"You are not authorized to access these settings.");
 
-			}
-
-			if (args[0] != null && args[0] instanceof AccountSetting) {
-				// check id
-				AccountSetting setting = (AccountSetting) args[0];
-
-				if (!user.getUserId().equals(setting.getUserId()))
-					throw new AccessDeniedException(
-							"You are not authorized to access this setting.");
-			}
 		}
+
+	}
+
+	@Before("execution(* *(..)) && args(parameter, setting,..) && @annotation(CheckOwner)")
+	public void checkOwnerSingle(JoinPoint joinPoint, String parameter,
+			AccountSetting setting) throws AccessDeniedException {
+
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+
+		// check id
+
+		if (!user.getUserId().equals(setting.getUserId()))
+			throw new AccessDeniedException(
+					"You are not authorized to access this setting.");
 
 	}
 }

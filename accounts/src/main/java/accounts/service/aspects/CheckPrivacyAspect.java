@@ -34,7 +34,7 @@ public class CheckPrivacyAspect {
 
 	@SuppressWarnings("unchecked")
 	@Around("execution(* *(..)) && @annotation(CheckPrivacy)")
-	public Object checkOwner(ProceedingJoinPoint joinPoint) throws Throwable {
+	public Object checkPrivacy(ProceedingJoinPoint joinPoint) throws Throwable {
 
 		Object[] args = joinPoint.getArgs();
 		List<AccountSetting> filteredSettings = new ArrayList<>();
@@ -44,13 +44,18 @@ public class CheckPrivacyAspect {
 			User user = (User) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
 
-			List<Organization> organizationsForUser = userService
-					.getOrganizationsForUser(user);
-
 			List<AccountSetting> settings = (List<AccountSetting>) joinPoint
 					.proceed();
 
-			// get organization and public shared settings
+			// user retrieving his own settings
+			if (settings.stream().anyMatch(
+					setting -> setting.getUserId().equals(user.getUserId())))
+				return settings;
+
+			List<Organization> organizationsForUser = userService
+					.getOrganizationsForUser(user);
+
+			// get organization and public shared settings, private are ignored
 			filteredSettings = settings
 					.stream()
 					.filter(setting -> setting.getPrivacy().equalsIgnoreCase(
@@ -61,15 +66,6 @@ public class CheckPrivacyAspect {
 
 			// filter by organization
 			if (!filteredSettings.isEmpty()) {
-				// filteredSettings = filteredSettings
-				// .stream()
-				// .filter(setting -> setting.getPrivacy()
-				// .equalsIgnoreCase(Privacy.PUBLIC.name())
-				// || organizationsForUser.stream().anyMatch(
-				// org -> org.getOrganizationName()
-				// .equalsIgnoreCase(
-				// setting.getValue())))
-				// .collect(Collectors.toList());
 
 				for (Iterator<AccountSetting> iterator = settings.iterator(); iterator
 						.hasNext();) {
@@ -85,6 +81,7 @@ public class CheckPrivacyAspect {
 				}
 			}
 		}
+
 		return filteredSettings;
 
 	}

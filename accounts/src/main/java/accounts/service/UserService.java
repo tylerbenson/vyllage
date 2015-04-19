@@ -40,6 +40,7 @@ import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.repository.UserRoleRepository;
+import accounts.service.aspects.CheckPrivacy;
 import accounts.validation.EmailValidator;
 
 @Service
@@ -229,10 +230,17 @@ public class UserService {
 		userRepository.updateUser(user);
 	}
 
+	@CheckPrivacy
+	public List<AccountSetting> getAccountSettings(List<Long> userIds) {
+		return settingRepository.getAccountSettings(userIds);
+	}
+
+	@CheckPrivacy
 	public List<AccountSetting> getAccountSettings(User user) {
 		return settingRepository.getAccountSettings(user);
 	}
 
+	@CheckPrivacy
 	public List<AccountSetting> getAccountSetting(final User user,
 			final String settingName) throws ElementNotFoundException {
 		assert settingName != null;
@@ -430,9 +438,8 @@ public class UserService {
 	/**
 	 * Returns account contact information
 	 */
-	public List<AccountContact> getAccountContactForUsers(List<Long> userIds) {
-		List<AccountSetting> accountSettings = settingRepository
-				.getAccountSettings(userIds);
+	public List<AccountContact> getAccountContactForUsers(
+			List<AccountSetting> accountSettings) {
 
 		if (accountSettings == null || accountSettings.isEmpty())
 			return Arrays.asList();
