@@ -5,13 +5,18 @@ import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 public class EmailBuilder {
 
 	@Autowired
 	private MailService mailService;
+
+	@Autowired
+	private Environment environment;
 
 	private String email;
 	private String from;
@@ -57,6 +62,15 @@ public class EmailBuilder {
 
 		EmailContext ctx = new EmailContext(templateName);
 		ctx.setVariables(additionalVariables);
+
+		// this is a bean and it should be picked automatically using @ before
+		// the name in the template
+		// this, of course doesn't work,
+		// "there's no registered beanResolver" in the environment even though
+		// it's there.
+
+		Assert.notNull(environment);
+		ctx.setVariable("environment", environment);
 
 		EmailHTMLBody emailBody = new EmailHTMLBody(txt, ctx);
 

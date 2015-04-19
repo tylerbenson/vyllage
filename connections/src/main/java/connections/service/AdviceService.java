@@ -40,7 +40,7 @@ import connections.repository.ElementNotFoundException;
 public class AdviceService {
 
 	@Autowired
-	private Environment env;
+	private Environment environment;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -148,7 +148,8 @@ public class AdviceService {
 	public void sendRequestAdviceEmail(HttpServletRequest request,
 			AdviceRequestParameter adviceRequest) throws EmailException {
 
-		String from = env.getProperty("email.from", "no-reply@vyllage.com");
+		String from = environment.getProperty("email.from",
+				"no-reply@vyllage.com");
 		String subject = adviceRequest.getSubject();
 		String noHTMLmsg = adviceRequest.getMessage();
 		EmailParameters parameters = null;
@@ -283,10 +284,19 @@ public class AdviceService {
 			ctx.setVariable(
 					"link",
 					"http://"
-							+ env.getProperty("vyllage.domain",
+							+ environment.getProperty("vyllage.domain",
 									"www.vyllage.com")
 							+ linksForRegisteredUsers.get(accountContact
 									.getEmail()));
+
+			// this is a bean and it should be picked automatically using @
+			// before
+			// the name in the template
+			// this, of course doesn't work,
+			// "there's no registered beanResolver" in the environment even
+			// though
+			// it's there.
+			ctx.setVariable("environment", environment);
 
 			EmailHTMLBody emailBody = new EmailHTMLBody(msg, ctx);
 
@@ -315,9 +325,18 @@ public class AdviceService {
 			ctx.setVariable(
 					"link",
 					"http://"
-							+ env.getProperty("vyllage.domain",
+							+ environment.getProperty("vyllage.domain",
 									"www.vyllage.com")
 							+ linksForNonRegisteredUsers.get(user.getEmail()));
+
+			// this is a bean and it should be picked automatically using @
+			// before
+			// the name in the template
+			// this, of course doesn't work,
+			// "there's no registered beanResolver" in the environment even
+			// though
+			// it's there.
+			ctx.setVariable("environment", environment);
 
 			EmailHTMLBody emailBody = new EmailHTMLBody(msg, ctx);
 

@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <link rel="shortcut icon" type="image/png" th:href="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/logo-orange.png}"
+  <link rel="shortcut icon" type="image/png" th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/logo-orange.png}"
   />
-  <link rel="stylesheet" th:href="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__/css/email.css}"
+  <link rel="stylesheet" th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/css/email.css}"
   />
   <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
 </head>
@@ -12,7 +12,7 @@
 <body>
   <div id="container">
     <div class="header">
-      <img th:src="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/logo.png}" alt="Logo" />
+      <img th:src="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/logo.png}" alt="Logo" />
     </div>
     <div class="content">
       <h1>Hello
@@ -26,7 +26,7 @@
 
     <div class="signature">
       <div class="message">Cheers,</div>
-      <img th:src="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/signature.png}" alt="Signature"
+      <img th:src="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/signature.png}" alt="Signature"
       />
     </div>
 
@@ -36,7 +36,7 @@
         <a href="mailto:hello@vyllage.com">hello@vyllage.com</a>.
       </span>
 
-      <a class="pull right" th:href="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__}" th:text="@{http://__${@environment.getProperty('vyllage.domain','www.vyllage.com')}__}">www.vyllage.com</a>
+      <a class="pull right" th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__}" th:text="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__}">www.vyllage.com</a>
     </div>
   </div>
 </body>
