@@ -224,6 +224,12 @@ input[type="reset"] {
       color: $secondary-color !important;
     }
   }
+
+  &.cancel {
+    i {
+      display: none;
+    }
+  }
 }
 
 a.button {
