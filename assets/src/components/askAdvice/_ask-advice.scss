@@ -3,6 +3,7 @@
     display: inline-block;
     font-weight: 400;
     font-size: 1em;
+    padding: 0 0 0 0.25em;
   }
   .section {
     & > .container {
@@ -22,6 +23,7 @@
       font-weight: 300;
       padding: 0.55em 0.25em;
       text-align: center;
+      white-space: nowrap;
     }
   }
   .recipient {
@@ -148,7 +150,6 @@
 
     input {
       width: 85%;
-      padding: 0;
     }
   }
   .message.content {
@@ -192,6 +193,11 @@
 
 @media (max-width: $small-landscape) {
   .ask-advice {
+    .recipients.header {
+      .empty {
+        font-size: 0.95em;
+      }
+    }
     .to.content {
       h2 {
         @include column(1);
