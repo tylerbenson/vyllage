@@ -70,7 +70,8 @@ public class AccountSettingsController {
 		Long userId = (Long) request.getSession().getAttribute("userId");
 
 		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(Arrays.asList(userId));
+				.getAccountContactForUsers(userService
+						.getAccountSettings(Arrays.asList(userId)));
 
 		if (contactDataForUsers.isEmpty()) {
 			AccountContact ac = new AccountContact();
