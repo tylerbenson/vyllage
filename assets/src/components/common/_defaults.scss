@@ -66,3 +66,9 @@ textarea {
     bottom: 0.25em;
   }
 }
+
+@media (max-width: $small-landscape) {
+  body {
+    font-size: 14px;
+  }
+}
