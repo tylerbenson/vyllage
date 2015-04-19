@@ -25,7 +25,7 @@ var Education = React.createClass({
     return (
       <div className='section'>
         <div className='container'>
-          <Header title='Education' type='experience' />
+          <Header title='Education' type='experience' owner={this.props.owner}/>
           {sectionNodes}
         </div>
       </div>
