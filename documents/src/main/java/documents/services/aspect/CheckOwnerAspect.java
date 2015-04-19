@@ -20,37 +20,34 @@ public class CheckOwnerAspect {
 	@Autowired
 	private DocumentService documentService;
 
-	// @Before("execution(* documents.services.DocumentService.save*(..))")
-	@Before("execution(* *(..)) && @annotation(CheckOwner)")
-	public void checkOwner(JoinPoint joinPoint) throws AccessDeniedException,
-			ElementNotFoundException {
+	@Before("execution(* *(..)) && args(documentId,..) && @annotation(CheckOwner)")
+	public void checkOwner(JoinPoint joinPoint, Long documentId)
+			throws AccessDeniedException, ElementNotFoundException {
 
-		Object[] args = joinPoint.getArgs();
+		Long userId = getUserId();
 
-		if (args != null) {
-			Object principal = SecurityContextHolder.getContext()
-					.getAuthentication().getPrincipal();
+		Long documentUserId = documentService.getDocument(documentId)
+				.getUserId();
 
-			System.out.println(principal);
-			Long userId = null;
-			try {
-				userId = (Long) principal.getClass().getMethod("getUserId")
-						.invoke(principal);
-			} catch (IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException
-					| SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (!userId.equals(documentUserId))
+			throw new AccessDeniedException(
+					"You are not authorized to access this document.");
 
-			Long documentUserId = documentService.getDocument((Long) args[0])
-					.getUserId();
+	}
 
-			if (!userId.equals(documentUserId))
-				throw new AccessDeniedException(
-						"You are not authorized to access this document.");
+	public Long getUserId() {
+		Object principal = SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 
+		Long userId = null;
+		try {
+			userId = (Long) principal.getClass().getMethod("getUserId")
+					.invoke(principal);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			e.printStackTrace();
 		}
-
+		return userId;
 	}
 }

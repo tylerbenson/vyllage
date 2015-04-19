@@ -14,6 +14,11 @@ import accounts.model.account.settings.AccountSetting;
 
 @Aspect
 @Component("accounts.CheckOwnerAspect")
+/**
+ * Checks Account Settings before they are saved, if the user is not the owner of the settings it rejects the change with AccessDeniedException.
+ * @author uh
+ *
+ */
 public class CheckOwnerAspect {
 
 	@Before("execution(* *(..)) && args(settings) && @annotation(CheckOwner)")
