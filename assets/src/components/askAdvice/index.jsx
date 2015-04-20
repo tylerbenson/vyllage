@@ -41,7 +41,7 @@ var Form = React.createClass({
               </div>
             </div>
             <Modal isOpen={this.state.processing}>
-              <p>We are sending this request to the added recipients.</p>
+              <p>Processing this request</p>
               <p>Please wait</p>
             </Modal>
           </div>
