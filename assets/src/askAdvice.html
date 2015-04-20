@@ -19,6 +19,7 @@
   <meta name="email" th:content="${intercom.email}" id="meta_email" />
   <meta name="userId" th:content="${intercom.userId}" id="meta_user" />
   <meta name="registeredOn" th:content="${intercom.registeredOn}" id="meta_created_at" />
+  <div th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body class='ask-advice'>
@@ -46,6 +47,7 @@
   });
   ga('send', 'pageview');
   </script>
+  <div th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
 </body>
 
 </html>
