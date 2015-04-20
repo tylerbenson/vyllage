@@ -129,6 +129,11 @@ public class AccountSettingsController {
 			@RequestBody final List<AccountSetting> settings) {
 		User user = getUser();
 
+		for (AccountSetting accountSetting : settings) {
+			if (accountSetting.getUserId() == null)
+				accountSetting.setAccountSettingId(getUserId());
+		}
+
 		settings.stream().map(setting -> {
 			if (validators.containsKey(setting.getName()))
 				validators.get(setting.getName()).validate(setting);
@@ -158,6 +163,9 @@ public class AccountSettingsController {
 			@PathVariable String parameter,
 			@Valid @RequestBody final AccountSetting setting,
 			BindingResult result) {
+
+		if (setting.getUserId() == null)
+			setting.setAccountSettingId(getUserId());
 
 		if (parameter.equalsIgnoreCase("organization")
 				|| parameter.equalsIgnoreCase("role"))

@@ -25,7 +25,10 @@ public class CheckOwnerAspect {
 	public void checkOwnerMany(JoinPoint joinPoint,
 			List<AccountSetting> settings) throws AccessDeniedException {
 
-		if (settings != null && !settings.isEmpty()) {
+		if (settings != null
+				&& !settings.isEmpty()
+				&& settings.stream().allMatch(
+						setting -> setting.getUserId() != null)) {
 			User user = (User) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
 
@@ -46,8 +49,10 @@ public class CheckOwnerAspect {
 		User user = (User) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 
-		// check id
+		if (setting.getUserId() == null)
+			return;
 
+		// check id
 		if (!user.getUserId().equals(setting.getUserId()))
 			throw new AccessDeniedException(
 					"You are not authorized to access this setting.");
