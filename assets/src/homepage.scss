@@ -1,11 +1,26 @@
-@import "./components/common/variables";
-@import "jeet/scss/jeet/index";
+@import './components/common/variables';
 
-* {
-  font-family: "Raleway", Helvetica, Arial, sans-serif;
+.clearfix:after {
+  font-size: 0;
+  display: block;
+  visibility: hidden;
+  clear: both;
+  height: 0;
+  content: ' ';
+}
+* html .clearfix {
+  zoom: 1;
+}
+*:first-child + html .clearfix {
+  zoom: 1;
 }
 
-html, body {
+* {
+  font-family: 'Raleway', Helvetica, Arial, sans-serif;
+}
+
+html,
+body {
   margin: 0;
 }
 
@@ -14,31 +29,31 @@ html, body {
 }
 
 #about {
+  color: #fff;
   background-color: #47382b;
   background-image: url(../images/banner.jpg);
   background-size: cover;
-  color: #fff;
-
   &.college {
-    background-image: url(../images/seats.jpg);
     padding-bottom: 5em;
+    background-image: url(../images/seats.jpg);
   }
 }
 
 .content {
-  margin: auto;
+  @extend .clearfix;
   position: relative;
   max-width: 1024px;
+  margin: auto;
 }
 
 .links {
-  display: inline-block;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
   position: absolute;
   top: 0;
   right: 0;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 .links li {
@@ -46,15 +61,15 @@ html, body {
 }
 
 .links a {
-  color: #fff;
-  display: inline-block;
+  font-size: .85em;
   font-weight: 100;
-  font-size: 0.85em;
-  letter-spacing: 2px;
+  display: inline-block;
   padding: 1em 1.5em;
-  text-decoration: none;
-  text-transform: uppercase;
   transition: color .2s ease;
+  text-decoration: none;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fff;
 }
 
 .links a:hover {
@@ -62,17 +77,17 @@ html, body {
 }
 
 .links a.sign-up {
-  border: #e2670d solid 2px;
-  border-radius: 5px;
-  color: #e2670d;
   font-weight: 500;
   margin-left: 1.5em;
   transition: all .2s ease;
+  color: #e2670d;
+  border: #e2670d solid 2px;
+  border-radius: 5px;
 }
 
 .links a.sign-up:hover {
-  background-color: #e2670d;
   color: #fff;
+  background-color: #e2670d;
 }
 
 .logo {
@@ -87,16 +102,16 @@ html, body {
   font-size: 1.75em;
   font-weight: 500;
   position: relative;
-  bottom: 0.35em;
+  bottom: .35em;
 }
 
 #about h1 {
   font-size: 2.75em;
   font-weight: 100;
-  letter-spacing: 5px;
   margin-top: 3.5em;
-  text-transform: uppercase;
   text-align: center;
+  letter-spacing: 5px;
+  text-transform: uppercase;
 }
 
 #about p {
@@ -108,21 +123,21 @@ html, body {
 }
 
 #about .button {
-  background: #e2670d;
-  border: none;
-  border-radius: 5px;
-  color: #fff;
-  display: block;
-  width: 180px;
-  text-align: center;
-  text-decoration: none;
   font-size: 1em;
   font-weight: 500;
-  letter-spacing: 2px;
+  display: block;
+  width: 180px;
   margin: auto;
   margin-top: 6em;
   padding: 1.75em;
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 2px;
   text-transform: uppercase;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  background: #e2670d;
 }
 
 #caret {
@@ -132,46 +147,49 @@ html, body {
 }
 
 #caret img {
-  opacity: 0.25;
   width: 30px;
+  opacity: .25;
 }
 
 #how-it-works h1 {
-  color: #e2670d;
+  font-size: 1.75em;
   font-weight: 100;
-  font-size: 2em;
   letter-spacing: 2px;
   text-transform: uppercase;
+  color: #e2670d;
 }
 
 #how-it-works p {
-  color: #333;
   font-size: 1.25em;
+  line-height: 1.4;
+  color: #333;
 }
 
 #how-it-works ul {
-  list-style-type: none;
+  @extend .clearfix;
   margin-top: 5em;
   padding: 0;
+  list-style-type: none;
   text-align: center;
 }
 
 #how-it-works li {
   display: inline-block;
+  float: left;
+  width: 27%;
   padding: 0 3%;
   text-align: center;
-  width: 27%;
 }
 
 #how-it-works .number {
-  background-color: #e2670d;
-  border-radius: 50%;
-  color: #fff;
-  display: inline-block;
   font-size: 1.25em;
-  padding: 0.45em;
+  display: inline-block;
   width: 25px;
+  padding: .45em;
   text-align: center;
+  color: #fff;
+  border-radius: 50%;
+  background-color: #e2670d;
 }
 
 #how-it-works h2 {
@@ -180,10 +198,10 @@ html, body {
 }
 
 #how-it-works ul p {
-  color: #333;
   font-size: 1.15em;
   line-height: 1.4;
   margin-top: 1.5em;
+  color: #333;
 }
 
 p {
@@ -191,42 +209,43 @@ p {
 }
 
 .feature h1 {
-  color: #666666;
   font-size: 1.75em;
   font-weight: 100;
   text-transform: uppercase;
+  color: #666;
 }
 
 .feature p {
-  color: #666666;
   font-size: 1.25em;
   font-weight: 100;
-  letter-spacing: 1px;
   line-height: 1.4;
+  letter-spacing: 1px;
+  color: #666;
 }
 
 .feature .spiel {
   padding-bottom: 1em;
-}
-
-.feature .quote img {
-  border-radius: 50%;
-  border: #fff solid 2px;
-}
-
-.feature .testimony p {
-  color: #999999;
-  font-style: italic;
   font-size: 1em;
 }
 
+.feature .quote img {
+  border: #fff solid 2px;
+  border-radius: 50%;
+}
+
+.feature .testimony p {
+  font-size: 1em;
+  font-style: italic;
+  color: #999;
+}
+
 .feature .name {
-  color: #666666;
+  color: #666;
 }
 
 .feature .university {
-  color: #e2670d;
   text-transform: uppercase;
+  color: #e2670d;
 }
 
 .feature .text,
@@ -236,45 +255,58 @@ p {
 }
 
 .feature {
-  background: #f6f6f6;
-  overflow: hidden;
-  padding: 5.5em 3em 8em 3em;
-  height: 28em;
   position: relative;
+  overflow: hidden;
+  // height: 28em;
+  // padding: 5.5em 3em 8em 3em;
+  background: #f6f6f6;
+
+  .text {
+    box-sizing: border-box;
+    float: left;
+    padding-right: 3em;
+  }
+
+  .image {
+    float: right;
+    img {
+      width: 125%;
+    }
+  }
 }
 
-.feature .image img {
-  position: absolute;
-  top: 0;
-  right: -25%;
-  height: 490px;
-  z-index: 1;
-}
+// .feature .image img {
+//   position: absolute;
+//   z-index: 1;
+//   top: 0;
+//   right: -25%;
+//   height: 490px;
+// }
 
-#build .text {
-  margin-top: 7em;
-}
+// #build .text {
+//   margin-top: 7em;
+// }
 
-#share .text {
-  margin-top: 5em;
-}
+// #share .text {
+//   margin-top: 5em;
+// }
 
-#collaborate .text {
-  margin-top: 4em;
-}
+// #collaborate .text {
+//   margin-top: 4em;
+// }
 
-#serve .text {
-  margin-top: 3em;
-}
+// #serve .text {
+//   margin-top: 3em;
+// }
 
-#follow .text {
-  margin-top: 4em;
-}
+// #follow .text {
+//   margin-top: 4em;
+// }
 
 .feature .testimony {
   display: inline-block;
-  padding-left: 1em;
   width: 70%;
+  padding-left: 1em;
 }
 
 .feature .quote img {
@@ -283,42 +315,150 @@ p {
 }
 
 .feature .quote {
-  border-top: #eeeeee solid 1px;
   padding-top: 1.5em;
+  border-top: #eee solid 1px;
 }
 
 .feature:nth-child(even) {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
-.feature:nth-child(even) .text {
-  position: relative;
-  left: 50%;
-}
+// .feature:nth-child(even) .text {
+//   position: relative;
+//   left: 55%;
+// }
 
-.feature:nth-child(even) .image img {
-  right: auto;
-  left: -25%;
-}
+// .feature:nth-child(even) .image img {
+//   right: auto;
+//   left: -25%;
+// }
 
 #sign-up {
-  background-color: #47382b;
-  color: #fff;
-  padding: 3em 0;
-  text-align: center;
   font-size: 1.5em;
   font-weight: 100;
-
+  line-height: 1.4;
+  padding: 3em 0;
+  text-align: center;
+  color: #fff;
+  background-color: #47382b;
   a {
-    color: #BF9A7A;
     text-decoration: none;
+    color: #bf9a7a;
   }
 }
 
 #footer {
   background-color: #312921;
-
   .logo {
     color: #fff;
+  }
+}
+
+@media (max-width: $medium-landscape) {
+  body {
+    font-size: 14px;
+  }
+
+  #about {
+    &.college {
+      padding-bottom: 2em;
+    }
+    h1 {
+      margin-top: 2em;
+      font-size: 2em;
+    }
+    .button {
+      margin-top: 6em;
+    }
+  }
+
+  #caret {
+    margin-top: 4em;
+  }
+
+  .nav {
+    text-align: center;
+    .logo {
+      margin-bottom: 1em;
+    }
+  }
+
+  .links {
+    display: block;
+    margin: 0.5em auto;
+    position: static;
+    text-align: center;
+  }
+
+  #footer {
+    padding: 1em 2em;
+    .logo {
+      display: none;
+    }
+  }
+
+  #how-it-works {
+    h1 {
+      font-size: 1.75em;
+    }
+    .number {
+      padding: .45em .35em;
+    }
+    ul {
+      margin-top: 2em;
+      p {
+        max-width: 320px !important;
+        margin: 1em auto;
+      }
+    }
+    li {
+      margin-top: 1em;
+      width: 100%;
+      padding: 0;
+    }
+  }
+
+  #sign-up {
+    padding: 2em;
+  }
+
+  .feature {
+    height: auto;
+    padding: 1em 3em 0 3em  !important;
+    h1 {
+      font-size: 1.25em;
+    }
+    .image {
+      width: 100%;
+      img {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        height: auto;
+        bottom: -1em;
+      }
+      .spiel {
+        font-size: 1.25em;
+      }
+    }
+    .text {
+      width: 100%;
+      margin-top: 0 !important;
+      padding: 0;
+      position: relative;
+      top: 1em;
+    }
+    &:nth-child(even) {
+      .text {
+        left: auto;
+        margin-top: 0;
+      }
+      .image {
+        img {
+          left: auto;
+        }
+      }
+    }
   }
 }
