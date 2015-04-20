@@ -22,7 +22,7 @@ var Profile = React.createClass({
         <form ref='profile' onSubmit={this.saveHandler}>
           <label>First name</label>
           <input
-            key={firstNameSetting.value || undefined}
+            key={'firstName-' + firstNameSetting.value || undefined}
             ref='firstName'
             type='text'
             className='padded'
@@ -32,7 +32,7 @@ var Profile = React.createClass({
 
           <label>Middle name</label>
           <input
-            key={middleNameSetting.value || undefined}
+            key={'middleName-' + middleNameSetting.value || undefined}
             ref='middleName'
             type='text'
             className='padded'
@@ -42,7 +42,7 @@ var Profile = React.createClass({
 
           <label>Last name</label>
           <input
-            key={lastNameSetting.value || undefined}
+            key={'lastName-' + lastNameSetting.value || undefined}
             ref='lastName'
             type='text'
             className='padded'
@@ -53,7 +53,7 @@ var Profile = React.createClass({
           <label>Role</label>
           <input
             disabled={true}
-            key={roleSetting.value || undefined}
+            key={'role-' + roleSetting.value || undefined}
             ref='role'
             type='text'
             className='padded'
@@ -64,7 +64,7 @@ var Profile = React.createClass({
           <label>Organization Name</label>
           <input
             disabled={true}
-            key={organizationSetting.value || undefined}
+            key={'organization-' + organizationSetting.value || undefined}
             ref='organization'
             type='text'
             className='padded'
@@ -86,7 +86,7 @@ var Profile = React.createClass({
 
           <label>Address</label>
           <Textarea
-            key={addressSetting.value || undefined}
+            key={'address-' + addressSetting.value || undefined}
             ref='address'
             className="padded"
             defaultValue={addressSetting.value}
@@ -95,7 +95,7 @@ var Profile = React.createClass({
 
           <label>Contact No.</label>
           <input
-            key={phoneNumberSetting.value || undefined}
+            key={'phoneNumber-' + phoneNumberSetting.value || undefined}
             ref='phoneNumber'
             type='text'
             className='padded'

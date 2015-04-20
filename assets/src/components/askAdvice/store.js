@@ -29,7 +29,7 @@ var AskAdviceStore = Reflux.createStore({
     })
   },
   onPostAskAdvice: function () {
-    if (this.users.length > 0 || this.notRegisteredUsers > 0) {
+    if (this.users.length > 0 || this.notRegisteredUsers.length > 0) {
       this.processing = true;
       this.update();
       request

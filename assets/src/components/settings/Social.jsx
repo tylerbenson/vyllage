@@ -17,7 +17,7 @@ var Social = React.createClass({
 
           <label>Facebook</label>
           <input
-            key={facebookSetting.value || undefined}
+            key={'facebook-' + facebookSetting.value || undefined}
             ref='facebook'
             type='text'
             className='padded'
@@ -27,7 +27,7 @@ var Social = React.createClass({
 
           <label>Twitter</label>
           <input
-            key={twitterSetting.value || undefined}
+            key={'twitter-' + twitterSetting.value || undefined}
             ref='twitter'
             type='text'
             className='padded'
@@ -37,7 +37,7 @@ var Social = React.createClass({
 
           <label>LinkedIn</label>
           <input
-            key={linkedInSetting.value || undefined}
+            key={'linkedIn-' + linkedInSetting.value || undefined}
             ref='linkedIn'
             type='text'
             className='padded'

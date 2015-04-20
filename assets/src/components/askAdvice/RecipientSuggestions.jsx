@@ -85,7 +85,7 @@ var Suggesions = React.createClass({
           onMouseUp={!Modernizr.touch? this.leaveHanlder: null}
           onTouchStart={Modernizr.touch? this.enterHandler: null}
           onTouchEnd={Modernizr.touch? this.leaveHanlder: null}
-          style={{marginTop: '70px'}}
+          style={{marginTop: '100px'}}
         >
           <ul id='suggested-users-list' style={style} className="autocomplete">
             {(recent.length > 0) ? <li className="title">
