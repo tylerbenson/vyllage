@@ -15,7 +15,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      '__tests__/*.js'
+      'test/**/*.js',
+      'test/**/*.jsx'
     ],
 
 
@@ -28,10 +29,28 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-       'src/sum.js': ['webpack'], 
-       '__tests__/*.js': ['webpack']
+       'src/**/*.js': ['webpack'], 
+       'src/**/*.jsx': ['webpack'], 
+       'test/**/*.js': ['webpack'],
+       'test/**/*.jsx': ['webpack']
     },
-
+    webpack: {
+      module: {
+        loaders: [
+          {
+            test: /\.js|jsx$/,
+            loaders: ['babel']
+          },
+          {
+            test: /\.json$/,
+            loader: 'json'
+          }
+        ],
+      },
+      resolve: {
+        extensions: ['', '.js', '.jsx', 'json'],
+      },
+    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
