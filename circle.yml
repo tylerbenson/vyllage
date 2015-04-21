@@ -17,3 +17,7 @@ deployment:
             bucket: vyllage-deployments
             key_pattern: vyllage-{BUILD_NUM}-{SHORT_COMMIT}.zip
         deployment_group: prod
+
+test:
+  override:
+    - cd assets && karma start ./karma.conf.js --single-run 

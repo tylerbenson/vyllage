@@ -49,3 +49,4 @@ assets/.sass-cache
 assets/public
 assets/mock/dist
 assets/mock/.tmp
+assets/test-results.xml
