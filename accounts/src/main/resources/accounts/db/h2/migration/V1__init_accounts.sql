@@ -17,7 +17,7 @@ create table if not exists ACCOUNTS.account_setting(
 	value varchar(30),
 	privacy varchar(15),
 	constraint fk_account_setting_users foreign key(user_id) references ACCOUNTS.users(user_id));
-  
+
 create table if not exists ACCOUNTS.user_credentials(
   user_id  bigint not null,
   password varchar_ignorecase(60) not null,
@@ -35,7 +35,7 @@ create table if not exists ACCOUNTS.organizations (
   organization_name varchar_ignorecase(50) not null);
 
 create table if not exists ACCOUNTS.user_organization_roles (
-  user_id bigint primary key not null,
+  user_id bigint not null,
   organization_id bigint not null,
   role varchar(50) not null,
   constraint fk_organization_roles_organization foreign key(organization_id) references ACCOUNTS.organizations(organization_id),

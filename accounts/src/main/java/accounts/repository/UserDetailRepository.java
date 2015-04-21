@@ -1,7 +1,6 @@
 package accounts.repository;
 
 import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
-import static accounts.domain.tables.Organizations.ORGANIZATIONS;
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 import static accounts.domain.tables.Users.USERS;
 
@@ -35,7 +34,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
 
-import accounts.domain.tables.Organizations;
+import accounts.domain.tables.UserOrganizationRoles;
 import accounts.domain.tables.Users;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.User;
@@ -612,40 +611,35 @@ public class UserDetailRepository implements UserDetailsManager {
 		final boolean accountNonLocked = true;
 
 		Result<Record1<Long>> organizationRecordsIds = sql
-				.select(ORGANIZATION_MEMBERS.ORGANIZATION_ID)
-				.from(ORGANIZATION_MEMBERS)
-				.where(ORGANIZATION_MEMBERS.USER_ID.eq(loggedUser.getUserId()))
-				.fetch();
+				.select(USER_ORGANIZATION_ROLES.ORGANIZATION_ID)
+				.from(USER_ORGANIZATION_ROLES)
+				.where(USER_ORGANIZATION_ROLES.USER_ID.eq(loggedUser
+						.getUserId())).fetch();
 
 		List<Long> organizationIds = organizationRecordsIds.stream()
-				.map(r -> r.getValue(ORGANIZATION_MEMBERS.ORGANIZATION_ID))
+				.map(r -> r.getValue(USER_ORGANIZATION_ROLES.ORGANIZATION_ID))
 				.collect(Collectors.toList());
 
-		/**
+		/*
 		 * TODO: this is outdated, don't delete it yet, I need it to create the
 		 * query again. select u.* from accounts.users u where username in (
 		 * select gm.username from accounts.group_members gm join
 		 * accounts.groups g on gm.group_id = g.id where g.id = 0) and username
 		 * in (select username from accounts.authorities where authority like
 		 * 'ADVISOR');
-		 * 
+		 */
+
+		/*
+		 * TODO: the above query could probably be combined into this one using
+		 * another join instead of a sub-select.
 		 */
 		Users u = USERS.as("u");
-		UserRoles a = USER_ROLES.as("a");
-		OrganizationMembers gm = ORGANIZATION_MEMBERS.as("gm");
-		Organizations g = ORGANIZATIONS.as("g");
+		UserOrganizationRoles uor = USER_ORGANIZATION_ROLES.as("uor");
 
-		SelectConditionStep<Record1<Long>> usernamesFromSameGroup = sql
-				.select(gm.USER_ID).from(gm).join(g)
-				.on(gm.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
-				.where(g.ORGANIZATION_ID.in(organizationIds));
-
-		SelectConditionStep<Record1<Long>> advisorIds = sql.select(a.USER_ID)
-				.from(a).where(a.ROLE.like("ADVISOR"));
-
-		SelectConditionStep<Record> select = sql.select().from(u)
-				.where(u.USER_ID.in(usernamesFromSameGroup))
-				.and(u.USER_ID.in(advisorIds));
+		SelectConditionStep<Record> select = sql.select(u.fields()).from(u)
+				.join(uor).on(u.USER_ID.eq(uor.USER_ID))
+				.where(uor.ORGANIZATION_ID.in(organizationIds))
+				.and(uor.ROLE.eq("ADVISOR"));
 
 		if (filters != null) {
 
