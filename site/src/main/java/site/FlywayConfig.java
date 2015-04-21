@@ -23,14 +23,14 @@ public class FlywayConfig {
 	@Autowired
 	private Environment env;
 
-	@Bean(initMethod = "migrate")
-	public Flyway flywayConnections() {
-		Flyway flyway = new Flyway();
-		flyway.setDataSource(this.dataSource);
-		flyway.setLocations(env.getRequiredProperty("flyway.connections"));
-		flyway.setSchemas("connections");
-		return flyway;
-	}
+	// @Bean(initMethod = "migrate")
+	// public Flyway flywayConnections() {
+	// Flyway flyway = new Flyway();
+	// flyway.setDataSource(this.dataSource);
+	// flyway.setLocations(env.getRequiredProperty("flyway.connections"));
+	// flyway.setSchemas("connections");
+	// return flyway;
+	// }
 
 	@Bean(initMethod = "migrate")
 	public Flyway flywayDocuments() {

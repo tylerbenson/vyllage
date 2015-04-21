@@ -3,7 +3,6 @@ package accounts.service;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -163,13 +163,13 @@ public class UserService {
 		// assigns default role.
 		String randomPassword = randomPasswordGenerator.getRandomPassword();
 
-		List<UserOrganizationRole> loggedUseRoles = new ArrayList<>();
+		List<GrantedAuthority> loggedUseRoles = new ArrayList<>();
 		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
 
 		// searching for UserOrganizationRole student.
 		loggedUseRoles
-				.addAll((Collection<? extends UserOrganizationRole>) ((User) SecurityContextHolder
-						.getContext().getAuthentication().getPrincipal())
+				.addAll(((User) SecurityContextHolder.getContext()
+						.getAuthentication().getPrincipal())
 						.getAuthorities()
 						.stream()
 						.filter(a -> a.getAuthority().equalsIgnoreCase(
@@ -179,10 +179,10 @@ public class UserService {
 		// setting up organizations and roles for the user account, we set the
 		// same organizations the logged in user belongs to and assign the Guest
 		// Role, user id is null until saved
-		for (UserOrganizationRole userOrganizationRole : loggedUseRoles)
+		for (GrantedAuthority userOrganizationRole : loggedUseRoles)
 			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
-					userOrganizationRole.getOrganizationId(), RolesEnum.STUDENT
-							.name()));
+					((UserOrganizationRole) userOrganizationRole)
+							.getOrganizationId(), RolesEnum.STUDENT.name()));
 
 		User user = new User(null, linkRequest.getFirstName(), null,
 				linkRequest.getLastName(), linkRequest.getEmail(),
