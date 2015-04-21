@@ -23,12 +23,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import accounts.constants.Roles;
+import accounts.constants.RolesEnum;
 import accounts.model.OrganizationMember;
 import accounts.model.User;
-import accounts.model.UserRole;
+import accounts.model.UserOrganizationRole;
 import accounts.repository.UserDetailRepository;
-import accounts.repository.UserRoleRepository;
+import accounts.repository.UserOrganizationRoleRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -39,7 +39,7 @@ public class LoginTest {
 	private UserDetailRepository repository;
 
 	@Autowired
-	private UserRoleRepository authRepo;
+	private UserOrganizationRoleRepository authRepo;
 
 	@Test
 	public void userExistsTest() {
@@ -71,7 +71,7 @@ public class LoginTest {
 
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
-				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
+				Arrays.asList(new UserOrganizationRole(RolesEnum.STUDENT.name().toUpperCase(),
 						null)), Arrays.asList(organizationMember));
 
 		repository.createUser(user);
@@ -105,7 +105,7 @@ public class LoginTest {
 
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
-				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
+				Arrays.asList(new UserOrganizationRole(RolesEnum.STUDENT.name().toUpperCase(),
 						null)), Arrays.asList(organizationMember));
 
 		repository.createUser(user);
@@ -142,7 +142,7 @@ public class LoginTest {
 
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
-				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
+				Arrays.asList(new UserOrganizationRole(RolesEnum.STUDENT.name().toUpperCase(),
 						null)), Arrays.asList(organizationMember));
 
 		repository.createUser(user);
@@ -162,8 +162,8 @@ public class LoginTest {
 		String userName = "test";
 		String oldPassword = "password";
 
-		GrantedAuthority auth = new UserRole(
-				Roles.STUDENT.name().toUpperCase(), null);
+		GrantedAuthority auth = new UserOrganizationRole(
+				RolesEnum.STUDENT.name().toUpperCase(), null);
 
 		OrganizationMember organizationMember = new OrganizationMember(0L, null);
 
@@ -188,7 +188,7 @@ public class LoginTest {
 				loadedUser.getPassword()));
 
 		String userName2 = "test2";
-		GrantedAuthority auth2 = new UserRole(Roles.STUDENT.name()
+		GrantedAuthority auth2 = new UserOrganizationRole(RolesEnum.STUDENT.name()
 				.toUpperCase(), null);
 		OrganizationMember organizationMember2 = new OrganizationMember(0L,
 				null);
@@ -216,8 +216,8 @@ public class LoginTest {
 		String userName = "long-password";
 		String password = "This is my very long password I made up by myself. 123456";
 
-		GrantedAuthority auth = new UserRole(
-				Roles.STUDENT.name().toUpperCase(), null);
+		GrantedAuthority auth = new UserOrganizationRole(
+				RolesEnum.STUDENT.name().toUpperCase(), null);
 
 		OrganizationMember organizationMember = new OrganizationMember(0L, null);
 
@@ -259,7 +259,7 @@ public class LoginTest {
 
 		User user = new User(userName, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
-				Arrays.asList(new UserRole(Roles.STUDENT.name().toUpperCase(),
+				Arrays.asList(new UserOrganizationRole(RolesEnum.STUDENT.name().toUpperCase(),
 						null)), Arrays.asList(organizationMember));
 
 		repository.createUser(user);
@@ -313,9 +313,9 @@ public class LoginTest {
 
 		OrganizationMember organizationMember = new OrganizationMember(0L, null);
 
-		GrantedAuthority auth1 = new UserRole(Roles.STUDENT.name()
+		GrantedAuthority auth1 = new UserOrganizationRole(RolesEnum.STUDENT.name()
 				.toUpperCase(), null);
-		GrantedAuthority auth2 = new UserRole(Roles.STUDENT.name()
+		GrantedAuthority auth2 = new UserOrganizationRole(RolesEnum.STUDENT.name()
 				.toUpperCase(), null);
 
 		User user = new User(userName, password, enabled, accountNonExpired,
@@ -326,7 +326,7 @@ public class LoginTest {
 
 		User loadedUser = repository.loadUserByUsername(userName);
 
-		List<UserRole> roles = authRepo.getByUserId(loadedUser.getUserId());
+		List<UserOrganizationRole> roles = authRepo.getByUserId(loadedUser.getUserId());
 		assertTrue("Found more than 1 authority, "
 				+ loadedUser.getAuthorities().size(), loadedUser
 				.getAuthorities().size() == 1);

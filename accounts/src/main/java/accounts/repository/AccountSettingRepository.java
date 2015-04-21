@@ -100,7 +100,7 @@ public class AccountSettingRepository {
 		return setting;
 	}
 
-	public void delete(Long userId) {
+	public void deleteByUserId(Long userId) {
 		sql.delete(ACCOUNT_SETTING).where(ACCOUNT_SETTING.USER_ID.eq(userId))
 				.execute();
 	}

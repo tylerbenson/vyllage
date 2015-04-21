@@ -3,6 +3,7 @@ package accounts.service;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,27 +21,24 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import accounts.constants.RolesEnum;
 import accounts.email.EmailBuilder;
 import accounts.model.BatchAccount;
 import accounts.model.CSRFToken;
 import accounts.model.Organization;
-import accounts.model.OrganizationMember;
-import accounts.model.Role;
 import accounts.model.User;
-import accounts.model.UserRole;
+import accounts.model.UserOrganizationRole;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AccountSettingRepository;
 import accounts.repository.ElementNotFoundException;
-import accounts.repository.OrganizationMemberRepository;
 import accounts.repository.OrganizationRepository;
-import accounts.repository.OrganizationRoleRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
-import accounts.repository.UserRoleRepository;
+import accounts.repository.UserOrganizationRoleRepository;
 import accounts.service.aspects.CheckPrivacy;
 import accounts.validation.EmailValidator;
 
@@ -55,16 +53,10 @@ public class UserService {
 	private OrganizationRepository organizationRepository;
 
 	@Autowired
-	private UserRoleRepository userRoleRepository;
+	private UserOrganizationRoleRepository userOrganizationRoleRepository;
 
 	@Autowired
 	private RoleRepository roleRepository;
-
-	@Autowired
-	private OrganizationRoleRepository organizationRoleRepository;
-
-	@Autowired
-	private OrganizationMemberRepository organizationMemberRepository;
 
 	@Autowired
 	private UserDetailRepository userRepository;
@@ -118,9 +110,9 @@ public class UserService {
 			throw new IllegalArgumentException(
 					"Contains invalid email addresses.");
 
-		Role role = roleRepository.get(batchAccount.getRole());
+		// Role role = roleRepository.get(batchAccount.getRole());
 
-		// note, for organization member and role there's no userId until it's
+		// note, for UserOrganizationRole there's no userId until it's
 		// saved.
 		List<User> users = Arrays
 				.stream(emailSplit)
@@ -128,9 +120,9 @@ public class UserService {
 				.map(s -> new User(s, randomPasswordGenerator
 						.getRandomPassword(), enabled, accountNonExpired,
 						credentialsNonExpired, accountNonLocked, Arrays
-								.asList(new UserRole(role.getRole(), null)),
-						Arrays.asList(new OrganizationMember(batchAccount
-								.getOrganization(), null))))
+								.asList(new UserOrganizationRole(null,
+										batchAccount.getOrganization(),
+										batchAccount.getRole()))))
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
@@ -157,6 +149,8 @@ public class UserService {
 	 * @return link response
 	 * @throws EmailException
 	 */
+	@SuppressWarnings("unchecked")
+	// the are fine
 	public User createUser(DocumentLinkRequest linkRequest)
 			throws EmailException {
 		boolean invalid = false;
@@ -169,24 +163,31 @@ public class UserService {
 		// assigns default role.
 		String randomPassword = randomPasswordGenerator.getRandomPassword();
 
-		List<UserRole> defaultAuthoritiesForNewUser = userRoleRepository
-				.getDefaultAuthoritiesForNewUser();
+		List<UserOrganizationRole> loggedUseRoles = new ArrayList<>();
+		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
 
-		List<OrganizationMember> organizationMemberList = ((User) SecurityContextHolder
-				.getContext().getAuthentication().getPrincipal())
-				.getOrganizationMember();
+		// searching for UserOrganizationRole student.
+		loggedUseRoles
+				.addAll((Collection<? extends UserOrganizationRole>) ((User) SecurityContextHolder
+						.getContext().getAuthentication().getPrincipal())
+						.getAuthorities()
+						.stream()
+						.filter(a -> a.getAuthority().equalsIgnoreCase(
+								RolesEnum.STUDENT.name()))
+						.collect(Collectors.toList()));
 
-		List<OrganizationMember> newOrganizationMember = new ArrayList<>();
-
-		for (OrganizationMember organizationMember : organizationMemberList) {
-			newOrganizationMember.add(new OrganizationMember(organizationMember
-					.getOrganizationId(), null));
-		}
+		// setting up organizations and roles for the user account, we set the
+		// same organizations the logged in user belongs to and assign the Guest
+		// Role, user id is null until saved
+		for (UserOrganizationRole userOrganizationRole : loggedUseRoles)
+			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
+					userOrganizationRole.getOrganizationId(), RolesEnum.STUDENT
+							.name()));
 
 		User user = new User(null, linkRequest.getFirstName(), null,
 				linkRequest.getLastName(), linkRequest.getEmail(),
 				randomPassword, true, true, true, true,
-				defaultAuthoritiesForNewUser, newOrganizationMember, null, null);
+				defaultAuthoritiesForNewUser, null, null);
 		userRepository.createUser(user);
 
 		User loadUserByUsername = userRepository.loadUserByUsername(linkRequest
@@ -288,41 +289,66 @@ public class UserService {
 				.map(set -> setAccountSetting(user, set))
 				.collect(Collectors.toList()));
 
-		// set organizations
-		savedSettings.addAll(setOrganizations(
-				user,
-				settings.stream()
-						.filter(set -> set.getName().equalsIgnoreCase(
-								"organization")).collect(Collectors.toList())));
+		// set organizations and roles
 
-		// set roles
-		savedSettings.addAll(setRoles(
+		savedSettings.addAll(setRolesAndOrganizations(
 				user,
 				settings.stream()
-						.filter(set -> set.getName().equalsIgnoreCase("role"))
+						.filter(set -> set.getName().equalsIgnoreCase("role")
+								|| set.getName().equalsIgnoreCase(
+										"organization"))
 						.collect(Collectors.toList())));
 
 		return settings;
 	}
 
-	private List<AccountSetting> setRoles(User user,
-			List<AccountSetting> newRoles) {
+	// TODO: add validation in the controller
+	/**
+	 * 
+	 * Saves roles for a user within a specific organization.
+	 * 
+	 * @param user
+	 * @param collect
+	 * @return
+	 */
+	private List<AccountSetting> setRolesAndOrganizations(User user,
+			List<AccountSetting> userOrganizationRoleSettings) {
 
-		// create new role relationship
-		List<UserRole> userRoles = newRoles.stream()
-				.map(set -> new UserRole(set.getValue(), user.getUserId()))
+		// if this is not true we can't do anything
+		Assert.isTrue(userOrganizationRoleSettings
+				.stream()
+				.filter(seting -> seting.getName().equalsIgnoreCase(
+						"organization")).count() == 1);
+
+		Assert.isTrue(userOrganizationRoleSettings.stream()
+				.filter(seting -> seting.getName().equalsIgnoreCase("role"))
+				.count() >= 1);
+
+		Optional<AccountSetting> organizationSetting = userOrganizationRoleSettings
+				.stream()
+				.filter(seting -> seting.getName().equalsIgnoreCase(
+						"organization")).findFirst();
+
+		Long organizationId = organizationRepository.getByName(
+				organizationSetting.get().getValue()).getOrganizationId();
+
+		// create new user organization role relationship
+		List<UserOrganizationRole> userOrganizationRoles = userOrganizationRoleSettings
+				.stream()
+				.filter(seting -> seting.getName().equalsIgnoreCase("role"))
+				.map(set -> new UserOrganizationRole(user.getUserId(),
+						organizationId, set.getValue()))
 				.collect(Collectors.toList());
 
 		// save user roles
 		// authorities are immutable in Spring's user details.
-
+		// password is actually null here since it's erased, this is ok
 		User user2 = new User(user.getUserId(), user.getFirstName(),
 				user.getMiddleName(), user.getLastName(), user.getUsername(),
 				user.getPassword(), user.isEnabled(),
 				user.isAccountNonExpired(), user.isCredentialsNonExpired(),
-				user.isAccountNonLocked(), userRoles,
-				user.getOrganizationMember(), user.getDateCreated(),
-				user.getLastModified());
+				user.isAccountNonLocked(), userOrganizationRoles,
+				user.getDateCreated(), user.getLastModified());
 
 		this.update(user2);
 
@@ -331,31 +357,7 @@ public class UserService {
 		settingRepository.deleteByName(user.getUserId(), "role");
 
 		// saving and returning the new settings
-		return newRoles.stream().map(set -> setAccountSetting(user, set))
-				.collect(Collectors.toList());
-	}
-
-	protected List<AccountSetting> setOrganizations(User user,
-			List<AccountSetting> newOrganizations) {
-
-		// create new organization relationship
-		List<OrganizationMember> organizationMembers = newOrganizations
-				.stream()
-				.map(set -> new OrganizationMember(organizationRepository
-						.getByName(set.getValue()).getOrganizationId(), user
-						.getUserId())).collect(Collectors.toList());
-
-		// save user organizations
-		user.setOrganizationMember(organizationMembers);
-
-		this.update(user);
-
-		// delete current organizations, they will be replaced with the new
-		// ones.
-		settingRepository.deleteByName(user.getUserId(), "organization");
-
-		// saving and returning the new settings
-		return newOrganizations.stream()
+		return userOrganizationRoleSettings.stream()
 				.map(set -> setAccountSetting(user, set))
 				.collect(Collectors.toList());
 	}
@@ -367,8 +369,11 @@ public class UserService {
 	 * @return
 	 */
 	public List<Organization> getOrganizationsForUser(User user) {
-		return user.getOrganizationMember().stream()
-				.map(om -> organizationRepository.get(om.getOrganizationId()))
+		return user
+				.getAuthorities()
+				.stream()
+				.map(om -> organizationRepository
+						.get(((UserOrganizationRole) om).getOrganizationId()))
 				.collect(Collectors.toList());
 	}
 
@@ -425,8 +430,8 @@ public class UserService {
 					setting.getValue(), "a password we don't care about",
 					user.isEnabled(), user.isAccountNonExpired(),
 					user.isCredentialsNonExpired(), user.isAccountNonLocked(),
-					user.getAuthorities(), user.getOrganizationMember(),
-					user.getDateCreated(), user.getLastModified());
+					user.getAuthorities(), user.getDateCreated(),
+					user.getLastModified());
 			this.update(newUser);
 		}
 

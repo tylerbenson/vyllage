@@ -35,8 +35,8 @@ create table if not exists ACCOUNTS.organizations (
   organization_name varchar_ignorecase(50) not null);
 
 create table if not exists ACCOUNTS.user_organization_roles (
+  user_id bigint primary key not null,
   organization_id bigint not null,
-  user_id bigint not null,
   role varchar(50) not null,
   constraint fk_organization_roles_organization foreign key(organization_id) references ACCOUNTS.organizations(organization_id),
   constraint fk_organization_roles_users foreign key(user_id) references ACCOUNTS.users(user_id),

@@ -1,16 +1,14 @@
 package accounts.repository;
 
 import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
-import static accounts.domain.tables.OrganizationMembers.ORGANIZATION_MEMBERS;
 import static accounts.domain.tables.Organizations.ORGANIZATIONS;
-import static accounts.domain.tables.UserRoles.USER_ROLES;
+import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 import static accounts.domain.tables.Users.USERS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -37,16 +35,12 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
 
-import accounts.domain.tables.OrganizationMembers;
 import accounts.domain.tables.Organizations;
-import accounts.domain.tables.UserRoles;
 import accounts.domain.tables.Users;
 import accounts.domain.tables.records.UsersRecord;
-import accounts.model.Organization;
-import accounts.model.OrganizationMember;
 import accounts.model.User;
 import accounts.model.UserCredential;
-import accounts.model.UserRole;
+import accounts.model.UserOrganizationRole;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
@@ -65,13 +59,10 @@ public class UserDetailRepository implements UserDetailsManager {
 	private DSLContext sql;
 
 	@Autowired
-	private UserRoleRepository userRoleRepository;
+	private UserOrganizationRoleRepository userOrganizationRoleRepository;
 
 	@Autowired
 	private OrganizationRepository organizationRepository;
-
-	@Autowired
-	private OrganizationMemberRepository organizationMemberRepository;
 
 	@Autowired
 	private UserCredentialsRepository credentialsRepository;
@@ -119,10 +110,7 @@ public class UserDetailRepository implements UserDetailsManager {
 		// TODO: eventually we'll need these fields in the database.
 		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
 
-		List<UserRole> roles = userRoleRepository.getByUserId(record
-				.getUserId());
-
-		List<OrganizationMember> organizations = organizationMemberRepository
+		List<UserOrganizationRole> roles = userOrganizationRoleRepository
 				.getByUserId(record.getUserId());
 
 		UserCredential credential = credentialsRepository.get(record
@@ -132,7 +120,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				record.getMiddleName(), record.getLastName(),
 				record.getUserName(), credential.getPassword(),
 				record.getEnabled(), accountNonExpired, credentialsNonExpired,
-				accountNonLocked, roles, organizations, record.getDateCreated()
+				accountNonLocked, roles, record.getDateCreated()
 						.toLocalDateTime(), record.getLastModified()
 						.toLocalDateTime());
 		return user;
@@ -142,12 +130,6 @@ public class UserDetailRepository implements UserDetailsManager {
 	// @Transactional
 	public void createUser(UserDetails userDetails) {
 		User user = (User) userDetails;
-		Collection<? extends GrantedAuthority> roles;
-
-		if (user.getAuthorities() != null || user.getAuthorities().size() > 0)
-			roles = user.getAuthorities();
-		else
-			roles = userRoleRepository.getDefaultAuthoritiesForNewUser();
 
 		TransactionStatus transaction = txManager
 				.getTransaction(new DefaultTransactionDefinition());
@@ -173,9 +155,10 @@ public class UserDetailRepository implements UserDetailsManager {
 			credentialsRepository.create(newRecord.getUserId(),
 					user.getPassword());
 
-			for (GrantedAuthority role : roles) {
-				((UserRole) role).setUserId(newRecord.getUserId());
-				userRoleRepository.create((UserRole) role);
+			for (GrantedAuthority role : user.getAuthorities()) {
+				((UserOrganizationRole) role).setUserId(newRecord.getUserId());
+				userOrganizationRoleRepository
+						.create((UserOrganizationRole) role);
 
 				AccountSetting roleSetting = new AccountSetting();
 				roleSetting.setName("role");
@@ -185,24 +168,34 @@ public class UserDetailRepository implements UserDetailsManager {
 				accountSettingRepository
 						.set(newRecord.getUserId(), roleSetting);
 
-			}
-
-			for (OrganizationMember organizationMember : user
-					.getOrganizationMember()) {
-				organizationMember.setUserId(newRecord.getUserId());
-				organizationMemberRepository.create(organizationMember);
-
 				AccountSetting organizationSetting = new AccountSetting();
 				organizationSetting.setName("organization");
 				organizationSetting.setUserId(newRecord.getUserId());
 				organizationSetting.setPrivacy(Privacy.PRIVATE.name()
 						.toLowerCase());
 				organizationSetting.setValue(organizationRepository.get(
-						organizationMember.getOrganizationId())
+						((UserOrganizationRole) role).getOrganizationId())
 						.getOrganizationName());
 				accountSettingRepository.set(newRecord.getUserId(),
 						organizationSetting);
 			}
+
+			// for (OrganizationMember organizationMember : user
+			// .getOrganizationMember()) {
+			// organizationMember.setUserId(newRecord.getUserId());
+			// organizationMemberRepository.create(organizationMember);
+			//
+			// AccountSetting organizationSetting = new AccountSetting();
+			// organizationSetting.setName("organization");
+			// organizationSetting.setUserId(newRecord.getUserId());
+			// organizationSetting.setPrivacy(Privacy.PRIVATE.name()
+			// .toLowerCase());
+			// organizationSetting.setValue(organizationRepository.get(
+			// organizationMember.getOrganizationId())
+			// .getOrganizationName());
+			// accountSettingRepository.set(newRecord.getUserId(),
+			// organizationSetting);
+			// }
 
 			AccountSetting emailSetting = new AccountSetting();
 			emailSetting.setName("email");
@@ -296,17 +289,11 @@ public class UserDetailRepository implements UserDetailsManager {
 			record.setLastName(user.getLastName());
 			record.update();
 
-			userRoleRepository.deleteByUserId(user.getUserId());
-			organizationMemberRepository.deleteByUserId(user.getUserId());
+			userOrganizationRoleRepository.deleteByUserId(user.getUserId());
 
-			for (GrantedAuthority authority : user.getAuthorities()) {
-				userRoleRepository.create((UserRole) authority);
-
-				for (OrganizationMember organizationMember : user
-						.getOrganizationMember()) {
-					organizationMemberRepository.create(organizationMember);
-				}
-			}
+			for (GrantedAuthority authority : user.getAuthorities())
+				userOrganizationRoleRepository
+						.create((UserOrganizationRole) authority);
 
 		} catch (Exception e) {
 			logger.info(e.toString());
@@ -334,13 +321,11 @@ public class UserDetailRepository implements UserDetailsManager {
 		try {
 			UsersRecord record = sql.fetchOne(USERS,
 					USERS.USER_NAME.eq(username));
-
-			userRoleRepository.deleteByUserId(record.getUserId());
-
 			long userId = record.getUserId();
-			organizationMemberRepository.deleteByUserId(userId);
-			credentialsRepository.delete(userId);
-			accountSettingRepository.delete(userId);
+
+			userOrganizationRoleRepository.deleteByUserId(userId);
+			credentialsRepository.deleteByUserId(userId);
+			accountSettingRepository.deleteByUserId(userId);
 
 			sql.update(USERS).set(USERS.ENABLED, false)
 					.where(USERS.USER_ID.eq(userId)).execute();
@@ -448,8 +433,7 @@ public class UserDetailRepository implements UserDetailsManager {
 						credentialsRepository.get(record.getUserId())
 								.getPassword(), record.getEnabled(),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, userRoleRepository.getByUserId(record
-								.getUserId()), organizationMemberRepository
+						accountNonLocked, userOrganizationRoleRepository
 								.getByUserId(record.getUserId()), record
 								.getDateCreated().toLocalDateTime(), record
 								.getLastModified().toLocalDateTime()))
@@ -470,8 +454,7 @@ public class UserDetailRepository implements UserDetailsManager {
 						credentialsRepository.get(record.getUserId())
 								.getPassword(), record.getEnabled(),
 						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, userRoleRepository.getByUserId(record
-								.getUserId()), organizationMemberRepository
+						accountNonLocked, userOrganizationRoleRepository
 								.getByUserId(record.getUserId()), record
 								.getDateCreated().toLocalDateTime(), record
 								.getLastModified().toLocalDateTime()))
@@ -516,9 +499,14 @@ public class UserDetailRepository implements UserDetailsManager {
 						user.getPassword());
 
 				for (GrantedAuthority authority : user.getAuthorities()) {
-					otherInserts.add(sql.insertInto(USER_ROLES,
-							USER_ROLES.USER_ID, USER_ROLES.ROLE).values(
-							user.getUserId(), authority.getAuthority()));
+					otherInserts.add(sql.insertInto(USER_ORGANIZATION_ROLES,
+							USER_ORGANIZATION_ROLES.USER_ID,
+							USER_ORGANIZATION_ROLES.ROLE,
+							USER_ORGANIZATION_ROLES.ORGANIZATION_ID).values(
+							user.getUserId(),
+							authority.getAuthority(),
+							((UserOrganizationRole) authority)
+									.getOrganizationId()));
 
 					// role setting
 					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
@@ -528,16 +516,6 @@ public class UserDetailRepository implements UserDetailsManager {
 									authority.getAuthority(),
 									Privacy.PRIVATE.name().toLowerCase()));
 
-				}
-
-				for (OrganizationMember organizationMember : user
-						.getOrganizationMember()) {
-					otherInserts.add(sql.insertInto(ORGANIZATION_MEMBERS,
-							ORGANIZATION_MEMBERS.ORGANIZATION_ID,
-							ORGANIZATION_MEMBERS.USER_ID).values(
-							organizationMember.getOrganizationId(),
-							user.getUserId()));
-
 					// organization setting
 					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
@@ -545,7 +523,7 @@ public class UserDetailRepository implements UserDetailsManager {
 							.values(user.getUserId(),
 									"organization",
 									organizationRepository.get(
-											organizationMember
+											((UserOrganizationRole) authority)
 													.getOrganizationId())
 											.getOrganizationName(),
 									Privacy.PRIVATE.name().toLowerCase()));
@@ -644,10 +622,12 @@ public class UserDetailRepository implements UserDetailsManager {
 				.collect(Collectors.toList());
 
 		/**
-		 * select u.* from accounts.users u where username in ( select
-		 * gm.username from accounts.group_members gm join accounts.groups g on
-		 * gm.group_id = g.id where g.id = 0) and username in (select username
-		 * from accounts.authorities where authority like 'ADVISOR');
+		 * TODO: this is outdated, don't delete it yet, I need it to create the
+		 * query again. select u.* from accounts.users u where username in (
+		 * select gm.username from accounts.group_members gm join
+		 * accounts.groups g on gm.group_id = g.id where g.id = 0) and username
+		 * in (select username from accounts.authorities where authority like
+		 * 'ADVISOR');
 		 * 
 		 */
 		Users u = USERS.as("u");
@@ -699,9 +679,7 @@ public class UserDetailRepository implements UserDetailsManager {
 						ur.getValue(USERS.USER_ID)).getPassword(), ur
 						.getValue(USERS.ENABLED), accountNonExpired,
 						credentialsNonExpired, accountNonLocked,
-						userRoleRepository.getByUserId(ur
-								.getValue(USERS.USER_ID)),
-						organizationMemberRepository.getByUserId(ur
+						userOrganizationRoleRepository.getByUserId(ur
 								.getValue(USERS.USER_ID)), ur.getValue(
 								USERS.DATE_CREATED).toLocalDateTime(), ur
 								.getValue(USERS.LAST_MODIFIED)
