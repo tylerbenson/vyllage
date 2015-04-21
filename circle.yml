@@ -20,4 +20,4 @@ deployment:
 
 test:
   override:
-    - cd assets && karma start ./karma.conf.js --single-run 
+    - cd assets && ./node_modules/.bin/karma start ./karma.conf.js --single-run 
