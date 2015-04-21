@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import accounts.Application;
-import accounts.constants.Roles;
+import accounts.constants.RolesEnum;
 import accounts.model.BatchAccount;
 import accounts.model.User;
 import accounts.model.account.settings.AccountSetting;
@@ -46,7 +46,7 @@ public class UserServiceTest {
 
 		batchAccount.setEmails("uno@gmail.com, dos@test.com, tres@yahoo.com");
 		batchAccount.setOrganization(1L);
-		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
+		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
@@ -65,7 +65,7 @@ public class UserServiceTest {
 		batchAccount
 				.setEmails("cuatro@gmail.com; cinco@test.com; seis@yahoo.com");
 		batchAccount.setOrganization(1L);
-		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
+		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
@@ -83,7 +83,7 @@ public class UserServiceTest {
 
 		batchAccount.setEmails("siet@gmail.com, , nueve@yahoo.com");
 		batchAccount.setOrganization(1L);
-		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
+		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);
@@ -100,7 +100,7 @@ public class UserServiceTest {
 
 		batchAccount.setEmails("diez@gmail.com, once.@, doce@yahoo.com");
 		batchAccount.setOrganization(1L);
-		batchAccount.setRole(Roles.STUDENT.name().toUpperCase());
+		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest());
 		service.batchCreateUsers(batchAccount);

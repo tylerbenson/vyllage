@@ -18,7 +18,6 @@ import accounts.model.Organization;
 import accounts.model.User;
 import accounts.model.account.AccountNames;
 import accounts.repository.OrganizationRepository;
-import accounts.repository.OrganizationRoleRepository;
 import accounts.repository.RoleRepository;
 import accounts.service.UserService;
 
@@ -33,9 +32,6 @@ public class AdminUserController {
 
 	@Autowired
 	private OrganizationRepository organizationRepository;
-
-	@Autowired
-	private OrganizationRoleRepository organizationRoleRepository;
 
 	@ModelAttribute("accountName")
 	public AccountNames accountNames() {
@@ -82,9 +78,7 @@ public class AdminUserController {
 		List<Organization> allOrganizations = organizationRepository.getAll();
 		model.addAttribute("organizations", allOrganizations);
 		// default to the first one.
-		model.addAttribute("roles", organizationRoleRepository
-				.getRolesForOrganization(allOrganizations.get(0)
-						.getOrganizationId()));
+		model.addAttribute("roles", roleRepository.getAll());
 
 		model.addAttribute("batchAccount", new BatchAccount());
 	}

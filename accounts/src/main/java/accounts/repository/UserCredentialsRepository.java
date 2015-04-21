@@ -95,7 +95,7 @@ public class UserCredentialsRepository {
 	 * 
 	 * @param userId
 	 */
-	public void delete(long userId) {
+	public void deleteByUserId(long userId) {
 		sql.update(USER_CREDENTIALS)
 				.set(USER_CREDENTIALS.ENABLED, false)
 				.where(USER_CREDENTIALS.USER_ID.eq(userId).and(

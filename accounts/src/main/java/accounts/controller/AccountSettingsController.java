@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import accounts.constants.Roles;
+import accounts.constants.RolesEnum;
 import accounts.model.User;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
@@ -205,10 +205,10 @@ public class AccountSettingsController {
 					.stream()
 					.anyMatch(
 							ur -> ur.getAuthority().equalsIgnoreCase(
-									Roles.STUDENT.name()))) {
-				return Arrays.asList(Roles.STUDENT.name(), Roles.ALUMNI.name());
+									RolesEnum.STUDENT.name()))) {
+				return Arrays.asList(RolesEnum.STUDENT.name(), RolesEnum.ALUMNI.name());
 			} else {
-				return Arrays.asList(Roles.values()).stream()
+				return Arrays.asList(RolesEnum.values()).stream()
 						.map(e -> e.toString()).collect(Collectors.toList());
 			}
 		}
