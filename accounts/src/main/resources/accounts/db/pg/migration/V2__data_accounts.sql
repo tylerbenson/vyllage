@@ -14,5 +14,5 @@ insert into accounts.user_credentials (user_id, password, enabled, expires) valu
 insert into accounts.organizations ( organization_id, organization_name ) values ( 0, 'Vyllage' );
 insert into accounts.organizations ( organization_id, organization_name ) values ( 1, 'Test' );
 
-insert into accounts.user_organization_roles ( organization_id, user_id, role ) values ( 0, 0, 'ADMIN', current_date );
-insert into accounts.user_organization_roles ( organization_id, user_id, role ) values ( 0, 1, 'ADMIN', current_date );
+insert into accounts.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 0, 0, 'ADMIN', current_date, 0 );
+insert into accounts.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 0, 1, 'ADMIN', current_date, 0 );

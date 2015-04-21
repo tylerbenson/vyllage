@@ -69,7 +69,7 @@ public class LoginTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserOrganizationRole(null, 0L,
-						RolesEnum.STUDENT.name().toUpperCase())));
+						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
 		repository.createUser(user);
 
@@ -101,7 +101,7 @@ public class LoginTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserOrganizationRole(null, 0L,
-						RolesEnum.STUDENT.name().toUpperCase())));
+						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
 		repository.createUser(user);
 
@@ -136,7 +136,7 @@ public class LoginTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserOrganizationRole(null, 0L,
-						RolesEnum.STUDENT.name().toUpperCase())));
+						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
 		repository.createUser(user);
 
@@ -156,7 +156,7 @@ public class LoginTest {
 		String oldPassword = "password";
 
 		GrantedAuthority auth = new UserOrganizationRole(null, 0L,
-				RolesEnum.STUDENT.name().toUpperCase());
+				RolesEnum.STUDENT.name().toUpperCase(), 0L);
 
 		boolean enabled = true;
 		boolean accountNonExpired = true;
@@ -179,7 +179,7 @@ public class LoginTest {
 
 		String userName2 = "test2";
 		GrantedAuthority auth2 = new UserOrganizationRole(null, 0L,
-				RolesEnum.STUDENT.name().toUpperCase());
+				RolesEnum.STUDENT.name().toUpperCase(), 0L);
 
 		User user2 = new User(userName2, oldPassword, enabled,
 				accountNonExpired, credentialsNonExpired, accountNonLocked,
@@ -203,7 +203,7 @@ public class LoginTest {
 		String password = "This is my very long password I made up by myself. 123456";
 
 		GrantedAuthority auth = new UserOrganizationRole(null, 0L,
-				RolesEnum.STUDENT.name().toUpperCase());
+				RolesEnum.STUDENT.name().toUpperCase(), 0L);
 
 		boolean enabled = true;
 		boolean accountNonExpired = true;
@@ -239,7 +239,7 @@ public class LoginTest {
 		User user = new User(userName, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
 				Arrays.asList(new UserOrganizationRole(null, 0L,
-						RolesEnum.STUDENT.name().toUpperCase())));
+						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
 		repository.createUser(user);
 
@@ -270,9 +270,9 @@ public class LoginTest {
 		boolean accountNonLocked = true;
 
 		GrantedAuthority auth1 = new UserOrganizationRole(null, 0L,
-				RolesEnum.STUDENT.name().toUpperCase());
+				RolesEnum.STUDENT.name().toUpperCase(), 0L);
 		GrantedAuthority auth2 = new UserOrganizationRole(null, 0L,
-				RolesEnum.STUDENT.name().toUpperCase());
+				RolesEnum.STUDENT.name().toUpperCase(), 0L);
 
 		User user = new User(userName, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth1,

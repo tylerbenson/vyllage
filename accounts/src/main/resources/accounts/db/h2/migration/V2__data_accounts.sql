@@ -55,8 +55,8 @@ insert into accounts.organizations ( organization_id, organization_name ) values
 --  user_id bigint not null,
 --  authority varchar(50) not null,
 --  constraint fk_group_authorities_group foreign key(group_id) references groups(id));
-insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created ) values ( 0, 0, 'ADMIN', CURRENT_DATE() );
-insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created ) values ( 0, 2, 'ADVISOR', CURRENT_DATE() );
-insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created ) values ( 2, 1, 'STUDENT', CURRENT_DATE() );
-insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created ) values ( 1, 3, 'ADMIN', CURRENT_DATE() );
-insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created ) values ( 2, 2, 'STAFF', CURRENT_DATE() );
+insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 0, 0, 'ADMIN', CURRENT_DATE(), 0 );
+insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 0, 2, 'ADVISOR', CURRENT_DATE(), 0 );
+insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 2, 1, 'STUDENT', CURRENT_DATE(), 0 );
+insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 1, 3, 'ADMIN', CURRENT_DATE(), 0 );
+insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 2, 2, 'STAFF', CURRENT_DATE(), 0 );

@@ -39,6 +39,8 @@ create table if not exists accounts.user_organization_roles (
   organization_id bigint not null,
   role varchar(50) not null,
   date_created timestamp not null,
-  constraint fk_user_organization_roles_organization foreign key(organization_id) references accounts.organizations(organization_id),
+  audit_user_id bigint not null,
   constraint fk_user_organization_roles_users foreign key(user_id) references accounts.users(user_id),
-  constraint fk_user_organization_roles_role foreign key(role) references accounts.roles(role));
+  constraint fk_user_organization_roles_organization foreign key(organization_id) references accounts.organizations(organization_id),
+  constraint fk_user_organization_roles_role foreign key(role) references accounts.roles(role),
+  constraint fk_user_organization_roles_users_audit foreign key(audit_user_id) references accounts.users(user_id));

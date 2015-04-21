@@ -122,7 +122,11 @@ public class UserService {
 						credentialsNonExpired, accountNonLocked, Arrays
 								.asList(new UserOrganizationRole(null,
 										batchAccount.getOrganization(),
-										batchAccount.getRole()))))
+										batchAccount.getRole(),
+										((User) SecurityContextHolder
+												.getContext()
+												.getAuthentication()
+												.getPrincipal()).getUserId()))))
 				.collect(Collectors.toList());
 
 		userRepository.saveUsers(users);
@@ -182,7 +186,9 @@ public class UserService {
 		for (GrantedAuthority userOrganizationRole : loggedUseRoles)
 			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
 					((UserOrganizationRole) userOrganizationRole)
-							.getOrganizationId(), RolesEnum.STUDENT.name()));
+							.getOrganizationId(), RolesEnum.STUDENT.name(),
+					((User) SecurityContextHolder.getContext()
+							.getAuthentication().getPrincipal()).getUserId()));
 
 		User user = new User(null, linkRequest.getFirstName(), null,
 				linkRequest.getLastName(), linkRequest.getEmail(),

@@ -39,6 +39,7 @@ public class UserOrganizationRoleRepository {
 		auth.setOrganizationId(role.getOrganizationId());
 		auth.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 				.of("UTC"))));
+		auth.setAuditUserId(role.getAuditUserId());
 		auth.insert();
 	}
 

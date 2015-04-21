@@ -17,19 +17,14 @@ public class UserOrganizationRole implements GrantedAuthority {
 	private final String role;
 	private Long userId;
 	private Long organizationId;
+	private Long auditUserId;
 
-	// public UserOrganizationRole(String role, Long userId, Long
-	// organizationId) {
-	// this.role = role;
-	// this.userId = userId;
-	// this.organizationId = organizationId;
-	//
-	// }
-
-	public UserOrganizationRole(Long userId, Long organizationId, String role) {
+	public UserOrganizationRole(Long userId, Long organizationId, String role,
+			Long auditUserId) {
 		this.role = role;
 		this.userId = userId;
 		this.organizationId = organizationId;
+		this.auditUserId = auditUserId;
 
 	}
 
@@ -37,6 +32,7 @@ public class UserOrganizationRole implements GrantedAuthority {
 		this.role = record.getRole();
 		this.userId = record.getUserId();
 		this.organizationId = record.getOrganizationId();
+		this.auditUserId = record.getAuditUserId();
 	}
 
 	@Override
@@ -58,5 +54,13 @@ public class UserOrganizationRole implements GrantedAuthority {
 
 	public void setOrganizationId(Long organizationId) {
 		this.organizationId = organizationId;
+	}
+
+	public Long getAuditUserId() {
+		return auditUserId;
+	}
+
+	public void setAuditUserId(Long auditUserId) {
+		this.auditUserId = auditUserId;
 	}
 }

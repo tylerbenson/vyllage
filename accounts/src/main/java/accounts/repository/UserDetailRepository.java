@@ -502,13 +502,17 @@ public class UserDetailRepository implements UserDetailsManager {
 							USER_ORGANIZATION_ROLES.USER_ID,
 							USER_ORGANIZATION_ROLES.ROLE,
 							USER_ORGANIZATION_ROLES.ORGANIZATION_ID,
-							USER_ORGANIZATION_ROLES.DATE_CREATED).values(
+							USER_ORGANIZATION_ROLES.DATE_CREATED,
+							USER_ORGANIZATION_ROLES.AUDIT_USER_ID).values(
 							user.getUserId(),
 							authority.getAuthority(),
 							((UserOrganizationRole) authority)
 									.getOrganizationId(),
 							Timestamp.valueOf(LocalDateTime.now(ZoneId
-									.of("UTC")))));
+									.of("UTC"))),
+							((User) SecurityContextHolder.getContext()
+									.getAuthentication().getPrincipal())
+									.getUserId()));
 
 					// role setting
 					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,

@@ -29,7 +29,7 @@ public class UserOrganizationRoleRepositoryTest {
 		String staff = "STAFF";
 
 		UserOrganizationRole role = new UserOrganizationRole(userId,
-				organizationId, staff);
+				organizationId, staff, userId);
 
 		userOrganizationRoleRepository.create(role);
 
@@ -41,7 +41,8 @@ public class UserOrganizationRoleRepositoryTest {
 		assertTrue(byUserId.stream().anyMatch(
 				uor -> uor.getAuthority().equalsIgnoreCase(staff)
 						&& uor.getOrganizationId().equals(organizationId)
-						&& uor.getUserId().equals(userId)));
+						&& uor.getUserId().equals(userId)
+						&& uor.getAuditUserId().equals(userId)));
 	}
 
 	@Test
@@ -51,7 +52,7 @@ public class UserOrganizationRoleRepositoryTest {
 		String alumni = "ALUMNI";
 
 		UserOrganizationRole role = new UserOrganizationRole(userId,
-				organizationId, alumni);
+				organizationId, alumni, userId);
 
 		userOrganizationRoleRepository.create(role);
 		userOrganizationRoleRepository.deleteByUserIdAndOrganizationId(userId,
