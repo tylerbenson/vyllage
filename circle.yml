@@ -18,6 +18,3 @@ deployment:
             key_pattern: vyllage-{BUILD_NUM}-{SHORT_COMMIT}.zip
         deployment_group: prod
 
-test:
-  override:
-    - cd assets && ./node_modules/.bin/karma start ./karma.conf.js --single-run 
