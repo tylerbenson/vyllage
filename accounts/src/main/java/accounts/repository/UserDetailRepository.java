@@ -288,11 +288,11 @@ public class UserDetailRepository implements UserDetailsManager {
 			record.setLastName(user.getLastName());
 			record.update();
 
-			userOrganizationRoleRepository.deleteByUserId(user.getUserId());
-
-			for (GrantedAuthority authority : user.getAuthorities())
-				userOrganizationRoleRepository
-						.create((UserOrganizationRole) authority);
+			// userOrganizationRoleRepository.deleteByUserId(user.getUserId());
+			//
+			// for (GrantedAuthority authority : user.getAuthorities())
+			// userOrganizationRoleRepository
+			// .create((UserOrganizationRole) authority);
 
 		} catch (Exception e) {
 			logger.info(e.toString());
@@ -501,11 +501,14 @@ public class UserDetailRepository implements UserDetailsManager {
 					otherInserts.add(sql.insertInto(USER_ORGANIZATION_ROLES,
 							USER_ORGANIZATION_ROLES.USER_ID,
 							USER_ORGANIZATION_ROLES.ROLE,
-							USER_ORGANIZATION_ROLES.ORGANIZATION_ID).values(
+							USER_ORGANIZATION_ROLES.ORGANIZATION_ID,
+							USER_ORGANIZATION_ROLES.DATE_CREATED).values(
 							user.getUserId(),
 							authority.getAuthority(),
 							((UserOrganizationRole) authority)
-									.getOrganizationId()));
+									.getOrganizationId(),
+							Timestamp.valueOf(LocalDateTime.now(ZoneId
+									.of("UTC")))));
 
 					// role setting
 					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
@@ -596,8 +599,8 @@ public class UserDetailRepository implements UserDetailsManager {
 	}
 
 	/**
-	 * Searches for advisors filtering by firstName, lastName and email. Filters
-	 * are optional.
+	 * Searches for advisors related to the user filtering by firstName,
+	 * lastName and email. Filters are optional.
 	 * 
 	 * @param loggedUser
 	 * @param filters
@@ -610,24 +613,17 @@ public class UserDetailRepository implements UserDetailsManager {
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
 
+		// get all the Organizations and Roles for the user executing the search
 		Result<Record1<Long>> organizationRecordsIds = sql
 				.select(USER_ORGANIZATION_ROLES.ORGANIZATION_ID)
 				.from(USER_ORGANIZATION_ROLES)
 				.where(USER_ORGANIZATION_ROLES.USER_ID.eq(loggedUser
 						.getUserId())).fetch();
 
+		// get all the organizations ids to filter the other users with
 		List<Long> organizationIds = organizationRecordsIds.stream()
 				.map(r -> r.getValue(USER_ORGANIZATION_ROLES.ORGANIZATION_ID))
 				.collect(Collectors.toList());
-
-		/*
-		 * TODO: this is outdated, don't delete it yet, I need it to create the
-		 * query again. select u.* from accounts.users u where username in (
-		 * select gm.username from accounts.group_members gm join
-		 * accounts.groups g on gm.group_id = g.id where g.id = 0) and username
-		 * in (select username from accounts.authorities where authority like
-		 * 'ADVISOR');
-		 */
 
 		/*
 		 * TODO: the above query could probably be combined into this one using

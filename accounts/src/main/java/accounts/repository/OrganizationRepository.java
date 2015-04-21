@@ -32,18 +32,4 @@ public class OrganizationRepository {
 				.into(Organization.class);
 	}
 
-	// public List<Organization> getOrganizationFromAuthority(String authority)
-	// {
-	// Organizations g = ORGANIZATIONS.as("g");
-	// OrganizationRoles ga = ORGANIZATION_ROLES.as("ga");
-	//
-	// return sql.select(g.fields()).from(ga).join(g)
-	// .on(ga.ORGANIZATION_ID.eq(g.ORGANIZATION_ID))
-	// .where(ga.ROLE.eq(authority)).fetchInto(Organization.class);
-	// /**
-	// * select *.g from group_authorities ga join groups g on ga.group_id =
-	// * g.id;
-	// */
-	// }
-
 }

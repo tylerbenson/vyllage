@@ -1,7 +1,7 @@
 package accounts.constants;
 
 public enum OrganizationEnum {
-	VYLLAGE(0L), GUEST(1L);
+	VYLLAGE(0L);
 
 	private final Long organizationId;
 

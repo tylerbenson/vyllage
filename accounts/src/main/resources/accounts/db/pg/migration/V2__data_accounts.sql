@@ -12,8 +12,7 @@ insert into accounts.user_credentials (user_id, password, enabled, expires) valu
 insert into accounts.user_credentials (user_id, password, enabled, expires) values (1, '$2a$10$AD3tneImR8CkAiESv.zDruYMGjm5rNnmQEW22VmiRq8wgjlt1WfNm', true, null);
 
 insert into accounts.organizations ( organization_id, organization_name ) values ( 0, 'Vyllage' );
-insert into accounts.organizations ( organization_id, organization_name ) values ( 1, 'Guest' );
-insert into accounts.organizations ( organization_id, organization_name ) values ( 2, 'Test' );
+insert into accounts.organizations ( organization_id, organization_name ) values ( 1, 'Test' );
 
-insert into accounts.user_organization_roles ( organization_id, user_id, role ) values ( 0, 0, 'ADMIN' );
-insert into accounts.user_organization_roles ( organization_id, user_id, role ) values ( 0, 1, 'ADMIN' );
+insert into accounts.user_organization_roles ( organization_id, user_id, role ) values ( 0, 0, 'ADMIN', current_date );
+insert into accounts.user_organization_roles ( organization_id, user_id, role ) values ( 0, 1, 'ADMIN', current_date );

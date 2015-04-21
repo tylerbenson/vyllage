@@ -289,77 +289,22 @@ public class UserService {
 				.map(set -> setAccountSetting(user, set))
 				.collect(Collectors.toList()));
 
-		// set organizations and roles
-
-		savedSettings.addAll(setRolesAndOrganizations(
-				user,
-				settings.stream()
-						.filter(set -> set.getName().equalsIgnoreCase("role")
-								|| set.getName().equalsIgnoreCase(
-										"organization"))
-						.collect(Collectors.toList())));
-
-		return settings;
+		return savedSettings;
 	}
 
-	// TODO: add validation in the controller
-	/**
-	 * 
-	 * Saves roles for a user within a specific organization.
-	 * 
-	 * @param user
-	 * @param collect
-	 * @return
-	 */
-	private List<AccountSetting> setRolesAndOrganizations(User user,
-			List<AccountSetting> userOrganizationRoleSettings) {
+	public void updateUserRolesByOrganization(
+			List<UserOrganizationRole> userOrganizationRoles) {
 
-		// if this is not true we can't do anything
-		Assert.isTrue(userOrganizationRoleSettings
-				.stream()
-				.filter(seting -> seting.getName().equalsIgnoreCase(
-						"organization")).count() == 1);
+		Long organizationId = userOrganizationRoles.get(0).getOrganizationId();
+		Long userId = userOrganizationRoles.get(0).getUserId();
 
-		Assert.isTrue(userOrganizationRoleSettings.stream()
-				.filter(seting -> seting.getName().equalsIgnoreCase("role"))
-				.count() >= 1);
+		// delete all the roles related to the user in the organization
+		userOrganizationRoleRepository.deleteByUserIdAndOrganizationId(userId,
+				organizationId);
 
-		Optional<AccountSetting> organizationSetting = userOrganizationRoleSettings
-				.stream()
-				.filter(seting -> seting.getName().equalsIgnoreCase(
-						"organization")).findFirst();
+		for (UserOrganizationRole userOrganizationRole : userOrganizationRoles)
+			userOrganizationRoleRepository.create(userOrganizationRole);
 
-		Long organizationId = organizationRepository.getByName(
-				organizationSetting.get().getValue()).getOrganizationId();
-
-		// create new user organization role relationship
-		List<UserOrganizationRole> userOrganizationRoles = userOrganizationRoleSettings
-				.stream()
-				.filter(seting -> seting.getName().equalsIgnoreCase("role"))
-				.map(set -> new UserOrganizationRole(user.getUserId(),
-						organizationId, set.getValue()))
-				.collect(Collectors.toList());
-
-		// save user roles
-		// authorities are immutable in Spring's user details.
-		// password is actually null here since it's erased, this is ok
-		User user2 = new User(user.getUserId(), user.getFirstName(),
-				user.getMiddleName(), user.getLastName(), user.getUsername(),
-				user.getPassword(), user.isEnabled(),
-				user.isAccountNonExpired(), user.isCredentialsNonExpired(),
-				user.isAccountNonLocked(), userOrganizationRoles,
-				user.getDateCreated(), user.getLastModified());
-
-		this.update(user2);
-
-		// delete current roles, they will be replaced with the new
-		// ones.
-		settingRepository.deleteByName(user.getUserId(), "role");
-
-		// saving and returning the new settings
-		return userOrganizationRoleSettings.stream()
-				.map(set -> setAccountSetting(user, set))
-				.collect(Collectors.toList());
 	}
 
 	/**
