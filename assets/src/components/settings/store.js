@@ -16,6 +16,7 @@ module.exports = Reflux.createStore({
   onGetSettings: function () {
     request
     .get('/account/setting')
+    .set('Accept', 'application/json')
     .end(function (err, res) {
       this.settings = res.body;
       this.update();
