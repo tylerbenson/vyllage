@@ -19,10 +19,12 @@ module.exports = {
   saveHandler: function (e) {
     e.preventDefault();
     actions.updateSettings();
+    window.location = '/resume';
   },
   cancelHandler: function (name, e) {
     e.preventDefault();
     actions.cancelSettings();
     this.refs[name].getDOMNode().reset();
+    window.location = '/resume';
   }
 };
