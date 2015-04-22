@@ -191,8 +191,6 @@ public class AccountSettingsController {
 
 		validatorsForAll.stream().map(v -> v.validate(setting));
 
-		System.out.println(setting);
-
 		if (setting.getErrorMessage() == null)
 			return userService.setAccountSetting(getUser(), setting);
 
