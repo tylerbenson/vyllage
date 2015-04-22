@@ -66,4 +66,22 @@ public class UserOrganizationRoleRepositoryTest {
 		assertTrue(byUserId.stream().noneMatch(
 				uor -> uor.getAuthority().equalsIgnoreCase(alumni)));
 	}
+
+	@Test
+	public void getByUserIdTest() {
+		Long userId = 0L;
+
+		List<UserOrganizationRole> byUserId = userOrganizationRoleRepository
+				.getByUserId(userId);
+
+		assertTrue(byUserId != null && !byUserId.isEmpty());
+	}
+
+	@Test
+	public void getAllTest() {
+		List<UserOrganizationRole> all = userOrganizationRoleRepository
+				.getAll();
+
+		assertTrue(all != null && !all.isEmpty());
+	}
 }
