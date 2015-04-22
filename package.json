@@ -12,6 +12,6 @@
   "scripts": {
     "preinstall": "cd assets && npm install --no-optional",
     "postinstall": "cd assets && npm run build",
-    "test": "cd assets && ./node_modules/.bin/karma start ./karma.conf.js --single-run"
+    "test": "cd assets && npm test"
   }
 }

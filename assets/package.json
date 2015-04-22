@@ -84,7 +84,7 @@
     "build": "./node_modules/.bin/gulp build",
     "watch": "./node_modules/.bin/gulp watch",
     "dev-watch": "./node_modules/.bin/gulp dev-watch",
-    "test": "jest"
+    "test": "./node_modules/.bin/karma start ./karma.conf.js --single-run"
   },
   "repository": "https://github.com/natebenson/vyllage",
   "license": "Commercial",
