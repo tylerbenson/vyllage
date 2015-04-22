@@ -42,6 +42,7 @@ import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
 import accounts.validation.NumberValidator;
 import accounts.validation.SettingValidator;
+import accounts.validation.URLValidator;
 
 @Controller
 @RequestMapping("account")
@@ -83,9 +84,15 @@ public class AccountSettingsController {
 	}
 
 	public AccountSettingsController() {
+		URLValidator urlValidator = new URLValidator();
+
 		validators.put("phoneNumber", new NumberValidator());
 		validators.put("firstName", new NotNullValidator());
 		validators.put("email", new EmailSettingValidator());
+
+		validators.put("facebook", urlValidator);
+		validators.put("linkedIn", urlValidator);
+		validators.put("twitter", urlValidator);
 		validatorsForAll.add(new LengthValidator(30));
 
 		settingValues.put(
@@ -206,7 +213,8 @@ public class AccountSettingsController {
 					.anyMatch(
 							ur -> ur.getAuthority().equalsIgnoreCase(
 									RolesEnum.STUDENT.name()))) {
-				return Arrays.asList(RolesEnum.STUDENT.name(), RolesEnum.ALUMNI.name());
+				return Arrays.asList(RolesEnum.STUDENT.name(),
+						RolesEnum.ALUMNI.name());
 			} else {
 				return Arrays.asList(RolesEnum.values()).stream()
 						.map(e -> e.toString()).collect(Collectors.toList());
