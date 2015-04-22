@@ -45,16 +45,6 @@ public class AccountSettingRepository {
 				.collect(Collectors.toList());
 	}
 
-	private Function<? super Record, ? extends AccountSetting> createAccountSetting() {
-
-		return r -> new AccountSetting(
-				r.getValue(ACCOUNT_SETTING.ACCOUNT_SETTING_ID),
-				r.getValue(ACCOUNT_SETTING.USER_ID),
-				r.getValue(ACCOUNT_SETTING.NAME),
-				r.getValue(ACCOUNT_SETTING.VALUE),
-				r.getValue(ACCOUNT_SETTING.PRIVACY));
-	}
-
 	public List<AccountSetting> get(Long userId, String settingName)
 			throws ElementNotFoundException {
 
@@ -63,17 +53,12 @@ public class AccountSettingRepository {
 				ACCOUNT_SETTING.USER_ID.eq(userId).and(
 						ACCOUNT_SETTING.NAME.eq(settingName)));
 
-		if (settingRecords == null)
+		if (settingRecords == null || settingRecords.isEmpty())
 			throw new ElementNotFoundException("The setting with name '"
 					+ settingName + "' for User with id '" + userId
 					+ "' could not be found.");
 
-		return settingRecords
-				.stream()
-				.map(settingRecord -> new AccountSetting(settingRecord
-						.getAccountSettingId(), settingRecord.getUserId(),
-						settingRecord.getName(), settingRecord.getValue(),
-						settingRecord.getPrivacy()))
+		return settingRecords.stream().map(createAccountSetting())
 				.collect(Collectors.toList());
 	}
 
@@ -109,5 +94,15 @@ public class AccountSettingRepository {
 		sql.delete(ACCOUNT_SETTING)
 				.where(ACCOUNT_SETTING.USER_ID.eq(userId).and(
 						ACCOUNT_SETTING.NAME.eq(name))).execute();
+	}
+
+	private Function<? super Record, ? extends AccountSetting> createAccountSetting() {
+
+		return r -> new AccountSetting(
+				r.getValue(ACCOUNT_SETTING.ACCOUNT_SETTING_ID),
+				r.getValue(ACCOUNT_SETTING.USER_ID),
+				r.getValue(ACCOUNT_SETTING.NAME),
+				r.getValue(ACCOUNT_SETTING.VALUE),
+				r.getValue(ACCOUNT_SETTING.PRIVACY));
 	}
 }
