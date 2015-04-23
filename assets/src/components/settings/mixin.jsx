@@ -3,12 +3,6 @@ var findindex = require('lodash.findindex');
 var validator = require('validator');
 
 module.exports = {
-  getInitialState: function () {
-    return {
-      emailError: false,
-      linkedInError: false,
-    }
-  },
   changeHandler: function (name, e) {
     var index = findindex(this.props.settings, {name: name});
     var setting;

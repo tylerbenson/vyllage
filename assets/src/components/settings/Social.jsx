@@ -11,7 +11,6 @@ var Social = React.createClass({
     var facebookSetting = filter(this.props.settings, {name: 'facebook'})[0] || {value: ''};
     var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {value: ''};
     var linkedInSetting = filter(this.props.settings, {name: 'linkedIn'})[0] || {value: ''};
-    console.log(this.state);
     return (
       <div className='content'>
         <form ref='social' onSubmit={this.saveHandler}>
