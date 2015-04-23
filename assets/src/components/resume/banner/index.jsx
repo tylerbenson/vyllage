@@ -2,6 +2,7 @@ var React = require('react');
 var Textarea = require('react-textarea-autosize')
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
+var filter = require('lodash.filter');
 
 var Banner = React.createClass({
   getInitialState: function () {
@@ -47,6 +48,7 @@ var Banner = React.createClass({
   },
   render: function() {
     var header = this.props.header || {};
+    var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {};
     return (
       <section className='banner'>
         <div className ="content">
@@ -95,6 +97,7 @@ var Banner = React.createClass({
                 onClick={this.enableEdiMode.bind(this, 'email')}
                 onBlur={this.disableEdiMode.bind(this, 'email')}
               />
+              <p className='error'>{emailSetting.errorMessage}</p>
             </div>: null}
             {(header.owner || header.phoneNumber)? <div className='detail'>
               <i className="ion-ios-telephone"></i>

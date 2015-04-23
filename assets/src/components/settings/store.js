@@ -23,6 +23,7 @@ module.exports = Reflux.createStore({
     }.bind(this));
   },
   onUpdateSettings: function (options) {
+    options = options || {};
     request
       .put('/account/setting')
       .set(this.tokenHeader, this.tokenValue)
@@ -43,6 +44,7 @@ module.exports = Reflux.createStore({
     } else {
       this.settings.push(setting);
     }
+    this.update();
   },
   validateField: function (setting) {
     if (setting.name === 'linkedIn') {

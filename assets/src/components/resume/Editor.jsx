@@ -26,7 +26,7 @@ var ResumeEditor = React.createClass({
     return (
       <div>
         {owner ? <Subheader documentId={this.state.resume.documentId}/>: null}
-        <Banner header={this.state.resume.header} />
+        <Banner header={this.state.resume.header} settings={this.state.settings} />
         <div className="sections">
           <CareerGoal section={careerGoalSections[0]} owner={owner} />
           <Experience sections={experienceSections} owner={owner} />
