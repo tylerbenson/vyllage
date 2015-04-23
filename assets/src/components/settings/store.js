@@ -29,6 +29,7 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue)
       .send(setting)
       .end(function (err, res) {
+        console.log(err, res.body)
         var index = findindex(this.settings, {name: setting.name});
         if (index === -1) {
           this.settings.push(res.body);

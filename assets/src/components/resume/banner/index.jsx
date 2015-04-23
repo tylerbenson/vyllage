@@ -12,7 +12,6 @@ var Banner = React.createClass({
         address: false,
         email: false,
         twitter: false,
-        linkedIn: false,
         phoneNumber: false
       }
     }
@@ -111,22 +110,6 @@ var Banner = React.createClass({
                 onChange={this.handleChange.bind(this, 'phoneNumber')}
                 onClick={this.enableEdiMode.bind(this, 'phoneNumber')}
                 onBlur={this.disableEdiMode.bind(this, 'phoneNumber')}
-              />
-            </div>: null}
-            {(header.owner || header.linkedIn)? <div className='detail'>
-              <i className="ion-social-linkedin"></i>
-              <input
-                required
-                type='text'
-                placeholder="LinkedIn profile"
-                disabled={!header.owner}
-                key={header.linkedIn || undefined}
-                className="inline transparent"
-                autoComplete="off"
-                defaultValue={header.linkedIn}
-                onChange={this.handleChange.bind(this, 'linkedIn')}
-                onClick={this.enableEdiMode.bind(this, 'linkedIn')}
-                onBlur={this.disableEdiMode.bind(this, 'linkedIn')}
               />
             </div>: null}
             {(header.owner || header.twitter)? <div className='detail'>
