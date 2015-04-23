@@ -30,7 +30,6 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         this.settings = res.body || [];
         this.update();
-        window.redirect = '/resume';
       }.bind(this))
   },
   onChangeSetting: function (setting) {
@@ -47,7 +46,7 @@ module.exports = Reflux.createStore({
       setting.errorMessage = validator.isURL(setting.value) ? null: "Invalid URL";
     } else if (setting.name === 'email') {
       setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid Email";
-    }
+    } 
     return setting;
   },
   onCancelSettings: function () {
