@@ -22,7 +22,7 @@ module.exports = Reflux.createStore({
       this.update();
     }.bind(this));
   },
-  onUpdateSettings: function () {
+  onUpdateSettings: function (options) {
     request
       .put('/account/setting')
       .set(this.tokenHeader, this.tokenValue)
@@ -30,6 +30,9 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         this.settings = res.body || [];
         this.update();
+        if (options.redirect) {
+          window.location = '/resume';
+        }
       }.bind(this))
   },
   onChangeSetting: function (setting) {

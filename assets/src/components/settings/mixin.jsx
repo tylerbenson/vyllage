@@ -20,8 +20,7 @@ module.exports = {
   },
   saveHandler: function (e) {
     e.preventDefault();
-    actions.updateSettings();
-    window.location = '/resume';
+    actions.updateSettings({redirect: true});
   },
   cancelHandler: function (name, e) {
     e.preventDefault();
