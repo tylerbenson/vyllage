@@ -3,6 +3,7 @@ var Reflux = require('reflux');
 var SettingsStore = require('./store');
 var actions = require('./actions');
 var SideBar = require('./SideBar');
+var Alert = require('../alert');
 var Profile = require('./Profile');
 var Account = require('./Account');
 var Social = require('./Social');
@@ -23,13 +24,14 @@ var Settings = React.createClass({
     }
     return (
       <div className='sections'>
+        <Alert message='Your settings have been saved.' />
         <section className='mini section'>
           <div className='container'>
             <SideBar />
             {SettingsNode}
           </div>
         </section>
-      </div>  
+      </div>
     );
   }
 });
