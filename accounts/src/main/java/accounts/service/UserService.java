@@ -186,7 +186,7 @@ public class UserService {
 		for (GrantedAuthority userOrganizationRole : loggedUseRoles)
 			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
 					((UserOrganizationRole) userOrganizationRole)
-							.getOrganizationId(), RolesEnum.STUDENT.name(),
+							.getOrganizationId(), RolesEnum.GUEST.name(),
 					((User) SecurityContextHolder.getContext()
 							.getAuthentication().getPrincipal()).getUserId()));
 

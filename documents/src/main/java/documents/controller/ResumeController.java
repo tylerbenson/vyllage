@@ -35,6 +35,7 @@ import documents.model.DocumentSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
+import documents.services.aspect.CheckAccess;
 import documents.services.aspect.CheckOwner;
 
 @Controller
@@ -107,8 +108,9 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
+	@CheckAccess
 	public @ResponseBody List<DocumentSection> getResumeSections(
-			@PathVariable final Long documentId)
+			HttpServletRequest request, @PathVariable final Long documentId)
 			throws JsonProcessingException, ElementNotFoundException {
 		List<DocumentSection> documentSections = documentService
 				.getDocumentSections(documentId);
@@ -129,6 +131,7 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
+	@CheckAccess
 	public @ResponseBody DocumentSection getResumeSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId) throws ElementNotFoundException {
@@ -144,6 +147,7 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.GET, produces = "application/json")
+	@CheckAccess
 	public @ResponseBody DocumentHeader getResumeHeader(
 			HttpServletRequest request, @PathVariable final Long documentId)
 			throws JsonProcessingException, IOException,
@@ -191,7 +195,6 @@ public class ResumeController {
 			@RequestBody final DocumentSection documentSection)
 			throws JsonProcessingException, ElementNotFoundException {
 
-		// Document document = documentService.getDocument(documentId);
 		documentSection.setDocumentId(documentId);
 		return documentService.saveDocumentSection(documentSection);
 	}
@@ -207,7 +210,6 @@ public class ResumeController {
 			throws JsonProcessingException, ElementNotFoundException,
 			AccessDeniedException {
 
-		// Document document = documentService.getDocument(documentId);
 		documentSection.setDocumentId(documentId);
 		return documentService.saveDocumentSection(documentSection);
 	}
@@ -223,6 +225,7 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/recent-users", method = RequestMethod.GET, produces = "application/json")
+	@CheckAccess
 	public @ResponseBody List<AccountNames> getRecentUsers(
 			HttpServletRequest request,
 			@PathVariable final Long documentId,

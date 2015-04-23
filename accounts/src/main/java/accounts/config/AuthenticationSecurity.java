@@ -1,7 +1,5 @@
 package accounts.config;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -16,9 +14,6 @@ import accounts.repository.UserDetailRepository;
 @Configuration
 public class AuthenticationSecurity extends
 		GlobalAuthenticationConfigurerAdapter {
-
-	@Autowired
-	private DataSource dataSource;
 
 	@Autowired
 	private UserDetailRepository userDetailRepository;
@@ -38,5 +33,4 @@ public class AuthenticationSecurity extends
 		auth.userDetailsService(userDetailRepository).passwordEncoder(
 				new BCryptPasswordEncoder());
 	}
-
 }

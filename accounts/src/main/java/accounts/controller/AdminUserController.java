@@ -1,6 +1,7 @@
 package accounts.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import accounts.model.BatchAccount;
 import accounts.model.Organization;
 import accounts.model.User;
+import accounts.model.UserOrganizationRole;
 import accounts.model.account.AccountNames;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
+import accounts.repository.UserNotFoundException;
 import accounts.service.UserService;
 
 @Controller
@@ -66,6 +71,28 @@ public class AdminUserController {
 
 		prepareBatch(model);
 		return "adminAccountManagement";
+	}
+
+	@RequestMapping(value = "/user/sameOrganization", method = RequestMethod.GET)
+	// @PreAuthorize("hasAuthority('ADMIN')")
+	public @ResponseBody boolean sameOrganization(
+			@RequestParam Long firstUserId, @RequestParam Long secondUserId)
+			throws UserNotFoundException {
+
+		User firstUser = service.getUser(firstUserId);
+		User secondUser = service.getUser(secondUserId);
+		List<Long> secondUserOrganizationIds = secondUser.getAuthorities()
+				.stream()
+				.map(uor -> ((UserOrganizationRole) uor).getOrganizationId())
+				.collect(Collectors.toList());
+
+		return firstUser
+				.getAuthorities()
+				.stream()
+				.anyMatch(
+						uor -> secondUserOrganizationIds
+								.contains(((UserOrganizationRole) uor)
+										.getOrganizationId()));
 	}
 
 	private void prepareBatchError(BatchAccount batch, Model model, String msg) {
