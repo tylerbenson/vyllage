@@ -18,19 +18,20 @@ var ResumeEditor = React.createClass({
     actions.getResume();
   },
   render: function () {
+    var owner=this.state.resume.header.owner;
     var careerGoalSections = filter(this.state.resume.sections, {title: 'career goal'});
     var skillSections = filter(this.state.resume.sections, {title: 'skills'});
     var experienceSections = sortby(filter(this.state.resume.sections, {title: 'experience'}), 'sectionPostion').reverse();
     var educationSections = sortby(filter(this.state.resume.sections, {title: 'education'}), 'sectionPostion').reverse();
     return (
       <div>
-        <Subheader documentId={this.state.resume.documentId}/>
+        {owner ? <Subheader documentId={this.state.resume.documentId}/>: null}
         <Banner header={this.state.resume.header} />
         <div className="sections">
-          <CareerGoal section={careerGoalSections[0]} owner={this.state.resume.header.owner} />
-          <Experience sections={experienceSections} owner={this.state.resume.header.owner} />
-          <Education sections={educationSections} owner={this.state.resume.header.owner} />
-          <Skill section={skillSections[0]} owner={this.state.resume.header.owner} />
+          <CareerGoal section={careerGoalSections[0]} owner={owner} />
+          <Experience sections={experienceSections} owner={owner} />
+          <Education sections={educationSections} owner={owner} />
+          <Skill section={skillSections[0]} owner={owner} />
         </div>
       </div>
     );
