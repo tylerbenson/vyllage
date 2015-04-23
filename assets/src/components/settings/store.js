@@ -45,6 +45,8 @@ module.exports = Reflux.createStore({
   validateField: function (setting) {
     if (setting.name === 'linkedIn') {
       setting.errorMessage = validator.isURL(setting.value) ? null: "Invalid URL";
+    } else if (setting.name === 'email') {
+      setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid Email";
     }
     return setting;
   },
