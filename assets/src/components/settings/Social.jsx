@@ -11,11 +11,13 @@ var Social = React.createClass({
     var facebookSetting = filter(this.props.settings, {name: 'facebook'})[0] || {value: ''};
     var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {value: ''};
     var linkedInSetting = filter(this.props.settings, {name: 'linkedIn'})[0] || {value: ''};
+    console.log(this.state);
     return (
       <div className='content'>
         <form ref='social' onSubmit={this.saveHandler}>
 
           <label>Facebook</label>
+          <span className='tip'>facebook.com/</span>
           <input
             key={'facebook-' + facebookSetting.value || undefined}
             ref='facebook'
@@ -24,8 +26,10 @@ var Social = React.createClass({
             defaultValue={facebookSetting.value}
             onChange={this.changeHandler.bind(this, 'facebook')}
           />
+          <p className='error'>{facebookSetting.errorMessage}</p>
 
           <label>Twitter</label>
+          <span className='tip'>@</span>
           <input
             key={'twitter-' + twitterSetting.value || undefined}
             ref='twitter'
@@ -44,6 +48,7 @@ var Social = React.createClass({
             defaultValue={linkedInSetting.value}
             onChange={this.changeHandler.bind(this, 'linkedIn')}
           />
+          <p className='error'>{linkedInSetting.errorMessage}</p>
 
           <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'social')} />
         </form>
