@@ -18,7 +18,7 @@
   background: $inverted-text-color;
   bottom: 0;
   left: 0;
-  margin: auto;
+  margin: 7.5% auto;
   padding: 2em;
   position: absolute;
   right: 0;
@@ -64,6 +64,18 @@
 @media (max-width: $medium-portrait) {
   .section .modal,
   .modal {
-    width: 320px
+    padding: 1em;
+    width: 320px;
+
+    .header {
+      padding: 0 0.5em !important;
+      .title {
+        font-size: 1em;
+      }
+    }
+
+    .content {
+      padding: 0 0.5em !important;
+    }
   }
 }
