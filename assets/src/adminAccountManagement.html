@@ -29,8 +29,11 @@
         <select th:field="*{organization}">
           <option th:each="grp : ${organizations}" th:value="${grp.organizationId}" th:text="${grp.organizationName}">Some organization</option>
         </select>
-        <select th:field="*{role}">
-          <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}">Some Role</option>
+        <select name="role">
+          <option th:each="rol : ${roles}" 
+          		  th:value="${rol.role}" 
+          		  th:text="${rol.role}"
+          		  th:selected="${rol.role == 'STUDENT'}">Some Role</option>
         </select>
         <div class="content-part">
           <!-- 							<input type="text" /> -->

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import accounts.constants.OrganizationEnum;
 import accounts.model.BatchAccount;
 import accounts.model.Organization;
 import accounts.model.User;
@@ -97,12 +98,29 @@ public class AdminUserController {
 
 	private void prepareBatchError(BatchAccount batch, Model model, String msg) {
 		model.addAttribute("organizations", organizationRepository.getAll());
+		model.addAttribute("roles", roleRepository.getAll());
 		model.addAttribute("batchAccount", batch);
 		model.addAttribute("error", msg);
 	}
 
 	private void prepareBatch(Model model) {
-		List<Organization> allOrganizations = organizationRepository.getAll();
+		List<Organization> allOrganizations;
+
+		if (getUser()
+				.getAuthorities()
+				.stream()
+				.anyMatch(
+						uor -> OrganizationEnum.VYLLAGE.getOrganizationId()
+								.equals(((UserOrganizationRole) uor)
+										.getOrganizationId())))
+			allOrganizations = organizationRepository.getAll();
+		else
+			allOrganizations = organizationRepository.getAll(getUser()
+					.getAuthorities()
+					.stream()
+					.map(uor -> ((UserOrganizationRole) uor)
+							.getOrganizationId()).collect(Collectors.toList()));
+
 		model.addAttribute("organizations", allOrganizations);
 		// default to the first one.
 		model.addAttribute("roles", roleRepository.getAll());

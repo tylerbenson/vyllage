@@ -32,4 +32,10 @@ public class OrganizationRepository {
 				.into(Organization.class);
 	}
 
+	public List<Organization> getAll(List<Long> organizationIds) {
+		return sql.select().from(ORGANIZATIONS)
+				.where(ORGANIZATIONS.ORGANIZATION_ID.in(organizationIds))
+				.fetch().into(Organization.class);
+	}
+
 }

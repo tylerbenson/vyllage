@@ -103,7 +103,9 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)
-	public String getResume(@PathVariable final Long documentId) {
+	@CheckAccess
+	public String getResume(HttpServletRequest request,
+			@PathVariable final Long documentId) {
 		return "resume";
 	}
 
@@ -327,16 +329,4 @@ public class ResumeController {
 		return map;
 	}
 
-	@ExceptionHandler(value = { AccessDeniedException.class })
-	@ResponseStatus(value = HttpStatus.FORBIDDEN)
-	public @ResponseBody Map<String, Object> handleAccessDeniedException(
-			Exception ex) {
-		Map<String, Object> map = new HashMap<>();
-		if (ex.getCause() != null) {
-			map.put("error", ex.getCause().getMessage());
-		} else {
-			map.put("error", ex.getMessage());
-		}
-		return map;
-	}
 }
