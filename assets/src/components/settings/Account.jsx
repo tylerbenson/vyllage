@@ -17,7 +17,6 @@ var Account = React.createClass({
             key={emailSetting.value || undefined}
             ref='email'
             type='text'
-            className='padded'
             defaultValue={emailSetting.value}
             onChange={this.changeHandler.bind(this, 'email')}
           />
@@ -26,7 +25,7 @@ var Account = React.createClass({
 
           <label>Other</label>
           <div>
-            <a className="flat small secondary button" href='account/reset-password'>
+            <a className="flat small button normal-caps" href='account/reset-password'>
               <i className="ion-locked"></i>
               Reset Password
             </a>

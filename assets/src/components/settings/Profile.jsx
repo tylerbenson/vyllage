@@ -25,7 +25,6 @@ var Profile = React.createClass({
             key={'firstName-' + firstNameSetting.value || undefined}
             ref='firstName'
             type='text'
-            className='padded'
             defaultValue={firstNameSetting.value}
             onChange={this.changeHandler.bind(this, 'firstName')}
           />
@@ -35,7 +34,6 @@ var Profile = React.createClass({
             key={'middleName-' + middleNameSetting.value || undefined}
             ref='middleName'
             type='text'
-            className='padded'
             defaultValue={middleNameSetting.value}
             onChange={this.changeHandler.bind(this, 'middleName')}
           />
@@ -45,7 +43,6 @@ var Profile = React.createClass({
             key={'lastName-' + lastNameSetting.value || undefined}
             ref='lastName'
             type='text'
-            className='padded'
             defaultValue={lastNameSetting.value}
             onChange={this.changeHandler.bind(this, 'lastName')}
           />
@@ -56,7 +53,6 @@ var Profile = React.createClass({
             key={'role-' + roleSetting.value || undefined}
             ref='role'
             type='text'
-            className='padded'
             defaultValue={roleSetting.value}
             onChange={this.changeHandler.bind(this, 'role')}
           />
@@ -67,7 +63,6 @@ var Profile = React.createClass({
             key={'organization-' + organizationSetting.value || undefined}
             ref='organization'
             type='text'
-            className='padded'
             defaultValue={organizationSetting.value}
             onChange={this.changeHandler.bind(this, 'organization')}
           />
@@ -79,7 +74,6 @@ var Profile = React.createClass({
           >
             <input
               type='text'
-              className='padded'
               autoComplete={false}
             />
           </Datepicker>
@@ -88,7 +82,6 @@ var Profile = React.createClass({
           <Textarea
             key={'address-' + addressSetting.value || undefined}
             ref='address'
-            className="padded"
             defaultValue={addressSetting.value}
             onChange={this.changeHandler.bind(this, 'address')}
           ></Textarea>
@@ -98,7 +91,6 @@ var Profile = React.createClass({
             key={'phoneNumber-' + phoneNumberSetting.value || undefined}
             ref='phoneNumber'
             type='text'
-            className='padded'
             defaultValue={phoneNumberSetting.value}
             onChange={this.changeHandler.bind(this, 'phoneNumber')}
           />

@@ -38,6 +38,7 @@ textarea {
   }
 
   &[disabled] {
+    background: lighten($secondary-color, 43%);
     border-color: transparent;
     cursor: default;
   }
@@ -80,10 +81,6 @@ textarea {
   &.padded {
     border-width: 2px;
     padding: 0.75em 1em;
-
-    &[disabled] {
-      background: lighten($secondary-color, 43%);
-    }
   }
 }
 

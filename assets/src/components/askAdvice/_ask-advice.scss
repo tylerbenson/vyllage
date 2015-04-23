@@ -2,7 +2,8 @@
   h2 {
     display: inline-block;
     font-weight: 400;
-    font-size: 1em;
+    font-size: 0.75em;
+    text-transform: uppercase;
     padding: 0 0 0 0.25em;
   }
   .section {
@@ -11,10 +12,10 @@
     }
   }
   .recipients.header {
-    padding: 2em 4em;
+    padding: 1.25em 4em;
 
     .list {
-      margin-top: 1em;
+      margin-top: 0.25em;
     }
 
     .empty {
@@ -73,7 +74,7 @@
 
   .to.content {
     background: darken($section-footer-background, 1%);
-    padding: 2em 4em;
+    padding: 1.25em 4em;
 
     h2 {
       @include column(1/17);
@@ -92,20 +93,22 @@
         label {
           color: lighten($text-color, 10%);
           display: block;
-          font-size: 0.85em;
+          font-size: 0.75em;
           margin-bottom: 0.25em;
           margin-top: 0;
         }
 
         input {
           @extend .inline;
+          font-size: 0.9em;
+          padding: 0.5em 0.75em;
 
           &.name {
-            width: 8.5em;
+            width: 9.25em;
           }
 
           &.email {
-            width: 14em;
+            width: 16em;
           }
 
           &:focus {
@@ -141,7 +144,7 @@
     }
   }
   .subject.content {
-    padding: 1.5em 4em;
+    padding: 1em 4em;
     border-bottom: $section-footer-background solid 1px;
 
     h2 {
@@ -149,20 +152,22 @@
     }
 
     input {
+      font-size: 0.9em;
       width: 85%;
     }
   }
   .message.content {
-    padding-top: 1.75em;
+    padding-top: 1em;
 
     textarea {
+      font-size: 0.9em;
       margin-top: 0.5em;
       white-space: normal;
     }
   }
   .footer {
     @include cf();
-    padding: 1.5em 4em;
+    padding: 1.25em 4em;
   }
 }
 

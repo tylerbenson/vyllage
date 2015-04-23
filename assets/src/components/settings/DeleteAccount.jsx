@@ -23,7 +23,7 @@ var DeleteAccount = React.createClass({
     return (
       <div style={{display: 'inline-block'}}>
         <button
-          className='flat small secondary'
+          className='flat small destructive normal-caps'
           onClick={this.openModal}>
           <i className='ion-trash-a'></i>
           Delete Account

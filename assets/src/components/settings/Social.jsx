@@ -20,7 +20,6 @@ var Social = React.createClass({
             key={'facebook-' + facebookSetting.value || undefined}
             ref='facebook'
             type='text'
-            className='padded'
             defaultValue={facebookSetting.value}
             onChange={this.changeHandler.bind(this, 'facebook')}
           />
@@ -30,7 +29,6 @@ var Social = React.createClass({
             key={'twitter-' + twitterSetting.value || undefined}
             ref='twitter'
             type='text'
-            className='padded'
             defaultValue={twitterSetting.value}
             onChange={this.changeHandler.bind(this, 'twitter')}
           />
@@ -40,7 +38,6 @@ var Social = React.createClass({
             key={'linkedIn-' + linkedInSetting.value || undefined}
             ref='linkedIn'
             type='text'
-            className='padded'
             defaultValue={linkedInSetting.value}
             onChange={this.changeHandler.bind(this, 'linkedIn')}
           />
@@ -60,7 +57,6 @@ module.exports = Social;
 //   key={urlSetting.value || undefined}
 //   ref='url'
 //   type='text'
-//   className='padded'
 //   defaultValue={urlSetting.value}
 //   onChange={this.changeHandler.bind(this, 'url')}
 // />
