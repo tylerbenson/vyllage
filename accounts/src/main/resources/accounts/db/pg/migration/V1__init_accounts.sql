@@ -13,9 +13,9 @@ create table if not exists accounts.users(
 create table if not exists ACCOUNTS.account_setting(
 	account_setting_id bigserial primary key,
 	user_id bigint not null,
-	name varchar(15) not null,
-	value varchar(30) not null,
-	privacy varchar(15) not null,
+	name varchar(15),
+	value varchar(100),
+	privacy varchar(15),
 	constraint fk_account_setting_users foreign key(user_id) references ACCOUNTS.users(user_id));
 
 create table if not exists accounts.user_credentials(
