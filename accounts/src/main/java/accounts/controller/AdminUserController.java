@@ -109,9 +109,7 @@ public class AdminUserController {
 		List<Organization> allOrganizations = getUserOrganizations();
 
 		model.addAttribute("organizations", allOrganizations);
-		// default to the first one.
 		model.addAttribute("roles", roleRepository.getAll());
-
 		model.addAttribute("batchAccount", new BatchAccount());
 	}
 
