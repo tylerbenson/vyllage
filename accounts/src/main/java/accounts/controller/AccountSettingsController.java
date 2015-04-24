@@ -151,7 +151,7 @@ public class AccountSettingsController {
 				setting -> validatorsForAll.stream().map(
 						v -> v.validate(setting)));
 
-		if (settings.stream().allMatch(
+		if (settings.stream().anyMatch(
 				setting -> setting.getErrorMessage() != null))
 			return new ResponseEntity<List<AccountSetting>>(settings,
 					HttpStatus.BAD_REQUEST);
