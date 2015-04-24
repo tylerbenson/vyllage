@@ -24,7 +24,7 @@ var Settings = React.createClass({
     }
     return (
       <div className='sections'>
-        <Alert message='Your settings have been saved.' />
+        <Alert id='settings-alert' />
         <section className='mini section'>
           <div className='container'>
             <SideBar />
