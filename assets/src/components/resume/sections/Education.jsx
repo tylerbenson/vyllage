@@ -6,7 +6,8 @@ var SectionFooter = require('./Footer');
 var Education = React.createClass({
   render: function () {
     var placeholders = {
-      role: "Degree"
+      role: "Degree",
+      roleDescription: "Field of study"
     };
     var sectionNodes
     var sections = this.props.sections || [];

@@ -8,6 +8,7 @@ import accounts.validation.EmailSettingValidator;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
 import accounts.validation.NumberValidator;
+import accounts.validation.URLValidator;
 
 public class AccountSettingValidatorTest {
 
@@ -135,6 +136,45 @@ public class AccountSettingValidatorTest {
 		AccountSetting setting = validator.validate(as);
 
 		Assert.isTrue(!setting.getErrorMessage().isEmpty());
+	}
+
+	@Test
+	public void URLValidatorFacebookTest() {
+		final String facebook = "https://www.facebook.com/my.name";
+
+		URLValidator validator = new URLValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(facebook);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void URLValidatorLinkedInTest() {
+		final String linkedIn = "https://ar.linkedin.com/in/my.name";
+
+		URLValidator validator = new URLValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(linkedIn);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void URLValidatorTwitterTest() {
+		final String twitter = "https://twitter.com/my.name";
+
+		URLValidator validator = new URLValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(twitter);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
 	}
 
 }

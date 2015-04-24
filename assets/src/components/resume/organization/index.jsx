@@ -119,7 +119,7 @@ var Organization = React.createClass({
                 className="flat"
                 style={uiEditMode || section.roleDescription ? {}: {display: 'none'}}
                 rows="1"
-                placeholder="Role Description"
+                placeholder={placeholders.roleDescription || "Role Description"}
                 value={section.roleDescription}
                 onChange={this.handleChange.bind(this, 'roleDescription')}
               ></Textarea>

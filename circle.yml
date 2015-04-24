@@ -17,3 +17,4 @@ deployment:
             bucket: vyllage-deployments
             key_pattern: vyllage-{BUILD_NUM}-{SHORT_COMMIT}.zip
         deployment_group: prod
+
