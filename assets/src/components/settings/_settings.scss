@@ -149,6 +149,12 @@
         }
       }
 
+      .error {
+        color: $error-color;
+        font-size: 0.65em;
+        position: absolute;
+      }
+
       .url {
         width: 9.5em;
       }

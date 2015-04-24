@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Tue Apr 21 2015 20:25:53 GMT+0530 (IST)
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -22,30 +22,27 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-      
+
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-       'src/**/*.js': ['webpack'], 
-       'src/**/*.jsx': ['webpack'], 
-       'test/**/*.js': ['webpack'],
-       'test/**/*.jsx': ['webpack']
+      'src/**/*.js': ['webpack'],
+      'src/**/*.jsx': ['webpack'],
+      'test/**/*.js': ['webpack'],
+      'test/**/*.jsx': ['webpack']
     },
     webpack: {
       module: {
-        loaders: [
-          {
-            test: /\.js|jsx$/,
-            loaders: ['babel']
-          },
-          {
-            test: /\.json$/,
-            loader: 'json'
-          }
-        ],
+        loaders: [{
+          test: /\.js|jsx$/,
+          loaders: ['babel']
+        }, {
+          test: /\.json$/,
+          loader: 'json'
+        }],
       },
       resolve: {
         extensions: ['', '.js', '.jsx', 'json'],
