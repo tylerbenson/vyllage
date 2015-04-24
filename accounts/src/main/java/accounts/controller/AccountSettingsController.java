@@ -13,6 +13,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -93,7 +94,7 @@ public class AccountSettingsController {
 		validators.put("facebook", urlValidator);
 		validators.put("linkedIn", urlValidator);
 		validators.put("twitter", urlValidator);
-		validatorsForAll.add(new LengthValidator(30));
+		validatorsForAll.add(new LengthValidator(100));
 
 		settingValues.put(
 				"emailUpdates",
@@ -132,9 +133,8 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "setting", method = RequestMethod.PUT, produces = "application/json")
 	@CheckOwner
-	public @ResponseBody List<AccountSetting> setAccountSettings(
+	public @ResponseBody ResponseEntity<List<AccountSetting>> setAccountSettings(
 			@RequestBody final List<AccountSetting> settings) {
-		User user = getUser();
 
 		for (AccountSetting accountSetting : settings) {
 			if (accountSetting.getUserId() == null)
@@ -151,11 +151,14 @@ public class AccountSettingsController {
 				setting -> validatorsForAll.stream().map(
 						v -> v.validate(setting)));
 
-		if (settings.stream().allMatch(
-				setting -> setting.getErrorMessage() == null))
-			return userService.setAccountSettings(user, settings);
+		if (settings.stream().anyMatch(
+				setting -> setting.getErrorMessage() != null))
+			return new ResponseEntity<List<AccountSetting>>(settings,
+					HttpStatus.BAD_REQUEST);
 
-		return settings;
+		return new ResponseEntity<List<AccountSetting>>(
+				userService.setAccountSettings(getUser(), settings),
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
@@ -166,7 +169,7 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
 	@CheckOwner
-	public @ResponseBody AccountSetting setAccountSetting(
+	public @ResponseBody ResponseEntity<AccountSetting> setAccountSetting(
 			@PathVariable String parameter,
 			@Valid @RequestBody final AccountSetting setting,
 			BindingResult result) {
@@ -177,13 +180,14 @@ public class AccountSettingsController {
 		if (parameter.equalsIgnoreCase("organization")
 				|| parameter.equalsIgnoreCase("role"))
 			throw new UnsupportedOperationException(
-					"Saving of Role/Organization is not supported by this endpoint.");
+					"Saving of Role/Organization is not supported.");
 
 		if (result.hasErrors()) {
 			setting.setErrorMessage(result.getFieldErrors().stream()
 					.map(e -> e.getDefaultMessage())
 					.collect(Collectors.joining(",")));
-			return setting;
+			return new ResponseEntity<AccountSetting>(setting,
+					HttpStatus.BAD_REQUEST);
 		}
 
 		if (validators.containsKey(setting.getName()))
@@ -191,10 +195,13 @@ public class AccountSettingsController {
 
 		validatorsForAll.stream().map(v -> v.validate(setting));
 
-		if (setting.getErrorMessage() == null)
-			return userService.setAccountSetting(getUser(), setting);
+		if (setting.getErrorMessage() != null)
+			return new ResponseEntity<AccountSetting>(setting,
+					HttpStatus.BAD_REQUEST);
 
-		return setting;
+		return new ResponseEntity<AccountSetting>(
+				userService.setAccountSetting(getUser(), setting),
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "setting/{parameter}/values", method = RequestMethod.GET, produces = "application/json")
