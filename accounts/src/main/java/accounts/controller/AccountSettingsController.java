@@ -91,9 +91,9 @@ public class AccountSettingsController {
 		validators.put("firstName", new NotNullValidator());
 		validators.put("email", new EmailSettingValidator());
 
-		validators.put("facebook", urlValidator);
+		// validators.put("facebook", urlValidator);
 		validators.put("linkedIn", urlValidator);
-		validators.put("twitter", urlValidator);
+		// validators.put("twitter", urlValidator);
 		validatorsForAll.add(new LengthValidator(100));
 
 		settingValues.put(
