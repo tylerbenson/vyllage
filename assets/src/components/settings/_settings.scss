@@ -18,7 +18,7 @@
         cursor: pointer;
         display: block;
         font-size: 1.1em;
-        padding: 1.8em 1em;
+        padding: 1.25em;
         position: relative;
         text-decoration: none;
         transition: all .2s ease;
@@ -64,9 +64,9 @@
             display: inline-block;
             width: 0;
             height: 0;
-            border-top: 12px solid transparent;
-            border-right: 15px solid $inverted-text-color;
-            border-bottom: 12px solid transparent;
+            border-top: 10px solid transparent;
+            border-right: 12px solid $inverted-text-color;
+            border-bottom: 10px solid transparent;
             position: absolute;
             right: 0;
             top: 40%;
@@ -107,10 +107,24 @@
       label {
         color: $secondary-color;
         display: block;
-        font-size: 0.85em;
+        font-size: 0.7em;
         font-weight: 400;
+        text-transform: uppercase;
         margin-bottom: 0.25em;
-        margin-top: 2em;
+        margin-top: 2.5em;
+      }
+
+      input,
+      textarea,
+      select {
+        font-size: 0.85em;
+        padding: 0.5em 0.75em;
+      }
+
+      button.destructive {
+        i, span {
+          color: $error-color;
+        }
       }
 
       span.tip {
