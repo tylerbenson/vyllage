@@ -3,7 +3,7 @@
 --  password varchar_ignorecase(60) not null,
 --  enabled boolean not null);
 --NOTE: password == '$2a$10$6REiiQD8i4FTE4D/X3.chOnlgxghwWMGcngksAjyQun0njGDQznxq'
-insert into ACCOUNTS.users ( user_name, first_Name, middle_name, last_name, enabled, date_created, last_modified) values ( 'aaronnoeldeleon@gmail.com', 'Luke', 'V', 'Skywalker', true, CURRENT_DATE(), CURRENT_DATE());
+insert into ACCOUNTS.users ( user_name, first_Name, middle_name, last_name, enabled, date_created, last_modified) values ( 'email', 'Luke', 'V', 'Skywalker', true, CURRENT_DATE(), CURRENT_DATE());
 insert into ACCOUNTS.users ( user_name, enabled, date_created, last_modified ) values ( 'testuser@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE());
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'deana@vyllage.com', 'Deana', 'Troi', true, CURRENT_DATE(), CURRENT_DATE() );
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'mario@toadstool.com', 'Mario', 'Mario', true, CURRENT_DATE(), CURRENT_DATE() );
@@ -22,7 +22,7 @@ insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, '
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'address', 'Avenida Siempreviva 123', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'organization', 'stanford', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'role', 'student', 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'email', 'aaronnoeldeleon@gmail.com', 'private');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'email', 'email', 'private');
 
 
 --create table if not exists ACCOUNTS.user_credentials(
