@@ -27,7 +27,8 @@ module.exports = {
   cancelHandler: function (name, e) {
     e.preventDefault();
     actions.cancelSettings();
-    this.refs[name].getDOMNode().reset();
-    PubSub.publish('settings-alert', {isOpen: true, message: "Your setting changes have been discarded"});
+    // Reseting form is causing #404. So using redirect instead
+    // this.refs[name].getDOMNode().reset();
+    window.location = '/account/setting';
   }
 };
