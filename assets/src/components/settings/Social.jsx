@@ -16,6 +16,7 @@ var Social = React.createClass({
         <form ref='social' onSubmit={this.saveHandler}>
 
           <label>Facebook</label>
+          <span className='tip'>facebook.com/</span>
           <input
             key={'facebook-' + facebookSetting.value || undefined}
             ref='facebook'
@@ -24,8 +25,10 @@ var Social = React.createClass({
             defaultValue={facebookSetting.value}
             onChange={this.changeHandler.bind(this, 'facebook')}
           />
+          <p className='error'>{facebookSetting.errorMessage}</p>
 
           <label>Twitter</label>
+          <span className='tip'>@</span>
           <input
             key={'twitter-' + twitterSetting.value || undefined}
             ref='twitter'
@@ -44,6 +47,7 @@ var Social = React.createClass({
             defaultValue={linkedInSetting.value}
             onChange={this.changeHandler.bind(this, 'linkedIn')}
           />
+          <p className='error'>{linkedInSetting.errorMessage}</p>
 
           <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'social')} />
         </form>

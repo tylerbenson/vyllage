@@ -166,7 +166,7 @@ var Organization = React.createClass({
                 className="flat"
                 style={uiEditMode || section.highlights ? {}: {display: 'none'}}
                 rows="1"
-                placeholder="Note at least three (3) notable accomplishments achieved during this position.."
+                placeholder={placeholders.highlights || "Note at least three (3) notable accomplishments achieved during this position.."}
                 value={section.highlights}
                 onChange={this.handleChange.bind(this, 'highlights')}
               ></Textarea>

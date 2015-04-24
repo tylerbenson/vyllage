@@ -7,7 +7,8 @@ var Education = React.createClass({
   render: function () {
     var placeholders = {
       role: "Degree",
-      roleDescription: "Field of study"
+      roleDescription: "Field of study",
+      highlights: "Add at least three highlights of your education"
     };
     var sectionNodes
     var sections = this.props.sections || [];

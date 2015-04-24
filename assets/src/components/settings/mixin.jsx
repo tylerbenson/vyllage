@@ -1,25 +1,26 @@
 var actions = require('./actions');
 var findindex = require('lodash.findindex');
+var validator = require('validator');
 
 module.exports = {
   changeHandler: function (name, e) {
     var index = findindex(this.props.settings, {name: name});
+    var setting;
     if (index !== -1) {
-      var setting = this.props.settings[index];
+      setting = this.props.settings[index];
       setting.value = e.target.value;
-      actions.changeSetting(setting);
     } else {
-      actions.changeSetting({
+      setting = {
         name: name,
         value: e.target.value,
         privacy: 'private'
-      });
+      };
     }
+    actions.changeSetting(setting);
   },
   saveHandler: function (e) {
     e.preventDefault();
-    actions.updateSettings();
-    window.location = '/resume';
+    actions.updateSettings({redirect: true});
   },
   cancelHandler: function (name, e) {
     e.preventDefault();

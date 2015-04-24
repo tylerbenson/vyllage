@@ -21,6 +21,7 @@ var Account = React.createClass({
             defaultValue={emailSetting.value}
             onChange={this.changeHandler.bind(this, 'email')}
           />
+          <p className='error'>{emailSetting.errorMessage}</p>
 
           <div className="hr"></div>
 

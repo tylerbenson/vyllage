@@ -102,7 +102,7 @@ var Profile = React.createClass({
             defaultValue={phoneNumberSetting.value}
             onChange={this.changeHandler.bind(this, 'phoneNumber')}
           />
-
+          <p className='error'>{phoneNumberSetting.errorMessage}</p>
           <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'profile')} />
         </form>
       </div>
