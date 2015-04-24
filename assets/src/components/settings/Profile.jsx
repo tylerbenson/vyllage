@@ -17,88 +17,85 @@ var Profile = React.createClass({
     var addressSetting = filter(this.props.settings, {name: 'address'})[0] || {value: ''} ;
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {value: ''};
     var graduationDateSetting = filter(this.props.settings, {name: 'graduationDate'})[0] || {value: ''};
-    return (
-      <div className='content'>
-        <form ref='profile' onSubmit={this.saveHandler}>
-          <label>First name</label>
-          <input
-            key={'firstName-' + firstNameSetting.value || undefined}
-            ref='firstName'
-            type='text'
-            defaultValue={firstNameSetting.value}
-            onChange={this.changeHandler.bind(this, 'firstName')}
-          />
-
-          <label>Middle name</label>
-          <input
-            key={'middleName-' + middleNameSetting.value || undefined}
-            ref='middleName'
-            type='text'
-            defaultValue={middleNameSetting.value}
-            onChange={this.changeHandler.bind(this, 'middleName')}
-          />
-
-          <label>Last name</label>
-          <input
-            key={'lastName-' + lastNameSetting.value || undefined}
-            ref='lastName'
-            type='text'
-            defaultValue={lastNameSetting.value}
-            onChange={this.changeHandler.bind(this, 'lastName')}
-          />
-
-          <label>Role</label>
-          <input
-            disabled={true}
-            key={'role-' + roleSetting.value || undefined}
-            ref='role'
-            type='text'
-            defaultValue={roleSetting.value}
-            onChange={this.changeHandler.bind(this, 'role')}
-          />
-
-          <label>Organization Name</label>
-          <input
-            disabled={true}
-            key={'organization-' + organizationSetting.value || undefined}
-            ref='organization'
-            type='text'
-            defaultValue={organizationSetting.value}
-            onChange={this.changeHandler.bind(this, 'organization')}
-          />
-          <label>Graduation Date</label>
-          <Datepicker
-            name='graduationDate'
-            date={graduationDateSetting.value}
-            setDate={this.changeHandler}
-          >
+    if (settings.length > 0) {
+      return (
+        <div className='content'>
+          <form ref='profile' onSubmit={this.saveHandler}>
+            <label>First name</label>
             <input
+              ref='firstName'
               type='text'
-              autoComplete={false}
+              defaultValue={firstNameSetting.value}
+              onChange={this.changeHandler.bind(this, 'firstName')}
             />
-          </Datepicker>
 
-          <label>Address</label>
-          <Textarea
-            key={'address-' + addressSetting.value || undefined}
-            ref='address'
-            defaultValue={addressSetting.value}
-            onChange={this.changeHandler.bind(this, 'address')}
-          ></Textarea>
+            <label>Middle name</label>
+            <input
+              ref='middleName'
+              type='text'
+              defaultValue={middleNameSetting.value}
+              onChange={this.changeHandler.bind(this, 'middleName')}
+            />
 
-          <label>Contact No.</label>
-          <input
-            key={'phoneNumber-' + phoneNumberSetting.value || undefined}
-            ref='phoneNumber'
-            type='text'
-            defaultValue={phoneNumberSetting.value}
-            onChange={this.changeHandler.bind(this, 'phoneNumber')}
-          />
-          <p className='error'>{phoneNumberSetting.errorMessage}</p>
-          <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'profile')} />
-        </form>
-      </div>
-    );
+            <label>Last name</label>
+            <input
+              ref='lastName'
+              type='text'
+              defaultValue={lastNameSetting.value}
+              onChange={this.changeHandler.bind(this, 'lastName')}
+            />
+
+            <label>Role</label>
+            <input
+              disabled={true}
+              ref='role'
+              type='text'
+              defaultValue={roleSetting.value}
+              onChange={this.changeHandler.bind(this, 'role')}
+            />
+
+            <label>Organization Name</label>
+            <input
+              disabled={true}
+              ref='organization'
+              type='text'
+              defaultValue={organizationSetting.value}
+              onChange={this.changeHandler.bind(this, 'organization')}
+            />
+            <label>Graduation Date</label>
+            <Datepicker
+              name='graduationDate'
+              date={graduationDateSetting.value}
+              setDate={this.changeHandler}
+            >
+              <input
+                type='text'
+                autoComplete={false}
+              />
+            </Datepicker>
+
+            <label>Address</label>
+            <Textarea
+              ref='address'
+              defaultValue={addressSetting.value}
+              onChange={this.changeHandler.bind(this, 'address')}
+            ></Textarea>
+
+            <label>Contact No.</label>
+            <input
+              ref='phoneNumber'
+              type='text'
+              defaultValue={phoneNumberSetting.value}
+              onChange={this.changeHandler.bind(this, 'phoneNumber')}
+            />
+            <p className='error'>{phoneNumberSetting.errorMessage}</p>
+            <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'profile')} />
+          </form>
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 });
 
