@@ -50,8 +50,8 @@ module.exports = Reflux.createStore({
     if (setting.name === 'linkedIn') {
       setting.errorMessage = validator.isURL(setting.value) ? null: "Invalid URL";
     } else if (setting.name === 'email') {
-      setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid Email";
-    } 
+      setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid E-mail";
+    }
     return setting;
   },
   onCancelSettings: function () {
