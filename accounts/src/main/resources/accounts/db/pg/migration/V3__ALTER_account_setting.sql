@@ -1,3 +1,3 @@
-alter table ACCOUNTS.account_setting alter column name not null;
-alter table ACCOUNTS.account_setting alter column value not null;
-alter table ACCOUNTS.account_setting alter column privacy not null;
+alter table ACCOUNTS.account_setting alter column name set not null;
+alter table ACCOUNTS.account_setting alter column value set not null;
+alter table ACCOUNTS.account_setting alter column privacy set not null;
