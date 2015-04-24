@@ -1,4 +1,4 @@
-package documents.services.aspect;
+package accounts.service.aspects;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CheckAccess {
+public @interface CheckWriteAccess {
 
 }

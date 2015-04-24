@@ -15,7 +15,7 @@ import documents.services.DocumentService;
 
 @Aspect
 @Component("documents.CheckAccessAspect")
-public class CheckAccessAspect {
+public class CheckReadAccessAspect {
 
 	@Autowired
 	private DocumentService documentService;
@@ -23,7 +23,7 @@ public class CheckAccessAspect {
 	@Autowired
 	private AccountService accountService;
 
-	@Before("execution(* *(..)) && args(request, documentId,..) && @annotation(CheckAccess)")
+	@Before("execution(* *(..)) && args(request, documentId,..) && @annotation(CheckReadAccess)")
 	public void checkOwner(JoinPoint joinPoint, HttpServletRequest request,
 			Long documentId) throws AccessDeniedException,
 			ElementNotFoundException {
