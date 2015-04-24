@@ -97,13 +97,25 @@ public class AdminUserController {
 	}
 
 	private void prepareBatchError(BatchAccount batch, Model model, String msg) {
-		model.addAttribute("organizations", organizationRepository.getAll());
+		List<Organization> allOrganizations = getUserOrganizations();
+
+		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("roles", roleRepository.getAll());
 		model.addAttribute("batchAccount", batch);
 		model.addAttribute("error", msg);
 	}
 
 	private void prepareBatch(Model model) {
+		List<Organization> allOrganizations = getUserOrganizations();
+
+		model.addAttribute("organizations", allOrganizations);
+		// default to the first one.
+		model.addAttribute("roles", roleRepository.getAll());
+
+		model.addAttribute("batchAccount", new BatchAccount());
+	}
+
+	private List<Organization> getUserOrganizations() {
 		List<Organization> allOrganizations;
 
 		if (getUser()
@@ -120,12 +132,7 @@ public class AdminUserController {
 					.stream()
 					.map(uor -> ((UserOrganizationRole) uor)
 							.getOrganizationId()).collect(Collectors.toList()));
-
-		model.addAttribute("organizations", allOrganizations);
-		// default to the first one.
-		model.addAttribute("roles", roleRepository.getAll());
-
-		model.addAttribute("batchAccount", new BatchAccount());
+		return allOrganizations;
 	}
 
 	private User getUser() {
