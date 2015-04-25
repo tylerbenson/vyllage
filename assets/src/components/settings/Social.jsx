@@ -16,24 +16,28 @@ var Social = React.createClass({
         <div className='content'>
           <form ref='social' onSubmit={this.saveHandler}>
 
-            <label>Facebook</label>
-            <input
-              ref='facebook'
-              type='text'
-              defaultValue={facebookSetting.value}
-              onChange={this.changeHandler.bind(this, 'facebook')}
-            />
-            <p className='error'>{facebookSetting.errorMessage}</p>
+          <label>Facebook Username</label>
+          <span className='tip'>facebook.com/</span>
+          <input
+            ref='facebook'
+            type='text'
+            defaultValue={facebookSetting.value}
+            className='facebook'
+            onChange={this.changeHandler.bind(this, 'facebook')}
+          />
+          <p className='error'>{facebookSetting.errorMessage}</p>
 
-            <label>Twitter</label>
-            <input
-              ref='twitter'
-              type='text'
-              defaultValue={twitterSetting.value}
-              onChange={this.changeHandler.bind(this, 'twitter')}
-            />
+          <label>Twitter Username</label>
+          <span className='tip'>@</span>
+          <input
+            ref='twitter'
+            type='text'
+            defaultValue={twitterSetting.value}
+            className='twitter'
+            onChange={this.changeHandler.bind(this, 'twitter')}
+          />
 
-            <label>LinkedIn</label>
+            <label>LinkedIn URL</label>
             <input
               ref='linkedIn'
               type='text'

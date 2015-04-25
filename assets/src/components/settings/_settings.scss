@@ -128,13 +128,31 @@
       }
 
       span.tip {
-        display: block;
+        display: inline-block;
         font-size: 0.85em;
-        margin-bottom: 0.5em;
+        position: absolute;
+        padding: 0.6em 1em;
+        color: $secondary-color;
 
         em {
           color: $secondary-color;
         }
+      }
+
+      input {
+        &.facebook {
+          padding-left: 8.25em;
+        }
+
+        &.twitter {
+          padding-left: 2em;
+        }
+      }
+
+      .error {
+        color: $error-color;
+        font-size: 0.65em;
+        position: absolute;
       }
 
       .url {
