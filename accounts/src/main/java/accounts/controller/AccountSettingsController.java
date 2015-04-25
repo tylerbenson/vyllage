@@ -39,11 +39,12 @@ import accounts.repository.OrganizationRepository;
 import accounts.service.UserService;
 import accounts.service.aspects.CheckOwner;
 import accounts.validation.EmailSettingValidator;
+import accounts.validation.FacebookValidator;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
 import accounts.validation.NumberValidator;
-import accounts.validation.OnlyAlphanumericValidator;
 import accounts.validation.SettingValidator;
+import accounts.validation.TwitterValidator;
 import accounts.validation.URLValidator;
 
 @Controller
@@ -86,16 +87,14 @@ public class AccountSettingsController {
 	}
 
 	public AccountSettingsController() {
-		URLValidator urlValidator = new URLValidator();
-		OnlyAlphanumericValidator onlyAlphanumericValidator = new OnlyAlphanumericValidator();
 
 		validators.put("phoneNumber", new NumberValidator());
 		validators.put("firstName", new NotNullValidator());
 		validators.put("email", new EmailSettingValidator());
 
-		validators.put("facebook", onlyAlphanumericValidator);
-		validators.put("linkedIn", urlValidator);
-		validators.put("twitter", onlyAlphanumericValidator);
+		validators.put("facebook", new FacebookValidator());
+		validators.put("linkedIn", new URLValidator());
+		validators.put("twitter", new TwitterValidator());
 		validatorsForAll.add(new LengthValidator(100));
 
 		settingValues.put(
