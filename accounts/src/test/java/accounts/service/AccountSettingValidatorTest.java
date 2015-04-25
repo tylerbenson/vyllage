@@ -8,6 +8,7 @@ import accounts.validation.EmailSettingValidator;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
 import accounts.validation.NumberValidator;
+import accounts.validation.OnlyAlphanumericValidator;
 import accounts.validation.URLValidator;
 
 public class AccountSettingValidatorTest {
@@ -175,6 +176,32 @@ public class AccountSettingValidatorTest {
 		AccountSetting setting = validator.validate(as);
 
 		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void onlyAlphanumericSuccess() {
+		final String value = "aeiou123456";
+
+		OnlyAlphanumericValidator validator = new OnlyAlphanumericValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(value);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void onlyAlphanumericFail() {
+		final String value = "/*+55aer";
+
+		OnlyAlphanumericValidator validator = new OnlyAlphanumericValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(value);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(!setting.getErrorMessage().isEmpty());
 	}
 
 }

@@ -42,6 +42,7 @@ import accounts.validation.EmailSettingValidator;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
 import accounts.validation.NumberValidator;
+import accounts.validation.OnlyAlphanumericValidator;
 import accounts.validation.SettingValidator;
 import accounts.validation.URLValidator;
 
@@ -86,14 +87,15 @@ public class AccountSettingsController {
 
 	public AccountSettingsController() {
 		URLValidator urlValidator = new URLValidator();
+		OnlyAlphanumericValidator onlyAlphanumericValidator = new OnlyAlphanumericValidator();
 
 		validators.put("phoneNumber", new NumberValidator());
 		validators.put("firstName", new NotNullValidator());
 		validators.put("email", new EmailSettingValidator());
 
-		// validators.put("facebook", urlValidator);
+		validators.put("facebook", onlyAlphanumericValidator);
 		validators.put("linkedIn", urlValidator);
-		// validators.put("twitter", urlValidator);
+		validators.put("twitter", onlyAlphanumericValidator);
 		validatorsForAll.add(new LengthValidator(100));
 
 		settingValues.put(
