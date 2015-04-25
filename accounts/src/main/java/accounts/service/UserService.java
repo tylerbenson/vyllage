@@ -171,14 +171,15 @@ public class UserService {
 		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
 
 		// searching for UserOrganizationRole student.
-		loggedUseRoles
-				.addAll(((User) SecurityContextHolder.getContext()
-						.getAuthentication().getPrincipal())
-						.getAuthorities()
-						.stream()
-						.filter(a -> a.getAuthority().equalsIgnoreCase(
-								RolesEnum.STUDENT.name()))
-						.collect(Collectors.toList()));
+		loggedUseRoles.addAll(((User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal())
+				.getAuthorities()
+				.stream()
+				.filter(a -> a.getAuthority().equalsIgnoreCase(
+						RolesEnum.STUDENT.name())
+						|| a.getAuthority().equalsIgnoreCase(
+								RolesEnum.ALUMNI.name()))
+				.collect(Collectors.toList()));
 
 		// setting up organizations and roles for the user account, we set the
 		// same organizations the logged in user belongs to and assign the Guest
