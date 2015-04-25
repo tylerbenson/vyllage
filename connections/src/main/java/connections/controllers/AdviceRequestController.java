@@ -83,7 +83,13 @@ public class AdviceRequestController {
 	}
 
 	@RequestMapping(value = "ask-advice", method = RequestMethod.GET)
-	public String askAdvice() {
+	public String askAdvice(HttpServletRequest request) {
+		boolean isGuest = (boolean) request.getSession()
+				.getAttribute("isGuest");
+
+		if (isGuest)
+			return "redirect:/";
+
 		return "askAdvice";
 	}
 
