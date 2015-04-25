@@ -6,50 +6,49 @@ var SettingsMixin = require('./mixin');
 var Social = React.createClass({
   mixins: [SettingsMixin],
   render: function () {
-    var settings = this.props.settings || {};
+    var settings = this.props.settings || [];
     // var urlSetting = filter(this.props.settings, {name: 'url'})[0] || {value: ''};
     var facebookSetting = filter(this.props.settings, {name: 'facebook'})[0] || {value: ''};
     var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {value: ''};
     var linkedInSetting = filter(this.props.settings, {name: 'linkedIn'})[0] || {value: ''};
-    return (
-      <div className='content'>
-        <form ref='social' onSubmit={this.saveHandler}>
+    if (settings.length > 0) {
+      return (
+        <div className='content'>
+          <form ref='social' onSubmit={this.saveHandler}>
 
-          <label>Facebook</label>
-          <span className='tip'>facebook.com/</span>
-          <input
-            key={'facebook-' + facebookSetting.value || undefined}
-            ref='facebook'
-            type='text'
-            defaultValue={facebookSetting.value}
-            onChange={this.changeHandler.bind(this, 'facebook')}
-          />
-          <p className='error'>{facebookSetting.errorMessage}</p>
+            <label>Facebook</label>
+            <input
+              ref='facebook'
+              type='text'
+              defaultValue={facebookSetting.value}
+              onChange={this.changeHandler.bind(this, 'facebook')}
+            />
+            <p className='error'>{facebookSetting.errorMessage}</p>
 
-          <label>Twitter</label>
-          <span className='tip'>@</span>
-          <input
-            key={'twitter-' + twitterSetting.value || undefined}
-            ref='twitter'
-            type='text'
-            defaultValue={twitterSetting.value}
-            onChange={this.changeHandler.bind(this, 'twitter')}
-          />
+            <label>Twitter</label>
+            <input
+              ref='twitter'
+              type='text'
+              defaultValue={twitterSetting.value}
+              onChange={this.changeHandler.bind(this, 'twitter')}
+            />
 
-          <label>LinkedIn</label>
-          <input
-            key={'linkedIn-' + linkedInSetting.value || undefined}
-            ref='linkedIn'
-            type='text'
-            defaultValue={linkedInSetting.value}
-            onChange={this.changeHandler.bind(this, 'linkedIn')}
-          />
-          <p className='error'>{linkedInSetting.errorMessage}</p>
+            <label>LinkedIn</label>
+            <input
+              ref='linkedIn'
+              type='text'
+              defaultValue={linkedInSetting.value}
+              onChange={this.changeHandler.bind(this, 'linkedIn')}
+            />
+            <p className='error'>{linkedInSetting.errorMessage}</p>
 
-          <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'social')} />
-        </form>
-      </div>
-    );
+            <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'social')} />
+          </form>
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 });
 
