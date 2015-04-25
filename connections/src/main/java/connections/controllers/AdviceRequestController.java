@@ -87,8 +87,12 @@ public class AdviceRequestController {
 		boolean isGuest = (boolean) request.getSession()
 				.getAttribute("isGuest");
 
-		if (isGuest)
+		// TODO: Replace with check on User Roles once we have the classes in
+		// another project.
+		if (isGuest) {
+			request.getSession().invalidate();
 			return "redirect:/";
+		}
 
 		return "askAdvice";
 	}
