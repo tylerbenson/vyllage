@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <link rel="stylesheet" href="../../public/css/email.css" />
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
+</head>
+
+<body>
+  <div id="container">
+    <div class="header">
+      <img height="40" th:src="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/logo.png}" alt="Logo"
+      />
+    </div>
+    <div class="content">
+      <strong>Hello
+        <span th:if="${userName} != null" th:text="${userName}"></span>,
+      </strong>
+
+      <p>
+        Welcome to Vyllage! Your school has created an account just for you.
+        <a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}">Log In</a> with this
+        e-mail and the following password:
+      </p>
+
+      <p>
+        <strong>Password:</strong>
+        <code th:text="${password}">Oops, there was an error. Please contact us at <a href="mailto:hello@vyllage.com">hello@vyllage.com</a>.</code>
+      </p>
+    </div>
+
+    <div class="action">
+      <a class="padded embossed normal-caps button" th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}">Log In Now!</a>
+    </div>
+
+    <div class="signature">
+      <p>See you there,</p>
+      <img height="25" alt="Signature" th:src="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/signature.png}"
+      />
+      <div class="author">Chief of Vyllage</div>
+    </div>
+
+    <div class="footer">
+      <span>
+        For questions and feedback, e-mail us at
+        <a href="mailto:hello@vyllage.com">hello@vyllage.com</a>.
+      </span>
+    </div>
+  </div>
+
+  <div class="link-out">
+    Let's succeed together. Visit us at <a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__}">www.vyllage.com</a>.
+  </div>
+</body>
+
+</html>

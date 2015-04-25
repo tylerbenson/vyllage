@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <link rel="stylesheet" href="../../public/css/email.css" />
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
+</head>
+
+<body>
+  <div id="container">
+    <div class="header">
+      <img height="40" th:src="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/logo.png}" alt="Logo"
+      />
+    </div>
+    <div class="content">
+      <strong>Hello
+        <span th:if="${recipientName} != null" th:text="${recipientName}"></span>,
+      </strong>
+
+      <p>A Vyllager sent you a message!</p>
+
+      <p class="blockquote" th:text="${message}"></p>
+
+      <p>
+        <a th:href="@{${link}}">View online resume</a> and start giving some pieces of advice.
+      </p>
+
+    </div>
+
+    <div class="action">
+      <a class="padded embossed normal-caps button" th:href="@{${link}}">View Online Resume</a>
+    </div>
+
+    <div class="signature">
+      <p>Cheers,</p>
+      <img height="25" alt="Signature" th:src="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/images/signature.png}"
+      />
+      <div class="author">Chief of Vyllage</div>
+    </div>
+
+    <div class="footer">
+      <span>
+        For questions and feedback, e-mail us at
+        <a href="mailto:hello@vyllage.com">hello@vyllage.com</a>.
+      </span>
+    </div>
+  </div>
+  <div class="link-out">
+    Let's succeed together. Visit us at <a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__}">www.vyllage.com</a>.
+  </div>
+</body>
+
+</html>
