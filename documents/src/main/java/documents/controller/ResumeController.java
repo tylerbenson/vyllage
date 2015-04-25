@@ -35,7 +35,8 @@ import documents.model.DocumentSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
-import documents.services.aspect.CheckOwner;
+import documents.services.aspect.CheckReadAccess;
+import documents.services.aspect.CheckWriteAccess;
 
 @Controller
 @RequestMapping("resume")
@@ -102,13 +103,16 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)
-	public String getResume(@PathVariable final Long documentId) {
+	@CheckReadAccess
+	public String getResume(HttpServletRequest request,
+			@PathVariable final Long documentId) {
 		return "resume";
 	}
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
+	@CheckReadAccess
 	public @ResponseBody List<DocumentSection> getResumeSections(
-			@PathVariable final Long documentId)
+			HttpServletRequest request, @PathVariable final Long documentId)
 			throws JsonProcessingException, ElementNotFoundException {
 		List<DocumentSection> documentSections = documentService
 				.getDocumentSections(documentId);
@@ -129,6 +133,7 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
+	@CheckReadAccess
 	public @ResponseBody DocumentSection getResumeSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId) throws ElementNotFoundException {
@@ -144,6 +149,7 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.GET, produces = "application/json")
+	@CheckReadAccess
 	public @ResponseBody DocumentHeader getResumeHeader(
 			HttpServletRequest request, @PathVariable final Long documentId)
 			throws JsonProcessingException, IOException,
@@ -185,13 +191,12 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	@CheckOwner
+	@CheckWriteAccess
 	public @ResponseBody DocumentSection createSection(
 			@PathVariable final Long documentId,
 			@RequestBody final DocumentSection documentSection)
 			throws JsonProcessingException, ElementNotFoundException {
 
-		// Document document = documentService.getDocument(documentId);
 		documentSection.setDocumentId(documentId);
 		return documentService.saveDocumentSection(documentSection);
 	}
@@ -199,7 +204,7 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	// @PreAuthorize("hasPermission(#documentId, 'WRITE')")
-	@CheckOwner
+	@CheckWriteAccess
 	public @ResponseBody DocumentSection saveSection(
 			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
@@ -207,14 +212,13 @@ public class ResumeController {
 			throws JsonProcessingException, ElementNotFoundException,
 			AccessDeniedException {
 
-		// Document document = documentService.getDocument(documentId);
 		documentSection.setDocumentId(documentId);
 		return documentService.saveDocumentSection(documentSection);
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	@CheckOwner
+	@CheckWriteAccess
 	public void deleteSection(@PathVariable final Long documentId,
 			@PathVariable final Long sectionId) throws JsonProcessingException,
 			ElementNotFoundException {
@@ -223,6 +227,7 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/recent-users", method = RequestMethod.GET, produces = "application/json")
+	@CheckReadAccess
 	public @ResponseBody List<AccountNames> getRecentUsers(
 			HttpServletRequest request,
 			@PathVariable final Long documentId,
@@ -244,7 +249,7 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	@CheckOwner
+	@CheckWriteAccess
 	public void updateHeader(@PathVariable final Long documentId,
 			@RequestBody final DocumentHeader documentHeader)
 			throws ElementNotFoundException {
@@ -324,16 +329,4 @@ public class ResumeController {
 		return map;
 	}
 
-	@ExceptionHandler(value = { AccessDeniedException.class })
-	@ResponseStatus(value = HttpStatus.FORBIDDEN)
-	public @ResponseBody Map<String, Object> handleAccessDeniedException(
-			Exception ex) {
-		Map<String, Object> map = new HashMap<>();
-		if (ex.getCause() != null) {
-			map.put("error", ex.getCause().getMessage());
-		} else {
-			map.put("error", ex.getMessage());
-		}
-		return map;
-	}
 }

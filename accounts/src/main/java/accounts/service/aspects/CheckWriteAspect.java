@@ -19,9 +19,9 @@ import accounts.model.account.settings.AccountSetting;
  * @author uh
  *
  */
-public class CheckOwnerAspect {
+public class CheckWriteAspect {
 
-	@Before("execution(* *(..)) && args(settings) && @annotation(CheckOwner)")
+	@Before("execution(* *(..)) && args(settings) && @annotation(CheckWriteAccess)")
 	public void checkOwnerMany(JoinPoint joinPoint,
 			List<AccountSetting> settings) throws AccessDeniedException {
 
@@ -42,7 +42,7 @@ public class CheckOwnerAspect {
 
 	}
 
-	@Before("execution(* *(..)) && args(parameter, setting,..) && @annotation(CheckOwner)")
+	@Before("execution(* *(..)) && args(parameter, setting,..) && @annotation(CheckWriteAccess)")
 	public void checkOwnerSingle(JoinPoint joinPoint, String parameter,
 			AccountSetting setting) throws AccessDeniedException {
 

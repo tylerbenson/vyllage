@@ -87,6 +87,25 @@ public class AccountService {
 		return Arrays.asList();
 	}
 
+	public boolean usersBelongToSameOrganization(HttpServletRequest request,
+			Long firstUserId, Long secondUserId) {
+
+		HttpEntity<Object> entity = assembleHeader(request);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
+				.path("/admin/user/sameOrganization");
+
+		builder.queryParam("firstUserId", firstUserId).queryParam(
+				"secondUserId", secondUserId);
+
+		boolean body = restTemplate.exchange(builder.build().toUriString(),
+				HttpMethod.GET, entity, Boolean.class).getBody();
+
+		return body;
+	}
+
 	protected HttpEntity<Object> assembleHeader(HttpServletRequest request) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Cookie", request.getHeader("Cookie"));
