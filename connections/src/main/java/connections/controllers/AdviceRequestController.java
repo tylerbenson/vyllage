@@ -83,7 +83,17 @@ public class AdviceRequestController {
 	}
 
 	@RequestMapping(value = "ask-advice", method = RequestMethod.GET)
-	public String askAdvice() {
+	public String askAdvice(HttpServletRequest request) {
+		boolean isGuest = (boolean) request.getSession()
+				.getAttribute("isGuest");
+
+		// TODO: Replace with check on User Roles once we have the classes in
+		// another project.
+		if (isGuest) {
+			request.getSession().invalidate();
+			return "redirect:/";
+		}
+
 		return "askAdvice";
 	}
 
