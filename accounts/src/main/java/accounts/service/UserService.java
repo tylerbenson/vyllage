@@ -162,13 +162,12 @@ public class UserService {
 					"Contains invalid email address.");
 
 		// assigns current user's Organizations
-		// assigns default role.
+		// assigns default Guest role.
 		String randomPassword = randomPasswordGenerator.getRandomPassword();
 
 		List<GrantedAuthority> loggedUseRoles = new ArrayList<>();
 		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
 
-		// searching for UserOrganizationRole student.
 		loggedUseRoles.addAll(((User) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal()).getAuthorities());
 
