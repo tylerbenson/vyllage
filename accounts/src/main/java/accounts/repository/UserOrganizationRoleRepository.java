@@ -40,31 +40,36 @@ public class UserOrganizationRoleRepository {
 	}
 
 	public void create(UserOrganizationRole role) {
-		UserOrganizationRolesRecord auth = sql
-				.newRecord(USER_ORGANIZATION_ROLES);
-		auth.setUserId(role.getUserId());
-		auth.setRole(role.getAuthority());
-		auth.setOrganizationId(role.getOrganizationId());
-		auth.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
-				.of("UTC"))));
-		auth.setAuditUserId(role.getAuditUserId());
-		auth.insert();
 
-		AccountSetting roleSetting = new AccountSetting();
-		roleSetting.setName("role");
-		roleSetting.setUserId(role.getUserId());
-		roleSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-		roleSetting.setValue(role.getAuthority());
-		accountSettingRepository.set(role.getUserId(), roleSetting);
+		if (!this.exists(role.getUserId(), role.getOrganizationId(),
+				role.getAuthority())) {
 
-		AccountSetting organizationSetting = new AccountSetting();
-		organizationSetting.setName("organization");
-		organizationSetting.setUserId(role.getUserId());
-		organizationSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-		organizationSetting.setValue(organizationRepository.get(
-				role.getOrganizationId()).getOrganizationName());
-		accountSettingRepository.set(role.getUserId(), organizationSetting);
+			UserOrganizationRolesRecord auth = sql
+					.newRecord(USER_ORGANIZATION_ROLES);
+			auth.setUserId(role.getUserId());
+			auth.setRole(role.getAuthority());
+			auth.setOrganizationId(role.getOrganizationId());
+			auth.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
+					.of("UTC"))));
+			auth.setAuditUserId(role.getAuditUserId());
+			auth.insert();
 
+			AccountSetting roleSetting = new AccountSetting();
+			roleSetting.setName("role");
+			roleSetting.setUserId(role.getUserId());
+			roleSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+			roleSetting.setValue(role.getAuthority());
+			accountSettingRepository.set(role.getUserId(), roleSetting);
+
+			AccountSetting organizationSetting = new AccountSetting();
+			organizationSetting.setName("organization");
+			organizationSetting.setUserId(role.getUserId());
+			organizationSetting
+					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+			organizationSetting.setValue(organizationRepository.get(
+					role.getOrganizationId()).getOrganizationName());
+			accountSettingRepository.set(role.getUserId(), organizationSetting);
+		}
 	}
 
 	public List<UserOrganizationRole> getAll() {
@@ -76,7 +81,7 @@ public class UserOrganizationRoleRepository {
 	}
 
 	/**
-	 * Deletes ALL user's organizations and roles.
+	 * Deletes ALL the user's organizations and roles.
 	 * 
 	 * @param userId
 	 */
@@ -86,7 +91,8 @@ public class UserOrganizationRoleRepository {
 	}
 
 	/**
-	 * Deletes ALL user's organizations and roles.
+	 * Deletes ALL the user's roles for an specific organization, including the
+	 * organization relationship.
 	 * 
 	 * @param userId
 	 */
@@ -95,5 +101,21 @@ public class UserOrganizationRoleRepository {
 				.where(USER_ORGANIZATION_ROLES.USER_ID.eq(userId).and(
 						USER_ORGANIZATION_ROLES.ORGANIZATION_ID
 								.eq(organizationId))).execute();
+	}
+
+	/**
+	 * Checks if the given combination of userId, organizationId, and Role
+	 * exists.
+	 * 
+	 * @param userId
+	 */
+	public boolean exists(Long userId, Long organizationId, String role) {
+		return sql.fetchExists(sql
+				.select()
+				.from(USER_ORGANIZATION_ROLES)
+				.where(USER_ORGANIZATION_ROLES.USER_ID.eq(userId).and(
+						USER_ORGANIZATION_ROLES.ORGANIZATION_ID.eq(
+								organizationId).and(
+								USER_ORGANIZATION_ROLES.ROLE.eq(role)))));
 	}
 }

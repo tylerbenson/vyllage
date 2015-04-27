@@ -142,10 +142,18 @@ public class UserService {
 
 			if (existingUser != null) {
 				// change roles
+				Long userId = existingUser.getUserId();
+
 				List<GrantedAuthority> newRolesForOrganization = new ArrayList<>();
-				existingUser.getAuthorities().removeAll(user.getAuthorities());
+
 				newRolesForOrganization.addAll(user.getAuthorities());
-				newRolesForOrganization.addAll(existingUser.getAuthorities());
+				newRolesForOrganization.stream().forEach(
+						ga -> ((UserOrganizationRole) ga).setUserId(userId));
+
+				// remove duplicates
+				// newRolesForOrganization
+				// .removeAll(existingUser.getAuthorities());
+				// newRolesForOrganization.addAll(existingUser.getAuthorities());
 
 				updateUserRolesByOrganization(newRolesForOrganization);
 
@@ -323,18 +331,22 @@ public class UserService {
 	public void updateUserRolesByOrganization(
 			List<GrantedAuthority> newRolesForOrganization) {
 
-		Long organizationId = ((UserOrganizationRole) newRolesForOrganization
-				.get(0)).getOrganizationId();
-		Long userId = ((UserOrganizationRole) newRolesForOrganization.get(0))
-				.getUserId();
+		// Long organizationId = ((UserOrganizationRole) newRolesForOrganization
+		// .get(0)).getOrganizationId();
+		// Long userId = ((UserOrganizationRole) newRolesForOrganization.get(0))
+		// .getUserId();
 
 		// delete all the roles related to the user in the organization
-		userOrganizationRoleRepository.deleteByUserIdAndOrganizationId(userId,
-				organizationId);
+		// userOrganizationRoleRepository.deleteByUserIdAndOrganizationId(userId,
+		// organizationId);
 
-		for (GrantedAuthority userOrganizationRole : newRolesForOrganization)
+		for (GrantedAuthority userOrganizationRole : newRolesForOrganization) {
+			((UserOrganizationRole) userOrganizationRole)
+					.setAuditUserId(((User) SecurityContextHolder.getContext()
+							.getAuthentication().getPrincipal()).getUserId());
 			userOrganizationRoleRepository
 					.create((UserOrganizationRole) userOrganizationRole);
+		}
 
 	}
 
