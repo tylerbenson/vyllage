@@ -61,6 +61,7 @@
     "karma-jasmine": "^0.3.5",
     "karma-junit-reporter": "^0.2.2",
     "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sinon": "^1.0.4",
     "karma-webpack": "^1.5.0",
     "minimist": "^1.1.1",
     "run-sequence": "^1.0.2",
@@ -86,7 +87,8 @@
     "build": "./node_modules/.bin/gulp build",
     "watch": "./node_modules/.bin/gulp watch",
     "dev-watch": "./node_modules/.bin/gulp dev-watch",
-    "test": "./node_modules/.bin/karma start ./karma.conf.js --single-run"
+    "test": "./node_modules/.bin/karma start ./karma.conf.js --single-run",
+    "dev-test": "./node_modules/.bin/karma start ./karma.conf.js"
   },
   "repository": "https://github.com/natebenson/vyllage",
   "license": "Commercial",
