@@ -159,42 +159,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				userOrganizationRoleRepository
 						.create((UserOrganizationRole) role);
 
-				AccountSetting roleSetting = new AccountSetting();
-				roleSetting.setName("role");
-				roleSetting.setUserId(newRecord.getUserId());
-				roleSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-				roleSetting.setValue(role.getAuthority());
-				accountSettingRepository
-						.set(newRecord.getUserId(), roleSetting);
-
-				AccountSetting organizationSetting = new AccountSetting();
-				organizationSetting.setName("organization");
-				organizationSetting.setUserId(newRecord.getUserId());
-				organizationSetting.setPrivacy(Privacy.PRIVATE.name()
-						.toLowerCase());
-				organizationSetting.setValue(organizationRepository.get(
-						((UserOrganizationRole) role).getOrganizationId())
-						.getOrganizationName());
-				accountSettingRepository.set(newRecord.getUserId(),
-						organizationSetting);
 			}
-
-			// for (OrganizationMember organizationMember : user
-			// .getOrganizationMember()) {
-			// organizationMember.setUserId(newRecord.getUserId());
-			// organizationMemberRepository.create(organizationMember);
-			//
-			// AccountSetting organizationSetting = new AccountSetting();
-			// organizationSetting.setName("organization");
-			// organizationSetting.setUserId(newRecord.getUserId());
-			// organizationSetting.setPrivacy(Privacy.PRIVATE.name()
-			// .toLowerCase());
-			// organizationSetting.setValue(organizationRepository.get(
-			// organizationMember.getOrganizationId())
-			// .getOrganizationName());
-			// accountSettingRepository.set(newRecord.getUserId(),
-			// organizationSetting);
-			// }
 
 			AccountSetting emailSetting = new AccountSetting();
 			emailSetting.setName("email");
@@ -257,8 +222,7 @@ public class UserDetailRepository implements UserDetailsManager {
 	}
 
 	/**
-	 * Updates the user data, roles and organizations. DOES NOT CHANGE USER
-	 * PASSWORD.
+	 * Updates the user data. DOES NOT CHANGE USER PASSWORD.
 	 */
 	@Override
 	// @Transactional

@@ -20,8 +20,8 @@ insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, '
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'middleName', 'V', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'lastName', 'Skywalker', 'private');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'address', 'Avenida Siempreviva 123', 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'organization', 'stanford', 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'role', 'student', 'public');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'organization', 'Vyllage', 'public');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'role', 'ADMIN', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'email', 'email', 'private');
 
 
