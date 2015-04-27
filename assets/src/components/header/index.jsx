@@ -38,9 +38,12 @@ var HeaderContainer = React.createClass({
   }
 });
 
-var name = document.getElementById('header-container').getAttribute('name');
-var title = document.getElementById('header-container').getAttribute('title');
-React.render(<HeaderContainer title={title} name={name}/>, document.getElementById('header-container'));
+var header = document.getElementById('header-container');
+if (header) {
+  var name = header.getAttribute('name');
+  var title = header.getAttribute('title');
+  React.render(<HeaderContainer title={title} name={name}/>, header);
+}
 
 module.exports = HeaderContainer;
 
