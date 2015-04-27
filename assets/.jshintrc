@@ -4,6 +4,7 @@
   "globalstrict": true,
   "node": true,
   "mocha": true,
+  "jasmine": true,
   "browser": true,
   "bitwise": true,
   "camelcase": true,
