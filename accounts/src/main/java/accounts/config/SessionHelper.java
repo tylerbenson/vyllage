@@ -21,7 +21,7 @@ public class SessionHelper {
 				"isGuest",
 				user.getAuthorities()
 						.stream()
-						.anyMatch(
+						.allMatch(
 								uor -> RolesEnum.GUEST.name().equalsIgnoreCase(
 										uor.getAuthority())));
 	}

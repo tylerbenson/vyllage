@@ -153,8 +153,6 @@ public class UserService {
 	 * @return link response
 	 * @throws EmailException
 	 */
-	@SuppressWarnings("unchecked")
-	// the are fine
 	public User createUser(DocumentLinkRequest linkRequest)
 			throws EmailException {
 		boolean invalid = false;
@@ -172,14 +170,7 @@ public class UserService {
 
 		// searching for UserOrganizationRole student.
 		loggedUseRoles.addAll(((User) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal())
-				.getAuthorities()
-				.stream()
-				.filter(a -> a.getAuthority().equalsIgnoreCase(
-						RolesEnum.STUDENT.name())
-						|| a.getAuthority().equalsIgnoreCase(
-								RolesEnum.ALUMNI.name()))
-				.collect(Collectors.toList()));
+				.getAuthentication().getPrincipal()).getAuthorities());
 
 		// setting up organizations and roles for the user account, we set the
 		// same organizations the logged in user belongs to and assign the Guest
