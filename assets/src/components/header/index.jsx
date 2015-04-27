@@ -1,13 +1,6 @@
 var React = require('react');
 
 var HeaderContainer = React.createClass({
-  getInitialState: function () {
-    return { documentId: '' };
-  },
-  componentDidMount: function () {
-    var documentId = window.location.pathname.split('/')[2];
-    this.setState({documentId: documentId});
-  },
   render: function() {
     var name = this.props.name || 'user';
     var title = this.props.title;
