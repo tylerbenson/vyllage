@@ -32,7 +32,7 @@ var Alert = React.createClass({
   render: function () {
     var className = classnames({
       visible: this.state.isOpen,
-      alert: true
+      [this.props.className]: true
     })
     return (
       <div className={className } >
