@@ -78,13 +78,6 @@ var Datepicker = React.createClass({
       this.setDate();
     }.bind(this));
   },
-  // setCurrent: function(e) {
-  //   var date = e.target.checked? null: this.state.month + ' ' + this.state.year;
-  //   this.setState({
-  //     isOpen: true,
-  //     date: date
-  //   });
-  // },
   onFocus: function () {
     this.setState({
         isFocused: true,
