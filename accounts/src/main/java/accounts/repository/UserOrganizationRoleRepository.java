@@ -15,12 +15,20 @@ import org.springframework.stereotype.Repository;
 
 import accounts.domain.tables.records.UserOrganizationRolesRecord;
 import accounts.model.UserOrganizationRole;
+import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.Privacy;
 
 @Repository
 public class UserOrganizationRoleRepository {
 
 	@Autowired
 	private DSLContext sql;
+
+	@Autowired
+	private AccountSettingRepository accountSettingRepository;
+
+	@Autowired
+	private OrganizationRepository organizationRepository;
 
 	public List<UserOrganizationRole> getByUserId(Long userId) {
 		Result<UserOrganizationRolesRecord> records = sql.fetch(
@@ -41,6 +49,22 @@ public class UserOrganizationRoleRepository {
 				.of("UTC"))));
 		auth.setAuditUserId(role.getAuditUserId());
 		auth.insert();
+
+		AccountSetting roleSetting = new AccountSetting();
+		roleSetting.setName("role");
+		roleSetting.setUserId(role.getUserId());
+		roleSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+		roleSetting.setValue(role.getAuthority());
+		accountSettingRepository.set(role.getUserId(), roleSetting);
+
+		AccountSetting organizationSetting = new AccountSetting();
+		organizationSetting.setName("organization");
+		organizationSetting.setUserId(role.getUserId());
+		organizationSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+		organizationSetting.setValue(organizationRepository.get(
+				role.getOrganizationId()).getOrganizationName());
+		accountSettingRepository.set(role.getUserId(), organizationSetting);
+
 	}
 
 	public List<UserOrganizationRole> getAll() {

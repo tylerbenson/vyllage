@@ -3,6 +3,7 @@ package accounts.service;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -110,8 +111,6 @@ public class UserService {
 			throw new IllegalArgumentException(
 					"Contains invalid email addresses.");
 
-		// Role role = roleRepository.get(batchAccount.getRole());
-
 		// note, for UserOrganizationRole there's no userId until it's
 		// saved.
 		List<User> users = Arrays
@@ -128,6 +127,32 @@ public class UserService {
 												.getAuthentication()
 												.getPrincipal()).getUserId()))))
 				.collect(Collectors.toList());
+
+		// find existing users to update instead of save
+		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
+			User user = iterator.next();
+			User existingUser = null;
+
+			try {
+				existingUser = userRepository.loadUserByUsername(user
+						.getUsername());
+			} catch (Exception e) {
+				// continue.
+			}
+
+			if (existingUser != null) {
+				// change roles
+				List<GrantedAuthority> newRolesForOrganization = new ArrayList<>();
+				existingUser.getAuthorities().removeAll(user.getAuthorities());
+				newRolesForOrganization.addAll(user.getAuthorities());
+				newRolesForOrganization.addAll(existingUser.getAuthorities());
+
+				updateUserRolesByOrganization(newRolesForOrganization);
+
+				// remove the user from the batch
+				iterator.remove();
+			}
+		}
 
 		userRepository.saveUsers(users);
 
@@ -153,8 +178,6 @@ public class UserService {
 	 * @return link response
 	 * @throws EmailException
 	 */
-	@SuppressWarnings("unchecked")
-	// the are fine
 	public User createUser(DocumentLinkRequest linkRequest)
 			throws EmailException {
 		boolean invalid = false;
@@ -231,8 +254,7 @@ public class UserService {
 	}
 
 	/**
-	 * Updates the user data, roles and organizations. DOES NOT CHANGE USER
-	 * PASSWORD.
+	 * Updates the user data. DOES NOT CHANGE USER PASSWORD.
 	 */
 	public void update(User user) {
 		userRepository.updateUser(user);
@@ -299,17 +321,20 @@ public class UserService {
 	}
 
 	public void updateUserRolesByOrganization(
-			List<UserOrganizationRole> userOrganizationRoles) {
+			List<GrantedAuthority> newRolesForOrganization) {
 
-		Long organizationId = userOrganizationRoles.get(0).getOrganizationId();
-		Long userId = userOrganizationRoles.get(0).getUserId();
+		Long organizationId = ((UserOrganizationRole) newRolesForOrganization
+				.get(0)).getOrganizationId();
+		Long userId = ((UserOrganizationRole) newRolesForOrganization.get(0))
+				.getUserId();
 
 		// delete all the roles related to the user in the organization
 		userOrganizationRoleRepository.deleteByUserIdAndOrganizationId(userId,
 				organizationId);
 
-		for (UserOrganizationRole userOrganizationRole : userOrganizationRoles)
-			userOrganizationRoleRepository.create(userOrganizationRole);
+		for (GrantedAuthority userOrganizationRole : newRolesForOrganization)
+			userOrganizationRoleRepository
+					.create((UserOrganizationRole) userOrganizationRole);
 
 	}
 
