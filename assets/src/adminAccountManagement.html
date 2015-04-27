@@ -2,13 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>admin - accounts</title>
+  <title>Vyllage Admin | Account Management</title>
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/admin.css" />
+  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
 
   <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
 
@@ -17,42 +18,51 @@
   <div th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
-<body>
-  <header>
-    <div id="header-container" th:name="${accountName.firstName}">
-    </div>
-  </header>
-
-  <section class="container">
-    <form action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post">
-      <div class="four columns">
+<body class="admin">
+  <div id="container">
+    <header>
+      <div class="content">
+        <div class="logo">
+          <img src="images/logo-white.png" alt="Vyllage" />
+          <span>Vyllage</span>
+        </div>
+        <span class="page-title">Account Management</span>
+      </div>
+    </header>
+    <div class="section content">
+      <form class="container" action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post">
         <select th:field="*{organization}">
           <option th:each="grp : ${organizations}" th:value="${grp.organizationId}" th:text="${grp.organizationName}">Some organization</option>
         </select>
         <select name="role">
-          <option th:each="rol : ${roles}" 
-          		  th:value="${rol.role}" 
-          		  th:text="${rol.role}"
-          		  th:selected="${rol.role == 'STUDENT'}">Some Role</option>
+          <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}" th:selected="${rol.role == 'STUDENT'}">Some Role</option>
         </select>
-        <div class="content-part">
-          <!-- 							<input type="text" /> -->
-          <textarea rows="20" cols="80" th:field="*{emails}">
-          </textarea>
-        </div>
-        <br></br>
-        <div class="content-part">
-          <button name="batchAccounts" type="submit" class="send-btn">Submit</button>
-        </div>
-        <br></br>
-        <div class="content-part">
-          <label th:if="${error != null}" th:text="${error}" style="color: red;"></label>
-        </div>
+        <textarea rows="20" cols="80" th:field="*{emails}">
+        </textarea>
+        <button name="batchAccounts" type="submit" class="pull right padded send-btn">Submit</button>
+        <label th:if="${error != null}" th:text="${error}" style="color: red;"></label>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="content">
+      <div class="logo">
+        <img src="images/logo-orange.png" alt="Vyllage" />
+        <span>Vyllage</span>
       </div>
+      <nav>
+        <ul>
+          <li><a href="">Help</a></li>
+          <li><a href="">Careers</a></li>
+          <li><a href="">Terms</a></li>
+          <li><a href="">Privacy</a></li>
+          <li><a href="">Contact Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
 
-    </form>
-
-  </section>
   <script type="text/javascript" src="javascript/base.js"></script>
   <script>
   (function(i, s, o, g, r, a, m) {
