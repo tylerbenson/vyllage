@@ -15,7 +15,7 @@ public class BeansConfiguration {
 		return restTemplate;
 	}
 
-	@Bean(name = "connections.mailService")
+	@Bean(name = "connections.MailService")
 	public MailService mailService() {
 		MailService mailService = new MailService();
 		return mailService;

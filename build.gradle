@@ -90,10 +90,6 @@ configure(bootProjects) {
 
     version = "0.0.1-SNAPSHOT" //commitId
 
-	dependencies {
-		compile project(':email')
-	}
-	
     applicationDefaultJvmArgs = [
             // Set PROJECT_HOME env variable to the root. This allows to register an additional
             // resource handler location and serve static resources directly from the template module during dev.

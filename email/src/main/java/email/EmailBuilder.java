@@ -4,28 +4,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-@Service
 public class EmailBuilder {
 
-	@Autowired
 	private MailService mailService;
 
-	@Autowired
 	private Environment environment;
 
 	private String email;
 	private String from;
+	private String fromUserName;
 	private String subject;
 
 	private String txt;
 	private String templateName;
 
 	private Map<String, Object> additionalVariables = new HashMap<>();
+
+	private EmailBuilder() {
+	}
+
+	public EmailBuilder(MailService mailService, Environment environment) {
+		this.mailService = mailService;
+		this.environment = environment;
+	}
 
 	public EmailBuilder to(String email) {
 		this.email = email;
@@ -34,6 +38,17 @@ public class EmailBuilder {
 
 	public EmailBuilder from(String from) {
 		this.from = from;
+		return this;
+	}
+
+	/**
+	 * Optional, the user name to display.
+	 * 
+	 * @param fromUserName
+	 * @return
+	 */
+	public EmailBuilder fromUserName(String fromUserName) {
+		this.fromUserName = fromUserName;
 		return this;
 	}
 
@@ -58,7 +73,8 @@ public class EmailBuilder {
 	}
 
 	public void send() throws EmailException {
-		EmailParameters parameters = new EmailParameters(from, subject, email);
+		EmailParameters parameters = new EmailParameters(from, fromUserName,
+				subject, email);
 
 		EmailContext ctx = new EmailContext(templateName);
 		ctx.setVariables(additionalVariables);

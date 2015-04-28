@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import accounts.constants.RolesEnum;
-import accounts.email.EmailBuilder;
 import accounts.model.BatchAccount;
 import accounts.model.CSRFToken;
 import accounts.model.Organization;
@@ -42,6 +41,7 @@ import accounts.repository.UserNotFoundException;
 import accounts.repository.UserOrganizationRoleRepository;
 import accounts.service.aspects.CheckPrivacy;
 import accounts.validation.EmailValidator;
+import email.EmailBuilder;
 
 @Service
 public class UserService {
@@ -168,8 +168,10 @@ public class UserService {
 		for (User user : users) {
 			emailBuilder
 					.to(user.getUsername())
-					.from(env.getProperty("email.userName",
-							"no-reply@vyllage.com"))
+					.from(env.getProperty("email.from", "no-reply@vyllage.com"))
+					.fromUserName(
+							env.getProperty("email.from.userName",
+									"Chief of Vyllage"))
 					.subject("Account Creation - Vyllage.com")
 					.setNoHtmlMessage(
 							"Your account has been created successfuly. \\n Your password is: "
@@ -228,8 +230,10 @@ public class UserService {
 
 			emailBuilder
 					.to(linkRequest.getEmail())
-					.from(env.getProperty("email.userName",
-							"no-reply@vyllage.com"))
+					.from(env.getProperty("email.from", "no-reply@vyllage.com"))
+					.fromUserName(
+							env.getProperty("email.from.userName",
+									"Chief of Vyllage"))
 					.subject("Account Creation")
 					.setNoHtmlMessage(
 							"Your account has been created successfuly. \\n Your password is: "

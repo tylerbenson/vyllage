@@ -80,7 +80,11 @@ public class MailService {
 		email.setAuthenticator(new DefaultAuthenticator(userName, password));
 		email.setSSLOnConnect(true);
 
-		email.setFrom(parameters.from);
+		if (parameters.fromUserName != null
+				&& !parameters.fromUserName.isEmpty())
+			email.setFrom(parameters.from, parameters.fromUserName);
+		else
+			email.setFrom(parameters.from);
 		email.setSubject(parameters.subject);
 		email.addTo(parameters.to);
 	}

@@ -13,6 +13,7 @@ import lombok.ToString;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -46,6 +47,7 @@ public class AdviceService {
 	private RestTemplate restTemplate;
 
 	@Autowired
+	@Qualifier(value = "connections.MailService")
 	private MailService mailService;
 
 	@Value("${accounts.host:localhost}")
@@ -150,6 +152,8 @@ public class AdviceService {
 
 		String from = environment.getProperty("email.from",
 				"no-reply@vyllage.com");
+		String fromUserName = environment.getProperty("email.from.userName",
+				"Chief of Vyllage");
 		String subject = adviceRequest.getSubject();
 		String noHTMLmsg = adviceRequest.getMessage();
 		EmailParameters parameters = null;
@@ -165,7 +169,8 @@ public class AdviceService {
 
 			// send email to registered users
 			for (Email email : mailsForRegisteredUsers) {
-				parameters = new EmailParameters(from, subject, email.getTo());
+				parameters = new EmailParameters(from, fromUserName, subject,
+						email.getTo());
 				mailService.sendEmail(parameters, email.getBody());
 			}
 		}
@@ -179,11 +184,11 @@ public class AdviceService {
 
 			// send email to added users
 			for (Email email : prepareMailsForNonRegisteredUsers) {
-				parameters = new EmailParameters(from, subject, email.getTo());
+				parameters = new EmailParameters(from, fromUserName, subject,
+						email.getTo());
 				mailService.sendEmail(parameters, email.getBody());
 			}
 		}
-
 	}
 
 	protected Map<String, String> generateLinksForRegisteredUsers(
