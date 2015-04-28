@@ -5,6 +5,7 @@ var cloneWithProps = require('react/lib/cloneWithProps');
 var LayerMixin = require('react-layer-mixin');
 var Tether = require('tether/tether');
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var isTouch = require('../isTouch');
 
 var Datepicker = React.createClass({
   mixins: [LayerMixin],
@@ -137,8 +138,8 @@ var Datepicker = React.createClass({
           <span
             key={index}
             className={className}
-            onClick={!Modernizr.touch ? this.selectMonth.bind(this, month): null}
-            onTouchStart={Modernizr.touch ? this.selectMonth.bind(this, month): null}
+            onClick={!isTouch ? this.selectMonth.bind(this, month): null}
+            onTouchStart={isTouch ? this.selectMonth.bind(this, month): null}
           >
             {month}
           </span>
