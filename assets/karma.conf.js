@@ -42,6 +42,7 @@ module.exports = function (config) {
       module: {
         loaders: [{
           test: /\.js|jsx$/,
+          exclude: /lodash|node_modules/,
           loaders: ['babel']
         }, {
           test: /\.json$/,
