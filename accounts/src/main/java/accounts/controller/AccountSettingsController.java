@@ -136,17 +136,15 @@ public class AccountSettingsController {
 	@CheckWriteAccess
 	public @ResponseBody ResponseEntity<List<AccountSetting>> setAccountSettings(
 			@RequestBody final List<AccountSetting> settings) {
-		User user = getUser();
 
 		for (AccountSetting accountSetting : settings) {
 			if (accountSetting.getUserId() == null)
 				accountSetting.setAccountSettingId(getUserId());
 		}
 
-		settings.stream().map(setting -> {
+		settings.stream().forEach(setting -> {
 			if (validators.containsKey(setting.getName()))
 				validators.get(setting.getName()).validate(setting);
-			return setting;
 		});
 
 		settings.stream().map(
