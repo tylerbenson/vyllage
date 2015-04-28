@@ -1,6 +1,7 @@
 var React = require('react');
 var cx = require('react/lib/cx');
 var Actions = require('./actions');
+var isTouch = require('../isTouch');
 
 var Suggesions = React.createClass({
   getInitialState: function () {
@@ -43,8 +44,8 @@ var Suggesions = React.createClass({
         <li key={index} className={cx(classes)}>
           <div
             className='name'
-            onClick={!Modernizr.touch? this.recentClick.bind(this, index): null}
-            onTouchStart={Modernizr.touch? this.recentClick.bind(this, index): null}
+            onClick={!isTouch? this.recentClick.bind(this, index): null}
+            onTouchStart={isTouch? this.recentClick.bind(this, index): null}
           >
             {recipient.firstName + " " + recipient.lastName}
           </div>
@@ -62,8 +63,8 @@ var Suggesions = React.createClass({
         <li key={this.props.suggestions.recent.length + index} className={cx(classes)}>
           <div 
             className='name'
-            onClick={!Modernizr.touch? this.recommendedClick.bind(this, index): null}
-            onTouchStart={Modernizr.touch? this.recommendedClick.bind(this, index): null}
+            onClick={!isTouch? this.recommendedClick.bind(this, index): null}
+            onTouchStart={isTouch? this.recommendedClick.bind(this, index): null}
           >
             {recipient.firstName + " " + recipient.lastName}
           </div>
@@ -81,10 +82,10 @@ var Suggesions = React.createClass({
       };
       return (
         <div 
-          onMouseDown={!Modernizr.touch? this.enterHandler: null}
-          onMouseUp={!Modernizr.touch? this.leaveHanlder: null}
-          onTouchStart={Modernizr.touch? this.enterHandler: null}
-          onTouchEnd={Modernizr.touch? this.leaveHanlder: null}
+          onMouseDown={!isTouch? this.enterHandler: null}
+          onMouseUp={!isTouch? this.leaveHanlder: null}
+          onTouchStart={isTouch? this.enterHandler: null}
+          onTouchEnd={isTouch? this.leaveHanlder: null}
           style={{marginTop: '100px'}}
         >
           <ul id='suggested-users-list' style={style} className="autocomplete">

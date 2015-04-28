@@ -1,5 +1,6 @@
 // Karma configuration
 // Generated on Tue Apr 21 2015 20:25:53 GMT+0530 (IST)
+var webpack = require('webpack');
 
 module.exports = function (config) {
   config.set({
@@ -15,6 +16,7 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
+      // 'node_modules/react/dist/react-with-addons.js',
       'test/**/*.js',
       'test/**/*.jsx',
       'src/**/test/**/*.js',
@@ -40,6 +42,7 @@ module.exports = function (config) {
       module: {
         loaders: [{
           test: /\.js|jsx$/,
+          exclude: /lodash|node_modules/,
           loaders: ['babel']
         }, {
           test: /\.json$/,
@@ -49,6 +52,13 @@ module.exports = function (config) {
       resolve: {
         extensions: ['', '.js', '.jsx', 'json'],
       },
+      // externals: {
+      //   react: "React",
+      //   "react/addons": "React"
+      // }, 
+      plugins: [
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/)
+      ]
     },
 
     // test results reporter to use
@@ -71,7 +81,7 @@ module.exports = function (config) {
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
-
+    captureTimeout: 150000,
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
