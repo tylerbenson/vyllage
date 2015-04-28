@@ -1,4 +1,4 @@
-package connections.email;
+package email;
 
 /**
  * Simple emil text body.

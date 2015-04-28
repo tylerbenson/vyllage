@@ -1,7 +1,7 @@
 def vJavaLang = '1.8'
 def gradleDir = "${rootProject.rootDir}/gradle"
 ext.javascriptProjects = [ project(':assets') ]
-ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') ]
+ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections'), project(':email') ]
 ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') ]
 ext.dbProjects = [ project(':accounts'), project(':documents') ]
 
@@ -48,7 +48,7 @@ configure(javaProjects) {
     }
 
     dependencies {
-        compile 'org.slf4j:slf4j-api'
+        compile 'org.slf4j:slf4j-api:1.7.12'
         compile 'org.projectlombok:lombok:1.14.8'
         compile 'com.newrelic.agent.java:newrelic-api:3.+'
         testCompile 'junit:junit'
@@ -90,6 +90,10 @@ configure(bootProjects) {
 
     version = "0.0.1-SNAPSHOT" //commitId
 
+	dependencies {
+		compile project(':email')
+	}
+	
     applicationDefaultJvmArgs = [
             // Set PROJECT_HOME env variable to the root. This allows to register an additional
             // resource handler location and serve static resources directly from the template module during dev.

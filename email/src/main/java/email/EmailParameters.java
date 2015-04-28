@@ -1,4 +1,4 @@
-package connections.email;
+package email;
 
 import org.springframework.util.Assert;
 

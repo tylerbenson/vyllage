@@ -1,4 +1,4 @@
-package connections.email;
+package email;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
@@ -7,11 +7,9 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
-@Service
 public class MailService {
 
 	@Value("${email.host}")
@@ -30,7 +28,7 @@ public class MailService {
 	private String from;
 
 	@Autowired
-	private TemplateEngine templateEngine;
+	private SpringTemplateEngine templateEngine;
 
 	/**
 	 * Sends a simple text mail.
@@ -82,8 +80,7 @@ public class MailService {
 		email.setAuthenticator(new DefaultAuthenticator(userName, password));
 		email.setSSLOnConnect(true);
 
-		email.setFrom(parameters.from != null && !parameters.from.isEmpty() ? parameters.from
-				: from);
+		email.setFrom(parameters.from);
 		email.setSubject(parameters.subject);
 		email.addTo(parameters.to);
 	}

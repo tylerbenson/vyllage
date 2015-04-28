@@ -1,4 +1,4 @@
-package connections.email;
+package email;
 
 /**
  * Html email body, using the specified html template and key value context

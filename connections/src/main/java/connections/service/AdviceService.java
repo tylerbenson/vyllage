@@ -24,10 +24,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import connections.email.EmailContext;
-import connections.email.EmailHTMLBody;
-import connections.email.EmailParameters;
-import connections.email.MailService;
 import connections.model.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequestParameter;
@@ -35,6 +31,10 @@ import connections.model.DocumentLinkRequest;
 import connections.model.NotRegisteredUser;
 import connections.model.UserFilterResponse;
 import connections.repository.ElementNotFoundException;
+import email.EmailContext;
+import email.EmailHTMLBody;
+import email.EmailParameters;
+import email.MailService;
 
 @Service
 public class AdviceService {
