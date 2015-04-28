@@ -8,8 +8,14 @@ var validator = require('validator');
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
-    this.tokenHeader = document.getElementById('meta_header').content,
-    this.tokenValue = document.getElementById('meta_token').content;
+    var metaHeader = document.getElementById('meta_header');
+    if (metaHeader) {
+      this.tokenHeader = metaHeader.content;
+    }
+    var metaToken = document.getElementById('meta_token');
+    if (metaToken) {
+      this.tokenValue = metaToken.content;
+    }
     this.settings = [];
     this.activeSettingsType = 'profile';
   },
