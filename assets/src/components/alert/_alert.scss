@@ -11,10 +11,11 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   font-size: 0.9em;
   z-index: 999;
-  transition: top .4s ease;
+  transition: top .6s ease;
 
   &.visible {
   	top: 0;
+    transition: top .4s ease;
   }
 
   &.success {

@@ -16,8 +16,12 @@ var Alert = React.createClass({
     }
   },
   componentDidMount: function () {
+    var timeout = {};
     PubSub.subscribe(this.props.id, function (id, data) {
-      this.setState(data)
+      var self = this;
+      self.setState(data);
+      clearTimeout(timeout);
+      timeout = setTimeout(self.closeHandler, 4000);
     }.bind(this))
   },
   componentWillUnmount: function () {

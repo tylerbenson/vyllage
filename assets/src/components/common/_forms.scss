@@ -1,17 +1,17 @@
 ::-webkit-input-placeholder {
-   color: lighten($banner-background, 50%);
+ color: lighten($banner-background, 50%);
 }
 
 :-moz-placeholder { /* Firefox 18- */
-   color: lighten($banner-background, 50%);
+ color: lighten($banner-background, 50%);
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
-   color: lighten($banner-background, 50%);
+ color: lighten($banner-background, 50%);
 }
 
 :-ms-input-placeholder {
-   color: lighten($banner-background, 50%);
+ color: lighten($banner-background, 50%);
 }
 
 input[type="text"],
@@ -68,7 +68,7 @@ textarea {
     &:focus {
       background: rgba(0,0,0,0.1);
       box-shadow: 0 1px 1px rgba(255,255,255,0.1),
-        inset 0 1px 1px rgba(0,0,0,0.1);
+      inset 0 1px 1px rgba(0,0,0,0.1);
     }
   }
 
@@ -101,12 +101,45 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: url(../images/caret.png);
-  background-position: 98%;
+  background-image: url(../images/small-caret.png);
+  background-position: 98.5%;
   background-repeat: no-repeat;
-  background-size: 1em;
+  background-size: 0.6em;
 
   &.padded {
     background-position: 96%;
+  }
+}
+
+$table-border-radius: 5px;
+table {
+  background: $inverted-text-color;
+  // border: $footer-background solid 1px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  width: 100%;
+  margin: 1em;
+  text-align: center;
+
+  th {
+    text-transform: uppercase;
+    font-size: 0.85em;
+    background: $footer-background;
+    color: $inverted-text-color;
+    padding: 0.5em;
+  }
+
+  tr {
+    &:nth-child(even) {
+      background: darken($inverted-text-color, 2%);
+    }
+  }
+
+  td {
+    padding: 0.5em;
+    border-right: darken($inverted-text-color, 8%) solid 1px;
+
+    &:last-child {
+      border: none;
+    }
   }
 }
