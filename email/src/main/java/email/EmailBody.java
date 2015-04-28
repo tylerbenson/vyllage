@@ -1,4 +1,4 @@
-package accounts.email;
+package email;
 
 /**
  * Simple emil text body.

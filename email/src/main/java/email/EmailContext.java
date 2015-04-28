@@ -1,4 +1,4 @@
-package accounts.email;
+package email;
 
 import org.thymeleaf.context.Context;
 

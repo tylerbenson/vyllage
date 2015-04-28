@@ -1,5 +1,6 @@
 package connections.service;
 
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import lombok.ToString;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -24,10 +26,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import connections.email.EmailContext;
-import connections.email.EmailHTMLBody;
-import connections.email.EmailParameters;
-import connections.email.MailService;
 import connections.model.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequestParameter;
@@ -35,6 +33,10 @@ import connections.model.DocumentLinkRequest;
 import connections.model.NotRegisteredUser;
 import connections.model.UserFilterResponse;
 import connections.repository.ElementNotFoundException;
+import email.EmailContext;
+import email.EmailHTMLBody;
+import email.EmailParameters;
+import email.MailService;
 
 @Service
 public class AdviceService {
@@ -46,6 +48,7 @@ public class AdviceService {
 	private RestTemplate restTemplate;
 
 	@Autowired
+	@Qualifier(value = "connections.MailService")
 	private MailService mailService;
 
 	@Value("${accounts.host:localhost}")
@@ -150,6 +153,21 @@ public class AdviceService {
 
 		String from = environment.getProperty("email.from",
 				"no-reply@vyllage.com");
+
+		String userFirstName = (String) request.getSession().getAttribute(
+				"userFirstName");
+
+		// default.
+		String fromUser = environment.getProperty("email.from",
+				"no-reply@vyllage.com");
+		String atVyllage = environment.getProperty("email.from.user");
+
+		if (userFirstName != null && !userFirstName.isEmpty()
+				&& atVyllage != null) {
+
+			fromUser = MessageFormat.format(atVyllage, userFirstName);
+		}
+
 		String subject = adviceRequest.getSubject();
 		String noHTMLmsg = adviceRequest.getMessage();
 		EmailParameters parameters = null;
@@ -165,7 +183,8 @@ public class AdviceService {
 
 			// send email to registered users
 			for (Email email : mailsForRegisteredUsers) {
-				parameters = new EmailParameters(from, subject, email.getTo());
+				parameters = new EmailParameters(from, fromUser, subject,
+						email.getTo());
 				mailService.sendEmail(parameters, email.getBody());
 			}
 		}
@@ -179,11 +198,11 @@ public class AdviceService {
 
 			// send email to added users
 			for (Email email : prepareMailsForNonRegisteredUsers) {
-				parameters = new EmailParameters(from, subject, email.getTo());
+				parameters = new EmailParameters(from, fromUser, subject,
+						email.getTo());
 				mailService.sendEmail(parameters, email.getBody());
 			}
 		}
-
 	}
 
 	protected Map<String, String> generateLinksForRegisteredUsers(
@@ -421,6 +440,7 @@ public class AdviceService {
 		public void setBody(EmailHTMLBody body) {
 			this.body = body;
 		}
+
 	}
 
 }

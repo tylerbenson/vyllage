@@ -48,7 +48,7 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
-		service.setEmailBuilder(new EmailBuilderTest());
+		service.setEmailBuilder(new EmailBuilderTest(null, null));
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("uno@gmail.com"));
@@ -67,7 +67,7 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
-		service.setEmailBuilder(new EmailBuilderTest());
+		service.setEmailBuilder(new EmailBuilderTest(null, null));
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
@@ -85,7 +85,7 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
-		service.setEmailBuilder(new EmailBuilderTest());
+		service.setEmailBuilder(new EmailBuilderTest(null, null));
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertFalse(service.userExists("siet@gmail.com"));
@@ -102,7 +102,7 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
-		service.setEmailBuilder(new EmailBuilderTest());
+		service.setEmailBuilder(new EmailBuilderTest(null, null));
 		service.batchCreateUsers(batchAccount);
 
 		Assert.assertFalse(service.userExists("diez@gmail.com"));

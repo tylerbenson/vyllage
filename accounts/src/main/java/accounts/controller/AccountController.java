@@ -28,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import accounts.email.EmailBuilder;
-import accounts.email.MailService;
 import accounts.model.CSRFToken;
 import accounts.model.User;
 import accounts.model.account.AccountContact;
@@ -46,6 +44,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import email.EmailBuilder;
 
 @Controller
 @RequestMapping("account")
@@ -68,9 +68,6 @@ public class AccountController {
 
 	@Autowired
 	private ObjectMapper mapper;
-
-	@Autowired
-	private MailService mailService;
 
 	@Autowired
 	private EmailBuilder emailBuilder;
@@ -252,9 +249,12 @@ public class AccountController {
 				+ "/account/reset-password-change/";
 
 		emailBuilder
-				.from(env.getProperty("email.userName", "no-reply@vyllage.com"))
-				.subject("Reset Password").to(email)
-				.templateName("email-change-password").setNoHtmlMessage(txt)
+				.from(env.getProperty("email.from", "no-reply@vyllage.com"))
+				.fromUserName(
+						env.getProperty("email.from.userName",
+								"Chief of Vyllage")).subject("Reset Password")
+				.to(email).templateName("email-change-password")
+				.setNoHtmlMessage(txt)
 				.addTemplateVariable("userName", userName)
 				.addTemplateVariable("url", txt)
 				.addTemplateVariable("encodedLink", encodedString).send();
