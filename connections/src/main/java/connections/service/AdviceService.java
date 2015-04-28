@@ -1,5 +1,6 @@
 package connections.service;
 
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -152,8 +153,21 @@ public class AdviceService {
 
 		String from = environment.getProperty("email.from",
 				"no-reply@vyllage.com");
-		String fromUserName = environment.getProperty("email.from.userName",
-				"Chief of Vyllage");
+
+		String userFirstName = (String) request.getSession().getAttribute(
+				"userFirstName");
+
+		// default.
+		String fromUser = environment.getProperty("email.from",
+				"no-reply@vyllage.com");
+		String atVyllage = environment.getProperty("email.from.user");
+
+		if (userFirstName != null && !userFirstName.isEmpty()
+				&& atVyllage != null) {
+
+			fromUser = MessageFormat.format(atVyllage, userFirstName);
+		}
+
 		String subject = adviceRequest.getSubject();
 		String noHTMLmsg = adviceRequest.getMessage();
 		EmailParameters parameters = null;
@@ -169,7 +183,7 @@ public class AdviceService {
 
 			// send email to registered users
 			for (Email email : mailsForRegisteredUsers) {
-				parameters = new EmailParameters(from, fromUserName, subject,
+				parameters = new EmailParameters(from, fromUser, subject,
 						email.getTo());
 				mailService.sendEmail(parameters, email.getBody());
 			}
@@ -184,7 +198,7 @@ public class AdviceService {
 
 			// send email to added users
 			for (Email email : prepareMailsForNonRegisteredUsers) {
-				parameters = new EmailParameters(from, fromUserName, subject,
+				parameters = new EmailParameters(from, fromUser, subject,
 						email.getTo());
 				mailService.sendEmail(parameters, email.getBody());
 			}
@@ -426,6 +440,7 @@ public class AdviceService {
 		public void setBody(EmailHTMLBody body) {
 			this.body = body;
 		}
+
 	}
 
 }

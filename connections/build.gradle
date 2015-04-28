@@ -11,8 +11,6 @@ dependencies {
 	
 	compile project(':email')
 	
-	compile 'org.apache.commons:commons-email:1.3.3'
-
 //    compile("org.springframework.boot:spring-boot-starter-security")
 //    compile("org.springframework.boot:spring-boot-starter-aop")
 //    compile("org.springframework.boot:spring-boot-starter-jdbc")
