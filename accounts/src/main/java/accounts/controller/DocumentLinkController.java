@@ -14,7 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import user.common.User;
+import accounts.config.SessionHelper;
+import accounts.model.User;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.UserNotFoundException;
@@ -74,6 +74,8 @@ public class DocumentLinkController {
 		Authentication auth = new UsernamePasswordAuthenticationToken(user,
 				user.getPassword(), user.getAuthorities());
 
+		SessionHelper.addUserDataToSession(request, user);
+
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
 		return "redirect:/" + documentLink.getDocumentType() + "/"
@@ -83,14 +85,12 @@ public class DocumentLinkController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public @ResponseBody String create(
-			@RequestBody DocumentLinkRequest linkRequest,
-			@AuthenticationPrincipal User user) throws JsonProcessingException,
-			EmailException {
+			@RequestBody DocumentLinkRequest linkRequest)
+			throws JsonProcessingException, EmailException {
 
 		linkRequest.setSendRegistrationMail(true);
 
-		DocumentLink documentLink = documentLinkService.createLink(linkRequest,
-				user);
+		DocumentLink documentLink = documentLinkService.createLink(linkRequest);
 
 		String json = mapper.writeValueAsString(documentLink);
 
@@ -109,17 +109,16 @@ public class DocumentLinkController {
 	 */
 	@RequestMapping(value = "/create-many", method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> massCreate(
-			@RequestBody List<DocumentLinkRequest> linkRequest,
-			@AuthenticationPrincipal User user) throws JsonProcessingException,
-			EmailException {
+			@RequestBody List<DocumentLinkRequest> linkRequest)
+			throws JsonProcessingException, EmailException {
 
 		Map<String, String> links = new HashMap<>();
 		System.out.println("linkrequests " + linkRequest);
 		for (DocumentLinkRequest documentLinkRequest : linkRequest) {
 			System.out.println(documentLinkRequest);
 
-			DocumentLink documentLink = documentLinkService.createLink(
-					documentLinkRequest, user);
+			DocumentLink documentLink = documentLinkService
+					.createLink(documentLinkRequest);
 
 			String json = mapper.writeValueAsString(documentLink);
 

@@ -7,9 +7,6 @@ jar {
 
 dependencies {
 	compile parent.javascriptProjects.findAll { it != project}
-	
-	compile project(':user-common')
-	
 //	compile 'org.springframework.security:spring-security-acl'
 	
 	compile("org.springframework.boot:spring-boot-starter-security")

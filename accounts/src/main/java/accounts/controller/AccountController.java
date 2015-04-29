@@ -19,7 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +28,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import user.common.User;
 import accounts.model.CSRFToken;
+import accounts.model.User;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangePasswordForm;
@@ -130,14 +129,13 @@ public class AccountController {
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,
 			RequestMethod.POST }, consumes = "application/x-www-form-urlencoded;charset=UTF-8", produces = "text/html")
-	public String deleteUser(HttpServletRequest request,
-			@AuthenticationPrincipal User user) throws ServletException,
-			UserNotFoundException {
+	public String deleteUser(HttpServletRequest request)
+			throws ServletException, UserNotFoundException {
 
 		CSRFToken token = new CSRFToken();
 		token.setValue(TokenHelper.getToken(request).getToken());
 
-		userService.delete(request, user.getUserId(), token);
+		userService.delete(request, getUser().getUserId(), token);
 
 		return "user-deleted";
 	}
@@ -277,4 +275,10 @@ public class AccountController {
 				.getAccountSettings(userIds));
 	}
 
+	private User getUser() {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		return (User) auth.getPrincipal();
+	}
 }

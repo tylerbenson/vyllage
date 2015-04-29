@@ -1,5 +1,7 @@
 package documents.services.aspect;
 
+import java.lang.reflect.InvocationTargetException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.aspectj.lang.JoinPoint;
@@ -10,7 +12,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import user.common.User;
 import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 
@@ -38,7 +39,18 @@ public class CheckWriteAspect {
 	}
 
 	public Long getUserId() {
-		return ((User) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal()).getUserId();
+		Object principal = SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+
+		Long userId = null;
+		try {
+			userId = (Long) principal.getClass().getMethod("getUserId")
+					.invoke(principal);
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			e.printStackTrace();
+		}
+		return userId;
 	}
 }

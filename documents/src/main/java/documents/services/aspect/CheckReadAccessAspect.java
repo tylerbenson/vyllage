@@ -7,10 +7,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import user.common.User;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -32,7 +30,7 @@ public class CheckReadAccessAspect {
 
 		Long firstUserId = documentService.getDocument(documentId).getUserId();
 
-		Long secondUserId = getUserId();
+		Long secondUserId = (Long) request.getSession().getAttribute("userId");
 
 		System.out.println("firstUserId " + firstUserId + " secondUserId "
 				+ secondUserId);
@@ -49,11 +47,6 @@ public class CheckReadAccessAspect {
 			throw new AccessDeniedException(
 					"You are not authorized to access this document.");
 
-	}
-
-	protected Long getUserId() {
-		return ((User) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal()).getUserId();
 	}
 
 }

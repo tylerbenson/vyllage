@@ -8,7 +8,7 @@ import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import user.common.Organization;
+import accounts.model.Organization;
 
 @Repository
 public class OrganizationRepository {

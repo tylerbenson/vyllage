@@ -6,9 +6,10 @@ import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -18,10 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import user.common.User;
-import user.common.constants.RolesEnum;
 import accounts.Application;
+import accounts.constants.RolesEnum;
 import accounts.model.BatchAccount;
+import accounts.model.User;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
@@ -35,23 +36,20 @@ public class UserServiceTest {
 	@Autowired
 	private UserService service;
 
-	@Mock
-	private User user;
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
 
 	@Test
 	public void createUserBatchTest() throws IllegalArgumentException,
 			EmailException {
 		BatchAccount batchAccount = new BatchAccount();
 
-		User user = Mockito.mock(User.class);
-		Mockito.when(user.getUserId()).thenReturn(0L);
-
 		batchAccount.setEmails("uno@gmail.com, dos@test.com, tres@yahoo.com");
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest(null, null));
-		service.batchCreateUsers(batchAccount, user);
+		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("uno@gmail.com"));
 		Assert.assertFalse(service.getUser("uno@gmail.com").getPassword() == null);
@@ -64,16 +62,13 @@ public class UserServiceTest {
 			throws IllegalArgumentException, EmailException {
 		BatchAccount batchAccount = new BatchAccount();
 
-		User user = Mockito.mock(User.class);
-		Mockito.when(user.getUserId()).thenReturn(0L);
-
 		batchAccount
 				.setEmails("cuatro@gmail.com; cinco@test.com; seis@yahoo.com");
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest(null, null));
-		service.batchCreateUsers(batchAccount, user);
+		service.batchCreateUsers(batchAccount);
 
 		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
 		Assert.assertFalse(service.getUser("uno@gmail.com").getPassword() == null);
@@ -91,7 +86,7 @@ public class UserServiceTest {
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest(null, null));
-		service.batchCreateUsers(batchAccount, user);
+		service.batchCreateUsers(batchAccount);
 
 		Assert.assertFalse(service.userExists("siet@gmail.com"));
 		Assert.assertFalse(service.userExists(" "));
@@ -108,7 +103,7 @@ public class UserServiceTest {
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest(null, null));
-		service.batchCreateUsers(batchAccount, user);
+		service.batchCreateUsers(batchAccount);
 
 		Assert.assertFalse(service.userExists("diez@gmail.com"));
 		Assert.assertFalse(service.userExists("once.@"));

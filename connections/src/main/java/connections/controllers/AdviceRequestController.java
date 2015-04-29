@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import user.common.User;
-import user.common.constants.RolesEnum;
 import connections.model.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
@@ -50,9 +47,8 @@ public class AdviceRequestController {
 			.getLogger(AdviceRequestController.class.getName());
 
 	@ModelAttribute("accountName")
-	public AccountNames accountNames(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
-		Long userId = user.getUserId();
+	public AccountNames accountNames(HttpServletRequest request) {
+		Long userId = (Long) request.getSession().getAttribute("userId");
 
 		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
 				request, Arrays.asList(userId));
@@ -70,12 +66,11 @@ public class AdviceRequestController {
 	}
 
 	@ModelAttribute("intercom")
-	public AccountContact intercom(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
+	public AccountContact intercom(HttpServletRequest request) {
+		Long userId = (Long) request.getSession().getAttribute("userId");
 
 		List<AccountContact> contactDataForUsers = accountService
-				.getContactDataForUsers(request,
-						Arrays.asList(user.getUserId()));
+				.getContactDataForUsers(request, Arrays.asList(userId));
 
 		if (contactDataForUsers.isEmpty()) {
 			AccountContact ac = new AccountContact();
@@ -88,16 +83,12 @@ public class AdviceRequestController {
 	}
 
 	@RequestMapping(value = "ask-advice", method = RequestMethod.GET)
-	public String askAdvice(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
+	public String askAdvice(HttpServletRequest request) {
+		boolean isGuest = (boolean) request.getSession()
+				.getAttribute("isGuest");
 
-		boolean isGuest = user
-				.getAuthorities()
-				.stream()
-				.allMatch(
-						uor -> RolesEnum.GUEST.name().equalsIgnoreCase(
-								uor.getAuthority()));
-
+		// TODO: Replace with check on User Roles once we have the classes in
+		// another project.
 		if (isGuest) {
 			request.getSession().invalidate();
 			return "redirect:/";
@@ -108,16 +99,17 @@ public class AdviceRequestController {
 
 	@RequestMapping(value = "ask-advice", method = RequestMethod.POST)
 	public String askAdvice(HttpServletRequest request,
-			@RequestBody AdviceRequest adviceRequest,
-			@AuthenticationPrincipal User user) throws EmailException,
+			@RequestBody AdviceRequest adviceRequest) throws EmailException,
 			ElementNotFoundException {
 
 		validateAdviceRequest(adviceRequest);
 
-		Long userId = user.getUserId();
-		String firstName = user.getFirstName();
+		Long userId = (Long) request.getSession().getAttribute("userId");
 
 		Long documentId = adviceService.getUserDocumentId(request, userId);
+
+		String firstName = (String) request.getSession().getAttribute(
+				"userFirstName");
 
 		// get emails for registered users
 		List<AccountContact> emailsFromRegisteredUsers = new ArrayList<>();
@@ -137,8 +129,7 @@ public class AdviceRequestController {
 		adviceRequestParameters.setSenderName(firstName);
 		adviceRequestParameters.setSubject(adviceRequest.getSubject());
 		adviceRequestParameters.setMessage(adviceRequest.getMessage());
-		adviceService.sendRequestAdviceEmail(request, adviceRequestParameters,
-				user);
+		adviceService.sendRequestAdviceEmail(request, adviceRequestParameters);
 
 		return "redirect:/resume/" + documentId;
 	}
@@ -158,9 +149,9 @@ public class AdviceRequestController {
 			@RequestParam(value = "excludeIds", required = false) List<Long> excludeIds,
 			@RequestParam(value = "firstNameFilter", required = false) String firstNameFilter,
 			@RequestParam(value = "lastNameFilter", required = false) String lastNameFilter,
-			@RequestParam(value = "emailFilter", required = false) String emailFilter,
-			@AuthenticationPrincipal User user) throws ElementNotFoundException {
-		Long userId = user.getUserId();
+			@RequestParam(value = "emailFilter", required = false) String emailFilter)
+			throws ElementNotFoundException {
+		Long userId = (Long) request.getSession().getAttribute("userId");
 
 		// excluding logged in user
 		if (excludeIds == null)

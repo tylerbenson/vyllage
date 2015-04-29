@@ -6,7 +6,7 @@ import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import user.common.User;
+import accounts.model.User;
 import accounts.model.account.ResetPasswordLink;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
@@ -28,14 +28,14 @@ public class DocumentLinkService {
 	@Autowired
 	private RandomPasswordGenerator randomPasswordGenerator;
 
-	public DocumentLink createLink(DocumentLinkRequest linkRequest,
-			User loggedInUser) throws EmailException {
+	public DocumentLink createLink(DocumentLinkRequest linkRequest)
+			throws EmailException {
 
 		User user = null;
 		if (userService.userExists(linkRequest.getEmail()))
 			user = userService.getUser(linkRequest.getEmail());
 		else
-			user = userService.createUser(linkRequest, loggedInUser);
+			user = userService.createUser(linkRequest);
 
 		DocumentLink doclink = new DocumentLink();
 		doclink.setUserId(user.getUserId());

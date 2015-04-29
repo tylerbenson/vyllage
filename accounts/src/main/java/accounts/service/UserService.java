@@ -22,12 +22,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import user.common.Organization;
-import user.common.User;
-import user.common.UserOrganizationRole;
-import user.common.constants.RolesEnum;
+import accounts.constants.RolesEnum;
 import accounts.model.BatchAccount;
 import accounts.model.CSRFToken;
+import accounts.model.Organization;
+import accounts.model.User;
+import accounts.model.UserOrganizationRole;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
@@ -86,7 +86,7 @@ public class UserService {
 		return this.userRepository.userExists(userName);
 	}
 
-	public void batchCreateUsers(BatchAccount batchAccount, User loggedInUser)
+	public void batchCreateUsers(BatchAccount batchAccount)
 			throws IllegalArgumentException, EmailException {
 
 		final boolean enabled = true;
@@ -121,8 +121,11 @@ public class UserService {
 						credentialsNonExpired, accountNonLocked, Arrays
 								.asList(new UserOrganizationRole(null,
 										batchAccount.getOrganization(),
-										batchAccount.getRole(), loggedInUser
-												.getUserId()))))
+										batchAccount.getRole(),
+										((User) SecurityContextHolder
+												.getContext()
+												.getAuthentication()
+												.getPrincipal()).getUserId()))))
 				.collect(Collectors.toList());
 
 		// find existing users to update instead of save
@@ -152,15 +155,14 @@ public class UserService {
 				// .removeAll(existingUser.getAuthorities());
 				// newRolesForOrganization.addAll(existingUser.getAuthorities());
 
-				updateUserRolesByOrganization(newRolesForOrganization,
-						loggedInUser);
+				updateUserRolesByOrganization(newRolesForOrganization);
 
 				// remove the user from the batch
 				iterator.remove();
 			}
 		}
 
-		userRepository.saveUsers(users, loggedInUser);
+		userRepository.saveUsers(users);
 
 		// send mails
 		for (User user : users) {
@@ -186,7 +188,7 @@ public class UserService {
 	 * @return link response
 	 * @throws EmailException
 	 */
-	public User createUser(DocumentLinkRequest linkRequest, User loggedInUser)
+	public User createUser(DocumentLinkRequest linkRequest)
 			throws EmailException {
 		boolean invalid = false;
 
@@ -211,7 +213,8 @@ public class UserService {
 			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
 					((UserOrganizationRole) userOrganizationRole)
 							.getOrganizationId(), RolesEnum.GUEST.name(),
-					loggedInUser.getUserId()));
+					((User) SecurityContextHolder.getContext()
+							.getAuthentication().getPrincipal()).getUserId()));
 
 		User user = new User(null, linkRequest.getFirstName(), null,
 				linkRequest.getLastName(), linkRequest.getEmail(),
@@ -323,7 +326,7 @@ public class UserService {
 	}
 
 	public void updateUserRolesByOrganization(
-			List<GrantedAuthority> newRolesForOrganization, User loggedInUser) {
+			List<GrantedAuthority> newRolesForOrganization) {
 
 		// Long organizationId = ((UserOrganizationRole) newRolesForOrganization
 		// .get(0)).getOrganizationId();
@@ -336,7 +339,8 @@ public class UserService {
 
 		for (GrantedAuthority userOrganizationRole : newRolesForOrganization) {
 			((UserOrganizationRole) userOrganizationRole)
-					.setAuditUserId(loggedInUser.getUserId());
+					.setAuditUserId(((User) SecurityContextHolder.getContext()
+							.getAuthentication().getPrincipal()).getUserId());
 			userOrganizationRoleRepository
 					.create((UserOrganizationRole) userOrganizationRole);
 		}

@@ -34,12 +34,12 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
 
-import user.common.User;
-import user.common.UserOrganizationRole;
 import accounts.domain.tables.UserOrganizationRoles;
 import accounts.domain.tables.Users;
 import accounts.domain.tables.records.UsersRecord;
+import accounts.model.User;
 import accounts.model.UserCredential;
+import accounts.model.UserOrganizationRole;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
@@ -426,7 +426,7 @@ public class UserDetailRepository implements UserDetailsManager {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	// @Transactional
-	public void saveUsers(List<User> users, User loggedInUser) {
+	public void saveUsers(List<User> users) {
 		final boolean enabled = true;
 
 		TransactionStatus transaction = txManager
@@ -473,7 +473,10 @@ public class UserDetailRepository implements UserDetailsManager {
 							((UserOrganizationRole) authority)
 									.getOrganizationId(),
 							Timestamp.valueOf(LocalDateTime.now(ZoneId
-									.of("UTC"))), loggedInUser.getUserId()));
+									.of("UTC"))),
+							((User) SecurityContextHolder.getContext()
+									.getAuthentication().getPrincipal())
+									.getUserId()));
 
 					// role setting
 					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
