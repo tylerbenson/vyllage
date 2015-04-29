@@ -31,10 +31,10 @@
     </header>
     <div class="section content">
       <form class="container" action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post">
-        <select th:field="*{organization}" th:readonly="${organizations.size() > 1}">
+        <select th:field="*{organization}">
           <option th:each="grp : ${organizations}" th:value="${grp.organizationId}" th:text="${grp.organizationName}">Some organization</option>
         </select>
-        <select name="role" th:readonly="${roles.size() == 1}">
+        <select name="role">
           <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}" th:selected="${rol.role == 'STUDENT'}">Some Role</option>
         </select>
         <textarea rows="20" cols="80" th:field="*{emails}">

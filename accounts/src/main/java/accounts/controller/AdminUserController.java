@@ -47,10 +47,15 @@ public class AdminUserController {
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STAFF')")
+<<<<<<< Upstream, based on origin/master
 	public String admin(@AuthenticationPrincipal User user, Model model) {
 		// if (Features.GOOGLE_ANALYTICS.isActive()) {
 		prepareBatch(model, user);
 		// }
+=======
+	public String admin(Model model) {
+		prepareBatch(model);
+>>>>>>> 45fc190 ServiceLoader loads the Feature manager.
 		return "adminAccountManagement";
 	}
 
