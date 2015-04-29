@@ -1,0 +1,10 @@
+jar {
+	baseName = 'user-common'
+}
+
+dependencies {
+	compile 'org.springframework.security:spring-security-core:3.2.7.RELEASE'
+//	compile("org.springframework.boot:spring-boot-starter-security")
+//	compile("org.springframework.boot:spring-boot-starter-web")
+	
+}

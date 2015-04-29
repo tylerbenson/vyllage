@@ -2,8 +2,8 @@ package accounts.config;
 
 import javax.servlet.http.HttpServletRequest;
 
-import accounts.constants.RolesEnum;
-import accounts.model.User;
+import user.common.User;
+import user.common.constants.RolesEnum;
 
 public class SessionHelper {
 

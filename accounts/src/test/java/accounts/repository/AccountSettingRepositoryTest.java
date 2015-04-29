@@ -13,8 +13,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import user.common.User;
 import accounts.Application;
-import accounts.model.User;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 

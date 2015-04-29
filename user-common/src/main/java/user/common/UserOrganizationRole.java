@@ -1,11 +1,9 @@
-package accounts.model;
+package user.common;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import org.springframework.security.core.GrantedAuthority;
-
-import accounts.domain.tables.records.UserOrganizationRolesRecord;
 
 @ToString
 @EqualsAndHashCode
@@ -26,13 +24,6 @@ public class UserOrganizationRole implements GrantedAuthority {
 		this.organizationId = organizationId;
 		this.auditUserId = auditUserId;
 
-	}
-
-	public UserOrganizationRole(UserOrganizationRolesRecord record) {
-		this.role = record.getRole();
-		this.userId = record.getUserId();
-		this.organizationId = record.getOrganizationId();
-		this.auditUserId = record.getAuditUserId();
 	}
 
 	@Override

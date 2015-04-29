@@ -1,8 +1,10 @@
-package accounts.model;
+package user.common;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
+@EqualsAndHashCode
 public class Organization {
 
 	private Long organizationId;

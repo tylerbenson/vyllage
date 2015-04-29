@@ -1,4 +1,4 @@
-package accounts.model;
+package user.common;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

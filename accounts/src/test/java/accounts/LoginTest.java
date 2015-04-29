@@ -23,9 +23,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import accounts.constants.RolesEnum;
-import accounts.model.User;
-import accounts.model.UserOrganizationRole;
+import user.common.User;
+import user.common.UserOrganizationRole;
+import user.common.constants.RolesEnum;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserOrganizationRoleRepository;
 
@@ -249,8 +249,7 @@ public class LoginTest {
 
 		repository.deleteUser(userName);
 
-		accounts.model.User deletedUser = repository
-				.loadUserByUsername(userName);
+		User deletedUser = repository.loadUserByUsername(userName);
 
 		assertTrue("User not found.", repository.userExists(userName));
 		assertFalse("User is enabled.", deletedUser.isEnabled());

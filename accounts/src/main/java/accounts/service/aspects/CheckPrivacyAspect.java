@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import accounts.model.Organization;
-import accounts.model.User;
+import user.common.Organization;
+import user.common.User;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.service.UserService;
@@ -41,19 +41,17 @@ public class CheckPrivacyAspect {
 
 		// setting name is present
 		if (args != null) {
-			User user = (User) SecurityContextHolder.getContext()
-					.getAuthentication().getPrincipal();
-
 			List<AccountSetting> settings = (List<AccountSetting>) joinPoint
 					.proceed();
 
 			// user retrieving his own settings
 			if (settings.stream().anyMatch(
-					setting -> setting.getUserId().equals(user.getUserId())))
+					setting -> setting.getUserId()
+							.equals(getUser().getUserId())))
 				return settings;
 
 			List<Organization> organizationsForUser = userService
-					.getOrganizationsForUser(user);
+					.getOrganizationsForUser(getUser());
 
 			// get organization and public shared settings, private are ignored
 			filteredSettings = settings
@@ -83,6 +81,10 @@ public class CheckPrivacyAspect {
 		}
 
 		return filteredSettings;
+	}
 
+	protected User getUser() {
+		return (User) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
 	}
 }

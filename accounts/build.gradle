@@ -10,6 +10,7 @@ dependencies {
 	compile parent.javascriptProjects.findAll { it != project}
 
 	compile project(':email')
+	compile project(':user-common')
 	
 	compile 'org.apache.commons:commons-lang3:3.3.2'
 
