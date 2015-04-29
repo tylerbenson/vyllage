@@ -3,6 +3,7 @@ jar {
 }
 
 dependencies {
+	compile parent.javascriptProjects.findAll { it != project}
 	compile 'org.apache.commons:commons-email:1.3.3'
 	
 	compile 'org.thymeleaf:thymeleaf-spring4:2.1.4.RELEASE'
