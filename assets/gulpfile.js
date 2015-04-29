@@ -60,7 +60,7 @@ gulp.task('styles', function () {
   return gulp.src(['src/**/*.scss'])
     .pipe(sass({
       includePaths: ['./src/components', 'bower_components'],
-      errLogToConsole: true,
+      errLogToConsole: (process.env.NODE_ENV !== 'production'),
       outputStyle: 'expanded'
     }))
     .pipe(autoprefixer({
@@ -120,9 +120,17 @@ gulp.task('react', function (callback) {
     })
   );
   return webpack(webpackConfig, function (err, stats) {
-    if (err) {
-      throw new gutil.PluginError("webpack:build", err);
+    
+    if (process.env.NODE_ENV === 'production') {
+      if(err) {
+        throw "webpack:build failed" + err; 
+      }
+      var jsonStats = stats.toJson();
+      if(jsonStats.errors.length > 0) {
+        throw "webpack:build failed" + jsonStats.errors;
+      }
     }
+
     gutil.log("[webpack:build]", stats.toString({
       colors: true
     }));
