@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import user.common.User;
-import accounts.config.SessionHelper;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.UserNotFoundException;
@@ -74,8 +73,6 @@ public class DocumentLinkController {
 
 		Authentication auth = new UsernamePasswordAuthenticationToken(user,
 				user.getPassword(), user.getAuthorities());
-
-		SessionHelper.addUserDataToSession(request, user);
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
