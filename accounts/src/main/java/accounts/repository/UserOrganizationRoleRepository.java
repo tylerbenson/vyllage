@@ -13,8 +13,8 @@ import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import user.common.UserOrganizationRole;
 import accounts.domain.tables.records.UserOrganizationRolesRecord;
-import accounts.model.UserOrganizationRole;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 
@@ -35,7 +35,10 @@ public class UserOrganizationRoleRepository {
 				USER_ORGANIZATION_ROLES,
 				USER_ORGANIZATION_ROLES.USER_ID.eq(userId));
 
-		return records.stream().map(UserOrganizationRole::new)
+		return records
+				.stream()
+				.map(r -> new UserOrganizationRole(r.getUserId(), r
+						.getOrganizationId(), r.getRole(), r.getAuditUserId()))
 				.collect(Collectors.toList());
 	}
 
@@ -76,7 +79,10 @@ public class UserOrganizationRoleRepository {
 		Result<UserOrganizationRolesRecord> records = sql
 				.fetch(USER_ORGANIZATION_ROLES);
 
-		return records.stream().map(UserOrganizationRole::new)
+		return records
+				.stream()
+				.map(r -> new UserOrganizationRole(r.getUserId(), r
+						.getOrganizationId(), r.getRole(), r.getAuditUserId()))
 				.collect(Collectors.toList());
 	}
 

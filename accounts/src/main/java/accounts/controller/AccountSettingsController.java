@@ -14,8 +14,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,8 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import accounts.constants.RolesEnum;
-import accounts.model.User;
+import user.common.User;
+import user.common.constants.RolesEnum;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
@@ -70,12 +69,12 @@ public class AccountSettingsController {
 	private Map<String, List<String>> settingValues = new HashMap<>();
 
 	@ModelAttribute("intercom")
-	public AccountContact intercom(HttpServletRequest request) {
-		Long userId = (Long) request.getSession().getAttribute("userId");
+	public AccountContact intercom(HttpServletRequest request,
+			@AuthenticationPrincipal User user) {
 
 		List<AccountContact> contactDataForUsers = userService
 				.getAccountContactForUsers(userService
-						.getAccountSettings(Arrays.asList(userId)));
+						.getAccountSettings(Arrays.asList(user.getUserId())));
 
 		if (contactDataForUsers.isEmpty()) {
 			AccountContact ac = new AccountContact();
@@ -111,8 +110,7 @@ public class AccountSettingsController {
 
 	// for header
 	@ModelAttribute("accountName")
-	public AccountNames accountNames() {
-		User user = getUser();
+	public AccountNames accountNames(@AuthenticationPrincipal User user) {
 		AccountNames name = new AccountNames(user.getUserId(),
 				user.getFirstName(), user.getMiddleName(), user.getLastName());
 		return name;
@@ -124,10 +122,10 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<AccountSetting> getAccountSettings() {
+	public @ResponseBody List<AccountSetting> getAccountSettings(
+			@AuthenticationPrincipal User user) {
 
-		List<AccountSetting> settings = userService
-				.getAccountSettings(getUser());
+		List<AccountSetting> settings = userService.getAccountSettings(user);
 
 		return settings;
 	}
@@ -135,12 +133,12 @@ public class AccountSettingsController {
 	@RequestMapping(value = "setting", method = RequestMethod.PUT, produces = "application/json")
 	@CheckWriteAccess
 	public @ResponseBody ResponseEntity<List<AccountSetting>> setAccountSettings(
-			@RequestBody final List<AccountSetting> settings) {
-		User user = getUser();
+			@RequestBody final List<AccountSetting> settings,
+			@AuthenticationPrincipal User user) {
 
 		for (AccountSetting accountSetting : settings) {
 			if (accountSetting.getUserId() == null)
-				accountSetting.setAccountSettingId(getUserId());
+				accountSetting.setAccountSettingId(user.getUserId());
 		}
 
 		settings.stream().map(setting -> {
@@ -159,14 +157,14 @@ public class AccountSettingsController {
 					HttpStatus.BAD_REQUEST);
 
 		return new ResponseEntity<List<AccountSetting>>(
-				userService.setAccountSettings(getUser(), settings),
-				HttpStatus.OK);
+				userService.setAccountSettings(user, settings), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountSetting> getAccountSetting(
-			@PathVariable String parameter) throws ElementNotFoundException {
-		return userService.getAccountSetting(getUser(), parameter);
+			@PathVariable String parameter, @AuthenticationPrincipal User user)
+			throws ElementNotFoundException {
+		return userService.getAccountSetting(user, parameter);
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
@@ -174,10 +172,10 @@ public class AccountSettingsController {
 	public @ResponseBody ResponseEntity<AccountSetting> setAccountSetting(
 			@PathVariable String parameter,
 			@Valid @RequestBody final AccountSetting setting,
-			BindingResult result) {
+			@AuthenticationPrincipal User user, BindingResult result) {
 
 		if (setting.getUserId() == null)
-			setting.setAccountSettingId(getUserId());
+			setting.setAccountSettingId(user.getUserId());
 
 		if (parameter.equalsIgnoreCase("organization")
 				|| parameter.equalsIgnoreCase("role"))
@@ -202,13 +200,13 @@ public class AccountSettingsController {
 					HttpStatus.BAD_REQUEST);
 
 		return new ResponseEntity<AccountSetting>(
-				userService.setAccountSetting(getUser(), setting),
-				HttpStatus.OK);
+				userService.setAccountSetting(user, setting), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "setting/{parameter}/values", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<String> getAccountSettingValues(
-			@PathVariable String parameter) throws ElementNotFoundException {
+			@PathVariable String parameter, @AuthenticationPrincipal User user)
+			throws ElementNotFoundException {
 
 		if (parameter.equalsIgnoreCase("organization"))
 			return organizationRepository.getAll().stream()
@@ -216,8 +214,7 @@ public class AccountSettingsController {
 					.collect(Collectors.toList());
 
 		if (parameter.equalsIgnoreCase("role")) {
-			if (getUser()
-					.getAuthorities()
+			if (user.getAuthorities()
 					.stream()
 					.anyMatch(
 							ur -> ur.getAuthority().equalsIgnoreCase(
@@ -273,18 +270,4 @@ public class AccountSettingsController {
 		return map;
 	}
 
-	@SuppressWarnings("unused")
-	private Long getUserId() {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-
-		return ((User) auth.getPrincipal()).getUserId();
-	}
-
-	private User getUser() {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-
-		return (User) auth.getPrincipal();
-	}
 }

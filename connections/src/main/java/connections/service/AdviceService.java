@@ -26,6 +26,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import user.common.User;
 import connections.model.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequestParameter;
@@ -149,13 +150,13 @@ public class AdviceService {
 	}
 
 	public void sendRequestAdviceEmail(HttpServletRequest request,
-			AdviceRequestParameter adviceRequest) throws EmailException {
+			AdviceRequestParameter adviceRequest, User loggedInUser)
+			throws EmailException {
 
 		String from = environment.getProperty("email.from",
 				"no-reply@vyllage.com");
 
-		String userFirstName = (String) request.getSession().getAttribute(
-				"userFirstName");
+		String userFirstName = loggedInUser.getFirstName();
 
 		// default.
 		String fromUser = environment.getProperty("email.from",

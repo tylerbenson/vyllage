@@ -9,7 +9,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import accounts.model.User;
+import user.common.User;
 import accounts.model.account.settings.AccountSetting;
 
 @Aspect
@@ -29,12 +29,11 @@ public class CheckWriteAspect {
 				&& !settings.isEmpty()
 				&& settings.stream().allMatch(
 						setting -> setting.getUserId() != null)) {
-			User user = (User) SecurityContextHolder.getContext()
-					.getAuthentication().getPrincipal();
 
 			// check all ids
 			if (!settings.stream().allMatch(
-					setting -> user.getUserId().equals(setting.getUserId())))
+					setting -> getUser().getUserId()
+							.equals(setting.getUserId())))
 				throw new AccessDeniedException(
 						"You are not authorized to access these settings.");
 
@@ -46,16 +45,17 @@ public class CheckWriteAspect {
 	public void checkOwnerSingle(JoinPoint joinPoint, String parameter,
 			AccountSetting setting) throws AccessDeniedException {
 
-		User user = (User) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-
 		if (setting.getUserId() == null)
 			return;
 
 		// check id
-		if (!user.getUserId().equals(setting.getUserId()))
+		if (!getUser().getUserId().equals(setting.getUserId()))
 			throw new AccessDeniedException(
 					"You are not authorized to access this setting.");
+	}
 
+	protected User getUser() {
+		return (User) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
 	}
 }
