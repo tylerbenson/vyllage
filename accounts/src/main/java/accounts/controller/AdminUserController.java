@@ -51,8 +51,6 @@ public class AdminUserController {
 		// if (Features.GOOGLE_ANALYTICS.isActive()) {
 		prepareBatch(model, user);
 		// }
-	public String admin(Model model) {
-		prepareBatch(model);
 		return "adminAccountManagement";
 	}
 

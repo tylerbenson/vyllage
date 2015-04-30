@@ -30,12 +30,6 @@ public class TogglzConfiguration implements TogglzConfig {
 	@Override
 	public UserProvider getUserProvider() {
 		return new SpringSecurityUserProvider("ADMIN");
-		// return new UserProvider() {
-		// @Override
-		// public FeatureUser getCurrentUser() {
-		// return new SimpleFeatureUser("ADMIN", true);
-		// }
-		// };
 	}
 
 }

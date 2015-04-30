@@ -54,22 +54,23 @@ public class ErrorHandlerController implements ErrorController {
 	public ModelAndView errorHtml(HttpServletRequest request,
 			@AuthenticationPrincipal User user) throws UserNotFoundException {
 
-		User currentUser = userService.getUser(user.getUserId());
-
 		Map<String, Object> body = getErrorAttributes(request, true);
 
-		if (displayWebError
-				&& currentUser != null
-				&& currentUser.getAuthorities() != null
-				&& currentUser
-						.getAuthorities()
-						.stream()
-						.anyMatch(
-								a -> authority.equalsIgnoreCase(a
-										.getAuthority())))
+		if (user != null) {
+
+			if (displayWebError
+					&& user != null
+					&& user.getAuthorities() != null
+					&& user.getAuthorities()
+							.stream()
+							.anyMatch(
+									a -> authority.equalsIgnoreCase(a
+											.getAuthority())))
+				body.put("displayWebError", true);
+			else
+				body.put("displayWebError", false);
+		} else
 			body.put("displayWebError", true);
-		else
-			body.put("displayWebError", false);
 
 		return new ModelAndView("error", body);
 	}
