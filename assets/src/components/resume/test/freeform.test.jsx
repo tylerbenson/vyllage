@@ -11,14 +11,18 @@ describe('Freeform', function() {
 
   it('should have title', function() {
     var freeform = TestUtils.renderIntoDocument(<Freeform title='Goal' />);
-    var title = TestUtils.findRenderedDOMComponentWithClass(freeform, 'title');
-    expect(title.getDOMNode().textContent).toBe('Goal');
+    expect(freeform.getDOMNode().textContent).toMatch(/^Goal/);
   });
 
   it('should show message if section is empty', function() {
     var freeform = TestUtils.renderIntoDocument(<Freeform title='Goal' />);
-    var content = TestUtils.findRenderedDOMComponentWithClass(freeform, 'content');
-    expect(content.getDOMNode().textContent).toBe('No goal added yet');
+    expect(freeform.getDOMNode().textContent).toMatch(/No goal added yet$/);
+  });
+
+  it('should show description', function() {
+    var section = { sectionId: 1, description: 'my goal'}
+    var freeform = TestUtils.renderIntoDocument(<Freeform section={section} />);
+    expect(freeform.getDOMNode().textContent).toMatch(/my goal/);
   });
   
 });
