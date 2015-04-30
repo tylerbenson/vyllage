@@ -120,13 +120,13 @@ gulp.task('react', function (callback) {
     })
   );
   return webpack(webpackConfig, function (err, stats) {
-    
+
     if (process.env.NODE_ENV === 'production') {
-      if(err) {
-        throw "webpack:build failed" + err; 
+      if (err) {
+        throw "webpack:build failed" + err;
       }
       var jsonStats = stats.toJson();
-      if(jsonStats.errors.length > 0) {
+      if (jsonStats.errors.length > 0) {
         throw "webpack:build failed" + jsonStats.errors;
       }
     }
