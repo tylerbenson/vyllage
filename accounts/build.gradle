@@ -20,6 +20,8 @@ dependencies {
 	compile 'org.togglz:togglz-spring-security:2.1.0.Final'
 	compile 'org.togglz:togglz-console:2.1.0.Final'
 	
+	compile files('lib/thymeleaf-extras-togglz-1.0.1.RELEASE.jar')
+	
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-jdbc")

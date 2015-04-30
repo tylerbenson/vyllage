@@ -17,7 +17,7 @@ public class SingletonFeatureManagerProvider implements FeatureManagerProvider {
 	public FeatureManager getFeatureManager() {
 		if (featureManager == null) {
 			featureManager = FeatureManagerBuilder.begin()
-					.name("demo-feature-manager").featureEnum(Features.class)
+					.name("accounts-features").featureEnum(Features.class)
 					.togglzConfig(new TogglzConfiguration()).build();
 		}
 		return featureManager;

@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import org.togglz.console.TogglzConsoleServlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.heneke.thymeleaf.togglz.TogglzDialect;
 
 import email.EmailBuilder;
 import email.MailService;
@@ -47,29 +48,8 @@ public class BeansConfiguration {
 				"/togglz/*");
 	}
 
-	// @Bean
-	// public FeatureManager featureManager() throws IOException {
-	//
-	// final FeatureManagerBuilder builder = new FeatureManagerBuilder();
-	// builder.name("demo-feature-manager").featureEnum(Features.class)
-	// .stateRepository(stateRepository())
-	// .userProvider(userProvider())
-	// .togglzConfig(new TogglzConfiguration());
-	//
-	// return builder.build();
-	// }
-	//
-	// @Bean
-	// public StateRepository stateRepository() throws IOException {
-	// final InMemoryStateRepository stateRepository = new
-	// InMemoryStateRepository();
-	// stateRepository.setFeatureState(new FeatureState(
-	// Features.GOOGLE_ANALYTICS, false));
-	// return stateRepository;
-	// }
-	//
-	// @Bean
-	// public UserProvider userProvider() {
-	// return new SpringSecurityUserProvider("ADMIN");
-	// }
+	@Bean
+	public TogglzDialect togglzDialect() {
+		return new TogglzDialect();
+	}
 }

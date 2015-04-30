@@ -10,12 +10,6 @@ import org.togglz.spring.security.SpringSecurityUserProvider;
 
 public class TogglzConfiguration implements TogglzConfig {
 
-	// @Autowired
-	// private UserProvider userProvider;
-	//
-	// @Autowired
-	// private StateRepository stateRepository;
-
 	@Override
 	public Class<? extends Feature> getFeatureClass() {
 		return Features.class;
@@ -29,13 +23,19 @@ public class TogglzConfiguration implements TogglzConfig {
 
 		final InMemoryStateRepository stateRepository = new InMemoryStateRepository();
 		stateRepository.setFeatureState(new FeatureState(
-				Features.GOOGLE_ANALYTICS, false));
+				Features.GOOGLE_ANALYTICS, true));
 		return stateRepository;
 	}
 
 	@Override
 	public UserProvider getUserProvider() {
 		return new SpringSecurityUserProvider("ADMIN");
+		// return new UserProvider() {
+		// @Override
+		// public FeatureUser getCurrentUser() {
+		// return new SimpleFeatureUser("ADMIN", true);
+		// }
+		// };
 	}
 
 }
