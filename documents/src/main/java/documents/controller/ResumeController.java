@@ -13,9 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import user.common.User;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -52,9 +55,14 @@ public class ResumeController {
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
 
-	@ModelAttribute("accountName")
-	public AccountNames accountNames(HttpServletRequest request) {
-		Long userId = (Long) request.getSession().getAttribute("userId");
+	// ModelAttributes execute for every request, even REST ones since they are
+	// only needed in one method and complicate testing I'm calling them
+	// directly instead
+	// https://jira.spring.io/browse/SPR-12303
+
+	// @ModelAttribute("accountName")
+	public AccountNames accountName(HttpServletRequest request, User user) {
+		Long userId = user.getUserId();
 
 		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
 				Arrays.asList(userId), request);
@@ -71,12 +79,12 @@ public class ResumeController {
 		return namesForUsers.get(0);
 	}
 
-	@ModelAttribute("intercom")
-	public AccountContact intercom(HttpServletRequest request) {
-		Long userId = (Long) request.getSession().getAttribute("userId");
+	// @ModelAttribute("intercom")
+	public AccountContact intercom(HttpServletRequest request, User user) {
 
 		List<AccountContact> contactDataForUsers = accountService
-				.getContactDataForUsers(request, Arrays.asList(userId));
+				.getContactDataForUsers(request,
+						Arrays.asList(user.getUserId()));
 
 		if (contactDataForUsers.isEmpty()) {
 			AccountContact ac = new AccountContact();
@@ -89,23 +97,23 @@ public class ResumeController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String resume(HttpServletRequest request)
-			throws ElementNotFoundException {
-		Long userId = getUserIdFromSession(request);
+	public String resume(HttpServletRequest request,
+			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
-		Document documentByUser = documentService.getDocumentByUser(userId);
+		Document documentByUser = documentService.getDocumentByUser(user
+				.getUserId());
 
 		return "redirect:/resume/" + documentByUser.getDocumentId();
-	}
-
-	private Long getUserIdFromSession(HttpServletRequest request) {
-		return (Long) request.getSession().getAttribute("userId");
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)
 	@CheckReadAccess
 	public String getResume(HttpServletRequest request,
-			@PathVariable final Long documentId) {
+			@PathVariable final Long documentId,
+			@AuthenticationPrincipal User user, Model model) {
+		model.addAttribute("accountName", accountName(request, user));
+		model.addAttribute("intercom", intercom(request, user));
+
 		return "resume";
 	}
 
@@ -151,16 +159,15 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	public @ResponseBody DocumentHeader getResumeHeader(
-			HttpServletRequest request, @PathVariable final Long documentId)
-			throws JsonProcessingException, IOException,
-			ElementNotFoundException {
+			HttpServletRequest request, @PathVariable final Long documentId,
+			@AuthenticationPrincipal User user) throws JsonProcessingException,
+			IOException, ElementNotFoundException {
 
-		Long userId = getUserIdFromSession(request);
 		Document document = documentService.getDocument(documentId);
 
 		DocumentHeader header = new DocumentHeader();
 
-		if (document.getUserId().equals(userId)) {
+		if (document.getUserId().equals(user.getUserId())) {
 			header.setOwner(true);
 		}
 
@@ -272,15 +279,18 @@ public class ResumeController {
 	public @ResponseBody Comment saveCommentsForSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
-			@RequestBody final Comment comment) {
+			@RequestBody final Comment comment,
+			@AuthenticationPrincipal User user) {
 
-		comment.setUserId(getUserIdFromSession(request));
+		Long userId = user.getUserId();
+
+		comment.setUserId(userId);
 
 		if (comment.getSectionId() == null)
 			comment.setSectionId(sectionId);
 
 		List<AccountNames> names = accountService.getNamesForUsers(
-				Arrays.asList(getUserIdFromSession(request)), request);
+				Arrays.asList(userId), request);
 
 		if (names != null && !names.isEmpty())
 			comment.setUserName(names.get(0).getFirstName() + " "

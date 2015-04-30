@@ -12,8 +12,8 @@ import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import user.common.User;
 import accounts.domain.tables.records.AccountSettingRecord;
-import accounts.model.User;
 import accounts.model.account.settings.AccountSetting;
 
 @Repository

@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import accounts.model.User;
+import user.common.User;
 import accounts.repository.UserNotFoundException;
 import accounts.service.UserService;
 
@@ -50,11 +51,10 @@ public class ErrorHandlerController implements ErrorController {
 	}
 
 	@RequestMapping(value = PATH, produces = "text/html")
-	public ModelAndView errorHtml(HttpServletRequest request)
-			throws UserNotFoundException {
-		Long userId = (Long) request.getSession().getAttribute("userId");
+	public ModelAndView errorHtml(HttpServletRequest request,
+			@AuthenticationPrincipal User user) throws UserNotFoundException {
 
-		User currentUser = userService.getUser(userId);
+		User currentUser = userService.getUser(user.getUserId());
 
 		Map<String, Object> body = getErrorAttributes(request, true);
 
