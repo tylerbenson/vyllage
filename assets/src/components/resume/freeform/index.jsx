@@ -16,6 +16,7 @@ var Freeform = React.createClass({
   },
   getDefaultProps: function () {
     return {
+      title: '',
       placeholder: 'Tell us more..',
       section: {}
     }
@@ -91,7 +92,7 @@ var Freeform = React.createClass({
             ></Textarea>
           </div>
           <SectionFooter section={this.props.section} />
-        </div>: <p className='content empty'>No {this.props.title.toLowerCase()} added yet</p> }
+          </div>: <p className='content empty'>No {this.props.title.toLowerCase()} added yet</p> }
       </div>
     );
   }
