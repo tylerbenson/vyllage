@@ -10,8 +10,14 @@ var max = require('lodash.max');
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
-    this.tokenHeader = document.getElementById('meta_header').content,
-    this.tokenValue = document.getElementById('meta_token').content;
+    var metaHeader = document.getElementById('meta_header');
+    if (metaHeader) {
+      this.tokenHeader = metaHeader.content;
+    }
+    var metaToken = document.getElementById('meta_token');
+    if (metaToken) {
+      this.tokenValue = metaToken.content;
+    }
     this.documentId = window.location.pathname.split('/')[2];
     this.resume = {
       documentId: this.documentId,
