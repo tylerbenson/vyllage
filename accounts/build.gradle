@@ -11,16 +11,17 @@ dependencies {
 
 	compile project(':email')
 	compile project(':user-common')
+	compile project(':togglz')
 	
 	compile 'org.apache.commons:commons-lang3:3.3.2'
 	
-	compile 'org.togglz:togglz-core:2.1.0.Final'
-	compile 'org.togglz:togglz-servlet:2.1.0.Final'
-	compile 'org.togglz:togglz-spring:2.1.0.Final'
-	compile 'org.togglz:togglz-spring-security:2.1.0.Final'
-	compile 'org.togglz:togglz-console:2.1.0.Final'
-	
-	compile files('lib/thymeleaf-extras-togglz-1.0.1.RELEASE.jar')
+//	compile 'org.togglz:togglz-core:2.1.0.Final'
+//	compile 'org.togglz:togglz-servlet:2.1.0.Final'
+//	compile 'org.togglz:togglz-spring:2.1.0.Final'
+//	compile 'org.togglz:togglz-spring-security:2.1.0.Final'
+//	compile 'org.togglz:togglz-console:2.1.0.Final'
+//	
+//	compile files('lib/thymeleaf-extras-togglz-1.0.1.RELEASE.jar')
 	
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-aop")

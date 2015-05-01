@@ -9,7 +9,15 @@ public enum Features implements Feature {
 
 	@EnabledByDefault
 	@Label("Google Analytics")
-	GOOGLE_ANALYTICS;
+	GOOGLE_ANALYTICS,
+
+	@EnabledByDefault
+	@Label("New Relic")
+	NEW_RELIC,
+
+	@EnabledByDefault
+	@Label("Zopim Message Client")
+	ZOPIM_MESSAGE_CLIENT;
 
 	public boolean isActive() {
 		return FeatureContext.getFeatureManager().isActive(this);

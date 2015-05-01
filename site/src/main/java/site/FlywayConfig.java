@@ -49,4 +49,13 @@ public class FlywayConfig {
 		flyway.setSchemas("accounts");
 		return flyway;
 	}
+
+	@Bean(initMethod = "migrate")
+	public Flyway flywayTogglz() {
+		Flyway flyway = new Flyway();
+		flyway.setDataSource(this.dataSource);
+		flyway.setLocations(env.getRequiredProperty("flyway.togglz"));
+		flyway.setSchemas("togglz");
+		return flyway;
+	}
 }
