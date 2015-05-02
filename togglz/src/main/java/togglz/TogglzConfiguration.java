@@ -1,5 +1,7 @@
 package togglz;
 
+import java.util.Arrays;
+
 import javax.sql.DataSource;
 
 import org.springframework.util.Assert;
@@ -8,7 +10,6 @@ import org.togglz.core.manager.TogglzConfig;
 import org.togglz.core.repository.StateRepository;
 import org.togglz.core.repository.jdbc.JDBCStateRepository;
 import org.togglz.core.user.UserProvider;
-import org.togglz.spring.security.SpringSecurityUserProvider;
 
 public class TogglzConfiguration implements TogglzConfig {
 
@@ -43,7 +44,8 @@ public class TogglzConfiguration implements TogglzConfig {
 
 	@Override
 	public UserProvider getUserProvider() {
-		return new SpringSecurityUserProvider("ADMIN");
+		return new CustomSpringSecurityUserProvider(Arrays.asList("ADMIN",
+				"STAFF"));
 	}
 
 }

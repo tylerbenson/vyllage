@@ -46,16 +46,14 @@ public class AdminUserController {
 	}
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STAFF')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String admin(@AuthenticationPrincipal User user, Model model) {
-		// if (Features.GOOGLE_ANALYTICS.isActive()) {
 		prepareBatch(model, user);
-		// }
 		return "adminAccountManagement";
 	}
 
 	@RequestMapping(value = "/user/createBatch", method = RequestMethod.POST)
-	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STAFF')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String batchAccountCreation(BatchAccount batch,
 			@AuthenticationPrincipal User user, Model model)
 			throws IllegalArgumentException, EmailException {
