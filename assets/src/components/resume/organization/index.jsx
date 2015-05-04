@@ -7,6 +7,7 @@ var CancelBtn = require('../../buttons/cancel');
 var Textarea = require('react-textarea-autosize');
 var Datepicker = require('../../datepicker');
 var assign = require('lodash.assign')
+var MoveButton = require('../../buttons/move');
 
 var Organization = React.createClass({
   getInitialState: function () {
@@ -66,6 +67,7 @@ var Organization = React.createClass({
     var placeholders = this.props.placeholders || {};
     return (
       <div className ="subsection">
+        <MoveButton />
         <div className='header'>
           <div className='title'>
             <h2>
