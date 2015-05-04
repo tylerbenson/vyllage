@@ -2,6 +2,7 @@ package accounts.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.Date;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -11,10 +12,12 @@ import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import accounts.model.CSRFToken;
@@ -275,6 +279,16 @@ public class AccountController {
 
 		return userService.getAccountContactForUsers(userService
 				.getAccountSettings(userIds));
+	}
+
+	@RequestMapping(value = "ping", method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void ping(HttpServletRequest request,
+			@AuthenticationPrincipal User user) {
+		HttpSession session = request.getSession();
+
+		logger.info("User " + user.getFirstName() + " is alive. "
+				+ "Last Access: " + new Date(session.getLastAccessedTime()));
 	}
 
 }
