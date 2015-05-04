@@ -18,9 +18,7 @@
     background-image: url(images/banner-2.jpg);
   }
   </style>
-  <div togglz:active="NEW_RELIC">
-  	<div th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
-  </div>
+  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body class="login info">
@@ -61,7 +59,7 @@
       </nav>
     </div>
   </footer>
-	<script togglz:active="ZOPIM_MESSAGE_CLIENT" type="text/javascript">
+  <script togglz:active="ZOPIM_MESSAGE_CLIENT" type="text/javascript">
 	  window.$zopim || (function(d, s) {
 	    var z = $zopim = function(c) {
 	        z._.push(c)
@@ -83,9 +81,9 @@
 	    type = "text/javascript";
 	    e.parentNode.insertBefore($, e)
 	  })(document, "script");
-	  </script>	
-  	<!--End of Zopim Live Chat Script-->
-	  <script togglz:active="GOOGLE_ANALYTICS">
+  </script>	
+  <!--End of Zopim Live Chat Script-->
+  <script togglz:active="GOOGLE_ANALYTICS">
 	  (function(i, s, o, g, r, a, m) {
 	    i['GoogleAnalyticsObject'] = r;
 	    i[r] = i[r] || function() {
@@ -101,8 +99,8 @@
 	    'userId': document.getElementById('meta_user').getAttribute('content')
 	  });
 	  ga('send', 'pageview');
-	  </script>
-  	<div togglz:active="NEW_RELIC" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
+  </script>
+  <div togglz:active="NEW_RELIC" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
 </body>
 
 </html>

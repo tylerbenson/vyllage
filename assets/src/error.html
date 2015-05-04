@@ -2,116 +2,114 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title th:text="'Vyllage | ' + ${status} + ' - ' + ${error}">Vyllage | Oops, something went wrong.</title>
-  <base href="." th:href="@{/}" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title th:text="'Vyllage | ' + ${status} + ' - ' + ${error}">Vyllage
+	| Oops, something went wrong.</title>
+<base href="." th:href="@{/}" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-  <link rel="stylesheet" href="/css/base.css" />
-  <link rel="stylesheet" href="/css/error.css" />
-  <link rel="shortcut icon" type="image/png" href="/images/logo-orange.png" />
+<link rel="stylesheet" href="/css/base.css" />
+<link rel="stylesheet" href="/css/error.css" />
+<link rel="shortcut icon" type="image/png"
+	href="/images/logo-orange.png" />
 
-  <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
-   <div togglz:active="NEW_RELIC">
-  	<div th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
-  </div>
+<link href='http://fonts.googleapis.com/css?family=Raleway'
+	rel='stylesheet' type='text/css' />
+<div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body class="error">
-  <div id="container">
-    <form action="" method="post">
-      <header>
-        <div class="content">
-          <div class="logo">
-            <img src="images/logo-orange.png" alt="Vyllage" />
-            <span>Vyllage</span>
-          </div>
-        </div>
-      </header>
-      <div class="message">
-        <h1>Oops. Something went wrong!</h1>
-        <p>We're working to fix this. Please head back to the <a href="/">homepage</a> for now.</p>
-      </div>
-      <div class="content">
-        <th:block th:if="${displayWebError}">
-          <div class="timestamp" th:if="${exception != null}" th:text="${timestamp}"> </div>
-          <div class="exception">
-            <div class="row" th:if="${exception != null}">
-              <h2 th:text="'Exception: ' + ${exception}"> java.lang.NullpointerExcetion </h2>
-            </div>
-            <div class="row" th:if="${exception != null and message != null}">
-              <h2 th:text="'Message: ' + ${message}"> Message Error </h2>
-            </div>
-          </div>
-          <div class="row" th:if="${exception != null and trace != null}">
-            <textarea class="stack-trace" rows="50" cols="90" th:text="${trace}"></textarea>
-          </div>
-        </th:block>
-      </div>
-    </form>
-  </div>
-  <footer>
-    <div class="content">
-      <div class="logo">
-        <img src="images/logo-orange.png" alt="Vyllage" />
-      </div>
-      <nav>
-        <ul>
-          <li><a href="">Help</a>
-          </li>
-          <li><a href="">Careers</a>
-          </li>
-          <li><a href="">Terms</a>
-          </li>
-          <li><a href="">Privacy</a>
-          </li>
-          <li><a href="">Contact Us</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </footer>
-   <script togglz:active="ZOPIM_MESSAGE_CLIENT" type="text/javascript">
-	  window.$zopim || (function(d, s) {
-	    var z = $zopim = function(c) {
-	        z._.push(c)
-	      },
-	      $ = z.s =
-	      d.createElement(s),
-	      e = d.getElementsByTagName(s)[0];
-	    z.set = function(o) {
-	      z.set.
-	      _.push(o)
-	    };
-	    z._ = [];
-	    z.set._ = [];
-	    $.async = !0;
-	    $.setAttribute("charset", "utf-8");
-	    $.src = "//v2.zopim.com/?2yTp08ZLPRPIeR1PSlNmH7ZXuZ7Hitop";
-	    z.t = +new Date;
-	    $.
-	    type = "text/javascript";
-	    e.parentNode.insertBefore($, e)
-	  })(document, "script");
-	  </script>	
-  	<!--End of Zopim Live Chat Script-->
-	  <script togglz:active="GOOGLE_ANALYTICS">
-	  (function(i, s, o, g, r, a, m) {
-	    i['GoogleAnalyticsObject'] = r;
-	    i[r] = i[r] || function() {
-	      (i[r].q = i[r].q || []).push(arguments)
-	    }, i[r].l = 1 * new Date();
-	    a = s.createElement(o),
-	      m = s.getElementsByTagName(o)[0];
-	    a.async = 1;
-	    a.src = g;
-	    m.parentNode.insertBefore(a, m)
-	  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-	  ga('create', 'UA-62026590-1', {
-	    'userId': document.getElementById('meta_user').getAttribute('content')
-	  });
-	  ga('send', 'pageview');
-	  </script>
-  	<div togglz:active="NEW_RELIC" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
+	<div id="container">
+		<form action="" method="post">
+			<header>
+				<div class="content">
+					<div class="logo">
+						<img src="images/logo-orange.png" alt="Vyllage" /> <span>Vyllage</span>
+					</div>
+				</div>
+			</header>
+			<div class="message">
+				<h1>Oops. Something went wrong!</h1>
+				<p>
+					We're working to fix this. Please head back to the <a href="/">homepage</a>
+					for now.
+				</p>
+			</div>
+			<div class="content">
+				<th:block th:if="${displayWebError}">
+					<div class="timestamp" th:if="${exception != null}"
+						th:text="${timestamp}"></div>
+					<div class="exception">
+						<div class="row" th:if="${exception != null}">
+							<h2 th:text="'Exception: ' + ${exception}">
+								java.lang.NullpointerExcetion</h2>
+						</div>
+						<div class="row" th:if="${exception != null and message != null}">
+							<h2 th:text="'Message: ' + ${message}">Message Error</h2>
+						</div>
+					</div>
+					<div class="row" th:if="${exception != null and trace != null}">
+						<textarea class="stack-trace" rows="50" cols="90"
+							th:text="${trace}"></textarea>
+					</div>
+				</th:block>
+			</div>
+		</form>
+	</div>
+	<footer>
+		<div class="content">
+			<div class="logo">
+				<img src="images/logo-orange.png" alt="Vyllage" />
+			</div>
+			<nav>
+				<ul>
+					<li><a href="">Help</a></li>
+					<li><a href="">Careers</a></li>
+					<li><a href="">Terms</a></li>
+					<li><a href="">Privacy</a></li>
+					<li><a href="">Contact Us</a></li>
+				</ul>
+			</nav>
+		</div>
+	</footer>
+	<script togglz:active="ZOPIM_MESSAGE_CLIENT" type="text/javascript">
+		window.$zopim || (function(d, s) {
+			var z = $zopim = function(c) {
+				z._.push(c)
+			}, $ = z.s = d.createElement(s), e = d.getElementsByTagName(s)[0];
+			z.set = function(o) {
+				z.set._.push(o)
+			};
+			z._ = [];
+			z.set._ = [];
+			$.async = !0;
+			$.setAttribute("charset", "utf-8");
+			$.src = "//v2.zopim.com/?2yTp08ZLPRPIeR1PSlNmH7ZXuZ7Hitop";
+			z.t = +new Date;
+			$.type = "text/javascript";
+			e.parentNode.insertBefore($, e)
+		})(document, "script");
+	</script>
+	<!--End of Zopim Live Chat Script-->
+	<script togglz:active="GOOGLE_ANALYTICS">
+		(function(i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function() {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script',
+				'//www.google-analytics.com/analytics.js', 'ga');
+		ga('create', 'UA-62026590-1', {
+			'userId' : document.getElementById('meta_user').getAttribute(
+					'content')
+		});
+		ga('send', 'pageview');
+	</script>
+	<div togglz:active="NEW_RELIC"
+		th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
 </body>
 
 </html>

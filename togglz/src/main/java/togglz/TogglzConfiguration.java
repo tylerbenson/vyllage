@@ -1,7 +1,5 @@
 package togglz;
 
-import java.util.Arrays;
-
 import javax.sql.DataSource;
 
 import org.springframework.util.Assert;
@@ -31,8 +29,6 @@ public class TogglzConfiguration implements TogglzConfig {
 
 		JDBCStateRepository jdbcStateRepository = new JDBCStateRepository(
 				dataSource, "TOGGLZ.togglz_features");
-		// jdbcStateRepository.setFeatureState(new FeatureState(
-		// Features.GOOGLE_ANALYTICS, true));
 
 		// final InMemoryStateRepository stateRepository = new
 		// InMemoryStateRepository();
@@ -44,8 +40,7 @@ public class TogglzConfiguration implements TogglzConfig {
 
 	@Override
 	public UserProvider getUserProvider() {
-		return new CustomSpringSecurityUserProvider(Arrays.asList("ADMIN",
-				"STAFF"));
+		return new CustomSpringSecurityUserProvider("ADMIN", "STAFF");
 	}
 
 }

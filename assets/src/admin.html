@@ -16,9 +16,7 @@
 
   <meta name="_csrf_token" th:content="${_csrf.token}" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
-  <div togglz:active="NEW_RELIC">
-  	<div th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
-  </div>
+  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body>

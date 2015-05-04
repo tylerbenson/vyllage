@@ -18,9 +18,7 @@
   <meta name="email" th:content="${intercom.email}" id="meta_email" />
   <meta name="userId" th:content="${intercom.userId}" id="meta_user" />
   <meta name="registeredOn" th:content="${intercom.registeredOn}" id="meta_created_at" />
-  <div togglz:active="NEW_RELIC">
-  	<div th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
-  </div>
+  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body class='ask-advice'>
@@ -31,7 +29,7 @@
   <div id="footer"></div>
   <script src='javascript/base.js'></script>
   <script src='javascript/askAdvice.js'></script>
-   <script togglz:active="ZOPIM_MESSAGE_CLIENT" type="text/javascript">
+  <script togglz:active="ZOPIM_MESSAGE_CLIENT" type="text/javascript">
 	  window.$zopim || (function(d, s) {
 	    var z = $zopim = function(c) {
 	        z._.push(c)
@@ -53,9 +51,9 @@
 	    type = "text/javascript";
 	    e.parentNode.insertBefore($, e)
 	  })(document, "script");
-	  </script>	
+	</script>	
   	<!--End of Zopim Live Chat Script-->
-	  <script togglz:active="GOOGLE_ANALYTICS">
+	<script togglz:active="GOOGLE_ANALYTICS">
 	  (function(i, s, o, g, r, a, m) {
 	    i['GoogleAnalyticsObject'] = r;
 	    i[r] = i[r] || function() {
@@ -71,7 +69,7 @@
 	    'userId': document.getElementById('meta_user').getAttribute('content')
 	  });
 	  ga('send', 'pageview');
-	  </script>
+	</script>
   	<div togglz:active="NEW_RELIC" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
 </body>
 
