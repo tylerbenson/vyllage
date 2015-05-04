@@ -2,6 +2,7 @@ var React = require('react');
 var Header = require('./Header');
 var Organization = require('../organization');
 var SectionFooter = require('./Footer');
+var MoveButton = require('../../buttons/move');
 
 var Experience = React.createClass({
   render: function () {
@@ -25,6 +26,7 @@ var Experience = React.createClass({
     return (
       <div className='section'>
         <div className='container'>
+          <MoveButton />
           <Header title='Experience' type='experience' owner={this.props.owner} />
           {sectionNodes}
         </div>

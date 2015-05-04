@@ -3,9 +3,9 @@ var React = require('react');
 var MoveBtn = React.createClass({
   render: function() {
     return (
-      <button class="inverted secondary small move">
-        <i class="ion-arrow-move"></i>
-          Move
+      <button className="inverted secondary small move">
+        <i className="ion-arrow-move"></i>
+        Move
       </button>
     );
   }
