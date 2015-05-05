@@ -26,6 +26,7 @@ var ResumeEditor = React.createClass({
     sectionOrder.splice(sectionIndex, 1);
     sectionOrder.splice(afterIndex, 0, section);
     actions.updateSectionOrder(sectionOrder);
+    console.log(sectionOrder);
   },
   render: function () {
     var owner=this.state.resume.header.owner;
@@ -38,10 +39,26 @@ var ResumeEditor = React.createClass({
         {owner ? <Subheader documentId={this.state.resume.documentId}/>: null}
         <Banner header={this.state.resume.header} settings={this.state.settings} />
         <div className="sections">
-          <CareerGoal section={careerGoalSections[0]} owner={owner} />
-          <Experience sections={experienceSections} owner={owner} />
-          <Education sections={educationSections} owner={owner} />
-          <Skill section={skillSections[0]} owner={owner} />
+          <CareerGoal 
+            title='career goal'
+            section={careerGoalSections[0]}
+            owner={owner}
+            moveSection={this.moveSection} />
+          <Experience 
+            title='experience'
+            sections={experienceSections}
+            owner={owner} 
+            moveSection={this.moveSection} />
+          <Education 
+            title='education'
+            sections={educationSections} 
+            owner={owner} 
+            moveSection={this.moveSection} />
+          <Skill 
+            title='skills'
+            section={skillSections[0]} 
+            owner={owner} 
+            moveSection={this.moveSection} />
         </div>
       </div>
     );

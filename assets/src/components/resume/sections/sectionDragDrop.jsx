@@ -10,7 +10,7 @@ module.exports = {
   },
   dropTarget: {
     over: function (component, item) {
-      component.props.moveCard(item.title, component.props.title);
+      component.props.moveSection(item.title, component.props.title);
     }
   }
 }
