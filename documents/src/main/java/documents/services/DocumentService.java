@@ -65,51 +65,46 @@ public class DocumentService {
 	public DocumentSection saveDocumentSection(DocumentSection documentSection) {
 
 		logger.info(documentSection.toString());
+		DocumentSection savedSection = null;
 
-		// try {
-		// List<DocumentSection> documentSections = documentSectionRepository
-		// .getDocumentSections(documentSection.getDocumentId());
-		// documentSections.add(documentSection);
-		//
-		// documentSections.stream().forEachOrdered(
-		// s -> logger.info("Section " + s.getSectionId() + " P: "
-		// + s.getSectionPosition()));
-		//
-		// // sort by position and shift 1
-		//
-		// documentSections
-		// .stream()
-		// .sorted((s1, s2) -> s1.getSectionPosition().compareTo(
-		// s2.getSectionPosition())) //
-		// .map(s -> {
-		// s.setSectionPosition(s.getSectionPosition() + 1L);
-		// return s;
-		// }).forEach(s -> documentSectionRepository.save(s));
-		//
-		// documentSections.stream().forEachOrdered(
-		// s -> logger.info("Section " + s.getSectionId() + " P: "
-		// + s.getSectionPosition()));
-		//
-		// } catch (ElementNotFoundException e) {
-		// e.printStackTrace();
-		// }
+		// if a section position's has not been set by the client we set the
+		// section as the first one.
+		if (documentSection.getSectionPosition() == null) {
+			documentSection.setSectionPosition(1L);
+			try {
+				List<DocumentSection> documentSections = documentSectionRepository
+						.getDocumentSections(documentSection.getDocumentId());
 
-		// logger.info("Saving document section: "
-		// + documentSection.getSectionId() + " from document "
-		// + document.getDocumentId());
-		//
-		// try {
-		// documentRepository.get(document.getDocumentId());
-		//
-		// } catch (ElementNotFoundException e) {
-		// logger.info("Document with id" + document.getDocumentId()
-		// + "not found, saving document first.");
-		// document = this.saveDocument(document);
-		// }
+				documentSections.stream().forEachOrdered(
+						s -> logger.info("Section " + s.getSectionId() + " P: "
+								+ s.getSectionPosition()));
 
-		// documentSection.setDocumentId(document.getDocumentId());
+				// sort by position in case they are not sorted already and
+				// shift 1
 
-		return documentSectionRepository.save(documentSection);
+				documentSections
+						.stream()
+						.sorted((s1, s2) -> s1.getSectionPosition().compareTo(
+								s2.getSectionPosition())) //
+						.map(s -> {
+							s.setSectionPosition(s.getSectionPosition() + 1L);
+							return s;
+						}).forEach(s -> documentSectionRepository.save(s));
+
+				savedSection = documentSectionRepository.save(documentSection);
+
+				documentSections.stream().forEachOrdered(
+						s -> logger.info("Section " + s.getSectionId() + " P: "
+								+ s.getSectionPosition()));
+
+			} catch (ElementNotFoundException e) {
+				e.printStackTrace();
+			}
+		} else {
+			savedSection = documentSectionRepository.save(documentSection);
+		}
+
+		return savedSection;
 
 	}
 
