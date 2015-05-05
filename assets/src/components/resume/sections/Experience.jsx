@@ -3,8 +3,19 @@ var Header = require('./Header');
 var Organization = require('../organization');
 var SectionFooter = require('./Footer');
 var MoveButton = require('../../buttons/move');
+var  { DragDropMixin } = require('react-dnd');
+var {dragSource, dropTarget} = require('./sectionDragDrop');
 
 var Experience = React.createClass({
+  mixins: [DragDropMixin],
+  statics: {
+    configureDragDrop(register) {
+      register('section', {
+        dragSource,
+        dropTarget
+      });
+    }
+  },
   render: function () {
     var placeholders = {
       role: 'Position'
@@ -26,7 +37,7 @@ var Experience = React.createClass({
     return (
       <div className='section'>
         <div className='container'>
-          <MoveButton />
+          <MoveButton {...this.dragSourceFor('section')} />
           <Header title='Experience' type='experience' owner={this.props.owner} />
           {sectionNodes}
         </div>
