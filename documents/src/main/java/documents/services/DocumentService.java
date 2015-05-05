@@ -264,7 +264,7 @@ public class DocumentService {
 							+ " Position: " + s.getSectionPosition()));
 
 			// set position according to the position of the id in the array.
-			// +1 because it stars at 0.
+			// +1 because it starts at 0.
 			documentSections.stream().forEach(
 					ds -> ds.setSectionPosition((long) documentSectionIds
 							.indexOf(ds.getSectionId()) + 1));
