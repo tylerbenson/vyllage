@@ -19,9 +19,9 @@ var CareerGoal = React.createClass({
   },
   render: function () {
     return (
-      <div className='section' {...this.dragSourceFor('section')}>
+      <div className='section'>
         <div className='container'>
-          <MoveButton />
+          <MoveButton {...this.dragSourceFor('section')} />
           <Freeform title='Career Goal' section={this.props.section} owner={this.props.owner}/>
         </div>
       </div>
