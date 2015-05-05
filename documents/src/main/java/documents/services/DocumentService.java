@@ -64,6 +64,36 @@ public class DocumentService {
 	 */
 	public DocumentSection saveDocumentSection(DocumentSection documentSection) {
 
+		logger.info(documentSection.toString());
+
+		// try {
+		// List<DocumentSection> documentSections = documentSectionRepository
+		// .getDocumentSections(documentSection.getDocumentId());
+		// documentSections.add(documentSection);
+		//
+		// documentSections.stream().forEachOrdered(
+		// s -> logger.info("Section " + s.getSectionId() + " P: "
+		// + s.getSectionPosition()));
+		//
+		// // sort by position and shift 1
+		//
+		// documentSections
+		// .stream()
+		// .sorted((s1, s2) -> s1.getSectionPosition().compareTo(
+		// s2.getSectionPosition())) //
+		// .map(s -> {
+		// s.setSectionPosition(s.getSectionPosition() + 1L);
+		// return s;
+		// }).forEach(s -> documentSectionRepository.save(s));
+		//
+		// documentSections.stream().forEachOrdered(
+		// s -> logger.info("Section " + s.getSectionId() + " P: "
+		// + s.getSectionPosition()));
+		//
+		// } catch (ElementNotFoundException e) {
+		// e.printStackTrace();
+		// }
+
 		// logger.info("Saving document section: "
 		// + documentSection.getSectionId() + " from document "
 		// + document.getDocumentId());
@@ -202,6 +232,39 @@ public class DocumentService {
 	 */
 	public void deleteDocumentsFromUser(Long userId) {
 		documentRepository.deleteForUser(userId);
+	}
+
+	/**
+	 * Orders sections according to their position in the list.
+	 * 
+	 * @param documentId
+	 * @param documentSectionIds
+	 */
+	public void orderDocumentSections(Long documentId,
+			List<Long> documentSectionIds) {
+
+		try {
+			List<DocumentSection> documentSections = documentSectionRepository
+					.getDocumentSections(documentId);
+
+			documentSections.stream().forEachOrdered(
+					s -> logger.info("Section " + s.getSectionId()
+							+ " Position: " + s.getSectionPosition()));
+
+			// set position according to the position of the id in the array.
+			// +1 because it stars at 0.
+			documentSections.stream().forEach(
+					ds -> ds.setSectionPosition((long) documentSectionIds
+							.indexOf(ds.getSectionId()) + 1));
+
+			logger.info("--------");
+			documentSections.stream().forEachOrdered(
+					s -> logger.info("Section " + s.getSectionId()
+							+ " Position: " + s.getSectionPosition()));
+
+		} catch (ElementNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

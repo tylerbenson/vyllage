@@ -184,6 +184,9 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 
 			documentSection.setSectionVersion(newSectionVersion);
 
+			logger.info(String.format(
+					"Saving new document section '%1$s' version '%2$s' ",
+					newRecord.getId(), newRecord.getSectionversion()));
 		} else {
 
 			long nextVersion = existingRecord.getSectionversion() + 1;
