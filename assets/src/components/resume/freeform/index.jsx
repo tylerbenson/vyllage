@@ -21,6 +21,7 @@ var Freeform = React.createClass({
       section: {}
     }
   },
+  
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       description: nextProps.section.description,
