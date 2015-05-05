@@ -59,5 +59,7 @@ The csfr token value is required to use the service in Documents.
 The csfr token value is required to use the service in Documents.
 
 
- 
+# Ping to prevent sessions expiration.
+## GET /account/ping
++ Response 200
 
