@@ -3,14 +3,23 @@ var assign = require('lodash.assign');
 var request = require('superagent');
 var urlTemplate = require('url-template');
 var endpoints = require('../endpoints');
-var firstName = document.getElementById('header-container').getAttribute('name');
+var firstName;
+var headerContainer = document.getElementById('header-container');
+if (headerContainer) {
+ firstName = headerContainer.getAttribute('name');
+}
 
 var AskAdviceStore = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
-    this.tokenHeader = document.getElementById('meta_header').content,
-    this.tokenValue = document.getElementById('meta_token').content;
-    // this.documentId = window.location.pathname.split('/')[2];
+    var metaHeader = document.getElementById('meta_header');
+    if (metaHeader) {
+      this.tokenHeader = metaHeader.content;
+    }
+    var metaToken = document.getElementById('meta_token');
+    if (metaToken) {
+      this.tokenValue = metaToken.content;
+    }
     this.recepientsError = false;
     this.notRegisteredUsers = [];
     this.processing= false;

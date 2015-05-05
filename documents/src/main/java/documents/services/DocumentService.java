@@ -1,9 +1,11 @@
 package documents.services;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -64,22 +66,47 @@ public class DocumentService {
 	 */
 	public DocumentSection saveDocumentSection(DocumentSection documentSection) {
 
-		// logger.info("Saving document section: "
-		// + documentSection.getSectionId() + " from document "
-		// + document.getDocumentId());
-		//
-		// try {
-		// documentRepository.get(document.getDocumentId());
-		//
-		// } catch (ElementNotFoundException e) {
-		// logger.info("Document with id" + document.getDocumentId()
-		// + "not found, saving document first.");
-		// document = this.saveDocument(document);
-		// }
+		logger.info(documentSection.toString());
+		DocumentSection savedSection = null;
 
-		// documentSection.setDocumentId(document.getDocumentId());
+		// if a section position's has not been set by the client we set the
+		// section as the first one.
+		if (documentSection.getSectionPosition() == null) {
+			documentSection.setSectionPosition(1L);
+			try {
+				List<DocumentSection> documentSections = documentSectionRepository
+						.getDocumentSections(documentSection.getDocumentId());
 
-		return documentSectionRepository.save(documentSection);
+				documentSections.stream().forEachOrdered(
+						s -> logger.info("Section " + s.getSectionId() + " P: "
+								+ s.getSectionPosition()));
+
+				// sort by position in case they are not sorted already and
+				// shift 1
+
+				documentSections
+						.stream()
+						.sorted((s1, s2) -> s1.getSectionPosition().compareTo(
+								s2.getSectionPosition())) //
+						.map(s -> {
+							s.setSectionPosition(s.getSectionPosition() + 1L);
+							return s;
+						}).forEach(s -> documentSectionRepository.save(s));
+
+				savedSection = documentSectionRepository.save(documentSection);
+
+				documentSections.stream().forEachOrdered(
+						s -> logger.info("Section " + s.getSectionId() + " P: "
+								+ s.getSectionPosition()));
+
+			} catch (ElementNotFoundException e) {
+				e.printStackTrace();
+			}
+		} else {
+			savedSection = documentSectionRepository.save(documentSection);
+		}
+
+		return savedSection;
 
 	}
 
@@ -202,6 +229,54 @@ public class DocumentService {
 	 */
 	public void deleteDocumentsFromUser(Long userId) {
 		documentRepository.deleteForUser(userId);
+	}
+
+	/**
+	 * Orders sections according to their position in the list.
+	 * 
+	 * @param documentId
+	 * @param documentSectionIds
+	 */
+	public void orderDocumentSections(Long documentId,
+			List<Long> documentSectionIds) {
+
+		// removing duplicates
+		Set<Long> set = new HashSet<>(documentSectionIds);
+		documentSectionIds.clear();
+		documentSectionIds.addAll(set);
+
+		try {
+			List<DocumentSection> documentSections = documentSectionRepository
+					.getDocumentSections(documentId);
+
+			if (documentSectionIds.size() != documentSections.size())
+				throw new IllegalArgumentException(
+						"The amount of section ids does not match the number of existing sections in the database.");
+
+			if (!documentSections.stream().map(ds -> ds.getSectionId())
+					.collect(Collectors.toList())
+					.containsAll(documentSectionIds))
+				throw new IllegalArgumentException(
+						"The sections ids do not match the existing sections in the database.");
+
+			documentSections.stream().forEachOrdered(
+					s -> logger.info("Section " + s.getSectionId()
+							+ " Position: " + s.getSectionPosition()));
+
+			// set position according to the position of the id in the array.
+			// +1 because it starts at 0.
+			documentSections.stream().forEach(
+					ds -> ds.setSectionPosition((long) documentSectionIds
+							.indexOf(ds.getSectionId()) + 1));
+
+			logger.info("--------");
+			documentSections.stream().forEachOrdered(
+					s -> logger.info("Section " + s.getSectionId()
+							+ " Position: " + s.getSectionPosition()));
+
+		} catch (ElementNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

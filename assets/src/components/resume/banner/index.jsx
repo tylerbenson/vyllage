@@ -88,7 +88,7 @@ var Banner = React.createClass({
                 required
                 type='text'
                 placeholder="E-mail Address"
-                disabled={!header.owner}
+                readOnly={!header.owner}
                 key={header.email || undefined}
                 className="inline transparent"
                 autoComplete="off"

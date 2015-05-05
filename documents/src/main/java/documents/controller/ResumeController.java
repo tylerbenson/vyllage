@@ -202,7 +202,7 @@ public class ResumeController {
 	public @ResponseBody DocumentSection createSection(
 			@PathVariable final Long documentId,
 			@RequestBody final DocumentSection documentSection)
-			throws JsonProcessingException, ElementNotFoundException {
+			throws JsonProcessingException {
 
 		documentSection.setDocumentId(documentId);
 		return documentService.saveDocumentSection(documentSection);
@@ -216,11 +216,18 @@ public class ResumeController {
 			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@RequestBody final DocumentSection documentSection)
-			throws JsonProcessingException, ElementNotFoundException,
-			AccessDeniedException {
+			throws JsonProcessingException, AccessDeniedException {
 
 		documentSection.setDocumentId(documentId);
 		return documentService.saveDocumentSection(documentSection);
+	}
+
+	@RequestMapping(value = "{documentId}/section-order", method = RequestMethod.PUT, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	@CheckWriteAccess
+	public void saveSectionPositions(@PathVariable final Long documentId,
+			@RequestBody final List<Long> documentSectionIds) {
+		documentService.orderDocumentSections(documentId, documentSectionIds);
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.DELETE, consumes = "application/json")
@@ -329,6 +336,19 @@ public class ResumeController {
 	@ExceptionHandler(value = { ElementNotFoundException.class })
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public @ResponseBody Map<String, Object> handleDocumentNotFoundException(
+			Exception ex) {
+		Map<String, Object> map = new HashMap<>();
+		if (ex.getCause() != null) {
+			map.put("error", ex.getCause().getMessage());
+		} else {
+			map.put("error", ex.getMessage());
+		}
+		return map;
+	}
+
+	@ExceptionHandler(value = { IllegalArgumentException.class })
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public @ResponseBody Map<String, Object> handleIllegalArgumentException(
 			Exception ex) {
 		Map<String, Object> map = new HashMap<>();
 		if (ex.getCause() != null) {
