@@ -34,31 +34,39 @@ var ResumeEditor = React.createClass({
     var skillSections = filter(this.state.resume.sections, {title: 'skills'});
     var experienceSections = sortby(filter(this.state.resume.sections, {title: 'experience'}), 'sectionPostion').reverse();
     var educationSections = sortby(filter(this.state.resume.sections, {title: 'education'}), 'sectionPostion').reverse();
+    var sections = this.state.resume.sectionOrder.map(function (title, index) {
+      if (title === 'career goal') {
+        return <CareerGoal 
+            title='career goal'
+            section={careerGoalSections[0]}
+            owner={owner}
+            moveSection={this.moveSection} />;
+      } else if (title === 'experience') {
+        return <Experience 
+            title='experience'
+            sections={experienceSections}
+            owner={owner} 
+            moveSection={this.moveSection} />;
+      } else if (title === 'education') {
+        return <Education 
+            title='education'
+            sections={educationSections} 
+            owner={owner} 
+            moveSection={this.moveSection} />;
+      } else {
+        return <Skill 
+            title='skills'
+            section={skillSections[0]} 
+            owner={owner} 
+            moveSection={this.moveSection} />;
+      }
+    }.bind(this))
     return (
       <div>
         {owner ? <Subheader documentId={this.state.resume.documentId}/>: null}
         <Banner header={this.state.resume.header} settings={this.state.settings} />
         <div className="sections">
-          <CareerGoal 
-            title='career goal'
-            section={careerGoalSections[0]}
-            owner={owner}
-            moveSection={this.moveSection} />
-          <Experience 
-            title='experience'
-            sections={experienceSections}
-            owner={owner} 
-            moveSection={this.moveSection} />
-          <Education 
-            title='education'
-            sections={educationSections} 
-            owner={owner} 
-            moveSection={this.moveSection} />
-          <Skill 
-            title='skills'
-            section={skillSections[0]} 
-            owner={owner} 
-            moveSection={this.moveSection} />
+          {sections}
         </div>
       </div>
     );
