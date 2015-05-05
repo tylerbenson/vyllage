@@ -2,200 +2,190 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Welcome to Vyllage | Make a Difference</title>
-	<base href="." th:href="@{/}" />
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	
-	<link rel="stylesheet" href="css/homepage.css" />
-	<link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
-	<link href='http://fonts.googleapis.com/css?family=Raleway:400,300'
-		rel='stylesheet' type='text/css' />
-	<div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
+  <title>Welcome to Vyllage | Make a Difference</title>
+  <base href="." th:href="@{/}" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="css/homepage.css" />
+  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
+  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
+  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body>
-	<div id="about" class="college section">
-		<div class="content">
-			<div class="nav">
-				<div class="logo">
-					<img src="images/logo-orange.png" alt="Vyllage Logo" /> <span>Vyllage</span>
-				</div>
-				<ul class="links">
-					<li><a href="#how-it-works">How it works</a></li>
-					<li><a href="/">Colleges</a></li>
-					<li><a href="/students">Students</a></li>
-					<li><a href="/login">Login</a></li>
-					<li><a href="mailto:hello@vyllage.com?subject=Demo Request"
+  <div id="about" class="college section">
+    <div class="content">
+      <div class="nav">
+        <div class="logo">
+          <img src="images/logo-orange.png" alt="Vyllage Logo" />
+          <span>Vyllage</span>
+        </div>
+        <ul class="links">
+          <li><a href="#how-it-works">How it works</a></li>
+          <li><a href="/">Colleges</a></li>
+          <li><a href="/students">Students</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="mailto:hello@vyllage.com?subject=Demo Request"
 						class="sign-up">Request a demo</a></li>
-				</ul>
-			</div>
-			<h1>
-				Success is a <br /> community effort
-			</h1>
-			<p>The first people analytics platform for higher education.</p>
-			<a href="mailto:hello@vyllage.com?subject=Demo Request"
-				class="button">Request a demo</a> <a href="#how-it-works" id="caret">
-				<img src="/images/caret.png" alt="Learn More" />
-			</a>
-		</div>
-	</div>
-	<div id="how-it-works" class="section">
-		<div class="content">
-			<h1>How does it work?</h1>
-			<p>We turn the resume into the starting point for launching
-				students’ career discussions with advisors, professors, alumni, and
-				fellow classmates. As students progress through their program, they
-				improve their resumes along the way.</p>
-			<ul>
-				<li>
+        </ul>
+      </div>
+      <h1>
+        Success is a
+        <br /> community effort
+      </h1>
+      <p>The first people analytics platform for higher education.</p>
+      <a href="mailto:hello@vyllage.com?subject=Demo Request" class="button">Request a demo</a>
+      <a href="#how-it-works" id="caret">
+        <img src="/images/caret.png" alt="Learn More" />
+      </a>
+    </div>
+  </div>
+  <div id="how-it-works" class="section">
+    <div class="content">
+      <h1>How does it work?</h1>
+      <p>We turn the resume into the starting point for launching students’ career discussions with advisors, professors, alumni,
+        and fellow classmates. As students progress through their program, they improve their resumes along the way.</p>
+      <ul>
+        <li>
 					<div class="number">1</div>
 					<h2>Serve</h2>
 					<p>Decentralize your college career service process, so
 						students begin working on their resumes and career discussions the
 						first day of class.</p>
 				</li>
-				<li>
+        <li>
 					<div class="number">2</div>
 					<h2>Follow</h2>
 					<p>Monitor alumni career progress, as they grow in their fields
 						and update their resumes, allowing students to self report
 						information.</p>
 				</li>
-				<li>
+        <li>
 					<div class="number">3</div>
 					<h2>Grow</h2>
 					<p>Use the first organic lead generation tool for higher
 						education to grow your campus from your best source, your current
 						students.</p>
 				</li>
-			</ul>
-		</div>
-	</div>
+      </ul>
+    </div>
+  </div>
 
-	<div id="serve" class="feature section">
-		<div class="content">
-			<div class="text">
-				<h1>Career Service Success Leads to Happier Students</h1>
-				<p class="spiel">Bring your entire college community into the
-					career service process. With a decentralized and integrated
-					approach to career services, students begin their career service
-					process the first day of class and move a step closer with every
-					class they take.</p>
-				<p class="spiel">Assisting your students in having successful
-					career outcomes is an essential long-term growth strategy. Our
-					platform provides your college with a cost-effective career service
-					model to equally support your onsite or online students</p>
-			</div>
-			<div class="image">
-				<img src="images/screenshot-1.png" alt="Build" />
-			</div>
-		</div>
-	</div>
+  <div id="serve" class="feature section">
+    <div class="content">
+      <div class="text">
+        <h1>Career Service Success Leads to Happier Students</h1>
+        <p class="spiel">Bring your entire college community into the career service process. With a decentralized and integrated approach
+          to career services, students begin their career service process the first day of class and move a step closer with
+          every class they take.</p>
+        <p class="spiel">Assisting your students in having successful career outcomes is an essential long-term growth strategy. Our platform
+          provides your college with a cost-effective career service model to equally support your onsite or online students</p>
+      </div>
+      <div class="image">
+        <img src="images/screenshot-1.png" alt="Build" />
+      </div>
+    </div>
+  </div>
 
-	<div id="follow" class="feature section">
-		<div class="content">
-			<div class="text">
-				<h1>Meaningful Long-term Tool for Alumni</h1>
-				<p class="spiel">After graduation, alumni can continue to
-					access, update, and collaborate on their resume. As alumni update
-					their resumes, you are able to follow their progress, and continue
-					to assist them.</p>
-				<p class="spiel">As your alumni update their resume, we provide
-					you with the tracking tools you need to report statistics to
-					prospective students, accreditation committees, or regulators.</p>
-			</div>
-			<div class="image">
-				<img src="images/screenshot-2.png" alt="Build" />
-			</div>
-		</div>
-	</div>
+  <div id="follow" class="feature section">
+    <div class="content">
+      <div class="text">
+        <h1>Meaningful Long-term Tool for Alumni</h1>
+        <p class="spiel">After graduation, alumni can continue to access, update, and collaborate on their resume. As alumni update their
+          resumes, you are able to follow their progress, and continue to assist them.</p>
+        <p class="spiel">As your alumni update their resume, we provide you with the tracking tools you need to report statistics to prospective
+          students, accreditation committees, or regulators.</p>
+      </div>
+      <div class="image">
+        <img src="images/screenshot-2.png" alt="Build" />
+      </div>
+    </div>
+  </div>
 
-	<div id="grow" class="feature section">
-		<div class="content">
-			<div class="text">
-				<h1>Long-term Campus Growth through Referrals</h1>
-				<p class="spiel">The first student referral platform to help you
-					achieve 100% organic growth. 92% of people trust recommendations
-					from friends and family above all other forms of advertising.</p>
-				<p class="spiel">Our personalized career education platform
-					focuses on servicing the individual needs of students, so that they
-					can help provide additional growth to your institution.</p>
-				<p class="spiel">By focusing on helping students work towards
-					their career goals, students can help you achieve your enrollment
-					goals. Some of your students are already doing this. Our unique
-					technology can leverage all your students to assist in your campus
-					success.</p>
-			</div>
-			<div class="image">
-				<img src="images/screenshot-3.png" alt="Build" />
-			</div>
-		</div>
-	</div>
+  <div id="grow" class="feature section">
+    <div class="content">
+      <div class="text">
+        <h1>Long-term Campus Growth through Referrals</h1>
+        <p class="spiel">The first student referral platform to help you achieve 100% organic growth. 92% of people trust recommendations
+          from friends and family above all other forms of advertising.</p>
+        <p class="spiel">Our personalized career education platform focuses on servicing the individual needs of students, so that they can
+          help provide additional growth to your institution.</p>
+        <p class="spiel">By focusing on helping students work towards their career goals, students can help you achieve your enrollment goals.
+          Some of your students are already doing this. Our unique technology can leverage all your students to assist in
+          your campus success.
+        </p>
+      </div>
+      <div class="image">
+        <img src="images/screenshot-3.png" alt="Build" />
+      </div>
+    </div>
+  </div>
 
-	<div id="sign-up">
-		<div class="content">
-			Learn more about how Vyllage can help your students. <a
-				href="/students">Click here.</a>
-		</div>
-	</div>
+  <div id="sign-up">
+    <div class="content">
+      Learn more about how Vyllage can help your students. <a href="/students">Click here.</a>
+    </div>
+  </div>
 
-	<div id="footer" class="section">
-		<div class="content">
-			<div class="nav">
-				<div class="logo">
-					<img src="images/logo-white.png" alt="Vyllage Logo" /> <span>Vyllage</span>
-				</div>
-				<ul class="links">
-					<li><a href="#how-it-works">How it works</a></li>
-					<li><a href="/">Colleges</a></li>
-					<li><a href="/students">Students</a></li>
-					<li><a href="/login">Login</a></li>
-					<li><a href="mailto:hello@vyllage.com?subject=Demo Request"
+  <div id="footer" class="section">
+    <div class="content">
+      <div class="nav">
+        <div class="logo">
+          <img src="images/logo-white.png" alt="Vyllage Logo" />
+          <span>Vyllage</span>
+        </div>
+        <ul class="links">
+          <li><a href="#how-it-works">How it works</a></li>
+          <li><a href="/">Colleges</a></li>
+          <li><a href="/students">Students</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="mailto:hello@vyllage.com?subject=Demo Request"
 						class="sign-up">Request a demo</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<script togglz:active="ZOPIM_MESSAGE_CLIENT" type="text/javascript">
-		window.$zopim || (function(d, s) {
-			var z = $zopim = function(c) {
-				z._.push(c)
-			}, $ = z.s = d.createElement(s), e = d.getElementsByTagName(s)[0];
-			z.set = function(o) {
-				z.set._.push(o)
-			};
-			z._ = [];
-			z.set._ = [];
-			$.async = !0;
-			$.setAttribute("charset", "utf-8");
-			$.src = "//v2.zopim.com/?2yTp08ZLPRPIeR1PSlNmH7ZXuZ7Hitop";
-			z.t = +new Date;
-			$.type = "text/javascript";
-			e.parentNode.insertBefore($, e)
-		})(document, "script");
-	</script>
-	<!--End of Zopim Live Chat Script-->
-	<script togglz:active="GOOGLE_ANALYTICS">
-		(function(i, s, o, g, r, a, m) {
-			i['GoogleAnalyticsObject'] = r;
-			i[r] = i[r] || function() {
-				(i[r].q = i[r].q || []).push(arguments)
-			}, i[r].l = 1 * new Date();
-			a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-			a.async = 1;
-			a.src = g;
-			m.parentNode.insertBefore(a, m)
-		})(window, document, 'script',
-				'//www.google-analytics.com/analytics.js', 'ga');
-		ga('create', 'UA-62026590-1', {
-			'userId' : document.getElementById('meta_user').getAttribute(
-					'content')
-		});
-		ga('send', 'pageview');
-	</script>
-	<div togglz:active="NEW_RELIC"
-		th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script togglz:active="ZOPIM_MESSAGE_CLIENT" type="text/javascript">
+  window.$zopim || (function(d, s) {
+    var z = $zopim = function(c) {
+        z._.push(c)
+      },
+      $ = z.s = d.createElement(s),
+      e = d.getElementsByTagName(s)[0];
+    z.set = function(o) {
+      z.set._.push(o)
+    };
+    z._ = [];
+    z.set._ = [];
+    $.async = !0;
+    $.setAttribute("charset", "utf-8");
+    $.src = "//v2.zopim.com/?2yTp08ZLPRPIeR1PSlNmH7ZXuZ7Hitop";
+    z.t = +new Date;
+    $.type = "text/javascript";
+    e.parentNode.insertBefore($, e)
+  })(document, "script");
+  </script>
+  <!--End of Zopim Live Chat Script-->
+  <script togglz:active="GOOGLE_ANALYTICS">
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script',
+    '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-62026590-1', {
+    'userId': document.getElementById('meta_user').getAttribute(
+      'content')
+  });
+  ga('send', 'pageview');
+  </script>
+  <div togglz:active="NEW_RELIC" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
 </body>
 
 </html>
