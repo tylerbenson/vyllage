@@ -82,7 +82,7 @@ gulp.task('prettify-html', function () {
         indentSize: 2,
         maxPreserveNewlines: 5,
         preserveNewlines: true,
-        unformatted: ["a", "sub", "sup", "b", "i", "u"],
+        unformatted: ["a", "sub", "sup", "b", "i", "u", "li"],
         wrapLineLength: 120
       }
     }))

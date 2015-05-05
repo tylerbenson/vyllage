@@ -48,7 +48,6 @@ public class AdminUserController {
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String admin(@AuthenticationPrincipal User user, Model model) {
-
 		prepareBatch(model, user);
 		return "adminAccountManagement";
 	}

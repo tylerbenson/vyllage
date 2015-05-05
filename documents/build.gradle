@@ -9,6 +9,7 @@ dependencies {
 	compile parent.javascriptProjects.findAll { it != project}
 	
 	compile project(':user-common')
+	compile project(':togglz')
 	
 //	compile 'org.springframework.security:spring-security-acl'
 	

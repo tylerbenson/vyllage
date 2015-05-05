@@ -55,18 +55,21 @@ public class ErrorHandlerController implements ErrorController {
 
 		Map<String, Object> body = getErrorAttributes(request, true);
 
-		if (displayWebError
-				&& currentUser != null
-				&& currentUser.getAuthorities() != null
-				&& currentUser
-						.getAuthorities()
-						.stream()
-						.anyMatch(
-								a -> authority.equalsIgnoreCase(a
-										.getAuthority())))
+		if (currentUser != null) {
+
+			if (displayWebError
+					&& currentUser != null
+					&& currentUser.getAuthorities() != null
+					&& currentUser.getAuthorities()
+							.stream()
+							.anyMatch(
+									a -> authority.equalsIgnoreCase(a
+											.getAuthority())))
+				body.put("displayWebError", true);
+			else
+				body.put("displayWebError", false);
+		} else
 			body.put("displayWebError", true);
-		else
-			body.put("displayWebError", false);
 
 		return new ModelAndView("error", body);
 	}

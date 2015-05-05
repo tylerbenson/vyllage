@@ -11,7 +11,7 @@
   <link rel="shortcut icon" type="image/png" href="/images/logo-orange.png" />
 
   <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
-  <div th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
+  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body class="error">
@@ -27,7 +27,9 @@
       </header>
       <div class="message">
         <h1>Your session has expired.</h1>
-        <p>Please go back to the <a href="/login">login page</a> and enter your credentials.</p>
+        <p>
+          Please go back to the <a href="/login">login page</a> and enter your credentials.
+        </p>
       </div>
     </form>
   </div>
@@ -39,32 +41,24 @@
       </div>
       <nav>
         <ul>
-          <li><a href="">Help</a>
-          </li>
-          <li><a href="">Careers</a>
-          </li>
-          <li><a href="">Terms</a>
-          </li>
-          <li><a href="">Privacy</a>
-          </li>
-          <li><a href="">Contact Us</a>
-          </li>
+          <li><a href="">Help</a></li>
+          <li><a href="">Careers</a></li>
+          <li><a href="">Terms</a></li>
+          <li><a href="">Privacy</a></li>
+          <li><a href="">Contact Us</a></li>
         </ul>
       </nav>
     </div>
   </footer>
-  <!--Start of Zopim Live Chat Script-->
-  <script type="text/javascript">
+  <script togglz:active="ZOPIM_MESSAGE_CLIENT" type="text/javascript">
   window.$zopim || (function(d, s) {
     var z = $zopim = function(c) {
         z._.push(c)
       },
-      $ = z.s =
-      d.createElement(s),
+      $ = z.s = d.createElement(s),
       e = d.getElementsByTagName(s)[0];
     z.set = function(o) {
-      z.set.
-      _.push(o)
+      z.set._.push(o)
     };
     z._ = [];
     z.set._ = [];
@@ -72,28 +66,30 @@
     $.setAttribute("charset", "utf-8");
     $.src = "//v2.zopim.com/?2yTp08ZLPRPIeR1PSlNmH7ZXuZ7Hitop";
     z.t = +new Date;
-    $.
-    type = "text/javascript";
+    $.type = "text/javascript";
     e.parentNode.insertBefore($, e)
   })(document, "script");
   </script>
   <!--End of Zopim Live Chat Script-->
-  <script>
+  <script togglz:active="GOOGLE_ANALYTICS">
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function() {
       (i[r].q = i[r].q || []).push(arguments)
     }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
+    a = s.createElement(o), m = s.getElementsByTagName(o)[0];
     a.async = 1;
     a.src = g;
     m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-  ga('create', 'UA-62026590-1', 'auto');
+  })(window, document, 'script',
+    '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-62026590-1', {
+    'userId': document.getElementById('meta_user').getAttribute(
+      'content')
+  });
   ga('send', 'pageview');
   </script>
-  <div th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
+  <div togglz:active="NEW_RELIC" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
 </body>
 
 </html>
