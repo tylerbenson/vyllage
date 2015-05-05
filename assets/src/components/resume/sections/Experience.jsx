@@ -35,7 +35,7 @@ var Experience = React.createClass({
       sectionNodes = <p className='content empty'>No experience added yet</p>;
     }
     return (
-      <div className='section'>
+      <div className='section' {...this.dropTargetFor('section')}>
         <div className='container'>
           <MoveButton {...this.dragSourceFor('section')} />
           <Header title='Experience' type='experience' owner={this.props.owner} />

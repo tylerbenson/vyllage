@@ -37,7 +37,7 @@ var Education = React.createClass({
       sectionNodes = <p className='empty content'>No education added yet</p>
     }
     return (
-      <div className='section'>
+      <div className='section' {...this.dropTargetFor('section')}>
         <div className='container'>
           <MoveButton {...this.dragSourceFor('section')} />
           <Header title='Education' type='experience' owner={this.props.owner}/>
