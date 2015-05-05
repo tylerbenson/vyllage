@@ -1,9 +1,11 @@
 package documents.services;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -238,9 +240,24 @@ public class DocumentService {
 	public void orderDocumentSections(Long documentId,
 			List<Long> documentSectionIds) {
 
+		// removing duplicates
+		Set<Long> set = new HashSet<>(documentSectionIds);
+		documentSectionIds.clear();
+		documentSectionIds.addAll(set);
+
 		try {
 			List<DocumentSection> documentSections = documentSectionRepository
 					.getDocumentSections(documentId);
+
+			if (documentSectionIds.size() != documentSections.size())
+				throw new IllegalArgumentException(
+						"The amount of section ids does not match the number of existing sections in the database.");
+
+			if (!documentSections.stream().map(ds -> ds.getSectionId())
+					.collect(Collectors.toList())
+					.containsAll(documentSectionIds))
+				throw new IllegalArgumentException(
+						"The sections ids do not match the existing sections in the database.");
 
 			documentSections.stream().forEachOrdered(
 					s -> logger.info("Section " + s.getSectionId()

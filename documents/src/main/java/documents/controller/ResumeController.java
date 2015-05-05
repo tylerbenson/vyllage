@@ -346,4 +346,17 @@ public class ResumeController {
 		return map;
 	}
 
+	@ExceptionHandler(value = { IllegalArgumentException.class })
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public @ResponseBody Map<String, Object> handleIllegalArgumentException(
+			Exception ex) {
+		Map<String, Object> map = new HashMap<>();
+		if (ex.getCause() != null) {
+			map.put("error", ex.getCause().getMessage());
+		} else {
+			map.put("error", ex.getMessage());
+		}
+		return map;
+	}
+
 }

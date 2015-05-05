@@ -20,7 +20,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import user.common.User;
-import accounts.repository.UserNotFoundException;
 import accounts.service.UserService;
 
 @Controller
@@ -52,9 +51,7 @@ public class ErrorHandlerController implements ErrorController {
 
 	@RequestMapping(value = PATH, produces = "text/html")
 	public ModelAndView errorHtml(HttpServletRequest request,
-			@AuthenticationPrincipal User user) throws UserNotFoundException {
-
-		User currentUser = userService.getUser(user.getUserId());
+			@AuthenticationPrincipal User currentUser) {
 
 		Map<String, Object> body = getErrorAttributes(request, true);
 
