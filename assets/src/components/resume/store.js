@@ -26,7 +26,8 @@ module.exports = Reflux.createStore({
         middleName: '',
         lastName: ''
       },
-      sections: []
+      sections: [],
+      sectionOrder: ['Career Goal', 'Experience', 'Education', 'Skills']
     }; 
   },
   getMaxSectionPostion: function () {
@@ -131,6 +132,10 @@ module.exports = Reflux.createStore({
         this.resume.sections.splice(index, 1);
         this.trigger(this.resume);
       }.bind(this));           
+  },
+  onUpdateSectionOrder: function (order) {
+    this.resume.sectionOrder = order;
+    this.trigger(this.resume);
   },
   onGetComments: function (sectionId) {
     var url = urlTemplate

@@ -17,6 +17,16 @@ var ResumeEditor = React.createClass({
   componentWillMount: function () {
     actions.getResume();
   },
+  moveSection: function (title, afterTitle) {
+    const { sectionOrder } = this.state.resume;
+    const section = sectionOrder.filter(c => c === title)[0];
+    const afterSection = sectionOrder.filter(c => c === afterTitle)[0];
+    const sectionIndex = sectionOrder.indexOf(section);
+    const afterIndex = sectionOrder.indexOf(afterSection);
+    sectionOrder.splice(sectionIndex, 1);
+    sectionOrder.splice(afterIndex, 0, section);
+    actions.updateSectionOrder(sectionOrder);
+  },
   render: function () {
     var owner=this.state.resume.header.owner;
     var careerGoalSections = filter(this.state.resume.sections, {title: 'career goal'});

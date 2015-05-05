@@ -10,6 +10,7 @@ module.exports = Reflux.createActions([
   'postSection',
   'putSection',
   'deleteSection',
+  'updateSectionOrder',
   // comments
   'getComments',
   'postComment',
