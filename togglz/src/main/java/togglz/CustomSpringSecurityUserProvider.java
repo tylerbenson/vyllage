@@ -1,6 +1,5 @@
 package togglz;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +20,7 @@ public class CustomSpringSecurityUserProvider implements UserProvider {
 	private final List<String> featureAdminAuthorities;
 
 	public CustomSpringSecurityUserProvider(String... authorities) {
-		featureAdminAuthorities = new ArrayList<>(Arrays.asList(authorities));
+		featureAdminAuthorities = Arrays.asList(authorities);
 	}
 
 	@Override
