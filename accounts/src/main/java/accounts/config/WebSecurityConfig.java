@@ -27,7 +27,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/link/advice/**", "/account/reset-password",
-						"/account/reset-password-change/**").permitAll();
+						"/account/reset-password-change/**",
+						"/facebook-login/**", "/facebook/**",
+						"/facebookConnect/**", "/facebookConnected/**",
+						"/connect/**", "/hello/**").permitAll();
 
 		// disabling CSRF for the togglz console.
 		http.csrf().requireCsrfProtectionMatcher(
