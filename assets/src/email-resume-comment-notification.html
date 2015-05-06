@@ -20,7 +20,7 @@
 
       <p style="color: #555; font-family: Raleway,'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 15px; font-weight: 300; line-height: 1.4; margin: 1.25em 0;">A Vyllager sent you a message!</p>
  	  
- 	  <p class="blockquote" th:text="${senderName}" style="border-left: #e1e1e1 solid 3px; color: #555; font-family: Raleway,'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 15px; font-style: italic; font-weight: 300; line-height: 1.5; margin: 1.25em 0; padding: .25em .25em .25em 2em;"></p>
+ 	  <p class="blockquote" th:if="${senderName} != null" th:text="${senderName}" style="border-left: #e1e1e1 solid 3px; color: #555; font-family: Raleway,'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 15px; font-style: italic; font-weight: 300; line-height: 1.5; margin: 1.25em 0; padding: .25em .25em .25em 2em;"></p>
       <p class="blockquote" th:text="${comment}" style="border-left: #e1e1e1 solid 3px; color: #555; font-family: Raleway,'Helvetica Neue',Helvetica,Arial,sans-serif; font-size: 15px; font-style: italic; font-weight: 300; line-height: 1.5; margin: 1.25em 0; padding: .25em .25em .25em 2em;"></p>
 
     </div>
