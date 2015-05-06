@@ -1,6 +1,7 @@
 package documents.services;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import email.EmailBuilder;
 
 @Service
 public class NotificationService {
+
+	private final Logger logger = Logger.getLogger(NotificationService.class
+			.getName());
 
 	private static final String EMAIL_RESUME_COMMENT_NOTIFICATION = "email-resume-comment-notification";
 
@@ -47,29 +51,40 @@ public class NotificationService {
 	 *            the comment
 	 * 
 	 */
-	public void sendEmailNewCommentNotification(User user, AccountContact accountContact,
-			Comment comment) {
+	public void sendEmailNewCommentNotification(User user,
+			AccountContact accountContact, Comment comment) {
 
-		try {
-			emailBuilder
-					.from(environment.getProperty("email.from", "no-reply@vyllage.com"))
-					.fromUserName(
-							environment.getProperty("email.from.userName",
-									"Chief of Vyllage"))
-					.to(accountContact.getEmail())
-					.subject(SUBJECT)
-					.addTemplateVariable("comment", comment.getCommentText())
-					.addTemplateVariable("recipientName",
-							accountContact.getFirstName())
-					.addTemplateVariable("senderName", user.getFirstName())
-					.templateName(EMAIL_RESUME_COMMENT_NOTIFICATION)
-					.setNoHtmlMessage("A user has commented your resume.")
-					.send();
+		(new Thread(new Runnable() {
 
-		} catch (EmailException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			@Override
+			public void run() {
+				try {
+					logger.info("Sending notification email.");
+					emailBuilder
+							.from(environment.getProperty("email.from",
+									"no-reply@vyllage.com"))
+							.fromUserName(
+									environment.getProperty(
+											"email.from.userName",
+											"Chief of Vyllage"))
+							.to(accountContact.getEmail())
+							.subject(SUBJECT)
+							.addTemplateVariable("comment",
+									comment.getCommentText())
+							.addTemplateVariable("recipientName",
+									accountContact.getFirstName())
+							.addTemplateVariable("senderName",
+									user.getFirstName())
+							.templateName(EMAIL_RESUME_COMMENT_NOTIFICATION)
+							.setNoHtmlMessage(
+									"A user has commented your resume.").send();
+				} catch (EmailException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		})).start();
 
 	}
 }

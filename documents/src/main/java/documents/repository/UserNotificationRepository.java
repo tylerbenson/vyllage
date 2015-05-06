@@ -14,8 +14,9 @@ import documents.model.UserNotification;
 
 @Repository
 public class UserNotificationRepository {
-	private final Logger logger = Logger.getLogger(CommentRepository.class
-			.getName());
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger
+			.getLogger(UserNotificationRepository.class.getName());
 
 	@Autowired
 	private DSLContext sql;
