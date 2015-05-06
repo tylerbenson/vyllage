@@ -36,6 +36,12 @@ public class NotificationService {
 
 	private String SUBJECT = "Vyllage notification";
 
+	/**
+	 * Retrieves a single user notification.
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	public Optional<UserNotification> getNotification(Long userId) {
 		return userNotificationRepository.get(userId);
 	}
@@ -54,37 +60,31 @@ public class NotificationService {
 	public void sendEmailNewCommentNotification(User user,
 			AccountContact accountContact, Comment comment) {
 
-		(new Thread(new Runnable() {
+		try {
+			logger.info("Sending notification email.");
+			emailBuilder
+					.from(environment.getProperty("email.from",
+							"no-reply@vyllage.com"))
+					.fromUserName(
+							environment.getProperty("email.from.userName",
+									"Chief of Vyllage"))
+					.to(accountContact.getEmail())
+					.subject(SUBJECT)
+					.addTemplateVariable("comment", comment.getCommentText())
+					.addTemplateVariable("recipientName",
+							accountContact.getFirstName())
+					.addTemplateVariable("senderName", user.getFirstName())
+					.templateName(EMAIL_RESUME_COMMENT_NOTIFICATION)
+					.setNoHtmlMessage("A user has commented your resume.")
+					.send();
 
-			@Override
-			public void run() {
-				try {
-					logger.info("Sending notification email.");
-					emailBuilder
-							.from(environment.getProperty("email.from",
-									"no-reply@vyllage.com"))
-							.fromUserName(
-									environment.getProperty(
-											"email.from.userName",
-											"Chief of Vyllage"))
-							.to(accountContact.getEmail())
-							.subject(SUBJECT)
-							.addTemplateVariable("comment",
-									comment.getCommentText())
-							.addTemplateVariable("recipientName",
-									accountContact.getFirstName())
-							.addTemplateVariable("senderName",
-									user.getFirstName())
-							.templateName(EMAIL_RESUME_COMMENT_NOTIFICATION)
-							.setNoHtmlMessage(
-									"A user has commented your resume.").send();
-				} catch (EmailException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			userNotificationRepository.save(new UserNotification(accountContact
+					.getUserId()));
 
-			}
-		})).start();
+		} catch (EmailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 }

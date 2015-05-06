@@ -2,6 +2,9 @@ package documents.repository;
 
 import static documents.domain.tables.UserNotification.USER_NOTIFICATION;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -31,5 +34,18 @@ public class UserNotificationRepository {
 			return Optional.of(new UserNotification(userNotificationRecord
 					.getUserId(), userNotificationRecord.getDateCreated()
 					.toLocalDateTime()));
+	}
+
+	public void save(UserNotification userNotification) {
+		sql.delete(USER_NOTIFICATION)
+				.where(USER_NOTIFICATION.USER_ID.eq(userNotification
+						.getUserId())).execute();
+
+		UserNotificationRecord newRecord = sql.newRecord(USER_NOTIFICATION);
+
+		newRecord.setUserId(userNotification.getUserId());
+		newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
+				.of("UTC"))));
+		newRecord.store();
 	}
 }

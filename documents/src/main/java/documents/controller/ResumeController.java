@@ -1,8 +1,6 @@
 package documents.controller;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -312,16 +310,14 @@ public class ResumeController {
 				.getNotification(document.getUserId());
 
 		// check that we have not sent a message today
-		if (!notification.isPresent()
-				|| LocalDateTime.now(ZoneId.of("UTC")).getDayOfMonth() != notification
-						.get().getDateCreated().getDayOfMonth()) {
+		if (!notification.isPresent() || !notification.get().wasSentToday()) {
 			List<AccountContact> recipient = accountService
 					.getContactDataForUsers(request,
 							Arrays.asList(document.getUserId()));
 
 			// if we have not, send it
-			notificationService.sendEmailNewCommentNotification(user, recipient.get(0),
-					comment);
+			notificationService.sendEmailNewCommentNotification(user,
+					recipient.get(0), comment);
 		}
 
 		return documentService.saveComment(comment);
