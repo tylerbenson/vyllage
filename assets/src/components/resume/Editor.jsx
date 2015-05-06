@@ -37,24 +37,28 @@ var ResumeEditor = React.createClass({
     var sections = this.state.resume.sectionOrder.map(function (title, index) {
       if (title === 'career goal') {
         return <CareerGoal 
+            key={title}
             title='career goal'
             section={careerGoalSections[0]}
             owner={owner}
             moveSection={this.moveSection} />;
       } else if (title === 'experience') {
         return <Experience 
+            key={title}
             title='experience'
             sections={experienceSections}
             owner={owner} 
             moveSection={this.moveSection} />;
       } else if (title === 'education') {
         return <Education 
+            key={title}
             title='education'
             sections={educationSections} 
             owner={owner} 
             moveSection={this.moveSection} />;
       } else {
         return <Skill 
+            key={title}
             title='skills'
             section={skillSections[0]} 
             owner={owner} 
