@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.togglz.console.TogglzConsoleServlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +24,9 @@ public class BeansConfiguration {
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private SpringTemplateEngine templateEngine;
+
 	@Bean
 	public ObjectMapper objectMapper() {
 		return new ObjectMapper();
@@ -34,16 +38,11 @@ public class BeansConfiguration {
 		return restTemplate;
 	}
 
-	@Bean(name = "accounts.mailService")
-	public MailService mailService() {
-		MailService mailService = new MailService();
-		return mailService;
-	}
-
 	@Bean(name = "accounts.emailBuilder")
-	@Autowired
-	public EmailBuilder emailBuilder(Environment environment) {
-		EmailBuilder emailBuilder = new EmailBuilder(mailService(), environment);
+	public EmailBuilder emailBuilder(SpringTemplateEngine templateEngine,
+			Environment environment) {
+		EmailBuilder emailBuilder = new EmailBuilder(new MailService(
+				templateEngine), environment);
 
 		return emailBuilder;
 	}

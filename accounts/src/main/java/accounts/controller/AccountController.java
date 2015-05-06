@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -75,6 +76,7 @@ public class AccountController {
 	private ObjectMapper mapper;
 
 	@Autowired
+	@Qualifier(value = "accounts.emailBuilder")
 	private EmailBuilder emailBuilder;
 
 	/**

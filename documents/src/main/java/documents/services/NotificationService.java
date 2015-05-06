@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import user.common.User;
@@ -20,6 +21,7 @@ public class NotificationService {
 	private UserNotificationRepository userNotificationRepository;
 
 	@Autowired
+	@Qualifier(value = "documents.emailBuilder")
 	private EmailBuilder emailBuilder;
 
 	private String SUBJECT = "Vyllage notification";
