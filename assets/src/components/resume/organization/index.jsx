@@ -8,14 +8,25 @@ var Textarea = require('react-textarea-autosize');
 var Datepicker = require('../../datepicker');
 var assign = require('lodash.assign')
 var MoveButton = require('../../buttons/move');
+var { DragDropMixin } = require('react-dnd');
+var {dragSource, dropTarget} = require('../sections/subsectionDragDrop');
 
 var Organization = React.createClass({
+  mixins: [DragDropMixin],
   getInitialState: function () {
     return {
       section: assign({}, this.props.section),
       uiEditMode: this.props.section.newSection,
       newSection: this.props.section.newSection
     };
+  },
+  statics: {
+    configureDragDrop(register) {
+      register('subsection', {
+        dragSource,
+        dropTarget
+      });
+    }
   },
   componentWillReceiveProps: function (nextProps) {
     this.setState({
@@ -66,8 +77,8 @@ var Organization = React.createClass({
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
     return (
-      <div className ="subsection">
-        <MoveButton />
+      <div className ="subsection" {...this.dropTargetFor('subsection')}>
+        <MoveButton {...this.dragSourceFor('subsection')} />
         <div className='header'>
           <div className='title'>
             <h2>

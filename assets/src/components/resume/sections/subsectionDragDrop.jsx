@@ -10,7 +10,7 @@ module.exports = {
   },
   dropTarget: {
     over: function (component, item) {
-      component.props.moveSection(item.sectionPosition, component.props.sectionPosition);
+      component.props.moveSubSection(item.sectionPosition, component.props.sectionPosition);
     }
   }
 }
