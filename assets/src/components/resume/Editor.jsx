@@ -45,7 +45,8 @@ var ResumeEditor = React.createClass({
     var skillSections = filter(this.state.resume.sections, {title: 'skills'});
     var experienceSections = sortby(filter(this.state.resume.sections, {title: 'experience'}), 'sectionPostion').reverse();
     var educationSections = sortby(filter(this.state.resume.sections, {title: 'education'}), 'sectionPostion').reverse();
-    var sections = this.state.resume.sectionOrder.map(function (title, index) {
+    var sectionOrder = this.state.resume.sectionOrder || [];
+    var sections = sectionOrder.map(function (title, index) {
       if (title === 'career goal') {
         return <CareerGoal 
             key={title}
