@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -35,9 +36,11 @@ import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
+import documents.model.UserNotification;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
+import documents.services.NotificationService;
 import documents.services.aspect.CheckReadAccess;
 import documents.services.aspect.CheckWriteAccess;
 
@@ -50,6 +53,9 @@ public class ResumeController {
 
 	@Autowired
 	private AccountService accountService;
+
+	@Autowired
+	private NotificationService notificationService;
 
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(ResumeController.class
@@ -289,19 +295,30 @@ public class ResumeController {
 			@RequestBody final Comment comment,
 			@AuthenticationPrincipal User user) {
 
-		Long userId = user.getUserId();
+		setCommentData(sectionId, comment, user);
 
-		comment.setUserId(userId);
+		// notification
+		Document document = null;
 
-		if (comment.getSectionId() == null)
-			comment.setSectionId(sectionId);
+		try {
+			document = documentService.getDocument(documentId);
+		} catch (ElementNotFoundException e) {
+			e.printStackTrace();
+		}
 
-		List<AccountNames> names = accountService.getNamesForUsers(
-				Arrays.asList(userId), request);
+		Optional<UserNotification> notification = notificationService
+				.getNotification(document.getUserId());
 
-		if (names != null && !names.isEmpty())
-			comment.setUserName(names.get(0).getFirstName() + " "
-					+ names.get(0).getLastName());
+		// check that we have not sent a message today
+		if (!notification.isPresent() || !notification.get().wasSentToday()) {
+			List<AccountContact> recipient = accountService
+					.getContactDataForUsers(request,
+							Arrays.asList(document.getUserId()));
+
+			// if we have not, send it
+			notificationService.sendEmailNewCommentNotification(user,
+					recipient.get(0), comment);
+		}
 
 		return documentService.saveComment(comment);
 	}
@@ -311,12 +328,27 @@ public class ResumeController {
 	public void saveCommentsForComment(@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@PathVariable final Long commentId,
-			@RequestBody final Comment comment) {
+			@RequestBody final Comment comment,
+			@AuthenticationPrincipal User user) {
+
+		setCommentData(sectionId, comment, user);
 
 		if (comment.getOtherCommentId() == null)
 			comment.setOtherCommentId(commentId);
 
 		documentService.saveComment(comment);
+	}
+
+	private void setCommentData(final Long sectionId, final Comment comment,
+			User user) {
+		if (comment.getUserId() == null)
+			comment.setUserId(user.getUserId());
+
+		if (comment.getSectionId() == null)
+			comment.setSectionId(sectionId);
+
+		if (comment.getUserName() == null || comment.getUserName().isEmpty())
+			comment.setUserName(user.getFirstName() + " " + user.getLastName());
 	}
 
 	@ExceptionHandler(value = { JsonProcessingException.class,

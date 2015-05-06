@@ -5,30 +5,28 @@ import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 public class MailService {
+	
+	//@Value("${email.host}")
+	private String hostName = "smtp.zoho.com";
 
-	@Value("${email.host}")
-	private String hostName;
+	//@Value("${email.port}")
+	private int port = 465;
 
-	@Value("${email.port}")
-	private int port;
+	//@Value("${email.userName}")
+	private String userName = "no-reply@vyllage.com";
 
-	@Value("${email.userName}")
-	private String userName;
+	//@Value("${email.password}")
+	private String password = "vyllage15";
 
-	@Value("${email.password}")
-	private String password;
-
-	@Value("${email.from}")
-	private String from;
-
-	@Autowired
 	private SpringTemplateEngine templateEngine;
+
+	public MailService(SpringTemplateEngine templateEngine) {
+		this.templateEngine = templateEngine;
+	}
 
 	/**
 	 * Sends a simple text mail.
