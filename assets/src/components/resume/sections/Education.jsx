@@ -28,7 +28,12 @@ var Education = React.createClass({
       sectionNodes = sections.map(function (section, index) {
         return (
           <div key={section.sectionId}>
-            <Organization section={section} placeholders={placeholders} owner={this.props.owner} />
+            <Organization 
+              section={section} 
+              placeholders={placeholders} 
+              owner={this.props.owner}
+              moveSubSection={this.props.moveSubSection} 
+            />
             <SectionFooter section={section} />
           </div>
         );
