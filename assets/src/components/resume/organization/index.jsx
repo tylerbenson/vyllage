@@ -9,7 +9,7 @@ var Datepicker = require('../../datepicker');
 var assign = require('lodash.assign')
 var MoveButton = require('../../buttons/move');
 var { DragDropMixin } = require('react-dnd');
-var {dragSource, dropTarget} = require('../sections/subsectionDragDrop');
+var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
 var SectionFooter = require('../sections/Footer');
 
 var Organization = React.createClass({
