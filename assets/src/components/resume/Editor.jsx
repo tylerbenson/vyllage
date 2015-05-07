@@ -9,6 +9,8 @@ var CareerGoal = require('./sections/CareerGoal');
 var Experience = require('./sections/Experience');
 var Education = require('./sections/Education');
 var Skill = require('./sections/Skill');
+var Header = require('./sections/Header');
+var Section = require('./sections');
 var Banner = require('./banner');
 var sortby = require('lodash.sortby');
 
@@ -28,65 +30,50 @@ var ResumeEditor = React.createClass({
     actions.updateSectionOrder(sectionOrder);
     console.log(sectionOrder);
   },
-  moveSubSection: function (title, afterTitle) {
-    const { sectionOrder } = this.state.resume;
-    const section = sectionOrder.filter(c => c === title)[0];
-    const afterSection = sectionOrder.filter(c => c === afterTitle)[0];
-    const sectionIndex = sectionOrder.indexOf(section);
-    const afterIndex = sectionOrder.indexOf(afterSection);
-    sectionOrder.splice(sectionIndex, 1);
-    sectionOrder.splice(afterIndex, 0, section);
-    actions.updateSectionOrder(sectionOrder);
-    console.log(sectionOrder);
+  renderSections: function () {
+    var owner=this.state.resume.header.owner;
+    var sectionNodes = []
+    var subsectionNodes = [];
+    var sections = this.state.resume.sections || [];
+    var previousTitle = '';
+    sections.forEach(function (section, index) {
+      var subsectionNode = ( 
+        <Section
+          key={section.sectionId}
+          section={section}
+          owner={owner}
+        />  
+      );
+      
+      if (previousTitle === section.title) {
+        subsectionNodes.push(subsectionNode);
+      } else {
+        subsectionNodes = [subsectionNode];
+      }
+
+      if ((previousTitle !== section.title) || (sections.length-1 === index)) {
+        sectionNodes.push(
+          <div key={Math.random()} className='section'>
+            <div className='container'>
+              <Header title={section.title} type={section.type} owner={owner} />
+              {subsectionNodes}
+            </div>
+          </div>
+        );
+      }
+
+      previousTitle = section.title;
+    });
+    return sectionNodes;
   },
   render: function () {
     var owner=this.state.resume.header.owner;
-    var careerGoalSections = filter(this.state.resume.sections, {title: 'career goal'});
-    var skillSections = filter(this.state.resume.sections, {title: 'skills'});
-    var experienceSections = sortby(filter(this.state.resume.sections, {title: 'experience'}), 'sectionPostion').reverse();
-    var educationSections = sortby(filter(this.state.resume.sections, {title: 'education'}), 'sectionPostion').reverse();
-    var sectionOrder = this.state.resume.sectionOrder || [];
-    var sections = sectionOrder.map(function (title, index) {
-      if (title === 'career goal') {
-        return <CareerGoal 
-            key={title}
-            title='career goal'
-            section={careerGoalSections[0]}
-            owner={owner}
-            moveSection={this.moveSection} />;
-      } else if (title === 'experience') {
-        return <Experience 
-            key={title}
-            title='experience'
-            sections={experienceSections}
-            owner={owner} 
-            moveSection={this.moveSection} 
-            moveSubSection={this.moveSubSection} 
-            />;
-      } else if (title === 'education') {
-        return <Education 
-            key={title}
-            title='education'
-            sections={educationSections} 
-            owner={owner} 
-            moveSection={this.moveSection}
-            moveSubSection={this.moveSubSection}
-             />;
-      } else {
-        return <Skill 
-            key={title}
-            title='skills'
-            section={skillSections[0]} 
-            owner={owner} 
-            moveSection={this.moveSection} />;
-      }
-    }.bind(this))
     return (
       <div>
         {owner ? <Subheader documentId={this.state.resume.documentId}/>: null}
         <Banner header={this.state.resume.header} settings={this.state.settings} />
         <div className="sections">
-          {sections}
+          {this.renderSections()}
         </div>
       </div>
     );
