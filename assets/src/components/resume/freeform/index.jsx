@@ -71,9 +71,6 @@ var Freeform = React.createClass({
     return (
       <div className='section'>
         <div className='header'>
-          <div className='title'>
-            <h1>{this.props.title}</h1>
-          </div>
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: AddOrEditButton }
             {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: ''}
