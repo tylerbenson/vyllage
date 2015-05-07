@@ -90,7 +90,7 @@ var Freeform = React.createClass({
             ></Textarea>
           </div>
           <SectionFooter section={this.props.section} />
-          </div>: <p className='content empty'>No {this.props.title.toLowerCase()} added yet</p> }
+          </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
       </div>
     );
   }
