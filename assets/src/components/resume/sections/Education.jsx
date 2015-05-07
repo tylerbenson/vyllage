@@ -2,20 +2,8 @@ var React = require('react');
 var Header = require('./Header');
 var Organization = require('../organization');
 var SectionFooter = require('./Footer');
-var MoveButton = require('../../buttons/move');
-var  { DragDropMixin } = require('react-dnd');
-var {dragSource, dropTarget} = require('./sectionDragDrop');
 
 var Education = React.createClass({
-  mixins: [DragDropMixin],
-  statics: {
-    configureDragDrop(register) {
-      register('section', {
-        dragSource,
-        dropTarget
-      });
-    }
-  },
   render: function () {
     var placeholders = {
       role: "Degree",
@@ -32,7 +20,6 @@ var Education = React.createClass({
               section={section} 
               placeholders={placeholders} 
               owner={this.props.owner}
-              moveSubSection={this.props.moveSubSection} 
             />
             <SectionFooter section={section} />
           </div>
@@ -42,9 +29,8 @@ var Education = React.createClass({
       sectionNodes = <p className='empty content'>No education added yet</p>
     }
     return (
-      <div className='section' {...this.dropTargetFor('section')}>
+      <div className='section'>
         <div className='container'>
-          <MoveButton {...this.dragSourceFor('section')} />
           <Header title='Education' type='experience' owner={this.props.owner}/>
           {sectionNodes}
         </div>
