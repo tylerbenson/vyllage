@@ -1,12 +1,10 @@
 package user.common.social;
 
-import javax.inject.Inject;
-
 import org.springframework.social.facebook.api.Facebook;
 
 public class Social {
 
-	@Inject
+	// @Inject
 	private Facebook facebook;
 
 	public boolean isAuthorized() {

@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
-import user.common.social.Social;
 import user.common.social.SocialSessionEnum;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
@@ -60,8 +59,8 @@ public class DocumentLinkController {
 	@Autowired
 	private Encryptor linkEncryptor;
 
-	@Autowired
-	private Social social;
+	// @Autowired
+	// private Social social;
 
 	@Autowired
 	private SignInUtil signInUtil;
