@@ -10,6 +10,8 @@ import user.common.User;
 import accounts.model.account.ResetPasswordLink;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
+import accounts.model.link.SimpleDocumentLink;
+import accounts.model.link.SimpleDocumentLinkRequest;
 import accounts.repository.UserCredentialsRepository;
 import accounts.service.utilities.RandomPasswordGenerator;
 
@@ -47,6 +49,19 @@ public class DocumentLinkService {
 
 		linkRepository.createDocumentLinkPassword(doclink,
 				linkRequest.getExpirationDate());
+
+		System.out.println(doclink);
+
+		return doclink;
+	}
+
+	public SimpleDocumentLink createLink(SimpleDocumentLinkRequest linkRequest,
+			User loggedInUser) {
+
+		SimpleDocumentLink doclink = new SimpleDocumentLink();
+		doclink.setUserId(loggedInUser.getUserId());
+		doclink.setDocumentType(linkRequest.getDocumentType());
+		doclink.setDocumentId(linkRequest.getDocumentId());
 
 		System.out.println(doclink);
 

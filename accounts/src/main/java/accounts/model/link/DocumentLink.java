@@ -2,6 +2,13 @@ package accounts.model.link;
 
 import lombok.ToString;
 
+/**
+ * Object used to share a link for a document. Creating a user in the system for
+ * the intended recipient.
+ * 
+ * @author uh
+ *
+ */
 @ToString
 public class DocumentLink {
 	private Long userId;
@@ -9,6 +16,10 @@ public class DocumentLink {
 	private Long documentId;
 	private String documentType;
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Long getUserId() {
 		return userId;
 	}

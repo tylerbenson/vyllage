@@ -42,8 +42,6 @@ public class SocialLoginController {
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String signup(HttpServletRequest request, WebRequest webRequest) {
-		String userName = (String) request.getSession(false).getAttribute(
-				SocialSessionEnum.SOCIAL_USER_NAME.name());
 
 		logger.info("Signin with social account");
 
@@ -66,11 +64,16 @@ public class SocialLoginController {
 			lastName = api.userOperations().getUserProfile().getLastName();
 
 		}
+		userService.createUser(
+				email,
+				firstName,
+				middleName,
+				lastName,
+				(Long) request.getSession(false).getAttribute(
+						SocialSessionEnum.SOCIAL_USER_ID.name()));
 
-		userService.createUser(email, firstName, middleName, lastName);
-
-		// sign in existing user
-		User user = signInUtil.signIn(userName);
+		// sign in with the created user
+		User user = signInUtil.signIn(email);
 
 		providerSignInUtils.doPostSignUp(user.getUsername(), webRequest);
 

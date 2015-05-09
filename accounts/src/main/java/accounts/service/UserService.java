@@ -631,18 +631,33 @@ public class UserService {
 	}
 
 	public User createUser(String email, String firstName, String middleName,
-			String lastName) {
+			String lastName, Long auditUserId) {
 		String randomPassword = randomPasswordGenerator.getRandomPassword();
 		boolean enabled = true;
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 
+		User auditUser = null;
+		try {
+			auditUser = this.getUser(auditUserId);
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// add similar organization
+		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
+
+		for (GrantedAuthority userOrganizationRole : auditUser.getAuthorities())
+			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
+					((UserOrganizationRole) userOrganizationRole)
+							.getOrganizationId(), RolesEnum.GUEST.name(),
+					auditUser.getUserId()));
+
 		User user = new User(email, randomPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
-				Arrays.asList(new UserOrganizationRole(null,
-						((UserOrganizationRole) userOrganizationRole)
-								.getOrganizationId(), RolesEnum.GUEST.name(),
-						null)));
+				defaultAuthoritiesForNewUser);
+		return user;
 	}
 }

@@ -28,6 +28,8 @@ import user.common.social.Social;
 import user.common.social.SocialSessionEnum;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
+import accounts.model.link.SimpleDocumentLink;
+import accounts.model.link.SimpleDocumentLinkRequest;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
 import accounts.service.SignInUtil;
@@ -152,10 +154,14 @@ public class DocumentLinkController {
 		return links;
 	}
 
-	@RequestMapping(value = "/shared/{documentType}/{documentId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/access-shared-document/{encodedDocumentLink}", method = RequestMethod.GET)
 	public String accessSharedDocument(HttpServletRequest request,
-			WebRequest webRequest, @PathVariable String documentType,
-			@PathVariable Long documentId) {
+			WebRequest webRequest, String encodedDocumentLink)
+			throws JsonParseException, JsonMappingException, IOException {
+		String json = linkEncryptor.decrypt(encodedDocumentLink);
+
+		SimpleDocumentLink documentLink = mapper.readValue(json,
+				SimpleDocumentLink.class);
 
 		// check social login
 		Connection<?> connection = providerSignInUtils
@@ -166,12 +172,43 @@ public class DocumentLinkController {
 		if (connection == null || connection.hasExpired()) {
 			request.getSession(false).setAttribute(
 					SocialSessionEnum.SOCIAL_REDIRECT_URL.name(),
-					"/ " + documentType + "/" + documentId);
+					"/ " + documentLink.getDocumentType() + "/"
+							+ documentLink.getDocumentId());
+
+			// storing the id of the link creator for later
+			request.getSession(false).setAttribute(
+					SocialSessionEnum.SOCIAL_USER_ID.name(),
+					documentLink.getUserId());
 
 			return "redirect:/social-login";
 		}
 
-		return "redirect:" + "/ " + documentType + "/" + documentId;
+		return "redirect:" + "/ " + documentLink.getDocumentType() + "/"
+				+ documentLink.getDocumentId();
 
+	}
+
+	/**
+	 * Creates a link to share a document.
+	 * 
+	 * @param linkRequest
+	 * @param loggedInUser
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value = "/share-document", method = RequestMethod.POST)
+	public String shareDocumentLink(
+			@RequestBody SimpleDocumentLinkRequest linkRequest,
+			@AuthenticationPrincipal User loggedInUser)
+			throws JsonProcessingException {
+
+		SimpleDocumentLink documentLink = documentLinkService.createLink(
+				linkRequest, loggedInUser);
+
+		String json = mapper.writeValueAsString(documentLink);
+
+		String safeString = linkEncryptor.encrypt(json);
+
+		return safeString;
 	}
 }
