@@ -15,11 +15,7 @@ dependencies {
 	
 	compile 'org.apache.commons:commons-lang3:3.3.2'
 	compile 'org.apache.commons:commons-csv:1.1'
-	compile 'org.springframework.social:spring-social-core:1.1.0.RELEASE'
-	compile 'org.springframework.social:spring-social-web:1.1.0.RELEASE'
-	compile 'org.springframework.social:spring-social-security:1.1.0.RELEASE'
-	compile("org.springframework.social:spring-social-facebook")
-	
+		
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-jdbc")

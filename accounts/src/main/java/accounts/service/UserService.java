@@ -629,4 +629,20 @@ public class UserService {
 	public void setEmailBuilder(EmailBuilder emailBuilder) {
 		this.emailBuilder = emailBuilder;
 	}
+
+	public User createUser(String email, String firstName, String middleName,
+			String lastName) {
+		String randomPassword = randomPasswordGenerator.getRandomPassword();
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+
+		User user = new User(email, randomPassword, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked,
+				Arrays.asList(new UserOrganizationRole(null,
+						((UserOrganizationRole) userOrganizationRole)
+								.getOrganizationId(), RolesEnum.GUEST.name(),
+						null)));
+	}
 }

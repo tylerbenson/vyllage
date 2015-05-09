@@ -11,22 +11,26 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
+import user.common.social.Social;
+import user.common.social.SocialSessionEnum;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
+import accounts.service.SignInUtil;
 import accounts.service.UserService;
 import accounts.service.utilities.Encryptor;
 
@@ -55,6 +59,17 @@ public class DocumentLinkController {
 	@Autowired
 	private Encryptor linkEncryptor;
 
+	@Autowired
+	private Facebook facebook;
+
+	@Autowired
+	private Social social;
+
+	@Autowired
+	private SignInUtil signInUtil;
+
+	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
+
 	@RequestMapping(value = "/advice/{encodedDocumentLink}", method = RequestMethod.GET)
 	public String sharedLinkLogin(HttpServletRequest request,
 			@PathVariable String encodedDocumentLink)
@@ -69,12 +84,18 @@ public class DocumentLinkController {
 				documentLink.getGeneratedPassword()))
 			throw new UserNotFoundException("Invalid link provided.");
 
-		User user = userService.getUser(documentLink.getUserId());
+		// login
+		signInUtil.signIn(documentLink.getUserId());
 
-		Authentication auth = new UsernamePasswordAuthenticationToken(user,
-				user.getPassword(), user.getAuthorities());
+		// if (!social.isAuthorized())
+		// return social.redirectToAuthorize();
+		//
+		// if (!facebook.isAuthorized()) {
+		// return "redirect:/connect/facebook";
+		// }
 
-		SecurityContextHolder.getContext().setAuthentication(auth);
+		// if they are already authenticated with their social account we just
+		// redirect them to the document
 
 		return "redirect:/" + documentLink.getDocumentType() + "/"
 				+ documentLink.getDocumentId();
@@ -129,5 +150,28 @@ public class DocumentLinkController {
 		}
 
 		return links;
+	}
+
+	@RequestMapping(value = "/shared/{documentType}/{documentId}", method = RequestMethod.GET)
+	public String accessSharedDocument(HttpServletRequest request,
+			WebRequest webRequest, @PathVariable String documentType,
+			@PathVariable Long documentId) {
+
+		// check social login
+		Connection<?> connection = providerSignInUtils
+				.getConnectionFromSession(webRequest);
+
+		// not logged in on social provider? redirect them and keep data in
+		// session to redirect later
+		if (connection == null || connection.hasExpired()) {
+			request.getSession(false).setAttribute(
+					SocialSessionEnum.SOCIAL_REDIRECT_URL.name(),
+					"/ " + documentType + "/" + documentId);
+
+			return "redirect:/social-login";
+		}
+
+		return "redirect:" + "/ " + documentType + "/" + documentId;
+
 	}
 }

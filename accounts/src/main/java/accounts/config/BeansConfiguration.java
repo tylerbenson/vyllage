@@ -8,9 +8,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.togglz.console.TogglzConsoleServlet;
+
+import user.common.social.Social;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.heneke.thymeleaf.togglz.TogglzDialect;
@@ -90,5 +94,46 @@ public class BeansConfiguration {
 		provider.setApplicationContext(applicationContext);
 		return provider;
 	}
+
+	// // this one is not autoconfigured for tests for some reason
+	// @Bean
+	// @ConditionalOnMissingBean(Facebook.class)
+	// @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
+	// public Facebook facebook(ConnectionRepository repository) {
+	// Connection<Facebook> connection = repository
+	// .findPrimaryConnection(Facebook.class);
+	// return connection != null ? connection.getApi()
+	// : new FacebookTemplate("");
+	// }
+
+	// @Bean
+	// public ConnectController connectController(
+	// ConnectionFactoryLocator connectionFactoryLocator,
+	// ConnectionRepository connectionRepository) throws Exception {
+	// ConnectController controller = new ConnectController(
+	// connectionFactoryLocator, connectionRepository);
+	// controller.afterPropertiesSet();
+	// controller.setApplicationUrl("/facebook-login");
+	// return controller;
+	// }
+
+	@Bean
+	public SignInAdapter signInAdapter() {
+		return new SimpleSignInAdapter(new HttpSessionRequestCache());
+	}
+
+	@Bean
+	public Social social() {
+		return new Social();
+	}
+
+	// @Bean
+	// public ProviderSignInController providerSignInController(
+	// ConnectionFactoryLocator connectionFactoryLocator,
+	// UsersConnectionRepository usersConnectionRepository) {
+	// return new ProviderSignInController(connectionFactoryLocator,
+	// usersConnectionRepository, new SimpleSignInAdapter(
+	// new HttpSessionRequestCache()));
+	// }
 
 }
