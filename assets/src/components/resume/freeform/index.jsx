@@ -42,7 +42,7 @@ var Freeform = React.createClass({
     });
   },
   componentDidMount: function() {
-    this.refs.description.getDOMNode().focus();
+    // this.refs.description.getDOMNode().focus();
   },
   handleChange: function(e) {
     e.preventDefault();

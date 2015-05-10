@@ -76,6 +76,12 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         if (res.ok) {
           this.resume.sections = res.body;
+          // Fetching comments here instead of comments component to avoid infinite loop of api calls to comments
+          this.resume.sections.forEach(function (section) {
+            if (section.numberOfComments > 0) {
+              this.onGetComments(section.sectionId);
+            }
+          }.bind(this))
           this.trigger(this.resume);
         } 
       }.bind(this))
@@ -147,6 +153,7 @@ module.exports = Reflux.createStore({
     request
       .get(url)
       .end(function (err, res) {
+        console.log(sectionId, err, res)
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         this.resume.sections[index].comments = res.body;
         this.trigger(this.resume);
@@ -196,6 +203,7 @@ module.exports = Reflux.createStore({
   onToggleComments: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showComments = !this.resume.sections[index].showComments;
+    console.log(sectionId, index, this.resume.sections[index]);
     this.trigger(this.resume);
   },
   getInitialState: function () {

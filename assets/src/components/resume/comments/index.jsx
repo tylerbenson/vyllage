@@ -1,6 +1,7 @@
 var React = require('react');
 var CommentForm = require('./Form');
 var CommentList = require('./List');
+var actions = require('../actions');
 
 var Comments = React.createClass({
   render: function () {

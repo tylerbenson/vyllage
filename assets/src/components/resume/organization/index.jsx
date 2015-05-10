@@ -35,7 +35,9 @@ var Organization = React.createClass({
     });
   },
   componentDidMount: function() {
-    this.refs.organizationName.getDOMNode().focus();
+    if (this.state.uiEditMode) {
+      this.refs.organizationName.getDOMNode().focus();
+    }
   },
   handleChange: function(key, e) {
     // e.preventDefault();
