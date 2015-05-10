@@ -144,8 +144,13 @@ module.exports = Reflux.createStore({
     this.resume.sectionOrder = order;
     this.trigger(this.resume);
   },
-  onMoveSection: function (index, afterIndex) {
-    var section = this.resume.sections[index];
+  onMoveSection: function (id, afterId) {
+    const { sections } = this.resume;
+    const section = sections.filter(c => c.sectionId === id)[0];
+    const afterSection = sections.filter(c => c.sectionId === afterId)[0];
+    const index = sections.indexOf(section);
+    const afterIndex = sections.indexOf(afterSection);
+
     var obj = update(this.resume, {
       sections: {
         $splice: [
