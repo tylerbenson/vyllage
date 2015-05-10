@@ -9,6 +9,7 @@ var Header = require('./sections/Header');
 var Section = require('./sections');
 var Banner = require('./banner');
 var sortby = require('lodash.sortby');
+var EmptySections = require('./sections/Empty');
 
 var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
@@ -70,6 +71,7 @@ var ResumeEditor = React.createClass({
         <Banner header={this.state.resume.header} settings={this.state.settings} />
         <div className="sections">
           {this.renderSections()}
+          {owner ? <EmptySections sections={this.state.resume.sections} owner={owner} />: null}
         </div>
       </div>
     );
