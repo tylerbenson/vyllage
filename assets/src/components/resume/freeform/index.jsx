@@ -11,12 +11,14 @@ var MoveButton = require('../../buttons/move');
 var { DragDropMixin } = require('react-dnd');
 var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
 var SectionFooter = require('../sections/Footer');
+var DeleteSection = require('../Delete');
 
 var Freeform = React.createClass({
   mixins: [DragDropMixin],
   getInitialState: function() {
     return {
       description: this.props.section.description,
+      uiEditMode: this.props.section.newSection,
     };
   },
   getDefaultProps: function () {
@@ -39,10 +41,8 @@ var Freeform = React.createClass({
       description: nextProps.section.description,
     });
   },
-  componentDidUpdate: function() {
-    if (this.state.uiEditMode) {
-      this.refs.organizationName.getDOMNode().focus();
-    }
+  componentDidMount: function() {
+    this.refs.description.getDOMNode().focus();
   },
   handleChange: function(e) {
     e.preventDefault();
@@ -57,10 +57,15 @@ var Freeform = React.createClass({
     })
   },
   cancelHandler: function(e) {
-    this.setState({
-      description:this.props.section.description,
-      uiEditMode: false
-    });
+    var section = this.props.section;
+    if (section.newSection) {
+      actions.deleteSection(section.sectionId);
+    } else {
+      this.setState({
+        description:this.props.section.description,
+        uiEditMode: false
+      });
+    }
   },
   editHandler: function (e) {
     this.setState({
@@ -69,24 +74,15 @@ var Freeform = React.createClass({
       this.refs.description.getDOMNode().focus();
     });
   },
-  addSection: function (e) {
-    actions.postSection({
-      title: this.props.title.toLowerCase(),
-    });
-    this.setState({
-      uiEditMode: true
-    })
-  },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
-    var AddOrEditButton = this.props.section.sectionId ? <EditBtn onClick={this.editHandler}/> : <AddBtn onClick={this.addSection} />
     return (
       <div className='subsection' {...this.dropTargetFor('subsection')}>
         <MoveButton {...this.dragSourceFor('subsection')} />
         <div className='header'>
           {this.props.owner ? <div className="actions">
-            {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: AddOrEditButton }
-            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: ''}
+            {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
+            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
           </div>: null}
         </div>
         {this.props.section.sectionId ? <div>

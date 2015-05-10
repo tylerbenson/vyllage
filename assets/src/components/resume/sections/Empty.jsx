@@ -4,15 +4,20 @@ var filter = require('lodash.filter');
 
 var EmptySections = React.createClass({
   render: function () {
-    var sectionTitles = ['career goal', 'education', 'experience', 'skills']
-    var emptyNodes = sectionTitles.map(function (title) {
-      var sections = filter(this.props.sections, {title: title})
+    var sectionOptions = [
+      { title: 'career goal', type: 'freeform' },
+      { title: 'skills', type: 'freeform' },
+      { title: 'experience', type: 'experience' },
+      { title: 'education', type: 'experience' },
+    ]
+    var emptyNodes = sectionOptions.map(function (options) {
+      var sections = filter(this.props.sections, {title: options.title})
       if (sections.length === 0) {
         return (
           <div key={Math.random()} className='section'>
             <div className='container'>
-              <Header title={title} owner={this.props.owner} />
-              <p className='empty content'>No {title} added yet</p>  
+              <Header title={options.title} type={options.type} owner={this.props.owner} />
+              <p className='empty content'>No {options.title} added yet</p>  
             </div>
           </div>
         );

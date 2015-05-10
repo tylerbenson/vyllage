@@ -21,7 +21,6 @@ var Section = React.createClass({
     if (section.type === 'freeform') {
       return (
         <Freeform 
-          title={section.title}
           section={section} 
           owner={this.props.owner}/>
       );
