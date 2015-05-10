@@ -6,6 +6,7 @@ var findindex = require('lodash.findindex');
 var omit = require('lodash.omit');
 var assign = require('lodash.assign');
 var max = require('lodash.max');
+var update = require('react/lib/update');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -141,6 +142,19 @@ module.exports = Reflux.createStore({
   },
   onUpdateSectionOrder: function (order) {
     this.resume.sectionOrder = order;
+    this.trigger(this.resume);
+  },
+  onMoveSection: function (index, afterIndex) {
+    var section = this.resume.sections[index];
+    var obj = update(this.resume, {
+      sections: {
+        $splice: [
+          [index, 1],
+          [afterIndex, 0, section]
+        ]
+      }
+    });
+    this.resume.sections = obj.sections;
     this.trigger(this.resume);
   },
   onGetComments: function (sectionId) {

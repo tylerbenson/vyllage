@@ -23,7 +23,7 @@ var Organization = React.createClass({
   },
   statics: {
     configureDragDrop(register) {
-      register('subsection', {
+      register('section', {
         dragSource,
         dropTarget
       });
@@ -81,8 +81,8 @@ var Organization = React.createClass({
     var placeholders = this.props.placeholders || {};
     return (
       <div>
-        <div className ="subsection" {...this.dropTargetFor('subsection')}>
-          <MoveButton {...this.dragSourceFor('subsection')} />
+        <div className ="subsection" {...this.dropTargetFor('section')}>
+          <MoveButton {...this.dragSourceFor('section')} />
           <div className='header'>
             <div className='title'>
               <h2>
