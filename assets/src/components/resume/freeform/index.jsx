@@ -30,7 +30,7 @@ var Freeform = React.createClass({
   },
   statics: {
     configureDragDrop(register) {
-      register('subsection', {
+      register('section', {
         dragSource,
         dropTarget
       });
@@ -76,9 +76,11 @@ var Freeform = React.createClass({
   },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
+    var { isDragging } = this.getDragState('section');
+    var opacity = isDragging ? 0 : 1;
     return (
-      <div className='subsection' {...this.dropTargetFor('subsection')}>
-        <MoveButton {...this.dragSourceFor('subsection')} />
+      <div className='subsection' {...this.dropTargetFor('section')} style={{opacity}}>
+        <MoveButton {...this.dragSourceFor('section')} />
         <div className='header'>
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }

@@ -21,13 +21,17 @@ var Section = React.createClass({
     if (section.type === 'freeform') {
       return (
         <Freeform 
+          index={this.props.index}
           section={section} 
+          moveSection={this.props.moveSection}
           owner={this.props.owner}/>
       );
     } else {
       return (
         <Organization 
+          index={this.props.index}
           section={section}
+          moveSection={this.props.moveSection}
           placeholders={this.getPlaceholders()}
           owner={this.props.owner} 
         />

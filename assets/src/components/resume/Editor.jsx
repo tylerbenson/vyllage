@@ -16,16 +16,13 @@ var ResumeEditor = React.createClass({
   componentWillMount: function () {
     actions.getResume();
   },
-  moveSection: function (title, afterTitle) {
-    const { sectionOrder } = this.state.resume;
-    const section = sectionOrder.filter(c => c === title)[0];
-    const afterSection = sectionOrder.filter(c => c === afterTitle)[0];
-    const sectionIndex = sectionOrder.indexOf(section);
-    const afterIndex = sectionOrder.indexOf(afterSection);
-    sectionOrder.splice(sectionIndex, 1);
-    sectionOrder.splice(afterIndex, 0, section);
-    actions.updateSectionOrder(sectionOrder);
-    console.log(sectionOrder);
+  moveSection: function (index, afterIndex) {
+    // var { sections } = this.state.resume;
+    // console.log()
+    // var section = sections.splice(index, 1);
+    // sections.splice(afterIndex, 0, section);
+    // actions.updateSectionOrder(sections);
+    actions.moveSection(index, afterIndex);
   },
   renderSections: function () {
     var owner=this.state.resume.header.owner;
@@ -36,8 +33,10 @@ var ResumeEditor = React.createClass({
     sections.forEach(function (section, index) {
       var subsectionNode = ( 
         <Section
+          index={index}
           key={section.sectionId}
           section={section}
+          moveSection={this.moveSection}
           owner={owner}
         />  
       );
@@ -60,7 +59,7 @@ var ResumeEditor = React.createClass({
       }
 
       previousTitle = section.title;
-    });
+    }.bind(this));
     return sectionNodes;
   },
   render: function () {
