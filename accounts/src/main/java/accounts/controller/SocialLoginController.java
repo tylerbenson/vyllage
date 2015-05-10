@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
-import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,26 +47,17 @@ public class SocialLoginController {
 		Connection<?> connection = providerSignInUtils
 				.getConnectionFromSession(webRequest);
 
-		// if (facebook.isAuthorized())
-		// logger.info("Facebook authorized.");
-		String email = null;
-		String firstName = null;
-		String middleName = null;
-		String lastName = null;
+		if (connection == null || connection.fetchUserProfile() == null)
+			throw new IllegalArgumentException("Social account not connected.");
 
-		if (connection.getApi() instanceof FacebookTemplate) {
-			FacebookTemplate api = (FacebookTemplate) connection.getApi();
+		String email = connection.fetchUserProfile().getEmail();
+		String firstName = connection.fetchUserProfile().getFirstName();
+		String lastName = connection.fetchUserProfile().getLastName();
 
-			email = api.userOperations().getUserProfile().getEmail();
-			firstName = api.userOperations().getUserProfile().getFirstName();
-			middleName = api.userOperations().getUserProfile().getMiddleName();
-			lastName = api.userOperations().getUserProfile().getLastName();
-
-		}
 		userService.createUser(
 				email,
 				firstName,
-				middleName,
+				null,
 				lastName,
 				(Long) request.getSession(false).getAttribute(
 						SocialSessionEnum.SOCIAL_USER_ID.name()));

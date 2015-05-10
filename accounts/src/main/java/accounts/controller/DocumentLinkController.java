@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.social.connect.Connection;
@@ -65,6 +66,9 @@ public class DocumentLinkController {
 	@Autowired
 	private SignInUtil signInUtil;
 
+	@Autowired
+	private Environment environment;
+
 	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
 
 	@RequestMapping(value = "/advice/{encodedDocumentLink}", method = RequestMethod.GET)
@@ -83,16 +87,6 @@ public class DocumentLinkController {
 
 		// login
 		signInUtil.signIn(documentLink.getUserId());
-
-		// if (!social.isAuthorized())
-		// return social.redirectToAuthorize();
-		//
-		// if (!facebook.isAuthorized()) {
-		// return "redirect:/connect/facebook";
-		// }
-
-		// if they are already authenticated with their social account we just
-		// redirect them to the document
 
 		return "redirect:/" + documentLink.getDocumentType() + "/"
 				+ documentLink.getDocumentId();
@@ -151,7 +145,7 @@ public class DocumentLinkController {
 
 	@RequestMapping(value = "/access-shared-document/{encodedDocumentLink}", method = RequestMethod.GET)
 	public String accessSharedDocument(HttpServletRequest request,
-			WebRequest webRequest, String encodedDocumentLink)
+			WebRequest webRequest, @PathVariable String encodedDocumentLink)
 			throws JsonParseException, JsonMappingException, IOException {
 		String json = linkEncryptor.decrypt(encodedDocumentLink);
 
@@ -165,13 +159,14 @@ public class DocumentLinkController {
 		// not logged in on social provider? redirect them and keep data in
 		// session to redirect later
 		if (connection == null || connection.hasExpired()) {
-			request.getSession(false).setAttribute(
+			// if there's no session, create one to store link information
+			request.getSession(true).setAttribute(
 					SocialSessionEnum.SOCIAL_REDIRECT_URL.name(),
 					"/ " + documentLink.getDocumentType() + "/"
 							+ documentLink.getDocumentId());
 
 			// storing the id of the link creator for later
-			request.getSession(false).setAttribute(
+			request.getSession(true).setAttribute(
 					SocialSessionEnum.SOCIAL_USER_ID.name(),
 					documentLink.getUserId());
 
@@ -192,7 +187,7 @@ public class DocumentLinkController {
 	 * @throws JsonProcessingException
 	 */
 	@RequestMapping(value = "/share-document", method = RequestMethod.POST)
-	public String shareDocumentLink(
+	public @ResponseBody String shareDocumentLink(
 			@RequestBody SimpleDocumentLinkRequest linkRequest,
 			@AuthenticationPrincipal User loggedInUser)
 			throws JsonProcessingException {
@@ -204,6 +199,7 @@ public class DocumentLinkController {
 
 		String safeString = linkEncryptor.encrypt(json);
 
-		return safeString;
+		return environment.getProperty("vyllage.domain", "www.vyllage.com")
+				+ "/link/access-shared-document/" + safeString;
 	}
 }
