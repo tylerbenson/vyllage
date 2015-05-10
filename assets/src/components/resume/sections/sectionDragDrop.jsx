@@ -3,14 +3,14 @@ module.exports = {
     beginDrag: function(component) {
       return {
         item: {
-          index: component.props.index
+          sectionId: component.props.section.sectionId
         }
       };
     }
   },
   dropTarget: {
     over: function (component, item) {
-      component.props.moveSection(item.index, component.props.index);
+      component.props.moveSection(item.sectionId, component.props.section.sectionId);
     }
   }
 }

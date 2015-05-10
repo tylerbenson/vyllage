@@ -16,13 +16,13 @@ var ResumeEditor = React.createClass({
   componentWillMount: function () {
     actions.getResume();
   },
-  moveSection: function (index, afterIndex) {
+  moveSection: function (id, afterId) {
     // var { sections } = this.state.resume;
     // console.log()
     // var section = sections.splice(index, 1);
     // sections.splice(afterIndex, 0, section);
     // actions.updateSectionOrder(sections);
-    actions.moveSection(index, afterIndex);
+    actions.moveSection(id, afterId);
   },
   renderSections: function () {
     var owner=this.state.resume.header.owner;
