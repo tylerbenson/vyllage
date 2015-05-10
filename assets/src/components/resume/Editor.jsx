@@ -17,50 +17,44 @@ var ResumeEditor = React.createClass({
     actions.getResume();
   },
   moveSection: function (id, afterId) {
-    // var { sections } = this.state.resume;
-    // console.log()
-    // var section = sections.splice(index, 1);
-    // sections.splice(afterIndex, 0, section);
-    // actions.updateSectionOrder(sections);
     actions.moveSection(id, afterId);
   },
-  renderSections: function () {
+  renderGroup: function (sections) {
     var owner=this.state.resume.header.owner;
-    var sectionNodes = []
-    var subsectionNodes = [];
-    var sections = this.state.resume.sections || [];
-    var previousTitle = '';
-    sections.forEach(function (section, index) {
-      var subsectionNode = ( 
-        <Section
-          index={index}
+    var subsectionNodes = sections.map(function(section) {
+      return <Section
           key={section.sectionId}
           section={section}
           moveSection={this.moveSection}
           owner={owner}
         />  
-      );
-      
-      if (previousTitle === section.title) {
-        subsectionNodes.push(subsectionNode);
-      } else {
-        subsectionNodes = [subsectionNode];
-      }
-
-      if ((previousTitle !== section.title) || (sections.length-1 === index)) {
-        sectionNodes.push(
-          <div key={Math.random()} className='section'>
-            <div className='container'>
-              <Header title={section.title} type={section.type} owner={owner} />
-              {subsectionNodes}
-            </div>
-          </div>
-        );
-      }
-
-      previousTitle = section.title;
     }.bind(this));
-    return sectionNodes;
+    return (
+      <div key={Math.random()} className='section'>
+        <div className='container'>
+          <Header title={sections[0].title} type={sections[0].type} owner={owner} />
+          {subsectionNodes}
+        </div>
+      </div>
+    )
+  },
+  renderSections: function () {
+    var owner=this.state.resume.header.owner;
+    var sectionGroupNodes = []
+    var sections = this.state.resume.sections || [];
+    var previousTitle = '';
+    var nextTitle = '';
+    var groupSections = [];
+    sections.forEach(function (section, index) {
+      nextTitle = (sections.length-1 !== index) ? sections[index + 1].title : '';
+      groupSections.push(section);
+      if (nextTitle !== section.title) {
+        sectionGroupNodes.push(this.renderGroup(groupSections));
+        groupSections = [];
+      }
+    }.bind(this));
+
+    return sectionGroupNodes;
   },
   render: function () {
     var owner=this.state.resume.header.owner;
