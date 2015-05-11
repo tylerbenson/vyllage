@@ -87,7 +87,7 @@ configure(javaProjects) {
 	
 	compileAspect {
 		xlint = 'warning'
-		additionalAjcArgs = ['sourceRoots':['documents/src/main/java/documents/controller', 'accounts/src/main/java/accounts/service']]
+		additionalAjcArgs = ['sourceRoots':'documents/src/main/java/documents/controller']
 	}
 
     test {
