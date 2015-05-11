@@ -54,16 +54,19 @@ public class SocialLoginController {
 
 		Assert.notNull(email);
 
-		userService.createUser(
-				email,
-				firstName,
-				null,
-				lastName,
-				(Long) request.getSession(false).getAttribute(
-						SocialSessionEnum.SOCIAL_USER_ID.name()));
+		User user = null;
+		if (userService.userExists(email))
+			user = userService.getUser(email);
+		else
+			user = userService.createUser(
+					email,
+					firstName,
+					null,
+					lastName,
+					(Long) request.getSession(false).getAttribute(
+							SocialSessionEnum.SOCIAL_USER_ID.name()));
 
-		// sign in with the created user
-		User user = signInUtil.signIn(email);
+		signInUtil.signIn(email);
 
 		providerSignInUtils.doPostSignUp(user.getUsername(), webRequest);
 
