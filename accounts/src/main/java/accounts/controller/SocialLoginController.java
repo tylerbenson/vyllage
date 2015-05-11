@@ -5,15 +5,18 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
+import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
@@ -74,5 +77,15 @@ public class SocialLoginController {
 		return "redirect:"
 				+ (String) request.getSession(false).getAttribute(
 						SocialSessionEnum.SOCIAL_REDIRECT_URL.name());
+	}
+
+	@RequestMapping(value = "/signin", method = RequestMethod.GET)
+	public void signinError(@RequestParam String error,
+			@RequestParam("error_description") String errorDescription) {
+
+		if (FaceBookErrorsEnum.ACCESS_DENIED.name().equalsIgnoreCase(error))
+			throw new AccessDeniedException(
+					"You are not authorized to access this resource.");
+
 	}
 }

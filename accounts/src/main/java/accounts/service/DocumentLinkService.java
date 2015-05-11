@@ -1,5 +1,7 @@
 package accounts.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.logging.Logger;
 
 import org.apache.commons.mail.EmailException;
@@ -62,8 +64,8 @@ public class DocumentLinkService {
 		doclink.setUserId(loggedInUser.getUserId());
 		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
-
-		System.out.println(doclink);
+		doclink.setExpirationDate(LocalDateTime.now(ZoneId.of("UTC")).plusDays(
+				30));
 
 		return doclink;
 	}

@@ -1,6 +1,7 @@
 package accounts.controller;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.social.connect.Connection;
@@ -148,6 +150,10 @@ public class DocumentLinkController {
 
 		SimpleDocumentLink documentLink = mapper.readValue(json,
 				SimpleDocumentLink.class);
+
+		if (LocalDateTime.now().isAfter(documentLink.getExpirationDate()))
+			throw new AccessDeniedException(
+					"You are not authorized to access this resource. The link has expired.");
 
 		// check social login
 		Connection<?> connection = providerSignInUtils
