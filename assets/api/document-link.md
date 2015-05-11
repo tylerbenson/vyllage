@@ -31,7 +31,7 @@ Admin users only.
 + Response 200
 ++ String, encoded link to the document.
 
-## GET /access-shared-document/{encodedDocumentLink}
+## GET /link/access-shared-document/{encodedDocumentLink}
 + Parameters
 ++ encodedDocumentLink (string, `www.vyllage.com/link/access-shared-document/Ph5c-0vx3FlslrH...`) - The link to the document.
 
