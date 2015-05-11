@@ -11,6 +11,7 @@ import accounts.model.account.ResetPasswordLink;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.UserCredentialsRepository;
+import accounts.service.utilities.RandomPasswordGenerator;
 
 @Service
 public class DocumentLinkService {

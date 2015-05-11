@@ -17,7 +17,7 @@ public class EmailValidator {
 	 *            email for validation
 	 * @return true valid email, false invalid email
 	 */
-	public static boolean validate(final String email) {
+	public static boolean isValid(final String email) {
 		Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 		Matcher matcher = pattern.matcher(email);
 

@@ -27,8 +27,8 @@ import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
-import accounts.service.Encryptor;
 import accounts.service.UserService;
+import accounts.service.utilities.Encryptor;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
