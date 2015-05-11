@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
@@ -31,9 +32,6 @@ public class SocialLoginController {
 	@Autowired
 	private UserService userService;
 
-	// @Autowired
-	// private Facebook facebook;
-
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)
 	public String socialLogin(WebRequest request) {
 		return "social-login";
@@ -53,6 +51,8 @@ public class SocialLoginController {
 		String email = connection.fetchUserProfile().getEmail();
 		String firstName = connection.fetchUserProfile().getFirstName();
 		String lastName = connection.fetchUserProfile().getLastName();
+
+		Assert.notNull(email);
 
 		userService.createUser(
 				email,

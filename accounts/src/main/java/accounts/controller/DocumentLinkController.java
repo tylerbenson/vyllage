@@ -60,9 +60,6 @@ public class DocumentLinkController {
 	@Autowired
 	private Encryptor linkEncryptor;
 
-	// @Autowired
-	// private Social social;
-
 	@Autowired
 	private SignInUtil signInUtil;
 
@@ -162,11 +159,11 @@ public class DocumentLinkController {
 			// if there's no session, create one to store link information
 			request.getSession(true).setAttribute(
 					SocialSessionEnum.SOCIAL_REDIRECT_URL.name(),
-					"/ " + documentLink.getDocumentType() + "/"
+					"/" + documentLink.getDocumentType() + "/"
 							+ documentLink.getDocumentId());
 
 			// storing the id of the link creator for later
-			request.getSession(true).setAttribute(
+			request.getSession().setAttribute(
 					SocialSessionEnum.SOCIAL_USER_ID.name(),
 					documentLink.getUserId());
 

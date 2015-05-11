@@ -655,9 +655,13 @@ public class UserService {
 							.getOrganizationId(), RolesEnum.GUEST.name(),
 					auditUser.getUserId()));
 
-		User user = new User(email, randomPassword, enabled, accountNonExpired,
+		User user = new User(null, firstName, middleName, lastName, email,
+				randomPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked,
-				defaultAuthoritiesForNewUser);
+				defaultAuthoritiesForNewUser, null, null);
+
+		userRepository.createUser(user);
+
 		return user;
 	}
 }

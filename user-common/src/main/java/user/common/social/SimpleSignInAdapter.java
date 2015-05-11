@@ -1,6 +1,5 @@
-package accounts.config;
+package user.common.social;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -8,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -16,30 +16,42 @@ import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import user.common.User;
-import accounts.service.UserService;
 
 public class SimpleSignInAdapter implements SignInAdapter {
 
 	private final RequestCache requestCache;
 
-	@Inject
-	private UserService userService;
+	private UserDetailsService userDetailsService;
 
-	@Inject
-	public SimpleSignInAdapter(RequestCache requestCache) {
+	public SimpleSignInAdapter(UserDetailsService userDetailsService,
+			RequestCache requestCache) {
+		this.userDetailsService = userDetailsService;
 		this.requestCache = requestCache;
 	}
 
 	@Override
 	public String signIn(String localUserId, Connection<?> connection,
 			NativeWebRequest request) {
-		User user = userService.getUser(localUserId);
+		User socialUserDetails = (User) userDetailsService
+				.loadUserByUsername(localUserId);
 
-		Authentication auth = new UsernamePasswordAuthenticationToken(user,
-				user.getPassword(), user.getAuthorities());
+		Authentication auth = new UsernamePasswordAuthenticationToken(
+				socialUserDetails, socialUserDetails.getPassword(),
+				socialUserDetails.getAuthorities());
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
-		return extractOriginalUrl(request);
+
+		String originalUrl = extractOriginalUrl(request);
+
+		if (originalUrl == null) {
+			HttpServletRequest nativeReq = request
+					.getNativeRequest(HttpServletRequest.class);
+			// get it from the session.
+			return (String) nativeReq.getSession(false).getAttribute(
+					SocialSessionEnum.SOCIAL_REDIRECT_URL.name());
+		}
+
+		return originalUrl;
 	}
 
 	private String extractOriginalUrl(NativeWebRequest request) {

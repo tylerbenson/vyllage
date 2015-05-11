@@ -8,13 +8,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.togglz.console.TogglzConsoleServlet;
 
-import user.common.social.Social;
+import user.common.social.SimpleSignInAdapter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.heneke.thymeleaf.togglz.TogglzDialect;
@@ -118,13 +119,9 @@ public class BeansConfiguration {
 	// }
 
 	@Bean
-	public SignInAdapter signInAdapter() {
-		return new SimpleSignInAdapter(new HttpSessionRequestCache());
-	}
-
-	@Bean
-	public Social social() {
-		return new Social();
+	public SignInAdapter signInAdapter(UserDetailsService userDetailsService) {
+		return new SimpleSignInAdapter(userDetailsService,
+				new HttpSessionRequestCache());
 	}
 
 	// @Bean
