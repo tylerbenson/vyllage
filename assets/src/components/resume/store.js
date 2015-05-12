@@ -37,6 +37,22 @@ module.exports = Reflux.createStore({
     // Return 0 if sections is empty
     return (section !== -Infinity) ? section.sectionPosition: 0;
   },
+  postSectionOrder: function () {
+    var order = this.resume.sections.map(function (section) {
+      return section.sectionId;
+    });
+
+    var url = urlTemplate
+                .parse(endpoints.resumeSectionOrder)
+                .expand({documentId: this.documentId});
+    request
+      .put(url)
+      .set(this.tokenHeader, this.tokenValue) 
+      .send(order)
+      .end(function (err, res) {
+        console.log(err, res.body, order, url);
+      }.bind(this)) 
+  },
   onGetResume: function () {
     this.onGetHeader();
     this.onGetSections();
@@ -166,6 +182,7 @@ module.exports = Reflux.createStore({
       }
     });
     this.resume.sections = obj.sections;
+    this.postSectionOrder();
     this.trigger(this.resume);
   },
   onGetComments: function (sectionId) {
