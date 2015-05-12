@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -51,16 +52,22 @@ public class SocialLoginController {
 		if (connection == null || connection.fetchUserProfile() == null)
 			throw new IllegalArgumentException("Social account not connected.");
 
-		String email = connection.fetchUserProfile().getEmail();
-		String firstName = connection.fetchUserProfile().getFirstName();
-		String lastName = connection.fetchUserProfile().getLastName();
+		UserProfile userProfile = connection.fetchUserProfile();
+		String email = userProfile.getEmail();
+		String firstName = userProfile.getFirstName();
+		String lastName = userProfile.getLastName();
 
 		Assert.notNull(email);
 
 		User user = null;
-		if (userService.userExists(email))
-			user = userService.getUser(email);
-		else
+		if (userService.userExists(email)) {
+			user = signInUtil.signIn(email);
+
+			providerSignInUtils.doPostSignUp(user.getUsername(), webRequest);
+
+			return "redirect:/resume";
+
+		} else {
 			user = userService.createUser(
 					email,
 					firstName,
@@ -69,14 +76,15 @@ public class SocialLoginController {
 					(Long) request.getSession(false).getAttribute(
 							SocialSessionEnum.SOCIAL_USER_ID.name()));
 
-		signInUtil.signIn(email);
+			signInUtil.signIn(email);
 
-		providerSignInUtils.doPostSignUp(user.getUsername(), webRequest);
+			providerSignInUtils.doPostSignUp(user.getUsername(), webRequest);
 
-		// return "redirect:/resume";
-		return "redirect:"
-				+ (String) request.getSession(false).getAttribute(
-						SocialSessionEnum.SOCIAL_REDIRECT_URL.name());
+			return "redirect:"
+					+ (String) request.getSession(false).getAttribute(
+							SocialSessionEnum.SOCIAL_REDIRECT_URL.name());
+		}
+
 	}
 
 	@RequestMapping(value = "/signin", method = RequestMethod.GET)

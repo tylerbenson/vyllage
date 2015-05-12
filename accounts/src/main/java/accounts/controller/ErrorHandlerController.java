@@ -60,7 +60,8 @@ public class ErrorHandlerController implements ErrorController {
 			if (displayWebError
 					&& currentUser != null
 					&& currentUser.getAuthorities() != null
-					&& currentUser.getAuthorities()
+					&& currentUser
+							.getAuthorities()
 							.stream()
 							.anyMatch(
 									a -> authority.equalsIgnoreCase(a
@@ -69,7 +70,7 @@ public class ErrorHandlerController implements ErrorController {
 			else
 				body.put("displayWebError", false);
 		} else
-			body.put("displayWebError", true);
+			body.put("displayWebError", false);
 
 		return new ModelAndView("error", body);
 	}

@@ -19,6 +19,7 @@ import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -632,6 +633,11 @@ public class UserService {
 
 	public User createUser(String email, String firstName, String middleName,
 			String lastName, Long auditUserId) {
+
+		if (auditUserId == null)
+			throw new AccessDeniedException(
+					"Account creation is not allowed without a referring user.");
+
 		String randomPassword = randomPasswordGenerator.getRandomPassword();
 		boolean enabled = true;
 		boolean accountNonExpired = true;
