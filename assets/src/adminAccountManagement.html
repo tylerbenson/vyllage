@@ -37,7 +37,7 @@
         <select name="role">
           <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}" th:selected="${rol.role == 'STUDENT'}">Some Role</option>
         </select>
-        <textarea rows="20" cols="80" th:field="*{emails}">
+        <textarea rows="20" cols="80" th:field="*{txt}">
         </textarea>
         <button name="batchAccounts" type="submit" class="pull right padded send-btn">Submit</button>
         <label th:if="${error != null}" th:text="${error}" style="color: red;"></label>

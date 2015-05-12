@@ -5,16 +5,16 @@ import lombok.ToString;
 @ToString
 public class BatchAccount {
 
-	private String emails;
+	private String txt;
 	private Long organization;
 	private String role;
 
-	public String getEmails() {
-		return emails;
+	public String getTxt() {
+		return txt;
 	}
 
-	public void setEmails(String emails) {
-		this.emails = emails;
+	public void setTxt(String emails) {
+		this.txt = emails;
 	}
 
 	public Long getOrganization() {
@@ -34,7 +34,7 @@ public class BatchAccount {
 	}
 
 	public boolean hasErrors() {
-		return emails == null || emails.isEmpty() || organization == null || role == null;
+		return txt == null || txt.isEmpty() || organization == null || role == null;
 	}
 
 

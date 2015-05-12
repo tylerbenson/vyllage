@@ -1,5 +1,6 @@
 package accounts.service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,13 +41,14 @@ public class UserServiceTest {
 
 	@Test
 	public void createUserBatchTest() throws IllegalArgumentException,
-			EmailException {
+			EmailException, IOException {
 		BatchAccount batchAccount = new BatchAccount();
 
 		User user = Mockito.mock(User.class);
 		Mockito.when(user.getUserId()).thenReturn(0L);
 
-		batchAccount.setEmails("uno@gmail.com, dos@test.com, tres@yahoo.com");
+		batchAccount
+				.setTxt("uno@gmail.com, First Name, Middle Name, Last Name\ndos@test.com, First Name, Middle Name, Last Name\ntres@yahoo.com, First Name, Middle Name, Last Name");
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
@@ -61,14 +63,14 @@ public class UserServiceTest {
 
 	@Test
 	public void createUserBatchWrongSeparatorTest()
-			throws IllegalArgumentException, EmailException {
+			throws IllegalArgumentException, EmailException, IOException {
 		BatchAccount batchAccount = new BatchAccount();
 
 		User user = Mockito.mock(User.class);
 		Mockito.when(user.getUserId()).thenReturn(0L);
 
 		batchAccount
-				.setEmails("cuatro@gmail.com; cinco@test.com; seis@yahoo.com");
+				.setTxt("cuatro@gmail.com; First Name; Middle Name; Last Name\ncinco@test.com; First Name; Middle Name; Last Name\nseis@yahoo.com; First Name; Middle Name; Last Name");
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
@@ -76,17 +78,17 @@ public class UserServiceTest {
 		service.batchCreateUsers(batchAccount, user);
 
 		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
-		Assert.assertFalse(service.getUser("uno@gmail.com").getPassword() == null);
+		Assert.assertFalse(service.getUser("cuatro@gmail.com").getPassword() == null);
 		Assert.assertTrue(service.userExists("cinco@test.com"));
 		Assert.assertTrue(service.userExists("seis@yahoo.com"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void createUserBatchEmptyUserNameTest()
-			throws IllegalArgumentException, EmailException {
+			throws IllegalArgumentException, EmailException, IOException {
 		BatchAccount batchAccount = new BatchAccount();
 
-		batchAccount.setEmails("siet@gmail.com, , nueve@yahoo.com");
+		batchAccount.setTxt("siet@gmail.com, , nueve@yahoo.com");
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
@@ -100,10 +102,10 @@ public class UserServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void createUserBatchBadEmailTest() throws IllegalArgumentException,
-			EmailException {
+			EmailException, IOException {
 		BatchAccount batchAccount = new BatchAccount();
 
-		batchAccount.setEmails("diez@gmail.com, once.@, doce@yahoo.com");
+		batchAccount.setTxt("diez@gmail.com, once.@, doce@yahoo.com");
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 

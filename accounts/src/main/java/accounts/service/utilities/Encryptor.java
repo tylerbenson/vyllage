@@ -1,4 +1,4 @@
-package accounts.service;
+package accounts.service.utilities;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;

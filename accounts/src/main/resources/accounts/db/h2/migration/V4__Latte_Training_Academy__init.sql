@@ -1,0 +1,1 @@
+insert into accounts.organizations ( organization_id, organization_name ) values ( 3, 'Latte Training Academy' );
