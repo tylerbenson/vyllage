@@ -7,6 +7,7 @@ var omit = require('lodash.omit');
 var assign = require('lodash.assign');
 var max = require('lodash.max');
 var update = require('react/lib/update');
+var sortby = require('lodash.sortby');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -77,6 +78,7 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         if (res.ok) {
           this.resume.sections = res.body;
+          this.resume.sections = sortby(this.resume.sections, 'sectionPosition');
           // Fetching comments here instead of comments component to avoid infinite loop of api calls to comments
           this.resume.sections.forEach(function (section) {
             if (section.numberOfComments > 0) {
@@ -93,15 +95,19 @@ module.exports = Reflux.createStore({
                 .expand({
                   documentId: this.documentId,
                 });
-    data.sectionPosition = this.getMaxSectionPostion() + 1;
+    // data.sectionPosition = this.getMaxSectionPostion() + 1;
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue) 
       .send(data)
       .end(function (err, res) {
+        // Increment section postion of other sections and push new section in the front
+        this.resume.sections.forEach(function (section) {
+          section.sectionPosition += 1;
+        })
         var section = assign({}, res.body);
         section.newSection = true;  // To indicate a section is newly created
-        this.resume.sections.push(section);
+        this.resume.sections.unshift(section);
         this.trigger(this.resume);
       }.bind(this));
   },
@@ -172,7 +178,6 @@ module.exports = Reflux.createStore({
     request
       .get(url)
       .end(function (err, res) {
-        console.log(sectionId, err, res)
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         this.resume.sections[index].comments = res.body;
         this.trigger(this.resume);
