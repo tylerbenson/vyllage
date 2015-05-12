@@ -24,7 +24,7 @@ var Section = React.createClass({
           index={this.props.index}
           section={section} 
           moveSection={this.props.moveSection}
-          owner={this.props.owner}/>
+          owner={this.props.owner} />
       );
     } else {
       return (
@@ -33,8 +33,7 @@ var Section = React.createClass({
           section={section}
           moveSection={this.props.moveSection}
           placeholders={this.getPlaceholders()}
-          owner={this.props.owner} 
-        />
+          owner={this.props.owner} />
       );
     }
   }

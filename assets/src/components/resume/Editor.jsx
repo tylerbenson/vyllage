@@ -26,8 +26,7 @@ var ResumeEditor = React.createClass({
           key={section.sectionId}
           section={section}
           moveSection={this.moveSection}
-          owner={owner}
-        />  
+          owner={owner} />  
     }.bind(this));
     return (
       <div key={Math.random()} className='section'>
