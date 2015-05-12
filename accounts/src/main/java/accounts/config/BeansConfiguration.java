@@ -60,29 +60,6 @@ public class BeansConfiguration {
 				"/togglz/*");
 	}
 
-	// @Bean
-	// public TogglzConfiguration togglzConfiguration(DataSource dataSource) {
-	// return new TogglzConfiguration(dataSource);
-	// }
-
-	// @Bean
-	// public SingletonFeatureManagerProvider singletonFeatureManagerProvider(
-	// TogglzConfiguration togglzConfiguration) {
-	// SingletonFeatureManagerProvider provider = new
-	// SingletonFeatureManagerProvider(
-	// togglzConfiguration);
-	//
-	// return provider;
-	// }
-
-	// @Bean
-	// public FeatureManager featureManager(DataSource dataSource) {
-	// FeatureManager featureManager = FeatureManagerBuilder.begin()
-	// .name("features").featureEnum(Features.class)
-	// .togglzConfig(new TogglzConfiguration(dataSource)).build();
-	// return featureManager;
-	// }
-
 	@Bean
 	public TogglzDialect togglzDialect() {
 		return new TogglzDialect();
@@ -96,41 +73,9 @@ public class BeansConfiguration {
 		return provider;
 	}
 
-	// // this one is not autoconfigured for tests for some reason
-	// @Bean
-	// @ConditionalOnMissingBean(Facebook.class)
-	// @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-	// public Facebook facebook(ConnectionRepository repository) {
-	// Connection<Facebook> connection = repository
-	// .findPrimaryConnection(Facebook.class);
-	// return connection != null ? connection.getApi()
-	// : new FacebookTemplate("");
-	// }
-
-	// @Bean
-	// public ConnectController connectController(
-	// ConnectionFactoryLocator connectionFactoryLocator,
-	// ConnectionRepository connectionRepository) throws Exception {
-	// ConnectController controller = new ConnectController(
-	// connectionFactoryLocator, connectionRepository);
-	// controller.afterPropertiesSet();
-	// controller.setApplicationUrl("/facebook-login");
-	// return controller;
-	// }
-
 	@Bean
 	public SignInAdapter signInAdapter(UserDetailsService userDetailsService) {
 		return new SimpleSignInAdapter(userDetailsService,
 				new HttpSessionRequestCache());
 	}
-
-	// @Bean
-	// public ProviderSignInController providerSignInController(
-	// ConnectionFactoryLocator connectionFactoryLocator,
-	// UsersConnectionRepository usersConnectionRepository) {
-	// return new ProviderSignInController(connectionFactoryLocator,
-	// usersConnectionRepository, new SimpleSignInAdapter(
-	// new HttpSessionRequestCache()));
-	// }
-
 }
