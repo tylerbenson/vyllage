@@ -10,18 +10,13 @@ wrapper.gradleVersion = '2.1'
 buildscript {
     ext {
         springBootVersion = '1.2.3.RELEASE'
-		aspectjVersion = '1.8.4'
     }
     repositories {
-		maven {
-			url "https://maven.eveoh.nl/content/repositories/releases"
-		}
         mavenCentral()
         jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath 'nl.eveoh:gradle-aspectj:1.5'
         classpath 'org.flywaydb:flyway-gradle-plugin:3.1'
         classpath 'com.h2database:h2:1.4.185'
         classpath 'org.jooq:jooq-codegen:3.5.0'
@@ -43,7 +38,6 @@ configure(rootProject) {
 
 configure(javaProjects) {
     apply plugin: 'java'
-	apply plugin: 'aspectj'
 	
 	def slf4j = '1.7.12'
 	def lombok = '1.14.8'
@@ -85,11 +79,6 @@ configure(javaProjects) {
         }
     }
 	
-	compileAspect {
-		xlint = 'warning'
-		additionalAjcArgs = ['sourceRoots':'documents/src/main/java/documents/controller']
-	}
-
     test {
         // Set PROJECT_HOME env variable to the root. This allows to register an additional
         // resource handler location and serve static resources directly from the template module during dev.

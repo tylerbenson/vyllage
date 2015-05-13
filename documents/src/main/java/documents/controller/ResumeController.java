@@ -310,7 +310,9 @@ public class ResumeController {
 				.getNotification(document.getUserId());
 
 		// check that we have not sent a message today
-		if (!notification.isPresent() || !notification.get().wasSentToday()) {
+		// don't notify if the user commenting is the owner of the document...
+		if (!notification.isPresent() || !notification.get().wasSentToday()
+				&& !comment.getUserId().equals(user.getUserId())) {
 			List<AccountContact> recipient = accountService
 					.getContactDataForUsers(request,
 							Arrays.asList(document.getUserId()));
