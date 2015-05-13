@@ -25,7 +25,7 @@ public class CheckReadAccessAspect {
 	@Autowired
 	private AccountService accountService;
 
-	@Before("execution(* *(..)) && args(request, documentId,..) && @annotation(CheckReadAccess)")
+	@Before("execution(* *(..)) && args(request, documentId) && @annotation(CheckReadAccess)")
 	public void checkOwner(JoinPoint joinPoint, HttpServletRequest request,
 			Long documentId) throws AccessDeniedException,
 			ElementNotFoundException {
@@ -55,5 +55,13 @@ public class CheckReadAccessAspect {
 		return ((User) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal()).getUserId();
 	}
+
+	// public void setDocumentService(DocumentService documentService) {
+	// this.documentService = documentService;
+	// }
+	//
+	// public void setAccountService(AccountService accountService) {
+	// this.accountService = accountService;
+	// }
 
 }

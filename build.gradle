@@ -17,7 +17,6 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-
         classpath 'org.flywaydb:flyway-gradle-plugin:3.1'
         classpath 'com.h2database:h2:1.4.185'
         classpath 'org.jooq:jooq-codegen:3.5.0'
@@ -79,7 +78,7 @@ configure(javaProjects) {
              containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
         }
     }
-
+	
     test {
         // Set PROJECT_HOME env variable to the root. This allows to register an additional
         // resource handler location and serve static resources directly from the template module during dev.

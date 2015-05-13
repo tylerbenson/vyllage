@@ -21,7 +21,7 @@ public class CheckWriteAspect {
 	@Autowired
 	private DocumentService documentService;
 
-	@Before("execution(* *(..)) && args(request, documentId,..) && @annotation(CheckWriteAccess)")
+	@Before("execution(* *(..)) && args(request, documentId) && @annotation(CheckWriteAccess)")
 	public void checkOwner(JoinPoint joinPoint, HttpServletRequest request,
 			Long documentId) throws AccessDeniedException,
 			ElementNotFoundException {
