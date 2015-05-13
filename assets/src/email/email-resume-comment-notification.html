@@ -290,7 +290,7 @@ width:100% !important;
 																		<tbody><tr>
 
 																			<td valign="top" class="vylTextContent" style="padding: 16px 0px 16px 18px;color: #888888;">
-																				A friend sent you a message.
+																				A friend commented on your resume.
 																			</td>
 																		</tr>
 																	</tbody></table>
@@ -300,7 +300,7 @@ width:100% !important;
 
 																			<td valign="top" class="vylTextContent" style="padding: 9px 18px 9px 0px; text-align: right;">
 
-																				<a th:href="@{${link}}">View Online Resume</a>
+																				<a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}">Improve Your Resume</a>
 																			</td>
 																		</tr>
 																	</tbody></table>
@@ -343,23 +343,42 @@ width:100% !important;
 														</tr>
 													</tbody>
 												</table></td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>
-						<!-- // END HEADER -->
-					</td>
-				</tr>
-				<tr>
-					<td align="center" valign="top"  style="border-bottom: #F7F7F7 solid 2px;">
-						<!-- BEGIN BODY // -->
-						<table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody">
-							<tr>
-								<td align="center" valign="top">
-									<table border="0" cellpadding="0" cellspacing="0" width="640" class="templateContainer">
-										<tr>
-											<td valign="top" class="bodyContainer" style="padding-top:9px; padding-bottom:9px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+							<!-- // END HEADER -->
+						</td>
+					</tr>
+					<tr>
+						<td align="center" valign="top"  style="border-bottom: #F7F7F7 solid 2px;">
+							<!-- BEGIN BODY // -->
+							<table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody">
+								<tr>
+									<td align="center" valign="top">
+										<table border="0" cellpadding="0" cellspacing="0" width="640" class="templateContainer">
+											<tr>
+												<td valign="top" class="bodyContainer" style="padding-top:9px; padding-bottom:9px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
+													<tbody class="vylTextBlockOuter">
+														<tr>
+															<td valign="top" class="vylTextBlockInner">
+
+																<table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylTextContentContainer">
+																	<tbody><tr>
+
+																		<td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;font-size: 14px;">
+
+																			<h2 class="null"><span style="font-size:16px">Dear <span th:if="${recipientName} != null" th:text="${recipientName}">Vyllager</span>,</span></h2>
+
+																		</td>
+																	</tr>
+																</tbody></table>
+
+															</td>
+														</tr>
+													</tbody>
+												</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
 												<tbody class="vylTextBlockOuter">
 													<tr>
 														<td valign="top" class="vylTextBlockInner">
@@ -367,14 +386,75 @@ width:100% !important;
 															<table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylTextContentContainer">
 																<tbody><tr>
 
-																	<td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;font-size: 14px;">
+																	<td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
 
-																		<h2 class="null"><span style="font-size:16px">Dear <span th:if="${recipientName} != null" th:text="${recipientName}">Vyllager</span>,</span></h2>
+																		A friend commented on your resume.
+																		<p class="commentBlock">
+																			<div class="senderName" th:if="${senderName} != null" th:text="${senderName}"></div>
+																			<div class="senderMessage" th:text="${message}"></div>
+																		</p>
+																		<a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}">Login to Vyllage</a> and improve your resume.
+																	</td>
+																</tr>
+															</tbody></table>
+
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
+												<tbody class="vylTextBlockOuter">
+													<tr>
+														<td valign="top" class="vylTextBlockInner">
+
+															<table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylTextContentContainer">
+																<tbody><tr>
+
+																	<td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
+
+																		Pay it forward and give some career advice to your friends, too.
+
+																		<br>
+																		<br>
+																		Sincerely,<br>
+																		<img align="none" height="90" src="https://gallery.mailchimp.com/5cb918082a39aef5a646dcf3a/images/9d8f49b5-97eb-45f6-8828-72bf696e2b76.png" style="width: 130px; margin: 5px 0px -30px -10px;" width="215">
+																		<h2 class="null"><span style="font-size:16px">Vyllage Chief</span></h2>
 
 																	</td>
 																</tr>
 															</tbody></table>
 
+														</td>
+													</tr>
+												</tbody>
+											</table></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+						<!-- // END BODY -->
+					</td>
+				</tr>
+				<tr>
+					<td align="center" valign="top">
+						<!-- BEGIN FOOTER // -->
+						<table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter">
+							<tr>
+								<td align="center" valign="top">
+									<table border="0" cellpadding="0" cellspacing="0" width="640" class="templateContainer">
+										<tr>
+											<td valign="top" class="footerContainer" style="padding-top:9px; padding-bottom:9px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylDividerBlock">
+												<tbody class="vylDividerBlockOuter">
+													<tr>
+														<td class="vylDividerBlockInner" style="padding: 10px 18px;">
+															<table class="vylDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top-width: 1px;border-top-style: none;border-top-color: #999999;">
+																<tbody><tr>
+																	<td>
+																		<span></span>
+																	</td>
+																</tr>
+															</tbody></table>
 														</td>
 													</tr>
 												</tbody>
@@ -386,11 +466,16 @@ width:100% !important;
 														<table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylTextContentContainer">
 															<tbody><tr>
 
-																<td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
+																<td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #888888;">
 
-																	A friend sent you a message.
-																	<p class="blockquote" th:text="${message}"></p>
-																	<a th:href="@{${link}}">View online resume</a> and start giving some pieces of advice.
+																	<span style="font-size:12px">Copyright © 2015 Vyllage, LLC, All rights reserved.</span>
+																</td>
+															</tr>
+															<tr>
+																<td valign="top" class="vylTextContent" style="padding: 4px 18px;color: #888888;">
+																	<a href="mailto:hello@vyllage.com">hello@vyllage.com</a> &nbsp;&#8226;&nbsp;
+																	<a href="tel:5037146238">(503) 714-6238</a> &nbsp;&#8226;&nbsp;
+																	<span style="line-height: 150%;">1906 NE 151st Circle Vancouver, Washington, 9868</span>
 																</td>
 															</tr>
 														</tbody></table>
@@ -398,115 +483,18 @@ width:100% !important;
 													</td>
 												</tr>
 											</tbody>
-										</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylButtonBlock" style="margin: 10px auto;">
-										<tbody class="vylButtonBlockOuter">
-											<tr>
-												<td style="padding: 18px; background-color: #FDEFE4;" valign="top" align="center" class="vylButtonBlockInner">
-													<table border="0" cellpadding="0" cellspacing="0" class="vylButtonContentContainer" style="border-collapse: separate !important;border-bottom: 4px solid #B65B18;border-radius: 5px;background-color: #E2670D;  margin: 20px 10px;">
-														<tbody>
-															<tr>
-																<td align="center" valign="middle" class="vylButtonContent" style="font-family: Arial; font-size: 16px; padding: 16px 24px;">
-																	<a class="vylButton " target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;" th:href="@{${link}}">View Online Resume</a>
-																</td>
-															</tr>
-														</tbody>
-													</table>
-												</td>
-											</tr>
-										</tbody>
-									</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
-									<tbody class="vylTextBlockOuter">
-										<tr>
-											<td valign="top" class="vylTextBlockInner">
-
-												<table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylTextContentContainer">
-													<tbody><tr>
-
-														<td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
-
-															Go ahead and give your friend some career advice. You can ask for your friends' advice too!
-
-															<br>
-															<br>
-															See you there,<br>
-															<img align="none" height="90" src="https://gallery.mailchimp.com/5cb918082a39aef5a646dcf3a/images/9d8f49b5-97eb-45f6-8828-72bf696e2b76.png" style="width: 130px; margin: 5px 0px -30px -10px;" width="215">
-															<h2 class="null"><span style="font-size:16px">Vyllage Chief</span></h2>
-
-														</td>
-													</tr>
-												</tbody></table>
-
-											</td>
-										</tr>
-									</tbody>
-								</table></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-			<!-- // END BODY -->
-		</td>
-	</tr>
-	<tr>
-		<td align="center" valign="top">
-			<!-- BEGIN FOOTER // -->
-			<table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter">
-				<tr>
-					<td align="center" valign="top">
-						<table border="0" cellpadding="0" cellspacing="0" width="640" class="templateContainer">
-							<tr>
-								<td valign="top" class="footerContainer" style="padding-top:9px; padding-bottom:9px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylDividerBlock">
-									<tbody class="vylDividerBlockOuter">
-										<tr>
-											<td class="vylDividerBlockInner" style="padding: 10px 18px;">
-												<table class="vylDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top-width: 1px;border-top-style: none;border-top-color: #999999;">
-													<tbody><tr>
-														<td>
-															<span></span>
-														</td>
-													</tr>
-												</tbody></table>
-											</td>
-										</tr>
-									</tbody>
-								</table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
-								<tbody class="vylTextBlockOuter">
-									<tr>
-										<td valign="top" class="vylTextBlockInner">
-
-											<table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylTextContentContainer">
-												<tbody><tr>
-
-													<td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #888888;">
-
-														<span style="font-size:12px">Copyright © 2015 Vyllage, LLC, All rights reserved.</span>
-													</td>
-												</tr>
-												<tr>
-													<td valign="top" class="vylTextContent" style="padding: 4px 18px;color: #888888;">
-														<a href="mailto:hello@vyllage.com">hello@vyllage.com</a> &nbsp;&#8226;&nbsp;
-														<a href="tel:5037146238">(503) 714-6238</a> &nbsp;&#8226;&nbsp;
-														<span style="line-height: 150%;">1906 NE 151st Circle Vancouver, Washington, 9868</span>
-													</td>
-												</tr>
-											</tbody></table>
-
-										</td>
+										</table></td>
 									</tr>
-								</tbody>
-							</table></td>
+								</table>
+							</td>
 						</tr>
 					</table>
+					<!-- // END FOOTER -->
 				</td>
 			</tr>
 		</table>
-		<!-- // END FOOTER -->
+		<!-- // END TEMPLATE -->
 	</td>
-</tr>
-</table>
-<!-- // END TEMPLATE -->
-</td>
 </tr>
 </table>
 </center>

@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title></title>
+  <title>The Vyllage Chief has a new new message!</title>
 
   <style type="text/css">
   @media only screen and (max-width: 656px) {
@@ -364,7 +364,8 @@
                                         <tr>
 
                                           <td valign="top" class="vylTextContent" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #888888; font-family: Helvetica; font-size: 12px; line-height: 150%; mso-table-lspace: 0; mso-table-rspace: 0; padding: 16px 0px 16px 18px; text-align: left;">
-                                            A friend sent you a message.
+
+                                            Use this area to offer a short preview of your email's content.
                                           </td>
                                         </tr>
                                       </tbody>
@@ -376,7 +377,7 @@
 
                                           <td valign="top" class="vylTextContent" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #9f8470; font-family: Helvetica; font-size: 12px; line-height: 150%; mso-table-lspace: 0; mso-table-rspace: 0; padding: 9px 18px 9px 0px; text-align: right;">
 
-                                            <a th:href="@{${link}}" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; background-color: #e2670d; border-bottom: #B65B18 solid 2px; border-radius: 5px; color: #fff; display: inline-block; font-weight: 400; padding: 6px 12px; text-decoration: none; word-wrap: break-word;">View Online Resume</a>
+                                            <a href="" target="_blank" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; background-color: #e2670d; border-bottom: #B65B18 solid 2px; border-radius: 5px; color: #fff; display: inline-block; font-weight: 400; padding: 6px 12px; text-decoration: none; word-wrap: break-word;">Visit website</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -430,6 +431,29 @@
                                 </tr>
                               </tbody>
                             </table>
+                            <!-- <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylBoxedTextBlock">
+												<tbody class="vylBoxedTextBlockOuter">
+													<tr>
+														<td valign="top" class="vylBoxedTextBlockInner">
+
+															<table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylBoxedTextContentContainer">
+																<tbody><tr>
+																	<td>
+																		<table border="0" cellpadding="18" cellspacing="0" class="vylTextContentContainer" width="100%">
+																			<tbody><tr>
+																				<td valign="top" class="vylTextContent" style="color: #827165;font-size: 12px;line-height: 100%;text-align: center; padding: 9px 9px 18px 9px;">
+																					<span style="font-size:12px"><span style="line-height:20.7999992370605px">HOW IT WORKS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FAQS</span><span style="line-height:20.7999992370605px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="line-height:20.7999992370605px">REQUEST A DEMO</span><span style="line-height:20.7999992370605px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; LOGIN</span></span>
+																				</td>
+																			</tr>
+																		</tbody></table>
+																	</td>
+																</tr>
+															</tbody></table>
+
+														</td>
+													</tr>
+												</tbody>
+											</table> -->
                           </td>
                         </tr>
                       </table>
@@ -460,8 +484,7 @@
                                           <td valign="top" class="vylTextContent" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #333333; font-family: Helvetica; font-size: 14px; line-height: 150%; mso-table-lspace: 0; mso-table-rspace: 0; padding: 9px 18px; text-align: left;">
 
                                             <h2 class="null" style="color: #333; display: block; font-family: Helvetica; font-size: 26px; font-style: normal; font-weight: 400; letter-spacing: -.75px; line-height: 125%; margin: 0; padding: 0; text-align: left;">
-                                              <span style="font-size:16px">Dear
-                                                <span th:if="${recipientName} != null" th:text="${recipientName}">Vyllager</span>,</span>
+                                              <span style="font-size:16px">Dear Customer,</span>
                                             </h2>
 
                                           </td>
@@ -484,33 +507,18 @@
 
                                           <td valign="top" class="vylTextContent" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #333333; font-family: Helvetica; font-size: 14px; line-height: 150%; mso-table-lspace: 0; mso-table-rspace: 0; padding: 9px 18px; text-align: left;">
 
-                                            A friend sent you a message.
-                                            <p class="blockquote" th:text="${message}" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; border-left: #eee solid 3px; color: #333; font-family: Helvetica; font-size: 14px; line-height: 150%; margin: 1em 0; padding: 15px 30px; text-align: left;"></p>
-                                            <a th:href="@{${link}}" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #e2670d; font-weight: 400; text-decoration: underline; word-wrap: break-word;">View online resume</a>                                            and start giving some pieces of advice.
+                                            As the year comes to a close, I'd like to take the opportunity to thank you, Generitech's loyal supporters, for your continued
+                                            commitment to experiencing the difference with our powerful products and solutions.
+                                            <br>
+                                            <br> I've learned a lot from your feedback this year, and from the countless surveys
+                                            and polls Generitech has conducted. I've learned that you're leaders in your
+                                            industries. Your innovation is both groundbreaking and wave-making. I've learned
+                                            that streamlining your company's communication efforts is your #1 priority.
                                           </td>
                                         </tr>
                                       </tbody>
                                     </table>
 
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylButtonBlock" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; border-collapse: collapse; margin: 10px auto; mso-table-lspace: 0; mso-table-rspace: 0;">
-                              <tbody class="vylButtonBlockOuter">
-                                <tr>
-                                  <td style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; background-color: #FDEFE4; mso-table-lspace: 0; mso-table-rspace: 0; padding: 18px;"
-                                  valign="top" align="center" class="vylButtonBlockInner">
-                                    <table border="0" cellpadding="0" cellspacing="0" class="vylButtonContentContainer" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; background-color: #E2670D; border-bottom: 4px solid #B65B18; border-collapse: separate; border-radius: 5px; margin: 20px 10px; mso-table-lspace: 0; mso-table-rspace: 0;">
-                                      <tbody>
-                                        <tr>
-                                          <td align="center" valign="middle" class="vylButtonContent" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; font-family: Arial; font-size: 16px; mso-table-lspace: 0; mso-table-rspace: 0; padding: 16px 24px;">
-                                            <a class="vylButton " target="_blank" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #FFFFFF; font-weight: bold; letter-spacing: normal; line-height: 100%; text-align: center; text-decoration: none; word-wrap: break-word;"
-                                            th:href="@{${link}}">View Online Resume</a>
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
                                   </td>
                                 </tr>
                               </tbody>
@@ -526,10 +534,20 @@
 
                                           <td valign="top" class="vylTextContent" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #333333; font-family: Helvetica; font-size: 14px; line-height: 150%; mso-table-lspace: 0; mso-table-rspace: 0; padding: 9px 18px; text-align: left;">
 
-                                            Go ahead and give your friend some career advice. You can ask for your friends' advice too!
-
+                                            I hope that our tools and solutions have improved the way you do business this year. I hope that our around-the-clock support
+                                            team has impressed you with their knowledge and friendliness. I hope that your
+                                            company's messaging and support streams improved when you partnered with Generitech.
+                                            I hope that you've taken advantage of our Leadership Summits, Tools Expos and
+                                            free whitepapers. If not, I hope you'll get involved in the new year, and I look
+                                            forward to hearing your feedback.
                                             <br>
-                                            <br> See you there,
+                                            <br> Follow us on Twitter at <a href="#" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #e2670d; font-weight: 400; text-decoration: underline; word-wrap: break-word;">@generitech</a>,
+                                            and let us know how we're doing.
+                                            <br>
+                                            <br> Thanks for a great year.
+                                            <br>
+                                            <br>
+                                            <br> Sincerely,
                                             <br>
                                             <img align="none" height="90" src="https://gallery.mailchimp.com/5cb918082a39aef5a646dcf3a/images/9d8f49b5-97eb-45f6-8828-72bf696e2b76.png"
                                             style="-ms-interpolation-mode: bicubic; border: 0; height: auto; margin: 5px 0px -30px -10px; outline: 0; text-decoration: none; width: 130px;"

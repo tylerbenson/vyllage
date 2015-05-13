@@ -15,7 +15,8 @@ var runSequence = require('run-sequence');
 var sass = require('gulp-sass');
 var watch = require('gulp-watch');
 var webpack = require('webpack');
-// var inlineCSS = require('gulp-inline-css');
+var inlineCss = require('gulp-inline-css');
+var replace = require('gulp-replace');
 
 // var argv = require('minimist')(process.argv.slice(2));
 
@@ -31,20 +32,25 @@ gulp.task('bower', function () {
   })
 });
 
-// gulp.task('inline', ['styles'], function () {
-//   return gulp.src(['src/email/*.html'])
-//     .pipe(inlineCSS({
-//       removeLinkTags: false
-//     }))
-//     .pipe(gulp.dest('src'));
-// });
+gulp.task('inline', ['styles'], function () {
+  return gulp.src(['src/email/*.html'])
+    .pipe(inlineCss({
+      applyStyleTags: false,
+      removeStyleTags: false
+    }))
+    .pipe(replace(
+      /<(meta|img)([^>]*)/g,
+      '<$1$2 /'
+    ))
+    .pipe(gulp.dest('src'));
+});
 
 gulp.task('copy-images', function () {
   return gulp.src(['src/images/*'])
     .pipe(gulp.dest('public/images'));
 });
 
-gulp.task('copy-html', /*['inline'],*/ function () {
+gulp.task('copy-html', function () {
   return gulp.src(['src/*.html'])
     .pipe(gulp.dest('public'));
 });
@@ -180,7 +186,7 @@ gulp.task('watch', ['build'], function () {
 });
 
 gulp.task('build', function () {
-  runSequence('clean', 'bower', ['react', 'copy', 'styles' /*, 'inline'*/ ]);
+  runSequence('clean', 'bower', ['react', 'copy', 'styles', 'inline']);
 });
 
 // dev-watch excludes the react/jsx compilation, allowing this to be done by the server.
@@ -188,9 +194,6 @@ gulp.task('dev-watch', ['dev-build'], function () {
   gulp.watch(['src/**/*.scss'], function () {
     runSequence('styles');
   });
-  // gulp.watch(['src/email/*.html'], function () {
-  //   runSequence('inline');
-  // });
   gulp.watch(['src/*.html', 'src/images/*'], function () {
     runSequence('prettify-html', 'copy');
   });
@@ -201,7 +204,7 @@ gulp.task('dev-watch', ['dev-build'], function () {
 
 // dev-build excludes the react/jsx compilation, allowing this to be done by the server.
 gulp.task('dev-build', function () {
-  runSequence('clean', 'bower', 'dev-react', ['copy', 'styles' /*, 'inline'*/ ]);
+  runSequence('clean', 'bower', 'dev-react', 'styles', 'inline');
 });
 
 gulp.task('default', ['watch']);
