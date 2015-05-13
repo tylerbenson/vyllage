@@ -43,8 +43,8 @@ import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
-import accounts.service.TokenHelper;
 import accounts.service.UserService;
+import accounts.service.utilities.TokenHelper;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -23,7 +23,7 @@ public class ResetPasswordForm {
 	}
 
 	public boolean isValid() {
-		return EmailValidator.validate(getEmail());
+		return EmailValidator.isValid(getEmail());
 	}
 
 	public boolean hasErrors() {

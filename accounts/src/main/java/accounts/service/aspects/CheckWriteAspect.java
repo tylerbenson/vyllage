@@ -41,7 +41,7 @@ public class CheckWriteAspect {
 
 	}
 
-	@Before("execution(* *(..)) && args(parameter, setting,..) && @annotation(CheckWriteAccess)")
+	@Before("execution(* *(..)) && args(parameter, setting) && @annotation(CheckWriteAccess)")
 	public void checkOwnerSingle(JoinPoint joinPoint, String parameter,
 			AccountSetting setting) throws AccessDeniedException {
 

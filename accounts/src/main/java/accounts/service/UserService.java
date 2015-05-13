@@ -1,5 +1,6 @@
 package accounts.service;
 
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +42,9 @@ import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.repository.UserOrganizationRoleRepository;
 import accounts.service.aspects.CheckPrivacy;
+import accounts.service.utilities.BatchParser;
+import accounts.service.utilities.BatchParser.ParsedAccount;
+import accounts.service.utilities.RandomPasswordGenerator;
 import accounts.validation.EmailValidator;
 import email.EmailBuilder;
 
@@ -76,6 +80,8 @@ public class UserService {
 	@Autowired
 	private Environment env;
 
+	private BatchParser batchParser = new BatchParser();
+
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
 	}
@@ -89,7 +95,7 @@ public class UserService {
 	}
 
 	public void batchCreateUsers(BatchAccount batchAccount, User loggedInUser)
-			throws IllegalArgumentException, EmailException {
+			throws IllegalArgumentException, EmailException, IOException {
 
 		final boolean enabled = true;
 		final boolean accountNonExpired = true;
@@ -98,33 +104,24 @@ public class UserService {
 
 		Assert.notNull(batchAccount.getOrganization());
 		Assert.notNull(batchAccount.getRole());
-		Assert.notNull(batchAccount.getEmails());
+		Assert.notNull(batchAccount.getTxt());
 
-		String[] emailSplit = batchAccount.getEmails()
-				.replace(";", System.lineSeparator())
-				.replace(",", System.lineSeparator()).trim()
-				.split(System.lineSeparator());
-
-		boolean invalid = Arrays.stream(emailSplit).map(String::trim)
-				.map(EmailValidator::validate).collect(Collectors.toList())
-				.stream().anyMatch(p -> p.booleanValue() != true);
-
-		if (invalid)
-			throw new IllegalArgumentException(
-					"Contains invalid email addresses.");
+		List<ParsedAccount> parsedAccounts = batchParser.parse(batchAccount
+				.getTxt());
 
 		// note, for UserOrganizationRole there's no userId until it's
 		// saved.
-		List<User> users = Arrays
-				.stream(emailSplit)
-				.map(String::trim)
-				.map(s -> new User(s, randomPasswordGenerator
-						.getRandomPassword(), enabled, accountNonExpired,
-						credentialsNonExpired, accountNonLocked, Arrays
+		List<User> users = parsedAccounts
+				.stream()
+				.map(pa -> new User(null, pa.getFirstName(),
+						pa.getMiddleName(), pa.getLastName(), pa.getEmail(),
+						randomPasswordGenerator.getRandomPassword(), enabled,
+						accountNonExpired, credentialsNonExpired,
+						accountNonLocked, Arrays
 								.asList(new UserOrganizationRole(null,
 										batchAccount.getOrganization(),
 										batchAccount.getRole(), loggedInUser
-												.getUserId()))))
+												.getUserId())), null, null))
 				.collect(Collectors.toList());
 
 		// find existing users to update instead of save
@@ -177,7 +174,9 @@ public class UserService {
 							"Your account has been created successfuly. \\n Your password is: "
 									+ user.getPassword())
 					.templateName("email-account-created")
-					.addTemplateVariable("password", user.getPassword()).send();
+					.addTemplateVariable("password", user.getPassword())
+					.addTemplateVariable("firstName", user.getFirstName())
+					.send();
 		}
 	}
 
@@ -192,7 +191,7 @@ public class UserService {
 			throws EmailException {
 		boolean invalid = false;
 
-		if (EmailValidator.validate(linkRequest.getEmail()) == invalid)
+		if (EmailValidator.isValid(linkRequest.getEmail()) == invalid)
 			throw new IllegalArgumentException(
 					"Contains invalid email address.");
 

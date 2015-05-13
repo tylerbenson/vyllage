@@ -1,4 +1,4 @@
-package accounts.service;
+package accounts.service.utilities;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
