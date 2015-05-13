@@ -7,6 +7,8 @@ import lombok.ToString;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import user.common.constants.RolesEnum;
+
 @ToString
 public class User extends org.springframework.security.core.userdetails.User {
 
@@ -99,6 +101,15 @@ public class User extends org.springframework.security.core.userdetails.User {
 
 	public void setLastModified(LocalDateTime lastModified) {
 		this.lastModified = lastModified;
+	}
+
+	public boolean isGuest() {
+		return this
+				.getAuthorities()
+				.stream()
+				.anyMatch(
+						a -> RolesEnum.GUEST.name().equalsIgnoreCase(
+								a.getAuthority()));
 	}
 
 }

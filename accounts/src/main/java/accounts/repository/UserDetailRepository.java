@@ -367,7 +367,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				createNewAuthentication(currentUser, newPassword));
 	}
 
-	private void updateCredential(String newPassword, Long userId) {
+	public void updateCredential(String newPassword, Long userId) {
 		UserCredential userCredential = credentialsRepository.get(userId);
 		userCredential.setEnabled(true);
 		userCredential.setPassword(newPassword);
