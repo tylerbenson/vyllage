@@ -6,9 +6,11 @@ var SectionHeader = React.createClass({
   addSection: function (e) {
     actions.postSection({
       title: this.props.title.toLowerCase(),
+      type: this.props.type
     });
   },
   render: function () {
+    // var add = (this.props.type !== 'freeform');
     return  (
       <div className='header'>
         <div className='title'>
