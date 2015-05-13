@@ -39,7 +39,7 @@ gulp.task('inline', ['styles'], function () {
       removeStyleTags: false
     }))
     .pipe(replace(
-      /<(meta|img)([^>]*)/g,
+      /<(meta|img|br)([^>]*)/g,
       '<$1$2 /'
     ))
     .pipe(gulp.dest('src'));
