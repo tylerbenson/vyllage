@@ -143,10 +143,27 @@ public class UserService {
 
 				this.changePassword(existingUser.getUserId(), newPassword);
 
-				existingUser.setFirstName(user.getFirstName());
-				existingUser.setMiddleName(user.getMiddleName());
-				existingUser.setLastName(user.getLastName());
-				this.update(existingUser);
+				List<GrantedAuthority> newRolesForOrganization = new ArrayList<>(
+						existingUser.getAuthorities());
+				newRolesForOrganization.add(new UserOrganizationRole(
+						existingUser.getUserId(), batchAccount
+								.getOrganization(), batchAccount.getRole(),
+						loggedInUser.getUserId()));
+
+				updateUserRolesByOrganization(newRolesForOrganization,
+						loggedInUser);
+
+				User newUpdateUser = new User(existingUser.getUserId(),
+						user.getFirstName(), user.getMiddleName(),
+						user.getLastName(), existingUser.getUsername(),
+						newPassword, existingUser.isEnabled(),
+						existingUser.isAccountNonExpired(),
+						existingUser.isCredentialsNonExpired(),
+						existingUser.isAccountNonLocked(),
+						newRolesForOrganization, existingUser.getDateCreated(),
+						existingUser.getLastModified());
+
+				this.update(newUpdateUser);
 
 				emailBuilder
 						.to(existingUser.getUsername())
@@ -169,7 +186,7 @@ public class UserService {
 			}
 		}
 
-		// find existing users to update instead of save
+		// find existing users to update instead of save/activate
 		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
 			User user = iterator.next();
 			User existingUser = null;

@@ -252,11 +252,38 @@ public class UserDetailRepository implements UserDetailsManager {
 			record.setLastName(user.getLastName());
 			record.update();
 
-			// userOrganizationRoleRepository.deleteByUserId(user.getUserId());
-			//
-			// for (GrantedAuthority authority : user.getAuthorities())
-			// userOrganizationRoleRepository
-			// .create((UserOrganizationRole) authority);
+			if (user.getFirstName() != null) {
+				AccountSetting firstNameSetting = new AccountSetting();
+				firstNameSetting.setName("firstName");
+				firstNameSetting.setUserId(record.getUserId());
+				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				firstNameSetting.setValue(user.getFirstName());
+				accountSettingRepository.set(record.getUserId(),
+						firstNameSetting);
+			}
+
+			if (user.getMiddleName() != null) {
+				AccountSetting middleNameSetting = new AccountSetting();
+				middleNameSetting.setName("middleName");
+				middleNameSetting.setUserId(record.getUserId());
+				middleNameSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				middleNameSetting.setValue(user.getMiddleName());
+				accountSettingRepository.set(record.getUserId(),
+						middleNameSetting);
+			}
+
+			if (user.getLastName() != null) {
+				AccountSetting lastNameSetting = new AccountSetting();
+				lastNameSetting.setName("lastName");
+				lastNameSetting.setUserId(record.getUserId());
+				lastNameSetting
+						.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+				lastNameSetting.setValue(user.getLastName());
+				accountSettingRepository.set(record.getUserId(),
+						lastNameSetting);
+			}
 
 		} catch (Exception e) {
 			logger.info(e.toString());
