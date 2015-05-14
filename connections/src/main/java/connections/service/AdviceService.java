@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +64,9 @@ public class AdviceService {
 
 	@Value("${documents.port:8080}")
 	private final Integer DOCUMENTS_PORT = null;
+
+	@Autowired
+	private ExecutorService executorService;
 
 	public UserFilterResponse getUsers(HttpServletRequest request,
 			Long documentId, Long userId, List<Long> excludeIds,
@@ -201,7 +205,7 @@ public class AdviceService {
 			final String subject,
 			final List<Email> prepareMailsForNonRegisteredUsers) {
 
-		(new Thread(new Runnable() {
+		executorService.execute(new Runnable() {
 
 			@Override
 			public void run() {
@@ -217,7 +221,7 @@ public class AdviceService {
 				}
 
 			}
-		})).start();
+		});
 	}
 
 	protected Map<String, String> generateLinksForRegisteredUsers(

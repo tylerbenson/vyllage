@@ -1,5 +1,8 @@
 package connections;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,5 +34,11 @@ public class BeansConfiguration {
 	@Bean
 	public TogglzDialect togglzDialect() {
 		return new TogglzDialect();
+	}
+
+	@Bean
+	public ExecutorService executorService() {
+		ExecutorService newCachedThreadPool = Executors.newCachedThreadPool();
+		return newCachedThreadPool;
 	}
 }
