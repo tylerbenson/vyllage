@@ -28,6 +28,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import user.common.User;
+
+import com.newrelic.api.agent.NewRelic;
+
 import connections.model.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequestParameter;
@@ -215,8 +218,7 @@ public class AdviceService {
 					try {
 						mailService.sendEmail(parameters, email.getBody());
 					} catch (EmailException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						NewRelic.noticeError(e);
 					}
 				}
 

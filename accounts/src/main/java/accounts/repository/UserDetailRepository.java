@@ -45,6 +45,8 @@ import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
 
+import com.newrelic.api.agent.NewRelic;
+
 @Repository
 public class UserDetailRepository implements UserDetailsManager {
 
@@ -212,7 +214,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 
 		} finally {
@@ -259,7 +261,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			// .create((UserOrganizationRole) authority);
 
 		} catch (Exception e) {
-			logger.info(e.toString());
+			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
 			txManager.commit(transaction);
@@ -297,7 +299,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			// record.delete();
 
 		} catch (Exception e) {
-			logger.info(e.toString());
+			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
 			txManager.commit(transaction);
@@ -545,7 +547,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			sql.batch(otherInserts).execute();
 
 		} catch (Exception e) {
-			logger.info(e.toString());
+			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
 			txManager.commit(transaction);
