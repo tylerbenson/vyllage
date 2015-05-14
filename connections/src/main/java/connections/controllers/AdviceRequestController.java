@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
-import user.common.constants.RolesEnum;
 import connections.model.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
@@ -91,14 +90,7 @@ public class AdviceRequestController {
 	public String askAdvice(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
 
-		boolean isGuest = user
-				.getAuthorities()
-				.stream()
-				.allMatch(
-						uor -> RolesEnum.GUEST.name().equalsIgnoreCase(
-								uor.getAuthority()));
-
-		if (isGuest) {
+		if (user.isGuest()) {
 			request.getSession().invalidate();
 			return "redirect:/";
 		}

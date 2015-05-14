@@ -124,7 +124,69 @@ public class UserService {
 												.getUserId())), null, null))
 				.collect(Collectors.toList());
 
-		// find existing users to update instead of save
+		// find existing GUEST users to activate
+		// https://github.com/natebenson/vyllage/issues/502
+		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
+			User user = iterator.next();
+			User existingUser = null;
+
+			try {
+				existingUser = userRepository.loadUserByUsername(user
+						.getUsername());
+			} catch (Exception e) {
+				// continue.
+			}
+
+			if (existingUser != null && existingUser.isGuest()) {
+				String newPassword = randomPasswordGenerator
+						.getRandomPassword();
+
+				this.changePassword(existingUser.getUserId(), newPassword);
+
+				List<GrantedAuthority> newRolesForOrganization = new ArrayList<>(
+						existingUser.getAuthorities());
+				newRolesForOrganization.add(new UserOrganizationRole(
+						existingUser.getUserId(), batchAccount
+								.getOrganization(), batchAccount.getRole(),
+						loggedInUser.getUserId()));
+
+				updateUserRolesByOrganization(newRolesForOrganization,
+						loggedInUser);
+
+				User newUpdateUser = new User(existingUser.getUserId(),
+						user.getFirstName(), user.getMiddleName(),
+						user.getLastName(), existingUser.getUsername(),
+						newPassword, existingUser.isEnabled(),
+						existingUser.isAccountNonExpired(),
+						existingUser.isCredentialsNonExpired(),
+						existingUser.isAccountNonLocked(),
+						newRolesForOrganization, existingUser.getDateCreated(),
+						existingUser.getLastModified());
+
+				this.update(newUpdateUser);
+
+				emailBuilder
+						.to(existingUser.getUsername())
+						.from(env.getProperty("email.from",
+								"no-reply@vyllage.com"))
+						.fromUserName(
+								env.getProperty("email.from.userName",
+										"Chief of Vyllage"))
+						.subject("Account Creation - Vyllage.com")
+						.setNoHtmlMessage(
+								"Your account has been created successfuly. \\n Your password is: "
+										+ user.getPassword())
+						.templateName("email-account-created")
+						.addTemplateVariable("password", newPassword)
+						.addTemplateVariable("firstName", user.getFirstName())
+						.send();
+
+				// remove the user from the batch
+				iterator.remove();
+			}
+		}
+
+		// find existing users to update instead of save/activate
 		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
 			User user = iterator.next();
 			User existingUser = null;
@@ -154,6 +216,11 @@ public class UserService {
 				updateUserRolesByOrganization(newRolesForOrganization,
 						loggedInUser);
 
+				existingUser.setFirstName(user.getFirstName());
+				existingUser.setMiddleName(user.getMiddleName());
+				existingUser.setLastName(user.getLastName());
+				this.update(existingUser);
+
 				// remove the user from the batch
 				iterator.remove();
 			}
@@ -163,21 +230,24 @@ public class UserService {
 
 		// send mails
 		for (User user : users) {
-			emailBuilder
-					.to(user.getUsername())
-					.from(env.getProperty("email.from", "no-reply@vyllage.com"))
-					.fromUserName(
-							env.getProperty("email.from.userName",
-									"Chief of Vyllage"))
-					.subject("Account Creation - Vyllage.com")
-					.setNoHtmlMessage(
-							"Your account has been created successfuly. \\n Your password is: "
-									+ user.getPassword())
-					.templateName("email-account-created")
-					.addTemplateVariable("password", user.getPassword())
-					.addTemplateVariable("firstName", user.getFirstName())
-					.send();
+			sendAccountCreationEmail(user);
 		}
+	}
+
+	protected void sendAccountCreationEmail(User user) throws EmailException {
+		emailBuilder
+				.to(user.getUsername())
+				.from(env.getProperty("email.from", "no-reply@vyllage.com"))
+				.fromUserName(
+						env.getProperty("email.from.userName",
+								"Chief of Vyllage"))
+				.subject("Account Creation - Vyllage.com")
+				.setNoHtmlMessage(
+						"Your account has been created successfuly. \\n Your password is: "
+								+ user.getPassword())
+				.templateName("email-account-created")
+				.addTemplateVariable("password", user.getPassword())
+				.addTemplateVariable("firstName", user.getFirstName()).send();
 	}
 
 	/**
@@ -417,6 +487,10 @@ public class UserService {
 			this.update(newUser);
 		}
 
+	}
+
+	public void changePassword(Long userId, String newPassword) {
+		userRepository.updateCredential(newPassword, userId);
 	}
 
 	public void changePassword(String newPassword) {
