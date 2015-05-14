@@ -108,7 +108,7 @@ public class BeansConfiguration {
 						.addConnectorCustomizers(new TomcatConnectorCustomizer() {
 							@Override
 							public void customize(Connector connector) {
-								AbstractHttp11Protocol httpProtocol = (AbstractHttp11Protocol) connector
+								AbstractHttp11Protocol<?> httpProtocol = (AbstractHttp11Protocol<?>) connector
 										.getProtocolHandler();
 
 								httpProtocol.setCompression("on");
