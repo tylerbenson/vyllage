@@ -278,6 +278,9 @@ public class DocumentService {
 					s -> logger.info("Section " + s.getSectionId()
 							+ " Position: " + s.getSectionPosition()));
 
+			documentSections.stream().forEachOrdered(
+					s -> documentSectionRepository.save(s));
+
 		} catch (ElementNotFoundException e) {
 			e.printStackTrace();
 		}
