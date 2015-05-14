@@ -199,8 +199,7 @@ public class AdviceService {
 
 	private void sendAsyncEmail(final String from, final String fromUser,
 			final String subject,
-			final List<Email> prepareMailsForNonRegisteredUsers)
-			throws EmailException {
+			final List<Email> prepareMailsForNonRegisteredUsers) {
 
 		(new Thread(new Runnable() {
 
