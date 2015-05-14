@@ -1,5 +1,10 @@
 package togglz.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,21 +17,27 @@ import togglz.Features;
 public class TogglzFeatureController {
 
 	@RequestMapping(value = "{feature}/is-active", method = RequestMethod.GET)
-	public boolean isEnabled(@PathVariable String feature) {
+	public ResponseEntity<?> isEnabled(@PathVariable String feature) {
 
 		if (feature == null || feature.isEmpty())
-			throw new IllegalArgumentException("Feature name cannot be null.");
+			return new ResponseEntity<String>("Feature name cannot be null.",
+					HttpStatus.BAD_REQUEST);
 
 		Features value;
 
 		try {
 			value = Features.valueOf(feature.toUpperCase());
 		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("No feature named '" + feature
-					+ "' found.");
+			return new ResponseEntity<String>("No feature named '" + feature
+					+ "' found.", HttpStatus.BAD_REQUEST);
 		}
 
-		return value.isActive();
-	}
+		Map<String, Boolean> map = new HashMap<>();
+		map.put("value", value.isActive());
 
+		if (value.isActive())
+			return new ResponseEntity<Map<String, Boolean>>(map, HttpStatus.OK);
+		return new ResponseEntity<Map<String, Boolean>>(map,
+				HttpStatus.ACCEPTED);
+	}
 }
