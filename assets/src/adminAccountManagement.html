@@ -30,8 +30,9 @@
       </div>
     </header>
     <div class="section content">
-      <form class="container" action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post">
-        <select th:field="*{organization}">
+      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post"
+      onsubmit="adminFormSubmit()">
+        <select id='organization' name='organization' th:field="*{organization}">
           <option th:each="grp : ${organizations}" th:value="${grp.organizationId}" th:text="${grp.organizationName}">Some organization</option>
         </select>
         <select name="role">
@@ -62,6 +63,18 @@
       </nav>
     </div>
   </footer>
+  <script>
+  var el = document.getElementById('organization');
+
+  if (el.childNodes.length === 1) {
+    document.adminForm.organization.disabled = true;
+  }
+  adminFormSubmit = function() {
+    document.adminForm.organization.disabled = false;
+  }
+  </script>
+
+
   <script togglz:active="GOOGLE_ANALYTICS">
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
