@@ -171,7 +171,6 @@ public class AdviceService {
 
 		String subject = adviceRequest.getSubject();
 		String noHTMLmsg = adviceRequest.getMessage();
-		EmailParameters parameters = null;
 
 		// generate document links
 		if (!adviceRequest.getRegisteredUsersContactData().isEmpty()) {
@@ -182,12 +181,7 @@ public class AdviceService {
 			List<Email> mailsForRegisteredUsers = prepareMailsForRegisteredUsers(
 					linksForRegisteredUsers, noHTMLmsg, adviceRequest);
 
-			// send email to registered users
-			for (Email email : mailsForRegisteredUsers) {
-				parameters = new EmailParameters(from, fromUser, subject,
-						email.getTo());
-				mailService.sendEmail(parameters, email.getBody());
-			}
+			sendAsyncEmail(from, fromUser, subject, mailsForRegisteredUsers);
 		}
 
 		if (!adviceRequest.getNotRegisteredUsers().isEmpty()) {
@@ -198,12 +192,33 @@ public class AdviceService {
 					linksForNonRegisteredUsers, noHTMLmsg, adviceRequest);
 
 			// send email to added users
-			for (Email email : prepareMailsForNonRegisteredUsers) {
-				parameters = new EmailParameters(from, fromUser, subject,
-						email.getTo());
-				mailService.sendEmail(parameters, email.getBody());
-			}
+			sendAsyncEmail(from, fromUser, subject,
+					prepareMailsForNonRegisteredUsers);
 		}
+	}
+
+	private void sendAsyncEmail(final String from, final String fromUser,
+			final String subject,
+			final List<Email> prepareMailsForNonRegisteredUsers)
+			throws EmailException {
+
+		(new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				for (Email email : prepareMailsForNonRegisteredUsers) {
+					EmailParameters parameters = new EmailParameters(from,
+							fromUser, subject, email.getTo());
+					try {
+						mailService.sendEmail(parameters, email.getBody());
+					} catch (EmailException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+			}
+		})).start();
 	}
 
 	protected Map<String, String> generateLinksForRegisteredUsers(
