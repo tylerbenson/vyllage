@@ -68,7 +68,6 @@ jar {
             // ignore
         } else if(details.path.endsWith('.html') && !details.path.contains('facebook')) {
             details.path = 'templates/' + details.path
-			println("html " + details.path);
         } else {
             details.path = 'static/' + details.path
         }
