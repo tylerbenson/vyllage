@@ -79,9 +79,11 @@ var Organization = React.createClass({
     var section = this.state.section;
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
+    var { isDragging } = this.getDragState('section');
+    var opacity = isDragging ? 0 : 1;
     return (
       <div>
-        <div className ="subsection" {...this.dropTargetFor('section')}>
+        <div className ="subsection" {...this.dropTargetFor('section')} style={{opacity}}>
           <MoveButton {...this.dragSourceFor('section')} />
           <div className='header'>
             <div className='title'>

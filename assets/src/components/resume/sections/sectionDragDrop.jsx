@@ -9,7 +9,7 @@ module.exports = {
     }
   },
   dropTarget: {
-    over: function (component, item) {
+    acceptDrop: function (component, item) {
       if (item.sectionId !== component.props.section.sectionId) {
         component.props.moveSection(item.sectionId, component.props.section.sectionId);
       }
