@@ -1,8 +1,5 @@
 package togglz.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +13,16 @@ import togglz.Features;
 @RequestMapping("togglz-feature")
 public class TogglzFeatureController {
 
+	/**
+	 * Returns if a certain feature is enabled or not.
+	 * 
+	 * HtttpStatus 200 for True. <br>
+	 * HtttpStatus 202 for False. <br>
+	 * HtttpStatus 404 if the feature doesn't exist.
+	 * 
+	 * @param feature
+	 * @return true: enabled, false: disabled.
+	 */
 	@RequestMapping(value = "{feature}/is-active", method = RequestMethod.GET)
 	public ResponseEntity<?> isEnabled(@PathVariable String feature) {
 
@@ -32,12 +39,9 @@ public class TogglzFeatureController {
 					+ "' found.", HttpStatus.BAD_REQUEST);
 		}
 
-		Map<String, Boolean> map = new HashMap<>();
-		map.put("value", value.isActive());
-
 		if (value.isActive())
-			return new ResponseEntity<Map<String, Boolean>>(map, HttpStatus.OK);
-		return new ResponseEntity<Map<String, Boolean>>(map,
+			return new ResponseEntity<Boolean>(value.isActive(), HttpStatus.OK);
+		return new ResponseEntity<Boolean>(value.isActive(),
 				HttpStatus.ACCEPTED);
 	}
 }
