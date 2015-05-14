@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.newrelic.api.agent.NewRelic;
 
 import documents.model.constants.SectionType;
 import documents.model.constants.Visibility;
@@ -192,8 +193,7 @@ public class DocumentSection {
 		try {
 			return mapper.readValue(json, DocumentSection.class);
 		} catch (IOException e) {
-
-			e.printStackTrace();
+			NewRelic.noticeError(e);
 		}
 
 		return null;

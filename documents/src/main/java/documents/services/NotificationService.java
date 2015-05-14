@@ -10,6 +10,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import user.common.User;
+
+import com.newrelic.api.agent.NewRelic;
+
 import documents.model.AccountContact;
 import documents.model.Comment;
 import documents.model.UserNotification;
@@ -82,8 +85,7 @@ public class NotificationService {
 					.getUserId()));
 
 		} catch (EmailException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			NewRelic.noticeError(e);
 		}
 
 	}

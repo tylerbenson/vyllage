@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.newrelic.api.agent.NewRelic;
 
 import documents.domain.tables.records.SuggestionsRecord;
 import documents.model.DocumentSection;
@@ -70,7 +71,7 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 		try {
 			newRecord.setJsonDocument(suggestion.getDocumentSection().asJSON());
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			NewRelic.noticeError(e);
 		}
 
 		newRecord.setUserId(suggestion.getUserId());
@@ -97,7 +98,7 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 			existingRecord.setJsonDocument(suggestion.getDocumentSection()
 					.asJSON());
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			NewRelic.noticeError(e);
 		}
 
 		existingRecord.setUserId(suggestion.getUserId());

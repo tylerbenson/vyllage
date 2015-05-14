@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import user.common.User;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.newrelic.api.agent.NewRelic;
 
 import documents.model.AccountContact;
 import documents.model.AccountNames;
@@ -303,7 +304,7 @@ public class ResumeController {
 		try {
 			document = documentService.getDocument(documentId);
 		} catch (ElementNotFoundException e) {
-			e.printStackTrace();
+			NewRelic.noticeError(e);
 		}
 
 		Optional<UserNotification> notification = notificationService

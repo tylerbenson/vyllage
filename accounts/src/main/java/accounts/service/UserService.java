@@ -46,6 +46,9 @@ import accounts.service.utilities.BatchParser;
 import accounts.service.utilities.BatchParser.ParsedAccount;
 import accounts.service.utilities.RandomPasswordGenerator;
 import accounts.validation.EmailValidator;
+
+import com.newrelic.api.agent.NewRelic;
+
 import email.EmailBuilder;
 
 @Service
@@ -448,7 +451,7 @@ public class UserService {
 								.getDateCreated().toInstant(ZoneOffset.UTC)
 								.getEpochSecond());
 					} catch (UserNotFoundException e) {
-						e.printStackTrace();
+						NewRelic.noticeError(e);
 					}
 					return ac;
 				}).collect(Collectors.toList());

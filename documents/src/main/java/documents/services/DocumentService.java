@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.newrelic.api.agent.NewRelic;
+
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
@@ -100,7 +102,7 @@ public class DocumentService {
 								+ s.getSectionPosition()));
 
 			} catch (ElementNotFoundException e) {
-				e.printStackTrace();
+				NewRelic.noticeError(e);
 			}
 		} else {
 			savedSection = documentSectionRepository.save(documentSection);
@@ -275,7 +277,7 @@ public class DocumentService {
 							+ " Position: " + s.getSectionPosition()));
 
 		} catch (ElementNotFoundException e) {
-			e.printStackTrace();
+			NewRelic.noticeError(e);
 		}
 	}
 
