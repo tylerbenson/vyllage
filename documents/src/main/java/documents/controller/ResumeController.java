@@ -85,8 +85,8 @@ public class ResumeController {
 		return namesForUsers.get(0);
 	}
 
-	// @ModelAttribute("intercom")
-	public AccountContact intercom(HttpServletRequest request, User user) {
+	// @ModelAttribute("userInfo")
+	public AccountContact userInfo(HttpServletRequest request, User user) {
 
 		List<AccountContact> contactDataForUsers = accountService
 				.getContactDataForUsers(request,
@@ -118,7 +118,7 @@ public class ResumeController {
 			@PathVariable final Long documentId,
 			@AuthenticationPrincipal User user, Model model) {
 		model.addAttribute("accountName", accountName(request, user));
-		model.addAttribute("intercom", intercom(request, user));
+		model.addAttribute("userInfo", userInfo(request, user));
 
 		return "resume";
 	}

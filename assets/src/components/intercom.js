@@ -33,7 +33,7 @@
 
 window.intercomSettings = {
   name: document.getElementById('header-container').getAttribute('name'),
-  email: document.getElementById('meta_email').getAttribute('content'),
-  created_at: document.getElementById('meta_created_at').getAttribute('content'),
+  email: document.getElementById('meta_userInfo_email').getAttribute('content'),
+  created_at: document.getElementById('meta_userInfo_created_at').getAttribute('content'),
   app_id: "g503rj0r"
 };

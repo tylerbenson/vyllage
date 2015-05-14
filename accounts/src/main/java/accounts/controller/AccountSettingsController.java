@@ -68,8 +68,8 @@ public class AccountSettingsController {
 
 	private Map<String, List<String>> settingValues = new HashMap<>();
 
-	@ModelAttribute("intercom")
-	public AccountContact intercom(HttpServletRequest request,
+	@ModelAttribute("userInfo")
+	public AccountContact userInfo(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
 
 		List<AccountContact> contactDataForUsers = userService

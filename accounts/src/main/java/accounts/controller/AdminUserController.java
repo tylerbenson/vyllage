@@ -1,8 +1,11 @@
 package accounts.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import accounts.constants.OrganizationEnum;
 import accounts.model.BatchAccount;
+import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
@@ -31,7 +35,7 @@ import accounts.service.UserService;
 @RequestMapping("admin")
 public class AdminUserController {
 	@Autowired
-	private UserService service;
+	private UserService userService;
 
 	@Autowired
 	private RoleRepository roleRepository;
@@ -44,6 +48,23 @@ public class AdminUserController {
 		AccountNames name = new AccountNames(user.getUserId(),
 				user.getFirstName(), user.getMiddleName(), user.getLastName());
 		return name;
+	}
+
+	@ModelAttribute("userInfo")
+	public AccountContact userInfo(HttpServletRequest request,
+			@AuthenticationPrincipal User user) {
+
+		List<AccountContact> contactDataForUsers = userService
+				.getAccountContactForUsers(userService
+						.getAccountSettings(Arrays.asList(user.getUserId())));
+
+		if (contactDataForUsers.isEmpty()) {
+			AccountContact ac = new AccountContact();
+			ac.setEmail("");
+			ac.setUserId(null);
+			return ac;
+		}
+		return contactDataForUsers.get(0);
 	}
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
@@ -68,7 +89,7 @@ public class AdminUserController {
 			return "adminAccountManagement";
 		}
 
-		service.batchCreateUsers(batch, user);
+		userService.batchCreateUsers(batch, user);
 
 		prepareBatch(model, user);
 		return "adminAccountManagement";
@@ -80,8 +101,8 @@ public class AdminUserController {
 			@RequestParam Long firstUserId, @RequestParam Long secondUserId,
 			@AuthenticationPrincipal User user) throws UserNotFoundException {
 
-		User firstUser = service.getUser(firstUserId);
-		User secondUser = service.getUser(secondUserId);
+		User firstUser = userService.getUser(firstUserId);
+		User secondUser = userService.getUser(secondUserId);
 		List<Long> secondUserOrganizationIds = secondUser.getAuthorities()
 				.stream()
 				.map(uor -> ((UserOrganizationRole) uor).getOrganizationId())

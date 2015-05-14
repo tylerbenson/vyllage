@@ -68,8 +68,8 @@ public class AdviceRequestController {
 		return namesForUsers.get(0);
 	}
 
-	@ModelAttribute("intercom")
-	public AccountContact intercom(HttpServletRequest request,
+	@ModelAttribute("userInfo")
+	public AccountContact userInfo(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
 
 		List<AccountContact> contactDataForUsers = accountService
