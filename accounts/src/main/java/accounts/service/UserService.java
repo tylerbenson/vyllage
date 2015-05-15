@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -47,6 +48,9 @@ import accounts.service.utilities.BatchParser;
 import accounts.service.utilities.BatchParser.ParsedAccount;
 import accounts.service.utilities.RandomPasswordGenerator;
 import accounts.validation.EmailValidator;
+
+import com.newrelic.api.agent.NewRelic;
+
 import email.EmailBuilder;
 
 @Service
@@ -523,7 +527,8 @@ public class UserService {
 								.getDateCreated().toInstant(ZoneOffset.UTC)
 								.getEpochSecond());
 					} catch (UserNotFoundException e) {
-						e.printStackTrace();
+						logger.severe(ExceptionUtils.getStackTrace(e));
+						NewRelic.noticeError(e);
 					}
 					return ac;
 				}).collect(Collectors.toList());

@@ -100,8 +100,8 @@ public class AdviceRequestController {
 	@RequestMapping(value = "ask-advice", method = RequestMethod.POST)
 	public String askAdvice(HttpServletRequest request,
 			@RequestBody AdviceRequest adviceRequest,
-			@AuthenticationPrincipal User user) throws EmailException,
-			ElementNotFoundException {
+			@AuthenticationPrincipal User user)
+			throws ElementNotFoundException, EmailException {
 
 		validateAdviceRequest(adviceRequest);
 
@@ -128,6 +128,7 @@ public class AdviceRequestController {
 		adviceRequestParameters.setSenderName(firstName);
 		adviceRequestParameters.setSubject(adviceRequest.getSubject());
 		adviceRequestParameters.setMessage(adviceRequest.getMessage());
+
 		adviceService.sendRequestAdviceEmail(request, adviceRequestParameters,
 				user);
 

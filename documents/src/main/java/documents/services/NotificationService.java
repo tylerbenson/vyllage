@@ -3,6 +3,7 @@ package documents.services;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,6 +11,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import user.common.User;
+
+import com.newrelic.api.agent.NewRelic;
+
 import documents.model.AccountContact;
 import documents.model.Comment;
 import documents.model.UserNotification;
@@ -82,8 +86,8 @@ public class NotificationService {
 					.getUserId()));
 
 		} catch (EmailException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
 		}
 
 	}

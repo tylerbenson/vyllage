@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import user.common.User;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.newrelic.api.agent.NewRelic;
 
 import documents.model.AccountContact;
 import documents.model.AccountNames;
@@ -303,7 +305,8 @@ public class ResumeController {
 		try {
 			document = documentService.getDocument(documentId);
 		} catch (ElementNotFoundException e) {
-			e.printStackTrace();
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
 		}
 
 		Optional<UserNotification> notification = notificationService

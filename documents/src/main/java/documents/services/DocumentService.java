@@ -9,8 +9,11 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.newrelic.api.agent.NewRelic;
 
 import documents.model.AccountNames;
 import documents.model.Comment;
@@ -99,7 +102,8 @@ public class DocumentService {
 								+ s.getSectionPosition()));
 
 			} catch (ElementNotFoundException e) {
-				e.printStackTrace();
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
 			}
 		} else {
 			savedSection = documentSectionRepository.save(documentSection);
@@ -282,7 +286,8 @@ public class DocumentService {
 					s -> documentSectionRepository.save(s));
 
 		} catch (ElementNotFoundException e) {
-			e.printStackTrace();
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
 		}
 	}
 

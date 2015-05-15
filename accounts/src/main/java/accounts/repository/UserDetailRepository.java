@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Record1;
@@ -48,6 +49,8 @@ import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
+
+import com.newrelic.api.agent.NewRelic;
 
 @Repository
 public class UserDetailRepository implements UserDetailsManager,
@@ -217,7 +220,8 @@ public class UserDetailRepository implements UserDetailsManager,
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 
 		} finally {
@@ -291,7 +295,8 @@ public class UserDetailRepository implements UserDetailsManager,
 			}
 
 		} catch (Exception e) {
-			logger.info(e.toString());
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
 			txManager.commit(transaction);
@@ -329,7 +334,8 @@ public class UserDetailRepository implements UserDetailsManager,
 			// record.delete();
 
 		} catch (Exception e) {
-			logger.info(e.toString());
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
 			txManager.commit(transaction);
@@ -577,7 +583,8 @@ public class UserDetailRepository implements UserDetailsManager,
 			sql.batch(otherInserts).execute();
 
 		} catch (Exception e) {
-			logger.info(e.toString());
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
 			txManager.commit(transaction);

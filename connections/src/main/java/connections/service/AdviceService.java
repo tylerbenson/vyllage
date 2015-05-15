@@ -6,12 +6,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
 import lombok.ToString;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +30,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import user.common.User;
+
+import com.newrelic.api.agent.NewRelic;
+
 import connections.model.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequestParameter;
@@ -41,6 +47,9 @@ import email.MailService;
 
 @Service
 public class AdviceService {
+
+	private final Logger logger = Logger.getLogger(AdviceService.class
+			.getName());
 
 	@Autowired
 	private Environment environment;
@@ -63,6 +72,9 @@ public class AdviceService {
 
 	@Value("${documents.port:8080}")
 	private final Integer DOCUMENTS_PORT = null;
+
+	@Autowired
+	private ExecutorService executorService;
 
 	public UserFilterResponse getUsers(HttpServletRequest request,
 			Long documentId, Long userId, List<Long> excludeIds,
@@ -171,7 +183,6 @@ public class AdviceService {
 
 		String subject = adviceRequest.getSubject();
 		String noHTMLmsg = adviceRequest.getMessage();
-		EmailParameters parameters = null;
 
 		// generate document links
 		if (!adviceRequest.getRegisteredUsersContactData().isEmpty()) {
@@ -182,12 +193,7 @@ public class AdviceService {
 			List<Email> mailsForRegisteredUsers = prepareMailsForRegisteredUsers(
 					linksForRegisteredUsers, noHTMLmsg, adviceRequest);
 
-			// send email to registered users
-			for (Email email : mailsForRegisteredUsers) {
-				parameters = new EmailParameters(from, fromUser, subject,
-						email.getTo());
-				mailService.sendEmail(parameters, email.getBody());
-			}
+			sendAsyncEmail(from, fromUser, subject, mailsForRegisteredUsers);
 		}
 
 		if (!adviceRequest.getNotRegisteredUsers().isEmpty()) {
@@ -198,12 +204,32 @@ public class AdviceService {
 					linksForNonRegisteredUsers, noHTMLmsg, adviceRequest);
 
 			// send email to added users
-			for (Email email : prepareMailsForNonRegisteredUsers) {
-				parameters = new EmailParameters(from, fromUser, subject,
-						email.getTo());
-				mailService.sendEmail(parameters, email.getBody());
-			}
+			sendAsyncEmail(from, fromUser, subject,
+					prepareMailsForNonRegisteredUsers);
 		}
+	}
+
+	private void sendAsyncEmail(final String from, final String fromUser,
+			final String subject,
+			final List<Email> prepareMailsForNonRegisteredUsers) {
+
+		executorService.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				for (Email email : prepareMailsForNonRegisteredUsers) {
+					EmailParameters parameters = new EmailParameters(from,
+							fromUser, subject, email.getTo());
+					try {
+						mailService.sendEmail(parameters, email.getBody());
+					} catch (EmailException e) {
+						logger.severe(ExceptionUtils.getStackTrace(e));
+						NewRelic.noticeError(e);
+					}
+				}
+
+			}
+		});
 	}
 
 	protected Map<String, String> generateLinksForRegisteredUsers(

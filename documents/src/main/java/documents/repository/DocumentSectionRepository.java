@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record4;
 import org.jooq.Result;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.newrelic.api.agent.NewRelic;
 
 import documents.domain.tables.DocumentSections;
 import documents.domain.tables.records.DocumentSectionsRecord;
@@ -171,7 +173,8 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 			try {
 				newRecord.setJsondocument(documentSection.asJSON());
 			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
 			}
 
 			newRecord.store(); // first to get the Id.
@@ -180,7 +183,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 			try {
 				newRecord.setJsondocument(documentSection.asJSON());
 			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+				NewRelic.noticeError(e);
 			}
 
 			newRecord.store(); // second to add the sectionId.
@@ -204,7 +207,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 			try {
 				existingRecord.setJsondocument(documentSection.asJSON());
 			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+				NewRelic.noticeError(e);
 			}
 			existingRecord.setPosition(documentSection.getSectionPosition());
 			existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
