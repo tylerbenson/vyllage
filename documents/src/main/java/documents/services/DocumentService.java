@@ -1,11 +1,9 @@
 package documents.services;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -23,6 +21,7 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SuggestionRepository;
+import documents.utilities.FindDuplicates;
 
 /**
  * This service takes care of saving, retrieving and manipulating documents.
@@ -240,10 +239,15 @@ public class DocumentService {
 	public void orderDocumentSections(Long documentId,
 			List<Long> documentSectionIds) {
 
-		// removing duplicates
-		Set<Long> set = new HashSet<>(documentSectionIds);
-		documentSectionIds.clear();
-		documentSectionIds.addAll(set);
+		if (documentSectionIds == null || documentSectionIds.isEmpty())
+			throw new IllegalArgumentException(
+					"The amount of section ids does not match the number of existing sections in the database.");
+
+		// finding duplicates
+		FindDuplicates finder = new FindDuplicates();
+		if (!finder.findDuplicates(documentSectionIds).isEmpty()) {
+			throw new IllegalArgumentException("Duplicate IDs found.");
+		}
 
 		try {
 			List<DocumentSection> documentSections = documentSectionRepository
@@ -273,6 +277,9 @@ public class DocumentService {
 			documentSections.stream().forEachOrdered(
 					s -> logger.info("Section " + s.getSectionId()
 							+ " Position: " + s.getSectionPosition()));
+
+			documentSections.stream().forEachOrdered(
+					s -> documentSectionRepository.save(s));
 
 		} catch (ElementNotFoundException e) {
 			e.printStackTrace();

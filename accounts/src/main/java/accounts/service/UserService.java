@@ -19,6 +19,7 @@ import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -124,7 +125,69 @@ public class UserService {
 												.getUserId())), null, null))
 				.collect(Collectors.toList());
 
-		// find existing users to update instead of save
+		// find existing GUEST users to activate
+		// https://github.com/natebenson/vyllage/issues/502
+		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
+			User user = iterator.next();
+			User existingUser = null;
+
+			try {
+				existingUser = userRepository.loadUserByUsername(user
+						.getUsername());
+			} catch (Exception e) {
+				// continue.
+			}
+
+			if (existingUser != null && existingUser.isGuest()) {
+				String newPassword = randomPasswordGenerator
+						.getRandomPassword();
+
+				this.changePassword(existingUser.getUserId(), newPassword);
+
+				List<GrantedAuthority> newRolesForOrganization = new ArrayList<>(
+						existingUser.getAuthorities());
+				newRolesForOrganization.add(new UserOrganizationRole(
+						existingUser.getUserId(), batchAccount
+								.getOrganization(), batchAccount.getRole(),
+						loggedInUser.getUserId()));
+
+				updateUserRolesByOrganization(newRolesForOrganization,
+						loggedInUser);
+
+				User newUpdateUser = new User(existingUser.getUserId(),
+						user.getFirstName(), user.getMiddleName(),
+						user.getLastName(), existingUser.getUsername(),
+						newPassword, existingUser.isEnabled(),
+						existingUser.isAccountNonExpired(),
+						existingUser.isCredentialsNonExpired(),
+						existingUser.isAccountNonLocked(),
+						newRolesForOrganization, existingUser.getDateCreated(),
+						existingUser.getLastModified());
+
+				this.update(newUpdateUser);
+
+				emailBuilder
+						.to(existingUser.getUsername())
+						.from(env.getProperty("email.from",
+								"no-reply@vyllage.com"))
+						.fromUserName(
+								env.getProperty("email.from.userName",
+										"Chief of Vyllage"))
+						.subject("Account Creation - Vyllage.com")
+						.setNoHtmlMessage(
+								"Your account has been created successfuly. \\n Your password is: "
+										+ user.getPassword())
+						.templateName("email-account-created")
+						.addTemplateVariable("password", newPassword)
+						.addTemplateVariable("firstName", user.getFirstName())
+						.send();
+
+				// remove the user from the batch
+				iterator.remove();
+			}
+		}
+
+		// find existing users to update instead of save/activate
 		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
 			User user = iterator.next();
 			User existingUser = null;
@@ -154,6 +217,11 @@ public class UserService {
 				updateUserRolesByOrganization(newRolesForOrganization,
 						loggedInUser);
 
+				existingUser.setFirstName(user.getFirstName());
+				existingUser.setMiddleName(user.getMiddleName());
+				existingUser.setLastName(user.getLastName());
+				this.update(existingUser);
+
 				// remove the user from the batch
 				iterator.remove();
 			}
@@ -163,21 +231,24 @@ public class UserService {
 
 		// send mails
 		for (User user : users) {
-			emailBuilder
-					.to(user.getUsername())
-					.from(env.getProperty("email.from", "no-reply@vyllage.com"))
-					.fromUserName(
-							env.getProperty("email.from.userName",
-									"Chief of Vyllage"))
-					.subject("Account Creation - Vyllage.com")
-					.setNoHtmlMessage(
-							"Your account has been created successfuly. \\n Your password is: "
-									+ user.getPassword())
-					.templateName("email-account-created")
-					.addTemplateVariable("password", user.getPassword())
-					.addTemplateVariable("firstName", user.getFirstName())
-					.send();
+			sendAccountCreationEmail(user);
 		}
+	}
+
+	protected void sendAccountCreationEmail(User user) throws EmailException {
+		emailBuilder
+				.to(user.getUsername())
+				.from(env.getProperty("email.from", "no-reply@vyllage.com"))
+				.fromUserName(
+						env.getProperty("email.from.userName",
+								"Chief of Vyllage"))
+				.subject("Account Creation - Vyllage.com")
+				.setNoHtmlMessage(
+						"Your account has been created successfuly. \\n Your password is: "
+								+ user.getPassword())
+				.templateName("email-account-created")
+				.addTemplateVariable("password", user.getPassword())
+				.addTemplateVariable("firstName", user.getFirstName()).send();
 	}
 
 	/**
@@ -419,6 +490,10 @@ public class UserService {
 
 	}
 
+	public void changePassword(Long userId, String newPassword) {
+		userRepository.updateCredential(newPassword, userId);
+	}
+
 	public void changePassword(String newPassword) {
 		userRepository.changePassword(newPassword);
 	}
@@ -554,5 +629,45 @@ public class UserService {
 
 	public void setEmailBuilder(EmailBuilder emailBuilder) {
 		this.emailBuilder = emailBuilder;
+	}
+
+	public User createUser(String email, String firstName, String middleName,
+			String lastName, Long auditUserId) {
+
+		if (auditUserId == null)
+			throw new AccessDeniedException(
+					"Account creation is not allowed without a referring user.");
+
+		String randomPassword = randomPasswordGenerator.getRandomPassword();
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+
+		User auditUser = null;
+		try {
+			auditUser = this.getUser(auditUserId);
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// add similar organization
+		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
+
+		for (GrantedAuthority userOrganizationRole : auditUser.getAuthorities())
+			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
+					((UserOrganizationRole) userOrganizationRole)
+							.getOrganizationId(), RolesEnum.GUEST.name(),
+					auditUser.getUserId()));
+
+		User user = new User(null, firstName, middleName, lastName, email,
+				randomPassword, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked,
+				defaultAuthoritiesForNewUser, null, null);
+
+		userRepository.createUser(user);
+
+		return user;
 	}
 }

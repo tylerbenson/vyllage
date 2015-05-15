@@ -7,6 +7,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
+import togglz.controller.TogglzFeatureController;
+
 import com.github.heneke.thymeleaf.togglz.TogglzDialect;
 
 import email.EmailBuilder;
@@ -38,6 +40,11 @@ public class BeansConfiguration {
 				templateEngine), environment);
 
 		return emailBuilder;
+	}
+
+	@Bean
+	public TogglzFeatureController togglzController() {
+		return new TogglzFeatureController();
 	}
 
 }

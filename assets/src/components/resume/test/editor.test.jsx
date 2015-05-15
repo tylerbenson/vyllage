@@ -17,7 +17,11 @@ describe('Editor', function() {
 
   it('Should not show subheader if user is not owner', function() {
     var resumeEditor = TestUtils.renderIntoDocument(<ResumeEditor />)
-    resumeEditor.setState({resume: {header: {owner: false}}});
+    resumeEditor.setState({
+      resume: {
+        header: {owner: false},
+      }
+    });
     var nodes = TestUtils.scryRenderedDOMComponentsWithClass(resumeEditor, 'subheader');
     expect(nodes.length).toBe(0);
   });

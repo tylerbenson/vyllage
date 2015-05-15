@@ -7,6 +7,8 @@ import lombok.ToString;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import user.common.constants.RolesEnum;
+
 @ToString
 public class User extends org.springframework.security.core.userdetails.User {
 
@@ -33,7 +35,6 @@ public class User extends org.springframework.security.core.userdetails.User {
 			Collection<? extends GrantedAuthority> userOrganizationRole) {
 		super(username, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, userOrganizationRole);
-		// this.setOrganizationMember(organizationMember);
 	}
 
 	public User(Long userId, String firstName, String middleName,
@@ -50,7 +51,6 @@ public class User extends org.springframework.security.core.userdetails.User {
 		this.lastName = lastName;
 		this.dateCreated = dateCreated;
 		this.lastModified = lastModified;
-		// this.setOrganizationMember(organizationMember);
 	}
 
 	public Long getUserId() {
@@ -99,6 +99,20 @@ public class User extends org.springframework.security.core.userdetails.User {
 
 	public void setLastModified(LocalDateTime lastModified) {
 		this.lastModified = lastModified;
+	}
+
+	/**
+	 * A user is guest if it only has the GUEST role.
+	 * 
+	 * @return
+	 */
+	public boolean isGuest() {
+		return this
+				.getAuthorities()
+				.stream()
+				.allMatch(
+						a -> RolesEnum.GUEST.name().equalsIgnoreCase(
+								a.getAuthority()));
 	}
 
 }

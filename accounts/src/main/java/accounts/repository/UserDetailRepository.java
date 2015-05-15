@@ -19,6 +19,7 @@ import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.SelectConditionStep;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -36,6 +39,7 @@ import org.springframework.util.Assert;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
+import user.common.social.SocialUser;
 import accounts.domain.tables.UserOrganizationRoles;
 import accounts.domain.tables.Users;
 import accounts.domain.tables.records.UsersRecord;
@@ -46,7 +50,8 @@ import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
 
 @Repository
-public class UserDetailRepository implements UserDetailsManager {
+public class UserDetailRepository implements UserDetailsManager,
+		SocialUserDetailsService {
 
 	private final Logger logger = Logger.getLogger(UserDetailRepository.class
 			.getName());
@@ -252,11 +257,38 @@ public class UserDetailRepository implements UserDetailsManager {
 			record.setLastName(user.getLastName());
 			record.update();
 
-			// userOrganizationRoleRepository.deleteByUserId(user.getUserId());
-			//
-			// for (GrantedAuthority authority : user.getAuthorities())
-			// userOrganizationRoleRepository
-			// .create((UserOrganizationRole) authority);
+			if (user.getFirstName() != null) {
+				AccountSetting firstNameSetting = new AccountSetting();
+				firstNameSetting.setName("firstName");
+				firstNameSetting.setUserId(record.getUserId());
+				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				firstNameSetting.setValue(user.getFirstName());
+				accountSettingRepository.set(record.getUserId(),
+						firstNameSetting);
+			}
+
+			if (user.getMiddleName() != null) {
+				AccountSetting middleNameSetting = new AccountSetting();
+				middleNameSetting.setName("middleName");
+				middleNameSetting.setUserId(record.getUserId());
+				middleNameSetting.setPrivacy(Privacy.PRIVATE.name()
+						.toLowerCase());
+				middleNameSetting.setValue(user.getMiddleName());
+				accountSettingRepository.set(record.getUserId(),
+						middleNameSetting);
+			}
+
+			if (user.getLastName() != null) {
+				AccountSetting lastNameSetting = new AccountSetting();
+				lastNameSetting.setName("lastName");
+				lastNameSetting.setUserId(record.getUserId());
+				lastNameSetting
+						.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+				lastNameSetting.setValue(user.getLastName());
+				accountSettingRepository.set(record.getUserId(),
+						lastNameSetting);
+			}
 
 		} catch (Exception e) {
 			logger.info(e.toString());
@@ -367,7 +399,7 @@ public class UserDetailRepository implements UserDetailsManager {
 				createNewAuthentication(currentUser, newPassword));
 	}
 
-	private void updateCredential(String newPassword, Long userId) {
+	public void updateCredential(String newPassword, Long userId) {
 		UserCredential userCredential = credentialsRepository.get(userId);
 		userCredential.setEnabled(true);
 		userCredential.setPassword(newPassword);
@@ -655,6 +687,12 @@ public class UserDetailRepository implements UserDetailsManager {
 						.getValue(USERS.MIDDLE_NAME), r
 						.getValue(USERS.LAST_NAME)))
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public SocialUserDetails loadUserByUserId(String userId)
+			throws UsernameNotFoundException, DataAccessException {
+		return new SocialUser(this.loadUserByUsername(userId));
 	}
 
 }

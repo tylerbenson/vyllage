@@ -7,11 +7,18 @@ var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
 var SectionFooter = require('../sections/Footer');
 var Textarea = require('react-textarea-autosize');
+var MoveButton = require('../../buttons/move');
+var { DragDropMixin } = require('react-dnd');
+var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
+var SectionFooter = require('../sections/Footer');
+var DeleteSection = require('../Delete');
 
 var Freeform = React.createClass({
+  mixins: [DragDropMixin],
   getInitialState: function() {
     return {
       description: this.props.section.description,
+      uiEditMode: this.props.section.newSection,
     };
   },
   getDefaultProps: function () {
@@ -21,15 +28,21 @@ var Freeform = React.createClass({
       section: {}
     }
   },
+  statics: {
+    configureDragDrop(register) {
+      register('section', {
+        dragSource,
+        dropTarget
+      });
+    }
+  },
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       description: nextProps.section.description,
     });
   },
-  componentDidUpdate: function() {
-    if (this.state.uiEditMode) {
-      this.refs.organizationName.getDOMNode().focus();
-    }
+  componentDidMount: function() {
+    this.refs.description.getDOMNode().focus();
   },
   handleChange: function(e) {
     e.preventDefault();
@@ -44,10 +57,15 @@ var Freeform = React.createClass({
     })
   },
   cancelHandler: function(e) {
-    this.setState({
-      description:this.props.section.description,
-      uiEditMode: false
-    });
+    var section = this.props.section;
+    if (section.newSection) {
+      actions.deleteSection(section.sectionId);
+    } else {
+      this.setState({
+        description:this.props.section.description,
+        uiEditMode: false
+      });
+    }
   },
   editHandler: function (e) {
     this.setState({
@@ -56,26 +74,17 @@ var Freeform = React.createClass({
       this.refs.description.getDOMNode().focus();
     });
   },
-  addSection: function (e) {
-    actions.postSection({
-      title: this.props.title.toLowerCase(),
-    });
-    this.setState({
-      uiEditMode: true
-    })
-  },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
-    var AddOrEditButton = this.props.section.sectionId ? <EditBtn onClick={this.editHandler}/> : <AddBtn onClick={this.addSection} />
+    var { isDragging } = this.getDragState('section');
+    var opacity = isDragging ? 0 : 1;
     return (
-      <div className='section'>
+      <div className='subsection' {...this.dropTargetFor('section')} style={{opacity}}>
+        <MoveButton {...this.dragSourceFor('section')} />
         <div className='header'>
-          <div className='title'>
-            <h1>{this.props.title}</h1>
-          </div>
           {this.props.owner ? <div className="actions">
-            {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: AddOrEditButton }
-            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: ''}
+            {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
+            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
           </div>: null}
         </div>
         {this.props.section.sectionId ? <div>
@@ -92,7 +101,7 @@ var Freeform = React.createClass({
             ></Textarea>
           </div>
           <SectionFooter section={this.props.section} />
-          </div>: <p className='content empty'>No {this.props.title.toLowerCase()} added yet</p> }
+          </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
       </div>
     );
   }

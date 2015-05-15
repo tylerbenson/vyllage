@@ -165,6 +165,9 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 			newRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
 					.now(ZoneId.of("UTC"))));
 
+			documentSection
+					.setLastModified(LocalDateTime.now(ZoneId.of("UTC")));
+
 			try {
 				newRecord.setJsondocument(documentSection.asJSON());
 			} catch (JsonProcessingException e) {
@@ -204,10 +207,10 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 				e.printStackTrace();
 			}
 			existingRecord.setPosition(documentSection.getSectionPosition());
-			existingRecord.setDatecreated(Timestamp.valueOf(LocalDateTime
-					.now(ZoneId.of("UTC"))));
 			existingRecord.setLastmodified(Timestamp.valueOf(LocalDateTime
 					.now(ZoneId.of("UTC"))));
+			documentSection
+					.setLastModified(LocalDateTime.now(ZoneId.of("UTC")));
 
 			existingRecord.store();
 			documentSection.setSectionVersion(nextVersion);

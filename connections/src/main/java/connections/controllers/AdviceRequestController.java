@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
-import user.common.constants.RolesEnum;
 import connections.model.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
@@ -69,21 +68,20 @@ public class AdviceRequestController {
 		return namesForUsers.get(0);
 	}
 
-	@ModelAttribute("intercom")
-	public AccountContact intercom(HttpServletRequest request,
+	@ModelAttribute("userInfo")
+	public AccountContact userInfo(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
+		if (user == null) {
+			return null;
+		}
 
 		List<AccountContact> contactDataForUsers = accountService
 				.getContactDataForUsers(request,
 						Arrays.asList(user.getUserId()));
 
 		if (contactDataForUsers.isEmpty()) {
-			AccountContact ac = new AccountContact();
-			ac.setEmail("");
-			ac.setUserId(null);
-			return ac;
+			return null;
 		}
-
 		return contactDataForUsers.get(0);
 	}
 
@@ -91,14 +89,7 @@ public class AdviceRequestController {
 	public String askAdvice(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
 
-		boolean isGuest = user
-				.getAuthorities()
-				.stream()
-				.allMatch(
-						uor -> RolesEnum.GUEST.name().equalsIgnoreCase(
-								uor.getAuthority()));
-
-		if (isGuest) {
+		if (user.isGuest()) {
 			request.getSession().invalidate();
 			return "redirect:/";
 		}

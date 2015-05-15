@@ -8,9 +8,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.togglz.console.TogglzConsoleServlet;
+
+import user.common.social.SimpleSignInAdapter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.heneke.thymeleaf.togglz.TogglzDialect;
@@ -55,29 +60,6 @@ public class BeansConfiguration {
 				"/togglz/*");
 	}
 
-	// @Bean
-	// public TogglzConfiguration togglzConfiguration(DataSource dataSource) {
-	// return new TogglzConfiguration(dataSource);
-	// }
-
-	// @Bean
-	// public SingletonFeatureManagerProvider singletonFeatureManagerProvider(
-	// TogglzConfiguration togglzConfiguration) {
-	// SingletonFeatureManagerProvider provider = new
-	// SingletonFeatureManagerProvider(
-	// togglzConfiguration);
-	//
-	// return provider;
-	// }
-
-	// @Bean
-	// public FeatureManager featureManager(DataSource dataSource) {
-	// FeatureManager featureManager = FeatureManagerBuilder.begin()
-	// .name("features").featureEnum(Features.class)
-	// .togglzConfig(new TogglzConfiguration(dataSource)).build();
-	// return featureManager;
-	// }
-
 	@Bean
 	public TogglzDialect togglzDialect() {
 		return new TogglzDialect();
@@ -91,4 +73,9 @@ public class BeansConfiguration {
 		return provider;
 	}
 
+	@Bean
+	public SignInAdapter signInAdapter(UserDetailsService userDetailsService) {
+		return new SimpleSignInAdapter(userDetailsService,
+				new HttpSessionRequestCache());
+	}
 }

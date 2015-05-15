@@ -19,3 +19,22 @@ Admin users only.
 +++ documentId, the document the user will be able to comment on.
 +++ documentType, "resume" for now.
 
+## POST /link/share-document 
++Body (application/json)
+++ DocumentType: currently there's only a single document type.
+```
+	{
+  		"documentId":0,
+  		"documentType":"resume"
+	}
+```
++ Response 200
+++ String, encoded link to the document.
+
+## GET /link/access-shared-document/{encodedDocumentLink}
++ Parameters
+++ encodedDocumentLink (string, `www.vyllage.com/link/access-shared-document/Ph5c-0vx3FlslrH...`) - The link to the document.
+
+Redirects to Facebook to login. If the user doesn't exist in our database it's created using his profile.
+Once the user it's logged in he is redirected to the document he wanted to access.
+
