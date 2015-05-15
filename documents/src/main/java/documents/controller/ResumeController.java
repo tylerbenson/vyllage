@@ -85,18 +85,18 @@ public class ResumeController {
 		return namesForUsers.get(0);
 	}
 
-	// @ModelAttribute("intercom")
-	public AccountContact intercom(HttpServletRequest request, User user) {
+	// @ModelAttribute("userInfo")
+	public AccountContact userInfo(HttpServletRequest request, User user) {
+		if (user == null) {
+			return null;
+		}
 
 		List<AccountContact> contactDataForUsers = accountService
 				.getContactDataForUsers(request,
 						Arrays.asList(user.getUserId()));
 
 		if (contactDataForUsers.isEmpty()) {
-			AccountContact ac = new AccountContact();
-			ac.setEmail("");
-			ac.setUserId(null);
-			return ac;
+			return null;
 		}
 
 		return contactDataForUsers.get(0);
@@ -118,7 +118,7 @@ public class ResumeController {
 			@PathVariable final Long documentId,
 			@AuthenticationPrincipal User user, Model model) {
 		model.addAttribute("accountName", accountName(request, user));
-		model.addAttribute("intercom", intercom(request, user));
+		model.addAttribute("userInfo", userInfo(request, user));
 
 		return "resume";
 	}

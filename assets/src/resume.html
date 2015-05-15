@@ -8,9 +8,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
-  <meta name="email" th:content="${intercom.email}" id="meta_email" />
-  <meta name="userId" th:content="${intercom.userId}" id="meta_user" />
-  <meta name="registeredOn" th:content="${intercom.registeredOn}" id="meta_created_at" />
+  <meta th:if="${userInfo} != null" name="email" th:content="${userInfo.email}" id="meta_userInfo_email" />
+  <meta th:if="${userInfo} != null" name="userId" th:content="${userInfo.userId}" id="meta_userInfo_user" />
+  <meta th:if="${userInfo} != null" name="registeredOn" th:content="${userInfo.registeredOn}" id="meta_userInfo_created_at" />
 
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/resume.css" />
@@ -66,7 +66,8 @@
     m.parentNode.insertBefore(a, m)
   })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
   ga('create', 'UA-62026590-1', {
-    'userId': document.getElementById('meta_user').getAttribute('content')
+    'userId': document.getElementById('meta_userInfo_user') === null ? null : document.getElementById(
+      'meta_userInfo_user').getAttribute('content')
   });
   ga('send', 'pageview');
   </script>

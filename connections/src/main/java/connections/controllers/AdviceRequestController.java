@@ -68,21 +68,20 @@ public class AdviceRequestController {
 		return namesForUsers.get(0);
 	}
 
-	@ModelAttribute("intercom")
-	public AccountContact intercom(HttpServletRequest request,
+	@ModelAttribute("userInfo")
+	public AccountContact userInfo(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
+		if (user == null) {
+			return null;
+		}
 
 		List<AccountContact> contactDataForUsers = accountService
 				.getContactDataForUsers(request,
 						Arrays.asList(user.getUserId()));
 
 		if (contactDataForUsers.isEmpty()) {
-			AccountContact ac = new AccountContact();
-			ac.setEmail("");
-			ac.setUserId(null);
-			return ac;
+			return null;
 		}
-
 		return contactDataForUsers.get(0);
 	}
 

@@ -7,6 +7,9 @@
   <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/homepage.css">
   <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
+  <meta th:if="${userInfo} != null" name="email" th:content="${userInfo.email}" id="meta_userInfo_email" />
+  <meta th:if="${userInfo} != null" name="userId" th:content="${userInfo.userId}" id="meta_userInfo_user" />
+  <meta th:if="${userInfo} != null" name="registeredOn" th:content="${userInfo.registeredOn}" id="meta_userInfo_created_at" />
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
@@ -178,7 +181,8 @@
     m.parentNode.insertBefore(a, m)
   })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
   ga('create', 'UA-62026590-1', {
-    'userId': document.getElementById('meta_user').getAttribute('content')
+    'userId': document.getElementById('meta_userInfo_user') === null ? null : document.getElementById(
+      'meta_userInfo_user').getAttribute('content')
   });
   ga('send', 'pageview');
   </script>
