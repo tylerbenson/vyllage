@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A friend is asking for your advice!</title>
+  <title>A friend commented on your resume.</title>
   <link rel="stylesheet" href="../../public/css/email.css" />
   <style type="text/css">
   @media only screen and (max-width: 656px) {
@@ -336,7 +336,7 @@
                                         <tr>
 
                                           <td valign="top" class="vylTextContent" style="padding: 16px 0px 16px 18px;color: #888888;">
-                                            A friend is asking for your advice!
+                                            A friend commented on your resume.
                                           </td>
                                         </tr>
                                       </tbody>
@@ -348,7 +348,7 @@
 
                                           <td valign="top" class="vylTextContent" style="padding: 9px 18px 9px 0px; text-align: right;">
 
-                                            <a th:href="@{${link}}">View Online Resume</a>
+                                            <a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}">Improve Your Resume</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -455,33 +455,17 @@
 
                                           <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
 
-                                            A friend sent you a message.
-                                            <p class="blockquote" th:text="${message}"></p>
-                                            <a th:href="@{${link}}">View online resume</a> and start giving some pieces of
-                                            advice.
+                                            A friend commented on your resume.
+                                            <p class="commentBlock">
+                                              <div class="senderName" th:if="${senderName} != null" th:text="${senderName}"></div>
+                                              <div class="senderMessage" th:text="${message}"></div>
+                                            </p>
+                                            <a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}">Login to Vyllage</a>                                            and improve your resume.
                                           </td>
                                         </tr>
                                       </tbody>
                                     </table>
 
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylButtonBlock" style="margin: 10px auto;">
-                              <tbody class="vylButtonBlockOuter">
-                                <tr>
-                                  <td style="padding: 18px; background-color: #FDEFE4;" valign="top" align="center" class="vylButtonBlockInner">
-                                    <table border="0" cellpadding="0" cellspacing="0" class="vylButtonContentContainer" style="border-collapse: separate !important;border-bottom: 4px solid #B65B18;border-radius: 5px;background-color: #E2670D;  margin: 20px 10px;">
-                                      <tbody>
-                                        <tr>
-                                          <td align="center" valign="middle" class="vylButtonContent" style="font-family: Arial; font-size: 16px; padding: 16px 24px;">
-                                            <a class="vylButton " target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;"
-                                            th:href="@{${link}}">View Online Resume</a>
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
                                   </td>
                                 </tr>
                               </tbody>
@@ -497,10 +481,10 @@
 
                                           <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
 
-                                            Go ahead and give your friend some career advice. You can ask for your friends' advice too!
+                                            Pay it forward and give some career advice to your friends, too.
 
                                             <br>
-                                            <br> See you there,
+                                            <br> Sincerely,
                                             <br>
                                             <img align="none" height="90" src="https://gallery.mailchimp.com/5cb918082a39aef5a646dcf3a/images/9d8f49b5-97eb-45f6-8828-72bf696e2b76.png"
                                             style="width: 130px; margin: 5px 0px -30px -10px;" width="215">
