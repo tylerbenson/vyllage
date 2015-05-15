@@ -50,3 +50,5 @@ assets/public
 assets/mock/dist
 assets/mock/.tmp
 assets/test-results.xml
+*.sublime-project
+*.sublime-workspace
