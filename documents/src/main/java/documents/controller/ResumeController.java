@@ -88,6 +88,13 @@ public class ResumeController {
 	// @ModelAttribute("userInfo")
 	public AccountContact userInfo(HttpServletRequest request, User user) {
 
+		if (user == null) {
+			AccountContact ac = new AccountContact();
+			ac.setEmail("");
+			ac.setUserId(null);
+			return ac;
+		}
+
 		List<AccountContact> contactDataForUsers = accountService
 				.getContactDataForUsers(request,
 						Arrays.asList(user.getUserId()));

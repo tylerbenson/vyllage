@@ -15,9 +15,9 @@
 
   <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
-  <meta name="email" th:content="${userInfo.email}" id="meta_userInfo_email" />
-  <meta name="userId" th:content="${userInfo.userId}" id="meta_userInfo_user" />
-  <meta name="registeredOn" th:content="${userInfo.registeredOn}" id="meta_userInfo_created_at" />
+  <meta th:if="${userInfo} != null" name="email" th:content="${userInfo.email}" id="meta_userInfo_email" />
+  <meta th:if="${userInfo} != null" name="userId" th:content="${userInfo.userId}" id="meta_userInfo_user" />
+  <meta th:if="${userInfo} != null" name="registeredOn" th:content="${userInfo.registeredOn}" id="meta_userInfo_created_at" />
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
@@ -58,7 +58,7 @@
   })(document, "script");
   </script>
   <!--End of Zopim Live Chat Script-->
-  <script togglz:active="GOOGLE_ANALYTICS">
+  <script th:if="${userInfo} != null" togglz:active="GOOGLE_ANALYTICS">
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function() {

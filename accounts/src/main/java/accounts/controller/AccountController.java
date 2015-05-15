@@ -3,6 +3,7 @@ package accounts.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,6 +80,30 @@ public class AccountController {
 	@Autowired
 	@Qualifier(value = "accounts.emailBuilder")
 	private EmailBuilder emailBuilder;
+
+	@ModelAttribute("userInfo")
+	public AccountContact userInfo(HttpServletRequest request,
+			@AuthenticationPrincipal User user) {
+
+		if (user == null) {
+			AccountContact ac = new AccountContact();
+			ac.setEmail("");
+			ac.setUserId(null);
+			return ac;
+		}
+
+		List<AccountContact> contactDataForUsers = userService
+				.getAccountContactForUsers(userService
+						.getAccountSettings(Arrays.asList(user.getUserId())));
+
+		if (contactDataForUsers.isEmpty()) {
+			AccountContact ac = new AccountContact();
+			ac.setEmail("");
+			ac.setUserId(null);
+			return ac;
+		}
+		return contactDataForUsers.get(0);
+	}
 
 	/**
 	 * Returns a list containing the id, first, middle and last names for an
