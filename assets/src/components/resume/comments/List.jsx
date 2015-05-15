@@ -3,9 +3,9 @@ var actions = require('../actions');
 var moment = require('moment');
 
 var CommentList = React.createClass({
-  componentDidMount: function () {
-    actions.getComments(this.props.sectionId);
-  },
+  // componentWillMount: function () {
+  //   actions.getComments(this.props.sectionId);
+  // },
   render: function () {
     var comments = this.props.comments || [];
     var commentNodes = comments.map(function (comment, index) {

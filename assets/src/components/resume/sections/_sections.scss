@@ -158,6 +158,7 @@
 }
 
 .subsection {
+  background: $section-background;
   border-top: darken($section-footer-background,3%) solid 1px;
   position: relative;
 
