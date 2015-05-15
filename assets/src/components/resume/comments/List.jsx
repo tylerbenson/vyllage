@@ -13,7 +13,9 @@ var CommentList = React.createClass({
               <div className='content'>
                 <div className='info'>
                   <div className="author">{comment.userName}</div>
-                  <div className="timestamp">{moment.utc(comment.lastModified).fromNow()}</div>
+                  <div className="timestamp">
+                    {moment(comment.lastModified).isValid() ? moment.utc(comment.lastModified).fromNow(): ''}
+                  </div>
                 </div>  
                 <div className="message">
                   {comment.commentText}
