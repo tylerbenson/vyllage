@@ -78,7 +78,7 @@ gulp.task('styles', function () {
 });
 
 gulp.task('prettify-html', function () {
-  return gulp.src('src/*.html')
+  return gulp.src(['src/*.html', 'src/email/*.html'])
     .pipe(cache('prettify-html'))
     .pipe(prettify({
       html: {
