@@ -13,6 +13,8 @@ dependencies {
 	compile project(':user-common')
 	compile project(':togglz')
 	
+	compile 'org.apache.commons:commons-lang3:3.3.2'
+	
     compile("org.springframework.boot:spring-boot-starter-security")
 //    compile("org.springframework.boot:spring-boot-starter-aop")
 //    compile("org.springframework.boot:spring-boot-starter-jdbc")
