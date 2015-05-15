@@ -19,6 +19,7 @@ import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -628,5 +629,45 @@ public class UserService {
 
 	public void setEmailBuilder(EmailBuilder emailBuilder) {
 		this.emailBuilder = emailBuilder;
+	}
+
+	public User createUser(String email, String firstName, String middleName,
+			String lastName, Long auditUserId) {
+
+		if (auditUserId == null)
+			throw new AccessDeniedException(
+					"Account creation is not allowed without a referring user.");
+
+		String randomPassword = randomPasswordGenerator.getRandomPassword();
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+
+		User auditUser = null;
+		try {
+			auditUser = this.getUser(auditUserId);
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// add similar organization
+		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
+
+		for (GrantedAuthority userOrganizationRole : auditUser.getAuthorities())
+			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
+					((UserOrganizationRole) userOrganizationRole)
+							.getOrganizationId(), RolesEnum.GUEST.name(),
+					auditUser.getUserId()));
+
+		User user = new User(null, firstName, middleName, lastName, email,
+				randomPassword, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked,
+				defaultAuthoritiesForNewUser, null, null);
+
+		userRepository.createUser(user);
+
+		return user;
 	}
 }

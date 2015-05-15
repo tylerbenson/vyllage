@@ -70,7 +70,7 @@ public class ErrorHandlerController implements ErrorController {
 			else
 				body.put("displayWebError", false);
 		} else
-			body.put("displayWebError", true);
+			body.put("displayWebError", false);
 
 		return new ModelAndView("error", body);
 	}

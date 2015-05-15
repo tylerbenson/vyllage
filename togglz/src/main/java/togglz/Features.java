@@ -17,7 +17,10 @@ public enum Features implements Feature {
 
 	@EnabledByDefault
 	@Label("Zopim Message Client")
-	ZOPIM_MESSAGE_CLIENT;
+	ZOPIM_MESSAGE_CLIENT,
+
+	@Label("Share Resume")
+	SHARE_RESUME;
 
 	public boolean isActive() {
 		return FeatureContext.getFeatureManager().isActive(this);
