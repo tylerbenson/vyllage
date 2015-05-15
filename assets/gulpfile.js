@@ -78,7 +78,7 @@ gulp.task('styles', function () {
 });
 
 gulp.task('prettify-html', function () {
-  return gulp.src(['src/*.html', 'src/email/*.html'])
+  return gulp.src('src/**/*.html')
     .pipe(cache('prettify-html'))
     .pipe(prettify({
       html: {
@@ -177,7 +177,7 @@ gulp.task('watch', ['build'], function () {
   gulp.watch(['src/**/*.jsx', 'src/**/*.js'], function () {
     runSequence('react');
   });
-  gulp.watch(['src/*.html', 'src/images/*'], function () {
+  gulp.watch(['src/**/*.html', 'src/images/*'], function () {
     runSequence('prettify-html', 'copy');
   });
   gulp.watch(['./*.js', './*.json'], function () {
@@ -186,7 +186,7 @@ gulp.task('watch', ['build'], function () {
 });
 
 gulp.task('build', function () {
-  runSequence('clean', 'bower', ['react', 'copy', 'styles', 'inline']);
+  runSequence('clean', 'bower', ['react', 'copy', 'styles', 'inline', 'prettify-html']);
 });
 
 // dev-watch excludes the react/jsx compilation, allowing this to be done by the server.
@@ -197,7 +197,7 @@ gulp.task('dev-watch', ['dev-build'], function () {
   gulp.watch(['src/email/*.html'], function () {
     runSequence('inline');
   });
-  gulp.watch(['src/*.html', 'src/images/*'], function () {
+  gulp.watch(['src/**/*.html', 'src/images/*'], function () {
     runSequence('prettify-html', 'copy');
   });
   gulp.watch(['./*.js', './*.json'], function () {
