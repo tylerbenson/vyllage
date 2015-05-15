@@ -38,11 +38,14 @@
           <form th:action="@{/login}" method="post">
             <div class="content">
               <h1 class="centered">Log In</h1>
-              <div th:if="not ${param.error}">
+              <div th:if="not (${param.error} or ${param.logout})">
                 <p class="centered">Welcome to Vyllage</p>
               </div>
               <div th:if="${param.error}">
                 <p class="centered error">E-mail or Password invalid.</p>
+              </div>
+              <div th:if="${param.logout}">
+                <p class="centered error">You've been logged out.</p>
               </div>
               <label>E-mail</label>
               <input type="text" class="padded" name="email" />
@@ -119,7 +122,8 @@
     m.parentNode.insertBefore(a, m)
   })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
   ga('create', 'UA-62026590-1', {
-    'userId': document.getElementById('meta_userInfo_user').getAttribute('content')
+    'userId': document.getElementById('meta_userInfo_user') === null ? null : document.getElementById(
+      'meta_userInfo_user').getAttribute('content')
   });
   ga('send', 'pageview');
   </script>

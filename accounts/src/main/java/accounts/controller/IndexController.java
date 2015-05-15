@@ -31,12 +31,8 @@ public class IndexController {
 	@ModelAttribute("userInfo")
 	public AccountContact userInfo(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
-
 		if (user == null) {
-			AccountContact ac = new AccountContact();
-			ac.setEmail("");
-			ac.setUserId(null);
-			return ac;
+			return null;
 		}
 
 		List<AccountContact> contactDataForUsers = userService
@@ -44,10 +40,7 @@ public class IndexController {
 						.getAccountSettings(Arrays.asList(user.getUserId())));
 
 		if (contactDataForUsers.isEmpty()) {
-			AccountContact ac = new AccountContact();
-			ac.setEmail("");
-			ac.setUserId(null);
-			return ac;
+			return null;
 		}
 		return contactDataForUsers.get(0);
 	}
