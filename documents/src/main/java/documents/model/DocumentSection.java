@@ -3,8 +3,11 @@ package documents.model;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.logging.Logger;
 
 import lombok.ToString;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,6 +26,7 @@ import documents.model.customDeserializer.LocalDateTimeSerializer;
 @JsonIgnoreProperties(value = { "documentId", "sectionVersion" })
 @ToString
 public class DocumentSection {
+
 	private Long sectionId;
 	private Long documentId;
 	private Long sectionVersion;
@@ -188,11 +192,14 @@ public class DocumentSection {
 
 	public static DocumentSection fromJSON(String json) {
 
+		final Logger logger = Logger.getLogger(DocumentSection.class.getName());
+
 		ObjectMapper mapper = new ObjectMapper();
 
 		try {
 			return mapper.readValue(json, DocumentSection.class);
 		} catch (IOException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 		}
 

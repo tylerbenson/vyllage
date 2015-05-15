@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -451,6 +452,7 @@ public class UserService {
 								.getDateCreated().toInstant(ZoneOffset.UTC)
 								.getEpochSecond());
 					} catch (UserNotFoundException e) {
+						logger.severe(ExceptionUtils.getStackTrace(e));
 						NewRelic.noticeError(e);
 					}
 					return ac;

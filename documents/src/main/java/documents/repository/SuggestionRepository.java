@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,7 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 		try {
 			newRecord.setJsonDocument(suggestion.getDocumentSection().asJSON());
 		} catch (JsonProcessingException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 		}
 
@@ -98,6 +100,7 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 			existingRecord.setJsonDocument(suggestion.getDocumentSection()
 					.asJSON());
 		} catch (JsonProcessingException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 		}
 

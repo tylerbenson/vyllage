@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -102,6 +103,7 @@ public class DocumentService {
 								+ s.getSectionPosition()));
 
 			} catch (ElementNotFoundException e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
 				NewRelic.noticeError(e);
 			}
 		} else {
@@ -277,6 +279,7 @@ public class DocumentService {
 							+ " Position: " + s.getSectionPosition()));
 
 		} catch (ElementNotFoundException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 		}
 	}

@@ -3,6 +3,7 @@ package documents.services;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -85,6 +86,7 @@ public class NotificationService {
 					.getUserId()));
 
 		} catch (EmailException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 		}
 

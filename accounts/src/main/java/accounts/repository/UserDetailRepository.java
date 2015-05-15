@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Record1;
@@ -214,6 +215,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			}
 
 		} catch (Exception e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 
@@ -261,6 +263,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			// .create((UserOrganizationRole) authority);
 
 		} catch (Exception e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
@@ -299,6 +302,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			// record.delete();
 
 		} catch (Exception e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {
@@ -547,6 +551,7 @@ public class UserDetailRepository implements UserDetailsManager {
 			sql.batch(otherInserts).execute();
 
 		} catch (Exception e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			transaction.rollbackToSavepoint(savepoint);
 		} finally {

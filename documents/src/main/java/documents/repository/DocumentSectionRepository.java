@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record4;
 import org.jooq.Result;
@@ -169,6 +170,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 			try {
 				newRecord.setJsondocument(documentSection.asJSON());
 			} catch (JsonProcessingException e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
 				NewRelic.noticeError(e);
 			}
 

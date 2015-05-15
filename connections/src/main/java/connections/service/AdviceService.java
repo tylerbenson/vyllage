@@ -7,12 +7,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
 import lombok.ToString;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,6 +47,9 @@ import email.MailService;
 
 @Service
 public class AdviceService {
+
+	private final Logger logger = Logger.getLogger(AdviceService.class
+			.getName());
 
 	@Autowired
 	private Environment environment;
@@ -218,6 +223,7 @@ public class AdviceService {
 					try {
 						mailService.sendEmail(parameters, email.getBody());
 					} catch (EmailException e) {
+						logger.severe(ExceptionUtils.getStackTrace(e));
 						NewRelic.noticeError(e);
 					}
 				}
