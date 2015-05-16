@@ -69,7 +69,7 @@
   }
 }
 
-@media (max-width: $medium-portrait) {
+@media only screen and (max-width: $medium-portrait) {
   .banner {
     text-align: center;
     .info {
