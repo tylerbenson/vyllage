@@ -36,6 +36,10 @@
     .title {
       @include column(2/3);
       text-align: left;
+
+      h1:first-letter {
+        text-transform: uppercase;
+      }
     }
     .actions {
       @include column(1/3);
