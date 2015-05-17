@@ -41,8 +41,18 @@
         transition: all .2s ease;
       }
 
+      .tip {
+        position: absolute;
+        top: 0.25em;
+        padding-left: 0.6em;
+      }
+
       input {
         min-width: 18em;
+
+        &.twitter {
+          padding-left: 1.6em;
+        }
       }
 
       .error {

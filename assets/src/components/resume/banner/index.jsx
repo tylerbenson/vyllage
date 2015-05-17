@@ -117,13 +117,14 @@ var Banner = React.createClass({
             </div>: null}
             {(header.owner || header.twitter)? <div className='detail'>
               <i className="ion-social-twitter"></i>
+              <span className='tip'>@</span>
               <input
                 required
                 type='text'
-                placeholder="Twitter Handle"
+                placeholder="Twitter Username"
                 disabled={!header.owner}
                 key={header.twitter || undefined}
-                className="inline transparent"
+                className="inline transparent twitter"
                 autoComplete="off"
                 defaultValue={header.twitter}
                 onChange={this.handleChange.bind(this, 'twitter')}
