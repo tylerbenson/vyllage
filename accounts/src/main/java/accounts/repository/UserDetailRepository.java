@@ -474,11 +474,16 @@ public class UserDetailRepository implements UserDetailsManager,
 
 		List userBatch = users
 				.stream()
-				.map(u -> sql.insertInto(USERS, USERS.USER_NAME, USERS.ENABLED,
-						USERS.DATE_CREATED, USERS.LAST_MODIFIED).values(
-						u.getUsername(), enabled,
-						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))),
-						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))))
+				.map((User u) -> sql.insertInto(USERS, USERS.USER_NAME,
+						USERS.ENABLED, USERS.DATE_CREATED, USERS.LAST_MODIFIED,
+						USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME)
+						.values(u.getUsername(),
+								enabled,
+								Timestamp.valueOf(LocalDateTime.now(ZoneId
+										.of("UTC"))),
+								Timestamp.valueOf(LocalDateTime.now(ZoneId
+										.of("UTC"))), u.getFirstName(),
+								u.getMiddleName(), u.getLastName())
 
 				).collect(Collectors.toList());
 
