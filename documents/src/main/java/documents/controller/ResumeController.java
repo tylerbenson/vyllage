@@ -323,8 +323,9 @@ public class ResumeController {
 								Arrays.asList(document.getUserId()));
 
 				// if we have not, send it
-				notificationService.sendEmailNewCommentNotification(user,
-						recipient.get(0), comment);
+				if (recipient != null && !recipient.isEmpty())
+					notificationService.sendEmailNewCommentNotification(user,
+							recipient.get(0), comment);
 			}
 		}
 
