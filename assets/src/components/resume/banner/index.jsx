@@ -22,7 +22,7 @@ var Banner = React.createClass({
       this.setState({tagline: nextProps.header.tagline});
     }
   },
-  enableEdiMode: function (field, e) {
+  enableEditMode: function (field, e) {
     e.preventDefault();
     if (this.props.header.owner) {
       var editMode = this.state.editMode;
@@ -30,7 +30,7 @@ var Banner = React.createClass({
       this.setState({editMode: editMode});
     }
   },
-  disableEdiMode: function (field, e) {
+  disableEditMode: function (field, e) {
     e.preventDefault();
     var editMode = this.state.editMode;
     editMode[field] = false;
@@ -65,8 +65,8 @@ var Banner = React.createClass({
               autoComplete="off"
               defaultValue={header.tagline}
               onChange={this.handleChange.bind(this, 'tagline')}
-              onClick={this.enableEdiMode.bind(this, 'tagline')}
-              onBlur={this.disableEdiMode.bind(this, 'tagline')}
+              onClick={this.enableEditMode.bind(this, 'tagline')}
+              onBlur={this.disableEditMode.bind(this, 'tagline')}
             ></Textarea>: null}
             {(header.owner || header.address)? <Textarea
               key={header.address || undefined}
@@ -77,8 +77,8 @@ var Banner = React.createClass({
               autoComplete="off"
               defaultValue={header.address}
               onChange={this.handleChange.bind(this, 'address')}
-              onClick={this.enableEdiMode.bind(this, 'address')}
-              onBlur={this.disableEdiMode.bind(this, 'address')}
+              onClick={this.enableEditMode.bind(this, 'address')}
+              onBlur={this.disableEditMode.bind(this, 'address')}
             ></Textarea>: null}
           </div>
           <div className="contact">
@@ -94,8 +94,8 @@ var Banner = React.createClass({
                 autoComplete="off"
                 defaultValue={header.email}
                 onChange={this.handleChange.bind(this, 'email')}
-                onClick={this.enableEdiMode.bind(this, 'email')}
-                onBlur={this.disableEdiMode.bind(this, 'email')}
+                onClick={this.enableEditMode.bind(this, 'email')}
+                onBlur={this.disableEditMode.bind(this, 'email')}
               />
               <p className='error'>{emailSetting.errorMessage}</p>
             </div>: null}
@@ -111,8 +111,8 @@ var Banner = React.createClass({
                 autoComplete="off"
                 defaultValue={header.phoneNumber}
                 onChange={this.handleChange.bind(this, 'phoneNumber')}
-                onClick={this.enableEdiMode.bind(this, 'phoneNumber')}
-                onBlur={this.disableEdiMode.bind(this, 'phoneNumber')}
+                onClick={this.enableEditMode.bind(this, 'phoneNumber')}
+                onBlur={this.disableEditMode.bind(this, 'phoneNumber')}
               />
             </div>: null}
             {(header.owner || header.twitter)? <div className='detail'>
@@ -128,8 +128,8 @@ var Banner = React.createClass({
                 autoComplete="off"
                 defaultValue={header.twitter}
                 onChange={this.handleChange.bind(this, 'twitter')}
-                onClick={this.enableEdiMode.bind(this, 'twitter')}
-                onBlur={this.disableEdiMode.bind(this, 'twitter')}
+                onClick={this.enableEditMode.bind(this, 'twitter')}
+                onBlur={this.disableEditMode.bind(this, 'twitter')}
               />
             </div>: null}
           </div>
