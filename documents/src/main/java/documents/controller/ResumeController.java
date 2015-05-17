@@ -309,20 +309,23 @@ public class ResumeController {
 			NewRelic.noticeError(e);
 		}
 
-		Optional<UserNotification> notification = notificationService
-				.getNotification(document.getUserId());
-
-		// check that we have not sent a message today
+		// Check user ids before going to DB...
 		// don't notify if the user commenting is the owner of the document...
-		if (!notification.isPresent() || !notification.get().wasSentToday()
-				&& !comment.getUserId().equals(user.getUserId())) {
-			List<AccountContact> recipient = accountService
-					.getContactDataForUsers(request,
-							Arrays.asList(document.getUserId()));
+		if (!comment.getUserId().equals(user.getUserId())) {
 
-			// if we have not, send it
-			notificationService.sendEmailNewCommentNotification(user,
-					recipient.get(0), comment);
+			// check that we have not sent a message today
+			Optional<UserNotification> notification = notificationService
+					.getNotification(document.getUserId());
+
+			if (!notification.isPresent() || !notification.get().wasSentToday()) {
+				List<AccountContact> recipient = accountService
+						.getContactDataForUsers(request,
+								Arrays.asList(document.getUserId()));
+
+				// if we have not, send it
+				notificationService.sendEmailNewCommentNotification(user,
+						recipient.get(0), comment);
+			}
 		}
 
 		return documentService.saveComment(comment);
