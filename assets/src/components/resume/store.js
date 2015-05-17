@@ -216,7 +216,11 @@ module.exports = Reflux.createStore({
       .send(data)
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
-        this.resume.sections[index].comments.push(res.body);
+        if (this.resume.sections[index].comments) {
+          this.resume.sections[index].comments.push(res.body);
+        } else {
+          this.resume.sections[index].comments = [res.body];
+        }
         this.resume.sections[index].numberOfComments += 1;
         this.trigger(this.resume);
       }.bind(this))
