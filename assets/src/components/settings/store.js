@@ -53,11 +53,18 @@ module.exports = Reflux.createStore({
     this.update();
   },
   validateField: function (setting) {
-    if (setting.name === 'linkedIn') {
-      setting.errorMessage = validator.isURL(setting.value) ? null: "Invalid URL";
-    } else if (setting.name === 'email') {
-      setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid E-mail";
+    switch(setting.name) {
+      case 'linkedIn':
+        setting.errorMessage = validator.isURL(setting.value) ? null: "Invalid URL";
+        break;
+      case 'email':
+        setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid E-mail";
+        break;
+      case 'phoneNumber':
+        setting.errorMessage = validator.isNumeric(setting.value) ? null: "Invalid Phone Number";
+        break;
     }
+
     return setting;
   },
   onCancelSettings: function () {

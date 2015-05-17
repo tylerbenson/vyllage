@@ -3,6 +3,8 @@ var Textarea = require('react-textarea-autosize')
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
 var filter = require('lodash.filter');
+var phoneFormatter = require('phone-formatter');
+var validator = require('validator');
 
 var Banner = React.createClass({
   getInitialState: function () {
@@ -35,20 +37,35 @@ var Banner = React.createClass({
     var editMode = this.state.editMode;
     editMode[field] = false;
     this.setState({editMode: editMode});
-    settingActions.updateSettings();
-    actions.updateTagline(this.state.tagline);
+
+    switch(field) {
+      case 'tagline':
+        actions.updateTagline(this.state.tagline);
+        break;
+      case 'phoneNumber':
+        var phoneNumberValue = phoneFormatter.normalize(e.target.value);
+        if(validator.isNumeric(phoneNumberValue)) {
+          e.target.value = phoneFormatter.format(phoneNumberValue, "(NNN) NNN-NNNN");
+        }
+        break;
+      default:
+        settingActions.updateSettings();
+    }
   },
   handleChange: function (field, e) {
     e.preventDefault();
     if (field === 'tagline') {
       this.setState({tagline: e.target.value});
     } else {
-      settingActions.changeSetting({name: field, value: e.target.value, privacy: "private"});
+      var value = field === 'phoneNumber' ? phoneFormatter.normalize(e.target.value) : e.target.value;
+      settingActions.changeSetting({name: field, value: value, privacy: "private"});
     }
   },
   render: function() {
     var header = this.props.header || {};
     var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {};
+    var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {};
+
     return (
       <section className='banner'>
         <div className ="content">
@@ -109,11 +126,12 @@ var Banner = React.createClass({
                 key={header.phoneNumber || undefined}
                 className="inline transparent"
                 autoComplete="off"
-                defaultValue={header.phoneNumber}
+                defaultValue={phoneFormatter.format(header.phoneNumber,"(NNN) NNN-NNNN")}
                 onChange={this.handleChange.bind(this, 'phoneNumber')}
                 onClick={this.enableEditMode.bind(this, 'phoneNumber')}
                 onBlur={this.disableEditMode.bind(this, 'phoneNumber')}
               />
+              <p className='error'>{phoneNumberSetting.errorMessage}</p>
             </div>: null}
             {(header.owner || header.twitter)? <div className='detail'>
               <i className="ion-social-twitter"></i>

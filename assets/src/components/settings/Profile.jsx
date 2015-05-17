@@ -4,6 +4,7 @@ var Buttons = require('./Buttons');
 var SettingsMixin = require('./mixin');
 var Textarea = require('react-textarea-autosize');
 var Datepicker = require('../datepicker');
+var phoneFormatter = require('phone-formatter');
 
 var Profile = React.createClass({
   mixins: [SettingsMixin],
@@ -85,7 +86,7 @@ var Profile = React.createClass({
             <input
               ref='phoneNumber'
               type='text'
-              defaultValue={phoneNumberSetting.value}
+              defaultValue={phoneFormatter.format(phoneNumberSetting.value, "(NNN) NNN-NNNN")}
               onChange={this.changeHandler.bind(this, 'phoneNumber')}
             />
             <p className='error'>{phoneNumberSetting.errorMessage}</p>
