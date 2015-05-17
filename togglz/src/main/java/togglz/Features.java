@@ -20,7 +20,10 @@ public enum Features implements Feature {
 	ZOPIM_MESSAGE_CLIENT,
 
 	@Label("Share Resume")
-	SHARE_RESUME;
+	SHARE_RESUME,
+
+	@Label("Intercom")
+	INTERCOM;
 
 	public boolean isActive() {
 		return FeatureContext.getFeatureManager().isActive(this);
