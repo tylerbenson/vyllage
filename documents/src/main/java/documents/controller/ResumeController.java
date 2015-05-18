@@ -124,10 +124,6 @@ public class ResumeController {
 	public String getResume(HttpServletRequest request,
 			@PathVariable final Long documentId,
 			@AuthenticationPrincipal User user, Model model) {
-		if (user.isGuest()) {
-			request.getSession().invalidate();
-			return "redirect:/";
-		}
 
 		model.addAttribute("accountName", accountName(request, user));
 		model.addAttribute("userInfo", userInfo(request, user));
