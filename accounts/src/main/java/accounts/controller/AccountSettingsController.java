@@ -137,6 +137,9 @@ public class AccountSettingsController {
 			@AuthenticationPrincipal User user) {
 
 		for (AccountSetting accountSetting : settings) {
+			// clean errors
+			accountSetting.setErrorMessage(null);
+
 			if (accountSetting.getUserId() == null)
 				accountSetting.setAccountSettingId(user.getUserId());
 		}
@@ -172,6 +175,9 @@ public class AccountSettingsController {
 			@PathVariable String parameter,
 			@Valid @RequestBody final AccountSetting setting,
 			@AuthenticationPrincipal User user, BindingResult result) {
+
+		// clean error
+		setting.setErrorMessage(null);
 
 		if (setting.getUserId() == null)
 			setting.setAccountSettingId(user.getUserId());
