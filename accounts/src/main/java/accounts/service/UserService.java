@@ -231,7 +231,7 @@ public class UserService {
 			}
 		}
 
-		userRepository.saveUsers(users, loggedInUser);
+		userRepository.addUsers(users, loggedInUser);
 
 		// send mails
 		for (User user : users) {
