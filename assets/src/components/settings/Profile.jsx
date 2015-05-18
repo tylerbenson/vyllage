@@ -86,7 +86,7 @@ var Profile = React.createClass({
             <input
               ref='phoneNumber'
               type='text'
-              defaultValue={phoneFormatter.format(phoneNumberSetting.value, "(NNN) NNN-NNNN")}
+              defaultValue={phoneNumberSetting.value?phoneFormatter.format(phoneNumberSetting.value, "(NNN) NNN-NNNN"):''}
               onChange={this.changeHandler.bind(this, 'phoneNumber')}
             />
             <p className='error'>{phoneNumberSetting.errorMessage}</p>
