@@ -464,7 +464,7 @@ public class UserDetailRepository implements UserDetailsManager,
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	// @Transactional
-	public void saveUsers(List<User> users, User loggedInUser) {
+	public void addUsers(List<User> users, User loggedInUser) {
 		final boolean enabled = true;
 
 		TransactionStatus transaction = txManager
