@@ -42,9 +42,10 @@
       }
 
       .tip {
+        padding-left: 0.6em;
+        pointer-events: none;
         position: absolute;
         top: 0.25em;
-        padding-left: 0.6em;
       }
 
       input {
