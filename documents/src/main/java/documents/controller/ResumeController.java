@@ -63,7 +63,7 @@ public class ResumeController {
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
 
-	// ModelAttributes execute for every request, even REST ones since they are
+	// ModelAttributes execute for every request, even REST ones, since they are
 	// only needed in one method and complicate testing I'm calling them
 	// directly instead
 	// https://jira.spring.io/browse/SPR-12303
@@ -134,7 +134,7 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	public @ResponseBody List<DocumentSection> getResumeSections(
-			HttpServletRequest request, @PathVariable final Long documentId)
+			@PathVariable final Long documentId)
 			throws JsonProcessingException, ElementNotFoundException {
 		List<DocumentSection> documentSections = documentService
 				.getDocumentSections(documentId);
@@ -157,7 +157,7 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	public @ResponseBody DocumentSection getResumeSection(
-			HttpServletRequest request, @PathVariable final Long documentId,
+			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId) throws ElementNotFoundException {
 
 		int commentsForSection = documentService
@@ -240,7 +240,8 @@ public class ResumeController {
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckWriteAccess
 	public void saveSectionPositions(@PathVariable final Long documentId,
-			@RequestBody final List<Long> documentSectionIds) {
+			@RequestBody final List<Long> documentSectionIds)
+			throws ElementNotFoundException {
 		documentService.orderDocumentSections(documentId, documentSectionIds);
 	}
 

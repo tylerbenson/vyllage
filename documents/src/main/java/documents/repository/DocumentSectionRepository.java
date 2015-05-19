@@ -110,7 +110,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 				.where(s2.ID.isNull().and(s1.DOCUMENTID.eq(documentId)))
 				.fetch();
 
-		if (existingRecords == null)
+		if (existingRecords == null || existingRecords.isEmpty())
 			throw new ElementNotFoundException(
 					"DocumentSections for Document id '" + documentId
 							+ "' not found.");
