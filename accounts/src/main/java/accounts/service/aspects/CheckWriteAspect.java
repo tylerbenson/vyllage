@@ -13,7 +13,7 @@ import user.common.User;
 import accounts.model.account.settings.AccountSetting;
 
 @Aspect
-@Component("accounts.CheckOwnerAspect")
+@Component("accounts.CheckWriteAspect")
 /**
  * Checks Account Settings before they are saved, if the user is not the owner of the settings it rejects the change with AccessDeniedException.
  * @author uh

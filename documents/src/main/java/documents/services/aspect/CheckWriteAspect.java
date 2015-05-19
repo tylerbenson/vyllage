@@ -1,7 +1,5 @@
 package documents.services.aspect;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -15,16 +13,15 @@ import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 
 @Aspect
-@Component("documents.CheckOwnerAspect")
+@Component("documents.CheckWriteAspect")
 public class CheckWriteAspect {
 
 	@Autowired
 	private DocumentService documentService;
 
-	@Before("execution(* *(..)) && args(request, documentId) && @annotation(CheckWriteAccess)")
-	public void checkOwner(JoinPoint joinPoint, HttpServletRequest request,
-			Long documentId) throws AccessDeniedException,
-			ElementNotFoundException {
+	@Before("execution(* *(..)) && args(documentId,..) && @annotation(CheckWriteAccess)")
+	public void checkOwner(JoinPoint joinPoint, Long documentId)
+			throws AccessDeniedException, ElementNotFoundException {
 
 		Long userId = getUserId();
 

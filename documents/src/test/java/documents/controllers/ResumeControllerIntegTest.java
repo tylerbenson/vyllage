@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import user.common.User;
 import documents.Application;
 import documents.controller.ResumeController;
 import documents.model.Document;
@@ -40,7 +41,7 @@ public class ResumeControllerIntegTest {
 		Document document = generateDocument();
 
 		// mocking this because we don't have the class in this project...
-		MockUser o = Mockito.mock(MockUser.class);
+		User o = Mockito.mock(User.class);
 
 		Authentication authentication = Mockito.mock(Authentication.class);
 		Mockito.when(authentication.getPrincipal()).thenReturn(o);
@@ -72,15 +73,4 @@ public class ResumeControllerIntegTest {
 		return doc1;
 	}
 
-	private class MockUser {
-		private Long userId = 0L;
-
-		public Long getUserId() {
-			return userId;
-		}
-
-		public void setUserId(Long userId) {
-			this.userId = userId;
-		}
-	}
 }
