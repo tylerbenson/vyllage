@@ -9,19 +9,22 @@ var CommentList = React.createClass({
   render: function () {
     var comments = this.props.comments || [];
     var commentNodes = comments.map(function (comment, index) {
+      if(comment.commentText.length<1){
+        return null;
+      }
       return <div key={index} className='comment'>
               <div className='content'>
                 <div className='info'>
-                  <div className="author">{comment.userName}</div>
+                  <div className="author">{comment.userName?comment.userName:'Vyllage User'}</div>
                   <div className="timestamp">
                     {moment(comment.lastModified).isValid() ? moment.utc(comment.lastModified).fromNow(): ''}
                   </div>
-                </div>  
+                </div>
                 <div className="message">
                   {comment.commentText}
                 </div>
               </div>
-             </div>           
+             </div>
 
     }.bind(this));
     return (

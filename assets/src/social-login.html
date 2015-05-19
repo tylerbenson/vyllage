@@ -14,6 +14,7 @@
   <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,100' rel='stylesheet' type='text/css' />
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
+
 <body class="login">
   <div id="container">
     <header>
@@ -31,21 +32,21 @@
       </section>
       <section class="form section">
         <div class="container">
-          			<!-- FACEBOOK SIGNIN -->
-			<form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">
-				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
-				<input type="hidden" name="scope" value="email"></input>
-<!-- 				<input type="hidden" name="scope" value="publish_stream,user_photos,offline_access"></input> -->
-				<button type="submit">Facebook</button>
-			</form>
-<!-- 			<form id="tw_signin" th:action="@{/signin/twitter}" method="POST"> -->
-<!-- 				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input> -->
-<!-- 				<button type="submit"></button> -->
-<!-- 			</form> -->
-<!-- 			<form name="li_signin" id="li_signin" th:action="@{/signin/linkedin}" method="POST"> -->
-<!-- 				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input> -->
-<!-- 				<button type="submit">Sign In with LinkedIn</button> -->
-<!-- 			</form> -->
+          <!-- FACEBOOK SIGNIN -->
+          <form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
+            <input type="hidden" name="scope" value="email"></input>
+            <!-- 				<input type="hidden" name="scope" value="publish_stream,user_photos,offline_access"></input> -->
+            <button type="submit">Facebook</button>
+          </form>
+          <!-- 			<form id="tw_signin" th:action="@{/signin/twitter}" method="POST"> -->
+          <!-- 				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input> -->
+          <!-- 				<button type="submit"></button> -->
+          <!-- 			</form> -->
+          <!-- 			<form name="li_signin" id="li_signin" th:action="@{/signin/linkedin}" method="POST"> -->
+          <!-- 				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input> -->
+          <!-- 				<button type="submit">Sign In with LinkedIn</button> -->
+          <!-- 			</form> -->
         </div>
       </section>
     </div>

@@ -2,6 +2,7 @@ var actions = require('./actions');
 var findindex = require('lodash.findindex');
 var validator = require('validator');
 var PubSub = require('pubsub-js');
+var phoneFormatter = require('phone-formatter');
 
 module.exports = {
   changeHandler: function (name, e) {
@@ -9,7 +10,7 @@ module.exports = {
     var setting;
     if (index !== -1) {
       setting = this.props.settings[index];
-      setting.value = e.target.value;
+      setting.value = name ==='phoneNumber' ? phoneFormatter.normalize(e.target.value) : e.target.value;
     } else {
       setting = {
         name: name,

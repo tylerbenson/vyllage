@@ -3,6 +3,8 @@ var Textarea = require('react-textarea-autosize')
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
 var filter = require('lodash.filter');
+var phoneFormatter = require('phone-formatter');
+var validator = require('validator');
 
 var Banner = React.createClass({
   getInitialState: function () {
@@ -22,7 +24,7 @@ var Banner = React.createClass({
       this.setState({tagline: nextProps.header.tagline});
     }
   },
-  enableEdiMode: function (field, e) {
+  enableEditMode: function (field, e) {
     e.preventDefault();
     if (this.props.header.owner) {
       var editMode = this.state.editMode;
@@ -30,25 +32,40 @@ var Banner = React.createClass({
       this.setState({editMode: editMode});
     }
   },
-  disableEdiMode: function (field, e) {
+  disableEditMode: function (field, e) {
     e.preventDefault();
     var editMode = this.state.editMode;
     editMode[field] = false;
     this.setState({editMode: editMode});
-    settingActions.updateSettings();
-    actions.updateTagline(this.state.tagline);
+
+    switch(field) {
+      case 'tagline':
+        actions.updateTagline(this.state.tagline);
+        break;
+      case 'phoneNumber':
+        var phoneNumberValue = phoneFormatter.normalize(e.target.value);
+        if(validator.isNumeric(phoneNumberValue)) {
+          e.target.value = phoneFormatter.format(phoneNumberValue, "(NNN) NNN-NNNN");
+        }
+        break;
+      default:
+        settingActions.updateSettings();
+    }
   },
   handleChange: function (field, e) {
     e.preventDefault();
     if (field === 'tagline') {
       this.setState({tagline: e.target.value});
     } else {
-      settingActions.changeSetting({name: field, value: e.target.value, privacy: "private"});
+      var value = field === 'phoneNumber' ? phoneFormatter.normalize(e.target.value) : e.target.value;
+      settingActions.changeSetting({name: field, value: value, privacy: "private"});
     }
   },
   render: function() {
     var header = this.props.header || {};
     var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {};
+    var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {};
+
     return (
       <section className='banner'>
         <div className ="content">
@@ -65,8 +82,8 @@ var Banner = React.createClass({
               autoComplete="off"
               defaultValue={header.tagline}
               onChange={this.handleChange.bind(this, 'tagline')}
-              onClick={this.enableEdiMode.bind(this, 'tagline')}
-              onBlur={this.disableEdiMode.bind(this, 'tagline')}
+              onClick={this.enableEditMode.bind(this, 'tagline')}
+              onBlur={this.disableEditMode.bind(this, 'tagline')}
             ></Textarea>: null}
             {(header.owner || header.address)? <Textarea
               key={header.address || undefined}
@@ -77,8 +94,8 @@ var Banner = React.createClass({
               autoComplete="off"
               defaultValue={header.address}
               onChange={this.handleChange.bind(this, 'address')}
-              onClick={this.enableEdiMode.bind(this, 'address')}
-              onBlur={this.disableEdiMode.bind(this, 'address')}
+              onClick={this.enableEditMode.bind(this, 'address')}
+              onBlur={this.disableEditMode.bind(this, 'address')}
             ></Textarea>: null}
           </div>
           <div className="contact">
@@ -94,8 +111,8 @@ var Banner = React.createClass({
                 autoComplete="off"
                 defaultValue={header.email}
                 onChange={this.handleChange.bind(this, 'email')}
-                onClick={this.enableEdiMode.bind(this, 'email')}
-                onBlur={this.disableEdiMode.bind(this, 'email')}
+                onClick={this.enableEditMode.bind(this, 'email')}
+                onBlur={this.disableEditMode.bind(this, 'email')}
               />
               <p className='error'>{emailSetting.errorMessage}</p>
             </div>: null}
@@ -109,26 +126,28 @@ var Banner = React.createClass({
                 key={header.phoneNumber || undefined}
                 className="inline transparent"
                 autoComplete="off"
-                defaultValue={header.phoneNumber}
+                defaultValue={header.phoneNumber?phoneFormatter.format(header.phoneNumber,"(NNN) NNN-NNNN"):''}
                 onChange={this.handleChange.bind(this, 'phoneNumber')}
-                onClick={this.enableEdiMode.bind(this, 'phoneNumber')}
-                onBlur={this.disableEdiMode.bind(this, 'phoneNumber')}
+                onClick={this.enableEditMode.bind(this, 'phoneNumber')}
+                onBlur={this.disableEditMode.bind(this, 'phoneNumber')}
               />
+              <p className='error'>{phoneNumberSetting.errorMessage}</p>
             </div>: null}
             {(header.owner || header.twitter)? <div className='detail'>
               <i className="ion-social-twitter"></i>
+              <span className='tip'>@</span>
               <input
                 required
                 type='text'
-                placeholder="Twitter Handle"
+                placeholder="Twitter Username"
                 disabled={!header.owner}
                 key={header.twitter || undefined}
-                className="inline transparent"
+                className="inline transparent twitter"
                 autoComplete="off"
                 defaultValue={header.twitter}
                 onChange={this.handleChange.bind(this, 'twitter')}
-                onClick={this.enableEdiMode.bind(this, 'twitter')}
-                onBlur={this.disableEdiMode.bind(this, 'twitter')}
+                onClick={this.enableEditMode.bind(this, 'twitter')}
+                onBlur={this.disableEditMode.bind(this, 'twitter')}
               />
             </div>: null}
           </div>

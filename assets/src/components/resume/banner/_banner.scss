@@ -41,8 +41,19 @@
         transition: all .2s ease;
       }
 
+      .tip {
+        padding-left: 0.6em;
+        pointer-events: none;
+        position: absolute;
+        top: 0.25em;
+      }
+
       input {
         min-width: 18em;
+
+        &.twitter {
+          padding-left: 1.6em;
+        }
       }
 
       .error {
@@ -69,7 +80,7 @@
   }
 }
 
-@media (max-width: $medium-portrait) {
+@media only screen and (max-width: $medium-portrait) {
   .banner {
     text-align: center;
     .info {

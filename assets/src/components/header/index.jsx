@@ -15,7 +15,7 @@ var HeaderContainer = React.createClass({
             <ul>
               <li><a href='/account/setting'><i className="ion-gear-a"></i></a></li>
               <li className="dropdown-trigger user">
-                <a><i className="avatar ion-person"></i><span className="name">{name}</span><i className="caret"></i></a>
+                <a><i className="avatar ion-person"></i><span className="name">{name?name:'User'}</span><i className="caret"></i></a>
                 <ul className="dropdown-list">
                   <li><a href='/resume'>
                     <i className="ion-document"></i>
