@@ -13,7 +13,7 @@ import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 
 @Aspect
-@Component("documents.CheckOwnerAspect")
+@Component("documents.CheckWriteAspect")
 public class CheckWriteAspect {
 
 	@Autowired
