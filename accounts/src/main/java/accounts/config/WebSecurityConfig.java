@@ -36,8 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				new TogglzConsoleRequestMatcher());
 
 		http.authorizeRequests()
-				.antMatchers("/", "/css/**", "/images/**", "/javascript/**")
-				.permitAll();
+				.antMatchers("/", "/status", "/css/**", "/images/**",
+						"/javascript/**").permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
 
 		SimpleUrlAuthenticationSuccessHandler successHandler = successHandler();

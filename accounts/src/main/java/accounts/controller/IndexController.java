@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import user.common.User;
 import accounts.model.account.AccountContact;
@@ -65,18 +66,8 @@ public class IndexController {
 		return "index";
 	}
 
-	@RequestMapping("/email-account-created")
-	public String emailAccountCreated() {
-		return "email-account-created";
-	}
-
-	@RequestMapping("/email-advice-request")
-	public String emailAdviceRequest() {
-		return "email-advice-request";
-	}
-
-	@RequestMapping("/email-change-password")
-	public String emailChangePassword() {
-		return "email-change-password";
+	@RequestMapping(value = "/status", produces = "text/plain")
+	public @ResponseBody String status() {
+		return "OK";
 	}
 }
