@@ -20,8 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -34,7 +32,7 @@ import accounts.repository.UserOrganizationRoleRepository;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+// @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class LoginTest {
 
 	@Autowired
@@ -45,7 +43,7 @@ public class LoginTest {
 
 	@Test
 	public void userExistsTest() {
-		String username = "user@vyllage.com";
+		String username = "mario@toadstool.com";
 		UserDetails loadUserByUsername = repository
 				.loadUserByUsername(username);
 
