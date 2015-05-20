@@ -16,6 +16,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -31,6 +33,7 @@ import accounts.repository.UserNotFoundException;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+// @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserServiceTest {
 
 	@Autowired
@@ -120,7 +123,7 @@ public class UserServiceTest {
 	@Test
 	public void getAdvisorsWithoutFilterTest() {
 
-		User user = service.getUser("email");
+		User user = service.getUser("user@vyllage.com");
 
 		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
 				user, user.getPassword(), user.getAuthorities());
@@ -135,7 +138,7 @@ public class UserServiceTest {
 	@Test
 	public void getAdvisorsWithFilterTest() {
 
-		User user = service.getUser("email");
+		User user = service.getUser("user@vyllage.com");
 
 		Map<String, String> filters = new HashMap<>();
 

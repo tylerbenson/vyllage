@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -17,6 +19,7 @@ import accounts.Application;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserOrganizationRoleRepositoryTest {
 
 	@Autowired
@@ -48,7 +51,7 @@ public class UserOrganizationRoleRepositoryTest {
 	@Test
 	public void deleteUserOrganizationRoleTest() {
 		Long userId = 0L;
-		Long organizationId = 1L;
+		Long organizationId = 2L;
 		String alumni = "ALUMNI";
 
 		UserOrganizationRole role = new UserOrganizationRole(userId,
