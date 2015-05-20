@@ -84,11 +84,17 @@
 
     .form {
       @include column(16/17);
+      position: relative;
 
       .field {
         display: inline-block;
         margin: 0.5em 0.25em;
         position: relative;
+
+        &:last-child {
+          position: absolute;
+          bottom: 0;
+        }
 
         label {
           color: lighten($text-color, 10%);
@@ -184,6 +190,7 @@
       button,
       .button {
         border: none;
+        padding: 0.4em 1em;
         span > span {
           display: none;
         }
@@ -216,6 +223,9 @@
           }
           &:nth-child(3) {
             margin-top: 0;
+          }
+          &:last-child {
+            position: relative;
           }
 
           button,

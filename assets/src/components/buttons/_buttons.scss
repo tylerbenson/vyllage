@@ -15,6 +15,7 @@ input[type="reset"] {
   text-transform: uppercase;
   transition: background .2s ease,
      color .2s ease;
+  white-space: nowrap;
 
   &:hover,&:focus {
     background: lighten($primary-color, 8%);
