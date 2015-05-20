@@ -233,6 +233,8 @@ public class ResumeController {
 			throws JsonProcessingException, AccessDeniedException,
 			ElementNotFoundException {
 
+		documentSection.setDocumentId(documentId);
+
 		if (documentSection.getDocumentId() == null
 				|| documentSection.getSectionId() == null
 				|| !sectionId.equals(documentSection.getSectionId())) {
