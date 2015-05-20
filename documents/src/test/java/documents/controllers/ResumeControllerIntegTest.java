@@ -278,6 +278,49 @@ public class ResumeControllerIntegTest {
 				documentSection);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void updateSectionFailsDocumentIdInSectionNull()
+			throws JsonProcessingException, ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = 0L;
+		DocumentSection documentSection = createSection();
+		documentSection.setDocumentId(documentId);
+		documentSection.setSectionId(null);
+
+		controller.saveSection(documentId, documentSection.getSectionId(),
+				documentSection);
+	}
+
+	// from the aspect
+	@Test(expected = ElementNotFoundException.class)
+	public void updateSectionFailsDocumentNull()
+			throws JsonProcessingException, ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = null;
+		DocumentSection documentSection = createSection();
+		documentSection.setDocumentId(documentId);
+		documentSection.setSectionId(null);
+
+		controller.saveSection(documentId, documentSection.getSectionId(),
+				documentSection);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void updateSectionFailsDocumentSectionNull()
+			throws JsonProcessingException, ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = 0L;
+		DocumentSection documentSection = createSection();
+		documentSection.setDocumentId(documentId);
+		documentSection.setSectionId(null);
+
+		controller.saveSection(documentId, documentSection.getSectionId(),
+				documentSection);
+	}
+
 	@Test(expected = ElementNotFoundException.class)
 	public void updateSectionFailsSectionNotFound()
 			throws JsonProcessingException, ElementNotFoundException {
