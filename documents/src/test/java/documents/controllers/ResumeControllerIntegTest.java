@@ -199,6 +199,160 @@ public class ResumeControllerIntegTest {
 
 	}
 
+	@Test
+	public void createSectionSuccessfully() throws JsonProcessingException,
+			ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = 0L;
+		DocumentSection documentSection = createSection();
+
+		DocumentSection createdSection = controller.createSection(documentId,
+				documentSection);
+
+		Assert.assertNotNull(createdSection);
+		Assert.assertTrue(createdSection.getDocumentId() != null);
+		Assert.assertTrue(createdSection.getSectionId() != null);
+		Assert.assertTrue(createdSection.getSectionPosition() != null);
+		Assert.assertTrue(notNullNotEmpty(createdSection.getDescription()));
+		Assert.assertTrue(notNullNotEmpty(createdSection.getTitle()));
+		Assert.assertTrue(notNullNotEmpty(createdSection.getHighlights()));
+		Assert.assertTrue(notNullNotEmpty(createdSection
+				.getOrganizationDescription()));
+		Assert.assertTrue(notNullNotEmpty(createdSection.getOrganizationName()));
+	}
+
+	@Test(expected = ElementNotFoundException.class)
+	public void createSectionNonExistingDocument()
+			throws JsonProcessingException, ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = 999999L;
+		DocumentSection documentSection = createSection();
+
+		controller.createSection(documentId, documentSection);
+
+	}
+
+	@Test
+	public void updateSectionSuccessfully() throws JsonProcessingException,
+			ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = 0L;
+		DocumentSection documentSection = createSection();
+
+		DocumentSection createdSection = controller.createSection(documentId,
+				documentSection);
+
+		String newDescription = "Updated!";
+		createdSection.setDescription(newDescription);
+
+		DocumentSection updatedSection = controller.saveSection(documentId,
+				createdSection.getSectionId(), createdSection);
+
+		Assert.assertNotNull(updatedSection);
+		Assert.assertTrue(updatedSection.getDocumentId() != null);
+		Assert.assertTrue(updatedSection.getSectionId() != null);
+		Assert.assertTrue(updatedSection.getSectionPosition() != null);
+		Assert.assertTrue(notNullNotEmpty(updatedSection.getDescription()));
+		Assert.assertEquals(newDescription, updatedSection.getDescription());
+		Assert.assertTrue(notNullNotEmpty(updatedSection.getTitle()));
+		Assert.assertTrue(notNullNotEmpty(updatedSection.getHighlights()));
+		Assert.assertTrue(notNullNotEmpty(updatedSection
+				.getOrganizationDescription()));
+		Assert.assertTrue(notNullNotEmpty(updatedSection.getOrganizationName()));
+	}
+
+	@Test(expected = ElementNotFoundException.class)
+	public void updateSectionFailsDocumentNotFound()
+			throws JsonProcessingException, ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = 999999L;
+		DocumentSection documentSection = createSection();
+		documentSection.setDocumentId(documentId);
+		documentSection.setSectionId(123L);
+
+		controller.saveSection(documentId, documentSection.getSectionId(),
+				documentSection);
+	}
+
+	@Test(expected = ElementNotFoundException.class)
+	public void updateSectionFailsSectionNotFound()
+			throws JsonProcessingException, ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = 0L;
+		DocumentSection documentSection = createSection();
+		documentSection.setDocumentId(documentId);
+		documentSection.setSectionId(9999999L);
+
+		controller.saveSection(documentId, documentSection.getSectionId(),
+				documentSection);
+	}
+
+	@Test(expected = ElementNotFoundException.class)
+	public void updateSectionFailsSectionNotFoundDocumentNotFound()
+			throws JsonProcessingException, ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = 9999999999L;
+		DocumentSection documentSection = createSection();
+		documentSection.setDocumentId(documentId);
+		documentSection.setSectionId(9999999L);
+
+		controller.saveSection(documentId, documentSection.getSectionId(),
+				documentSection);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void updateSectionFailsSectionIdAndParameterSectionIdDoNotMatch()
+			throws JsonProcessingException, ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = 0L;
+		DocumentSection documentSection = createSection();
+		documentSection.setDocumentId(documentId);
+		documentSection.setSectionId(1L);
+
+		controller.saveSection(documentId, 2L, documentSection);
+	}
+
+	@Test(expected = ElementNotFoundException.class)
+	public void deleteSectionSuccessfully() throws JsonProcessingException,
+			ElementNotFoundException {
+		Long documentId = 0L;
+
+		DocumentSection documentSection = createSection();
+
+		DocumentSection createdSection = controller.createSection(documentId,
+				documentSection);
+
+		Assert.assertNotNull(createdSection);
+
+		Long sectionId = documentSection.getSectionId();
+		controller.deleteSection(documentId, sectionId);
+
+		controller.getResumeSection(documentId, sectionId);
+	}
+
+	@Test(expected = ElementNotFoundException.class)
+	public void deleteNonExistingSection() throws JsonProcessingException,
+			ElementNotFoundException {
+		Long documentId = 0L;
+
+		controller.deleteSection(documentId, 99999L);
+	}
+
+	@Test(expected = ElementNotFoundException.class)
+	public void deleteSectionFromNonExistingDocument()
+			throws JsonProcessingException, ElementNotFoundException {
+		Long documentId = 9999999L;
+
+		controller.deleteSection(documentId, 123L);
+	}
+
 	private User generateAndLoginUser() {
 		User o = Mockito.mock(User.class);
 
@@ -211,12 +365,28 @@ public class ResumeControllerIntegTest {
 		return o;
 	}
 
+	private DocumentSection createSection() {
+		DocumentSection section = new DocumentSection();
+		section.setDescription("hello");
+		section.setLocation("Somewhere");
+		section.setSectionPosition(5L);
+		section.setTitle("title");
+		section.setHighlights("High");
+		section.setOrganizationDescription("description");
+		section.setOrganizationName("name");
+		return section;
+	}
+
 	private Document generateDocument() {
 		Document doc1 = new Document();
 		doc1.setUserId(0L);
 		doc1.setVisibility(false);
 		doc1.setTagline("my curious tagline");
 		return doc1;
+	}
+
+	private boolean notNullNotEmpty(String value) {
+		return value != null && !value.isEmpty();
 	}
 
 }

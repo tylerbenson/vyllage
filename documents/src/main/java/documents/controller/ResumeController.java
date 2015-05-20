@@ -216,7 +216,7 @@ public class ResumeController {
 	public @ResponseBody DocumentSection createSection(
 			@PathVariable final Long documentId,
 			@RequestBody final DocumentSection documentSection)
-			throws JsonProcessingException {
+			throws JsonProcessingException, ElementNotFoundException {
 
 		documentSection.setDocumentId(documentId);
 		return documentService.saveDocumentSection(documentSection);
@@ -230,9 +230,31 @@ public class ResumeController {
 			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@RequestBody final DocumentSection documentSection)
-			throws JsonProcessingException, AccessDeniedException {
+			throws JsonProcessingException, AccessDeniedException,
+			ElementNotFoundException {
 
 		documentSection.setDocumentId(documentId);
+
+		if (documentSection.getSectionId() == null
+				|| documentSection.getSectionId() == null
+				|| !sectionId.equals(documentSection.getSectionId())) {
+			IllegalArgumentException e = new IllegalArgumentException(
+					"Section Id '" + documentSection.getSectionId()
+							+ "' does not match section parameter Id '"
+							+ sectionId + "'");
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			throw e;
+		}
+
+		if (!documentService.sectionExists(documentSection)) {
+			ElementNotFoundException e = new ElementNotFoundException(
+					"Section with id '" + sectionId + "' could not be found.");
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			throw e;
+		}
+
 		return documentService.saveDocumentSection(documentSection);
 	}
 
@@ -252,7 +274,7 @@ public class ResumeController {
 			@PathVariable final Long sectionId) throws JsonProcessingException,
 			ElementNotFoundException {
 
-		documentService.deleteSection(sectionId);
+		documentService.deleteSection(documentId, sectionId);
 	}
 
 	@RequestMapping(value = "{documentId}/recent-users", method = RequestMethod.GET, produces = "application/json")

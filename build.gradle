@@ -38,7 +38,6 @@ configure(rootProject) {
 
 configure(javaProjects) {
     apply plugin: 'java'
-	
 	apply plugin: 'jacoco'
 	
 	jacoco {

@@ -68,9 +68,10 @@ public class DocumentService {
 	 * 
 	 * @param body
 	 * @return the saved document
-	 * @throws
+	 * @throws ElementNotFoundException
 	 */
-	public DocumentSection saveDocumentSection(DocumentSection documentSection) {
+	public DocumentSection saveDocumentSection(DocumentSection documentSection)
+			throws ElementNotFoundException {
 
 		logger.info(documentSection.toString());
 		DocumentSection savedSection = null;
@@ -108,6 +109,7 @@ public class DocumentService {
 			} catch (ElementNotFoundException e) {
 				logger.severe(ExceptionUtils.getStackTrace(e));
 				NewRelic.noticeError(e);
+				throw e;
 			}
 		} else {
 			savedSection = documentSectionRepository.save(documentSection);
@@ -159,8 +161,24 @@ public class DocumentService {
 		return documentRepository.get(documentId);
 	}
 
-	public void deleteSection(Long sectionId) {
+	public void deleteSection(Long documentId, Long sectionId)
+			throws ElementNotFoundException {
+
+		if (!documentSectionRepository.exists(documentId, sectionId)) {
+			ElementNotFoundException e = new ElementNotFoundException(
+					"Section with id '" + sectionId + "' could not be found.");
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			throw e;
+		}
+
 		documentSectionRepository.delete(sectionId);
+	}
+
+	public boolean sectionExists(DocumentSection documentSection) {
+		return documentSectionRepository
+				.exists(documentSection.getDocumentId(),
+						documentSection.getSectionId());
 	}
 
 	/**

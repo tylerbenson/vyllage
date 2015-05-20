@@ -94,7 +94,8 @@ public class DocumentSectionRepositoryTest {
 		Long sectionId = savedDocumentSection.getSectionId();
 		dsRepository.delete(sectionId);
 
-		Assert.assertFalse(dsRepository.exists(sectionId));
+		Assert.assertFalse(dsRepository.exists(documentSection.getDocumentId(),
+				sectionId));
 
 	}
 
