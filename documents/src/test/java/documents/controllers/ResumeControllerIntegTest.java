@@ -74,7 +74,7 @@ public class ResumeControllerIntegTest {
 		List<DocumentSection> resumeSections = controller.getResumeSections(0L);
 
 		Assert.assertNotNull(resumeSections);
-		Assert.assertTrue(!resumeSections.isEmpty());
+		Assert.assertFalse(resumeSections.isEmpty());
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -151,6 +151,18 @@ public class ResumeControllerIntegTest {
 
 		Long documentId = 0L;
 		controller.saveSectionPositions(documentId, Arrays.asList(123L));
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void orderSectionsNumberOfSectionsCorrectIdsDoNotMatch()
+			throws JsonProcessingException, ElementNotFoundException {
+
+		generateAndLoginUser();
+
+		Long documentId = 0L;
+		controller.saveSectionPositions(documentId,
+				Arrays.asList(123L, 200L, 201L, 245L));
 
 	}
 

@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.junit.experimental.results.ResultMatchers;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,6 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import documents.controller.ResumeController;
 import documents.model.AccountNames;
+import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentSection;
 import documents.repository.ElementNotFoundException;
@@ -140,6 +143,51 @@ public class ResumeControllerTest {
 				.get("/resume/0/section/" + documentSectionId).then()
 				.assertThat().statusCode(404);
 
+	}
+
+	@Test
+	public void getCommentsForSectionEmptyComments() {
+
+		Long documentId = 1L;
+
+		Long sectionId = 123L;
+
+		Mockito.when(
+				documentService.getCommentsForSection(Mockito.any(),
+						Mockito.anyLong()))
+				.thenReturn(new ArrayList<Comment>());
+
+		given().standaloneSetup(controller)
+				.when()
+				.get("/resume/" + documentId + "/section/" + sectionId
+						+ "/comment").then().statusCode(200).and().assertThat()
+				.body(Matchers.equalTo("[]"));
+	}
+
+	@Test
+	public void getCommentsForSection() {
+
+		Long documentId = 1L;
+
+		Long sectionId = 123L;
+
+		Mockito.when(
+				documentService.getCommentsForSection(Mockito.any(),
+						Mockito.anyLong())).thenReturn(comments());
+
+		given().standaloneSetup(controller)
+				.when()
+				.get("/resume/" + documentId + "/section/" + sectionId
+						+ "/comment").then().statusCode(200)
+				.body("[0].sectionId", equalTo(123));
+	}
+
+	private List<Comment> comments() {
+		Comment comment = new Comment();
+		comment.setUserId(0L);
+		comment.setSectionId(123L);
+
+		return Arrays.asList(comment);
 	}
 
 	// resume/0/header

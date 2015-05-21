@@ -26,6 +26,7 @@ import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SuggestionRepository;
 import documents.utilities.FindDuplicates;
+import documents.utilities.OrderSectionValidator;
 
 /**
  * This service takes care of saving, retrieving and manipulating documents.
@@ -130,18 +131,6 @@ public class DocumentService {
 	public DocumentSection getDocumentSection(Long sectionId)
 			throws ElementNotFoundException {
 		return documentSectionRepository.get(sectionId);
-	}
-
-	/**
-	 * Retrieves all the sections related to a Document.
-	 * 
-	 * @param documentId
-	 * @return
-	 * @throws ElementNotFoundException
-	 */
-	public List<DocumentSection> getDocumentSections(Document document)
-			throws ElementNotFoundException {
-		return getDocumentSections(document.getDocumentId());
 	}
 
 	/**
