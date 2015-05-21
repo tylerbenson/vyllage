@@ -34,6 +34,7 @@ var Banner = React.createClass({
   },
   disableEditMode: function (field, e) {
     e.preventDefault();
+    var header = this.props.header || {};
     var editMode = this.state.editMode;
     editMode[field] = false;
     this.setState({editMode: editMode});
@@ -42,10 +43,22 @@ var Banner = React.createClass({
       case 'tagline':
         actions.updateTagline(this.state.tagline);
         break;
+      case 'email':
+        if(validator.isEmail(e.target.value)) {
+          settingActions.updateSettings();
+        }
+        else {
+          e.target.value = header.email;
+        }
+        break;
       case 'phoneNumber':
         var phoneNumberValue = phoneFormatter.normalize(e.target.value);
-        if(validator.isNumeric(phoneNumberValue)) {
+        if(validator.isNumeric(phoneNumberValue) && phoneNumberValue.length === 10) {
           e.target.value = phoneFormatter.format(phoneNumberValue, "(NNN) NNN-NNNN");
+          settingActions.changeSetting({name: field, value: phoneNumberValue, privacy: "private"});
+        }
+        else {
+          e.target.value = phoneFormatter.format(header.phoneNumber, "(NNN) NNN-NNNN");
         }
         break;
       default:

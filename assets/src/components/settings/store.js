@@ -45,10 +45,16 @@ module.exports = Reflux.createStore({
   onChangeSetting: function (setting) {
     var index = findindex(this.settings, {name: setting.name});
     setting = this.validateField(setting);
+
     if (index !== -1) {
+      if(setting.errorMessage !== null) {
+        setting.value = this.settings[index].value;
+      }
       this.settings[index] = setting;
     } else {
-      this.settings.push(setting);
+      if(setting.errorMessage === null) {
+        this.settings.push(setting);
+      }
     }
     this.update();
   },
@@ -61,7 +67,12 @@ module.exports = Reflux.createStore({
         setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid E-mail";
         break;
       case 'phoneNumber':
-        setting.errorMessage = validator.isNumeric(setting.value) ? null: "Invalid Phone Number";
+        setting.errorMessage = (validator.isNumeric(setting.value) &&
+                               setting.value.length === 10) ?
+                                  null: "Invalid Phone Number";
+        break;
+      case 'twitter':
+        setting.errorMessage = setting.value.length <= 140 ? null: "Invalid Twitter Username";
         break;
     }
 
