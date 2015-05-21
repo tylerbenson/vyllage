@@ -59,7 +59,6 @@ public class ResumeController {
 	@Autowired
 	private NotificationService notificationService;
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
 
@@ -72,8 +71,8 @@ public class ResumeController {
 	public AccountNames accountName(HttpServletRequest request, User user) {
 		Long userId = user.getUserId();
 
-		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
-				Arrays.asList(userId), request);
+		List<AccountNames> namesForUsers = getAccountService()
+				.getNamesForUsers(Arrays.asList(userId), request);
 
 		if (namesForUsers.isEmpty()) {
 			AccountNames an = new AccountNames();
@@ -93,7 +92,7 @@ public class ResumeController {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = accountService
+		List<AccountContact> contactDataForUsers = getAccountService()
 				.getContactDataForUsers(request,
 						Arrays.asList(user.getUserId()));
 
@@ -185,20 +184,15 @@ public class ResumeController {
 			header.setOwner(true);
 		}
 
-		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
-				Arrays.asList(document.getUserId()), request);
-
-		List<AccountContact> accountContactData = accountService
+		List<AccountContact> accountContactData = getAccountService()
 				.getContactDataForUsers(request,
 						Arrays.asList(document.getUserId()));
 
-		if (namesForUsers != null && namesForUsers.size() > 0) {
-			header.setFirstName(namesForUsers.get(0).getFirstName());
-			header.setMiddleName(namesForUsers.get(0).getMiddleName());
-			header.setLastName(namesForUsers.get(0).getLastName());
-		}
+		if (accountContactData != null && !accountContactData.isEmpty()) {
+			header.setFirstName(accountContactData.get(0).getFirstName());
+			header.setMiddleName(accountContactData.get(0).getMiddleName());
+			header.setLastName(accountContactData.get(0).getLastName());
 
-		if (accountContactData != null && accountContactData.size() > 0) {
 			header.setAddress(accountContactData.get(0).getAddress());
 			header.setEmail(accountContactData.get(0).getEmail());
 			header.setPhoneNumber(accountContactData.get(0).getPhoneNumber());
@@ -295,7 +289,8 @@ public class ResumeController {
 		if (recentUsersForDocument.size() == 0)
 			return Arrays.asList();
 
-		return accountService.getNamesForUsers(recentUsersForDocument, request);
+		return getAccountService().getNamesForUsers(recentUsersForDocument,
+				request);
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.PUT, consumes = "application/json")
@@ -324,7 +319,7 @@ public class ResumeController {
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@RequestBody final Comment comment,
-			@AuthenticationPrincipal User user) {
+			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
 		setCommentData(sectionId, comment, user);
 
@@ -336,6 +331,7 @@ public class ResumeController {
 		} catch (ElementNotFoundException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
+			throw e;
 		}
 
 		// Check user ids before going to DB...
@@ -347,7 +343,7 @@ public class ResumeController {
 					.getNotification(document.getUserId());
 
 			if (!notification.isPresent() || !notification.get().wasSentToday()) {
-				List<AccountContact> recipient = accountService
+				List<AccountContact> recipient = getAccountService()
 						.getContactDataForUsers(request,
 								Arrays.asList(document.getUserId()));
 
@@ -427,6 +423,14 @@ public class ResumeController {
 			map.put("error", ex.getMessage());
 		}
 		return map;
+	}
+
+	public AccountService getAccountService() {
+		return accountService;
+	}
+
+	public void setAccountService(AccountService accountService) {
+		this.accountService = accountService;
 	}
 
 }

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,9 +16,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import user.common.User;
 import documents.controller.ResumeController;
+import documents.model.AccountContact;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
@@ -186,33 +192,6 @@ public class ResumeControllerTest {
 				.body("[0].sectionId", equalTo(123));
 	}
 
-	// User can't be mocked
-	// @Test
-	// public void saveCommentsSuccessfully() {
-	//
-	// Long userId = 0L;
-	// Long documentId = 1L;
-	// Long sectionId = 42L;
-	//
-	// User user = Mockito.mock(User.class);
-	//
-	// Comment comment = comments(sectionId).get(0);
-	// comment.setUserId(userId);
-	//
-	// Mockito.when(documentService.saveComment(comment)).thenReturn(comment);
-	// Mockito.when(user.getUserId()).thenReturn(userId);
-	//
-	// given().contentType("application/json")
-	// .body(comment)
-	// .standaloneSetup(controller)
-	// .when()
-	// .post("/resume/" + documentId + "/section/" + sectionId
-	// + "/comment").then().statusCode(200)
-	// .body("sectionId", equalTo(sectionId)).and()
-	// .body("userId", equalTo(userId));
-	//
-	// }
-
 	private List<Comment> comments(Long sectionId) {
 		Comment comment = new Comment();
 		comment.setUserId(0L);
@@ -222,18 +201,4 @@ public class ResumeControllerTest {
 		return Arrays.asList(comment);
 	}
 
-	// resume/0/header
-	// once we retrieve information for this from the DB we can create this
-	// test.
-	// @Test
-	// public void getHeaderFromResumeTest() throws ElementNotFoundException {
-	// ObjectMapper mapper = Mockito.mock(ObjectMapper.class);
-	//
-	// Mockito.when(mapper.readValue(Mockito.any(JsonParser.class),
-	// DocumentHeader.class)).thenReturn(value);
-	//
-	// given().standaloneSetup(controller).when().get("/resume/0/header/")
-	// .then().statusCode(200).body("firstName", equalTo("Nathan"));
-
-	// }
 }

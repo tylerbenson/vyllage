@@ -1,12 +1,17 @@
 package documents.controllers;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -24,10 +29,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.Application;
 import documents.controller.ResumeController;
+import documents.model.AccountContact;
+import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
 import documents.repository.ElementNotFoundException;
+import documents.services.AccountService;
 import documents.services.DocumentService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -408,6 +416,89 @@ public class ResumeControllerIntegTest {
 		controller.deleteSection(documentId, 123L);
 	}
 
+	@Test
+	public void saveCommentsSuccessfully() throws JsonProcessingException,
+			IOException, ElementNotFoundException {
+		User user = generateAndLoginUser();
+		Long userId = 0L;
+		Long sectionId = 123L;
+		Long documentId = 0L;
+
+		Comment comment = comments(sectionId).get(0);
+		comment.setUserId(userId);
+		comment.setCommentId(null);
+		comment.setSectionVersion(1L);
+
+		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+
+		Mockito.when(user.getUserId()).thenReturn(userId);
+
+		controller.saveCommentsForSection(request, documentId, sectionId,
+				comment, user);
+	}
+
+	@Test(expected = ElementNotFoundException.class)
+	public void saveCommentsDocumentNotFound() throws JsonProcessingException,
+			IOException, ElementNotFoundException {
+		User user = generateAndLoginUser();
+		Long userId = 0L;
+		Long sectionId = 123L;
+		Long documentId = 999999999L;
+
+		Comment comment = comments(sectionId).get(0);
+		comment.setUserId(userId);
+		comment.setCommentId(null);
+		comment.setSectionVersion(1L);
+
+		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+
+		Mockito.when(user.getUserId()).thenReturn(userId);
+
+		controller.saveCommentsForSection(request, documentId, sectionId,
+				comment, user);
+	}
+
+	@Test
+	public void getResumeHeaderOk() throws ElementNotFoundException,
+			JsonProcessingException, IOException {
+		User user = generateAndLoginUser();
+
+		Long userId = 0L;
+		Long documentId = 0L;
+
+		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+		Document document = Mockito.mock(Document.class);
+		AccountService accountService = Mockito.mock(AccountService.class);
+
+		Mockito.when(document.getUserId()).thenReturn(userId);
+		Mockito.when(
+				accountService.getContactDataForUsers(request,
+						Arrays.asList(userId))).thenReturn(
+				accountContact(userId));
+		Mockito.when(user.getUserId()).thenReturn(userId);
+
+		controller.setAccountService(accountService);
+		DocumentHeader resumeHeader = controller.getResumeHeader(request,
+				documentId, user);
+
+		Assert.assertNotNull(resumeHeader);
+	}
+
+	@Test(expected = ElementNotFoundException.class)
+	public void getResumeHeaderDocumentNotFound()
+			throws ElementNotFoundException, JsonProcessingException,
+			IOException {
+
+		User user = generateAndLoginUser();
+
+		Long documentId = 999999L;
+
+		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+
+		controller.getResumeHeader(request, documentId, user);
+
+	}
+
 	private User generateAndLoginUser() {
 		User o = Mockito.mock(User.class);
 
@@ -442,6 +533,25 @@ public class ResumeControllerIntegTest {
 
 	private boolean notNullNotEmpty(String value) {
 		return value != null && !value.isEmpty();
+	}
+
+	private List<Comment> comments(Long sectionId) {
+		Comment comment = new Comment();
+		comment.setUserId(0L);
+		comment.setSectionId(sectionId);
+		comment.setCommentText("test");
+
+		return Arrays.asList(comment);
+	}
+
+	private List<AccountContact> accountContact(Long userId) {
+		AccountContact ac = new AccountContact();
+		ac.setFirstName("first");
+		ac.setEmail("email");
+		ac.setUserId(userId);
+		ac.setLastName("last");
+
+		return Arrays.asList(ac);
 	}
 
 }
