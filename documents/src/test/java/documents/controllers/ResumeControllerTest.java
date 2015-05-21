@@ -9,13 +9,13 @@ import java.util.List;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.junit.experimental.results.ResultMatchers;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import user.common.User;
 import documents.controller.ResumeController;
 import documents.model.AccountNames;
 import documents.model.Comment;
@@ -24,6 +24,7 @@ import documents.model.DocumentSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
+import documents.services.NotificationService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ResumeControllerTest {
@@ -60,6 +61,9 @@ public class ResumeControllerTest {
 
 	@Mock
 	private AccountService accountService;
+
+	@Mock
+	private NotificationService notificationService;
 
 	// resume/0/section/124
 	@Test
@@ -173,7 +177,7 @@ public class ResumeControllerTest {
 
 		Mockito.when(
 				documentService.getCommentsForSection(Mockito.any(),
-						Mockito.anyLong())).thenReturn(comments());
+						Mockito.anyLong())).thenReturn(comments(sectionId));
 
 		given().standaloneSetup(controller)
 				.when()
@@ -182,10 +186,38 @@ public class ResumeControllerTest {
 				.body("[0].sectionId", equalTo(123));
 	}
 
-	private List<Comment> comments() {
+	// User can't be mocked
+	// @Test
+	// public void saveCommentsSuccessfully() {
+	//
+	// Long userId = 0L;
+	// Long documentId = 1L;
+	// Long sectionId = 42L;
+	//
+	// User user = Mockito.mock(User.class);
+	//
+	// Comment comment = comments(sectionId).get(0);
+	// comment.setUserId(userId);
+	//
+	// Mockito.when(documentService.saveComment(comment)).thenReturn(comment);
+	// Mockito.when(user.getUserId()).thenReturn(userId);
+	//
+	// given().contentType("application/json")
+	// .body(comment)
+	// .standaloneSetup(controller)
+	// .when()
+	// .post("/resume/" + documentId + "/section/" + sectionId
+	// + "/comment").then().statusCode(200)
+	// .body("sectionId", equalTo(sectionId)).and()
+	// .body("userId", equalTo(userId));
+	//
+	// }
+
+	private List<Comment> comments(Long sectionId) {
 		Comment comment = new Comment();
 		comment.setUserId(0L);
-		comment.setSectionId(123L);
+		comment.setSectionId(sectionId);
+		comment.setCommentText("test");
 
 		return Arrays.asList(comment);
 	}
