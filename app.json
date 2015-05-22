@@ -20,11 +20,5 @@
     "VYLLAGE_DOMAIN":{
       "required":true
     }
-  },
-  "addons":[
-    "mongolab",
-    "newrelic",
-    "mailgun",
-    "alphamail"
-  ]
+  }
 }

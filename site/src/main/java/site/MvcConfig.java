@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-//import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect;
 /**
  * Site-wide MVC infrastructure configuration. See also {@link SiteConfig} where
  * certain additional web infrastructure is configured.
@@ -21,11 +20,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 class MvcConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
-	private PrincipalDetailsInterceptor pdi;
+	private PrincipalDetailsInterceptor principalDetailsInterceptor;
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(pdi);
+		registry.addInterceptor(principalDetailsInterceptor);
 	}
 
 	@Bean
