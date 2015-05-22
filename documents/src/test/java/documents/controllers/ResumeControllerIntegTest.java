@@ -231,15 +231,14 @@ public class ResumeControllerIntegTest {
 				documentSection);
 
 		Assert.assertNotNull(createdSection);
-		Assert.assertTrue(createdSection.getDocumentId() != null);
-		Assert.assertTrue(createdSection.getSectionId() != null);
-		Assert.assertTrue(createdSection.getSectionPosition() != null);
-		Assert.assertTrue(notNullNotEmpty(createdSection.getDescription()));
-		Assert.assertTrue(notNullNotEmpty(createdSection.getTitle()));
-		Assert.assertTrue(notNullNotEmpty(createdSection.getHighlights()));
-		Assert.assertTrue(notNullNotEmpty(createdSection
-				.getOrganizationDescription()));
-		Assert.assertTrue(notNullNotEmpty(createdSection.getOrganizationName()));
+		Assert.assertNotNull(createdSection.getDocumentId());
+		Assert.assertNotNull(createdSection.getSectionId());
+		Assert.assertNotNull(createdSection.getSectionPosition());
+		notNullNotEmpty(createdSection.getDescription());
+		notNullNotEmpty(createdSection.getTitle());
+		notNullNotEmpty(createdSection.getHighlights());
+		notNullNotEmpty(createdSection.getOrganizationDescription());
+		notNullNotEmpty(createdSection.getOrganizationName());
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -272,16 +271,16 @@ public class ResumeControllerIntegTest {
 				createdSection.getSectionId(), createdSection);
 
 		Assert.assertNotNull(updatedSection);
-		Assert.assertTrue(updatedSection.getDocumentId() != null);
-		Assert.assertTrue(updatedSection.getSectionId() != null);
-		Assert.assertTrue(updatedSection.getSectionPosition() != null);
-		Assert.assertTrue(notNullNotEmpty(updatedSection.getDescription()));
+		Assert.assertNotNull(updatedSection.getDocumentId());
+		Assert.assertNotNull(updatedSection.getSectionId());
+		Assert.assertNotNull(updatedSection.getSectionPosition());
+
+		notNullNotEmpty(updatedSection.getDescription());
 		Assert.assertEquals(newDescription, updatedSection.getDescription());
-		Assert.assertTrue(notNullNotEmpty(updatedSection.getTitle()));
-		Assert.assertTrue(notNullNotEmpty(updatedSection.getHighlights()));
-		Assert.assertTrue(notNullNotEmpty(updatedSection
-				.getOrganizationDescription()));
-		Assert.assertTrue(notNullNotEmpty(updatedSection.getOrganizationName()));
+		notNullNotEmpty(updatedSection.getTitle());
+		notNullNotEmpty(updatedSection.getHighlights());
+		notNullNotEmpty(updatedSection.getOrganizationDescription());
+		notNullNotEmpty(updatedSection.getOrganizationName());
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -531,8 +530,8 @@ public class ResumeControllerIntegTest {
 		return doc1;
 	}
 
-	private boolean notNullNotEmpty(String value) {
-		return value != null && !value.isEmpty();
+	private void notNullNotEmpty(String value) {
+		Assert.assertTrue(value != null && !value.isEmpty());
 	}
 
 	private List<Comment> comments(Long sectionId) {
