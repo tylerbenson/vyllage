@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter.XFrameOptionsMode;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
@@ -34,6 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// disabling CSRF for the togglz console.
 		http.csrf().requireCsrfProtectionMatcher(
 				new TogglzConsoleRequestMatcher());
+
+		// Allow frames to enable the h2 console.
+		http.headers().addHeaderWriter(
+				new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
 
 		http.authorizeRequests()
 				.antMatchers("/", "/status", "/css/**", "/images/**",

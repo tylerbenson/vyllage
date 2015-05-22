@@ -55,7 +55,7 @@ public class BeansConfiguration {
 	// this should probably go in site but since we are handling security from
 	// account too, I'm keeping it here. Same for the TogglzRequestMatcher.
 	@Bean
-	public ServletRegistrationBean servletRegistrationBean() {
+	public ServletRegistrationBean togglzConsole() {
 		return new ServletRegistrationBean(new TogglzConsoleServlet(),
 				"/togglz/*");
 	}

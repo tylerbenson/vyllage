@@ -22,8 +22,9 @@ public class Application {
 			if (profile != null && !profile.contentEquals("null"))
 				System.out.println("Using profile: " + profile);
 			else {
-				System.setProperty("spring.profiles.active", Profiles.DEBUG);
-				System.out.println("Using default profile.");
+				profile = profile == null ? Profiles.DEV : profile;
+				// System.setProperty("spring.profiles.active", Profiles.DEV);
+				System.out.println("Using " + profile + " profile.");
 			}
 			System.setProperty("spring.thymeleaf.prefix",
 					"file:///" + System.getProperty("PROJECT_HOME")
