@@ -59,11 +59,10 @@ public class ResumeController {
 	@Autowired
 	private NotificationService notificationService;
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
 
-	// ModelAttributes execute for every request, even REST ones since they are
+	// ModelAttributes execute for every request, even REST ones, since they are
 	// only needed in one method and complicate testing I'm calling them
 	// directly instead
 	// https://jira.spring.io/browse/SPR-12303
@@ -134,7 +133,7 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	public @ResponseBody List<DocumentSection> getResumeSections(
-			HttpServletRequest request, @PathVariable final Long documentId)
+			@PathVariable final Long documentId)
 			throws JsonProcessingException, ElementNotFoundException {
 		List<DocumentSection> documentSections = documentService
 				.getDocumentSections(documentId);
@@ -157,7 +156,7 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	public @ResponseBody DocumentSection getResumeSection(
-			HttpServletRequest request, @PathVariable final Long documentId,
+			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId) throws ElementNotFoundException {
 
 		int commentsForSection = documentService
@@ -185,20 +184,15 @@ public class ResumeController {
 			header.setOwner(true);
 		}
 
-		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
-				Arrays.asList(document.getUserId()), request);
-
 		List<AccountContact> accountContactData = accountService
 				.getContactDataForUsers(request,
 						Arrays.asList(document.getUserId()));
 
-		if (namesForUsers != null && namesForUsers.size() > 0) {
-			header.setFirstName(namesForUsers.get(0).getFirstName());
-			header.setMiddleName(namesForUsers.get(0).getMiddleName());
-			header.setLastName(namesForUsers.get(0).getLastName());
-		}
+		if (accountContactData != null && !accountContactData.isEmpty()) {
+			header.setFirstName(accountContactData.get(0).getFirstName());
+			header.setMiddleName(accountContactData.get(0).getMiddleName());
+			header.setLastName(accountContactData.get(0).getLastName());
 
-		if (accountContactData != null && accountContactData.size() > 0) {
 			header.setAddress(accountContactData.get(0).getAddress());
 			header.setEmail(accountContactData.get(0).getEmail());
 			header.setPhoneNumber(accountContactData.get(0).getPhoneNumber());
@@ -216,7 +210,7 @@ public class ResumeController {
 	public @ResponseBody DocumentSection createSection(
 			@PathVariable final Long documentId,
 			@RequestBody final DocumentSection documentSection)
-			throws JsonProcessingException {
+			throws JsonProcessingException, ElementNotFoundException {
 
 		documentSection.setDocumentId(documentId);
 		return documentService.saveDocumentSection(documentSection);
@@ -230,9 +224,31 @@ public class ResumeController {
 			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@RequestBody final DocumentSection documentSection)
-			throws JsonProcessingException, AccessDeniedException {
+			throws JsonProcessingException, AccessDeniedException,
+			ElementNotFoundException {
 
 		documentSection.setDocumentId(documentId);
+
+		if (documentSection.getDocumentId() == null
+				|| documentSection.getSectionId() == null
+				|| !sectionId.equals(documentSection.getSectionId())) {
+			IllegalArgumentException e = new IllegalArgumentException(
+					"Section Id '" + documentSection.getSectionId()
+							+ "' does not match section parameter Id '"
+							+ sectionId + "'");
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			throw e;
+		}
+
+		if (!documentService.sectionExists(documentSection)) {
+			ElementNotFoundException e = new ElementNotFoundException(
+					"Section with id '" + sectionId + "' could not be found.");
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			throw e;
+		}
+
 		return documentService.saveDocumentSection(documentSection);
 	}
 
@@ -240,7 +256,8 @@ public class ResumeController {
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckWriteAccess
 	public void saveSectionPositions(@PathVariable final Long documentId,
-			@RequestBody final List<Long> documentSectionIds) {
+			@RequestBody final List<Long> documentSectionIds)
+			throws ElementNotFoundException {
 		documentService.orderDocumentSections(documentId, documentSectionIds);
 	}
 
@@ -251,7 +268,7 @@ public class ResumeController {
 			@PathVariable final Long sectionId) throws JsonProcessingException,
 			ElementNotFoundException {
 
-		documentService.deleteSection(sectionId);
+		documentService.deleteSection(documentId, sectionId);
 	}
 
 	@RequestMapping(value = "{documentId}/recent-users", method = RequestMethod.GET, produces = "application/json")
@@ -301,7 +318,7 @@ public class ResumeController {
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@RequestBody final Comment comment,
-			@AuthenticationPrincipal User user) {
+			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
 		setCommentData(sectionId, comment, user);
 
@@ -313,6 +330,7 @@ public class ResumeController {
 		} catch (ElementNotFoundException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
+			throw e;
 		}
 
 		// Check user ids before going to DB...
@@ -404,6 +422,10 @@ public class ResumeController {
 			map.put("error", ex.getMessage());
 		}
 		return map;
+	}
+
+	public void setAccountService(AccountService accountService) {
+		this.accountService = accountService;
 	}
 
 }

@@ -110,7 +110,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 				.where(s2.ID.isNull().and(s1.DOCUMENTID.eq(documentId)))
 				.fetch();
 
-		if (existingRecords == null)
+		if (existingRecords == null || existingRecords.isEmpty())
 			throw new ElementNotFoundException(
 					"DocumentSections for Document id '" + documentId
 							+ "' not found.");
@@ -230,9 +230,13 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		existingRecords.forEach(r -> r.delete());
 	}
 
-	public boolean exists(Long sectionId) {
-		return sql.fetchExists(sql.select().from(DOCUMENT_SECTIONS)
-				.where(DOCUMENT_SECTIONS.ID.eq(sectionId)));
+	public boolean exists(Long documentId, Long sectionId) {
+
+		return sql.fetchExists(sql
+				.select()
+				.from(DOCUMENT_SECTIONS)
+				.where(DOCUMENT_SECTIONS.ID.eq(sectionId).and(
+						DOCUMENT_SECTIONS.DOCUMENTID.eq(documentId))));
 	}
 
 	/**

@@ -17,7 +17,7 @@ public class BatchParserTest {
 
 		List<ParsedAccount> parsed = parser.parse(txt);
 		Assert.assertNotNull(parsed);
-		Assert.assertTrue(!parsed.isEmpty());
+		Assert.assertFalse(parsed.isEmpty());
 		Assert.assertEquals("unemail@email.com", parsed.get(0).getEmail());
 		Assert.assertEquals("First Name", parsed.get(0).getFirstName());
 		Assert.assertEquals("Middle Name", parsed.get(0).getMiddleName());
@@ -31,7 +31,7 @@ public class BatchParserTest {
 
 		List<ParsedAccount> parsed = parser.parse(txt);
 		Assert.assertNotNull(parsed);
-		Assert.assertTrue(!parsed.isEmpty());
+		Assert.assertFalse(parsed.isEmpty());
 		Assert.assertEquals("email2@email.com", parsed.get(1).getEmail());
 		Assert.assertEquals("First Name2", parsed.get(1).getFirstName());
 		Assert.assertEquals("Middle Name2", parsed.get(1).getMiddleName());
@@ -45,7 +45,7 @@ public class BatchParserTest {
 
 		List<ParsedAccount> parsed = parser.parse(txt);
 		Assert.assertNotNull(parsed);
-		Assert.assertTrue(!parsed.isEmpty());
+		Assert.assertFalse(parsed.isEmpty());
 		Assert.assertEquals("email@email.com", parsed.get(0).getEmail());
 		Assert.assertEquals("First Name", parsed.get(0).getFirstName());
 		Assert.assertTrue(parsed.get(0).getMiddleName() == null);

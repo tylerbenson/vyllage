@@ -38,6 +38,12 @@ configure(rootProject) {
 
 configure(javaProjects) {
     apply plugin: 'java'
+	apply plugin: 'jacoco'
+	
+	jacoco {
+		toolVersion = "0.7.4.201502262128"
+		reportsDir = file("$buildDir/reports/Jacoco")
+	}
 	
 	def slf4j = '1.7.12'
 	def lombok = '1.14.8'
@@ -89,13 +95,14 @@ configure(javaProjects) {
 
 configure(bootProjects) {
     apply plugin: 'spring-boot'
+	
     //apply from: "$gradleDir/writeGitPropertiesFile.gradle"
 
     //bootRun.dependsOn writeGitPropertiesFile
-    springBoot.backupSource = false
+    springBoot.backupSource = false	
 
     version = "0.0.1-SNAPSHOT" //commitId
-
+	
     applicationDefaultJvmArgs = [
             // Set PROJECT_HOME env variable to the root. This allows to register an additional
             // resource handler location and serve static resources directly from the template module during dev.
