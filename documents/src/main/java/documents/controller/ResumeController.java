@@ -71,8 +71,8 @@ public class ResumeController {
 	public AccountNames accountName(HttpServletRequest request, User user) {
 		Long userId = user.getUserId();
 
-		List<AccountNames> namesForUsers = getAccountService()
-				.getNamesForUsers(Arrays.asList(userId), request);
+		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
+				Arrays.asList(userId), request);
 
 		if (namesForUsers.isEmpty()) {
 			AccountNames an = new AccountNames();
@@ -92,7 +92,7 @@ public class ResumeController {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = getAccountService()
+		List<AccountContact> contactDataForUsers = accountService
 				.getContactDataForUsers(request,
 						Arrays.asList(user.getUserId()));
 
@@ -184,7 +184,7 @@ public class ResumeController {
 			header.setOwner(true);
 		}
 
-		List<AccountContact> accountContactData = getAccountService()
+		List<AccountContact> accountContactData = accountService
 				.getContactDataForUsers(request,
 						Arrays.asList(document.getUserId()));
 
@@ -289,8 +289,7 @@ public class ResumeController {
 		if (recentUsersForDocument.size() == 0)
 			return Arrays.asList();
 
-		return getAccountService().getNamesForUsers(recentUsersForDocument,
-				request);
+		return accountService.getNamesForUsers(recentUsersForDocument, request);
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.PUT, consumes = "application/json")
@@ -343,7 +342,7 @@ public class ResumeController {
 					.getNotification(document.getUserId());
 
 			if (!notification.isPresent() || !notification.get().wasSentToday()) {
-				List<AccountContact> recipient = getAccountService()
+				List<AccountContact> recipient = accountService
 						.getContactDataForUsers(request,
 								Arrays.asList(document.getUserId()));
 
@@ -423,10 +422,6 @@ public class ResumeController {
 			map.put("error", ex.getMessage());
 		}
 		return map;
-	}
-
-	public AccountService getAccountService() {
-		return accountService;
 	}
 
 	public void setAccountService(AccountService accountService) {
