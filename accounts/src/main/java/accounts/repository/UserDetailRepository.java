@@ -186,39 +186,6 @@ public class UserDetailRepository implements UserDetailsManager,
 			accountSettingRepository.set(newRecord.getUserId(),
 					emailUpdatesSetting);
 
-			if (user.getFirstName() != null) {
-				AccountSetting firstNameSetting = new AccountSetting();
-				firstNameSetting.setName("firstName");
-				firstNameSetting.setUserId(newRecord.getUserId());
-				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
-						.toLowerCase());
-				firstNameSetting.setValue(user.getFirstName());
-				accountSettingRepository.set(newRecord.getUserId(),
-						firstNameSetting);
-			}
-
-			if (user.getMiddleName() != null) {
-				AccountSetting middleNameSetting = new AccountSetting();
-				middleNameSetting.setName("middleName");
-				middleNameSetting.setUserId(newRecord.getUserId());
-				middleNameSetting.setPrivacy(Privacy.PRIVATE.name()
-						.toLowerCase());
-				middleNameSetting.setValue(user.getMiddleName());
-				accountSettingRepository.set(newRecord.getUserId(),
-						middleNameSetting);
-			}
-
-			if (user.getLastName() != null) {
-				AccountSetting lastNameSetting = new AccountSetting();
-				lastNameSetting.setName("lastName");
-				lastNameSetting.setUserId(newRecord.getUserId());
-				lastNameSetting
-						.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-				lastNameSetting.setValue(user.getLastName());
-				accountSettingRepository.set(newRecord.getUserId(),
-						lastNameSetting);
-			}
-
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
@@ -260,39 +227,6 @@ public class UserDetailRepository implements UserDetailsManager,
 			record.setMiddleName(user.getMiddleName());
 			record.setLastName(user.getLastName());
 			record.update();
-
-			if (user.getFirstName() != null) {
-				AccountSetting firstNameSetting = new AccountSetting();
-				firstNameSetting.setName("firstName");
-				firstNameSetting.setUserId(record.getUserId());
-				firstNameSetting.setPrivacy(Privacy.PRIVATE.name()
-						.toLowerCase());
-				firstNameSetting.setValue(user.getFirstName());
-				accountSettingRepository.set(record.getUserId(),
-						firstNameSetting);
-			}
-
-			if (user.getMiddleName() != null) {
-				AccountSetting middleNameSetting = new AccountSetting();
-				middleNameSetting.setName("middleName");
-				middleNameSetting.setUserId(record.getUserId());
-				middleNameSetting.setPrivacy(Privacy.PRIVATE.name()
-						.toLowerCase());
-				middleNameSetting.setValue(user.getMiddleName());
-				accountSettingRepository.set(record.getUserId(),
-						middleNameSetting);
-			}
-
-			if (user.getLastName() != null) {
-				AccountSetting lastNameSetting = new AccountSetting();
-				lastNameSetting.setName("lastName");
-				lastNameSetting.setUserId(record.getUserId());
-				lastNameSetting
-						.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-				lastNameSetting.setValue(user.getLastName());
-				accountSettingRepository.set(record.getUserId(),
-						lastNameSetting);
-			}
 
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
@@ -555,33 +489,6 @@ public class UserDetailRepository implements UserDetailsManager,
 						user.getUserId(), "emailUpdates",
 						EmailFrequencyUpdates.NEVER.name().toLowerCase(),
 						Privacy.PRIVATE.name().toLowerCase()));
-
-				if (user.getFirstName() != null) {
-					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
-							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
-							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
-							.values(user.getUserId(), "firstName",
-									user.getFirstName(),
-									Privacy.PRIVATE.name().toLowerCase()));
-				}
-
-				if (user.getMiddleName() != null) {
-					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
-							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
-							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
-							.values(user.getUserId(), "middleName",
-									user.getMiddleName(),
-									Privacy.PRIVATE.name().toLowerCase()));
-				}
-
-				if (user.getLastName() != null) {
-					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
-							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
-							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
-							.values(user.getUserId(), "lastName",
-									user.getLastName(),
-									Privacy.PRIVATE.name().toLowerCase()));
-				}
 
 			}
 
