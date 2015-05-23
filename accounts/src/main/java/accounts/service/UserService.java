@@ -37,13 +37,11 @@ import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AccountSettingRepository;
-import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.repository.UserOrganizationRoleRepository;
-import accounts.service.aspects.CheckPrivacy;
 import accounts.service.utilities.BatchParser;
 import accounts.service.utilities.BatchParser.ParsedAccount;
 import accounts.service.utilities.RandomPasswordGenerator;
@@ -318,86 +316,6 @@ public class UserService {
 		return loadUserByUsername;
 	}
 
-	public User getUser(Long userId) throws UserNotFoundException {
-		return userRepository.get(userId);
-	}
-
-	public List<User> getAdvisors(User loggedUser, Map<String, String> filters,
-			int maxsize) {
-		return userRepository.getAdvisors(loggedUser, filters, maxsize);
-	}
-
-	public List<AccountNames> getNames(List<Long> userIds) {
-		return userRepository.getNames(userIds);
-	}
-
-	/**
-	 * Updates the user data. DOES NOT CHANGE USER PASSWORD.
-	 */
-	public void update(User user) {
-		userRepository.updateUser(user);
-	}
-
-	@CheckPrivacy
-	public List<AccountSetting> getAccountSettings(List<Long> userIds) {
-		return settingRepository.getAccountSettings(userIds);
-	}
-
-	@CheckPrivacy
-	public List<AccountSetting> getAccountSettings(User user) {
-		return settingRepository.getAccountSettings(user);
-	}
-
-	@CheckPrivacy
-	public List<AccountSetting> getAccountSetting(final User user,
-			final String settingName) throws ElementNotFoundException {
-		assert settingName != null;
-
-		return settingRepository.get(user.getUserId(), settingName);
-	}
-
-	public AccountSetting setAccountSetting(final User user,
-			AccountSetting setting) {
-
-		if (setting.getUserId() == null)
-			setting.setUserId(user.getUserId());
-
-		switch (setting.getName()) {
-		case "firstName":
-			setFirstName(user, setting);
-			return settingRepository.set(user.getUserId(), setting);
-
-		case "middleName":
-			setMiddleName(user, setting);
-			return settingRepository.set(user.getUserId(), setting);
-
-		case "lastName":
-			setLastName(user, setting);
-			return settingRepository.set(user.getUserId(), setting);
-
-		case "email":
-			setEmail(user, setting);
-			return settingRepository.set(user.getUserId(), setting);
-		default:
-			return settingRepository.set(user.getUserId(), setting);
-		}
-	}
-
-	public List<AccountSetting> setAccountSettings(final User user,
-			List<AccountSetting> settings) {
-
-		List<AccountSetting> savedSettings = new ArrayList<>();
-
-		savedSettings.addAll(settings
-				.stream()
-				.filter(set -> !set.getName().equalsIgnoreCase("role")
-						|| !set.getName().equalsIgnoreCase("organization"))
-				.map(set -> setAccountSetting(user, set))
-				.collect(Collectors.toList()));
-
-		return savedSettings;
-	}
-
 	public void updateUserRolesByOrganization(
 			List<GrantedAuthority> newRolesForOrganization, User loggedInUser) {
 
@@ -419,6 +337,26 @@ public class UserService {
 
 	}
 
+	public User getUser(Long userId) throws UserNotFoundException {
+		return userRepository.get(userId);
+	}
+
+	public List<User> getAdvisors(User loggedUser, Map<String, String> filters,
+			int maxsize) {
+		return userRepository.getAdvisors(loggedUser, filters, maxsize);
+	}
+
+	public List<AccountNames> getNames(List<Long> userIds) {
+		return userRepository.getNames(userIds);
+	}
+
+	/**
+	 * Updates the user data. DOES NOT CHANGE USER PASSWORD.
+	 */
+	public void update(User user) {
+		userRepository.updateUser(user);
+	}
+
 	/**
 	 * Returns the list of organizations a given user belongs too.
 	 * 
@@ -432,66 +370,6 @@ public class UserService {
 				.map(om -> organizationRepository
 						.get(((UserOrganizationRole) om).getOrganizationId()))
 				.collect(Collectors.toList());
-	}
-
-	/**
-	 * Updates the user's name.
-	 * 
-	 * @param user
-	 * @param setting
-	 */
-	protected void setFirstName(User user, AccountSetting setting) {
-
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			user.setFirstName(setting.getValue());
-			this.update(user);
-		}
-	}
-
-	/**
-	 * Updates the user's name.
-	 * 
-	 * @param user
-	 * @param setting
-	 */
-	protected void setMiddleName(User user, AccountSetting setting) {
-
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			user.setMiddleName(setting.getValue());
-			this.update(user);
-		}
-	}
-
-	/**
-	 * Updates the user's name.
-	 * 
-	 * @param user
-	 * @param setting
-	 */
-	protected void setLastName(User user, AccountSetting setting) {
-
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			user.setLastName(setting.getValue());
-			this.update(user);
-		}
-	}
-
-	// changes the username and email...
-	protected void setEmail(User user, AccountSetting setting) {
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			// username is final...
-			// password is erased after the user logins but we need something
-			// here, even if we won't change it
-			User newUser = new User(user.getUserId(), user.getFirstName(),
-					user.getMiddleName(), user.getLastName(),
-					setting.getValue(), "a password we don't care about",
-					user.isEnabled(), user.isAccountNonExpired(),
-					user.isCredentialsNonExpired(), user.isAccountNonLocked(),
-					user.getAuthorities(), user.getDateCreated(),
-					user.getLastModified());
-			this.update(newUser);
-		}
-
 	}
 
 	public void changePassword(Long userId, String newPassword) {

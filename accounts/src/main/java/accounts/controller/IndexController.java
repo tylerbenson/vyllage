@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import user.common.User;
 import accounts.model.account.AccountContact;
+import accounts.service.AccountSettingsService;
 import accounts.service.UserService;
 
 @Controller
@@ -26,8 +27,16 @@ public class IndexController {
 	private final Logger logger = Logger.getLogger(IndexController.class
 			.getName());
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
+
+	private final AccountSettingsService accountSettingsService;
+
+	@Inject
+	public IndexController(final UserService userService,
+			final AccountSettingsService accountSettingsService) {
+		this.userService = userService;
+		this.accountSettingsService = accountSettingsService;
+	}
 
 	@ModelAttribute("userInfo")
 	public AccountContact userInfo(HttpServletRequest request,
@@ -37,7 +46,7 @@ public class IndexController {
 		}
 
 		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(userService
+				.getAccountContactForUsers(accountSettingsService
 						.getAccountSettings(Arrays.asList(user.getUserId())));
 
 		if (contactDataForUsers.isEmpty()) {
