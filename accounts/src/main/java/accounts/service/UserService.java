@@ -81,7 +81,7 @@ public class UserService {
 	private EmailBuilder emailBuilder;
 
 	@Autowired
-	private Environment env;
+	private Environment environment;
 
 	private BatchParser batchParser = new BatchParser();
 
@@ -170,10 +170,10 @@ public class UserService {
 
 				emailBuilder
 						.to(existingUser.getUsername())
-						.from(env.getProperty("email.from",
+						.from(environment.getProperty("email.from",
 								"no-reply@vyllage.com"))
 						.fromUserName(
-								env.getProperty("email.from.userName",
+								environment.getProperty("email.from.userName",
 										"Chief of Vyllage"))
 						.subject("Account Creation - Vyllage.com")
 						.setNoHtmlMessage(
@@ -240,9 +240,9 @@ public class UserService {
 	protected void sendAccountCreationEmail(User user) throws EmailException {
 		emailBuilder
 				.to(user.getUsername())
-				.from(env.getProperty("email.from", "no-reply@vyllage.com"))
+				.from(environment.getProperty("email.from", "no-reply@vyllage.com"))
 				.fromUserName(
-						env.getProperty("email.from.userName",
+						environment.getProperty("email.from.userName",
 								"Chief of Vyllage"))
 				.subject("Account Creation - Vyllage.com")
 				.setNoHtmlMessage(
@@ -301,9 +301,9 @@ public class UserService {
 
 			emailBuilder
 					.to(linkRequest.getEmail())
-					.from(env.getProperty("email.from", "no-reply@vyllage.com"))
+					.from(environment.getProperty("email.from", "no-reply@vyllage.com"))
 					.fromUserName(
-							env.getProperty("email.from.userName",
+							environment.getProperty("email.from.userName",
 									"Chief of Vyllage"))
 					.subject("Account Creation")
 					.setNoHtmlMessage(

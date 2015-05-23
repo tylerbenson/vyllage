@@ -1,15 +1,19 @@
 package accounts.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import user.common.User;
+import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.Privacy;
 import accounts.repository.AccountSettingRepository;
 import accounts.repository.ElementNotFoundException;
 import accounts.service.aspects.CheckPrivacy;
@@ -17,13 +21,13 @@ import accounts.service.aspects.CheckPrivacy;
 @Service
 public class AccountSettingsService {
 
-	private UserService userService;
+	private final UserService userService;
 
-	private AccountSettingRepository accountSettingRepository;
+	private final AccountSettingRepository accountSettingRepository;
 
 	@Inject
-	public AccountSettingsService(UserService userService,
-			AccountSettingRepository accountSettingRepository) {
+	public AccountSettingsService(final UserService userService,
+			final AccountSettingRepository accountSettingRepository) {
 		super();
 		this.userService = userService;
 		this.accountSettingRepository = accountSettingRepository;
@@ -31,40 +35,83 @@ public class AccountSettingsService {
 
 	@CheckPrivacy
 	public List<AccountSetting> getAccountSettings(List<Long> userIds) {
-		return accountSettingRepository.getAccountSettings(userIds);
+		return appendUserNames(accountSettingRepository
+				.getAccountSettings(userIds));
 	}
 
 	@CheckPrivacy
 	public List<AccountSetting> getAccountSettings(User user) {
-		return accountSettingRepository.getAccountSettings(user);
+		return appendUserNames(accountSettingRepository
+				.getAccountSettings(user));
 	}
 
 	@CheckPrivacy
 	public List<AccountSetting> getAccountSetting(final User user,
 			final String settingName) throws ElementNotFoundException {
-		assert settingName != null;
+		Assert.notNull(settingName);
 
-		return accountSettingRepository.get(user.getUserId(), settingName);
+		switch (settingName) {
+		case "firstName":
+			return Arrays.asList(new AccountSetting(null, user.getUserId(),
+					"firstName", user.getFirstName(), Privacy.PUBLIC.name()));
+
+		case "middleName":
+			return Arrays.asList(new AccountSetting(null, user.getUserId(),
+					"middleName", user.getMiddleName(), Privacy.PUBLIC.name()));
+
+		case "lastName":
+			return Arrays.asList(new AccountSetting(null, user.getUserId(),
+					"lastName", user.getLastName(), Privacy.PUBLIC.name()));
+
+		default:
+			return accountSettingRepository.get(user.getUserId(), settingName);
+		}
+	}
+
+	protected List<AccountSetting> appendUserNames(
+			List<AccountSetting> accountSettings) {
+
+		accountSettings.addAll(getUserNames(accountSettings.stream()
+				.map(as -> as.getUserId()).collect(Collectors.toList())));
+
+		return accountSettings;
+	}
+
+	protected List<AccountSetting> getUserNames(List<Long> userIds) {
+		List<AccountSetting> settings = new ArrayList<>();
+
+		for (AccountNames accountNames : userService.getNames(userIds)) {
+			settings.add(new AccountSetting(null, accountNames.getUserId(),
+					"firstName", accountNames.getFirstName(), Privacy.PUBLIC
+							.name()));
+
+			settings.add(new AccountSetting(null, accountNames.getUserId(),
+					"middleName", accountNames.getMiddleName(), Privacy.PUBLIC
+							.name()));
+
+			settings.add(new AccountSetting(null, accountNames.getUserId(),
+					"lastName", accountNames.getLastName(), Privacy.PUBLIC
+							.name()));
+		}
+
+		return settings;
 	}
 
 	public AccountSetting setAccountSetting(final User user,
-			AccountSetting setting) {
+			final AccountSetting setting) {
 
 		if (setting.getUserId() == null)
 			setting.setUserId(user.getUserId());
 
 		switch (setting.getName()) {
 		case "firstName":
-			setFirstName(user, setting);
-			return accountSettingRepository.set(user.getUserId(), setting);
+			return setFirstName(user, setting);
 
 		case "middleName":
-			setMiddleName(user, setting);
-			return accountSettingRepository.set(user.getUserId(), setting);
+			return setMiddleName(user, setting);
 
 		case "lastName":
-			setLastName(user, setting);
-			return accountSettingRepository.set(user.getUserId(), setting);
+			return setLastName(user, setting);
 
 		case "email":
 			setEmail(user, setting);
@@ -95,12 +142,14 @@ public class AccountSettingsService {
 	 * @param user
 	 * @param setting
 	 */
-	protected void setFirstName(User user, AccountSetting setting) {
+	protected AccountSetting setFirstName(User user, AccountSetting setting) {
 
 		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
 			user.setFirstName(setting.getValue());
 			userService.update(user);
 		}
+
+		return setting;
 	}
 
 	/**
@@ -109,12 +158,14 @@ public class AccountSettingsService {
 	 * @param user
 	 * @param setting
 	 */
-	protected void setMiddleName(User user, AccountSetting setting) {
+	protected AccountSetting setMiddleName(User user, AccountSetting setting) {
 
 		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
 			user.setMiddleName(setting.getValue());
 			userService.update(user);
 		}
+
+		return setting;
 	}
 
 	/**
@@ -123,12 +174,14 @@ public class AccountSettingsService {
 	 * @param user
 	 * @param setting
 	 */
-	protected void setLastName(User user, AccountSetting setting) {
+	protected AccountSetting setLastName(User user, AccountSetting setting) {
 
 		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
 			user.setLastName(setting.getValue());
 			userService.update(user);
 		}
+
+		return setting;
 	}
 
 	// changes the username and email...

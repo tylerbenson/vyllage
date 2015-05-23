@@ -34,6 +34,7 @@ public class IndexController {
 	@Inject
 	public IndexController(final UserService userService,
 			final AccountSettingsService accountSettingsService) {
+		super();
 		this.userService = userService;
 		this.accountSettingsService = accountSettingsService;
 	}

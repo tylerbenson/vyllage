@@ -66,24 +66,27 @@ public class AccountController {
 	private final Logger logger = Logger.getLogger(AccountController.class
 			.getName());
 
-	private Environment environment;
+	private final Environment environment;
 
-	private UserService userService;
+	private final UserService userService;
 
-	private DocumentLinkService documentLinkService;
+	private final DocumentLinkService documentLinkService;
 
-	private AccountSettingsService accountSettingsService;
+	private final AccountSettingsService accountSettingsService;
 
-	private ObjectMapper mapper;
+	private final ObjectMapper mapper;
 
 	@Autowired
 	@Qualifier(value = "accounts.emailBuilder")
 	private EmailBuilder emailBuilder;
 
 	@Inject
-	public AccountController(Environment environment, UserService userService,
-			DocumentLinkService documentLinkService,
-			AccountSettingsService accountSettingsService, ObjectMapper mapper) {
+	public AccountController(final Environment environment,
+			final UserService userService,
+			final DocumentLinkService documentLinkService,
+			final AccountSettingsService accountSettingsService,
+			final ObjectMapper mapper) {
+		super();
 		this.environment = environment;
 		this.userService = userService;
 		this.documentLinkService = documentLinkService;

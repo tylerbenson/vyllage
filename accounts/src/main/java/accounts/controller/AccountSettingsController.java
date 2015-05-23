@@ -58,19 +58,40 @@ public class AccountSettingsController {
 	private final Logger logger = Logger
 			.getLogger(AccountSettingsController.class.getName());
 
-	private UserService userService;
+	private final UserService userService;
 
-	private AccountSettingsService accountSettingsService;
+	private final AccountSettingsService accountSettingsService;
 
-	private OrganizationRepository organizationRepository;
+	private final OrganizationRepository organizationRepository;
 
 	@Inject
-	public AccountSettingsController(UserService userService,
-			AccountSettingsService accountSettingsService,
-			OrganizationRepository organizationRepository) {
+	public AccountSettingsController(final UserService userService,
+			final AccountSettingsService accountSettingsService,
+			final OrganizationRepository organizationRepository) {
+		super();
 		this.userService = userService;
 		this.accountSettingsService = accountSettingsService;
 		this.organizationRepository = organizationRepository;
+
+		validators.put("phoneNumber", new NumberValidator());
+		validators.put("firstName", new NotNullValidator());
+		validators.put("email", new EmailSettingValidator());
+
+		validators.put("facebook", new FacebookValidator());
+		validators.put("linkedIn", new URLValidator());
+		validators.put("twitter", new TwitterValidator());
+		validatorsForAll.add(new LengthValidator(100));
+
+		settingValues.put(
+				"emailUpdates",
+				Arrays.asList(EmailFrequencyUpdates.values()).stream()
+						.map(e -> e.toString().toLowerCase())
+						.collect(Collectors.toList()));
+		settingValues.put(
+				"privacy",
+				Arrays.asList(Privacy.values()).stream()
+						.map(e -> e.toString().toLowerCase())
+						.collect(Collectors.toList()));
 
 	}
 
@@ -94,29 +115,6 @@ public class AccountSettingsController {
 			return null;
 		}
 		return contactDataForUsers.get(0);
-	}
-
-	public AccountSettingsController() {
-
-		validators.put("phoneNumber", new NumberValidator());
-		validators.put("firstName", new NotNullValidator());
-		validators.put("email", new EmailSettingValidator());
-
-		validators.put("facebook", new FacebookValidator());
-		validators.put("linkedIn", new URLValidator());
-		validators.put("twitter", new TwitterValidator());
-		validatorsForAll.add(new LengthValidator(100));
-
-		settingValues.put(
-				"emailUpdates",
-				Arrays.asList(EmailFrequencyUpdates.values()).stream()
-						.map(e -> e.toString().toLowerCase())
-						.collect(Collectors.toList()));
-		settingValues.put(
-				"privacy",
-				Arrays.asList(Privacy.values()).stream()
-						.map(e -> e.toString().toLowerCase())
-						.collect(Collectors.toList()));
 	}
 
 	// for header
