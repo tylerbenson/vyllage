@@ -84,7 +84,7 @@ var Organization = React.createClass({
     return (
       <div>
         <div className ="subsection" {...this.dropTargetFor('section')} style={{opacity}}>
-          <MoveButton {...this.dragSourceFor('section')} />
+          { this.props.owner? <MoveButton {...this.dragSourceFor('section')} />: null }
           <div className='header'>
             <div className='title'>
               <h2>
