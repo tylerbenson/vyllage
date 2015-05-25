@@ -17,7 +17,7 @@ var watch = require('gulp-watch');
 var webpack = require('webpack');
 var inlineCss = require('gulp-inline-css');
 var replace = require('gulp-replace');
-
+var shrinkwrap = require('gulp-shrinkwrap');
 // var argv = require('minimist')(process.argv.slice(2));
 
 gulp.task('clean', function () {
@@ -30,6 +30,12 @@ gulp.task('bower', function () {
   return bower({
     'cmd': 'update'
   })
+});
+
+gulp.task('shrinkwrap', function () {
+  return gulp.src('package.json')
+    .pipe(shrinkwrap())
+    .pipe(gulp.dest('./'));
 });
 
 gulp.task('inline', ['styles'], function () {
@@ -186,7 +192,7 @@ gulp.task('watch', ['build'], function () {
 });
 
 gulp.task('build', function () {
-  runSequence('clean', 'bower', ['react', 'copy', 'styles', 'inline', 'prettify-html']);
+  runSequence('clean', 'bower', 'shrinkwrap', ['react', 'copy', 'styles', 'inline', 'prettify-html']);
 });
 
 // dev-watch excludes the react/jsx compilation, allowing this to be done by the server.
@@ -207,7 +213,7 @@ gulp.task('dev-watch', ['dev-build'], function () {
 
 // dev-build excludes the react/jsx compilation, allowing this to be done by the server.
 gulp.task('dev-build', function () {
-  runSequence('clean', 'bower', 'dev-react', 'styles', 'inline');
+  runSequence('clean', 'bower', 'shrinkwrap', 'dev-react', 'styles', 'inline');
 });
 
 gulp.task('default', ['watch']);
