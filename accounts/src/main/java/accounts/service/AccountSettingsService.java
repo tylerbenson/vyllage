@@ -99,6 +99,7 @@ public class AccountSettingsService {
 
 	public AccountSetting setAccountSetting(final User user,
 			final AccountSetting setting) {
+		Assert.notNull(setting);
 
 		if (setting.getUserId() == null)
 			setting.setUserId(user.getUserId());
@@ -129,7 +130,7 @@ public class AccountSettingsService {
 		savedSettings.addAll(settings
 				.stream()
 				.filter(set -> !set.getName().equalsIgnoreCase("role")
-						|| !set.getName().equalsIgnoreCase("organization"))
+						&& !set.getName().equalsIgnoreCase("organization"))
 				.map(set -> setAccountSetting(user, set))
 				.collect(Collectors.toList()));
 
@@ -144,10 +145,8 @@ public class AccountSettingsService {
 	 */
 	protected AccountSetting setFirstName(User user, AccountSetting setting) {
 
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			user.setFirstName(setting.getValue());
-			userService.update(user);
-		}
+		user.setFirstName(setting.getValue());
+		userService.update(user);
 
 		return setting;
 	}
@@ -160,10 +159,8 @@ public class AccountSettingsService {
 	 */
 	protected AccountSetting setMiddleName(User user, AccountSetting setting) {
 
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			user.setMiddleName(setting.getValue());
-			userService.update(user);
-		}
+		user.setMiddleName(setting.getValue());
+		userService.update(user);
 
 		return setting;
 	}
@@ -176,10 +173,8 @@ public class AccountSettingsService {
 	 */
 	protected AccountSetting setLastName(User user, AccountSetting setting) {
 
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			user.setLastName(setting.getValue());
-			userService.update(user);
-		}
+		user.setLastName(setting.getValue());
+		userService.update(user);
 
 		return setting;
 	}

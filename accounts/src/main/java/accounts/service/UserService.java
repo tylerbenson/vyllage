@@ -240,7 +240,8 @@ public class UserService {
 	protected void sendAccountCreationEmail(User user) throws EmailException {
 		emailBuilder
 				.to(user.getUsername())
-				.from(environment.getProperty("email.from", "no-reply@vyllage.com"))
+				.from(environment.getProperty("email.from",
+						"no-reply@vyllage.com"))
 				.fromUserName(
 						environment.getProperty("email.from.userName",
 								"Chief of Vyllage"))
@@ -301,7 +302,8 @@ public class UserService {
 
 			emailBuilder
 					.to(linkRequest.getEmail())
-					.from(environment.getProperty("email.from", "no-reply@vyllage.com"))
+					.from(environment.getProperty("email.from",
+							"no-reply@vyllage.com"))
 					.fromUserName(
 							environment.getProperty("email.from.userName",
 									"Chief of Vyllage"))
@@ -346,6 +348,12 @@ public class UserService {
 		return userRepository.getAdvisors(loggedUser, filters, maxsize);
 	}
 
+	/**
+	 * Returns names of the requested user ids.
+	 * 
+	 * @param userIds
+	 * @return
+	 */
 	public List<AccountNames> getNames(List<Long> userIds) {
 		return userRepository.getNames(userIds);
 	}
