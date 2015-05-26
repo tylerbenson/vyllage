@@ -1,8 +1,8 @@
 package documents.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,13 +135,13 @@ public class ResumeController {
 	@CheckReadAccess
 	public @ResponseBody List<DocumentSection> getResumeSections(
 			@PathVariable final Long documentId) throws JsonProcessingException {
-		List<DocumentSection> documentSections = new ArrayList<>();
+		List<DocumentSection> documentSections;
 
 		try {
 			documentSections = documentService.getDocumentSections(documentId);
 		} catch (ElementNotFoundException e) {
 			// no sections, return [].
-			return documentSections;
+			return Collections.emptyList();
 		}
 
 		Map<Long, Integer> numberOfCommentsForSections = documentService
