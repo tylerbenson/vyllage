@@ -1,5 +1,7 @@
 package site;
 
+import java.util.Arrays;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,22 +17,23 @@ import org.springframework.context.annotation.PropertySource;
 public class Application {
 
 	public static void main(String[] args) {
+		SpringApplication application = new SpringApplication(Application.class);
+		System.setProperty("spring.profiles.default", Profiles.DEV);
 		if (Application.class.getResource("Application.class").getProtocol()
 				.equals("file")) {
-			// System.setProperty("spring.profiles.active", Profiles.DEBUG);
-			String profile = System.getProperty("spring.profiles.active");
-			if (profile != null && !profile.contentEquals("null"))
-				System.out.println("Using profile: " + profile);
-			else {
-				profile = profile == null || profile.contentEquals("null") ? Profiles.DEBUG
-						: profile;
-				System.setProperty("spring.profiles.active", Profiles.DEBUG);
-				System.out.println("Using " + profile + " profile.");
+			if (System.getProperty("PROJECT_HOME") == null) {
+				System.out.println("PROJECT_HOME sys prop not set");
+				System.exit(1);
 			}
+			application.setAdditionalProfiles(Profiles.DEV);
+			System.out.println("\n** Setting thymeleaf prefix to: "
+					+ System.getProperty("PROJECT_HOME") + "/assets/public/\n");
 			System.setProperty("spring.thymeleaf.prefix",
 					"file:///" + System.getProperty("PROJECT_HOME")
 							+ "/assets/public/");
 		}
-		SpringApplication.run(Application.class, args);
+		String[] profiles = application.run(args).getEnvironment()
+				.getActiveProfiles();
+		System.out.println("Using profiles: " + Arrays.toString(profiles));
 	}
 }

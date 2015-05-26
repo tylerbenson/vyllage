@@ -9,7 +9,5 @@ public final class Profiles {
 
 	// public static final String STAGE = "stage";
 
-	public static final String DEV = "default";
-
-	public static final String DEBUG = "debug";
+	public static final String DEV = "dev";
 }

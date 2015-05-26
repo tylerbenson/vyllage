@@ -46,6 +46,8 @@ class ClientResourcesConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		if (!this.homePath.isEmpty()) {
+			System.out.println("\n** Adding local resource handler for: "
+					+ this.homePath + "/assets/public/\n");
 			registry.addResourceHandler("/**")
 					.addResourceLocations(
 							"file:///" + this.homePath + "/assets/public/")
