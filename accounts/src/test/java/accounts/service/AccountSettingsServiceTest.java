@@ -300,6 +300,19 @@ public class AccountSettingsServiceTest {
 	}
 
 	@Test
+	public void getAllAccoutSettingsByUserIdSuccessfull()
+			throws ElementNotFoundException, UserNotFoundException {
+		Long userId = 0L;
+
+		List<Long> userIds = Arrays.asList(userId);
+		List<AccountSetting> accountSetting = accountSettingsService
+				.getAccountSettings(userIds);
+
+		Assert.assertNotNull(accountSetting);
+		Assert.assertFalse(accountSetting.isEmpty());
+	}
+
+	@Test
 	public void getAllAccoutSettingsSuccessfull()
 			throws ElementNotFoundException, UserNotFoundException {
 		Long userId = 0L;
@@ -442,6 +455,44 @@ public class AccountSettingsServiceTest {
 
 		Assert.assertEquals(settingValue, savedAccountSetting.getValue());
 		Assert.assertEquals(userId, savedAccountSetting.getUserId());
+
+	}
+
+	@Test(expected = DataIntegrityViolationException.class)
+	public void setAccoutSettingNull() throws UserNotFoundException {
+		String settingName = "email";
+		String settingValue = null;
+		Long userId = 1L;
+		User user = userService.getUser(userId);
+
+		AccountSetting setting = new AccountSetting(null, null, settingName,
+				settingValue, Privacy.PUBLIC.name());
+
+		accountSettingsService.setAccountSetting(user, setting);
+
+	}
+
+	@Test
+	public void setAccoutSettingEmailEmptyDoesNotChangeEmail()
+			throws UserNotFoundException {
+		String settingName = "email";
+		String settingValue = "";
+		Long userId = 1L;
+		User user = userService.getUser(userId);
+
+		AccountSetting setting = new AccountSetting(null, null, settingName,
+				settingValue, Privacy.PUBLIC.name());
+
+		AccountSetting savedAccountSetting = accountSettingsService
+				.setAccountSetting(user, setting);
+
+		User reloadedUser = userService.getUser(userId);
+
+		Assert.assertNotNull(savedAccountSetting);
+
+		Assert.assertEquals(settingValue, savedAccountSetting.getValue());
+		Assert.assertEquals(userId, savedAccountSetting.getUserId());
+		Assert.assertFalse(reloadedUser.getUsername().equals(settingValue));
 
 	}
 
