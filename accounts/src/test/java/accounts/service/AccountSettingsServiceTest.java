@@ -279,25 +279,25 @@ public class AccountSettingsServiceTest {
 
 	}
 
-	// @Test
-	// public void getAccoutSettingEmailSuccessfull()
-	// throws ElementNotFoundException, UserNotFoundException {
-	// String settingName = "email";
-	//
-	// Long userId = 0L;
-	// User user = userService.getUser(userId);
-	//
-	// List<AccountSetting> accountSetting = accountSettingsService
-	// .getAccountSetting(user, settingName);
-	//
-	// Assert.assertNotNull(accountSetting);
-	//
-	// Assert.assertFalse(accountSetting.isEmpty());
-	//
-	// Assert.assertEquals(user.getUsername(), accountSetting.get(0)
-	// .getValue());
-	//
-	// }
+	@Test
+	public void getAccoutSettingEmailSuccessfull()
+			throws ElementNotFoundException, UserNotFoundException {
+		String settingName = "email";
+
+		Long userId = 0L;
+		User user = userService.getUser(userId);
+
+		List<AccountSetting> accountSetting = accountSettingsService
+				.getAccountSetting(user, settingName);
+
+		Assert.assertNotNull(accountSetting);
+
+		Assert.assertFalse(accountSetting.isEmpty());
+
+		Assert.assertEquals(user.getUsername(), accountSetting.get(0)
+				.getValue());
+
+	}
 
 	@Test
 	public void getAllAccoutSettingsSuccessfull()
