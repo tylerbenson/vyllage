@@ -76,36 +76,51 @@ public class DocumentService {
 		logger.info(documentSection.toString());
 		DocumentSection savedSection = null;
 
-		// if a section position's has not been set by the client we set the
+		// if a section position has not been set by the client we set the
 		// section as the first one.
-		if (documentSection.getSectionPosition() == null
-				|| documentSection.getSectionPosition() <= 0) {
-			documentSection.setSectionPosition(1L);
+		documentSection
+				.setSectionPosition(documentSection.getSectionPosition() == null
+						|| documentSection.getSectionPosition() <= 0 ? 1L
+						: documentSection.getSectionPosition());
+
+		// if there are other sections we sort them
+		if (documentSectionRepository.exists(documentSection.getDocumentId())) {
+
 			try {
 				List<DocumentSection> documentSections = documentSectionRepository
 						.getDocumentSections(documentSection.getDocumentId());
 
-				documentSections.stream().forEachOrdered(
-						s -> logger.info("Section " + s.getSectionId() + " P: "
-								+ s.getSectionPosition()));
+				// sort if the section does not exist.
+				if (documentSections.stream().noneMatch(
+						ds -> ds.getSectionId().equals(
+								documentSection.getSectionId()))) {
 
-				// sort by position in case they are not sorted already and
-				// shift 1
+					documentSections.stream().forEachOrdered(
+							s -> logger.info("Section " + s.getSectionId()
+									+ " P: " + s.getSectionPosition()));
 
-				documentSections
-						.stream()
-						.sorted((s1, s2) -> s1.getSectionPosition().compareTo(
-								s2.getSectionPosition())) //
-						.map(s -> {
-							s.setSectionPosition(s.getSectionPosition() + 1L);
-							return s;
-						}).forEach(s -> documentSectionRepository.save(s));
+					// sort by position in case they are not sorted already and
+					// shift 1
 
-				savedSection = documentSectionRepository.save(documentSection);
+					documentSections
+							.stream()
+							.sorted((s1, s2) -> s1.getSectionPosition()
+									.compareTo(s2.getSectionPosition())) //
+							.map(s -> {
+								s.setSectionPosition(s.getSectionPosition() + 1L);
+								return s;
+							}).forEach(s -> documentSectionRepository.save(s));
 
-				documentSections.stream().forEachOrdered(
-						s -> logger.info("Section " + s.getSectionId() + " P: "
-								+ s.getSectionPosition()));
+					savedSection = documentSectionRepository
+							.save(documentSection);
+
+					documentSections.stream().forEachOrdered(
+							s -> logger.info("Section " + s.getSectionId()
+									+ " P: " + s.getSectionPosition()));
+				} else {
+					savedSection = documentSectionRepository
+							.save(documentSection);
+				}
 
 			} catch (ElementNotFoundException e) {
 				logger.severe(ExceptionUtils.getStackTrace(e));
