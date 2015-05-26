@@ -25,7 +25,6 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SuggestionRepository;
-import documents.utilities.FindDuplicates;
 import documents.utilities.OrderSectionValidator;
 
 /**
@@ -79,7 +78,8 @@ public class DocumentService {
 
 		// if a section position's has not been set by the client we set the
 		// section as the first one.
-		if (documentSection.getSectionPosition() == null) {
+		if (documentSection.getSectionPosition() == null
+				|| documentSection.getSectionPosition() <= 0) {
 			documentSection.setSectionPosition(1L);
 			try {
 				List<DocumentSection> documentSections = documentSectionRepository
