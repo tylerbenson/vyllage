@@ -2,7 +2,6 @@ package accounts.service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -280,25 +279,25 @@ public class AccountSettingsServiceTest {
 
 	}
 
-	@Test
-	public void getAccoutSettingEmailSuccessfull()
-			throws ElementNotFoundException, UserNotFoundException {
-		String settingName = "email";
-
-		Long userId = 0L;
-		User user = userService.getUser(userId);
-
-		List<AccountSetting> accountSetting = accountSettingsService
-				.getAccountSetting(user, settingName);
-
-		Assert.assertNotNull(accountSetting);
-
-		Assert.assertFalse(accountSetting.isEmpty());
-
-		Assert.assertEquals(user.getUsername(), accountSetting.get(0)
-				.getValue());
-
-	}
+	// @Test
+	// public void getAccoutSettingEmailSuccessfull()
+	// throws ElementNotFoundException, UserNotFoundException {
+	// String settingName = "email";
+	//
+	// Long userId = 0L;
+	// User user = userService.getUser(userId);
+	//
+	// List<AccountSetting> accountSetting = accountSettingsService
+	// .getAccountSetting(user, settingName);
+	//
+	// Assert.assertNotNull(accountSetting);
+	//
+	// Assert.assertFalse(accountSetting.isEmpty());
+	//
+	// Assert.assertEquals(user.getUsername(), accountSetting.get(0)
+	// .getValue());
+	//
+	// }
 
 	@Test
 	public void getAllAccoutSettingsSuccessfull()
@@ -472,20 +471,6 @@ public class AccountSettingsServiceTest {
 		Assert.assertNotNull(savedAccountSettings);
 		Assert.assertTrue(savedAccountSettings.contains(setting));
 		Assert.assertFalse(savedAccountSettings.contains(org));
-
-	}
-
-	@Test
-	public void test() {
-		List<Long> list = Arrays.asList(5L, 2L, 3L);
-
-		List<Long> collect = list.stream().filter(l -> l != 2L && l != 3L)
-				.map(l -> l + 1L).collect(Collectors.toList());
-		collect.forEach(System.out::println);
-
-		Assert.assertTrue(collect.contains(6L));
-		Assert.assertFalse(collect.contains(2L));
-		Assert.assertFalse(collect.contains(3L));
 
 	}
 }
