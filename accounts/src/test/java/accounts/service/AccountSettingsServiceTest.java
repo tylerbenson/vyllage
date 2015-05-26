@@ -457,7 +457,10 @@ public class AccountSettingsServiceTest {
 		AccountSetting org = new AccountSetting(null, null, "organization",
 				"organization", Privacy.PUBLIC.name());
 
-		List<AccountSetting> settings = Arrays.asList(setting, org);
+		AccountSetting role = new AccountSetting(null, null, "role", "role",
+				Privacy.PUBLIC.name());
+
+		List<AccountSetting> settings = Arrays.asList(setting, org, role);
 
 		User user = Mockito.mock(User.class);
 
@@ -471,6 +474,7 @@ public class AccountSettingsServiceTest {
 		Assert.assertNotNull(savedAccountSettings);
 		Assert.assertTrue(savedAccountSettings.contains(setting));
 		Assert.assertFalse(savedAccountSettings.contains(org));
+		Assert.assertFalse(savedAccountSettings.contains(role));
 
 	}
 }
