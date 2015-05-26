@@ -240,6 +240,18 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	}
 
 	/**
+	 * Checks if there are any document sections for a given document.
+	 * 
+	 * @param documentId
+	 * @return
+	 */
+	public boolean exists(Long documentId) {
+
+		return sql.fetchExists(sql.select().from(DOCUMENT_SECTIONS)
+				.where(DOCUMENT_SECTIONS.DOCUMENTID.eq(documentId)));
+	}
+
+	/**
 	 * Generates a DocumentSection from the records containing the latest
 	 * versions of the document sections.
 	 * 

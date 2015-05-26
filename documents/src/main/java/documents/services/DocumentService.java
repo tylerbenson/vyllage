@@ -25,7 +25,6 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SuggestionRepository;
-import documents.utilities.FindDuplicates;
 import documents.utilities.OrderSectionValidator;
 
 /**
@@ -77,13 +76,21 @@ public class DocumentService {
 		logger.info(documentSection.toString());
 		DocumentSection savedSection = null;
 
-		// if a section position's has not been set by the client we set the
+		// if a section position has not been set by the client we set the
 		// section as the first one.
-		if (documentSection.getSectionPosition() == null) {
-			documentSection.setSectionPosition(1L);
-			try {
-				List<DocumentSection> documentSections = documentSectionRepository
-						.getDocumentSections(documentSection.getDocumentId());
+		documentSection
+				.setSectionPosition(documentSection.getSectionPosition() == null
+						|| documentSection.getSectionPosition() <= 0 ? 1L
+						: documentSection.getSectionPosition());
+
+		try {
+			List<DocumentSection> documentSections = documentSectionRepository
+					.getDocumentSections(documentSection.getDocumentId());
+
+			// sort if the section does not exist.
+			if (documentSections.stream().noneMatch(
+					ds -> ds.getSectionId().equals(
+							documentSection.getSectionId()))) {
 
 				documentSections.stream().forEachOrdered(
 						s -> logger.info("Section " + s.getSectionId() + " P: "
@@ -106,15 +113,14 @@ public class DocumentService {
 				documentSections.stream().forEachOrdered(
 						s -> logger.info("Section " + s.getSectionId() + " P: "
 								+ s.getSectionPosition()));
-
-			} catch (ElementNotFoundException e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
-				throw e;
+				return savedSection;
 			}
-		} else {
-			savedSection = documentSectionRepository.save(documentSection);
+
+		} catch (ElementNotFoundException e) {
+			// do nothing just save normally
 		}
+
+		savedSection = documentSectionRepository.save(documentSection);
 
 		return savedSection;
 

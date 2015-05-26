@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -75,8 +73,7 @@ public class ResumeControllerIntegTest {
 	}
 
 	@Test
-	public void getResumeSections() throws JsonProcessingException,
-			ElementNotFoundException {
+	public void getResumeSections() throws JsonProcessingException {
 		generateAndLoginUser();
 
 		List<DocumentSection> resumeSections = controller.getResumeSections(0L);
@@ -85,15 +82,14 @@ public class ResumeControllerIntegTest {
 		Assert.assertFalse(resumeSections.isEmpty());
 	}
 
-	@Test(expected = ElementNotFoundException.class)
-	public void getResumeSectionsNotFound() throws JsonProcessingException,
-			ElementNotFoundException {
+	@Test
+	public void getResumeSectionsNotFound() throws JsonProcessingException {
 		generateAndLoginUser();
 
 		List<DocumentSection> resumeSections = controller
 				.getResumeSections(999999999L);
 
-		Assert.assertNull(resumeSections);
+		Assert.assertTrue(resumeSections.isEmpty());
 	}
 
 	@Test
