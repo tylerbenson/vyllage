@@ -111,19 +111,25 @@ module.exports = Reflux.createStore({
                 .expand({
                   documentId: this.documentId,
                 });
-    // data.sectionPosition = this.getMaxSectionPostion() + 1;
+    if (data.title === 'skills') {            
+      data.sectionPosition = this.getMaxSectionPostion() + 1;
+    }
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue) 
       .send(data)
       .end(function (err, res) {
-        // Increment section postion of other sections and push new section in the front
-        this.resume.sections.forEach(function (section) {
-          section.sectionPosition += 1;
-        })
         var section = assign({}, res.body);
         section.newSection = true;  // To indicate a section is newly created
-        this.resume.sections.unshift(section);
+        if (section.title === 'skills') {
+          this.resume.sections.push(section);
+        } else {
+          // Increment section postion of other sections and push new section in the front
+          this.resume.sections.forEach(function (section) {
+            section.sectionPosition += 1;
+          });
+          this.resume.sections.unshift(section);
+        }
         this.trigger(this.resume);
       }.bind(this));
   },
