@@ -31,7 +31,11 @@ var ResumeEditor = React.createClass({
     return (
       <div key={Math.random()} className='section'>
         <div className='container'>
-          <Header title={sections[0].title} type={sections[0].type} owner={owner} />
+          <Header 
+            title={sections[0].title}
+            type={sections[0].type}
+            owner={owner}
+            sections={sections} />
           {subsectionNodes}
         </div>
       </div>
