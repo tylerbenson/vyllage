@@ -6,9 +6,9 @@ var EmptySections = React.createClass({
   render: function () {
     var sectionOptions = [
       { title: 'career goal', type: 'freeform' },
-      { title: 'skills', type: 'freeform' },
       { title: 'experience', type: 'experience' },
       { title: 'education', type: 'experience' },
+      { title: 'skills', type: 'freeform' },
     ]
     var emptyNodes = sectionOptions.map(function (options) {
       var sections = filter(this.props.sections, {title: options.title})
