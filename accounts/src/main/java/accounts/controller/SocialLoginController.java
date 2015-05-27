@@ -2,9 +2,9 @@ package accounts.controller;
 
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
@@ -20,6 +20,7 @@ import user.common.User;
 import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
 import accounts.service.SignInUtil;
+import accounts.service.SocialService;
 import accounts.service.UserService;
 
 @Controller
@@ -30,11 +31,19 @@ public class SocialLoginController {
 
 	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
 
-	@Autowired
 	private SignInUtil signInUtil;
 
-	@Autowired
 	private UserService userService;
+
+	private SocialService socialService;
+
+	@Inject
+	public SocialLoginController(final SignInUtil signInUtil,
+			final UserService userService, final SocialService socialService) {
+		this.signInUtil = signInUtil;
+		this.userService = userService;
+		this.socialService = socialService;
+	}
 
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)
 	public String socialLogin(WebRequest request) {
@@ -49,17 +58,25 @@ public class SocialLoginController {
 		Connection<?> connection = providerSignInUtils
 				.getConnectionFromSession(webRequest);
 
-		if (connection == null || connection.fetchUserProfile() == null)
+		UserProfile userProfile;
+
+		if (connection == null
+				|| (userProfile = connection.fetchUserProfile()) == null)
 			throw new IllegalArgumentException("Social account not connected.");
 
-		UserProfile userProfile = connection.fetchUserProfile();
 		String email = userProfile.getEmail();
 		String firstName = userProfile.getFirstName();
 		String lastName = userProfile.getLastName();
+		String username = userProfile.getUsername();
 
 		Assert.notNull(email);
 
 		User user = null;
+
+		if (socialService.connectionExists(connection.createData())) {
+
+		}
+
 		if (userService.userExists(email)) {
 			user = signInUtil.signIn(email);
 
