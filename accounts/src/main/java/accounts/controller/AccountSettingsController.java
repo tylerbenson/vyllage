@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -35,6 +35,7 @@ import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
+import accounts.service.AccountSettingsService;
 import accounts.service.UserService;
 import accounts.service.aspects.CheckWriteAccess;
 import accounts.validation.EmailSettingValidator;
@@ -57,35 +58,20 @@ public class AccountSettingsController {
 	private final Logger logger = Logger
 			.getLogger(AccountSettingsController.class.getName());
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
-	@Autowired
-	private OrganizationRepository organizationRepository;
+	private final AccountSettingsService accountSettingsService;
 
-	private Map<String, SettingValidator> validators = new HashMap<>();
-	private List<SettingValidator> validatorsForAll = new LinkedList<>();
+	private final OrganizationRepository organizationRepository;
 
-	private Map<String, List<String>> settingValues = new HashMap<>();
-
-	@ModelAttribute("userInfo")
-	public AccountContact userInfo(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
-		if (user == null) {
-			return null;
-		}
-
-		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(userService
-						.getAccountSettings(Arrays.asList(user.getUserId())));
-
-		if (contactDataForUsers.isEmpty()) {
-			return null;
-		}
-		return contactDataForUsers.get(0);
-	}
-
-	public AccountSettingsController() {
+	@Inject
+	public AccountSettingsController(final UserService userService,
+			final AccountSettingsService accountSettingsService,
+			final OrganizationRepository organizationRepository) {
+		super();
+		this.userService = userService;
+		this.accountSettingsService = accountSettingsService;
+		this.organizationRepository = organizationRepository;
 
 		validators.put("phoneNumber", new NumberValidator());
 		validators.put("firstName", new NotNullValidator());
@@ -106,6 +92,29 @@ public class AccountSettingsController {
 				Arrays.asList(Privacy.values()).stream()
 						.map(e -> e.toString().toLowerCase())
 						.collect(Collectors.toList()));
+
+	}
+
+	private Map<String, SettingValidator> validators = new HashMap<>();
+	private List<SettingValidator> validatorsForAll = new LinkedList<>();
+
+	private Map<String, List<String>> settingValues = new HashMap<>();
+
+	@ModelAttribute("userInfo")
+	public AccountContact userInfo(HttpServletRequest request,
+			@AuthenticationPrincipal User user) {
+		if (user == null) {
+			return null;
+		}
+
+		List<AccountContact> contactDataForUsers = userService
+				.getAccountContactForUsers(accountSettingsService
+						.getAccountSettings(Arrays.asList(user.getUserId())));
+
+		if (contactDataForUsers.isEmpty()) {
+			return null;
+		}
+		return contactDataForUsers.get(0);
 	}
 
 	// for header
@@ -125,7 +134,8 @@ public class AccountSettingsController {
 	public @ResponseBody List<AccountSetting> getAccountSettings(
 			@AuthenticationPrincipal User user) {
 
-		List<AccountSetting> settings = userService.getAccountSettings(user);
+		List<AccountSetting> settings = accountSettingsService
+				.getAccountSettings(user);
 
 		return settings;
 	}
@@ -159,14 +169,15 @@ public class AccountSettingsController {
 					HttpStatus.BAD_REQUEST);
 
 		return new ResponseEntity<List<AccountSetting>>(
-				userService.setAccountSettings(user, settings), HttpStatus.OK);
+				accountSettingsService.setAccountSettings(user, settings),
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountSetting> getAccountSetting(
 			@PathVariable String parameter, @AuthenticationPrincipal User user)
 			throws ElementNotFoundException {
-		return userService.getAccountSetting(user, parameter);
+		return accountSettingsService.getAccountSetting(user, parameter);
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
@@ -205,7 +216,8 @@ public class AccountSettingsController {
 					HttpStatus.BAD_REQUEST);
 
 		return new ResponseEntity<AccountSetting>(
-				userService.setAccountSetting(user, setting), HttpStatus.OK);
+				accountSettingsService.setAccountSetting(user, setting),
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "setting/{parameter}/values", method = RequestMethod.GET, produces = "application/json")

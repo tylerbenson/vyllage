@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -29,19 +29,31 @@ import accounts.model.account.AccountNames;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserNotFoundException;
+import accounts.service.AccountSettingsService;
 import accounts.service.UserService;
 
 @Controller
 @RequestMapping("admin")
 public class AdminUserController {
-	@Autowired
-	private UserService userService;
 
-	@Autowired
-	private RoleRepository roleRepository;
+	private final UserService userService;
 
-	@Autowired
-	private OrganizationRepository organizationRepository;
+	private final RoleRepository roleRepository;
+
+	private final OrganizationRepository organizationRepository;
+
+	private final AccountSettingsService accountSettingsService;
+
+	@Inject
+	public AdminUserController(final UserService userService,
+			final RoleRepository roleRepository,
+			final OrganizationRepository organizationRepository,
+			final AccountSettingsService accountSettingsService) {
+		this.userService = userService;
+		this.roleRepository = roleRepository;
+		this.organizationRepository = organizationRepository;
+		this.accountSettingsService = accountSettingsService;
+	}
 
 	@ModelAttribute("accountName")
 	public AccountNames accountNames(@AuthenticationPrincipal User user) {
@@ -58,7 +70,7 @@ public class AdminUserController {
 		}
 
 		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(userService
+				.getAccountContactForUsers(accountSettingsService
 						.getAccountSettings(Arrays.asList(user.getUserId())));
 
 		if (contactDataForUsers.isEmpty()) {
