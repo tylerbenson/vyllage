@@ -224,6 +224,7 @@ module.exports = Reflux.createStore({
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
         if (this.resume.sections[index].comments) {
           this.resume.sections[index].comments.push(res.body);
+          this.postSectionOrder();
         } else {
           this.resume.sections[index].comments = [res.body];
         }
