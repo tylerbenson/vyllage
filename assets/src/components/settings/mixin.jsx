@@ -14,7 +14,7 @@ module.exports = {
     } else {
       setting = {
         name: name,
-        value: e.target.value,
+        value: name ==='phoneNumber' ? phoneFormatter.normalize(e.target.value) : e.target.value,
         privacy: 'private'
       };
     }
