@@ -31,8 +31,10 @@ import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.model.link.SimpleDocumentLink;
 import accounts.model.link.SimpleDocumentLinkRequest;
+import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
+import accounts.service.DocumentService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
 import accounts.service.utilities.Encryptor;
@@ -67,6 +69,9 @@ public class DocumentLinkController {
 
 	@Autowired
 	private Environment environment;
+
+	@Autowired
+	private DocumentService documentService;
 
 	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
 
@@ -188,12 +193,17 @@ public class DocumentLinkController {
 	 * @param loggedInUser
 	 * @return
 	 * @throws JsonProcessingException
+	 * @throws ElementNotFoundException
 	 */
 	@RequestMapping(value = "/share-document", method = RequestMethod.POST)
-	public @ResponseBody String shareDocumentLink(
+	public @ResponseBody String shareDocumentLink(HttpServletRequest request,
 			@RequestBody SimpleDocumentLinkRequest linkRequest,
 			@AuthenticationPrincipal User loggedInUser)
-			throws JsonProcessingException {
+			throws JsonProcessingException, ElementNotFoundException {
+
+		if (linkRequest.getDocumentId() == null)
+			linkRequest.setDocumentId(documentService.getUserDocumentId(
+					request, loggedInUser.getUserId()));
 
 		SimpleDocumentLink documentLink = documentLinkService.createLink(
 				linkRequest, loggedInUser);
