@@ -68,6 +68,10 @@ textarea {
   }
 }
 
+ul {
+  padding: 0;
+}
+
 @media (max-width: $medium-portrait) {
   body {
     font-size: 16px;
