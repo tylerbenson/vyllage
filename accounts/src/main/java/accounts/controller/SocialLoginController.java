@@ -1,7 +1,6 @@
 package accounts.controller;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -21,7 +20,6 @@ import user.common.User;
 import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
 import accounts.service.SignInUtil;
-import accounts.service.SocialService;
 import accounts.service.UserService;
 
 @Controller
@@ -36,14 +34,11 @@ public class SocialLoginController {
 
 	private UserService userService;
 
-	private SocialService socialService;
-
 	@Inject
 	public SocialLoginController(final SignInUtil signInUtil,
-			final UserService userService, final SocialService socialService) {
+			final UserService userService) {
 		this.signInUtil = signInUtil;
 		this.userService = userService;
-		this.socialService = socialService;
 	}
 
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)
@@ -69,26 +64,22 @@ public class SocialLoginController {
 		String firstName = userProfile.getFirstName();
 		String lastName = userProfile.getLastName();
 
-		HashSet<String> set = new HashSet<>();
-		set.add(connection.createData().getProviderUserId());
+		Optional<User> user = userService.getUserBySocialId(connection
+				.createData().getProviderId(), connection.createData()
+				.getProviderUserId());
 
-		List<User> userBySocialId = userService.getUserBySocialId(connection
-				.createData().getProviderId(), set);
+		if (user.isPresent()) {
+			signInUtil.signIn(user.get());
 
-		User user;
-
-		if (userBySocialId != null && !userBySocialId.isEmpty()) {
-			user = userBySocialId.get(0);
-			signInUtil.signIn(user);
-
-			providerSignInUtils.doPostSignUp(user.getUsername(), webRequest);
+			providerSignInUtils.doPostSignUp(user.get().getUsername(),
+					webRequest);
 
 			return "redirect:/resume";
 
 		} else {
 			String userName = email != null && !email.isEmpty() ? email
 					: generateName(userProfile);
-			user = userService.createUser(
+			User newUser = userService.createUser(
 					userName,
 					firstName,
 					null,
@@ -96,9 +87,9 @@ public class SocialLoginController {
 					(Long) request.getSession(false).getAttribute(
 							SocialSessionEnum.SOCIAL_USER_ID.name()));
 
-			signInUtil.signIn(email);
+			signInUtil.signIn(newUser);
 
-			providerSignInUtils.doPostSignUp(user.getUsername(), webRequest);
+			providerSignInUtils.doPostSignUp(userName, webRequest);
 
 			return "redirect:"
 					+ (String) request.getSession(false).getAttribute(
@@ -107,6 +98,13 @@ public class SocialLoginController {
 
 	}
 
+	/**
+	 * Generates a name for the user account, using email, provider's username
+	 * or a random one combining the user's names and numbers
+	 * 
+	 * @param userProfile
+	 * @return userName
+	 */
 	protected String generateName(UserProfile userProfile) {
 
 		if (userProfile.getEmail() != null && !userProfile.getEmail().isEmpty())

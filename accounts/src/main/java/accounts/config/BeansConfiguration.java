@@ -78,15 +78,4 @@ public class BeansConfiguration {
 		return new SimpleSignInAdapter(userDetailsService,
 				new HttpSessionRequestCache());
 	}
-
-	// @Bean
-	// public UsersConnectionRepository getUsersConnectionRepository(
-	// ConnectionFactoryLocator connectionFactoryLocator) {
-	//
-	// JdbcUsersConnectionRepository repository = new
-	// JdbcUsersConnectionRepository(
-	// dataSource, connectionFactoryLocator, Encryptors.noOpText());
-	// repository.setTablePrefix("ACCOUNTS");
-	// return repository;
-	// }
 }

@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,7 +23,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -42,6 +39,7 @@ import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AccountSettingRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
+import accounts.repository.SocialAccountRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.repository.UserOrganizationRoleRepository;
@@ -76,8 +74,8 @@ public class UserService {
 	@Autowired
 	private AccountSettingRepository settingRepository;
 
-	@Inject
-	private UsersConnectionRepository usersConnectionRepository;
+	@Autowired
+	private SocialAccountRepository socialAccountRepository;
 
 	@Autowired
 	private RandomPasswordGenerator randomPasswordGenerator;
@@ -99,13 +97,17 @@ public class UserService {
 		return this.userRepository.loadUserByUsername(username);
 	}
 
-	public List<User> getUserBySocialId(String providerId,
-			Set<String> providerUserIds) {
-		Set<String> findUserIdsConnectedTo = usersConnectionRepository
-				.findUserIdsConnectedTo(providerId, providerUserIds);
+	public Optional<User> getUserBySocialId(String providerId,
+			String providerUserId) {
+		Optional<User> user = Optional.empty();
 
-		List<User> users = new ArrayList<>();
-		return users;
+		try {
+			user = Optional.of(this.getUser(socialAccountRepository.getUserId(
+					providerId, providerUserId)));
+		} catch (UserNotFoundException e) {
+			// don't care, it means he has no account created yet.
+		}
+		return user;
 	}
 
 	public List<User> getAllUsers() {
