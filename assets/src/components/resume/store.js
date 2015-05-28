@@ -120,12 +120,13 @@ module.exports = Reflux.createStore({
         var section = assign({}, res.body);
         section.newSection = true;  // To indicate a section is newly created
         var newSectionPosition = section.sectionPosition
+        console.log('new', newSectionPosition, data);
         this.resume.sections.forEach(function (section) {
           if (section.sectionPosition >= newSectionPosition) {
             section.sectionPosition += 1;
           }
         });
-        this.resume.sections.splice(newSectionPosition, 0, section);
+        this.resume.sections.splice(newSectionPosition - 1, 0, section);
         this.postSectionOrder();
         this.trigger(this.resume);
       }.bind(this));

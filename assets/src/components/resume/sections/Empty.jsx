@@ -10,7 +10,7 @@ var EmptySections = React.createClass({
       { title: 'education', type: 'experience' },
       { title: 'skills', type: 'freeform' },
     ]
-    var groupPosition = this.props.sections.length || 0;
+    var groupPosition = this.props.sections.length + 1|| 1;
     var emptyNodes = sectionOptions.map(function (options, index) {
       var sections = filter(this.props.sections, {title: options.title})
       if (sections.length === 0) {

@@ -49,11 +49,13 @@ var ResumeEditor = React.createClass({
     var previousTitle = '';
     var nextTitle = '';
     var groupSections = [];
+    var groupPosition = 1;
     sections.forEach(function (section, index) {
       nextTitle = (sections.length-1 !== index) ? sections[index + 1].title : '';
       groupSections.push(section);
       if (nextTitle !== section.title) {
-        sectionGroupNodes.push(this.renderGroup(groupSections, index));
+        sectionGroupNodes.push(this.renderGroup(groupSections, groupPosition));
+        groupPosition += groupSections.length;
         groupSections = [];
       }
     }.bind(this));
