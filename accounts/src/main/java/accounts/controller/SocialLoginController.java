@@ -1,5 +1,7 @@
 package accounts.controller;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -10,7 +12,6 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,26 +68,28 @@ public class SocialLoginController {
 		String email = userProfile.getEmail();
 		String firstName = userProfile.getFirstName();
 		String lastName = userProfile.getLastName();
-		String username = userProfile.getUsername();
 
-		Assert.notNull(email);
+		HashSet<String> set = new HashSet<>();
+		set.add(connection.createData().getProviderUserId());
 
-		User user = null;
+		List<User> userBySocialId = userService.getUserBySocialId(connection
+				.createData().getProviderId(), set);
 
-		if (socialService.connectionExists(connection.createData())) {
+		User user;
 
-		}
-
-		if (userService.userExists(email)) {
-			user = signInUtil.signIn(email);
+		if (userBySocialId != null && !userBySocialId.isEmpty()) {
+			user = userBySocialId.get(0);
+			signInUtil.signIn(user);
 
 			providerSignInUtils.doPostSignUp(user.getUsername(), webRequest);
 
 			return "redirect:/resume";
 
 		} else {
+			String userName = email != null && !email.isEmpty() ? email
+					: generateName(userProfile);
 			user = userService.createUser(
-					email,
+					userName,
 					firstName,
 					null,
 					lastName,
@@ -102,6 +105,20 @@ public class SocialLoginController {
 							SocialSessionEnum.SOCIAL_REDIRECT_URL.name());
 		}
 
+	}
+
+	protected String generateName(UserProfile userProfile) {
+
+		if (userProfile.getEmail() != null && !userProfile.getEmail().isEmpty())
+			return userProfile.getEmail();
+
+		else if (userProfile.getUsername() != null
+				&& !userProfile.getUsername().isEmpty())
+			return userProfile.getUsername();
+
+		else
+			// TODO: Add numbers or something
+			return userProfile.getFirstName() + "-" + userProfile.getLastName();
 	}
 
 	@RequestMapping(value = "/signin", method = RequestMethod.GET)

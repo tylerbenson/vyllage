@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +25,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -73,6 +76,9 @@ public class UserService {
 	@Autowired
 	private AccountSettingRepository settingRepository;
 
+	@Inject
+	private UsersConnectionRepository usersConnectionRepository;
+
 	@Autowired
 	private RandomPasswordGenerator randomPasswordGenerator;
 
@@ -85,8 +91,21 @@ public class UserService {
 
 	private BatchParser batchParser = new BatchParser();
 
+	public User getUser(Long userId) throws UserNotFoundException {
+		return userRepository.get(userId);
+	}
+
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
+	}
+
+	public List<User> getUserBySocialId(String providerId,
+			Set<String> providerUserIds) {
+		Set<String> findUserIdsConnectedTo = usersConnectionRepository
+				.findUserIdsConnectedTo(providerId, providerUserIds);
+
+		List<User> users = new ArrayList<>();
+		return users;
 	}
 
 	public List<User> getAllUsers() {
@@ -339,10 +358,6 @@ public class UserService {
 
 	}
 
-	public User getUser(Long userId) throws UserNotFoundException {
-		return userRepository.get(userId);
-	}
-
 	public List<User> getAdvisors(User loggedUser, Map<String, String> filters,
 			int maxsize) {
 		return userRepository.getAdvisors(loggedUser, filters, maxsize);
@@ -561,4 +576,5 @@ public class UserService {
 
 		return user;
 	}
+
 }

@@ -19,4 +19,5 @@ create table if not exists ACCOUNTS.SOCIAL_ACCOUNT(
     refreshToken varchar(255),
     expireTime bigint,
     primary key (userId, providerId, providerUserId));
-create unique index UserConnectionRank on UserConnection(userId, providerId, rank);
+
+    create unique index UserConnectionRank on ACCOUNTS.UserConnection(userId, providerId, rank);
