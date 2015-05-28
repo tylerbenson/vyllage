@@ -50,7 +50,7 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue) 
       .send(order)
       .end(function (err, res) {
-        console.log(err, res.body, order, url);
+        //console.log(err, res.body, order, url);
       }.bind(this)) 
   },
   onGetResume: function () {
@@ -111,9 +111,6 @@ module.exports = Reflux.createStore({
                 .expand({
                   documentId: this.documentId,
                 });
-    if (data.title === 'skills') {            
-      data.sectionPosition = this.getMaxSectionPostion() + 1;
-    }
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue) 
@@ -121,15 +118,8 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var section = assign({}, res.body);
         section.newSection = true;  // To indicate a section is newly created
-        if (section.title === 'skills') {
-          this.resume.sections.push(section);
-        } else {
-          // Increment section postion of other sections and push new section in the front
-          this.resume.sections.forEach(function (section) {
-            section.sectionPosition += 1;
-          });
-          this.resume.sections.unshift(section);
-        }
+        this.resume.sections.splice(section.sectionPosition, 0, section);
+        this.postSectionOrder();
         this.trigger(this.resume);
       }.bind(this));
   },
