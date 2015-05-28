@@ -19,6 +19,10 @@ public enum Features implements Feature {
 	@Label("Zopim Message Client")
 	ZOPIM_MESSAGE_CLIENT,
 
+	@EnabledByDefault
+	@Label("Facebook SDK")
+	FACEBOOK_SDK,
+
 	@Label("Share Resume")
 	SHARE_RESUME,
 

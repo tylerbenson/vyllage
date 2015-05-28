@@ -46,8 +46,7 @@ var ShareableLink = React.createClass({
 				<div className="section shareable">
 					<div className="container">
 						<div className="content">
-							<p className="tip">Anyone with the link below will be able to
-							<br /> comment on your resume after signing up.</p>
+							<p className="tip">Anyone with the link below will be able to add feedback to your resume.</p>
 							<input id="shareable-link" className="padded" type="text" value={this.props.url} readOnly />
 							<Clipboard text={this.props.url} onAfterCopy={this.copyHandler} onReady={this.readyHandler}>
 								<button className={classes}>
