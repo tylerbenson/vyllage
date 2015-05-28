@@ -5,6 +5,9 @@ var actions = require('./actions');
 
 var InviteOptions = React.createClass({
 	mixins: [Reflux.connect(AskAdviceStore)],
+	componentWillMount: function(){
+		actions.getFacebookFeatureStatus();
+	},
 	select: function(type, e) {
 		actions.setInviteType(type);
 	},
@@ -28,9 +31,9 @@ var InviteOptions = React.createClass({
 	          className={(this.state.inviteType === 'form' ? 'primary active' : 'secondary') + ' flat'}
 	          ><i className="ion-email"></i> Invite Through E-mail</button>
 	        </li>
-	        <li>
-	          <button onClick={this.shareOnFacebook} className="secondary flat facebook"><i className="ion-social-facebook"></i> Share on Facebook</button>
-	        </li>
+	        {this.state.isShareableOnFacebook ?
+	        	<li ><button onClick={this.shareOnFacebook} className="secondary flat facebook"><i className="ion-social-facebook"></i> Share on Facebook</button></li>
+        	: null}
 	      </ul>
 	    </div>
 		);

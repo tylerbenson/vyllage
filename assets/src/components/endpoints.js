@@ -10,7 +10,8 @@ var endpoints = {
   resumeComment: '/resume/{documentId}/section/{sectionId}/comment/{commentId}',
   askAdvice: '/resume/ask-advice',
   askAdviceSuggestions: '/resume/users',
-  askAdviceGenerateLink: '/link/share-document'
+  askAdviceGenerateLink: '/link/share-document',
+  togglz: '/togglz-feature/{feature}/is-active'
 };
 
 module.exports = endpoints;
