@@ -41,6 +41,7 @@ module.exports = Reflux.createStore({
     var order = this.resume.sections.map(function (section) {
       return section.sectionId;
     });
+    console.log(order);
 
     var url = urlTemplate
                 .parse(endpoints.resumeSectionOrder)
@@ -118,7 +119,13 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var section = assign({}, res.body);
         section.newSection = true;  // To indicate a section is newly created
-        this.resume.sections.splice(section.sectionPosition, 0, section);
+        var newSectionPosition = section.sectionPosition
+        this.resume.sections.forEach(function (section) {
+          if (section.sectionPosition >= newSectionPosition) {
+            section.sectionPosition += 1;
+          }
+        });
+        this.resume.sections.splice(newSectionPosition, 0, section);
         this.postSectionOrder();
         this.trigger(this.resume);
       }.bind(this));
