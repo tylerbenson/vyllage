@@ -31,22 +31,31 @@ var AskAdviceStore = Reflux.createStore({
     this.recipient = {firstName: "", lastName: "", email: ""};
     this.subject = "Could you provide me some feedback on my resume?";
     this.message = "I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?\n\nThanks,\n" + firstName;
-    this.shareableLink = this.getShareableLink();
+    this.shareableLink = null;
+    this.inviteType = 'link';
   },
-  getShareableLink: function(){
+  onSetInviteType: function(type){
+    this.inviteType = type;
+    this.update();
+  },
+  onGetShareableLink: function(){
     request
       .post(endpoints.askAdviceGenerateLink)
       .set(this.tokenHeader, this.tokenValue)
       .send({
-        'documentId': 0, //WIP, Is there an endpoint for this? Maybe, get it from session data (?)
+        'documentId': null,
         'documentType': 'resume'
       })
       .end(function(err, res){
         if (res.status === 200) {
-          return res.text;
+          this.shareableLink = res.text;
+          this.update();
         }
-        return null;
-      });
+        else {
+          this.shareableLink = null;
+          this.update();
+        }
+      }.bind(this));
   },
   getRecipientUsersList: function () {
     return this.users.map(function (recipient) {
@@ -203,8 +212,10 @@ var AskAdviceStore = Reflux.createStore({
       recipient: this.recipient,
       subject: this.subject,
       message: this.message,
-      processing: this.processing
-    })
+      processing: this.processing,
+      shareableLink: this.shareableLink,
+      inviteType: this.inviteType
+    });
   },
   getInitialState: function () {
 
@@ -218,7 +229,9 @@ var AskAdviceStore = Reflux.createStore({
       recipient: this.recipient,
       subject: this.subject,
       message: this.message,
-      processing: this.processing
+      processing: this.processing,
+      shareableLink: this.shareableLink,
+      inviteType: this.inviteType
     }
   }
 });
