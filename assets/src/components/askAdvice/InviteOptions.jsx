@@ -23,7 +23,8 @@ var InviteOptions = React.createClass({
 	          ><i className="ion-email"></i> Invite Through E-mail</button>
 	        </li>
 	        <li>
-	          <button className="secondary flat"><i className="ion-social-facebook"></i> Share on Facebook</button>
+	          {/*<button className="secondary flat"><i className="ion-social-facebook"></i> Share on Facebook</button>*/}
+	          <div className="fb-share-button" data-href={this.state.shareableLink} data-layout="link"></div>
 	        </li>
 	      </ul>
 	    </div>

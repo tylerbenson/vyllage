@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Vyllage | Log In</title>
+  <title>Vyllage | Guest Log In</title>
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,7 +15,7 @@
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
-<body class="login">
+<body class="guest login">
   <div id="container">
     <header>
       <div class="content">
@@ -34,10 +34,18 @@
         <div class="container">
           <!-- FACEBOOK SIGNIN -->
           <form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">
-            <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
-            <input type="hidden" name="scope" value="email"></input>
-            <!-- 				<input type="hidden" name="scope" value="publish_stream,user_photos,offline_access"></input> -->
-            <button type="submit">Facebook</button>
+            <div class="content">
+              <h1 class="centered">Guest Log In</h1>
+              <p class="centered">Give feedback on your friends resumé.</p>
+              <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
+              <input type="hidden" name="scope" value="email"></input>
+              <!-- 				<input type="hidden" name="scope" value="publish_stream,user_photos,offline_access"></input> -->
+            </div>
+            <div class="content account">
+              <button class="padded facebook" type="submit">
+                <i class="ion-social-facebook"></i> Sign Up via Facebook
+              </button>
+            </div>
           </form>
           <!-- 			<form id="tw_signin" th:action="@{/signin/twitter}" method="POST"> -->
           <!-- 				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input> -->
