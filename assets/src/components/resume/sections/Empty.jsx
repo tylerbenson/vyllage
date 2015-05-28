@@ -10,13 +10,13 @@ var EmptySections = React.createClass({
       { title: 'education', type: 'experience' },
       { title: 'skills', type: 'freeform' },
     ]
-    var emptyNodes = sectionOptions.map(function (options) {
+    var emptyNodes = sectionOptions.map(function (options, index) {
       var sections = filter(this.props.sections, {title: options.title})
       if (sections.length === 0) {
         return (
           <div key={Math.random()} className='section'>
             <div className='container'>
-              <Header title={options.title} type={options.type} owner={this.props.owner} />
+              <Header title={options.title} type={options.type} owner={this.props.owner} groupPosition={index} />
               <p className='empty content'>No {options.title} added yet</p>  
             </div>
           </div>

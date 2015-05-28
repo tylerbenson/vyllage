@@ -19,7 +19,7 @@ var ResumeEditor = React.createClass({
   moveSection: function (id, afterId) {
     actions.moveSection(id, afterId);
   },
-  renderGroup: function (sections) {
+  renderGroup: function (sections, groupPosition) {
     var owner=this.state.resume.header.owner;
     var subsectionNodes = sections.map(function(section) {
       return <Section
@@ -35,6 +35,7 @@ var ResumeEditor = React.createClass({
             title={sections[0].title}
             type={sections[0].type}
             owner={owner}
+            groupPosition={groupPosition}
             sections={sections} />
           {subsectionNodes}
         </div>
@@ -52,7 +53,7 @@ var ResumeEditor = React.createClass({
       nextTitle = (sections.length-1 !== index) ? sections[index + 1].title : '';
       groupSections.push(section);
       if (nextTitle !== section.title) {
-        sectionGroupNodes.push(this.renderGroup(groupSections));
+        sectionGroupNodes.push(this.renderGroup(groupSections, index));
         groupSections = [];
       }
     }.bind(this));
