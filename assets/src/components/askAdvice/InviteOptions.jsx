@@ -8,6 +8,12 @@ var InviteOptions = React.createClass({
 	select: function(type, e) {
 		actions.setInviteType(type);
 	},
+	shareOnFacebook: function(){
+		FB.ui({
+		  method: 'share',
+		  href: this.props.url,
+		}, function(response){});
+	},
 	render: function() {
 		return (
 			<div className="banner content">
@@ -23,8 +29,7 @@ var InviteOptions = React.createClass({
 	          ><i className="ion-email"></i> Invite Through E-mail</button>
 	        </li>
 	        <li>
-	          {/*<button className="secondary flat"><i className="ion-social-facebook"></i> Share on Facebook</button>*/}
-	          <div className="fb-share-button" data-href={this.state.shareableLink} data-layout="link"></div>
+	          <button onClick={this.shareOnFacebook} className="secondary flat facebook"><i className="ion-social-facebook"></i> Share on Facebook</button>
 	        </li>
 	      </ul>
 	    </div>

@@ -26,7 +26,7 @@ var AskAdvice = React.createClass({
 
 		return (
 			<div>
-			<InviteOptions />
+			<InviteOptions url={this.state.shareableLink} />
 			{InviteType}
 			</div>
 		);
