@@ -42,8 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
 
 		http.authorizeRequests()
-				.antMatchers("/", "/status", "/css/**", "/images/**",
-						"/javascript/**").permitAll();
+				.antMatchers("/", "/status", "/status-*", "/css/**",
+						"/images/**", "/javascript/**").permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
 
 		SimpleUrlAuthenticationSuccessHandler successHandler = successHandler();

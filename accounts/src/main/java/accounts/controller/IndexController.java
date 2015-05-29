@@ -81,6 +81,11 @@ public class IndexController {
 		return "OK";
 	}
 
+	@RequestMapping(value = "/status-local", produces = "text/plain")
+	public @ResponseBody String statusLocal() {
+		return "OK";
+	}
+
 	@RequestMapping(value = "/status-aws", produces = "text/plain")
 	public @ResponseBody String statusAWS() {
 		return "OK";
