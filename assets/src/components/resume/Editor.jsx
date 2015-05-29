@@ -19,7 +19,7 @@ var ResumeEditor = React.createClass({
   moveSection: function (id, afterId) {
     actions.moveSection(id, afterId);
   },
-  renderGroup: function (sections) {
+  renderGroup: function (sections, groupPosition) {
     var owner=this.state.resume.header.owner;
     var subsectionNodes = sections.map(function(section) {
       return <Section
@@ -31,7 +31,12 @@ var ResumeEditor = React.createClass({
     return (
       <div key={Math.random()} className='section'>
         <div className='container'>
-          <Header title={sections[0].title} type={sections[0].type} owner={owner} />
+          <Header 
+            title={sections[0].title}
+            type={sections[0].type}
+            owner={owner}
+            groupPosition={groupPosition}
+            sections={sections} />
           {subsectionNodes}
         </div>
       </div>
@@ -44,11 +49,13 @@ var ResumeEditor = React.createClass({
     var previousTitle = '';
     var nextTitle = '';
     var groupSections = [];
+    var groupPosition = 1;
     sections.forEach(function (section, index) {
       nextTitle = (sections.length-1 !== index) ? sections[index + 1].title : '';
       groupSections.push(section);
       if (nextTitle !== section.title) {
-        sectionGroupNodes.push(this.renderGroup(groupSections));
+        sectionGroupNodes.push(this.renderGroup(groupSections, groupPosition));
+        groupPosition += groupSections.length;
         groupSections = [];
       }
     }.bind(this));

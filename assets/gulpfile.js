@@ -204,7 +204,7 @@ gulp.task('dev-watch', ['dev-build'], function () {
 
 // dev-build excludes the react/jsx compilation, allowing this to be done by the server.
 gulp.task('dev-build', function () {
-  runSequence('clean', ['dev-react', 'copy', 'styles', 'inline']);
+  runSequence(['dev-react', 'copy', 'styles', 'inline']);
 });
 
 gulp.task('default', ['watch']);

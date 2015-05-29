@@ -41,6 +41,7 @@ module.exports = Reflux.createStore({
     var order = this.resume.sections.map(function (section) {
       return section.sectionId;
     });
+    console.log(order);
 
     var url = urlTemplate
                 .parse(endpoints.resumeSectionOrder)
@@ -50,7 +51,7 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue) 
       .send(order)
       .end(function (err, res) {
-        console.log(err, res.body, order, url);
+        //console.log(err, res.body, order, url);
       }.bind(this)) 
   },
   onGetResume: function () {
@@ -111,19 +112,22 @@ module.exports = Reflux.createStore({
                 .expand({
                   documentId: this.documentId,
                 });
-    // data.sectionPosition = this.getMaxSectionPostion() + 1;
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue) 
       .send(data)
       .end(function (err, res) {
-        // Increment section postion of other sections and push new section in the front
-        this.resume.sections.forEach(function (section) {
-          section.sectionPosition += 1;
-        })
         var section = assign({}, res.body);
         section.newSection = true;  // To indicate a section is newly created
-        this.resume.sections.unshift(section);
+        var newSectionPosition = section.sectionPosition
+        console.log('new', newSectionPosition, data);
+        this.resume.sections.forEach(function (section) {
+          if (section.sectionPosition >= newSectionPosition) {
+            section.sectionPosition += 1;
+          }
+        });
+        this.resume.sections.splice(newSectionPosition - 1, 0, section);
+        this.postSectionOrder();
         this.trigger(this.resume);
       }.bind(this));
   },
@@ -218,6 +222,7 @@ module.exports = Reflux.createStore({
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
         if (this.resume.sections[index].comments) {
           this.resume.sections[index].comments.push(res.body);
+          this.postSectionOrder();
         } else {
           this.resume.sections[index].comments = [res.body];
         }
