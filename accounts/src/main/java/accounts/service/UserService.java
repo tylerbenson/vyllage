@@ -39,7 +39,6 @@ import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AccountSettingRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
-import accounts.repository.SocialAccountRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.repository.UserOrganizationRoleRepository;
@@ -75,9 +74,6 @@ public class UserService {
 	private AccountSettingRepository settingRepository;
 
 	@Autowired
-	private SocialAccountRepository socialAccountRepository;
-
-	@Autowired
 	private RandomPasswordGenerator randomPasswordGenerator;
 
 	@Autowired
@@ -96,22 +92,6 @@ public class UserService {
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
 	}
-
-	// public Optional<User> getUserBySocialId(String providerId,
-	// String providerUserId) {
-	// Optional<User> user = Optional.empty();
-	//
-	// try {
-	// Optional<Long> userId = socialAccountRepository.getUserId(
-	// providerId, providerUserId);
-	// user = userId.isPresent() ? Optional.ofNullable(this.getUser(userId
-	// .get())) : Optional.empty();
-	// } catch (UserNotFoundException e) {
-	// // don't care, it means he has no account created yet.
-	// user = Optional.empty();
-	// }
-	// return user;
-	// }
 
 	public List<User> getAllUsers() {
 		return this.userRepository.getAll();
