@@ -2,6 +2,8 @@ package accounts.repository;
 
 import static accounts.domain.tables.SocialAccount.SOCIAL_ACCOUNT;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.jooq.DSLContext;
@@ -19,12 +21,14 @@ public class SocialAccountRepository {
 		this.sql = sql;
 	}
 
-	public Long getUserId(String providerId, String providerUserId) {
+	public Optional<Long> getUserId(String providerId, String providerUserId) {
 		SocialAccountRecord accountRecord = sql.fetchOne(
 				SOCIAL_ACCOUNT,
 				SOCIAL_ACCOUNT.PROVIDER.eq(providerId).and(
 						SOCIAL_ACCOUNT.PROVIDER_USER_ID.eq(providerUserId)));
 
-		return accountRecord.getUserId();
+		if (accountRecord != null)
+			return Optional.of(accountRecord.getUserId());
+		return Optional.empty();
 	}
 }

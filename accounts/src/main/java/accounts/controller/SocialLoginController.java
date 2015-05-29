@@ -1,14 +1,16 @@
 package accounts.controller;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +21,11 @@ import org.springframework.web.context.request.WebRequest;
 import user.common.User;
 import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
+import accounts.repository.UserNotFoundException;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
+
+import com.newrelic.api.agent.NewRelic;
 
 @Controller
 public class SocialLoginController {
@@ -34,11 +39,15 @@ public class SocialLoginController {
 
 	private UserService userService;
 
+	private UsersConnectionRepository usersConnectionRepository;
+
 	@Inject
 	public SocialLoginController(final SignInUtil signInUtil,
-			final UserService userService) {
+			final UserService userService,
+			final UsersConnectionRepository usersConnectionRepository) {
 		this.signInUtil = signInUtil;
 		this.userService = userService;
+		this.usersConnectionRepository = usersConnectionRepository;
 	}
 
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)
@@ -49,7 +58,7 @@ public class SocialLoginController {
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String signup(HttpServletRequest request, WebRequest webRequest) {
 
-		logger.info("Signin with social account");
+		logger.info("Signup with social account");
 
 		Connection<?> connection = providerSignInUtils
 				.getConnectionFromSession(webRequest);
@@ -64,19 +73,51 @@ public class SocialLoginController {
 		String firstName = userProfile.getFirstName();
 		String lastName = userProfile.getLastName();
 
-		Optional<User> user = userService.getUserBySocialId(connection
-				.createData().getProviderId(), connection.createData()
-				.getProviderUserId());
+		// get user ids from this connection
+		List<String> userIds = usersConnectionRepository
+				.findUserIdsWithConnection(connection);
 
-		if (user.isPresent()) {
-			signInUtil.signIn(user.get());
+		User user;
+		try {
+			// more than one user found!?
+			if (userIds != null && !userIds.isEmpty() && userIds.size() > 1) {
+				// TODO: Error
 
-			providerSignInUtils.doPostSignUp(user.get().getUsername(),
-					webRequest);
+			} else if (userIds != null && !userIds.isEmpty()) {
+				user = userService.getUser(Long.valueOf(userIds.get(0)));
+				// social account exists and user exists
+				// just sigin
+				signInUtil.signIn(user);
 
-			return "redirect:/resume";
+				providerSignInUtils
+						.doPostSignUp(user.getUsername(), webRequest);
+
+				// return "redirect:/resume";
+				return "redirect:"
+						+ (String) request.getSession(false).getAttribute(
+								SocialSessionEnum.SOCIAL_REDIRECT_URL.name());
+			}
+		} catch (NumberFormatException e) {
+			// should never happen
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+
+		} catch (UserNotFoundException e) {
+			// do nothing here, creates account later
+		}
+
+		// social account information is not present but user already exists
+		if (email != null && !email.isEmpty() && userService.userExists(email)) {
+
+			// TODO: add error message
+			// error: redirect to login, he must be logged in to connect the
+			// accounts
+			return "redirect:/login";
 
 		} else {
+			// user doesn't exist, social account information not present
+
+			// create user
 			String userName = email != null && !email.isEmpty() ? email
 					: generateName(userProfile);
 			User newUser = userService.createUser(
@@ -86,6 +127,10 @@ public class SocialLoginController {
 					lastName,
 					(Long) request.getSession(false).getAttribute(
 							SocialSessionEnum.SOCIAL_USER_ID.name()));
+
+			// save social account information
+			// usersConnectionRepository.createConnectionRepository(
+			// newUser.getUserId().toString()).addConnection(connection);
 
 			signInUtil.signIn(newUser);
 

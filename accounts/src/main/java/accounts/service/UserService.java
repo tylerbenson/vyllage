@@ -97,18 +97,21 @@ public class UserService {
 		return this.userRepository.loadUserByUsername(username);
 	}
 
-	public Optional<User> getUserBySocialId(String providerId,
-			String providerUserId) {
-		Optional<User> user = Optional.empty();
-
-		try {
-			user = Optional.of(this.getUser(socialAccountRepository.getUserId(
-					providerId, providerUserId)));
-		} catch (UserNotFoundException e) {
-			// don't care, it means he has no account created yet.
-		}
-		return user;
-	}
+	// public Optional<User> getUserBySocialId(String providerId,
+	// String providerUserId) {
+	// Optional<User> user = Optional.empty();
+	//
+	// try {
+	// Optional<Long> userId = socialAccountRepository.getUserId(
+	// providerId, providerUserId);
+	// user = userId.isPresent() ? Optional.ofNullable(this.getUser(userId
+	// .get())) : Optional.empty();
+	// } catch (UserNotFoundException e) {
+	// // don't care, it means he has no account created yet.
+	// user = Optional.empty();
+	// }
+	// return user;
+	// }
 
 	public List<User> getAllUsers() {
 		return this.userRepository.getAll();
@@ -556,8 +559,9 @@ public class UserService {
 		try {
 			auditUser = this.getUser(auditUserId);
 		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// should never happen
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
 		}
 
 		// add similar organization
@@ -576,7 +580,7 @@ public class UserService {
 
 		userRepository.createUser(user);
 
-		return user;
+		return userRepository.loadUserByUsername(user.getUsername());
 	}
 
 }
