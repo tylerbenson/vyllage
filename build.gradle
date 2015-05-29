@@ -86,13 +86,8 @@ configure(javaProjects) {
     }
 
     test {
-<<<<<<< Upstream, based on origin/master
         minHeapSize = "256m"
         maxHeapSize = "512m"
-=======
-		maxHeapSize = "1024m"
-		jvmArgs "-XX:MaxPermSize=256m"
->>>>>>> 9b1adb5 Added custom social configuration, connection persistence.
         // Set PROJECT_HOME env variable to the root. This allows to register an additional
         // resource handler location and serve static resources directly from the template module during dev.
         // See ClientResourcesConfig
