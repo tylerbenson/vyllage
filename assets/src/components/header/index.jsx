@@ -1,6 +1,22 @@
 var React = require('react');
+var PubSub = require('pubsub-js');
 
 var HeaderContainer = React.createClass({
+  getInitialState: function () {
+    return {
+      guest: false
+    }
+  },
+  componentDidMount: function () {
+    PubSub.subscribe('GuestViewer', function (id, data) {
+      this.setState({
+        guest: data
+      });
+    }.bind(this))
+  },
+  componentWillUnmount: function () {
+    PubSub.unsubscribe('GuestViewer');
+  },
   render: function() {
     var name = this.props.name || 'user';
     var title = this.props.title;
@@ -17,14 +33,14 @@ var HeaderContainer = React.createClass({
               <li className="dropdown-trigger user">
                 <a><i className="avatar ion-person"></i><span className="name">{name?name:'User'}</span><i className="caret"></i></a>
                 <ul className="dropdown-list">
-                  <li><a href='/resume'>
+                  {!this.state.guest ? <li><a href='/resume'>
                     <i className="ion-document"></i>
                     Resume
-                  </a></li>
-                  <li><a href='/resume/ask-advice'>
+                  </a></li>: null}
+                  {!this.state.guest ? <li><a href='/resume/ask-advice'>
                     <i className="ion-person-stalker"></i>
                     Ask Advice
-                  </a></li>
+                  </a></li>: null}
                   <li><a href='/logout'>
                     <i className="ion-log-out"></i>
                     Sign out
