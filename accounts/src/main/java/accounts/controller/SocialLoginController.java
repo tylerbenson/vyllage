@@ -1,16 +1,14 @@
 package accounts.controller;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
-import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +19,8 @@ import org.springframework.web.context.request.WebRequest;
 import user.common.User;
 import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
-import accounts.repository.UserNotFoundException;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
-
-import com.newrelic.api.agent.NewRelic;
 
 @Controller
 public class SocialLoginController {
@@ -39,15 +34,11 @@ public class SocialLoginController {
 
 	private UserService userService;
 
-	private UsersConnectionRepository usersConnectionRepository;
-
 	@Inject
 	public SocialLoginController(final SignInUtil signInUtil,
-			final UserService userService,
-			final UsersConnectionRepository usersConnectionRepository) {
+			final UserService userService) {
 		this.signInUtil = signInUtil;
 		this.userService = userService;
-		this.usersConnectionRepository = usersConnectionRepository;
 	}
 
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)
@@ -73,41 +64,13 @@ public class SocialLoginController {
 		String firstName = userProfile.getFirstName();
 		String lastName = userProfile.getLastName();
 
-		// get user ids from this connection
-		List<String> userIds = usersConnectionRepository
-				.findUserIdsWithConnection(connection);
-
-		User user;
-		try {
-			// more than one user found!?
-			if (userIds != null && !userIds.isEmpty() && userIds.size() > 1) {
-				// TODO: Error
-
-			} else if (userIds != null && !userIds.isEmpty()) {
-				user = userService.getUser(Long.valueOf(userIds.get(0)));
-				// social account exists and user exists
-				// just sigin
-				signInUtil.signIn(user);
-
-				providerSignInUtils
-						.doPostSignUp(user.getUsername(), webRequest);
-
-				// return "redirect:/resume";
-				return "redirect:"
-						+ (String) request.getSession(false).getAttribute(
-								SocialSessionEnum.SOCIAL_REDIRECT_URL.name());
-			}
-		} catch (NumberFormatException e) {
-			// should never happen
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-
-		} catch (UserNotFoundException e) {
-			// do nothing here, creates account later
-		}
+		// Note, if the social account information is present then we won't
+		// reach this place, thus that case isn't necessary.
 
 		// social account information is not present but user already exists
-		if (email != null && !email.isEmpty() && userService.userExists(email)) {
+		// TODO: generateName is only useful if either user name or email are
+		// present on the userProfile
+		if (userService.userExists(generateName(userProfile))) {
 
 			// TODO: add error message
 			// error: redirect to login, he must be logged in to connect the
@@ -127,13 +90,10 @@ public class SocialLoginController {
 					lastName,
 					(Long) request.getSession(false).getAttribute(
 							SocialSessionEnum.SOCIAL_USER_ID.name()));
-
-			// save social account information
-			// usersConnectionRepository.createConnectionRepository(
-			// newUser.getUserId().toString()).addConnection(connection);
-
+			// login
 			signInUtil.signIn(newUser);
 
+			// saves social account information
 			providerSignInUtils.doPostSignUp(userName, webRequest);
 
 			return "redirect:"
@@ -160,8 +120,11 @@ public class SocialLoginController {
 			return userProfile.getUsername();
 
 		else
-			// TODO: Add numbers or something
-			return userProfile.getFirstName() + "-" + userProfile.getLastName();
+			// TODO: Add numbers based on the characters or something to make it
+			// return the same sequence
+			return userProfile.getFirstName() + "-" + userProfile.getLastName()
+					+ "." + LocalDateTime.now().getMonthValue() + "/"
+					+ LocalDateTime.now().getYear();
 	}
 
 	@RequestMapping(value = "/signin", method = RequestMethod.GET)
