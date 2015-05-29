@@ -80,4 +80,14 @@ public class IndexController {
 	public @ResponseBody String status() {
 		return "OK";
 	}
+
+	@RequestMapping(value = "/status-aws", produces = "text/plain")
+	public @ResponseBody String statusAWS() {
+		return "OK";
+	}
+
+	@RequestMapping(value = "/status-nr", produces = "text/plain")
+	public @ResponseBody String statusNR() {
+		return "OK";
+	}
 }
