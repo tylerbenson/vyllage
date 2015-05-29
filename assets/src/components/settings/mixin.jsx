@@ -18,7 +18,6 @@ module.exports = {
         privacy: 'private'
       };
     }
-    console.log(setting);
     actions.changeSetting(setting);
   },
   saveHandler: function (e) {
