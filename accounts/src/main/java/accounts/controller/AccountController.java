@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -44,6 +45,7 @@ import accounts.model.account.ChangePasswordForm;
 import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
 import accounts.repository.UserNotFoundException;
+import accounts.service.AccountSettingsService;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
 import accounts.service.utilities.TokenHelper;
@@ -61,25 +63,36 @@ public class AccountController {
 
 	private static final int limitForEmptyFilter = 5;
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(AccountController.class
 			.getName());
 
-	@Autowired
-	private Environment env;
+	private final Environment environment;
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
-	@Autowired
-	private DocumentLinkService documentLinkService;
+	private final DocumentLinkService documentLinkService;
 
-	@Autowired
-	private ObjectMapper mapper;
+	private final AccountSettingsService accountSettingsService;
+
+	private final ObjectMapper mapper;
 
 	@Autowired
 	@Qualifier(value = "accounts.emailBuilder")
 	private EmailBuilder emailBuilder;
+
+	@Inject
+	public AccountController(final Environment environment,
+			final UserService userService,
+			final DocumentLinkService documentLinkService,
+			final AccountSettingsService accountSettingsService,
+			final ObjectMapper mapper) {
+		super();
+		this.environment = environment;
+		this.userService = userService;
+		this.documentLinkService = documentLinkService;
+		this.accountSettingsService = accountSettingsService;
+		this.mapper = mapper;
+	}
 
 	@ModelAttribute("userInfo")
 	public AccountContact userInfo(HttpServletRequest request,
@@ -89,7 +102,7 @@ public class AccountController {
 		}
 
 		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(userService
+				.getAccountContactForUsers(accountSettingsService
 						.getAccountSettings(Arrays.asList(user.getUserId())));
 
 		if (contactDataForUsers.isEmpty()) {
@@ -272,13 +285,14 @@ public class AccountController {
 			String userName) throws EmailException {
 
 		String txt = "http://"
-				+ env.getProperty("vyllage.domain", "www.vyllage.com")
+				+ environment.getProperty("vyllage.domain", "www.vyllage.com")
 				+ "/account/reset-password-change/";
 
 		emailBuilder
-				.from(env.getProperty("email.from", "no-reply@vyllage.com"))
+				.from(environment.getProperty("email.from",
+						"no-reply@vyllage.com"))
 				.fromUserName(
-						env.getProperty("email.from.userName",
+						environment.getProperty("email.from.userName",
 								"Chief of Vyllage")).subject("Reset Password")
 				.to(email).templateName("email-change-password")
 				.setNoHtmlMessage(txt)
@@ -298,7 +312,7 @@ public class AccountController {
 	public @ResponseBody List<AccountContact> getContactInformation(
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {
 
-		return userService.getAccountContactForUsers(userService
+		return userService.getAccountContactForUsers(accountSettingsService
 				.getAccountSettings(userIds));
 	}
 

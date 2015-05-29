@@ -22,7 +22,7 @@ insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, '
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'address', 'Avenida Siempreviva 123', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'organization', 'Vyllage', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'role', 'ADMIN', 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'email', 'user@mail.com', 'private');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'email', 'user@vyllage.com', 'public');
 
 
 --create table if not exists ACCOUNTS.user_credentials(

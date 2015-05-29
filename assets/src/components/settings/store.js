@@ -68,7 +68,7 @@ module.exports = Reflux.createStore({
         break;
       case 'phoneNumber':
         setting.errorMessage = (validator.isNumeric(setting.value) &&
-                               setting.value.length === 10) ?
+                               (setting.value.length === 10)) ?
                                   null: "Invalid Phone Number";
         break;
       case 'twitter':
