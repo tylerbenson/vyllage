@@ -43,6 +43,7 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 
 		ConnectController connectController = new ConnectController(
 				connectionFactoryLocator, connectionRepository);
+		connectController.setViewPath("/");
 		// connectController.addInterceptor(new
 		// PostToWallAfterConnectInterceptor());
 		// connectController.addInterceptor(new TweetAfterConnectInterceptor());
