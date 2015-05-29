@@ -18,6 +18,7 @@ var Profile = React.createClass({
     var addressSetting = filter(this.props.settings, {name: 'address'})[0] || {value: ''} ;
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {value: ''};
     var graduationDateSetting = filter(this.props.settings, {name: 'graduationDate'})[0] || {value: ''};
+
     if (settings.length > 0) {
       return (
         <div className='content'>
@@ -87,8 +88,7 @@ var Profile = React.createClass({
               ref='phoneNumber'
               type='text'
               defaultValue={phoneNumberSetting.value?phoneFormatter.format(phoneNumberSetting.value, "(NNN) NNN-NNNN"):''}
-              onChange={this.changeHandler.bind(this, 'phoneNumber')}
-            />
+              onChange={this.changeHandler.bind(this, 'phoneNumber')} />
             <p className='error'>{phoneNumberSetting.errorMessage}</p>
             <Buttons save={this.saveHandler} cancel={this.cancelHandler.bind(this, 'profile')} />
           </form>
