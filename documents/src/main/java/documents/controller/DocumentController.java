@@ -2,6 +2,7 @@ package documents.controller;
 
 import java.nio.file.AccessDeniedException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import documents.model.Document;
+import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 
 @Controller
@@ -67,6 +69,11 @@ public class DocumentController {
 
 		Document documentByUser = documentService.getDocumentByUser(userId);
 
+		try {
+			documentService.getDocumentSections(documentByUser.getDocumentId());
+		} catch (ElementNotFoundException e) {
+			return Collections.emptyList();
+		}
 		// TODO: currently the user only has one document, this might change in
 		// the future but for now we return the document id the user has
 		return Arrays.asList(documentByUser.getDocumentId());
