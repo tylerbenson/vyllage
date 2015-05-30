@@ -4,10 +4,16 @@ var resumeStore = require('../resume/store');
 
 var HeaderContainer = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
+  componentDidMount: function () {
+    var path = window.location.href;
+    var re = new RegExp(/\/resume\/[0-9]+$/)
+    this.isResumePage = re.test(path);
+  },
   render: function() {
     var name = this.props.name || 'user';
     var title = this.props.title;
     var owner = this.state.resume.header.owner;
+    var showLink = owner || !this.isResumePage;
     return (
         <div className="content">
           <div className="logo">
@@ -21,11 +27,11 @@ var HeaderContainer = React.createClass({
               <li className="dropdown-trigger user">
                 <a><i className="avatar ion-person"></i><span className="name">{name?name:'User'}</span><i className="caret"></i></a>
                 <ul className="dropdown-list">
-                  {owner ? <li><a href='/resume'>
+                  {showLink ? <li><a href='/resume'>
                     <i className="ion-document"></i>
                     Resume
                   </a></li>: null}
-                  {owner ? <li><a href='/resume/get-feedback'>
+                  {showLink ? <li><a href='/resume/get-feedback'>
                     <i className="ion-person-stalker"></i>
                     Get Feedback
                   </a></li>: null}
