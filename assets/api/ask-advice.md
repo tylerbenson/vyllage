@@ -1,5 +1,5 @@
 # Endpoint for loading the request advice form
-## GET /resume/ask-advice
+## GET /resume/get-feedback
 + Parameters
   + documentId (string, `1`) - The id of the document.
 + Response 200 (text/html) - if the document belongs to the current user
@@ -7,7 +7,7 @@
 + Response 403 - if the document does not belong to the current user
 
 # Endpoint for submitting the request advice form
-## POST /resume/ask-advice
+## POST /resume/get-feedback
 + Parameters
   + documentId (string, `1`) - The id of the document.
 + Request (application/json)
