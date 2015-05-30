@@ -1,5 +1,7 @@
 package documents.repository;
 
+import java.io.IOException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -94,7 +96,8 @@ public class DocumentSectionRepositoryTest {
 		Long sectionId = savedDocumentSection.getSectionId();
 		dsRepository.delete(sectionId);
 
-		Assert.assertFalse(dsRepository.exists(sectionId));
+		Assert.assertFalse(dsRepository.exists(documentSection.getDocumentId(),
+				sectionId));
 
 	}
 

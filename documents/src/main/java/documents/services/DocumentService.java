@@ -1,5 +1,6 @@
 package documents.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SuggestionRepository;
-import documents.utilities.FindDuplicates;
+import documents.utilities.OrderSectionValidator;
 
 /**
  * This service takes care of saving, retrieving and manipulating documents.
@@ -53,6 +54,9 @@ public class DocumentService {
 	@Autowired
 	private AccountService accountService;
 
+	@Autowired
+	private OrderSectionValidator orderSectionValidator;
+
 	public Document saveDocument(Document document) {
 		logger.info("Saving document " + document);
 		return documentRepository.save(document);
@@ -64,20 +68,29 @@ public class DocumentService {
 	 * 
 	 * @param body
 	 * @return the saved document
-	 * @throws
+	 * @throws ElementNotFoundException
 	 */
-	public DocumentSection saveDocumentSection(DocumentSection documentSection) {
+	public DocumentSection saveDocumentSection(DocumentSection documentSection)
+			throws ElementNotFoundException {
 
 		logger.info(documentSection.toString());
 		DocumentSection savedSection = null;
 
-		// if a section position's has not been set by the client we set the
+		// if a section position has not been set by the client we set the
 		// section as the first one.
-		if (documentSection.getSectionPosition() == null) {
-			documentSection.setSectionPosition(1L);
-			try {
-				List<DocumentSection> documentSections = documentSectionRepository
-						.getDocumentSections(documentSection.getDocumentId());
+		documentSection
+				.setSectionPosition(documentSection.getSectionPosition() == null
+						|| documentSection.getSectionPosition() <= 0 ? 1L
+						: documentSection.getSectionPosition());
+
+		try {
+			List<DocumentSection> documentSections = documentSectionRepository
+					.getDocumentSections(documentSection.getDocumentId());
+
+			// sort if the section does not exist.
+			if (documentSections.stream().noneMatch(
+					ds -> ds.getSectionId().equals(
+							documentSection.getSectionId()))) {
 
 				documentSections.stream().forEachOrdered(
 						s -> logger.info("Section " + s.getSectionId() + " P: "
@@ -100,14 +113,14 @@ public class DocumentService {
 				documentSections.stream().forEachOrdered(
 						s -> logger.info("Section " + s.getSectionId() + " P: "
 								+ s.getSectionPosition()));
-
-			} catch (ElementNotFoundException e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
+				return savedSection;
 			}
-		} else {
-			savedSection = documentSectionRepository.save(documentSection);
+
+		} catch (ElementNotFoundException e) {
+			// do nothing just save normally
 		}
+
+		savedSection = documentSectionRepository.save(documentSection);
 
 		return savedSection;
 
@@ -133,18 +146,6 @@ public class DocumentService {
 	 * @return
 	 * @throws ElementNotFoundException
 	 */
-	public List<DocumentSection> getDocumentSections(Document document)
-			throws ElementNotFoundException {
-		return getDocumentSections(document.getDocumentId());
-	}
-
-	/**
-	 * Retrieves all the sections related to a Document.
-	 * 
-	 * @param documentId
-	 * @return
-	 * @throws ElementNotFoundException
-	 */
 	public List<DocumentSection> getDocumentSections(Long documentId)
 			throws ElementNotFoundException {
 		return documentSectionRepository.getDocumentSections(documentId);
@@ -155,8 +156,24 @@ public class DocumentService {
 		return documentRepository.get(documentId);
 	}
 
-	public void deleteSection(Long sectionId) {
+	public void deleteSection(Long documentId, Long sectionId)
+			throws ElementNotFoundException {
+
+		if (!documentSectionRepository.exists(documentId, sectionId)) {
+			ElementNotFoundException e = new ElementNotFoundException(
+					"Section with id '" + sectionId + "' could not be found.");
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			throw e;
+		}
+
 		documentSectionRepository.delete(sectionId);
+	}
+
+	public boolean sectionExists(DocumentSection documentSection) {
+		return documentSectionRepository
+				.exists(documentSection.getDocumentId(),
+						documentSection.getSectionId());
 	}
 
 	/**
@@ -239,56 +256,50 @@ public class DocumentService {
 	 * 
 	 * @param documentId
 	 * @param documentSectionIds
+	 * @throws ElementNotFoundException
 	 */
 	public void orderDocumentSections(Long documentId,
-			List<Long> documentSectionIds) {
+			List<Long> documentSectionIds) throws ElementNotFoundException {
 
-		if (documentSectionIds == null || documentSectionIds.isEmpty())
-			throw new IllegalArgumentException(
-					"The amount of section ids does not match the number of existing sections in the database.");
+		orderSectionValidator.checkNullOrEmptyParameters(documentId,
+				documentSectionIds);
 
 		// finding duplicates
-		FindDuplicates finder = new FindDuplicates();
-		if (!finder.findDuplicates(documentSectionIds).isEmpty()) {
-			throw new IllegalArgumentException("Duplicate IDs found.");
-		}
+		orderSectionValidator.checkDuplicateSectionIds(documentSectionIds);
+
+		List<DocumentSection> documentSections = new ArrayList<>();
 
 		try {
-			List<DocumentSection> documentSections = documentSectionRepository
+			documentSections = documentSectionRepository
 					.getDocumentSections(documentId);
-
-			if (documentSectionIds.size() != documentSections.size())
-				throw new IllegalArgumentException(
-						"The amount of section ids does not match the number of existing sections in the database.");
-
-			if (!documentSections.stream().map(ds -> ds.getSectionId())
-					.collect(Collectors.toList())
-					.containsAll(documentSectionIds))
-				throw new IllegalArgumentException(
-						"The sections ids do not match the existing sections in the database.");
-
-			documentSections.stream().forEachOrdered(
-					s -> logger.info("Section " + s.getSectionId()
-							+ " Position: " + s.getSectionPosition()));
-
-			// set position according to the position of the id in the array.
-			// +1 because it starts at 0.
-			documentSections.stream().forEach(
-					ds -> ds.setSectionPosition((long) documentSectionIds
-							.indexOf(ds.getSectionId()) + 1));
-
-			logger.info("--------");
-			documentSections.stream().forEachOrdered(
-					s -> logger.info("Section " + s.getSectionId()
-							+ " Position: " + s.getSectionPosition()));
-
-			documentSections.stream().forEachOrdered(
-					s -> documentSectionRepository.save(s));
 
 		} catch (ElementNotFoundException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
+			throw e;
 		}
+
+		orderSectionValidator.compareExistingIdsWithRequestedIds(
+				documentSectionIds, documentSections);
+
+		documentSections.stream().forEachOrdered(
+				s -> logger.info("Section " + s.getSectionId() + " Position: "
+						+ s.getSectionPosition()));
+
+		// set position according to the position of the id in the array.
+		// +1 because it starts at 0.
+		documentSections.stream().forEach(
+				ds -> ds.setSectionPosition((long) documentSectionIds
+						.indexOf(ds.getSectionId()) + 1));
+
+		logger.info("--------");
+		documentSections.stream().forEachOrdered(
+				s -> logger.info("Section " + s.getSectionId() + " Position: "
+						+ s.getSectionPosition()));
+
+		documentSections.stream().forEachOrdered(
+				s -> documentSectionRepository.save(s));
+
 	}
 
 }

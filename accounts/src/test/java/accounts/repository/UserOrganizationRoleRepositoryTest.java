@@ -17,6 +17,7 @@ import accounts.Application;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+// @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserOrganizationRoleRepositoryTest {
 
 	@Autowired
@@ -24,7 +25,7 @@ public class UserOrganizationRoleRepositoryTest {
 
 	@Test
 	public void createUserOrganizationRoleTest() {
-		Long userId = 0L;
+		Long userId = 3L;
 		Long organizationId = 1L;
 		String staff = "STAFF";
 
@@ -47,8 +48,8 @@ public class UserOrganizationRoleRepositoryTest {
 
 	@Test
 	public void deleteUserOrganizationRoleTest() {
-		Long userId = 0L;
-		Long organizationId = 1L;
+		Long userId = 3L;
+		Long organizationId = 2L;
 		String alumni = "ALUMNI";
 
 		UserOrganizationRole role = new UserOrganizationRole(userId,

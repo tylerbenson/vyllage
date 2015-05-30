@@ -32,6 +32,7 @@ import accounts.repository.UserOrganizationRoleRepository;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+// @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class LoginTest {
 
 	@Autowired
@@ -42,7 +43,7 @@ public class LoginTest {
 
 	@Test
 	public void userExistsTest() {
-		String username = "email";
+		String username = "mario@toadstool.com";
 		UserDetails loadUserByUsername = repository
 				.loadUserByUsername(username);
 

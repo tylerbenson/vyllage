@@ -7,20 +7,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import user.common.User;
 import documents.controller.ResumeController;
+import documents.model.AccountContact;
 import documents.model.AccountNames;
+import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
+import documents.services.NotificationService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ResumeControllerTest {
@@ -57,6 +67,9 @@ public class ResumeControllerTest {
 
 	@Mock
 	private AccountService accountService;
+
+	@Mock
+	private NotificationService notificationService;
 
 	// resume/0/section/124
 	@Test
@@ -142,18 +155,50 @@ public class ResumeControllerTest {
 
 	}
 
-	// resume/0/header
-	// once we retrieve information for this from the DB we can create this
-	// test.
-	// @Test
-	// public void getHeaderFromResumeTest() throws ElementNotFoundException {
-	// ObjectMapper mapper = Mockito.mock(ObjectMapper.class);
-	//
-	// Mockito.when(mapper.readValue(Mockito.any(JsonParser.class),
-	// DocumentHeader.class)).thenReturn(value);
-	//
-	// given().standaloneSetup(controller).when().get("/resume/0/header/")
-	// .then().statusCode(200).body("firstName", equalTo("Nathan"));
+	@Test
+	public void getCommentsForSectionEmptyComments() {
 
-	// }
+		Long documentId = 1L;
+
+		Long sectionId = 123L;
+
+		Mockito.when(
+				documentService.getCommentsForSection(Mockito.any(),
+						Mockito.anyLong()))
+				.thenReturn(new ArrayList<Comment>());
+
+		given().standaloneSetup(controller)
+				.when()
+				.get("/resume/" + documentId + "/section/" + sectionId
+						+ "/comment").then().statusCode(200).and().assertThat()
+				.body(Matchers.equalTo("[]"));
+	}
+
+	@Test
+	public void getCommentsForSection() {
+
+		Long documentId = 1L;
+
+		Long sectionId = 123L;
+
+		Mockito.when(
+				documentService.getCommentsForSection(Mockito.any(),
+						Mockito.anyLong())).thenReturn(comments(sectionId));
+
+		given().standaloneSetup(controller)
+				.when()
+				.get("/resume/" + documentId + "/section/" + sectionId
+						+ "/comment").then().statusCode(200)
+				.body("[0].sectionId", equalTo(123));
+	}
+
+	private List<Comment> comments(Long sectionId) {
+		Comment comment = new Comment();
+		comment.setUserId(0L);
+		comment.setSectionId(sectionId);
+		comment.setCommentText("test");
+
+		return Arrays.asList(comment);
+	}
+
 }

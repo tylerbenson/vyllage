@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import accounts.model.CSRFToken;
+import accounts.repository.ElementNotFoundException;
 
 @Service("accounts.DocumentService")
 public class DocumentService {
@@ -44,7 +45,7 @@ public class DocumentService {
 			CSRFToken token) {
 		assert userIds != null && !userIds.isEmpty();
 
-		HttpEntity<Object> entity = assembleHeader(request, userIds, token);
+		HttpEntity<Object> entity = createHeader(request, token);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -59,8 +60,50 @@ public class DocumentService {
 
 	}
 
-	protected HttpEntity<Object> assembleHeader(HttpServletRequest request,
-			List<Long> userIds, CSRFToken token) {
+	/**
+	 * Returns the user document Id.
+	 * 
+	 * @param request
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws ElementNotFoundException
+	 */
+	public Long getUserDocumentId(HttpServletRequest request, Long userId)
+			throws ElementNotFoundException {
+
+		HttpEntity<Object> entity = createHeader(request);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http").port(DOCUMENTS_PORT).host(DOCUMENTS_HOST)
+				.path("/document/user").queryParam("userId", userId);
+
+		@SuppressWarnings("unchecked")
+		List<Integer> responseBody = restTemplate.exchange(
+				builder.build().toUriString(), HttpMethod.GET, entity,
+				List.class).getBody();
+
+		if (responseBody.isEmpty())
+			throw new ElementNotFoundException(
+					"No documents found for user with id '" + userId + "'");
+
+		// TODO: currently the user only has one document, this might change in
+		// the future but for now we return the first document id he has
+		return new Long(responseBody.get(0));
+	}
+
+	protected HttpEntity<Object> createHeader(HttpServletRequest request) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Cookie", request.getHeader("Cookie"));
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
+		return entity;
+	}
+
+	protected HttpEntity<Object> createHeader(HttpServletRequest request,
+			CSRFToken token) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Cookie", request.getHeader("Cookie"));
 		headers.set("X-CSRF-TOKEN", token.getValue());

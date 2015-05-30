@@ -16,7 +16,19 @@ public class FindDuplicatesTest {
 		list.add(52L);
 		list.add(52L);
 
-		Assert.assertTrue(!finder.findDuplicates(list).isEmpty());
+		Assert.assertFalse(finder.findDuplicates(list).isEmpty());
+
+	}
+
+	@Test
+	public void findsDuplicatesStringsTest() {
+		FindDuplicates finder = new FindDuplicates();
+		List<String> list = new ArrayList<>();
+		list.add("aaa");
+		list.add("aaa");
+		list.add("bbb");
+
+		Assert.assertFalse(finder.findDuplicates(list).isEmpty());
 
 	}
 

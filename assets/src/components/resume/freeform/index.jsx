@@ -88,7 +88,7 @@ var Freeform = React.createClass({
 
     return (
       <div className={classes} {...this.dropTargetFor('section')}>
-        <MoveButton {...this.dragSourceFor('section')} />
+        { this.props.owner ? <MoveButton {...this.dragSourceFor('section')} />: null }
         <div className='header'>
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }

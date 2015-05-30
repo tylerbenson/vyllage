@@ -18,7 +18,7 @@ npm run httpd &
 
 or
 
-To run development server with optimizations and mock api 
+To run development server with optimizations
 ```
 cd assets
 npm install

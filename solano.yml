@@ -1,0 +1,21 @@
+hooks:
+  pre: npm install
+
+nodejs:
+  version: '0.12.4'
+
+java:
+  java_version: java-8-oracle
+  gradle_version: '2.4'
+
+tests:
+  - npm test
+  - type: junit
+    command: gradle test
+
+cache:
+  key_paths:     # Define the files Solano will use to determine when to rebuild your cache
+  - build.gradle
+  save_paths:    # Define the paths to save into the cache
+  - .gradle      # Relative to the repo
+  - HOME/.gradle

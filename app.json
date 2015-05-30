@@ -1,0 +1,24 @@
+{
+  "name":"vyllage",
+  "scripts":{},
+  "env":{
+    "BUILDPACK_URL":{
+      "required":true
+    },
+    "GRADLE_SKIP_NPM":{
+      "required":true
+    },
+    "JAVA_OPTS":{
+      "required":true
+    },
+    "NEW_RELIC_APP_NAME":{
+      "required":true
+    },
+    "NPM_CONFIG_PRODUCTION":{
+      "required":true
+    },
+    "VYLLAGE_DOMAIN":{
+      "required":true
+    }
+  }
+}

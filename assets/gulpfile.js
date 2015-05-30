@@ -17,12 +17,13 @@ var watch = require('gulp-watch');
 var webpack = require('webpack');
 var inlineCss = require('gulp-inline-css');
 var replace = require('gulp-replace');
-
+var shrinkwrap = require('gulp-shrinkwrap');
 // var argv = require('minimist')(process.argv.slice(2));
 
-gulp.task('clean', function () {
+gulp.task('clean', function (cb) {
   del(['./public', './build'], function (err) {
     console.log('cleaned build directories')
+    cb();
   })
 });
 
@@ -30,6 +31,12 @@ gulp.task('bower', function () {
   return bower({
     'cmd': 'update'
   })
+});
+
+gulp.task('shrinkwrap', function () {
+  return gulp.src('package.json')
+    .pipe(shrinkwrap())
+    .pipe(gulp.dest('./'));
 });
 
 gulp.task('inline', ['styles'], function () {
@@ -186,28 +193,19 @@ gulp.task('watch', ['build'], function () {
 });
 
 gulp.task('build', function () {
-  runSequence('clean', 'bower', ['react', 'copy', 'styles', 'inline', 'prettify-html']);
+  runSequence('clean', 'bower', 'shrinkwrap', ['react', 'copy', 'styles', 'inline', 'prettify-html']);
 });
 
 // dev-watch excludes the react/jsx compilation, allowing this to be done by the server.
 gulp.task('dev-watch', ['dev-build'], function () {
-  gulp.watch(['src/**/*.scss'], function () {
-    runSequence('styles');
-  });
-  gulp.watch(['src/email/*.html'], function () {
-    runSequence('inline');
-  });
-  gulp.watch(['src/**/*.html', 'src/images/*'], function () {
-    runSequence('prettify-html', 'copy');
-  });
-  gulp.watch(['./*.js', './*.json'], function () {
-    runSequence('prettify-js');
-  });
+  gulp.watch(['src/**/*.scss'], ['styles']);
+  gulp.watch(['src/email/*.html'], ['inline']);
+  gulp.watch(['src/**/*.html', 'src/images/*'], ['copy']);
 });
 
 // dev-build excludes the react/jsx compilation, allowing this to be done by the server.
 gulp.task('dev-build', function () {
-  runSequence('clean', 'bower', 'dev-react', 'styles', 'inline');
+  runSequence(['dev-react', 'copy', 'styles', 'inline']);
 });
 
 gulp.task('default', ['watch']);

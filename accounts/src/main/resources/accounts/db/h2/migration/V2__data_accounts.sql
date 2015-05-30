@@ -3,8 +3,8 @@
 --  password varchar_ignorecase(60) not null,
 --  enabled boolean not null);
 --NOTE: password == '$2a$10$6REiiQD8i4FTE4D/X3.chOnlgxghwWMGcngksAjyQun0njGDQznxq'
-insert into ACCOUNTS.users ( user_name, first_Name, middle_name, last_name, enabled, date_created, last_modified) values ( 'email', 'Luke', 'V', 'Skywalker', true, CURRENT_DATE(), CURRENT_DATE());
-insert into ACCOUNTS.users ( user_name, enabled, date_created, last_modified ) values ( 'testuser@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE());
+insert into ACCOUNTS.users ( user_name, first_Name, middle_name, last_name, enabled, date_created, last_modified) values ( 'user@vyllage.com', 'Luke', 'V', 'Skywalker', true, CURRENT_DATE(), CURRENT_DATE());
+insert into ACCOUNTS.users ( user_name, enabled, date_created, last_modified ) values ( 'admin@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE());
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'deana@vyllage.com', 'Deana', 'Troi', true, CURRENT_DATE(), CURRENT_DATE() );
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'mario@toadstool.com', 'Mario', 'Mario', true, CURRENT_DATE(), CURRENT_DATE() );
 
@@ -22,7 +22,7 @@ insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, '
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'address', 'Avenida Siempreviva 123', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'organization', 'Vyllage', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'role', 'ADMIN', 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'email', 'email', 'private');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'email', 'user@vyllage.com', 'public');
 
 
 --create table if not exists ACCOUNTS.user_credentials(
@@ -55,8 +55,7 @@ insert into accounts.organizations ( organization_id, organization_name ) values
 --  user_id bigint not null,
 --  authority varchar(50) not null,
 --  constraint fk_group_authorities_group foreign key(group_id) references groups(id));
-insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 0, 0, 'ADMIN', CURRENT_DATE(), 0 );
-insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 0, 2, 'ADVISOR', CURRENT_DATE(), 0 );
-insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 2, 1, 'STUDENT', CURRENT_DATE(), 0 );
-insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 1, 3, 'ADMIN', CURRENT_DATE(), 0 );
-insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 2, 2, 'STAFF', CURRENT_DATE(), 0 );
+insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 0, 1, 'ADMIN', CURRENT_DATE(), 0 );
+insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 1, 0, 'STUDENT', CURRENT_DATE(), 0 );
+insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 1, 2, 'ADVISOR', CURRENT_DATE(), 0 );
+insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 2, 3, 'STAFF', CURRENT_DATE(), 0 );

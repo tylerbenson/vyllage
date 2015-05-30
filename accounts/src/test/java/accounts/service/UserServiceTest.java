@@ -31,6 +31,7 @@ import accounts.repository.UserNotFoundException;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+// @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserServiceTest {
 
 	@Autowired
@@ -120,7 +121,7 @@ public class UserServiceTest {
 	@Test
 	public void getAdvisorsWithoutFilterTest() {
 
-		User user = service.getUser("email");
+		User user = service.getUser("user@vyllage.com");
 
 		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
 				user, user.getPassword(), user.getAuthorities());
@@ -135,7 +136,7 @@ public class UserServiceTest {
 	@Test
 	public void getAdvisorsWithFilterTest() {
 
-		User user = service.getUser("email");
+		User user = service.getUser("user@vyllage.com");
 
 		Map<String, String> filters = new HashMap<>();
 
@@ -149,70 +150,6 @@ public class UserServiceTest {
 		List<User> advisors = service.getAdvisors(user, filters, 5);
 
 		Assert.assertFalse(advisors.isEmpty());
-	}
-
-	@Test
-	public void saveAccountSetting() throws ElementNotFoundException {
-		Long userId = 1L;
-		String emailUpdates = "emailUpdates";
-		String value = "NEVER";
-
-		User u = Mockito.mock(User.class);
-		AccountSetting as = new AccountSetting();
-		as.setName(emailUpdates);
-		as.setUserId(userId);
-		as.setValue(value);
-		as.setPrivacy(Privacy.PUBLIC.name());
-
-		Mockito.when(u.getUserId()).thenReturn(userId);
-
-		service.setAccountSetting(u, as);
-
-		List<AccountSetting> settings = service.getAccountSetting(u,
-				emailUpdates);
-		Assert.assertEquals(emailUpdates, settings.get(0).getName());
-		Assert.assertEquals(value, settings.get(0).getValue());
-	}
-
-	@Test
-	public void saveAccountSettingFirstName() throws UserNotFoundException,
-			ElementNotFoundException {
-		Long userId = 1L;
-		String fieldName = "firstName";
-		String value = "Demogorgon";
-
-		User u = service.getUser(userId);
-		AccountSetting as = new AccountSetting();
-		as.setName(fieldName);
-		as.setUserId(userId);
-		as.setValue(value);
-		as.setPrivacy(Privacy.PUBLIC.name());
-
-		Mockito.when(u.getUserId()).thenReturn(userId);
-
-		service.setAccountSetting(u, as);
-
-		List<AccountSetting> settings = service.getAccountSetting(u, fieldName);
-		Assert.assertEquals(fieldName, settings.get(0).getName());
-		Assert.assertEquals(value, settings.get(0).getValue());
-
-		User u2 = service.getUser(userId);
-		Assert.assertEquals(value, u2.getFirstName());
-	}
-
-	@Test(expected = DataIntegrityViolationException.class)
-	public void saveAccountSettingWrongId() {
-		Long userId = -1L;
-		AccountSetting as = new AccountSetting();
-		User u = Mockito.mock(User.class);
-
-		Mockito.when(u.getUserId()).thenReturn(userId);
-		as.setName("data-integrity");
-		as.setUserId(userId);
-		as.setValue("data-integrity");
-		as.setPrivacy(Privacy.PUBLIC.name());
-
-		service.setAccountSetting(u, as);
 	}
 
 }
