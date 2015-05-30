@@ -10,17 +10,11 @@ var Section = require('./sections');
 var Banner = require('./banner');
 var sortby = require('lodash.sortby');
 var EmptySections = require('./sections/Empty');
-var PubSub = require('pubsub-js');
 
 var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
   componentWillMount: function () {
     actions.getResume();
-  },
-  componentDidUpdate: function () {
-    if (this.state.resume.header.owner === false) {
-      PubSub.publish('GuestViewer', true)
-    }
   },
   moveSection: function (id, afterId) {
     actions.moveSection(id, afterId);

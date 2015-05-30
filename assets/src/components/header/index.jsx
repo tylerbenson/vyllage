@@ -1,25 +1,13 @@
 var React = require('react');
-var PubSub = require('pubsub-js');
+var Reflux = require('reflux');
+var resumeStore = require('../resume/store');
 
 var HeaderContainer = React.createClass({
-  getInitialState: function () {
-    return {
-      guest: false
-    }
-  },
-  componentDidMount: function () {
-    PubSub.subscribe('GuestViewer', function (id, data) {
-      this.setState({
-        guest: data
-      });
-    }.bind(this))
-  },
-  componentWillUnmount: function () {
-    PubSub.unsubscribe('GuestViewer');
-  },
+  mixins: [Reflux.connect(resumeStore, 'resume')],
   render: function() {
     var name = this.props.name || 'user';
     var title = this.props.title;
+    var owner = this.state.resume.header.owner;
     return (
         <div className="content">
           <div className="logo">
@@ -33,11 +21,11 @@ var HeaderContainer = React.createClass({
               <li className="dropdown-trigger user">
                 <a><i className="avatar ion-person"></i><span className="name">{name?name:'User'}</span><i className="caret"></i></a>
                 <ul className="dropdown-list">
-                  {!this.state.guest ? <li><a href='/resume'>
+                  {owner ? <li><a href='/resume'>
                     <i className="ion-document"></i>
                     Resume
                   </a></li>: null}
-                  {!this.state.guest ? <li><a href='/resume/ask-advice'>
+                  {owner ? <li><a href='/resume/ask-advice'>
                     <i className="ion-person-stalker"></i>
                     Ask Advice
                   </a></li>: null}
