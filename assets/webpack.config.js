@@ -5,7 +5,7 @@ var path = require('path');
 module.exports = {
   entry: {
     'resume.js': './src/resume.jsx',
-    'askAdvice.js': './src/askAdvice.jsx',
+    'getFeedback.js': './src/getFeedback.jsx',
     'settings.js': './src/settings.jsx'
   },
   output: {

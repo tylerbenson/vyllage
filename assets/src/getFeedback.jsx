@@ -1,8 +1,8 @@
 var React = require('react');
 var Header = require('./components/header');
 var Footer = require('./components/footer');
-var AskAdvice = require('./components/askAdvice');
+var GetFeedback = require('./components/getFeedback');
 require('./components/intercom');
 
 React.initializeTouchEvents(true);
-React.render(<AskAdvice />, document.getElementById('ask-advice'));
+React.render(<GetFeedback />, document.getElementById('get-feedback'));
