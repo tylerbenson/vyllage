@@ -85,7 +85,7 @@ public class AdviceRequestController {
 		return contactDataForUsers.get(0);
 	}
 
-	@RequestMapping(value = "ask-advice", method = RequestMethod.GET)
+	@RequestMapping(value = "get-feedback", method = RequestMethod.GET)
 	public String askAdvice(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
 
@@ -94,10 +94,10 @@ public class AdviceRequestController {
 			return "redirect:/";
 		}
 
-		return "askAdvice";
+		return "getFeedback";
 	}
 
-	@RequestMapping(value = "ask-advice", method = RequestMethod.POST)
+	@RequestMapping(value = "get-feedback", method = RequestMethod.POST)
 	public String askAdvice(HttpServletRequest request,
 			@RequestBody AdviceRequest adviceRequest,
 			@AuthenticationPrincipal User user)
