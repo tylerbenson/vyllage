@@ -169,14 +169,28 @@
   position: relative;
   transition: all .2s ease;
 
+  .footer {
+    transition: all .2s ease;
+  }
+
   &.dragged {
     background: rgba(0,0,0,0.1);
     opacity: 0.25;
+
+    .footer {
+      background: transparent;
+      border-color: rgba(0,0,0,0.1);
+    }
   }
 
   &.hovered {
     background: rgba($primary-color, 0.1);
     opacity: 0.75;
+
+    .footer {
+      background: transparent;
+      border-color: rgba(0,0,0,0.1);
+    }
   }
 
   & > .header {
