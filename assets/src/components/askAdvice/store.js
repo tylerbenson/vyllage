@@ -33,24 +33,6 @@ var AskAdviceStore = Reflux.createStore({
     this.message = "I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?\n\nThanks,\n" + firstName;
     this.shareableLink = null;
     this.inviteType = 'link';
-    this.isShareableOnFacebook = false;
-  },
-  onGetFacebookFeatureStatus: function(){
-    var url = urlTemplate
-              .parse(endpoints.togglz)
-              .expand({feature: 'FACEBOOK_SDK'});
-    request
-      .get(url).
-      end(function(err, res) {
-        if(res.ok) {
-          this.isShareableOnFacebook = res.text === 'true';
-          this.update();
-        }
-        else {
-          this.isShareableOnFacebook = false;
-          this.update();
-        }
-      }.bind(this));
   },
   onSetInviteType: function(type){
     this.inviteType = type;
@@ -233,7 +215,6 @@ var AskAdviceStore = Reflux.createStore({
       processing: this.processing,
       shareableLink: this.shareableLink,
       inviteType: this.inviteType,
-      isShareableOnFacebook: this.isShareableOnFacebook
     });
   },
   getInitialState: function () {
@@ -251,7 +232,6 @@ var AskAdviceStore = Reflux.createStore({
       processing: this.processing,
       shareableLink: this.shareableLink,
       inviteType: this.inviteType,
-      isShareableOnFacebook: this.isShareableOnFacebook
     }
   }
 });

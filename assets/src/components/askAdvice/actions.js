@@ -18,6 +18,5 @@ module.exports = Reflux.createActions([
   'updateSubject',
   'updateMessage',
   'getShareableLink',
-  'setInviteType',
-  'getFacebookFeatureStatus'
+  'setInviteType'
 ]);

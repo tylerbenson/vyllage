@@ -1,13 +1,11 @@
 var React = require('react');
 var Reflux = require('reflux');
 var AskAdviceStore = require('./store');
+var FeatureToggle = require('../util/FeatureToggle');
 var actions = require('./actions');
 
 var InviteOptions = React.createClass({
 	mixins: [Reflux.connect(AskAdviceStore)],
-	componentWillMount: function(){
-		actions.getFacebookFeatureStatus();
-	},
 	select: function(type, e) {
 		actions.setInviteType(type);
 	},
@@ -19,6 +17,7 @@ var InviteOptions = React.createClass({
 	},
 	render: function() {
 		return (
+			<FeatureToggle name="SHARE_RESUME">
 			<div className="banner content">
 	      <ul className="channels">
 	        <li>
@@ -31,11 +30,12 @@ var InviteOptions = React.createClass({
 	          className={(this.state.inviteType === 'form' ? 'primary active' : 'secondary') + ' flat'}
 	          ><i className="ion-email"></i> Invite Through E-mail</button>
 	        </li>
-	        {this.state.isShareableOnFacebook ?
-	        	<li ><button onClick={this.shareOnFacebook} className="secondary flat facebook"><i className="ion-social-facebook"></i> Share on Facebook</button></li>
-        	: null}
+	        <FeatureToggle name="FACEBOOK_SDK">
+		        <li ><button onClick={this.shareOnFacebook} className="secondary flat facebook"><i className="ion-social-facebook"></i> Share on Facebook</button></li>
+	        </FeatureToggle>
 	      </ul>
 	    </div>
+	    </FeatureToggle>
 		);
 	}
 });
