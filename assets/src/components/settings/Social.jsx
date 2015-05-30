@@ -5,6 +5,15 @@ var SettingsMixin = require('./mixin');
 
 var Social = React.createClass({
   mixins: [SettingsMixin],
+  linkedInHandler: function (e) {
+    var re = new RegExp(/^https?:\/\//);
+    var url = re.test(e.target.value) ? e.target.value: 'http://' + e.target.value
+    this.changeHandler('linkedIn', {
+      target: {
+        value: url
+      }
+    })
+  },
   render: function () {
     var settings = this.props.settings || [];
     // var urlSetting = filter(this.props.settings, {name: 'url'})[0] || {value: ''};
@@ -42,7 +51,7 @@ var Social = React.createClass({
               ref='linkedIn'
               type='text'
               defaultValue={linkedInSetting.value}
-              onChange={this.changeHandler.bind(this, 'linkedIn')}
+              onChange={this.linkedInHandler}
             />
             <p className='error'>{linkedInSetting.errorMessage}</p>
 
