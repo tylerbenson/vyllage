@@ -11,7 +11,7 @@ java:
 tests:
   - npm test
   - type: junit
-  	command: gradle test
+    command: gradle test
 
 cache:
   key_paths:     # Define the files Solano will use to determine when to rebuild your cache
