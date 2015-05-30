@@ -25,9 +25,9 @@ var HeaderContainer = React.createClass({
                     <i className="ion-document"></i>
                     Resume
                   </a></li>: null}
-                  {owner ? <li><a href='/resume/ask-advice'>
+                  {owner ? <li><a href='/resume/get-feedback'>
                     <i className="ion-person-stalker"></i>
-                    Ask Advice
+                    Get Feedback
                   </a></li>: null}
                   <li><a href='/logout'>
                     <i className="ion-log-out"></i>

@@ -9,7 +9,7 @@ if (headerContainer) {
  firstName = headerContainer.getAttribute('name');
 }
 
-var AskAdviceStore = Reflux.createStore({
+var GetFeedbackStore = Reflux.createStore({
   listenables: require('./actions'),
   init: function () {
     var metaHeader = document.getElementById('meta_header');
@@ -37,12 +37,12 @@ var AskAdviceStore = Reflux.createStore({
       return recipient.userId;
     })
   },
-  onPostAskAdvice: function () {
+  onPostFeedback: function () {
     if (this.users.length > 0 || this.notRegisteredUsers.length > 0) {
       this.processing = true;
       this.update();
       request
-        .post(endpoints.askAdvice)
+        .post(endpoints.getFeedback)
         .set(this.tokenHeader, this.tokenValue) 
         .send({
           csrftoken: this.tokenValue,
@@ -66,7 +66,7 @@ var AskAdviceStore = Reflux.createStore({
   }, 
   onGetSuggestions: function () {
     request
-      .get(endpoints.askAdviceSuggestions)
+      .get(endpoints.getFeedbackSuggestions)
       .set('Accept', 'application/json')
       .query({firstNameFilter: this.recipient.firstName})
       .query({lastNameFilter: this.recipient.lastName})
@@ -207,4 +207,4 @@ var AskAdviceStore = Reflux.createStore({
   }
 });
 
-module.exports = AskAdviceStore;
+module.exports = GetFeedbackStore;

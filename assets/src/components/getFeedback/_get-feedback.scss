@@ -1,4 +1,4 @@
-.ask-advice {
+.get-feedback {
   h2 {
     display: inline-block;
     font-weight: 400;
@@ -178,7 +178,7 @@
 }
 
 @media (max-width: $medium-portrait) {
-  .ask-advice {
+  .get-feedback {
     .to.content {
       .form {
         .field {
@@ -204,7 +204,7 @@
 }
 
 @media (max-width: $small-landscape) {
-  .ask-advice {
+  .get-feedback {
     .recipients.header {
       .empty {
         font-size: 0.95em;

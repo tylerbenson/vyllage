@@ -19,9 +19,9 @@ var Subheader = React.createClass({
               <i className="ion-printer"></i>
               Print
             </a>
-            <a href='/resume/ask-advice' className="button embossed">
+            <a href='/resume/get-feedback' className="button embossed">
               <i className="ion-person-stalker"></i>
-              Ask Advice
+              Get Feedback
             </a>
           </div>
         </div>

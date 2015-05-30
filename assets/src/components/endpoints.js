@@ -8,8 +8,8 @@ var endpoints = {
   resumeSection: '/resume/{documentId}/section/{sectionId}',
   resumeComments: '/resume/{documentId}/section/{sectionId}/comment',
   resumeComment: '/resume/{documentId}/section/{sectionId}/comment/{commentId}',
-  askAdvice: '/resume/ask-advice',
-  askAdviceSuggestions: '/resume/users'
+  getFeedback: '/resume/get-feedback',
+  getFeedbackSuggestions: '/resume/users'
 };
 
 module.exports = endpoints;

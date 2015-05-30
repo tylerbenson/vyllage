@@ -4,15 +4,15 @@ var To = require('./FormTo');
 var Subject = require('./FormSubject');
 var Message = require('./FormMessage');
 var Reflux = require('reflux');
-var AskAdviceStore = require('./store');
+var GetFeedbackStore = require('./store');
 var Actions = require('./actions');
 var Modal = require('../modal');
 
 var Form = React.createClass({
-  mixins: [Reflux.connect(AskAdviceStore)],
+  mixins: [Reflux.connect(GetFeedbackStore)],
   submitHandler: function (e) {
     e.preventDefault();
-    Actions.postAskAdvice();
+    Actions.postFeedback();
   },
   cancelHandler: function (e) {
     window.location = '/resume';
