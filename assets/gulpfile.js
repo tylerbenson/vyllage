@@ -20,9 +20,10 @@ var replace = require('gulp-replace');
 var shrinkwrap = require('gulp-shrinkwrap');
 // var argv = require('minimist')(process.argv.slice(2));
 
-gulp.task('clean', function () {
-  return del(['./public', './build'], function (err) {
+gulp.task('clean', function (cb) {
+  del(['./public', './build'], function (err) {
     console.log('cleaned build directories')
+    cb();
   })
 });
 
