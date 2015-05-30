@@ -11,6 +11,7 @@ var MoveButton = require('../../buttons/move');
 var { DragDropMixin } = require('react-dnd');
 var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
 var SectionFooter = require('../sections/Footer');
+var cx = require('react/lib/cx');
 
 var Organization = React.createClass({
   mixins: [DragDropMixin],
@@ -79,11 +80,18 @@ var Organization = React.createClass({
     var section = this.state.section;
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
-    var { isDragging } = this.getDragState('section');
-    var opacity = isDragging ? 0 : 1;
+    var isDragging = this.getDragState('section').isDragging;
+    var isHovering = this.getDropState('section').isHovering;
+
+    var classes = cx({
+      'dragged': isDragging,
+      'hovered': isHovering,
+      'subsection': true
+    });
+
     return (
       <div>
-        <div className ="subsection" {...this.dropTargetFor('section')} style={{opacity}}>
+        <div className={classes} {...this.dropTargetFor('section')}>
           <MoveButton {...this.dragSourceFor('section')} />
           <div className='header'>
             <div className='title'>

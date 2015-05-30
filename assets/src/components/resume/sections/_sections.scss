@@ -164,7 +164,20 @@
 .subsection {
   background: $section-background;
   border-top: darken($section-footer-background,3%) solid 1px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
   position: relative;
+  transition: all .2s ease;
+
+  &.dragged {
+    background: rgba(0,0,0,0.1);
+    opacity: 0.25;
+  }
+
+  &.hovered {
+    background: rgba($primary-color, 0.1);
+    opacity: 0.75;
+  }
 
   & > .header {
     padding: 2em 4em 0em 4em;
