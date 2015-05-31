@@ -8,9 +8,9 @@ var endpoints = {
   resumeSection: '/resume/{documentId}/section/{sectionId}',
   resumeComments: '/resume/{documentId}/section/{sectionId}/comment',
   resumeComment: '/resume/{documentId}/section/{sectionId}/comment/{commentId}',
-  askAdvice: '/resume/ask-advice',
-  askAdviceSuggestions: '/resume/users',
-  askAdviceGenerateLink: '/link/share-document',
+  getFeedback: '/resume/get-feedback',
+  getFeedbackSuggestions: '/resume/users',
+  getFeedbackGenerateLink: '/link/share-document',
   togglz: '/togglz-feature/{feature}/is-active'
 };
 

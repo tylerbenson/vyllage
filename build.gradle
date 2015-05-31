@@ -86,6 +86,8 @@ configure(javaProjects) {
     }
 
     test {
+        minHeapSize = "256m"
+        maxHeapSize = "512m"
         // Set PROJECT_HOME env variable to the root. This allows to register an additional
         // resource handler location and serve static resources directly from the template module during dev.
         // See ClientResourcesConfig
