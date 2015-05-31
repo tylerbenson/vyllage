@@ -23,6 +23,8 @@ import org.springframework.social.facebook.web.DisconnectController;
 @Configuration
 @EnableSocial
 public class CustomSocialConfiguration extends SocialConfigurerAdapter {
+	// https://github.com/spring-projects/spring-social-samples/blob/master/spring-social-showcase-sec/src/main/java/org/springframework/social/showcase/config/SocialConfig.java
+	// also SocialAutoConfigurationAdapter
 
 	@Inject
 	private DataSource dataSource;
