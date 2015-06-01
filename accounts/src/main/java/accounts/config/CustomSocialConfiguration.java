@@ -29,11 +29,16 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 	@Inject
 	private DataSource dataSource;
 
+	@Inject
+	private Environment enviroment;
+
 	@Override
 	public UsersConnectionRepository getUsersConnectionRepository(
 			ConnectionFactoryLocator connectionFactoryLocator) {
 		JdbcUsersConnectionRepository jdbcUsersConnectionRepository = new JdbcUsersConnectionRepository(
-				dataSource, connectionFactoryLocator, Encryptors.noOpText());
+				dataSource, connectionFactoryLocator, Encryptors.queryableText(
+						enviroment.getRequiredProperty("social.password"),
+						enviroment.getRequiredProperty("social.salt")));
 		jdbcUsersConnectionRepository.setTablePrefix("ACCOUNTS.");
 		return jdbcUsersConnectionRepository;
 	}
