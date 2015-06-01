@@ -12,6 +12,7 @@ var { DragDropMixin } = require('react-dnd');
 var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
 var SectionFooter = require('../sections/Footer');
 var DeleteSection = require('../Delete');
+var cx = require('react/lib/cx');
 
 var Freeform = React.createClass({
   mixins: [DragDropMixin],
@@ -76,10 +77,17 @@ var Freeform = React.createClass({
   },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
-    var { isDragging } = this.getDragState('section');
-    var opacity = isDragging ? 0 : 1;
+    var isDragging = this.getDragState('section').isDragging;
+    var isHovering = this.getDropState('section').isHovering;
+
+    var classes = cx({
+      'dragged': isDragging,
+      'hovered': isHovering,
+      'subsection': true
+    });
+
     return (
-      <div className='subsection' {...this.dropTargetFor('section')} style={{opacity}}>
+      <div className={classes} {...this.dropTargetFor('section')}>
         { this.props.owner ? <MoveButton {...this.dragSourceFor('section')} />: null }
         <div className='header'>
           {this.props.owner ? <div className="actions">
