@@ -3,6 +3,7 @@ package accounts.config;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -29,16 +30,19 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 	@Inject
 	private DataSource dataSource;
 
-	@Inject
-	private Environment enviroment;
+	@Value("${social.password:hjQb7K3Nsgv5DL6kDNeRAR}")
+	private final String SOCIAL_PASSWORD = null;
+
+	@Value("${social.salt:686a5162374b334e73677635444c366b444e65524152}")
+	private final String SOCIAL_SALT = null;
 
 	@Override
 	public UsersConnectionRepository getUsersConnectionRepository(
 			ConnectionFactoryLocator connectionFactoryLocator) {
+
 		JdbcUsersConnectionRepository jdbcUsersConnectionRepository = new JdbcUsersConnectionRepository(
 				dataSource, connectionFactoryLocator, Encryptors.queryableText(
-						enviroment.getRequiredProperty("social.password"),
-						enviroment.getRequiredProperty("social.salt")));
+						SOCIAL_PASSWORD, SOCIAL_SALT));
 		jdbcUsersConnectionRepository.setTablePrefix("ACCOUNTS.");
 		return jdbcUsersConnectionRepository;
 	}

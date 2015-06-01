@@ -6,9 +6,9 @@ create table ACCOUNTS.UserConnection (
     displayName varchar(255),
     profileUrl varchar(512),
     imageUrl varchar(512),
-    accessToken varchar(255) not null,
+    accessToken varchar(1024) not null,
     secret varchar(255),
-    refreshToken varchar(255),
+    refreshToken varchar(1024),
     expireTime bigint,
     primary key (userId, providerId, providerUserId));
     
