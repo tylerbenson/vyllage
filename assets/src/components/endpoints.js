@@ -9,7 +9,9 @@ var endpoints = {
   resumeComments: '/resume/{documentId}/section/{sectionId}/comment',
   resumeComment: '/resume/{documentId}/section/{sectionId}/comment/{commentId}',
   getFeedback: '/resume/get-feedback',
-  getFeedbackSuggestions: '/resume/users'
+  getFeedbackSuggestions: '/resume/users',
+  getFeedbackGenerateLink: '/link/share-document',
+  togglz: '/togglz-feature/{feature}/is-active'
 };
 
 module.exports = endpoints;

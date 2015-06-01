@@ -23,13 +23,26 @@
 </head>
 
 <body class='get-feedback'>
+  <div id="fb-root"></div>
   <div id='container'>
     <header id="header-container" title="Get Feedback" th:name="${accountName.firstName}"></header>
+
     <div id="get-feedback"></div>
   </div>
   <div id="footer"></div>
   <script src='javascript/base.js'></script>
   <script src='javascript/getFeedback.js'></script>
+  <script togglz:active="FACEBOOK_SDK" type="text/javascript">
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = decodeURIComponent(
+      "%2F%2Fconnect.facebook.net%2Fen_US%2Fsdk.js%23xfbml%3D1%26version%3Dv2.3%26appId%3D363427210528185");
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+  </script>
   <script togglz:active="ZOPIM_MESSAGE_CLIENT" type="text/javascript">
   window.$zopim || (function(d, s) {
     var z = $zopim = function(c) {

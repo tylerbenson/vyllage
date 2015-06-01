@@ -31,6 +31,31 @@ var GetFeedbackStore = Reflux.createStore({
     this.recipient = {firstName: "", lastName: "", email: ""};
     this.subject = "Could you provide me some feedback on my resume?";
     this.message = "I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?\n\nThanks,\n" + firstName;
+    this.shareableLink = null;
+    this.inviteType = 'form';
+  },
+  onSetInviteType: function(type){
+    this.inviteType = type;
+    this.update();
+  },
+  onGetShareableLink: function(){
+    request
+      .post(endpoints.getFeedbackGenerateLink)
+      .set(this.tokenHeader, this.tokenValue)
+      .send({
+        'documentId': null,
+        'documentType': 'resume'
+      })
+      .end(function(err, res){
+        if (res.status === 200) {
+          this.shareableLink = res.text;
+          this.update();
+        }
+        else {
+          this.shareableLink = null;
+          this.update();
+        }
+      }.bind(this));
   },
   getRecipientUsersList: function () {
     return this.users.map(function (recipient) {
@@ -43,7 +68,7 @@ var GetFeedbackStore = Reflux.createStore({
       this.update();
       request
         .post(endpoints.getFeedback)
-        .set(this.tokenHeader, this.tokenValue) 
+        .set(this.tokenHeader, this.tokenValue)
         .send({
           csrftoken: this.tokenValue,
           users: this.users,
@@ -63,7 +88,7 @@ var GetFeedbackStore = Reflux.createStore({
       this.recepientsError= true;
       this.update();
     }
-  }, 
+  },
   onGetSuggestions: function () {
     request
       .get(endpoints.getFeedbackSuggestions)
@@ -187,11 +212,13 @@ var GetFeedbackStore = Reflux.createStore({
       recipient: this.recipient,
       subject: this.subject,
       message: this.message,
-      processing: this.processing
-    })
+      processing: this.processing,
+      shareableLink: this.shareableLink,
+      inviteType: this.inviteType,
+    });
   },
   getInitialState: function () {
-    
+
     return {
       users: this.users,
       notRegisteredUsers: this.notRegisteredUsers,
@@ -202,7 +229,9 @@ var GetFeedbackStore = Reflux.createStore({
       recipient: this.recipient,
       subject: this.subject,
       message: this.message,
-      processing: this.processing
+      processing: this.processing,
+      shareableLink: this.shareableLink,
+      inviteType: this.inviteType,
     }
   }
 });

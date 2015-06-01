@@ -16,5 +16,7 @@ module.exports = Reflux.createActions([
   'closeSuggestions',
   'openSuggestions',
   'updateSubject',
-  'updateMessage'
+  'updateMessage',
+  'getShareableLink',
+  'setInviteType'
 ]);

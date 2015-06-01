@@ -7,23 +7,27 @@ import org.togglz.core.context.FeatureContext;
 
 public enum Features implements Feature {
 
+	@Label("Facebook SDK")
+	FACEBOOK_SDK,
+
 	@EnabledByDefault
 	@Label("Google Analytics")
 	GOOGLE_ANALYTICS,
 
 	@EnabledByDefault
-	@Label("New Relic")
-	NEW_RELIC,
+	@Label("Intercom")
+	INTERCOM,
 
 	@EnabledByDefault
-	@Label("Zopim Message Client")
-	ZOPIM_MESSAGE_CLIENT,
+	@Label("New Relic")
+	NEW_RELIC,
 
 	@Label("Share Resume")
 	SHARE_RESUME,
 
-	@Label("Intercom")
-	INTERCOM;
+	@EnabledByDefault
+	@Label("Zopim Message Client")
+	ZOPIM_MESSAGE_CLIENT;
 
 	public boolean isActive() {
 		return FeatureContext.getFeatureManager().isActive(this);

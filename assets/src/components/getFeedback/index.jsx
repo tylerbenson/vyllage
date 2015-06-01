@@ -8,7 +8,7 @@ var GetFeedbackStore = require('./store');
 var Actions = require('./actions');
 var Modal = require('../modal');
 
-var Form = React.createClass({
+var InviteForm = React.createClass({
   mixins: [Reflux.connect(GetFeedbackStore)],
   submitHandler: function (e) {
     e.preventDefault();
@@ -22,7 +22,7 @@ var Form = React.createClass({
       <div className="sections">
         <div className='section'>
           <div className='container'>
-            <RecipientList 
+            <RecipientList
               users={this.state.users}
               notRegisteredUsers={this.state.notRegisteredUsers}
               selectedRecipient={this.state.selectedRecipient} />
@@ -51,4 +51,4 @@ var Form = React.createClass({
   }
 });
 
-module.exports = Form;
+module.exports = InviteForm;

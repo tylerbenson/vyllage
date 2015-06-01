@@ -20,6 +20,7 @@
     "react-dnd": "^0.9.8",
     "react-layer-mixin": "^0.2.1",
     "react-textarea-autosize": "^1.1.0",
+    "react-zeroclipboard": "^0.4.1",
     "reflux": "^0.2.6",
     "superagent": "^0.21.0",
     "tether": "^0.6.5",
@@ -71,8 +72,7 @@
     "webpack": "^1.8.8",
     "when": "3.4.4"
   },
-  "optionalDependencies": {
-  },
+  "optionalDependencies": {},
   "scripts": {
     "httpd": "./node_modules/.bin/http-server public -o -c-1",
     "xprepublish": "./node_modules/.bin/bower install --config.interactive=false",

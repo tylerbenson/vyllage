@@ -1,4 +1,96 @@
 .get-feedback {
+  .banner {
+    padding: 1em 3em 0 3em;
+  }
+
+  .channels {
+    list-style: none;
+    text-align: center;
+    margin-bottom: 0;
+    // margin-top: 2em;
+
+    li {
+      display: inline-block;
+      button {
+        border: none;
+        border-bottom: lighten($secondary-color, 35%) solid 2px;
+        border-radius: 0;
+        margin: 0;
+        padding: 0.85em 1em;
+        transition: color .2s ease,
+          border .2s ease;
+
+        i, span {
+          transition: color .2s ease;
+        }
+
+        &:hover {
+          border-bottom-color: lighten($secondary-color, 25%);
+          i, span {
+            color: darken($secondary-color, 10%);
+          }
+        }
+
+        &.active {
+          border-bottom-color: $primary-color;
+          &:hover {
+            i, span {
+              color: $primary-color;
+            }
+          }
+        }
+      }
+      .facebook {
+        span {
+          text-transform: uppercase;
+        }
+        &:hover {
+          border-bottom-color: $facebook-color;
+          color: $facebook-color;
+          i, span {
+            color: $facebook-color;
+          }
+        }
+      }
+    }
+  }
+
+  .shareable {
+    .content {
+      text-align: center;
+      padding: 3em 0;
+    }
+
+    .tip {
+      color: $secondary-color;
+      font-size: 0.8em;
+      line-height: 1.4;
+      margin: 0 auto 0.75em auto;
+    }
+
+    .copy {
+      min-width: 9em;
+      margin-left: 0.3em;
+      transition: background-color .2s ease;
+
+      &.copied {
+        background-color: $success-color;
+        pointer-events: none;
+      }
+
+      &.disabled {
+        background-color: lighten($secondary-color, 20%);
+        pointer-events: none;
+      }
+    }
+
+    input {
+      max-width: 360px;
+      margin: 0 auto 0.75em auto;
+      display: inline-block;
+    }
+  }
+
   h2 {
     display: inline-block;
     font-weight: 400;
@@ -37,7 +129,7 @@
     display: inline-block;
     font-size: 0.9em;
     font-weight: 300;
-    margin: 0.25em 0.125em;
+    margin: 0.3em 0.125em;
     transition: all .2s ease;
 
     &:hover {

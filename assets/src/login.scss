@@ -20,6 +20,15 @@
     }
   }
 
+  &.guest {
+    #container {
+      background-image: url(../images/banner-3.jpg);
+    }
+    .sections .form {
+      margin-top: 3.5em;
+    }
+  }
+
   .section > .container {
     background: #fff;
     border-radius: 5px;
