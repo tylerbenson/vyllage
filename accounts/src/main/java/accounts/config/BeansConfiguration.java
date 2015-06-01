@@ -3,12 +3,15 @@ package accounts.config;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.client.RestTemplate;
@@ -31,6 +34,12 @@ public class BeansConfiguration {
 
 	@Autowired
 	private SpringTemplateEngine templateEngine;
+
+	@Value("${social.password:hjQb7K3Nsgv5DL6kDNeRAR}")
+	private final String SOCIAL_PASSWORD = null;
+
+	@Value("${social.salt:686a5162374b334e73677635444c366b444e65524152}")
+	private final String SOCIAL_SALT = null;
 
 	@Bean
 	public ObjectMapper objectMapper() {
@@ -77,5 +86,10 @@ public class BeansConfiguration {
 	public SignInAdapter signInAdapter(UserDetailsService userDetailsService) {
 		return new SimpleSignInAdapter(userDetailsService,
 				new HttpSessionRequestCache());
+	}
+
+	@Bean
+	public TextEncryptor TextEncryptor() {
+		return Encryptors.queryableText(SOCIAL_PASSWORD, SOCIAL_SALT);
 	}
 }
