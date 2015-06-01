@@ -7,15 +7,18 @@ Note that it's not possible to use REST for this, the user must go to the social
 Used to login to vyllage using a social account. 
 
 Example:
-
+```
 <form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">
     <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
 	<input type="hidden" name="scope" value="email"></input>
 	<button type="submit">Facebook</button>
 </form>
+```
 
 Notice the **scope** field, this is used to request permissions to the user, like this:  
+```
 <input type="hidden" name="scope" value="publish_stream,user_photos,offline_access"></input>
+```
 
 ## Sign Up
 Currently there's no support for user sign up in the application, 
@@ -26,7 +29,7 @@ Connect is used to connect an existing Vyllage account to a social account.
 The user must be logged in to do this.
 
 Example:
-
+```
 <form action="/connect/facebook" method="POST">
     <input type="hidden" name="scope" value="email" />
     <div class="formInfo">
@@ -36,4 +39,4 @@ Example:
       <button type="submit">Connect to Facebook</button>
     </p>
 </form> 
-  
+ ```
