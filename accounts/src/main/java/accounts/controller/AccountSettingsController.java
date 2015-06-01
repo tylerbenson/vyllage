@@ -42,7 +42,7 @@ import accounts.validation.EmailSettingValidator;
 import accounts.validation.FacebookValidator;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
-import accounts.validation.NumberValidator;
+import accounts.validation.PhoneNumberValidator;
 import accounts.validation.SettingValidator;
 import accounts.validation.TwitterValidator;
 import accounts.validation.URLValidator;
@@ -73,7 +73,7 @@ public class AccountSettingsController {
 		this.accountSettingsService = accountSettingsService;
 		this.organizationRepository = organizationRepository;
 
-		validators.put("phoneNumber", new NumberValidator());
+		validators.put("phoneNumber", new PhoneNumberValidator());
 		validators.put("firstName", new NotNullValidator());
 		validators.put("email", new EmailSettingValidator());
 
