@@ -38,7 +38,14 @@ tests:
 cache:
   key_paths:     # Define the files Solano will use to determine when to rebuild your cache
   - build.gradle
-  - */build.gradle
+  - accounts/build.gradle
+  - assets/build.gradle
+  - connections/build.gradle
+  - documents/build.gradle
+  - email/build.gradle
+  - site/build.gradle
+  - togglz/build.gradle
+  - user-common/build.gradle
   save_paths:    # Define the paths to save into the cache
   - .gradle      # Relative to the repo
   - HOME/.gradle
