@@ -16,9 +16,10 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  *
  */
 public class TogglzConsoleRequestMatcher implements RequestMatcher {
-	private Pattern allowedMethods = Pattern.compile("^(GET|POST|PUT)$");
+	private Pattern allowedMethods = Pattern
+			.compile("^(GET|HEAD|TRACE|OPTIONS)$");
 	private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher(
-			"/togglz/editor", null);
+			"/togglz/edit", null);
 
 	@Override
 	public boolean matches(HttpServletRequest request) {
