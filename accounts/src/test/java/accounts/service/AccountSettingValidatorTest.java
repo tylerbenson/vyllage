@@ -8,8 +8,8 @@ import accounts.validation.EmailSettingValidator;
 import accounts.validation.FacebookValidator;
 import accounts.validation.LengthValidator;
 import accounts.validation.NotNullValidator;
-import accounts.validation.NumberValidator;
 import accounts.validation.OnlyAlphanumericValidator;
+import accounts.validation.PhoneNumberValidator;
 import accounts.validation.TwitterValidator;
 import accounts.validation.URLValidator;
 
@@ -121,9 +121,9 @@ public class AccountSettingValidatorTest {
 
 	@Test
 	public void NumberSettingValidatorReturnsOk() {
-		NumberValidator validator = new NumberValidator();
+		PhoneNumberValidator validator = new PhoneNumberValidator();
 		AccountSetting as = new AccountSetting();
-		as.setValue("50");
+		as.setValue("1234567890");
 
 		AccountSetting setting = validator.validate(as);
 
@@ -132,9 +132,31 @@ public class AccountSettingValidatorTest {
 
 	@Test
 	public void NumberSettingValidatorReturnsWithError() {
-		NumberValidator validator = new NumberValidator();
+		PhoneNumberValidator validator = new PhoneNumberValidator();
 		AccountSetting as = new AccountSetting();
 		as.setValue("a");
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() != null);
+	}
+
+	@Test
+	public void NumberSettingValidatorReturnsWithLengthError1() {
+		PhoneNumberValidator validator = new PhoneNumberValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue("12");
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() != null);
+	}
+
+	@Test
+	public void NumberSettingValidatorReturnsWithLengthError2() {
+		PhoneNumberValidator validator = new PhoneNumberValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue("1234567890505056406540");
 
 		AccountSetting setting = validator.validate(as);
 
