@@ -5,7 +5,30 @@
 ## Initial Setup
 * Install Java 8
 * Install Node.js
+* Install Java JCE 8
 
+### Java JCE 8 
+Either download and manually install from Oracle [Java Cryptography Extension (JCE) 8](http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html)
+
+Or use the following Debian compatible repository: 
+[webupd8 oracle-java8-unlimited-jce-policy](http://www.ubuntuupdates.org/package/webupd8_java/lucid/main/base/oracle-java8-unlimited-jce-policy)
+
+
+If you choose Oracle or have another OS, download the zip file, uncompress in some directory. Open a command prompt and move to the used directory. Execute the following commands, you might need admin authority to do this.
+
+Linux
+
+```
+cp *.jar "$JAVA_HOME"/jre/lib/security
+```
+
+Windows 
+
+```
+cp *.jar "$JAVA_HOME"/jre/lib/security
+```
+ 
+---
 To run http server without gulp optimizations
 
 ```
