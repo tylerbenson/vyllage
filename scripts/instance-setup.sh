@@ -13,6 +13,7 @@ chmod +x ./install
 ./install auto
 
 apt-get -y install oracle-java8-installer
+apt-get -y install oracle-java8-unlimited-jce-policy
 
 echo "JAVA_HOME='/usr/lib/jvm/java-8-oracle/jre/'" >> /etc/environment
 source /etc/environment

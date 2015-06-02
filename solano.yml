@@ -5,16 +5,40 @@ nodejs:
 
 java:
   java_version: java-8-oracle
-  gradle_version: '2.4'
 tests:
   - type: junit
-    command: gradle test
+    command: ./gradlew :accounts:test
+    report_files:
+    - "*/build/test-results/*.xml"
+  - type: junit
+    command: ./gradlew :connections:test
+    report_files:
+    - "*/build/test-results/*.xml"
+  - type: junit
+    command: ./gradlew :documents:test
+    report_files:
+    - "*/build/test-results/*.xml"
+  - type: junit
+    command: ./gradlew :email:test
+    report_files:
+    - "*/build/test-results/*.xml"
+  - type: junit
+    command: ./gradlew :site:test
+    report_files:
+    - "*/build/test-results/*.xml"
+  - type: junit
+    command: ./gradlew :togglz:test
+    report_files:
+    - "*/build/test-results/*.xml"
+  - type: junit
+    command: ./gradlew :user-common:test
     report_files:
     - "*/build/test-results/*.xml"
 
 cache:
   key_paths:     # Define the files Solano will use to determine when to rebuild your cache
   - build.gradle
+  - */build.gradle
   save_paths:    # Define the paths to save into the cache
   - .gradle      # Relative to the repo
   - HOME/.gradle
