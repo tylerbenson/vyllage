@@ -1,7 +1,9 @@
 package accounts.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -16,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
@@ -39,12 +43,12 @@ import accounts.service.DocumentLinkService;
 import accounts.service.DocumentService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
-import accounts.service.utilities.Encryptor;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.newrelic.api.agent.NewRelic;
 
 @Controller
 @RequestMapping("link")
@@ -63,8 +67,8 @@ public class DocumentLinkController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private Encryptor linkEncryptor;
+	// @Autowired
+	// private Encryptor linkEncryptor;
 
 	@Autowired
 	private SignInUtil signInUtil;
@@ -75,6 +79,9 @@ public class DocumentLinkController {
 	@Autowired
 	private DocumentService documentService;
 
+	@Autowired
+	private TextEncryptor textEncryptor;
+
 	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
 
 	@RequestMapping(value = "/advice/{encodedDocumentLink}", method = RequestMethod.GET)
@@ -83,7 +90,7 @@ public class DocumentLinkController {
 			throws JsonParseException, JsonMappingException, IOException,
 			UserNotFoundException {
 
-		String json = linkEncryptor.decrypt(encodedDocumentLink);
+		String json = decrypt(encodedDocumentLink);
 
 		DocumentLink documentLink = mapper.readValue(json, DocumentLink.class);
 
@@ -112,7 +119,7 @@ public class DocumentLinkController {
 
 		String json = mapper.writeValueAsString(documentLink);
 
-		String safeString = linkEncryptor.encrypt(json);
+		String safeString = encrypt(json);
 
 		return "/link/advice/" + safeString;
 	}
@@ -141,7 +148,7 @@ public class DocumentLinkController {
 
 			String json = mapper.writeValueAsString(documentLink);
 
-			String safeString = "/link/advice/" + linkEncryptor.encrypt(json);
+			String safeString = "/link/advice/" + encrypt(json);
 			System.out.println(safeString);
 			links.put(documentLinkRequest.getEmail(), safeString);
 		}
@@ -153,7 +160,8 @@ public class DocumentLinkController {
 	public String accessSharedDocument(HttpServletRequest request,
 			WebRequest webRequest, @PathVariable String encodedDocumentLink)
 			throws JsonParseException, JsonMappingException, IOException {
-		String json = linkEncryptor.decrypt(encodedDocumentLink);
+
+		String json = decrypt(encodedDocumentLink);
 
 		SimpleDocumentLink documentLink = mapper.readValue(json,
 				SimpleDocumentLink.class);
@@ -219,11 +227,39 @@ public class DocumentLinkController {
 
 		String json = mapper.writeValueAsString(documentLink);
 
-		String safeString = linkEncryptor.encrypt(json);
+		String safeString = encrypt(json);
 
 		return new ResponseEntity<>(environment.getProperty("vyllage.domain",
 				"www.vyllage.com")
 				+ "/link/access-shared-document/"
 				+ safeString, HttpStatus.OK);
+	}
+
+	/**
+	 * Encrypts the string and encodes it in Base 64.
+	 * 
+	 * @param json
+	 * @return
+	 */
+	public String encrypt(String json) {
+		try {
+			return Base64.getUrlEncoder().encodeToString(
+					textEncryptor.encrypt(json).getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+		return null;
+	}
+
+	/**
+	 * Decodes and decrypts the string.
+	 * 
+	 * @param encodedDocumentLink
+	 * @return
+	 */
+	public String decrypt(String encodedDocumentLink) {
+		return textEncryptor.decrypt(new String(Base64.getUrlDecoder().decode(
+				encodedDocumentLink)));
 	}
 }
