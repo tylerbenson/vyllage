@@ -1,6 +1,6 @@
 hooks:
   pre_setup: npm install
-  pre_setup: ./gradlew assemble
+  pre_setup: ./gradlew jar
 
 nodejs:
   version: '0.12.4'
@@ -41,6 +41,8 @@ tests:
     command: ./gradlew :user-common:test
     report_files:
     - "user-common/build/test-results/*.xml"
+
+coverage: true
 
 cache:
   key_paths:     # Define the files Solano will use to determine when to rebuild your cache
