@@ -11,5 +11,5 @@ create table ACCOUNTS.UserConnection (
     refreshToken varchar(1024),
     expireTime bigint,
     primary key (userId, providerId, providerUserId));
-    
-create unique index ACCOUNTS.UserConnectionRank on ACCOUNTS.UserConnection(userId, providerId, rank);
+
+create unique index ix_user_connection on ACCOUNTS.UserConnection(userId, providerId, rank);
