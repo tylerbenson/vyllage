@@ -1,10 +1,13 @@
 hooks:
-  pre: npm install
+  pre_setup: npm install
+  pre_setup: ./gradlew assemble
+
 nodejs:
   version: '0.12.4'
 
 java:
   java_version: java-8-oracle
+
 tests:
   - type: junit
     command: ./gradlew :accounts:test
