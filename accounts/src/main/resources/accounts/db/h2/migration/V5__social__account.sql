@@ -12,4 +12,4 @@ create table ACCOUNTS.UserConnection (
     expireTime bigint,
     primary key (userId, providerId, providerUserId));
 
-create unique index ix_user_connection on ACCOUNTS.UserConnection(userId, providerId, rank);
+create unique index ACCOUNTS.ix_user_connection on ACCOUNTS.UserConnection(userId, providerId, rank);
