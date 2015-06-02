@@ -15,6 +15,11 @@ public class SignInUtil {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * Looks up the user and logs him in.
+	 * 
+	 * @param user
+	 */
 	public User signIn(String username) {
 		User user = userService.getUser(username);
 
@@ -25,6 +30,11 @@ public class SignInUtil {
 		return user;
 	}
 
+	/**
+	 * Looks up the user and logs him in.
+	 * 
+	 * @param user
+	 */
 	public User signIn(Long userId) throws UserNotFoundException {
 		User user = userService.getUser(userId);
 
@@ -33,5 +43,18 @@ public class SignInUtil {
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		return user;
+	}
+
+	/**
+	 * Signs in the user.
+	 * 
+	 * @param user
+	 */
+	public void signIn(User user) {
+		Authentication auth = new UsernamePasswordAuthenticationToken(user,
+				user.getPassword(), user.getAuthorities());
+
+		SecurityContextHolder.getContext().setAuthentication(auth);
+
 	}
 }

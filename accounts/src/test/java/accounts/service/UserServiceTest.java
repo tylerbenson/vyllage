@@ -13,9 +13,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -23,15 +24,12 @@ import user.common.User;
 import user.common.constants.RolesEnum;
 import accounts.Application;
 import accounts.model.BatchAccount;
-import accounts.model.account.settings.AccountSetting;
-import accounts.model.account.settings.Privacy;
-import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-// @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class UserServiceTest {
 
 	@Autowired
@@ -152,4 +150,10 @@ public class UserServiceTest {
 		Assert.assertFalse(advisors.isEmpty());
 	}
 
+	@Test(expected = UserNotFoundException.class)
+	public void getUserNullId() throws UserNotFoundException {
+		Long userId = null;
+
+		service.getUser(userId);
+	}
 }

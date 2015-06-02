@@ -100,8 +100,8 @@ public class AdviceRequestController {
 	@RequestMapping(value = "get-feedback", method = RequestMethod.POST)
 	public String askAdvice(HttpServletRequest request,
 			@RequestBody AdviceRequest adviceRequest,
-			@AuthenticationPrincipal User user)
-			throws ElementNotFoundException, EmailException {
+			@AuthenticationPrincipal User user) throws EmailException,
+			ElementNotFoundException {
 
 		validateAdviceRequest(adviceRequest);
 

@@ -85,6 +85,10 @@ public class UserService {
 
 	private BatchParser batchParser = new BatchParser();
 
+	public User getUser(Long userId) throws UserNotFoundException {
+		return userRepository.get(userId);
+	}
+
 	public User getUser(String username) {
 		return this.userRepository.loadUserByUsername(username);
 	}
@@ -339,10 +343,6 @@ public class UserService {
 
 	}
 
-	public User getUser(Long userId) throws UserNotFoundException {
-		return userRepository.get(userId);
-	}
-
 	public List<User> getAdvisors(User loggedUser, Map<String, String> filters,
 			int maxsize) {
 		return userRepository.getAdvisors(loggedUser, filters, maxsize);
@@ -539,8 +539,9 @@ public class UserService {
 		try {
 			auditUser = this.getUser(auditUserId);
 		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// should never happen
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
 		}
 
 		// add similar organization
@@ -559,6 +560,7 @@ public class UserService {
 
 		userRepository.createUser(user);
 
-		return user;
+		return userRepository.loadUserByUsername(user.getUsername());
 	}
+
 }

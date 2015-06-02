@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -196,14 +198,21 @@ public class DocumentLinkController {
 	 * @throws ElementNotFoundException
 	 */
 	@RequestMapping(value = "/share-document", method = RequestMethod.POST)
-	public @ResponseBody String shareDocumentLink(HttpServletRequest request,
+	public @ResponseBody ResponseEntity<String> shareDocumentLink(
+			HttpServletRequest request,
 			@RequestBody SimpleDocumentLinkRequest linkRequest,
 			@AuthenticationPrincipal User loggedInUser)
-			throws JsonProcessingException, ElementNotFoundException {
+			throws JsonProcessingException {
 
-		if (linkRequest.getDocumentId() == null)
-			linkRequest.setDocumentId(documentService.getUserDocumentId(
-					request, loggedInUser.getUserId()));
+		if (linkRequest.getDocumentId() == null) {
+			try {
+				linkRequest.setDocumentId(documentService.getUserDocumentId(
+						request, loggedInUser.getUserId()));
+			} catch (ElementNotFoundException e) {
+				return new ResponseEntity<>(e.getMessage(),
+						HttpStatus.NO_CONTENT);
+			}
+		}
 
 		SimpleDocumentLink documentLink = documentLinkService.createLink(
 				linkRequest, loggedInUser);
@@ -212,7 +221,9 @@ public class DocumentLinkController {
 
 		String safeString = linkEncryptor.encrypt(json);
 
-		return environment.getProperty("vyllage.domain", "www.vyllage.com")
-				+ "/link/access-shared-document/" + safeString;
+		return new ResponseEntity<>(environment.getProperty("vyllage.domain",
+				"www.vyllage.com")
+				+ "/link/access-shared-document/"
+				+ safeString, HttpStatus.OK);
 	}
 }
