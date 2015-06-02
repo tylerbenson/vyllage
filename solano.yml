@@ -1,6 +1,5 @@
 hooks:
   pre_setup: npm install
-  pre_setup: ./gradlew jar
 
 nodejs:
   version: '0.12.4'
@@ -10,37 +9,13 @@ java:
 
 tests:
   - type: junit
-    command: ./gradlew :accounts:test
-    report_files:
-    - "accounts/build/test-results/*.xml"
-  - type: junit
     command: npm test
     report_files:
     - "assets/build/test-results/*.xml"
   - type: junit
-    command: ./gradlew :connections:test
+    command: ./gradlew test
     report_files:
-    - "connections/build/test-results/*.xml"
-  - type: junit
-    command: ./gradlew :documents:test
-    report_files:
-    - "documents/build/test-results/*.xml"
-  - type: junit
-    command: ./gradlew :email:test
-    report_files:
-    - "email/build/test-results/*.xml"
-  - type: junit
-    command: ./gradlew :site:test
-    report_files:
-    - "site/build/test-results/*.xml"
-  - type: junit
-    command: ./gradlew :togglz:test
-    report_files:
-    - "togglz/build/test-results/*.xml"
-  - type: junit
-    command: ./gradlew :user-common:test
-    report_files:
-    - "user-common/build/test-results/*.xml"
+    - "accounts/build/test-results/*.xml"
 
 coverage: true
 
