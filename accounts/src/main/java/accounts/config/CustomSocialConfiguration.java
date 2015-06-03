@@ -3,13 +3,12 @@ package accounts.config;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
@@ -30,19 +29,15 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 	@Inject
 	private DataSource dataSource;
 
-	@Value("${social.password:hjQb7K3Nsgv5DL6kDNeRAR}")
-	private final String SOCIAL_PASSWORD = null;
-
-	@Value("${social.salt:686a5162374b334e73677635444c366b444e65524152}")
-	private final String SOCIAL_SALT = null;
+	@Inject
+	private TextEncryptor textEncryptor;
 
 	@Override
 	public UsersConnectionRepository getUsersConnectionRepository(
 			ConnectionFactoryLocator connectionFactoryLocator) {
 
 		JdbcUsersConnectionRepository jdbcUsersConnectionRepository = new JdbcUsersConnectionRepository(
-				dataSource, connectionFactoryLocator, Encryptors.queryableText(
-						SOCIAL_PASSWORD, SOCIAL_SALT));
+				dataSource, connectionFactoryLocator, textEncryptor);
 		jdbcUsersConnectionRepository.setTablePrefix("ACCOUNTS.");
 		return jdbcUsersConnectionRepository;
 	}
