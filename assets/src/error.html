@@ -29,10 +29,16 @@
           </div>
         </div>
       </header>
-      <div class="message">
+      <div th:if="${status} != '404'" class="message">
         <h1>Oops. Something went wrong!</h1>
         <p>
           We're working to fix this. Please head back to the <a href="/">homepage</a> for now.
+        </p>
+      </div>
+      <div th:if="${status} == '404'" class="message">
+        <h1>Page not found.</h1>
+        <p>
+          The page you are trying to access cannot be found.
         </p>
       </div>
       <div class="content">
