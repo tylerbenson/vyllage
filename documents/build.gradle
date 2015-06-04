@@ -16,8 +16,10 @@ dependencies {
 	
 	compile 'org.xhtmlrenderer:flying-saucer-core:9.0.7'
 	compile 'org.xhtmlrenderer:flying-saucer-pdf:9.0.7'
-	
-//	compile 'org.springframework.security:spring-security-acl'
+
+	compile 'org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE'
+
+	//	compile 'org.springframework.security:spring-security-acl'
 	
 	compile("org.springframework.boot:spring-boot-starter-security")
 	compile("org.springframework.boot:spring-boot-starter-aop")

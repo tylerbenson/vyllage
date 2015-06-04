@@ -32,9 +32,6 @@ public class BeansConfiguration {
 	@Autowired
 	private DataSource dataSource;
 
-	@Autowired
-	private SpringTemplateEngine templateEngine;
-
 	@Value("${social.password:hjQb7K3Nsgv5DL6kDNeRAR}")
 	private final String SOCIAL_PASSWORD = null;
 

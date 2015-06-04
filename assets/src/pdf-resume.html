@@ -21,7 +21,12 @@
       </th:block>
       <th:block th:case="'ORGANIZATION'">
         <h2 th:text="${#strings.capitalize(section.title)}"></h2>
+        <h3 th:text="${section.organizationName}"></h3>
+        <p th:text="${section.organizationDescription}"></p>
+        <p th:text="${section.role}"></p>
         <p th:text="${section.roleDescription}"></p>
+        <label th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</label>
+
       </th:block>
     </th:block>
   </th:block>

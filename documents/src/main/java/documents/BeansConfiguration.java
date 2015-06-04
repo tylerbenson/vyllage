@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import togglz.controller.TogglzFeatureController;
@@ -19,9 +20,6 @@ public class BeansConfiguration {
 	@Autowired
 	private Environment environment;
 
-	@Autowired
-	private SpringTemplateEngine templateEngine;
-
 	@Bean
 	public RestTemplate restTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
@@ -31,6 +29,11 @@ public class BeansConfiguration {
 	@Bean
 	public TogglzDialect togglzDialect() {
 		return new TogglzDialect();
+	}
+
+	@Bean
+	public Java8TimeDialect Java8TimeDialect() {
+		return new Java8TimeDialect();
 	}
 
 	@Bean(name = "documents.emailBuilder")
