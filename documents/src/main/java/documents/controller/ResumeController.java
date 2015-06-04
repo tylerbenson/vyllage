@@ -46,7 +46,7 @@ import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
 import documents.model.UserNotification;
-import documents.pdf.PdfTest;
+import documents.pdf.ResumePdfService;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -64,12 +64,13 @@ public class ResumeController {
 
 	private final NotificationService notificationService;
 
-	private final PdfTest pdfTest;
+	private final ResumePdfService pdfTest;
 
 	@Inject
 	public ResumeController(final DocumentService documentService,
 			final AccountService accountService,
-			final NotificationService notificationService, final PdfTest pdfTest) {
+			final NotificationService notificationService,
+			final ResumePdfService pdfTest) {
 		this.documentService = documentService;
 		this.accountService = accountService;
 		this.notificationService = notificationService;
@@ -180,19 +181,32 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section/pdf", method = RequestMethod.GET, produces = "application/pdf")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
-	public void Section(HttpServletResponse response,
-			@PathVariable final Long documentId)
+	public void Section(HttpServletRequest request,
+			HttpServletResponse response, @PathVariable final Long documentId,
+			@AuthenticationPrincipal User user)
 			throws ElementNotFoundException, DocumentException, IOException {
+
+		DocumentHeader resumeHeader = this.getResumeHeader(request, documentId,
+				user);
 
 		List<DocumentSection> documentSections = this
 				.getResumeSections(documentId);
 
-		copyPDF(response, pdfTest.generateReport(documentSections));
+		copyPDF(response,
+				pdfTest.generateReport(resumeHeader, documentSections));
 		response.setStatus(HttpStatus.OK.value());
 		response.flushBuffer();
 
 	}
 
+	/**
+	 * Writes the pdf document to the response.
+	 * 
+	 * @param response
+	 * @param report
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
 	private void copyPDF(HttpServletResponse response,
 			ByteArrayOutputStream report) throws DocumentException, IOException {
 		InputStream in = new ByteArrayInputStream(report.toByteArray());

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+</head>
+
+<body>
+  <h1 th:text="${header.firstName + ' ' + header.middleName + ' ' + header.lastName}">Names!</h1>
+  <h3 th:text="${header.tagline}">This is my tagline</h3>
+  <h4 th:text="${header.address}">Casa 123</h4>
+  <h4 th:text="${header.email}"> abcd@abcd.com</h4>
+  <h4 th:text="${header.phoneNumber}">123456</h4>
+  <hr/>
+  <!-- loop over the sections -->
+  <th:block th:each="section : ${sections}">
+    <th:block th:switch="${section.type.name()}">
+      <th:block th:case="'FREEFORM'">
+        <h2 th:text="${#strings.capitalize(section.title)}"></h2>
+        <p th:text="${section.description}"></p>
+      </th:block>
+      <th:block th:case="'ORGANIZATION'">
+        <h2 th:text="${#strings.capitalize(section.title)}"></h2>
+        <p th:text="${section.roleDescription}"></p>
+      </th:block>
+    </th:block>
+  </th:block>
+
+</body>
+
+</html>

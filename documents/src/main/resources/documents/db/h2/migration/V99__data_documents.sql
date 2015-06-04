@@ -11,7 +11,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(124, 1, 0, 2, '{
-	"type": "experience",
+	"type": "organization",
 	"title": "experience",
 	"sectionId": 124,
 	"sectionPosition": 2,
@@ -28,7 +28,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(125, 1, 0, 3, '{
-	"type": "experience",
+	"type": "organization",
 	"title": "education",
 	"sectionId": 125,
 	"sectionPosition": 3,

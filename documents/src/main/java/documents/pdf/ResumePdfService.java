@@ -12,25 +12,27 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.lowagie.text.DocumentException;
 
+import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
 
 @Service
-public class PdfTest {
+public class ResumePdfService {
 
 	@Autowired
 	private TemplateEngine templateEngine;
 
-	public ByteArrayOutputStream generateReport(List<DocumentSection> sections)
-			throws DocumentException {
+	public ByteArrayOutputStream generateReport(DocumentHeader resumeHeader,
+			List<DocumentSection> sections) throws DocumentException {
 		Context ctx = new Context();
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		// ctx.setVariable("sexType", dataService.getSexType());
+		ctx.setVariable("header", resumeHeader);
+		ctx.setVariable("sections", sections);
 		ctx.setVariable("today", new Date());
 		// ctx.setVariable("stats", stats);
 
-		String htmlContent = templateEngine.process("pdf-test", ctx);
+		String htmlContent = templateEngine.process("pdf-resume", ctx);
 
 		ITextRenderer renderer = new ITextRenderer();
 		// PackageUserAgentCallback callback = new
@@ -39,7 +41,7 @@ public class PdfTest {
 		// callback.setBaseURL("templates/");
 		// renderer.getSharedContext().setUserAgentCallback(callback);
 		// renderer.getSharedContext().setDPI(600);
-		renderer.getSharedContext().setBaseURL("documents/");
+		// renderer.getSharedContext().setBaseURL("documents/");
 		renderer.setDocumentFromString(htmlContent);
 
 		renderer.layout();

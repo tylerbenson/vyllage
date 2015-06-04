@@ -32,7 +32,7 @@ import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
-import documents.pdf.PdfTest;
+import documents.pdf.ResumePdfService;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -54,7 +54,7 @@ public class ResumeControllerIntegTest {
 	private NotificationService notificationService;
 
 	@Autowired
-	private PdfTest pdfTest;
+	private ResumePdfService pdfTest;
 
 	@Test
 	public void updateTagLineTest() throws ElementNotFoundException,
