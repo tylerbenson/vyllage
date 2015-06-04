@@ -32,9 +32,11 @@ import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
+import documents.pdf.PdfTest;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
+import documents.services.NotificationService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -47,6 +49,12 @@ public class ResumeControllerIntegTest {
 
 	@Autowired
 	private DocumentService documentService;
+
+	@Autowired
+	private NotificationService notificationService;
+
+	@Autowired
+	private PdfTest pdfTest;
 
 	@Test
 	public void updateTagLineTest() throws ElementNotFoundException,
@@ -472,7 +480,9 @@ public class ResumeControllerIntegTest {
 				accountContact(userId));
 		Mockito.when(user.getUserId()).thenReturn(userId);
 
-		controller.setAccountService(accountService);
+		ResumeController controller = new ResumeController(documentService,
+				accountService, notificationService, pdfTest);
+
 		DocumentHeader resumeHeader = controller.getResumeHeader(request,
 				documentId, user);
 

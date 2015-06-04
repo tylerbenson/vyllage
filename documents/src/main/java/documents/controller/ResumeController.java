@@ -1,6 +1,9 @@
 package documents.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,15 +13,17 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import user.common.User;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
 
 import documents.model.AccountContact;
@@ -40,6 +46,7 @@ import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
 import documents.model.UserNotification;
+import documents.pdf.PdfTest;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -51,14 +58,24 @@ import documents.services.aspect.CheckWriteAccess;
 @RequestMapping("resume")
 public class ResumeController {
 
-	@Autowired
-	private DocumentService documentService;
+	private final DocumentService documentService;
 
-	@Autowired
-	private AccountService accountService;
+	private final AccountService accountService;
 
-	@Autowired
-	private NotificationService notificationService;
+	private final NotificationService notificationService;
+
+	private final PdfTest pdfTest;
+
+	@Inject
+	public ResumeController(final DocumentService documentService,
+			final AccountService accountService,
+			final NotificationService notificationService, final PdfTest pdfTest) {
+		this.documentService = documentService;
+		this.accountService = accountService;
+		this.notificationService = notificationService;
+		this.pdfTest = pdfTest;
+
+	}
 
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
@@ -157,6 +174,33 @@ public class ResumeController {
 								.get(ds.getSectionId())));
 
 		return documentSections;
+	}
+
+	// testing pdf.
+	@RequestMapping(value = "{documentId}/section/pdf", method = RequestMethod.GET, produces = "application/pdf")
+	@ResponseStatus(value = HttpStatus.OK)
+	@CheckReadAccess
+	public void Section(HttpServletResponse response,
+			@PathVariable final Long documentId)
+			throws ElementNotFoundException, DocumentException, IOException {
+
+		List<DocumentSection> documentSections = this
+				.getResumeSections(documentId);
+
+		copyPDF(response, pdfTest.generateReport(documentSections));
+		response.setStatus(HttpStatus.OK.value());
+		response.flushBuffer();
+
+	}
+
+	private void copyPDF(HttpServletResponse response,
+			ByteArrayOutputStream report) throws DocumentException, IOException {
+		InputStream in = new ByteArrayInputStream(report.toByteArray());
+		FileCopyUtils.copy(in, response.getOutputStream());
+
+		response.setContentType("application/pdf");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ "report.pdf");
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
@@ -428,10 +472,6 @@ public class ResumeController {
 			map.put("error", ex.getMessage());
 		}
 		return map;
-	}
-
-	public void setAccountService(AccountService accountService) {
-		this.accountService = accountService;
 	}
 
 }
