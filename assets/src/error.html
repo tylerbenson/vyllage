@@ -29,17 +29,31 @@
           </div>
         </div>
       </header>
-      <div th:if="${status} != '404'" class="message">
-        <h1>Oops. Something went wrong!</h1>
-        <p>
-          We're working to fix this. Please head back to the <a href="/">homepage</a> for now.
-        </p>
-      </div>
-      <div th:if="${status} == '404'" class="message">
-        <h1>Page not found.</h1>
-        <p>
-          The page you are trying to access cannot be found.
-        </p>
+      <div th:switch="${status}" class="message">
+        <th:block th:case="'401'">
+          <h1>Forbidden.</h1>
+          <p>
+            You are not authorized to access this page. Either <a href="/login">login</a> or request access from the Administrator.
+          </p>
+        </th:block>
+        <th:block th:case="'403'">
+          <h1>Forbidden.</h1>
+          <p>
+            You are not authorized to access this page. Either <a href="/login">login</a> or request access from the Administrator.
+          </p>
+        </th:block>
+        <th:block th:case="'404'">
+          <h1>Page not found.</h1>
+          <p>
+            The page you are trying to access cannot be found.
+          </p>
+        </th:block>
+        <th:block th:case="*">
+          <h1>Oops. Something went wrong!</h1>
+          <p>
+            We're working to fix this. Please head back to the <a href="/">homepage</a> for now.
+          </p>
+        </th:block>
       </div>
       <div class="content">
         <th:block th:if="${displayWebError}">
