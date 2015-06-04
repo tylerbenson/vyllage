@@ -1,12 +1,12 @@
 package documents.repository;
 
-import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -18,10 +18,10 @@ import documents.model.DocumentSection;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-// @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class DocumentSectionRepositoryTest {
 
-	private static final String JSON = "{" + "\"type\": \"experience\","
+	private static final String JSON = "{" + "\"type\": \"organization\","
 			+ "\"title\": \"experience\"," + "\"sectionId\": null,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","

@@ -64,17 +64,17 @@ public class ResumeController {
 
 	private final NotificationService notificationService;
 
-	private final ResumePdfService pdfTest;
+	private final ResumePdfService resumePdfService;
 
 	@Inject
 	public ResumeController(final DocumentService documentService,
 			final AccountService accountService,
 			final NotificationService notificationService,
-			final ResumePdfService pdfTest) {
+			final ResumePdfService resumePdfService) {
 		this.documentService = documentService;
 		this.accountService = accountService;
 		this.notificationService = notificationService;
-		this.pdfTest = pdfTest;
+		this.resumePdfService = resumePdfService;
 
 	}
 
@@ -181,7 +181,7 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section/pdf", method = RequestMethod.GET, produces = "application/pdf")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
-	public void Section(HttpServletRequest request,
+	public void resumePdf(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable final Long documentId,
 			@AuthenticationPrincipal User user)
 			throws ElementNotFoundException, DocumentException, IOException {
@@ -193,7 +193,7 @@ public class ResumeController {
 				.getResumeSections(documentId);
 
 		copyPDF(response,
-				pdfTest.generateReport(resumeHeader, documentSections));
+				resumePdfService.generateReport(resumeHeader, documentSections));
 		response.setStatus(HttpStatus.OK.value());
 		response.flushBuffer();
 
