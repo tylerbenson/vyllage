@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import org.springframework.format.Formatter;
 
-public class CellphoneFormatter implements Formatter<String> {
+public class PhoneNumberFormatter implements Formatter<String> {
 
 	@Override
 	public String print(String text, Locale locale) {

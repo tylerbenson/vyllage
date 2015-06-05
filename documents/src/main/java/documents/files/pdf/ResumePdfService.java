@@ -61,7 +61,7 @@ public class ResumePdfService {
 	 * @throws ParseException
 	 */
 	protected void format(DocumentHeader resumeHeader) {
-		CellphoneFormatter formatter = new CellphoneFormatter();
+		PhoneNumberFormatter formatter = new PhoneNumberFormatter();
 
 		resumeHeader.setPhoneNumber(formatter.print(
 				resumeHeader.getPhoneNumber(), Locale.US));
