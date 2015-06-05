@@ -73,7 +73,13 @@ public class ResumePdfService {
 	 * @param sections
 	 */
 	protected void format(List<DocumentSection> sections) {
+		ListFormatter listFormatter = new ListFormatter();
 
+		sections.forEach(s -> {
+			s.setDescription(listFormatter.print(s.getDescription(), Locale.US));
+			s.setRoleDescription(listFormatter.print(s.getRoleDescription(),
+					Locale.US));
+		});
 	}
 
 }
