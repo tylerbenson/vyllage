@@ -1,7 +1,10 @@
 package documents.files.pdf;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -18,6 +21,10 @@ import documents.model.DocumentSection;
 @Service
 public class ResumePdfService {
 
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger.getLogger(ResumePdfService.class
+			.getName());
+
 	@Inject
 	private TemplateEngine templateEngine;
 
@@ -27,6 +34,9 @@ public class ResumePdfService {
 		Context ctx = new Context();
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		format(resumeHeader);
+		format(sections);
 
 		ctx.setVariable("header", resumeHeader);
 		ctx.setVariable("sections", sections);
@@ -41,6 +51,28 @@ public class ResumePdfService {
 		renderer.finishPDF();
 
 		return out;
+
+	}
+
+	/**
+	 * Applies formatting to header fields.
+	 * 
+	 * @param resumeHeader
+	 * @throws ParseException
+	 */
+	protected void format(DocumentHeader resumeHeader) {
+		CellphoneFormatter formatter = new CellphoneFormatter();
+
+		resumeHeader.setPhoneNumber(formatter.print(
+				resumeHeader.getPhoneNumber(), Locale.US));
+	}
+
+	/**
+	 * Applies formatting to section fields.
+	 * 
+	 * @param sections
+	 */
+	protected void format(List<DocumentSection> sections) {
 
 	}
 

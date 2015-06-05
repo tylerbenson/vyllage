@@ -58,6 +58,9 @@ import documents.services.aspect.CheckWriteAccess;
 @RequestMapping("resume")
 public class ResumeController {
 
+	private final Logger logger = Logger.getLogger(ResumeController.class
+			.getName());
+
 	private final DocumentService documentService;
 
 	private final AccountService accountService;
@@ -77,9 +80,6 @@ public class ResumeController {
 		this.resumePdfService = resumePdfService;
 
 	}
-
-	private final Logger logger = Logger.getLogger(ResumeController.class
-			.getName());
 
 	// ModelAttributes execute for every request, even REST ones, since they are
 	// only needed in one method and complicate testing I'm calling them
@@ -191,8 +191,8 @@ public class ResumeController {
 		List<DocumentSection> documentSections = this
 				.getResumeSections(documentId);
 
-		copyPDF(response,
-				resumePdfService.generatePdfDocument(resumeHeader, documentSections));
+		copyPDF(response, resumePdfService.generatePdfDocument(resumeHeader,
+				documentSections));
 		response.setStatus(HttpStatus.OK.value());
 		response.flushBuffer();
 
