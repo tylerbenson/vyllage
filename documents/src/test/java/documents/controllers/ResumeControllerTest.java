@@ -15,11 +15,11 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import documents.controller.ResumeController;
+import documents.files.pdf.ResumePdfService;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentSection;
-import documents.pdf.ResumePdfService;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;

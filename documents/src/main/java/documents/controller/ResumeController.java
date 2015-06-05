@@ -39,6 +39,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
 
+import documents.files.pdf.ResumePdfService;
 import documents.model.AccountContact;
 import documents.model.AccountNames;
 import documents.model.Comment;
@@ -46,7 +47,6 @@ import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
 import documents.model.UserNotification;
-import documents.pdf.ResumePdfService;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -177,8 +177,7 @@ public class ResumeController {
 		return documentSections;
 	}
 
-	// testing pdf.
-	@RequestMapping(value = "{documentId}/section/pdf", method = RequestMethod.GET, produces = "application/pdf")
+	@RequestMapping(value = "{documentId}/file/pdf", method = RequestMethod.GET, produces = "application/pdf")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
 	public void resumePdf(HttpServletRequest request,
@@ -193,7 +192,7 @@ public class ResumeController {
 				.getResumeSections(documentId);
 
 		copyPDF(response,
-				resumePdfService.generateReport(resumeHeader, documentSections));
+				resumePdfService.generatePdfDocument(resumeHeader, documentSections));
 		response.setStatus(HttpStatus.OK.value());
 		response.flushBuffer();
 

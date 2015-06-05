@@ -27,12 +27,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.Application;
 import documents.controller.ResumeController;
+import documents.files.pdf.ResumePdfService;
 import documents.model.AccountContact;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
-import documents.pdf.ResumePdfService;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
