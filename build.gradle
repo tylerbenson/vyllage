@@ -169,6 +169,32 @@ configure(dbProjects) {
     generateH2JooqSchemaSource.inputs.dir "$buildDir/db"
     generateH2JooqSchemaSource.outputs.dir "$buildDir/generated-src"
     generateH2JooqSchemaSource.dependsOn flywayMigrate
-}
+	
+	task circlePg2Test(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+		extension = new org.flywaydb.gradle.FlywayExtension()
+		extension.driver = "org.postgresql.Driver"
+		extension.schemas = ["${project.name.toUpperCase()}"]
+		extension.locations = ["classpath:${project.name}/db/pg/migration"]
+	//	extension.sqlMigrationPrefix = "V"
+	//	extension.initOnMigrate = true
+	//	extension.outOfOrder = true
+		extension.user = 'ubuntu'
+		extension.password = ''
+		extension.url = 'jdbc:postgresql://localhost:5432/circle_test'
+	}
+	
+	task solanoPg2test(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+		extension = new org.flywaydb.gradle.FlywayExtension()
+		extension.driver = "org.postgresql.Driver"
+		extension.schemas = ["${project.name.toUpperCase()}"]
+		extension.locations = ["classpath:${project.name}/db/pg/migration"]
+	//	extension.sqlMigrationPrefix = "V"
+	//	extension.initOnMigrate = true
+	//	extension.outOfOrder = true
+		extension.user = System.getProperty("TDDIUM_DB_USER")
+		extension.password = System.getProperty("TDDIUM_DB_PASSWORD")
+		extension.url = 'jdbc:postgresql://localhost:5432/' + System.getProperty("TDDIUM_DB_NAME")
+	}
+}	
 
 task stage(dependsOn: [':site:build'])
