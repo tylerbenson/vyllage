@@ -13,7 +13,7 @@ tests:
     report_files:
     - "assets/build/test-results/*.xml"
   - type: junit
-    command: ./gradlew test solanoPg2test
+    command: ./gradlew test solanoPgtest
     report_files:
     - "accounts/build/test-results/*.xml"
 

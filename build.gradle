@@ -170,7 +170,7 @@ configure(dbProjects) {
     generateH2JooqSchemaSource.outputs.dir "$buildDir/generated-src"
     generateH2JooqSchemaSource.dependsOn flywayMigrate
 	
-	task circlePg2Test(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+	task circlePgTest(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
 		extension = new org.flywaydb.gradle.FlywayExtension()
 		extension.driver = "org.postgresql.Driver"
 		extension.schemas = ["${project.name.toUpperCase()}"]
@@ -183,7 +183,7 @@ configure(dbProjects) {
 		extension.url = 'jdbc:postgresql://localhost:5432/circle_test'
 	}
 	
-	task solanoPg2test(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+	task solanoPgtest(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
 		extension = new org.flywaydb.gradle.FlywayExtension()
 		extension.driver = "org.postgresql.Driver"
 		extension.schemas = ["${project.name.toUpperCase()}"]
