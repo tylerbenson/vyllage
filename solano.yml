@@ -7,6 +7,17 @@ nodejs:
 java:
   java_version: java-8-oracle
 
+postgresql:                              
+  version: '9.4'                  
+  postgis: '2.1.1'                        
+  adapter: postgresql                    
+  config:                        
+    pool: 5
+    config:
+     postgis_extension: true
+     encoding: unicode
+    pool: 5
+
 tests:
   - type: junit
     command: npm test
