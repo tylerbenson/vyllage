@@ -7,22 +7,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import user.common.User;
 import documents.controller.ResumeController;
-import documents.model.AccountContact;
+import documents.files.pdf.ResumePdfService;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
@@ -35,9 +28,10 @@ import documents.services.NotificationService;
 @RunWith(MockitoJUnitRunner.class)
 public class ResumeControllerTest {
 
-	private static final String SECTION_124 = "{" + "\"type\": \"experience\","
-			+ "\"title\": \"experience\"," + "\"sectionId\": 124,"
-			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
+	private static final String SECTION_124 = "{"
+			+ "\"type\": \"organization\"," + "\"title\": \"experience\","
+			+ "\"sectionId\": 124," + "\"sectionPosition\": 2,"
+			+ "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
 			+ "\"role\": \"Manager, Local Accounts\","
@@ -59,17 +53,24 @@ public class ResumeControllerTest {
 			+ "\"tagline\": \"Technology Enthusiast analyzing, building, and expanding solutions\""
 			+ "}";
 
-	@InjectMocks
 	private ResumeController controller;
 
-	@Mock
-	private DocumentService documentService;
+	private DocumentService documentService = Mockito
+			.mock(DocumentService.class);
 
-	@Mock
-	private AccountService accountService;
+	private AccountService accountService = Mockito.mock(AccountService.class);
 
-	@Mock
-	private NotificationService notificationService;
+	private NotificationService notificationService = Mockito
+			.mock(NotificationService.class);
+
+	private ResumePdfService resumePdfService = Mockito
+			.mock(ResumePdfService.class);
+
+	@Before
+	public void setUp() {
+		controller = new ResumeController(documentService, accountService,
+				notificationService, resumePdfService);
+	}
 
 	// resume/0/section/124
 	@Test

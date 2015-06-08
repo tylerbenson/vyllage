@@ -1,6 +1,9 @@
 package documents.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,15 +13,17 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,8 +36,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import user.common.User;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
 
+import documents.files.pdf.ResumePdfService;
 import documents.model.AccountContact;
 import documents.model.AccountNames;
 import documents.model.Comment;
@@ -51,17 +58,28 @@ import documents.services.aspect.CheckWriteAccess;
 @RequestMapping("resume")
 public class ResumeController {
 
-	@Autowired
-	private DocumentService documentService;
-
-	@Autowired
-	private AccountService accountService;
-
-	@Autowired
-	private NotificationService notificationService;
-
 	private final Logger logger = Logger.getLogger(ResumeController.class
 			.getName());
+
+	private final DocumentService documentService;
+
+	private final AccountService accountService;
+
+	private final NotificationService notificationService;
+
+	private final ResumePdfService resumePdfService;
+
+	@Inject
+	public ResumeController(final DocumentService documentService,
+			final AccountService accountService,
+			final NotificationService notificationService,
+			final ResumePdfService resumePdfService) {
+		this.documentService = documentService;
+		this.accountService = accountService;
+		this.notificationService = notificationService;
+		this.resumePdfService = resumePdfService;
+
+	}
 
 	// ModelAttributes execute for every request, even REST ones, since they are
 	// only needed in one method and complicate testing I'm calling them
@@ -157,6 +175,45 @@ public class ResumeController {
 								.get(ds.getSectionId())));
 
 		return documentSections;
+	}
+
+	@RequestMapping(value = "{documentId}/file/pdf", method = RequestMethod.GET, produces = "application/pdf")
+	@ResponseStatus(value = HttpStatus.OK)
+	@CheckReadAccess
+	public void resumePdf(HttpServletRequest request,
+			HttpServletResponse response, @PathVariable final Long documentId,
+			@AuthenticationPrincipal User user)
+			throws ElementNotFoundException, DocumentException, IOException {
+
+		DocumentHeader resumeHeader = this.getResumeHeader(request, documentId,
+				user);
+
+		List<DocumentSection> documentSections = this
+				.getResumeSections(documentId);
+
+		copyPDF(response, resumePdfService.generatePdfDocument(resumeHeader,
+				documentSections));
+		response.setStatus(HttpStatus.OK.value());
+		response.flushBuffer();
+
+	}
+
+	/**
+	 * Writes the pdf document to the response.
+	 * 
+	 * @param response
+	 * @param report
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
+	private void copyPDF(HttpServletResponse response,
+			ByteArrayOutputStream report) throws DocumentException, IOException {
+		InputStream in = new ByteArrayInputStream(report.toByteArray());
+		FileCopyUtils.copy(in, response.getOutputStream());
+
+		response.setContentType("application/pdf");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ "report.pdf");
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
@@ -428,10 +485,6 @@ public class ResumeController {
 			map.put("error", ex.getMessage());
 		}
 		return map;
-	}
-
-	public void setAccountService(AccountService accountService) {
-		this.accountService = accountService;
 	}
 
 }

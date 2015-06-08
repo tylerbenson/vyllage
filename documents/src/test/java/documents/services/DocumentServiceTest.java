@@ -30,7 +30,7 @@ import documents.repository.IRepository;
 @RunWith(MockitoJUnitRunner.class)
 public class DocumentServiceTest {
 
-	private static final String JSON = "{" + "\"type\": \"experience\","
+	private static final String JSON = "{" + "\"type\": \"organization\","
 			+ "\"title\": \"experience\"," + "\"sectionId\": 124,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
