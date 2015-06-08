@@ -1,5 +1,6 @@
 hooks:
   pre_setup: npm install
+  worker_setup: createdb $TDDIUM_DB_NAME; psql $TDDIUM_DB_NAME -c 'CREATE EXTENSION postgis;'
 
 nodejs:
   version: '0.12.4'

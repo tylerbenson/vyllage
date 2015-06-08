@@ -193,7 +193,7 @@ configure(dbProjects) {
 	//	extension.outOfOrder = true
 		extension.user = System.getProperty("TDDIUM_DB_USER")
 		extension.password = System.getProperty("TDDIUM_DB_PASSWORD")
-		extension.url = 'jdbc:postgresql://localhost:5432/' + System.getProperty("TDDIUM_DB_NAME")
+		extension.url = 'jdbc:postgresql://' + System.getProperty('TDDIUM_DB_PG_HOST') + ':' + System.getProperty('TDDIUM_DB_PG_PORT') + '/' + System.getProperty("TDDIUM_DB_NAME")
 	}
 }	
 
