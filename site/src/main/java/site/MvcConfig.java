@@ -22,9 +22,13 @@ class MvcConfig extends WebMvcConfigurerAdapter {
 	@Autowired
 	private PrincipalDetailsInterceptor principalDetailsInterceptor;
 
+	@Autowired
+	private UserAgentRequestInterceptor userAgentWebRequestInterceptor;
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(principalDetailsInterceptor);
+		registry.addInterceptor(userAgentWebRequestInterceptor);
 	}
 
 	@Bean
