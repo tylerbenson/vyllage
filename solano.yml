@@ -10,12 +10,11 @@ java:
 
 postgresql:                              
   version: '9.4'                  
-  postgis: '2.1.1'                        
   adapter: postgresql                    
   config:                        
     pool: 5
     config:
-     postgis_extension: true
+     postgis_extension: false
      encoding: unicode
     pool: 5
 
