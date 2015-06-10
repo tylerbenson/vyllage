@@ -1,7 +1,6 @@
 var ResumeEditor = require('../Editor');
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
-var sinon = require('sinon');
 
 describe('Editor', function() {
 
