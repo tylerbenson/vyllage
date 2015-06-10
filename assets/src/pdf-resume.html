@@ -12,7 +12,7 @@
 
 <body>
   <h1 th:text="${header.firstName + ' ' + header.middleName + ' ' + header.lastName}">Names!</h1>
-  <h3 th:text="${header.tagline}">This is my tagline</h3>
+  <h2 th:text="${header.tagline}">This is my tagline</h2>
   <label th:text="${header.address}">Casa 123</label>
   <br/>
   <label th:text="${header.email}"> abcd@abcd.com</label>
@@ -24,19 +24,19 @@
   <th:block th:each="section : ${sections}">
     <th:block th:switch="${section.type.name()}">
       <th:block th:case="'FREEFORM'">
-        <h4 th:text="${#strings.capitalizeWords(section.title)}">
-        </h4>
+        <h3 th:text="${#strings.capitalizeWords(section.title)}">
+        </h3>
         <p th:utext="${section.description}"></p>
       </th:block>
       <th:block th:case="'ORGANIZATION'">
-        <h4 th:text="${#strings.capitalizeWords(section.title)}">
-        </h4>
+        <h3 th:text="${#strings.capitalizeWords(section.title)}">
+        </h3>
         <h4 th:text="${section.organizationName}">
         </h4>
         <p th:text="${section.organizationDescription}"></p>
-        <p th:text="${section.role}"></p>
+        <p class="role" th:text="${section.role}"></p>
         <p th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</p>
-        <p th:text="${section.location}"></p>
+        <p class="location" th:text="${section.location}"></p>
         <p th:utext="${section.roleDescription}"></p>
       </th:block>
     </th:block>
