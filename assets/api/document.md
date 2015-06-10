@@ -20,4 +20,9 @@
 + Response 204
 
 This endpoint is not intended for consumption from the UI. (Currently it can only be called from 127.0.0.1, might be replaced with role validation)
-	
+
+# Returns a PDF file conversion of the selected document
+## /resume/{documentId}/file/pdf
++ Parameters
+	++ documentId (string, `1`) - The id of the document.
++ Response 200 (application/pdf)
