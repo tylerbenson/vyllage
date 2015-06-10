@@ -7,13 +7,23 @@ nodejs:
 java:
   java_version: java-8-oracle
 
+postgresql:                              
+  version: '9.4'                  
+  adapter: postgresql                    
+  config:                        
+    pool: 5
+    config:
+     postgis_extension: false
+     encoding: unicode
+    pool: 5
+
 tests:
   - type: junit
     command: npm test
     report_files:
     - "assets/build/test-results/*.xml"
   - type: junit
-    command: ./gradlew test
+    command: ./gradlew test solanoPgtest
     report_files:
     - "accounts/build/test-results/*.xml"
 
