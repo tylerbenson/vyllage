@@ -1,7 +1,7 @@
 def vJavaLang = '1.8'
 def gradleDir = "${rootProject.rootDir}/gradle"
 ext.javascriptProjects = [ project(':assets') ]
-ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections'), project(':email'), project(':user-common'), project(':togglz') ]
+ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections'), project(':email'), project(':user-common'), project(':togglz'), project(':util') ]
 ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') ]
 ext.dbProjects = [ project(':accounts'), project(':documents'), project(':togglz') ]
 
@@ -39,10 +39,18 @@ configure(rootProject) {
 configure(javaProjects) {
     apply plugin: 'java'
 	apply plugin: 'jacoco'
+	apply plugin: 'findbugs'
 
 	jacoco {
 		toolVersion = "0.7.4.201502262128"
 		reportsDir = file("$buildDir/reports/Jacoco")
+	}
+	
+	findbugs {
+		ignoreFailures = false
+		//effort = "max"
+		reportLevel = "medium"
+		visitors = ["FindSqlInjection", "SwitchFallthrough"]
 	}
 
 	def slf4j = '1.7.12'

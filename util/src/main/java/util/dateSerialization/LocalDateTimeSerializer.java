@@ -1,4 +1,4 @@
-package documents.model.customDeserializer;
+package util.dateSerialization;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -12,26 +12,24 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
 
+	private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger
 			.getLogger(LocalDateTimeSerializer.class.getName());
 
 	private final DateTimeFormatter formatter = DateTimeFormatter
-			.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+			.ofPattern(YYYY_MM_DD);
 
 	@Override
 	public void serialize(LocalDateTime date, JsonGenerator jgen,
 			SerializerProvider provider) throws IOException,
 			JsonProcessingException {
 
-		if (date == null)
-			jgen.writeString("");
+		String dateString = "";
 
-		// logger.info(date.toString());
-
-		String dateString = date.format(formatter);
-
-		// logger.info(dateString);
+		if (date != null)
+			dateString = date.format(formatter);
 
 		jgen.writeString(dateString);
 	}

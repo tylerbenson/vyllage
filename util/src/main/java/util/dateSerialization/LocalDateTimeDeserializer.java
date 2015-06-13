@@ -1,4 +1,4 @@
-package connections.model.customDeserializer;
+package util.dateSerialization;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -15,8 +15,8 @@ public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
 	private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
 	@SuppressWarnings("unused")
-	private final Logger logger = Logger.getLogger(LocalDateTimeDeserializer.class
-			.getName());
+	private final Logger logger = Logger
+			.getLogger(LocalDateTimeDeserializer.class.getName());
 
 	@Override
 	public LocalDateTime deserialize(JsonParser jp, DeserializationContext ctxt)
@@ -28,8 +28,6 @@ public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
 
 		if (dateString == null || dateString.isEmpty())
 			return null;
-		// dateString += " 01"; // TODO: without the dd part it cannot be parsed
-		// into a valid date.
 
 		// logger.info(dateString);
 

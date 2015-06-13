@@ -3,12 +3,11 @@ package documents.model;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
+import util.dateSerialization.LocalDateTimeDeserializer;
+import util.dateSerialization.LocalDateTimeSerializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import documents.model.customDeserializer.LocalDateTimeDeserializer;
-import documents.model.customDeserializer.LocalDateTimeSerializer;
 
 @ToString
 public class Suggestion {
