@@ -9,6 +9,11 @@ import lombok.ToString;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import util.dateSerialization.LocalDateDeserializer;
+import util.dateSerialization.LocalDateSerializer;
+import util.dateSerialization.LocalDateTimeDeserializer;
+import util.dateSerialization.LocalDateTimeSerializer;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,10 +23,6 @@ import com.newrelic.api.agent.NewRelic;
 
 import documents.model.constants.SectionType;
 import documents.model.constants.Visibility;
-import documents.model.customDeserializer.LocalDateDeserializer;
-import documents.model.customDeserializer.LocalDateSerializer;
-import documents.model.customDeserializer.LocalDateTimeDeserializer;
-import documents.model.customDeserializer.LocalDateTimeSerializer;
 
 @JsonIgnoreProperties(value = { "documentId", "sectionVersion" })
 @ToString

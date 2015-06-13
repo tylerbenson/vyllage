@@ -3,12 +3,11 @@ package connections.model;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
+import util.dateSerialization.LocalDateTimeDeserializer;
+import util.dateSerialization.LocalDateTimeSerializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import connections.model.customDeserializer.LocalDateTimeDeserializer;
-import connections.model.customDeserializer.LocalDateTimeSerializer;
 
 /**
  * Request object to generate a link for a particular document for another user.

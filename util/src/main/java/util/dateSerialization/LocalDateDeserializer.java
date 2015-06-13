@@ -1,4 +1,4 @@
-package documents.model.customDeserializer;
+package util.dateSerialization;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
+
+	private static final String MMM_YYYY_DD = "MMM yyyy dd";
 
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(LocalDateDeserializer.class
@@ -26,13 +28,13 @@ public class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
 
 		if (dateString == null || dateString.isEmpty())
 			return null;
-		dateString += " 01"; // TODO: without the dd part it cannot be parsed
+		dateString += " 01"; // without the dd part it cannot be parsed
 								// into a valid date.
 
 		// logger.info(dateString);
 
 		LocalDate date = LocalDate.parse(dateString,
-				DateTimeFormatter.ofPattern("MMM yyyy dd"));
+				DateTimeFormatter.ofPattern(MMM_YYYY_DD));
 
 		return date;
 	}

@@ -13,6 +13,11 @@ import org.springframework.context.ApplicationContextAware;
 public class ApplicationContextProvider implements ApplicationContextAware {
 	private static ApplicationContext ctx = null;
 
+	public ApplicationContextProvider(ApplicationContext ctx) {
+		if (ApplicationContextProvider.ctx == null)
+			ApplicationContextProvider.ctx = ctx;
+	}
+
 	public static ApplicationContext getApplicationContext() {
 		return ctx;
 	}
@@ -20,7 +25,9 @@ public class ApplicationContextProvider implements ApplicationContextAware {
 	@Override
 	public void setApplicationContext(ApplicationContext ctx)
 			throws BeansException {
-		this.ctx = ctx;
+
+		if (ApplicationContextProvider.ctx == null)
+			ApplicationContextProvider.ctx = ctx;
 	}
 
 }

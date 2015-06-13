@@ -3,8 +3,8 @@ package accounts.model.link;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
-import accounts.model.customDeserializer.LocalDateTimeDeserializer;
-import accounts.model.customDeserializer.LocalDateTimeSerializer;
+import util.dateSerialization.LocalDateTimeDeserializer;
+import util.dateSerialization.LocalDateTimeSerializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

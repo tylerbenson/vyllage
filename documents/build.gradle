@@ -11,6 +11,7 @@ dependencies {
 	compile project(':email')
 	compile project(':user-common')
 	compile project(':togglz')
+	compile project(':util')
 	
 	compile 'org.apache.commons:commons-lang3:3.3.2'
 	

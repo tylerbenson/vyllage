@@ -185,7 +185,8 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 0L;
-		controller.saveSectionPositions(documentId, null);
+		List<Long> documentSectionIds = null;
+		controller.saveSectionPositions(documentId, documentSectionIds);
 
 	}
 

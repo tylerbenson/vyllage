@@ -74,8 +74,8 @@ public class BeansConfiguration {
 	@Bean
 	public ApplicationContextProvider applicationContextProvider(
 			ApplicationContext applicationContext) {
-		ApplicationContextProvider provider = new ApplicationContextProvider();
-		provider.setApplicationContext(applicationContext);
+		ApplicationContextProvider provider = new ApplicationContextProvider(
+				applicationContext);
 		return provider;
 	}
 
