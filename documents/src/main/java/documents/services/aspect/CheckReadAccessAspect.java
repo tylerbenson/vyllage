@@ -63,7 +63,10 @@ public class CheckReadAccessAspect {
 								uor -> OrganizationEnum.VYLLAGE
 										.getOrganizationId().equals(
 												((UserOrganizationRole) uor)
-														.getOrganizationId()));
+														.getOrganizationId())
+										&& ((UserOrganizationRole) uor)
+												.getAuthority()
+												.equalsIgnoreCase("ADMIN"));
 	}
 
 	protected User getUser() {
