@@ -11,8 +11,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import util.dateSerialization.LocalDateDeserializer;
 import util.dateSerialization.LocalDateSerializer;
-import util.dateSerialization.LocalDateTimeDeserializer;
-import util.dateSerialization.LocalDateTimeSerializer;
+import util.dateSerialization.DocumentLocalDateTimeDeserializer;
+import util.dateSerialization.DocumentLocalDateTimeSerializer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -56,8 +56,8 @@ public class DocumentSection {
 	private String description;
 	private int numberOfComments;
 
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
+	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
 	private LocalDateTime lastModified;
 
 	public DocumentSection() {

@@ -10,13 +10,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
+public class DocumentLocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
 
-	private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+	private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss";
 
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger
-			.getLogger(LocalDateTimeSerializer.class.getName());
+			.getLogger(DocumentLocalDateTimeSerializer.class.getName());
 
 	private final DateTimeFormatter formatter = DateTimeFormatter
 			.ofPattern(YYYY_MM_DD);

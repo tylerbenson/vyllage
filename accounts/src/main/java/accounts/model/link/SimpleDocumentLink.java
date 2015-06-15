@@ -3,11 +3,11 @@ package accounts.model.link;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
-import util.dateSerialization.LocalDateTimeDeserializer;
-import util.dateSerialization.LocalDateTimeSerializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 /**
  * Object used to share a document link without creating a new user. Used to

@@ -1,4 +1,4 @@
-package accounts.constants;
+package user.common.constants;
 
 public enum OrganizationEnum {
 	VYLLAGE(0L);
