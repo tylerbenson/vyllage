@@ -3,11 +3,11 @@ package accounts.model.link;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
-import util.dateSerialization.LocalDateTimeDeserializerMs;
-import util.dateSerialization.LocalDateTimeSerializerMs;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 /**
  * Request object to generate a link for a particular document for another user.
@@ -30,8 +30,8 @@ public class DocumentLinkRequest {
 
 	private boolean sendRegistrationMail;
 
-	@JsonSerialize(using = LocalDateTimeSerializerMs.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializerMs.class)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime expirationDate;
 
 	public String getFirstName() {

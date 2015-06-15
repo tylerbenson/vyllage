@@ -3,8 +3,8 @@ package documents.model;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
-import util.dateSerialization.LocalDateTimeDeserializer;
-import util.dateSerialization.LocalDateTimeSerializer;
+import util.dateSerialization.DocumentLocalDateTimeDeserializer;
+import util.dateSerialization.DocumentLocalDateTimeSerializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -18,8 +18,8 @@ public class Comment {
 	private Long userId;
 	private String commentText;
 
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
+	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
 	private LocalDateTime lastModified;
 	private String userName;
 
