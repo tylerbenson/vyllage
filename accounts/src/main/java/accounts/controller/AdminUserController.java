@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
-import accounts.constants.OrganizationEnum;
+import user.common.constants.OrganizationEnum;
 import accounts.model.BatchAccount;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;

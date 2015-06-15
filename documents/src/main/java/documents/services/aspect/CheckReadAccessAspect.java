@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import user.common.User;
+import user.common.UserOrganizationRole;
+import user.common.constants.OrganizationEnum;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -26,18 +28,18 @@ public class CheckReadAccessAspect {
 	private AccountService accountService;
 
 	@Before("execution(* *(..)) && args(request, documentId) && @annotation(CheckReadAccess)")
-	public void checkOwner(JoinPoint joinPoint, HttpServletRequest request,
-			Long documentId) throws AccessDeniedException,
-			ElementNotFoundException {
+	public void checkReadAccess(JoinPoint joinPoint,
+			HttpServletRequest request, Long documentId)
+			throws AccessDeniedException, ElementNotFoundException {
 
 		Long firstUserId = documentService.getDocument(documentId).getUserId();
 
-		Long secondUserId = getUserId();
+		Long secondUserId = getUser().getUserId();
 
 		System.out.println("firstUserId " + firstUserId + " secondUserId "
 				+ secondUserId);
 
-		if (firstUserId.equals(secondUserId))
+		if (sameUserOrVyllageAdministrator(firstUserId, secondUserId))
 			return;
 
 		// Users belong to the same organization?
@@ -51,17 +53,22 @@ public class CheckReadAccessAspect {
 
 	}
 
-	protected Long getUserId() {
-		return ((User) SecurityContextHolder.getContext().getAuthentication()
-				.getPrincipal()).getUserId();
+	public boolean sameUserOrVyllageAdministrator(Long firstUserId,
+			Long secondUserId) {
+		return firstUserId.equals(secondUserId)
+				|| getUser()
+						.getAuthorities()
+						.stream()
+						.anyMatch(
+								uor -> OrganizationEnum.VYLLAGE
+										.getOrganizationId().equals(
+												((UserOrganizationRole) uor)
+														.getOrganizationId()));
 	}
 
-	// public void setDocumentService(DocumentService documentService) {
-	// this.documentService = documentService;
-	// }
-	//
-	// public void setAccountService(AccountService accountService) {
-	// this.accountService = accountService;
-	// }
+	protected User getUser() {
+		return ((User) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal());
+	}
 
 }

@@ -10,13 +10,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
-public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
+public class LocalDateTimeDeserializerMs extends
+		JsonDeserializer<LocalDateTime> {
 
-	private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss";
+	private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger
-			.getLogger(LocalDateTimeDeserializer.class.getName());
+			.getLogger(LocalDateTimeDeserializerMs.class.getName());
 
 	@Override
 	public LocalDateTime deserialize(JsonParser jp, DeserializationContext ctxt)

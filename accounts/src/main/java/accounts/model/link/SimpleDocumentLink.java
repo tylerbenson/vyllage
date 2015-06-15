@@ -3,8 +3,8 @@ package accounts.model.link;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
-import util.dateSerialization.LocalDateTimeDeserializer;
-import util.dateSerialization.LocalDateTimeSerializer;
+import util.dateSerialization.LocalDateTimeDeserializerMs;
+import util.dateSerialization.LocalDateTimeSerializerMs;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -24,8 +24,8 @@ public class SimpleDocumentLink {
 	private Long documentId;
 	private String documentType;
 
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializerMs.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializerMs.class)
 	private LocalDateTime expirationDate;
 
 	public Long getUserId() {
