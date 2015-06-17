@@ -42,6 +42,18 @@ public class UserOrganizationRoleRepository {
 				.collect(Collectors.toList());
 	}
 
+	public List<UserOrganizationRole> getByOrganizationId(Long organizationId) {
+		Result<UserOrganizationRolesRecord> records = sql.fetch(
+				USER_ORGANIZATION_ROLES,
+				USER_ORGANIZATION_ROLES.ORGANIZATION_ID.eq(organizationId));
+
+		return records
+				.stream()
+				.map(r -> new UserOrganizationRole(r.getUserId(), r
+						.getOrganizationId(), r.getRole(), r.getAuditUserId()))
+				.collect(Collectors.toList());
+	}
+
 	public void create(UserOrganizationRole role) {
 
 		if (!this.exists(role.getUserId(), role.getOrganizationId(),
@@ -124,4 +136,5 @@ public class UserOrganizationRoleRepository {
 								organizationId).and(
 								USER_ORGANIZATION_ROLES.ROLE.eq(role)))));
 	}
+
 }

@@ -23,6 +23,7 @@ import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.OrganizationEnum;
+import accounts.model.AccountRoleManagementForm;
 import accounts.model.BatchAccount;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
@@ -83,7 +84,24 @@ public class AdminUserController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String admin(@AuthenticationPrincipal User user, Model model) {
 		prepareBatch(model, user);
-		return "adminAccountManagement";
+		return "adminBatchAccountCreation";
+	}
+
+	@RequestMapping(value = "/user/role", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String adminRoleManagement(@AuthenticationPrincipal User user,
+			Model model) {
+
+		List<Organization> allOrganizations = getUserOrganizations(user);
+		model.addAttribute("organizations", allOrganizations);
+		model.addAttribute("users", userService
+				.getUsersFromOrganization(allOrganizations.get(0)
+						.getOrganizationId()));
+
+		model.addAttribute("roles", roleRepository.getAll());
+		model.addAttribute("accountRolesManagementForm",
+				new AccountRoleManagementForm());
+		return "adminAccountRoleManagement";
 	}
 
 	@RequestMapping(value = "/user/createBatch", method = RequestMethod.POST)
@@ -98,13 +116,13 @@ public class AdminUserController {
 					model,
 					"Please provide ',' or line separated emails and select the Group the users will belong to.",
 					user);
-			return "adminAccountManagement";
+			return "adminBatchAccountCreation";
 		}
 
 		userService.batchCreateUsers(batch, user);
 
 		prepareBatch(model, user);
-		return "adminAccountManagement";
+		return "adminBatchAccountCreation";
 	}
 
 	@RequestMapping(value = "/user/sameOrganization", method = RequestMethod.GET)

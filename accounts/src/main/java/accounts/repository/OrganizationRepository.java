@@ -37,5 +37,4 @@ public class OrganizationRepository {
 				.where(ORGANIZATIONS.ORGANIZATION_ID.in(organizationIds))
 				.fetch().into(Organization.class);
 	}
-
 }

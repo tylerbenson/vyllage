@@ -563,4 +563,12 @@ public class UserService {
 		return userRepository.loadUserByUsername(user.getUsername());
 	}
 
+	public List<User> getUsersFromOrganization(Long organizationId) {
+		List<UserOrganizationRole> byOrganizationId = userOrganizationRoleRepository
+				.getByOrganizationId(organizationId);
+
+		return userRepository.getAll(byOrganizationId.stream()
+				.map(uor -> uor.getUserId()).collect(Collectors.toList()));
+	}
+
 }
