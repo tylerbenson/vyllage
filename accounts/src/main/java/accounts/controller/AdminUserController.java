@@ -1,6 +1,7 @@
 package accounts.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +27,7 @@ import user.common.UserOrganizationRole;
 import user.common.constants.OrganizationEnum;
 import accounts.model.AccountRoleManagementForm;
 import accounts.model.BatchAccount;
+import accounts.model.UserNameAndId;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.repository.OrganizationRepository;
@@ -145,6 +148,20 @@ public class AdminUserController {
 						uor -> secondUserOrganizationIds
 								.contains(((UserOrganizationRole) uor)
 										.getOrganizationId()));
+	}
+
+	@RequestMapping(value = "/organization/{organizationId}/users", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public @ResponseBody List<UserNameAndId> getUsersFromOrganization(
+			@PathVariable Long organizationId) {
+		List<UserNameAndId> users = new ArrayList<>();
+
+		userService.getUsersFromOrganization(organizationId)
+				.forEach(
+						u -> users.add(new UserNameAndId(u.getUserId(), u
+								.getUsername())));
+
+		return users;
 	}
 
 	private void prepareBatchError(BatchAccount batch, Model model, String msg,
