@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -326,4 +327,17 @@ public class AccountController {
 				+ "Last Access: " + new Date(session.getLastAccessedTime()));
 	}
 
+	@RequestMapping(value = "{userId}/roles", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public @ResponseBody List<String> adminRoleManagement(
+			@PathVariable Long userId) throws UserNotFoundException {
+		User user = userService.getUser(userId);
+
+		if (user.getAuthorities() == null || user.getAuthorities().isEmpty())
+			return Collections.emptyList();
+
+		return user.getAuthorities().stream()
+				.map(a -> a.getAuthority().toUpperCase())
+				.collect(Collectors.toList());
+	}
 }

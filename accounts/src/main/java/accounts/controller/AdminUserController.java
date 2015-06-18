@@ -25,11 +25,12 @@ import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.OrganizationEnum;
-import accounts.model.AccountRoleManagementForm;
 import accounts.model.BatchAccount;
 import accounts.model.UserNameAndId;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
+import accounts.model.form.AccountRoleManagementForm;
+import accounts.model.form.UserRoleManagementForm;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserNotFoundException;
@@ -92,6 +93,47 @@ public class AdminUserController {
 
 	@RequestMapping(value = "/user/role", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
+	public String showUserRoles(@AuthenticationPrincipal User user, Model model) {
+
+		List<Organization> allOrganizations = getUserOrganizations(user);
+		model.addAttribute("organizations", allOrganizations);
+		model.addAttribute("users", userService
+				.getUsersFromOrganization(allOrganizations.get(0)
+						.getOrganizationId()));
+
+		model.addAttribute("roles", roleRepository.getAll());
+		model.addAttribute("userRoleManagementForm",
+				new UserRoleManagementForm());
+		return "adminUserRoleManagement";
+	}
+
+	@RequestMapping(value = "/user/role", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String setUserRoles(@AuthenticationPrincipal User user,
+			UserRoleManagementForm form, Model model) {
+
+		System.out.println(form);
+
+		if (form.isInvalid()) {
+			List<Organization> allOrganizations = getUserOrganizations(user);
+			model.addAttribute("organizations", allOrganizations);
+			model.addAttribute("users", userService
+					.getUsersFromOrganization(allOrganizations.get(0)
+							.getOrganizationId()));
+
+			model.addAttribute("roles", roleRepository.getAll());
+			model.addAttribute("userRoleManagementForm", form);
+
+			System.out.println(form);
+
+			return "adminUserRoleManagement";
+		}
+
+		return "redirect:/admin/user/role";
+	}
+
+	@RequestMapping(value = "/users/roles", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public String adminRoleManagement(@AuthenticationPrincipal User user,
 			Model model) {
 
@@ -107,7 +149,7 @@ public class AdminUserController {
 		return "adminAccountRoleManagement";
 	}
 
-	@RequestMapping(value = "/user/role/set", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+	@RequestMapping(value = "/users/roles", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String setRoles(@AuthenticationPrincipal User user,
 			AccountRoleManagementForm form, Model model) {
@@ -126,7 +168,17 @@ public class AdminUserController {
 			return "adminAccountRoleManagement";
 		}
 
-		return "redirect:/admin/user/role";
+		// List<GrantedAuthority> newRolesForOrganization = new ArrayList<>(
+		// existingUser.getAuthorities());
+		// newRolesForOrganization.add(new UserOrganizationRole(
+		// existingUser.getUserId(), batchAccount
+		// .getOrganization(), batchAccount.getRole(),
+		// loggedInUser.getUserId()));
+		//
+		// userService.updateUserRolesByOrganization(newRolesForOrganization,
+		// user);
+
+		return "redirect:/admin/users/roles";
 	}
 
 	@RequestMapping(value = "/user/createBatch", method = RequestMethod.POST)

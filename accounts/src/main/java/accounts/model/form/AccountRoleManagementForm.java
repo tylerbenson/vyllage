@@ -1,4 +1,4 @@
-package accounts.model;
+package accounts.model.form;
 
 import java.util.List;
 

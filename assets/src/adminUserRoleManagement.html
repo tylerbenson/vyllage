@@ -22,7 +22,7 @@
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
-<body class="admin">
+<body class="admin" onload="adminFormOrganizationChange()">
   <div id="container">
     <header>
       <div class="content">
@@ -34,21 +34,17 @@
       </div>
     </header>
     <div class="section content">
-      <form name="adminForm" class="container" action="#" th:action="@{/admin/users/roles}" th:object="${accountRolesManagementForm}"
+      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/role}" th:object="${userRoleManagementForm}"
       method="post" onsubmit="adminFormSubmit()">
         <select id='organizationId' name='organizationId' onchange="adminFormOrganizationChange()">
           <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}">Some organization</option>
         </select>
-        <select id="userIds" name="userIds" multiple="multiple">
-          <option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}">Some Role</option>
+        <select id="userIds" name="userId" onchange="adminFormUserSelected()">
+          <option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}">Some User</option>
         </select>
-        <select name="roles" multiple="multiple">
+        <select id="roles" name="roles" multiple="multiple">
           <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}">Some Role</option>
         </select>
-        <label>Replace</label>
-        <input type="radio" th:field="*{append}" value="false" />
-        <label>Append</label>
-        <input type="radio" th:field="*{append}" value="true" />
 
         <button name="set-roles" type="submit" class="pull right padded send-btn">Submit</button>
         <label th:if="*{error != null}" th:text="*{error}" style="color: red;"></label>
@@ -86,27 +82,57 @@
 
   //Updates the select with the users from the selected organization
   adminFormOrganizationChange = function() {
-      var organizationId = document.adminForm.organizationId.value;
+    var organizationId = document.adminForm.organizationId.value;
+
+    var request = new XMLHttpRequest();
+
+    request.onreadystatechange = function() {
+      if (request.readyState == 4 && request.status == 200) {
+        var users = JSON.parse(request.responseText);
+        var userSelect = document.getElementById('userIds');
+        userSelect.options.length = 0; //clearing options
+
+        for (i = 0; i < users.length; i++) {
+          userSelect.options[i] = new Option(users[i].username, users[i].userId, false, false);
+        }
+        adminFormUserSelected();
+        //           console.log(request.responseText);
+
+      }
+    }
+    request.open("GET", "/admin/organization/" + organizationId + "/users", true);
+    request.send();
+  }
+
+  //Updates the roles select with the roles from the user.
+  adminFormUserSelected = function() {
+      var userId = document.adminForm.userId.value;
+
+      if (userId === null || userId === "")
+        return;
 
       var request = new XMLHttpRequest();
 
       request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
-          var users = JSON.parse(request.responseText);
-          var userSelect = document.getElementById('userIds');
-          userSelect.options.length = 0; //clearing options
+          var roles = JSON.parse(request.responseText);
+          var rolesSelect = document.getElementById('roles');
 
-          for (i = 0; i < users.length; i++) {
-            userSelect.options[i] = new Option(users[i].username, users[i].userId, false, false);
+          for (i = 0; i < rolesSelect.options.length; i++) {
+            rolesSelect.options[i].selected = false;
+
+            roles.filter(function(role) {
+              var found = role === rolesSelect.options[i].value
+              if (found)
+                rolesSelect.options[i].selected = true;
+
+              return found;
+            });
           }
-
-          //           console.log(request.responseText);
-
         }
       }
-      request.open("GET", "/admin/organization/" + organizationId + "/users", true);
+      request.open("GET", "/account/" + userId + "/roles", true);
       request.send();
-
     }
     // ]]>
   </script>
