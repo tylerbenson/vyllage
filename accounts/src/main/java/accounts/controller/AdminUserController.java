@@ -107,6 +107,28 @@ public class AdminUserController {
 		return "adminAccountRoleManagement";
 	}
 
+	@RequestMapping(value = "/user/role/set", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String setRoles(@AuthenticationPrincipal User user,
+			AccountRoleManagementForm form, Model model) {
+		System.out.println(form);
+
+		if (form.isInvalid()) {
+			List<Organization> allOrganizations = getUserOrganizations(user);
+			model.addAttribute("organizations", allOrganizations);
+			model.addAttribute("users", userService
+					.getUsersFromOrganization(allOrganizations.get(0)
+							.getOrganizationId()));
+
+			model.addAttribute("roles", roleRepository.getAll());
+			model.addAttribute("accountRolesManagementForm", form);
+			System.out.println(form);
+			return "adminAccountRoleManagement";
+		}
+
+		return "redirect:/admin/user/role";
+	}
+
 	@RequestMapping(value = "/user/createBatch", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String batchAccountCreation(BatchAccount batch,

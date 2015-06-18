@@ -34,9 +34,9 @@
       </div>
     </header>
     <div class="section content">
-      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/set-roles}" th:object="${accountRolesManagementForm}"
-      method="post" onsubmit="adminFormSubmit()" onchange="adminFormOrganizationChange()">
-        <select id='organizationId' name='organizationId'>
+      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/role/set}" th:object="${accountRolesManagementForm}"
+      method="post" onsubmit="adminFormSubmit()">
+        <select id='organizationId' name='organizationId' onchange="adminFormOrganizationChange()">
           <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}">Some organization</option>
         </select>
         <select id="userIds" name="userIds" multiple="multiple">
@@ -45,8 +45,13 @@
         <select name="roles" multiple="multiple">
           <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}">Some Role</option>
         </select>
-        <button name="batchAccounts" type="submit" class="pull right padded send-btn">Submit</button>
-        <label th:if="${error != null}" th:text="${error}" style="color: red;"></label>
+        <label>Replace</label>
+        <input type="radio" th:field="*{append}" value="false" />
+        <label>Append</label>
+        <input type="radio" th:field="*{append}" value="true" />
+
+        <button name="set-roles" type="submit" class="pull right padded send-btn">Submit</button>
+        <label th:if="*{error != null}" th:text="*{error}" style="color: red;"></label>
       </form>
     </div>
   </div>
