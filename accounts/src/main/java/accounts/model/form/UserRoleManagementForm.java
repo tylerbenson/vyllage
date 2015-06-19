@@ -48,7 +48,11 @@ public class UserRoleManagementForm {
 	}
 
 	public boolean isInvalid() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean invalid = organizationId == null || userId == null
+				|| roles == null || roles.isEmpty();
+
+		setError("You must select an organization, user and roles to complete this operation.");
+
+		return invalid;
 	}
 }

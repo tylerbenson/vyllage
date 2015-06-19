@@ -322,7 +322,7 @@ public class UserService {
 		return loadUserByUsername;
 	}
 
-	public void updateUserRolesByOrganization(
+	protected void updateUserRolesByOrganization(
 			List<GrantedAuthority> newRolesForOrganization, User loggedInUser) {
 
 		// Long organizationId = ((UserOrganizationRole) newRolesForOrganization
@@ -569,6 +569,23 @@ public class UserService {
 
 		return userRepository.getAll(byOrganizationId.stream()
 				.map(uor -> uor.getUserId()).collect(Collectors.toList()));
+	}
+
+	public void appendUserRoles(List<UserOrganizationRole> userOrganizationRole) {
+		userOrganizationRole.stream().forEach(
+				uor -> userOrganizationRoleRepository.create(uor));
+	}
+
+	public void setUserRoles(List<UserOrganizationRole> userOrganizationRole) {
+		Long organizationId = userOrganizationRole.get(0).getOrganizationId();
+		Long userId = userOrganizationRole.get(0).getUserId();
+
+		userOrganizationRoleRepository.deleteByUserIdAndOrganizationId(userId,
+				organizationId);
+
+		userOrganizationRole.stream().forEach(
+				uor -> userOrganizationRoleRepository.create(uor));
+
 	}
 
 }

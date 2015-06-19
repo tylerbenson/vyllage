@@ -46,9 +46,9 @@
           <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}">Some Role</option>
         </select>
         <label>Replace</label>
-        <input type="radio" th:field="*{append}" value="false" />
+        <input type="radio" th:field="${accountRolesManagementForm.append}" value="false" />
         <label>Append</label>
-        <input type="radio" th:field="*{append}" value="true" />
+        <input type="radio" th:field="${accountRolesManagementForm.append}" value="true" />
 
         <button name="set-roles" type="submit" class="pull right padded send-btn">Submit</button>
         <label th:if="*{error != null}" th:text="*{error}" style="color: red;"></label>

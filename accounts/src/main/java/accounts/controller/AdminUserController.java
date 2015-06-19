@@ -129,6 +129,15 @@ public class AdminUserController {
 			return "adminUserRoleManagement";
 		}
 
+		userService
+				.setUserRoles(form
+						.getRoles()
+						.stream()
+						.map(s -> new UserOrganizationRole(form.getUserId(),
+								form.getOrganizationId(), s.toUpperCase(), user
+										.getUserId()))
+						.collect(Collectors.toList()));
+
 		return "redirect:/admin/user/role";
 	}
 
@@ -168,15 +177,26 @@ public class AdminUserController {
 			return "adminAccountRoleManagement";
 		}
 
-		// List<GrantedAuthority> newRolesForOrganization = new ArrayList<>(
-		// existingUser.getAuthorities());
-		// newRolesForOrganization.add(new UserOrganizationRole(
-		// existingUser.getUserId(), batchAccount
-		// .getOrganization(), batchAccount.getRole(),
-		// loggedInUser.getUserId()));
-		//
-		// userService.updateUserRolesByOrganization(newRolesForOrganization,
-		// user);
+		List<UserOrganizationRole> userOrganizationRoles = new ArrayList<>();
+
+		for (Long userId : form.getUserIds()) {
+			for (String role : form.getRoles()) {
+				userOrganizationRoles.add(new UserOrganizationRole(userId, form
+						.getOrganizationId(), role, user.getUserId()));
+			}
+		}
+
+		if (form.isAppend())
+			userService.appendUserRoles(userOrganizationRoles);
+		else
+			// replace
+			userOrganizationRoles
+					.stream()
+					.collect(
+							Collectors.groupingBy(
+									UserOrganizationRole::getUserId,
+									Collectors.toList()))
+					.forEach((k, v) -> userService.setUserRoles(v));
 
 		return "redirect:/admin/users/roles";
 	}
