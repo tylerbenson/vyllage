@@ -1,20 +1,22 @@
-package accounts.model;
+package accounts.model.form;
+
+import user.common.User;
 
 /**
- * Hmm..
+ * Represents a user for the forms
  * 
  * @author uh
  *
  */
-public class UserNameAndId {
+public class UserFormObject {
 
 	private Long userId;
 	private String username;
 
-	public UserNameAndId(Long userId, String username) {
+	public UserFormObject(User user) {
 		super();
-		this.userId = userId;
-		this.username = username;
+		this.userId = user.getUserId();
+		this.username = user.getUsername();
 	}
 
 	public Long getUserId() {

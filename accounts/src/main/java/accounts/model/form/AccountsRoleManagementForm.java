@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.ToString;
 
 @ToString
-public class AccountRoleManagementForm {
+public class AccountsRoleManagementForm {
 
 	private Long organizationId;
 

@@ -26,10 +26,12 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.OrganizationEnum;
 import accounts.model.BatchAccount;
-import accounts.model.UserNameAndId;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
-import accounts.model.form.AccountRoleManagementForm;
+import accounts.model.form.AccountsRoleManagementForm;
+import accounts.model.form.AdminUsersForm;
+import accounts.model.form.UserFormObject;
+import accounts.model.form.UserOrganizationForm;
 import accounts.model.form.UserRoleManagementForm;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
@@ -112,8 +114,6 @@ public class AdminUserController {
 	public String setUserRoles(@AuthenticationPrincipal User user,
 			UserRoleManagementForm form, Model model) {
 
-		System.out.println(form);
-
 		if (form.isInvalid()) {
 			List<Organization> allOrganizations = getUserOrganizations(user);
 			model.addAttribute("organizations", allOrganizations);
@@ -123,8 +123,6 @@ public class AdminUserController {
 
 			model.addAttribute("roles", roleRepository.getAll());
 			model.addAttribute("userRoleManagementForm", form);
-
-			System.out.println(form);
 
 			return "adminUserRoleManagement";
 		}
@@ -141,9 +139,41 @@ public class AdminUserController {
 		return "redirect:/admin/user/role";
 	}
 
+	@RequestMapping(value = "/users", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String showUsers(@AuthenticationPrincipal User user, Model model) {
+
+		List<Organization> allOrganizations = getUserOrganizations(user);
+
+		List<User> usersFromOrganization = userService
+				.getUsersFromOrganization(allOrganizations.get(0)
+						.getOrganizationId());
+
+		model.addAttribute("organizations", allOrganizations);
+		model.addAttribute("users", usersFromOrganization);
+		model.addAttribute("form", new AdminUsersForm());
+
+		return "adminUsers";
+	}
+
+	@RequestMapping(value = "/users", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String showUsersPOST(@AuthenticationPrincipal User user,
+			AdminUsersForm form, Model model) {
+
+		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<User> usersFromOrganization = userService
+				.getUsersFromOrganization(form.getOrganizationId());
+
+		model.addAttribute("organizations", allOrganizations);
+		model.addAttribute("users", usersFromOrganization);
+
+		return "adminUsers";
+	}
+
 	@RequestMapping(value = "/users/roles", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String adminRoleManagement(@AuthenticationPrincipal User user,
+	public String adminUserRoleManagement(@AuthenticationPrincipal User user,
 			Model model) {
 
 		List<Organization> allOrganizations = getUserOrganizations(user);
@@ -154,15 +184,26 @@ public class AdminUserController {
 
 		model.addAttribute("roles", roleRepository.getAll());
 		model.addAttribute("accountRolesManagementForm",
-				new AccountRoleManagementForm());
+				new AccountsRoleManagementForm());
 		return "adminAccountRoleManagement";
+	}
+
+	@RequestMapping(value = "/users/{userId}/organizations", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String adminUserOrganizationManagement(
+			@AuthenticationPrincipal User user, Model model) {
+
+		List<Organization> allOrganizations = getUserOrganizations(user);
+		model.addAttribute("organizations", allOrganizations);
+		model.addAttribute("form", new UserOrganizationForm());
+
+		return "adminUserOrganizationManagement";
 	}
 
 	@RequestMapping(value = "/users/roles", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String setRoles(@AuthenticationPrincipal User user,
-			AccountRoleManagementForm form, Model model) {
-		System.out.println(form);
+			AccountsRoleManagementForm form, Model model) {
 
 		if (form.isInvalid()) {
 			List<Organization> allOrganizations = getUserOrganizations(user);
@@ -246,14 +287,12 @@ public class AdminUserController {
 
 	@RequestMapping(value = "/organization/{organizationId}/users", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public @ResponseBody List<UserNameAndId> getUsersFromOrganization(
+	public @ResponseBody List<UserFormObject> getUsersFromOrganization(
 			@PathVariable Long organizationId) {
-		List<UserNameAndId> users = new ArrayList<>();
+		List<UserFormObject> users = new ArrayList<>();
 
-		userService.getUsersFromOrganization(organizationId)
-				.forEach(
-						u -> users.add(new UserNameAndId(u.getUserId(), u
-								.getUsername())));
+		userService.getUsersFromOrganization(organizationId).forEach(
+				u -> users.add(new UserFormObject(u)));
 
 		return users;
 	}
