@@ -3,6 +3,7 @@ package accounts.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
+import accounts.service.DocumentService;
 import accounts.service.UserService;
 
 @Controller
@@ -51,15 +53,19 @@ public class AdminUserController {
 
 	private final AccountSettingsService accountSettingsService;
 
+	private final DocumentService documentService;
+
 	@Inject
 	public AdminUserController(final UserService userService,
 			final RoleRepository roleRepository,
 			final OrganizationRepository organizationRepository,
-			final AccountSettingsService accountSettingsService) {
+			final AccountSettingsService accountSettingsService,
+			final DocumentService documentService) {
 		this.userService = userService;
 		this.roleRepository = roleRepository;
 		this.organizationRepository = organizationRepository;
 		this.accountSettingsService = accountSettingsService;
+		this.documentService = documentService;
 	}
 
 	@ModelAttribute("accountName")
@@ -141,13 +147,26 @@ public class AdminUserController {
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String showUsers(@AuthenticationPrincipal User user, Model model) {
+	public String showUsers(final HttpServletRequest request,
+			@AuthenticationPrincipal User user, Model model) {
 
 		List<Organization> allOrganizations = getUserOrganizations(user);
 
-		List<User> usersFromOrganization = userService
-				.getUsersFromOrganization(allOrganizations.get(0)
-						.getOrganizationId());
+		List<UserFormObject> usersFromOrganization = userService
+				.getUsersFromOrganization(
+						allOrganizations.get(0).getOrganizationId())
+				.stream()
+				.map(u -> new UserFormObject(u))
+				.map(uf -> {
+					try {
+						uf.setDocuments(documentService.getUserDocumentId(
+								request, uf.getUserId()));
+					} catch (Exception e) {
+						// no documents, empty list
+						uf.setDocuments(Collections.emptyList());
+					}
+					return uf;
+				}).collect(Collectors.toList());
 
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("users", usersFromOrganization);
@@ -158,12 +177,25 @@ public class AdminUserController {
 
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String showUsersPOST(@AuthenticationPrincipal User user,
-			AdminUsersForm form, Model model) {
+	public String showUsersPOST(HttpServletRequest request,
+			@AuthenticationPrincipal User user, AdminUsersForm form, Model model) {
 
 		List<Organization> allOrganizations = getUserOrganizations(user);
-		List<User> usersFromOrganization = userService
-				.getUsersFromOrganization(form.getOrganizationId());
+
+		List<UserFormObject> usersFromOrganization = userService
+				.getUsersFromOrganization(form.getOrganizationId())
+				.stream()
+				.map(u -> new UserFormObject(u))
+				.map(uf -> {
+					try {
+						uf.setDocuments(documentService.getUserDocumentId(
+								request, uf.getUserId()));
+					} catch (Exception e) {
+						// no documents, empty list
+						uf.setDocuments(Collections.emptyList());
+					}
+					return uf;
+				}).collect(Collectors.toList());
 
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("users", usersFromOrganization);

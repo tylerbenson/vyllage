@@ -57,6 +57,9 @@
               <th>
                 Roles
               </th>
+              <th>
+                Resume
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -73,6 +76,11 @@
               <td>
                 <th:block th:each="role : ${user.authorities}">
                   <div th:text="${role.authority}"></div>
+                </th:block>
+              </td>
+              <td>
+                <th:block th:each="doc : ${user.documents}">
+                  <a th:href="@{/resume/{documentId}(documentId=${doc})}" th:text="${'Document ' + doc}"> Document </a>
                 </th:block>
               </td>
             </tr>
