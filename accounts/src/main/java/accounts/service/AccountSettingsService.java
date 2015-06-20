@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import user.common.User;
+import user.common.UserOrganizationRole;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
@@ -185,13 +186,15 @@ public class AccountSettingsService {
 			// username is final...
 			// password is erased after the user logins but we need something
 			// here, even if we won't change it
+			@SuppressWarnings("unchecked")
 			User newUser = new User(user.getUserId(), user.getFirstName(),
 					user.getMiddleName(), user.getLastName(),
 					setting.getValue(), "a password we don't care about",
 					user.isEnabled(), user.isAccountNonExpired(),
 					user.isCredentialsNonExpired(), user.isAccountNonLocked(),
-					user.getAuthorities(), user.getDateCreated(),
-					user.getLastModified());
+					(List<UserOrganizationRole>) user.getAuthorities().stream()
+							.collect(Collectors.toList()),
+					user.getDateCreated(), user.getLastModified());
 			userService.update(newUser);
 		}
 

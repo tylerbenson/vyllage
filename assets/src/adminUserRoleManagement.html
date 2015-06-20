@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Vyllage Admin | Account Management</title>
+  <title>Vyllage Admin | Account Role Management</title>
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -30,11 +30,16 @@
           <img src="images/logo-white.png" alt="Vyllage" />
           <span>Vyllage</span>
         </div>
-        <span class="page-title">Account Management</span>
+        <span class="page-title">Account Role Management</span>
+        <a th:href="@{/admin/users}"> Users </a> |
+        <a th:href="@{/admin/user/roles}"> Single User Role Editor </a> |
+        <a th:href="@{/admin/users/roles}"> Users Role Editor </a> |
+        <a th:href="@{/admin/user/batch}"> Batch Account </a>
       </div>
     </header>
     <div class="section content">
-      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/role}" th:object="${userRoleManagementForm}"
+      <label> Shows the roles a user has and allows assigning new ones. </label>
+      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/roles}" th:object="${userRoleManagementForm}"
       method="post" onsubmit="adminFormSubmit()">
         <select id='organizationId' name='organizationId' onchange="adminFormOrganizationChange()">
           <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}">Some organization</option>

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,7 @@ import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.form.AccountsRoleManagementForm;
 import accounts.model.form.AdminUsersForm;
+import accounts.model.form.OrganizationOptionForm;
 import accounts.model.form.UserFormObject;
 import accounts.model.form.UserOrganizationForm;
 import accounts.model.form.UserRoleManagementForm;
@@ -92,14 +94,7 @@ public class AdminUserController {
 		return contactDataForUsers.get(0);
 	}
 
-	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public String admin(@AuthenticationPrincipal User user, Model model) {
-		prepareBatch(model, user);
-		return "adminBatchAccountCreation";
-	}
-
-	@RequestMapping(value = "/user/role", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/roles", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String showUserRoles(@AuthenticationPrincipal User user, Model model) {
 
@@ -115,7 +110,7 @@ public class AdminUserController {
 		return "adminUserRoleManagement";
 	}
 
-	@RequestMapping(value = "/user/role", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/roles", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String setUserRoles(@AuthenticationPrincipal User user,
 			UserRoleManagementForm form, Model model) {
@@ -142,7 +137,7 @@ public class AdminUserController {
 										.getUserId()))
 						.collect(Collectors.toList()));
 
-		return "redirect:/admin/user/role";
+		return "redirect:/admin/user/roles";
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
@@ -156,6 +151,7 @@ public class AdminUserController {
 				.getUsersFromOrganization(
 						allOrganizations.get(0).getOrganizationId())
 				.stream()
+				.parallel()
 				.map(u -> new UserFormObject(u))
 				.map(uf -> {
 					try {
@@ -170,7 +166,7 @@ public class AdminUserController {
 
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("users", usersFromOrganization);
-		model.addAttribute("form", new AdminUsersForm());
+		model.addAttribute("adminUsersForm", new AdminUsersForm());
 
 		return "adminUsers";
 	}
@@ -185,6 +181,7 @@ public class AdminUserController {
 		List<UserFormObject> usersFromOrganization = userService
 				.getUsersFromOrganization(form.getOrganizationId())
 				.stream()
+				.parallel()
 				.map(u -> new UserFormObject(u))
 				.map(uf -> {
 					try {
@@ -220,21 +217,9 @@ public class AdminUserController {
 		return "adminAccountRoleManagement";
 	}
 
-	@RequestMapping(value = "/users/{userId}/organizations", method = RequestMethod.GET)
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public String adminUserOrganizationManagement(
-			@AuthenticationPrincipal User user, Model model) {
-
-		List<Organization> allOrganizations = getUserOrganizations(user);
-		model.addAttribute("organizations", allOrganizations);
-		model.addAttribute("form", new UserOrganizationForm());
-
-		return "adminUserOrganizationManagement";
-	}
-
 	@RequestMapping(value = "/users/roles", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String setRoles(@AuthenticationPrincipal User user,
+	public String adminUserSetRoles(@AuthenticationPrincipal User user,
 			AccountsRoleManagementForm form, Model model) {
 
 		if (form.isInvalid()) {
@@ -260,21 +245,86 @@ public class AdminUserController {
 		}
 
 		if (form.isAppend())
-			userService.appendUserRoles(userOrganizationRoles);
+			userService.appendUserOrganizationRoles(userOrganizationRoles);
 		else
 			// replace
-			userOrganizationRoles
-					.stream()
-					.collect(
-							Collectors.groupingBy(
-									UserOrganizationRole::getUserId,
-									Collectors.toList()))
-					.forEach((k, v) -> userService.setUserRoles(v));
+			userService.setUserRoles(userOrganizationRoles);
 
 		return "redirect:/admin/users/roles";
 	}
 
-	@RequestMapping(value = "/user/createBatch", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/{userId}/organizations", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String adminUserOrganizationManagement(@PathVariable Long userId,
+			@AuthenticationPrincipal User user, Model model)
+			throws UserNotFoundException {
+
+		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> userOrganizations = getUserOrganizations(userService
+				.getUser(userId));
+
+		List<OrganizationOptionForm> organizationOptions = allOrganizations
+				.stream()
+				.map(org1 -> new OrganizationOptionForm(org1, userOrganizations
+						.stream().anyMatch(org2 -> org1.equals(org2))))
+				.collect(Collectors.toList());
+
+		model.addAttribute("organizationOptions", organizationOptions);
+		model.addAttribute("userOrganizationForm", new UserOrganizationForm());
+
+		return "adminUserOrganizationManagement";
+	}
+
+	@RequestMapping(value = "/user/{userId}/organizations", method = RequestMethod.POST)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String adminUserSetOrganizations(final UserOrganizationForm form,
+			@PathVariable Long userId, @AuthenticationPrincipal User user,
+			Model model) throws UserNotFoundException {
+
+		List<Organization> userOrganizations = getUserOrganizations(userService
+				.getUser(userId));
+
+		if (form.isInvalid()) {
+
+			List<Organization> allOrganizations = getUserOrganizations(user);
+			List<OrganizationOptionForm> organizationOptions = allOrganizations
+					.stream()
+					.map(org1 -> new OrganizationOptionForm(org1,
+							userOrganizations.stream().anyMatch(
+									org2 -> org1.equals(org2))))
+					.collect(Collectors.toList());
+
+			model.addAttribute("organizationOptions", organizationOptions);
+			model.addAttribute("userOrganizationForm", form);
+			return "adminUserOrganizationManagement";
+		}
+
+		User selectedUser = userService.getUser(userId);
+
+		List<UserOrganizationRole> userOrganizationRoles = new ArrayList<>();
+
+		for (Long organizationId : form.getOrganizationIds()) {
+			for (GrantedAuthority grantedAuthority : selectedUser
+					.getAuthorities()) {
+				userOrganizationRoles.add(new UserOrganizationRole(userId,
+						organizationId, grantedAuthority.getAuthority(), user
+								.getUserId()));
+			}
+		}
+
+		userService.setUserOrganization(userOrganizationRoles);
+
+		return "redirect:/admin/user/" + form.getUserId() + "/organizations";
+	}
+
+	@RequestMapping(value = "/user/batch", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String admin(@AuthenticationPrincipal User user, Model model) {
+		prepareBatch(model, user);
+		return "adminBatchAccountCreation";
+	}
+
+	@RequestMapping(value = "/user/batch/createBatch", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String batchAccountCreation(BatchAccount batch,
 			@AuthenticationPrincipal User user, Model model)

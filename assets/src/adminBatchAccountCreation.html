@@ -24,18 +24,22 @@
 
 <body class="admin">
   <div id="container">
-    <header>
+    <header class="header">
       <div class="content">
         <div class="logo">
           <img src="images/logo-white.png" alt="Vyllage" />
           <span>Vyllage</span>
         </div>
-        <span class="page-title">Account Management</span>
+        <span class="page-title">Batch Account Creation</span>
+        <a th:href="@{/admin/users}"> Users </a> |
+        <a th:href="@{/admin/user/roles}"> Single User Role Editor </a> |
+        <a th:href="@{/admin/users/roles}"> Users Role Editor </a> |
+        <a th:href="@{/admin/user/batch}"> Batch Account </a>
       </div>
     </header>
     <div class="section content">
-      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post"
-      onsubmit="adminFormSubmit()">
+      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/batch/createBatch}" th:object="${batchAccount}"
+      method="post" onsubmit="adminFormSubmit()">
         <select id='organization' name='organization' th:field="*{organization}">
           <option th:each="grp : ${organizations}" th:value="${grp.organizationId}" th:text="${grp.organizationName}">Some organization</option>
         </select>

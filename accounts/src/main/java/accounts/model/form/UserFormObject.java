@@ -1,14 +1,12 @@
 package accounts.model.form;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.ToString;
-
-import org.springframework.security.core.GrantedAuthority;
-
 import user.common.User;
+import user.common.UserOrganizationRole;
 
 /**
  * Represents a user for the forms
@@ -24,15 +22,17 @@ public class UserFormObject {
 	private List<Long> documents = new ArrayList<>();
 	private String firstName;
 	private String lastName;
-	private Collection<GrantedAuthority> authorities;
+	private List<UserOrganizationRole> authorities = new ArrayList<>();
 
+	@SuppressWarnings("unchecked")
 	public UserFormObject(User user) {
 		super();
 		this.userId = user.getUserId();
 		this.username = user.getUsername();
 		this.firstName = user.getFirstName();
 		this.lastName = user.getLastName();
-		this.authorities = user.getAuthorities();
+		this.authorities = (List<UserOrganizationRole>) user.getAuthorities()
+				.stream().collect(Collectors.toList());
 
 	}
 
@@ -76,11 +76,11 @@ public class UserFormObject {
 		this.lastName = lastName;
 	}
 
-	public Collection<GrantedAuthority> getAuthorities() {
+	public List<UserOrganizationRole> getAuthorities() {
 		return authorities;
 	}
 
-	public void setAuthorities(Collection<GrantedAuthority> authorities) {
+	public void setAuthorities(List<UserOrganizationRole> authorities) {
 		this.authorities = authorities;
 	}
 }

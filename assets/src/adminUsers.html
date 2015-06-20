@@ -31,10 +31,15 @@
           <span>Vyllage</span>
         </div>
         <span class="page-title">Account Management</span>
+        <a th:href="@{/admin/users}"> Users </a> |
+        <a th:href="@{/admin/user/roles}"> Single User Role Editor </a> |
+        <a th:href="@{/admin/users/roles}"> Users Role Editor </a> |
+        <a th:href="@{/admin/user/batch}"> Batch Account </a>
       </div>
     </header>
     <div class="section content">
-      <form name="adminForm" class="container" action="#" th:action="@{/admin/users}" th:object="${form}" method="post" onsubmit="adminFormSubmit()">
+      <form name="adminForm" class="container" action="#" th:action="@{/admin/users}" th:object="${adminUsersForm}" method="POST"
+      onsubmit="adminFormSubmit()">
         <select id='organizationId' name='organizationId'>
           <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}">Some organization</option>
         </select>
@@ -58,7 +63,7 @@
                 Roles
               </th>
               <th>
-                Resume
+                Document
               </th>
             </tr>
           </thead>
@@ -71,11 +76,11 @@
               <td th:text="${user.lastName}">
               </td>
               <td>
-                <a th:href="@{/user/{userId}/organizations(userId=${user.userId})}"> Edit </a>
+                <a th:href="@{/admin/user/{userId}/organizations(userId=${user.userId})}"> Edit </a>
               </td>
               <td>
-                <th:block th:each="role : ${user.authorities}">
-                  <div th:text="${role.authority}"></div>
+                <th:block th:each="auth : ${user.authorities}">
+                  <div th:text="${auth.authority}"></div>
                 </th:block>
               </td>
               <td>

@@ -150,8 +150,12 @@ public class UserService {
 
 				this.changePassword(existingUser.getUserId(), newPassword);
 
-				List<GrantedAuthority> newRolesForOrganization = new ArrayList<>(
-						existingUser.getAuthorities());
+				List<UserOrganizationRole> newRolesForOrganization = new ArrayList<>();
+				for (GrantedAuthority grantedAuthority : existingUser
+						.getAuthorities())
+					newRolesForOrganization
+							.add((UserOrganizationRole) grantedAuthority);
+
 				newRolesForOrganization.add(new UserOrganizationRole(
 						existingUser.getUserId(), batchAccount
 								.getOrganization(), batchAccount.getRole(),
@@ -209,11 +213,14 @@ public class UserService {
 				// change roles
 				Long userId = existingUser.getUserId();
 
-				List<GrantedAuthority> newRolesForOrganization = new ArrayList<>();
+				List<UserOrganizationRole> newRolesForOrganization = new ArrayList<>();
+				for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
+					newRolesForOrganization
+							.add((UserOrganizationRole) grantedAuthority);
+				}
 
-				newRolesForOrganization.addAll(user.getAuthorities());
 				newRolesForOrganization.stream().forEach(
-						ga -> ((UserOrganizationRole) ga).setUserId(userId));
+						ga -> ga.setUserId(userId));
 
 				// remove duplicates
 				// newRolesForOrganization
@@ -323,7 +330,8 @@ public class UserService {
 	}
 
 	protected void updateUserRolesByOrganization(
-			List<GrantedAuthority> newRolesForOrganization, User loggedInUser) {
+			List<UserOrganizationRole> newRolesForOrganization,
+			User loggedInUser) {
 
 		// Long organizationId = ((UserOrganizationRole) newRolesForOrganization
 		// .get(0)).getOrganizationId();
@@ -334,11 +342,9 @@ public class UserService {
 		// userOrganizationRoleRepository.deleteByUserIdAndOrganizationId(userId,
 		// organizationId);
 
-		for (GrantedAuthority userOrganizationRole : newRolesForOrganization) {
-			((UserOrganizationRole) userOrganizationRole)
-					.setAuditUserId(loggedInUser.getUserId());
-			userOrganizationRoleRepository
-					.create((UserOrganizationRole) userOrganizationRole);
+		for (UserOrganizationRole userOrganizationRole : newRolesForOrganization) {
+			userOrganizationRole.setAuditUserId(loggedInUser.getUserId());
+			userOrganizationRoleRepository.create(userOrganizationRole);
 		}
 
 	}
@@ -571,19 +577,43 @@ public class UserService {
 				.map(uor -> uor.getUserId()).collect(Collectors.toList()));
 	}
 
-	public void appendUserRoles(List<UserOrganizationRole> userOrganizationRole) {
+	public void appendUserOrganizationRoles(
+			List<UserOrganizationRole> userOrganizationRole) {
 		userOrganizationRole.stream().forEach(
 				uor -> userOrganizationRoleRepository.create(uor));
 	}
 
-	public void setUserRoles(List<UserOrganizationRole> userOrganizationRole) {
-		Long organizationId = userOrganizationRole.get(0).getOrganizationId();
-		Long userId = userOrganizationRole.get(0).getUserId();
+	public void setUserRoles(List<UserOrganizationRole> userOrganizationRoles) {
 
-		userOrganizationRoleRepository.deleteByUserIdAndOrganizationId(userId,
-				organizationId);
+		userOrganizationRoles
+				.stream()
+				.collect(
+						Collectors.groupingBy(UserOrganizationRole::getUserId,
+								Collectors.toList()))
+				.forEach(
+						(userId, organizations) -> {
+							for (UserOrganizationRole userOrganizationRole : organizations) {
+								userOrganizationRoleRepository
+										.deleteByUserIdAndOrganizationId(
+												userId, userOrganizationRole
+														.getOrganizationId());
 
-		userOrganizationRole.stream().forEach(
+							}
+
+						});
+
+		userOrganizationRoles.stream().forEach(
+				uor -> userOrganizationRoleRepository.create(uor));
+
+	}
+
+	public void setUserOrganization(
+			List<UserOrganizationRole> userOrganizationRoles) {
+
+		userOrganizationRoleRepository.deleteByUserId(userOrganizationRoles
+				.get(0).getUserId());
+
+		userOrganizationRoles.stream().forEach(
 				uor -> userOrganizationRoleRepository.create(uor));
 
 	}
