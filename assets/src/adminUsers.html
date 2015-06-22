@@ -99,6 +99,7 @@
             </tr>
           </tbody>
         </table>
+         <label id="errorLabel" style="color: red;"></label>
       </form>
     </div>
   </div>
@@ -136,15 +137,22 @@
 
     request.onreadystatechange = function() {
       if (request.readyState == 4 && request.status == 200) {
-
+    	var errorLabel = document.getElementById('errorLabel');
         var response = JSON.parse(request.responseText);
 
+        if(response.error != null){
+        	errorLabel.innerHTML = response.error;
+        	return;
+        }
+        
         var link = document.getElementById('enableDisableUser' + response.userId);
         
         if(link.text === 'Enable'){
         	link.text = 'Disable';
+        	errorLabel.innerHTML = "";
         } else {
         	link.text = 'Enable';
+        	errorLabel.innerHTML = "";
         }
 
       }
