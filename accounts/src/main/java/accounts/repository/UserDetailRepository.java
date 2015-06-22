@@ -614,4 +614,17 @@ public class UserDetailRepository implements UserDetailsManager,
 		return new SocialUser(this.loadUserByUsername(userId));
 	}
 
+	public boolean enableDisableUser(Long userId) {
+		Result<Record1<Boolean>> result = sql.select(USERS.ENABLED).from(USERS)
+				.where(USERS.USER_ID.eq(userId)).fetch();
+		Boolean enabled = result.get(0).getValue(USERS.ENABLED);
+
+		logger.info("userId " + userId + " status: " + enabled);
+
+		sql.update(USERS).set(USERS.ENABLED, !enabled)
+				.where(USERS.USER_ID.eq(userId)).execute();
+
+		return !enabled;
+	}
+
 }

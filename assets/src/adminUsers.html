@@ -65,6 +65,9 @@
               <th>
                 Document
               </th>
+              <th>
+                Enable/Disable
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -87,6 +90,11 @@
                 <th:block th:each="doc : ${user.documents}">
                   <a th:href="@{/resume/{documentId}(documentId=${doc})}" th:text="${'Document ' + doc}"> Document </a>
                 </th:block>
+              </td>
+              <td>
+                <!--               th:href="@{/admin/user/{userId}/enable-disable(userId=${user.userId})}" -->
+                <a id="enableDisableUser" href="/admin/users" th:onclick="'enableDisable(this, \'' + ${user.userId} + '\');'" th:text="${user.enabled} == true ? 'Disable' : 'Enable'">
+                </a>
               </td>
             </tr>
           </tbody>
@@ -120,9 +128,37 @@
   }
 
   adminFormSubmit = function() {
-      document.adminForm.organizationId.disabled = false;
+    document.adminForm.organizationId.disabled = false;
+  }
+
+  enableDisable = function(link, userId) {
+    alert(link.host);
+
+    var request = new XMLHttpRequest();
+
+    request.onreadystatechange = function() {
+      if (request.readyState == 4 && request.status == 200) {
+        var users = JSON.parse(request.responseText);
+        var userSelect = document.getElementById('userIds');
+        userSelect.options.length = 0; //clearing options
+
+        for (i = 0; i < users.length; i++) {
+          userSelect.options[i] = new Option(users[i].username, users[i].userId, false, false);
+        }
+        adminFormUserSelected();
+        //           console.log(request.responseText);
+
+      }
     }
-    // ]]>
+    request.open("PUT", "/admin/user/" + userId + "/enable-disable", true);
+    request.send();
+
+  }
+
+
+
+
+  // ]]>
   </script>
   <script togglz:active="GOOGLE_ANALYTICS">
   (function(i, s, o, g, r, a, m) {

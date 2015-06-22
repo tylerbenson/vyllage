@@ -618,4 +618,14 @@ public class UserService {
 
 	}
 
+	/**
+	 * Enables or disables a given user returning the new state.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public boolean enableDisableUser(Long userId) {
+		return userRepository.enableDisableUser(userId);
+	}
+
 }

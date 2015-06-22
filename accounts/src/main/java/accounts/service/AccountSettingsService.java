@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -186,15 +187,19 @@ public class AccountSettingsService {
 			// username is final...
 			// password is erased after the user logins but we need something
 			// here, even if we won't change it
+
+			List<UserOrganizationRole> uor = new ArrayList<>();
+
+			for (GrantedAuthority grantedAuthority : user.getAuthorities())
+				uor.add((UserOrganizationRole) grantedAuthority);
+
 			@SuppressWarnings("unchecked")
 			User newUser = new User(user.getUserId(), user.getFirstName(),
 					user.getMiddleName(), user.getLastName(),
 					setting.getValue(), "a password we don't care about",
 					user.isEnabled(), user.isAccountNonExpired(),
 					user.isCredentialsNonExpired(), user.isAccountNonLocked(),
-					(List<UserOrganizationRole>) user.getAuthorities().stream()
-							.collect(Collectors.toList()),
-					user.getDateCreated(), user.getLastModified());
+					uor, user.getDateCreated(), user.getLastModified());
 			userService.update(newUser);
 		}
 

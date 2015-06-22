@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import lombok.ToString;
 import user.common.User;
 import user.common.UserOrganizationRole;
@@ -23,17 +25,18 @@ public class UserFormObject {
 	private String firstName;
 	private String lastName;
 	private List<UserOrganizationRole> authorities = new ArrayList<>();
+	private boolean enabled;
 
-	@SuppressWarnings("unchecked")
 	public UserFormObject(User user) {
 		super();
 		this.userId = user.getUserId();
 		this.username = user.getUsername();
 		this.firstName = user.getFirstName();
 		this.lastName = user.getLastName();
-		this.authorities = (List<UserOrganizationRole>) user.getAuthorities()
-				.stream().collect(Collectors.toList());
+		this.enabled = user.isEnabled();
 
+		for (GrantedAuthority grantedAuthority : user.getAuthorities())
+			this.authorities.add((UserOrganizationRole) grantedAuthority);
 	}
 
 	public Long getUserId() {
@@ -82,5 +85,13 @@ public class UserFormObject {
 
 	public void setAuthorities(List<UserOrganizationRole> authorities) {
 		this.authorities = authorities;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }
