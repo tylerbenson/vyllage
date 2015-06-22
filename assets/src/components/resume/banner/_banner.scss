@@ -1,6 +1,9 @@
 .banner {
   @extend .inverted;
-  background: $banner-background;
+  background-color: $banner-background;
+  background-image: url(../images/banner-bg.png);
+  background-size: cover;
+  background-position: center;
   padding: 2em;
   font-weight: 300;
 
