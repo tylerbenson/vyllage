@@ -7,12 +7,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,6 +52,9 @@ import accounts.service.UserService;
 @Controller
 @RequestMapping("admin")
 public class AdminUserController {
+
+	private final Logger logger = Logger.getLogger(AdminUserController.class
+			.getName());
 
 	private final UserService userService;
 
@@ -349,24 +354,26 @@ public class AdminUserController {
 		return "adminBatchAccountCreation";
 	}
 
-	@RequestMapping(value = "/user/{userId}/enable-disable", method = RequestMethod.PUT)
+	@RequestMapping(value = "/user/{userId}/enable-disable", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public @ResponseBody ResponseEntity<Map<String, Object>> enableDisable(
+	public @ResponseBody Map<String, Object> enableDisable(
 			@PathVariable Long userId, @AuthenticationPrincipal User user) {
+
+		logger.info("toggling status for  userId " + userId);
 
 		if (user.getUserId().equals(userId)) {
 			Map<String, Object> response = new HashMap<>();
 			response.put("error", "You cannot disable your own user.");
-			return new ResponseEntity<Map<String, Object>>(response,
-					HttpStatus.BAD_REQUEST);
+			return response;
 		}
 
 		boolean enableDisableUser = userService.enableDisableUser(userId);
 
 		Map<String, Object> response = new HashMap<>();
+		response.put("userId", userId);
 		response.put("result", enableDisableUser);
 
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		return response;
 	}
 
 	@RequestMapping(value = "/user/sameOrganization", method = RequestMethod.GET)

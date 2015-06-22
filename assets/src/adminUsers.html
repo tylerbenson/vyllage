@@ -93,7 +93,7 @@
               </td>
               <td>
                 <!--               th:href="@{/admin/user/{userId}/enable-disable(userId=${user.userId})}" -->
-                <a id="enableDisableUser" href="/admin/users" th:onclick="'enableDisable(this, \'' + ${user.userId} + '\');'" th:text="${user.enabled} == true ? 'Disable' : 'Enable'">
+                <a th:id="${'enableDisableUser' + user.userId}" th:onclick="'enableDisable(this, \'' + ${user.userId} + '\');'" th:text="${user.enabled} == true ? 'Disable' : 'Enable'">
                 </a>
               </td>
             </tr>
@@ -132,25 +132,24 @@
   }
 
   enableDisable = function(link, userId) {
-    alert(link.host);
-
     var request = new XMLHttpRequest();
 
     request.onreadystatechange = function() {
       if (request.readyState == 4 && request.status == 200) {
-        var users = JSON.parse(request.responseText);
-        var userSelect = document.getElementById('userIds');
-        userSelect.options.length = 0; //clearing options
 
-        for (i = 0; i < users.length; i++) {
-          userSelect.options[i] = new Option(users[i].username, users[i].userId, false, false);
+        var response = JSON.parse(request.responseText);
+
+        var link = document.getElementById('enableDisableUser' + response.userId);
+        
+        if(link.text === 'Enable'){
+        	link.text = 'Disable';
+        } else {
+        	link.text = 'Enable';
         }
-        adminFormUserSelected();
-        //           console.log(request.responseText);
 
       }
     }
-    request.open("PUT", "/admin/user/" + userId + "/enable-disable", true);
+    request.open("GET", "/admin/user/" + userId + "/enable-disable", true);
     request.send();
 
   }
