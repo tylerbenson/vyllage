@@ -5,15 +5,15 @@ $inverted-text-color: #fff;
 
 $neutral-color-1: #333333;
 
-$header-color: $inverted-text-color;
-$page-title-color: #999999;
-$footer-background: $banner-background;
-$mode-color: lighten($banner-background, 5%);
-
 $body-background: #f3f3f3;
 
 $banner-background: #374047;
 $tagline-color: #D8F0F4;
+
+$header-color: $inverted-text-color;
+$page-title-color: #999999;
+$footer-background: $banner-background;
+$mode-color: lighten($banner-background, 5%);
 
 $section-background: #fff;
 $section-footer-background: #fcfcfc;

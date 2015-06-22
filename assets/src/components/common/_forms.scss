@@ -52,8 +52,8 @@ textarea {
     transition: none;
 
     &:focus {
-      background: lighten($footer-background, 76%);
-      box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+      background: lighten($banner-background, 70%);
+      transition: background .2s ease;
     }
 
     &[disabled] {
