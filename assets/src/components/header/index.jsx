@@ -17,7 +17,7 @@ var HeaderContainer = React.createClass({
     return (
         <div className="content">
           <div className="logo">
-            <img src="images/logo-white.png" alt="Vyllage" />
+            <img src="images/logo-orange.png" alt="Vyllage" />
             <span>Vyllage</span>
           </div>
           <span className="page-title">{title}</span>
