@@ -7,8 +7,8 @@ $neutral-color-1: #333333;
 
 $header-color: $inverted-text-color;
 $page-title-color: #999999;
-$footer-background: #374047;
-$mode-color: #374047;
+$footer-background: $banner-background;
+$mode-color: lighten($banner-background, 5%);
 
 $body-background: #f3f3f3;
 
