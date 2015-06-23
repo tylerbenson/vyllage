@@ -15,7 +15,6 @@ html,
 body {
   background: $body-background;
   font-size: 18px;
-  padding-top: 1em;
   height: 100%;
 }
 
@@ -23,7 +22,7 @@ body {
   min-height: 100%;
   height: auto !important;
   height: 100%;
-  margin: 0 auto -2.85em;
+  margin: 2.5em auto -2.85em;
 
   &:after {
     content: '';
