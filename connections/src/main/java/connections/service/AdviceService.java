@@ -74,6 +74,7 @@ public class AdviceService {
 	private final Integer DOCUMENTS_PORT = null;
 
 	@Autowired
+	@Qualifier(value = "connections.ExecutorService")
 	private ExecutorService executorService;
 
 	public UserFilterResponse getUsers(HttpServletRequest request,

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -82,6 +83,10 @@ public class UserService {
 
 	@Autowired
 	private Environment environment;
+
+	@Autowired
+	@Qualifier(value = "accounts.ExecutorService")
+	private ExecutorService executorService;
 
 	private BatchParser batchParser = new BatchParser();
 
@@ -637,7 +642,7 @@ public class UserService {
 	 * @throws EmailException
 	 */
 	public void activateUser(Long userId, Long organizationId, User loggedInUser)
-			throws UserNotFoundException, EmailException {
+			throws UserNotFoundException {
 		User existingUser = this.getUser(userId);
 
 		if (existingUser.isGuest()) {
@@ -650,22 +655,34 @@ public class UserService {
 
 			this.changePassword(existingUser.getUserId(), newPassword);
 
-			emailBuilder
-					.to(existingUser.getUsername())
-					.from(environment.getProperty("email.from",
-							"no-reply@vyllage.com"))
-					.fromUserName(
-							environment.getProperty("email.from.userName",
-									"Chief of Vyllage"))
-					.subject("Account Creation - Vyllage.com")
-					.setNoHtmlMessage(
-							"Your account has been created successfuly. \\n Your password is: "
-									+ newPassword)
-					.templateName("email-account-created")
-					.addTemplateVariable("password", newPassword)
-					.addTemplateVariable("firstName",
-							existingUser.getFirstName()).send();
+			executorService.execute(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						emailBuilder
+								.to(existingUser.getUsername())
+								.from(environment.getProperty("email.from",
+										"no-reply@vyllage.com"))
+								.fromUserName(
+										environment.getProperty(
+												"email.from.userName",
+												"Chief of Vyllage"))
+								.subject("Account Creation - Vyllage.com")
+								.setNoHtmlMessage(
+										"Your account has been created successfuly. \\n Your password is: "
+												+ newPassword)
+								.templateName("email-account-created")
+								.addTemplateVariable("password", newPassword)
+								.addTemplateVariable("firstName",
+										existingUser.getFirstName()).send();
+					} catch (EmailException e) {
+						logger.severe(ExceptionUtils.getStackTrace(e));
+						NewRelic.noticeError(e);
+					}
+
+				}
+			});
+
 		}
 	}
-
 }

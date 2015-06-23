@@ -417,15 +417,11 @@ public class AdminUserController {
 			final @PathVariable Long userId,
 			final @PathVariable Long organizationId,
 			@AuthenticationPrincipal User loggedInUser)
-			throws UserNotFoundException, EmailException {
-
-		System.out.println("activating...");
+			throws UserNotFoundException {
 
 		userService.activateUser(userId, organizationId, loggedInUser);
 		Map<String, Object> response = new HashMap<>();
 		response.put("userId", userId);
-
-		System.out.println("Activated user " + userId);
 
 		return response;
 	}
