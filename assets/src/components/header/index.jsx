@@ -1,5 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
+var Print = require('../resume/Print');
 var resumeStore = require('../resume/store');
 
 var HeaderContainer = React.createClass({
@@ -23,24 +24,19 @@ var HeaderContainer = React.createClass({
           <span className="page-title">{title}</span>
           <nav>
             <ul>
+              {showLink ? <li><a href='/resume' className='flat button'>
+                <i className="ion-document"></i>
+                <span>Resume</span>
+              </a></li>: null}
+              <li><Print /></li>
+              {showLink ? <li><a href='/resume/get-feedback' className='embossed button'>
+                <i className="ion-person-stalker"></i>
+                Get Feedback
+              </a></li>: null}
               <li><a href='/account/setting'><i className="ion-gear-a"></i></a></li>
-              <li className="dropdown-trigger user">
-                <a><i className="avatar ion-person"></i><span className="name">{name?name:'User'}</span><i className="caret"></i></a>
-                <ul className="dropdown-list">
-                  {showLink ? <li><a href='/resume'>
-                    <i className="ion-document"></i>
-                    Resume
-                  </a></li>: null}
-                  {showLink ? <li><a href='/resume/get-feedback'>
-                    <i className="ion-person-stalker"></i>
-                    Get Feedback
-                  </a></li>: null}
-                  <li><a href='/logout'>
-                    <i className="ion-log-out"></i>
-                    Sign out
-                    </a></li>
-                </ul>
-              </li>
+              {/*<li className="dropdown-trigger user">
+                <a><i className="avatar ion-person"></i><span className="name">{name?name:'User'}</span></a>
+              </li>*/}
             </ul>
           </nav>
         </div>

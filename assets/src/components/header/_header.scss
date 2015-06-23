@@ -1,10 +1,29 @@
 header {
   @extend .inverted;
   background: $neutral-color-1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 1;
 
   nav ul li a{
     cursor: pointer;
-    padding: 0.6em;
+    padding: 0.7em;
+
+    &.flat.button {
+      span,
+      i {
+        color: $inverted-text-color;
+      }
+
+      &:hover {
+        span,
+        i {
+          color: $inverted-text-color;
+        }
+      }
+    }
 
     i,
     span {
