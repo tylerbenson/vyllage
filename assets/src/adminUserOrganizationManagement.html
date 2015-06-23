@@ -38,12 +38,15 @@
       </div>
     </header>
     <div class="section content">
-      <label>Assigns a user to one or more organizations while keeping all the roles he has assigned. If an organization is deselected
-        then it's removed. </label>
+      <label>Assigns a user to one or more organizations with the selected roles, keeping the existing ones unchanged. Deselected
+        organizations are removed. </label>
       <form name="adminForm" class="container" action="#" th:action="@{/admin/user/{userId}/organizations(userId=${userId})}" th:object="${userOrganizationForm}"
       method="post">
         <select id="organizationIds" name="organizationIds" multiple="multiple">
           <option th:each="org : ${organizationOptions}" th:value="${org.organizationId}" th:text="${org.organizationName}" th:selected="${org.selected}">Some organization</option>
+        </select>
+        <select id="roles" name="roles" multiple="multiple">
+          <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}">Some Role</option>
         </select>
         <button name="set-organizations" type="submit" class="pull right padded send-btn">Submit</button>
         <label th:if="*{error != null}" th:text="*{error}" style="color: red;"></label>

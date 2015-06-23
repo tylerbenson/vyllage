@@ -45,12 +45,12 @@ import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
-import accounts.service.utilities.RandomPasswordGenerator;
 
 @Controller
 @RequestMapping("admin")
 public class AdminUserController {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(AdminUserController.class
 			.getName());
 
@@ -63,8 +63,6 @@ public class AdminUserController {
 	private final AccountSettingsService accountSettingsService;
 
 	private final DocumentService documentService;
-
-	private RandomPasswordGenerator randomPasswordGenerator;
 
 	@Inject
 	public AdminUserController(final UserService userService,
@@ -122,14 +120,14 @@ public class AdminUserController {
 	@RequestMapping(value = "/user/roles", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String setUserRoles(@AuthenticationPrincipal User user,
-			UserRoleManagementForm form, Model model) {
+			UserRoleManagementForm form, Model model)
+			throws UserNotFoundException {
 
 		if (form.isInvalid()) {
 			List<Organization> allOrganizations = getUserOrganizations(user);
 			model.addAttribute("organizations", allOrganizations);
 			model.addAttribute("users", userService
-					.getUsersFromOrganization(allOrganizations.get(0)
-							.getOrganizationId()));
+					.getUsersFromOrganization(form.getOrganizationId()));
 
 			model.addAttribute("roles", roleRepository.getAll());
 			model.addAttribute("userRoleManagementForm", form);
@@ -137,14 +135,31 @@ public class AdminUserController {
 			return "adminUserRoleManagement";
 		}
 
-		userService
-				.setUserRoles(form
-						.getRoles()
-						.stream()
-						.map(s -> new UserOrganizationRole(form.getUserId(),
-								form.getOrganizationId(), s.toUpperCase(), user
-										.getUserId()))
-						.collect(Collectors.toList()));
+		User selectedUser = userService.getUser(form.getUserId());
+
+		// create new roles to set
+		List<UserOrganizationRole> newRoles = form
+				.getRoles()
+				.stream()
+				.map(s -> new UserOrganizationRole(form.getUserId(), form
+						.getOrganizationId(), s.toUpperCase(), user.getUserId()))
+				.collect(Collectors.toList());
+
+		List<UserOrganizationRole> existingUserOrganizations = new ArrayList<>();
+
+		// get existing roles to remove them if they were removed on the
+		// frontend while keeping the unchanged ones from other organizations
+		for (GrantedAuthority grantedAuthority : selectedUser.getAuthorities())
+			existingUserOrganizations
+					.add((UserOrganizationRole) grantedAuthority);
+
+		// remove roles that were removed in the frontend
+		existingUserOrganizations.removeIf(org -> org.getOrganizationId()
+				.equals(form.getOrganizationId()) && !newRoles.contains(org));
+
+		existingUserOrganizations.addAll(newRoles);
+
+		userService.setUserRoles(existingUserOrganizations);
 
 		return "redirect:/admin/user/roles";
 	}
@@ -310,6 +325,7 @@ public class AdminUserController {
 						.contains(org1))).collect(Collectors.toList());
 
 		model.addAttribute("organizationOptions", organizationOptions);
+		model.addAttribute("roles", roleRepository.getAll());
 		model.addAttribute("userOrganizationForm", new UserOrganizationForm());
 
 		return "adminUserOrganizationManagement";
@@ -321,9 +337,10 @@ public class AdminUserController {
 			@PathVariable Long userId, @AuthenticationPrincipal User user,
 			Model model) throws UserNotFoundException {
 
+		User selectedUser = userService.getUser(userId);
+
 		if (form.isInvalid()) {
 
-			User selectedUser = userService.getUser(userId);
 			List<Organization> allOrganizations = getUserOrganizations(user);
 
 			List<Organization> userOrganizations = organizationRepository
@@ -341,24 +358,41 @@ public class AdminUserController {
 					.collect(Collectors.toList());
 
 			model.addAttribute("organizationOptions", organizationOptions);
+			model.addAttribute("roles", roleRepository.getAll());
 			model.addAttribute("userOrganizationForm", form);
+
 			return "adminUserOrganizationManagement";
 		}
 
-		User selectedUser = userService.getUser(userId);
+		List<UserOrganizationRole> newUserOrganizationRoles = new ArrayList<>();
 
-		List<UserOrganizationRole> userOrganizationRoles = new ArrayList<>();
+		List<UserOrganizationRole> existingUserOrganizations = new ArrayList<>();
+
+		for (GrantedAuthority grantedAuthority : selectedUser.getAuthorities())
+			existingUserOrganizations
+					.add((UserOrganizationRole) grantedAuthority);
+
+		// remove organizations that were removed on the frontend
+		existingUserOrganizations.removeIf(org -> !form.getOrganizationIds()
+				.contains(org.getOrganizationId()));
 
 		for (Long organizationId : form.getOrganizationIds()) {
-			for (GrantedAuthority grantedAuthority : selectedUser
-					.getAuthorities()) {
-				userOrganizationRoles.add(new UserOrganizationRole(userId,
-						organizationId, grantedAuthority.getAuthority(), user
-								.getUserId()));
+			// skip existing organizations to create the new roles, we don't
+			// change roles from existing ones
+			if (!existingUserOrganizations.stream().anyMatch(
+					org -> org.getOrganizationId().equals(organizationId))) {
+				for (String role : form.getRoles()) {
+					newUserOrganizationRoles.add(new UserOrganizationRole(
+							userId, organizationId, role, user.getUserId()));
+				}
 			}
 		}
 
-		userService.setUserOrganization(userOrganizationRoles);
+		// add existing organizations back so we don't lose them when setting
+		// the new ones
+		newUserOrganizationRoles.addAll(existingUserOrganizations);
+
+		userService.setUserOrganization(newUserOrganizationRoles);
 
 		return "redirect:/admin/user/" + form.getUserId() + "/organizations";
 	}

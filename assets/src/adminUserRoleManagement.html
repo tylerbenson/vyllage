@@ -113,13 +113,21 @@
   //Updates the roles select with the roles from the user.
   adminFormUserSelected = function() {
       var userId = document.adminForm.userId.value;
+      var organizationId = document.adminForm.organizationId.value;
 
-      if (userId === null || userId === "")
+      if (userId === null || userId === "") {
+        var rolesSelect = document.getElementById('roles');
+
+        for (i = 0; i < rolesSelect.options.length; i++) {
+          rolesSelect.options[i].selected = false;
+        }
         return;
+      }
 
       var request = new XMLHttpRequest();
 
       request.onreadystatechange = function() {
+
         if (request.readyState == 4 && request.status == 200) {
           var roles = JSON.parse(request.responseText);
           var rolesSelect = document.getElementById('roles');
@@ -137,7 +145,7 @@
           }
         }
       }
-      request.open("GET", "/account/" + userId + "/roles", true);
+      request.open("GET", "/account/" + userId + "/organization/" + organizationId + "/roles", true);
       request.send();
     }
     // ]]>

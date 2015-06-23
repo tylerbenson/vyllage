@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
+import user.common.UserOrganizationRole;
 import accounts.model.CSRFToken;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
@@ -327,16 +328,21 @@ public class AccountController {
 				+ "Last Access: " + new Date(session.getLastAccessedTime()));
 	}
 
-	@RequestMapping(value = "{userId}/roles", method = RequestMethod.GET)
+	@RequestMapping(value = "{userId}/organization/{organizationId}/roles", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public @ResponseBody List<String> adminRoleManagement(
-			@PathVariable Long userId) throws UserNotFoundException {
+			@PathVariable Long userId, @PathVariable Long organizationId)
+			throws UserNotFoundException {
 		User user = userService.getUser(userId);
 
 		if (user.getAuthorities() == null || user.getAuthorities().isEmpty())
 			return Collections.emptyList();
 
-		return user.getAuthorities().stream()
+		return user
+				.getAuthorities()
+				.stream()
+				.filter(uor -> ((UserOrganizationRole) uor).getOrganizationId()
+						.equals(organizationId))
 				.map(a -> a.getAuthority().toUpperCase())
 				.collect(Collectors.toList());
 	}

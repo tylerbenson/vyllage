@@ -602,9 +602,7 @@ public class UserService {
 										.deleteByUserIdAndOrganizationId(
 												userId, userOrganizationRole
 														.getOrganizationId());
-
 							}
-
 						});
 
 		userOrganizationRoles.stream().forEach(

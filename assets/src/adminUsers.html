@@ -185,7 +185,7 @@
         var response = JSON.parse(request.responseText);
 
         var link = document.getElementById('activateUser' + response.userId);
-		
+
         var label = document.createElement("label");
         label.innerHTML = "-";
         link.parentNode.replaceChild(label, link);

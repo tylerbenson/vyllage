@@ -9,6 +9,7 @@ public class UserOrganizationForm {
 
 	private Long userId;
 	private List<Long> organizationIds;
+	private List<String> roles;
 	private String error;
 
 	public Long getUserId() {
@@ -17,6 +18,14 @@ public class UserOrganizationForm {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 
 	public List<Long> getOrganizationIds() {
@@ -36,9 +45,10 @@ public class UserOrganizationForm {
 	}
 
 	public boolean isInvalid() {
-		if (organizationIds == null || organizationIds.isEmpty()) {
+		if (organizationIds == null || organizationIds.isEmpty()
+				|| roles == null || roles.isEmpty()) {
 			// user id is not selected, if it's null it's an app error.
-			setError("You must select at least one organization.");
+			setError("You must select at least one organization and role.");
 			return true;
 		}
 
