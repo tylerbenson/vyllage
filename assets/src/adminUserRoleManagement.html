@@ -38,7 +38,8 @@
       </div>
     </header>
     <div class="section content">
-      <label> Shows the roles a user has and allows assigning new ones. </label>
+      <label> Shows the roles a user has and allows assigning new ones. All the selected roles will be set replacing existing ones,
+        if they are present and deselected then they are removed. </label>
       <form name="adminForm" class="container" action="#" th:action="@{/admin/user/roles}" th:object="${userRoleManagementForm}"
       method="post" onsubmit="adminFormSubmit()">
         <select id='organizationId' name='organizationId' onchange="adminFormOrganizationChange()">

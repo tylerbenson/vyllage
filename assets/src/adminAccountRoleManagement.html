@@ -38,14 +38,15 @@
       </div>
     </header>
     <div class="section content">
-      <label> Assigns roles to one or more users from an organization. </label>
+      <label> Assigns roles to one or more users from an organization. Appending or overwriting them according to the selection.
+      </label>
       <form name="adminForm" class="container" action="#" th:action="@{/admin/users/roles}" th:object="${accountRolesManagementForm}"
       method="post" onsubmit="adminFormSubmit()">
         <select id='organizationId' name='organizationId' onchange="adminFormOrganizationChange()">
           <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}">Some organization</option>
         </select>
         <select id="userIds" name="userIds" multiple="multiple">
-          <option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}">Some Role</option>
+          <option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}">Some User</option>
         </select>
         <select name="roles" multiple="multiple">
           <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}">Some Role</option>

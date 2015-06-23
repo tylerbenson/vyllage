@@ -40,10 +40,10 @@
     <div class="section content">
       <form name="adminForm" class="container" action="#" th:action="@{/admin/users}" th:object="${adminUsersForm}" method="POST"
       onsubmit="adminFormSubmit()">
-        <select id='organizationId' name='organizationId'>
-          <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}">Some organization</option>
+        <select id='organizationId' name='organizationId' onchange="this.form.submit()">
+          <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}" th:selected="${org.selected}">Some organization</option>
         </select>
-        <button name="select-organization" type="submit" class="pull right send-btn">Submit</button>
+        <!--         <button name="select-organization" type="submit" class="pull right send-btn">Submit</button> -->
         <table>
           <thead>
             <tr>
@@ -68,6 +68,9 @@
               <th>
                 Enable/Disable
               </th>
+              <th>
+                Guest to Student
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -86,20 +89,30 @@
                   <div th:text="${auth.authority}"></div>
                 </th:block>
               </td>
-              <td>
+              <td th:if="${user.documents != null and !user.documents.isEmpty()}">
                 <th:block th:each="doc : ${user.documents}">
                   <a th:href="@{/resume/{documentId}(documentId=${doc})}" th:text="${'Document ' + doc}"> Document </a>
                 </th:block>
               </td>
+              <td th:if="${user.documents == null or user.documents.isEmpty() }">
+                <label>-</label>
+              </td>
               <td>
                 <!--               th:href="@{/admin/user/{userId}/enable-disable(userId=${user.userId})}" -->
-                <a th:id="${'enableDisableUser' + user.userId}" th:onclick="'enableDisable(this, \'' + ${user.userId} + '\');'" th:text="${user.enabled} == true ? 'Disable' : 'Enable'">
+                <a th:id="${'enableDisableUser' + user.userId}" th:onclick="'enableDisableUser(\'' + ${user.userId} + '\');'" th:text="${user.enabled} == true ? 'Disable' : 'Enable'">
                 </a>
+              </td>
+              <td th:if="${user.guest}">
+                <a th:id="${'activateUser' + user.userId}" th:onclick="'activateUser(\'' + ${user.userId} + '\');'" th:text="'Activate'">
+                </a>
+              </td>
+              <td th:if="${user.guest == false}">
+                <label>-</label>
               </td>
             </tr>
           </tbody>
         </table>
-         <label id="errorLabel" style="color: red;"></label>
+        <label id="errorLabel" style="color: red;"></label>
       </form>
     </div>
   </div>
@@ -132,27 +145,27 @@
     document.adminForm.organizationId.disabled = false;
   }
 
-  enableDisable = function(link, userId) {
+  enableDisableUser = function(userId) {
     var request = new XMLHttpRequest();
 
     request.onreadystatechange = function() {
       if (request.readyState == 4 && request.status == 200) {
-    	var errorLabel = document.getElementById('errorLabel');
+        var errorLabel = document.getElementById('errorLabel');
         var response = JSON.parse(request.responseText);
 
-        if(response.error != null){
-        	errorLabel.innerHTML = response.error;
-        	return;
+        if (response.error != null) {
+          errorLabel.innerHTML = response.error;
+          return;
         }
-        
+
         var link = document.getElementById('enableDisableUser' + response.userId);
-        
-        if(link.text === 'Enable'){
-        	link.text = 'Disable';
-        	errorLabel.innerHTML = "";
+
+        if (link.text === 'Enable') {
+          link.text = 'Disable';
+          errorLabel.innerHTML = "";
         } else {
-        	link.text = 'Enable';
-        	errorLabel.innerHTML = "";
+          link.text = 'Enable';
+          errorLabel.innerHTML = "";
         }
 
       }
@@ -162,8 +175,25 @@
 
   }
 
+  activateUser = function(userId) {
+    var request = new XMLHttpRequest();
+    var organizationSelect = document.getElementById("organizationId");
+    var organizationId = organizationSelect.options[organizationSelect.selectedIndex].value;
 
+    request.onreadystatechange = function() {
+      if (request.readyState == 4 && request.status == 200) {
+        var response = JSON.parse(request.responseText);
 
+        var link = document.getElementById('activateUser' + response.userId);
+		
+        var label = document.createElement("label");
+        label.innerHTML = "-";
+        link.parentNode.replaceChild(label, link);
+      }
+    }
+    request.open("GET", "/admin/user/" + userId + "/organization/" + organizationId + "/activate", true);
+    request.send();
+  }
 
   // ]]>
   </script>

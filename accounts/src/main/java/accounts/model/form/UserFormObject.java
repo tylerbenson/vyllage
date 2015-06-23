@@ -26,6 +26,7 @@ public class UserFormObject {
 	private String lastName;
 	private List<UserOrganizationRole> authorities = new ArrayList<>();
 	private boolean enabled;
+	private boolean guest;
 
 	public UserFormObject(User user) {
 		super();
@@ -34,6 +35,7 @@ public class UserFormObject {
 		this.firstName = user.getFirstName();
 		this.lastName = user.getLastName();
 		this.enabled = user.isEnabled();
+		this.guest = user.isGuest();
 
 		for (GrantedAuthority grantedAuthority : user.getAuthorities())
 			this.authorities.add((UserOrganizationRole) grantedAuthority);
@@ -93,5 +95,13 @@ public class UserFormObject {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public boolean isGuest() {
+		return guest;
+	}
+
+	public void setGuest(boolean guest) {
+		this.guest = guest;
 	}
 }

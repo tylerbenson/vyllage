@@ -22,7 +22,7 @@
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
-<body class="admin" onload="adminFormOrganizationChange()">
+<body class="admin">
   <div id="container">
     <header>
       <div class="content">
@@ -38,7 +38,8 @@
       </div>
     </header>
     <div class="section content">
-      <label>Assigns a user to one or more organizations while keeping all the roles he has assigned. </label>
+      <label>Assigns a user to one or more organizations while keeping all the roles he has assigned. If an organization is deselected
+        then it's removed. </label>
       <form name="adminForm" class="container" action="#" th:action="@{/admin/user/{userId}/organizations(userId=${userId})}" th:object="${userOrganizationForm}"
       method="post">
         <select id="organizationIds" name="organizationIds" multiple="multiple">

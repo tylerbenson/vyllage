@@ -20,7 +20,6 @@ import org.springframework.util.Assert;
 
 import user.common.constants.RolesEnum;
 
-@ToString
 public class User implements UserDetails, CredentialsContainer {
 
 	/**

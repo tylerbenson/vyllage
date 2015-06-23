@@ -628,4 +628,44 @@ public class UserService {
 		return userRepository.enableDisableUser(userId);
 	}
 
+	/**
+	 * Activates an user account, the account must be GUEST and have no other
+	 * role.
+	 * 
+	 * @param userId
+	 * @throws UserNotFoundException
+	 * @throws EmailException
+	 */
+	public void activateUser(Long userId, Long organizationId, User loggedInUser)
+			throws UserNotFoundException, EmailException {
+		User existingUser = this.getUser(userId);
+
+		if (existingUser.isGuest()) {
+			String newPassword = randomPasswordGenerator.getRandomPassword();
+
+			// Setting the user as Student.
+			this.setUserRoles(Arrays.asList(new UserOrganizationRole(userId,
+					organizationId, RolesEnum.STUDENT.name(), loggedInUser
+							.getUserId())));
+
+			this.changePassword(existingUser.getUserId(), newPassword);
+
+			emailBuilder
+					.to(existingUser.getUsername())
+					.from(environment.getProperty("email.from",
+							"no-reply@vyllage.com"))
+					.fromUserName(
+							environment.getProperty("email.from.userName",
+									"Chief of Vyllage"))
+					.subject("Account Creation - Vyllage.com")
+					.setNoHtmlMessage(
+							"Your account has been created successfuly. \\n Your password is: "
+									+ newPassword)
+					.templateName("email-account-created")
+					.addTemplateVariable("password", newPassword)
+					.addTemplateVariable("firstName",
+							existingUser.getFirstName()).send();
+		}
+	}
+
 }

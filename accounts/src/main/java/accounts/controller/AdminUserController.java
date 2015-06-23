@@ -14,9 +14,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -48,6 +45,7 @@ import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
+import accounts.service.utilities.RandomPasswordGenerator;
 
 @Controller
 @RequestMapping("admin")
@@ -65,6 +63,8 @@ public class AdminUserController {
 	private final AccountSettingsService accountSettingsService;
 
 	private final DocumentService documentService;
+
+	private RandomPasswordGenerator randomPasswordGenerator;
 
 	@Inject
 	public AdminUserController(final UserService userService,
@@ -171,9 +171,22 @@ public class AdminUserController {
 						uf.setDocuments(Collections.emptyList());
 					}
 					return uf;
+				})
+				.map(uf -> {
+					uf.getAuthorities().removeIf(
+							auth -> !auth.getOrganizationId()
+									.equals(allOrganizations.get(0)
+											.getOrganizationId()));
+					return uf;
 				}).collect(Collectors.toList());
 
-		model.addAttribute("organizations", allOrganizations);
+		List<OrganizationOptionForm> organizationOptions = allOrganizations
+				.stream().map(org1 -> new OrganizationOptionForm(org1, false))
+				.collect(Collectors.toList());
+
+		organizationOptions.get(0).setSelected(true);
+
+		model.addAttribute("organizations", organizationOptions);
 		model.addAttribute("users", usersFromOrganization);
 		model.addAttribute("adminUsersForm", new AdminUsersForm());
 
@@ -183,9 +196,15 @@ public class AdminUserController {
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String showUsersPOST(HttpServletRequest request,
-			@AuthenticationPrincipal User user, AdminUsersForm form, Model model) {
+			@AuthenticationPrincipal User user, final AdminUsersForm form,
+			Model model) {
 
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<OrganizationOptionForm> organizationOptions = getUserOrganizations(
+				user)
+				.stream()
+				.map(org1 -> new OrganizationOptionForm(org1, org1
+						.getOrganizationId().equals(form.getOrganizationId())))
+				.collect(Collectors.toList());
 
 		List<UserFormObject> usersFromOrganization = userService
 				.getUsersFromOrganization(form.getOrganizationId())
@@ -201,9 +220,15 @@ public class AdminUserController {
 						uf.setDocuments(Collections.emptyList());
 					}
 					return uf;
+				})
+				.map(uf -> {
+					uf.getAuthorities().removeIf(
+							auth -> !auth.getOrganizationId().equals(
+									form.getOrganizationId()));
+					return uf;
 				}).collect(Collectors.toList());
 
-		model.addAttribute("organizations", allOrganizations);
+		model.addAttribute("organizations", organizationOptions);
 		model.addAttribute("users", usersFromOrganization);
 
 		return "adminUsers";
@@ -268,15 +293,21 @@ public class AdminUserController {
 			@AuthenticationPrincipal User user, Model model)
 			throws UserNotFoundException {
 
+		User selectedUser = userService.getUser(userId);
+
 		List<Organization> allOrganizations = getUserOrganizations(user);
-		List<Organization> userOrganizations = getUserOrganizations(userService
-				.getUser(userId));
+		List<Organization> userOrganizations = organizationRepository
+				.getAll(selectedUser
+						.getAuthorities()
+						.stream()
+						.map(uor -> ((UserOrganizationRole) uor)
+								.getOrganizationId())
+						.collect(Collectors.toList()));
 
 		List<OrganizationOptionForm> organizationOptions = allOrganizations
 				.stream()
 				.map(org1 -> new OrganizationOptionForm(org1, userOrganizations
-						.stream().anyMatch(org2 -> org1.equals(org2))))
-				.collect(Collectors.toList());
+						.contains(org1))).collect(Collectors.toList());
 
 		model.addAttribute("organizationOptions", organizationOptions);
 		model.addAttribute("userOrganizationForm", new UserOrganizationForm());
@@ -290,17 +321,23 @@ public class AdminUserController {
 			@PathVariable Long userId, @AuthenticationPrincipal User user,
 			Model model) throws UserNotFoundException {
 
-		List<Organization> userOrganizations = getUserOrganizations(userService
-				.getUser(userId));
-
 		if (form.isInvalid()) {
 
+			User selectedUser = userService.getUser(userId);
 			List<Organization> allOrganizations = getUserOrganizations(user);
+
+			List<Organization> userOrganizations = organizationRepository
+					.getAll(selectedUser
+							.getAuthorities()
+							.stream()
+							.map(uor -> ((UserOrganizationRole) uor)
+									.getOrganizationId())
+							.collect(Collectors.toList()));
+
 			List<OrganizationOptionForm> organizationOptions = allOrganizations
 					.stream()
 					.map(org1 -> new OrganizationOptionForm(org1,
-							userOrganizations.stream().anyMatch(
-									org2 -> org1.equals(org2))))
+							userOrganizations.contains(org1)))
 					.collect(Collectors.toList());
 
 			model.addAttribute("organizationOptions", organizationOptions);
@@ -359,8 +396,6 @@ public class AdminUserController {
 	public @ResponseBody Map<String, Object> enableDisable(
 			@PathVariable Long userId, @AuthenticationPrincipal User user) {
 
-		logger.info("toggling status for  userId " + userId);
-
 		if (user.getUserId().equals(userId)) {
 			Map<String, Object> response = new HashMap<>();
 			response.put("error", "You cannot disable your own user.");
@@ -372,6 +407,25 @@ public class AdminUserController {
 		Map<String, Object> response = new HashMap<>();
 		response.put("userId", userId);
 		response.put("result", enableDisableUser);
+
+		return response;
+	}
+
+	@RequestMapping(value = "/user/{userId}/organization/{organizationId}/activate", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public @ResponseBody Map<String, Object> activate(
+			final @PathVariable Long userId,
+			final @PathVariable Long organizationId,
+			@AuthenticationPrincipal User loggedInUser)
+			throws UserNotFoundException, EmailException {
+
+		System.out.println("activating...");
+
+		userService.activateUser(userId, organizationId, loggedInUser);
+		Map<String, Object> response = new HashMap<>();
+		response.put("userId", userId);
+
+		System.out.println("Activated user " + userId);
 
 		return response;
 	}
