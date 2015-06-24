@@ -26,9 +26,16 @@ var Account = React.createClass({
 
             <label>Other</label>
             <div>
-              <a className="flat small button normal-caps" href='account/reset-password'>
+              <a className="flat secondary small button normal-caps" href='account/reset-password'>
                 <i className="ion-locked"></i>
                 Reset Password
+              </a>
+            </div>
+
+            <div>
+              <a className="flat secondary small button normal-caps" href='logout'>
+                <i className="ion-android-exit"></i>
+                Sign out of Vyllage
               </a>
             </div>
 
