@@ -3,6 +3,7 @@ package accounts.model.link;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
+import accounts.domain.tables.records.SharedDocumentRecord;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -27,6 +28,20 @@ public class SimpleDocumentLink {
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime expirationDate;
+	private String documentURL;
+	private LinkType linkType;
+
+	public SimpleDocumentLink() {
+	}
+
+	public SimpleDocumentLink(SharedDocumentRecord record) {
+		this.documentId = record.getDocumentId();
+		this.documentType = record.getDocumentType();
+		this.setLinkType(LinkType.valueOf(record.getLinkType()));
+		this.documentURL = record.getShortUrl();
+		this.userId = record.getUserId();
+		this.expirationDate = record.getExpirationDate().toLocalDateTime();
+	}
 
 	public Long getUserId() {
 		return userId;
@@ -58,6 +73,22 @@ public class SimpleDocumentLink {
 
 	public void setExpirationDate(LocalDateTime expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+
+	public String getDocumentURL() {
+		return this.documentURL;
+	}
+
+	public void setDocumentURL(String documentURL) {
+		this.documentURL = documentURL;
+	}
+
+	public LinkType getLinkType() {
+		return linkType;
+	}
+
+	public void setLinkType(LinkType linkType) {
+		this.linkType = linkType;
 	}
 
 }

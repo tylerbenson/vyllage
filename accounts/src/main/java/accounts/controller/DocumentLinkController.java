@@ -152,15 +152,18 @@ public class DocumentLinkController {
 		return links;
 	}
 
-	@RequestMapping(value = "/access-shared-document/{encodedDocumentLink}", method = RequestMethod.GET)
+	@RequestMapping(value = "/p/{encodedDocumentLink}", method = RequestMethod.GET)
 	public String accessSharedDocument(HttpServletRequest request,
 			WebRequest webRequest, @PathVariable String encodedDocumentLink)
 			throws JsonParseException, JsonMappingException, IOException {
 
-		String json = decrypt(encodedDocumentLink);
+		// String json = decrypt(encodedDocumentLink);
+		//
+		// SimpleDocumentLink documentLink = mapper.readValue(json,
+		// SimpleDocumentLink.class);
 
-		SimpleDocumentLink documentLink = mapper.readValue(json,
-				SimpleDocumentLink.class);
+		SimpleDocumentLink documentLink = documentLinkService
+				.get(encodedDocumentLink);
 
 		if (LocalDateTime.now().isAfter(documentLink.getExpirationDate()))
 			throw new AccessDeniedException(
@@ -221,14 +224,14 @@ public class DocumentLinkController {
 		SimpleDocumentLink documentLink = documentLinkService.createLink(
 				linkRequest, loggedInUser);
 
-		String json = mapper.writeValueAsString(documentLink);
+		// String json = mapper.writeValueAsString(documentLink);
+		//
+		// String safeString = encrypt(json);
 
-		String safeString = encrypt(json);
-
-		return new ResponseEntity<>(environment.getProperty("vyllage.domain",
-				"www.vyllage.com")
-				+ "/link/access-shared-document/"
-				+ safeString, HttpStatus.OK);
+		return new ResponseEntity<>(
+				environment.getProperty("vyllage.domain", "www.vyllage.com")
+						+ "/link/p/" + documentLink.getDocumentURL(),
+				HttpStatus.OK);
 	}
 
 	/**

@@ -7,15 +7,16 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import user.common.User;
 import accounts.model.account.ResetPasswordLink;
 import accounts.model.link.DocumentLink;
 import accounts.model.link.DocumentLinkRequest;
+import accounts.model.link.LinkType;
 import accounts.model.link.SimpleDocumentLink;
 import accounts.model.link.SimpleDocumentLinkRequest;
+import accounts.repository.SharedDocumentRepository;
 import accounts.repository.UserCredentialsRepository;
 import accounts.service.utilities.RandomPasswordGenerator;
 
@@ -26,21 +27,25 @@ public class DocumentLinkService {
 	private final Logger logger = Logger.getLogger(DocumentLinkService.class
 			.getName());
 
-	private UserCredentialsRepository userCredentialsRepository;
+	private final UserCredentialsRepository userCredentialsRepository;
 
-	private UserService userService;
+	private final UserService userService;
 
-	private RandomPasswordGenerator randomPasswordGenerator;
+	private final RandomPasswordGenerator randomPasswordGenerator;
+
+	private final SharedDocumentRepository sharedDocumentRepository;
 
 	@Inject
 	public DocumentLinkService(
 			final UserCredentialsRepository userCredentialsRepository,
 			final UserService userService,
-			final RandomPasswordGenerator randomPasswordGenerator) {
+			final RandomPasswordGenerator randomPasswordGenerator,
+			final SharedDocumentRepository sharedDocumentRepository) {
 		super();
 		this.userCredentialsRepository = userCredentialsRepository;
 		this.userService = userService;
 		this.randomPasswordGenerator = randomPasswordGenerator;
+		this.sharedDocumentRepository = sharedDocumentRepository;
 	}
 
 	public DocumentLink createLink(DocumentLinkRequest linkRequest,
@@ -78,6 +83,10 @@ public class DocumentLinkService {
 		doclink.setDocumentId(linkRequest.getDocumentId());
 		doclink.setExpirationDate(LocalDateTime.now(ZoneId.of("UTC")).plusDays(
 				30));
+		doclink.setDocumentURL(randomPasswordGenerator.getRandomString(10));
+		doclink.setLinkType(LinkType.PUBLIC);
+
+		sharedDocumentRepository.create(doclink);
 
 		return doclink;
 	}
@@ -99,4 +108,10 @@ public class DocumentLinkService {
 	public boolean isActive(Long userId, String generatedPassword) {
 		return userCredentialsRepository.isActive(userId, generatedPassword);
 	}
+
+	public SimpleDocumentLink get(String shortUrl) {
+
+		return sharedDocumentRepository.get(shortUrl);
+	}
+
 }
