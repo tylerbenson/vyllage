@@ -32,7 +32,7 @@ public class BeansConfiguration {
 		return new TogglzDialect();
 	}
 
-	@Bean
+	@Bean(name = "connections.ExecutorService")
 	public ExecutorService executorService() {
 		ExecutorService newCachedThreadPool = Executors.newCachedThreadPool();
 		return newCachedThreadPool;

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Vyllage Admin | Account Management</title>
+  <title>Vyllage Admin | Account Organization Management</title>
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -30,26 +30,29 @@
           <img src="images/logo-white.png" alt="Vyllage" />
           <span>Vyllage</span>
         </div>
-        <span class="page-title">Account Management</span>
+        <span class="page-title">Account Organization Management</span>
+        <a th:href="@{/admin/users}"> Users </a> |
+        <a th:href="@{/admin/user/roles}"> Single User Role Editor </a> |
+        <a th:href="@{/admin/users/roles}"> Users Role Editor </a> |
+        <a th:href="@{/admin/user/batch}"> Batch Account </a>
       </div>
     </header>
     <div class="section content">
-      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/createBatch}" th:object="${batchAccount}" method="post"
-      onsubmit="adminFormSubmit()">
-        <select id='organization' name='organization' th:field="*{organization}">
-          <option th:each="grp : ${organizations}" th:value="${grp.organizationId}" th:text="${grp.organizationName}">Some organization</option>
+      <label>Assigns a user to one or more organizations with the selected roles, keeping the existing ones unchanged. Deselected
+        organizations are removed. </label>
+      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/{userId}/organizations(userId=${userId})}" th:object="${userOrganizationForm}"
+      method="post">
+        <select id="organizationIds" name="organizationIds" multiple="multiple">
+          <option th:each="org : ${organizationOptions}" th:value="${org.organizationId}" th:text="${org.organizationName}" th:selected="${org.selected}">Some organization</option>
         </select>
-        <select name="role">
-          <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}" th:selected="${rol.role == 'STUDENT'}">Some Role</option>
+        <select id="roles" name="roles" multiple="multiple">
+          <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}">Some Role</option>
         </select>
-        <textarea rows="20" cols="80" th:field="*{txt}">
-        </textarea>
-        <button name="batchAccounts" type="submit" class="pull right padded send-btn">Submit</button>
-        <label th:if="${error != null}" th:text="${error}" style="color: red;"></label>
+        <button name="set-organizations" type="submit" class="pull right padded send-btn">Submit</button>
+        <label th:if="*{error != null}" th:text="*{error}" style="color: red;"></label>
       </form>
     </div>
   </div>
-
   <footer>
     <div class="content">
       <div class="logo">
@@ -67,18 +70,6 @@
       </nav>
     </div>
   </footer>
-  <script>
-  var el = document.getElementById('organization');
-
-  if (el.childNodes.length === 1) {
-    document.adminForm.organization.disabled = true;
-  }
-  adminFormSubmit = function() {
-    document.adminForm.organization.disabled = false;
-  }
-  </script>
-
-
   <script togglz:active="GOOGLE_ANALYTICS">
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;

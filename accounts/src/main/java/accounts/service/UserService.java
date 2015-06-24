@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -83,6 +84,10 @@ public class UserService {
 	@Autowired
 	private Environment environment;
 
+	@Autowired
+	@Qualifier(value = "accounts.ExecutorService")
+	private ExecutorService executorService;
+
 	private BatchParser batchParser = new BatchParser();
 
 	public User getUser(Long userId) throws UserNotFoundException {
@@ -150,8 +155,12 @@ public class UserService {
 
 				this.changePassword(existingUser.getUserId(), newPassword);
 
-				List<GrantedAuthority> newRolesForOrganization = new ArrayList<>(
-						existingUser.getAuthorities());
+				List<UserOrganizationRole> newRolesForOrganization = new ArrayList<>();
+				for (GrantedAuthority grantedAuthority : existingUser
+						.getAuthorities())
+					newRolesForOrganization
+							.add((UserOrganizationRole) grantedAuthority);
+
 				newRolesForOrganization.add(new UserOrganizationRole(
 						existingUser.getUserId(), batchAccount
 								.getOrganization(), batchAccount.getRole(),
@@ -209,11 +218,14 @@ public class UserService {
 				// change roles
 				Long userId = existingUser.getUserId();
 
-				List<GrantedAuthority> newRolesForOrganization = new ArrayList<>();
+				List<UserOrganizationRole> newRolesForOrganization = new ArrayList<>();
+				for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
+					newRolesForOrganization
+							.add((UserOrganizationRole) grantedAuthority);
+				}
 
-				newRolesForOrganization.addAll(user.getAuthorities());
 				newRolesForOrganization.stream().forEach(
-						ga -> ((UserOrganizationRole) ga).setUserId(userId));
+						ga -> ga.setUserId(userId));
 
 				// remove duplicates
 				// newRolesForOrganization
@@ -322,8 +334,9 @@ public class UserService {
 		return loadUserByUsername;
 	}
 
-	public void updateUserRolesByOrganization(
-			List<GrantedAuthority> newRolesForOrganization, User loggedInUser) {
+	protected void updateUserRolesByOrganization(
+			List<UserOrganizationRole> newRolesForOrganization,
+			User loggedInUser) {
 
 		// Long organizationId = ((UserOrganizationRole) newRolesForOrganization
 		// .get(0)).getOrganizationId();
@@ -334,11 +347,9 @@ public class UserService {
 		// userOrganizationRoleRepository.deleteByUserIdAndOrganizationId(userId,
 		// organizationId);
 
-		for (GrantedAuthority userOrganizationRole : newRolesForOrganization) {
-			((UserOrganizationRole) userOrganizationRole)
-					.setAuditUserId(loggedInUser.getUserId());
-			userOrganizationRoleRepository
-					.create((UserOrganizationRole) userOrganizationRole);
+		for (UserOrganizationRole userOrganizationRole : newRolesForOrganization) {
+			userOrganizationRole.setAuditUserId(loggedInUser.getUserId());
+			userOrganizationRoleRepository.create(userOrganizationRole);
 		}
 
 	}
@@ -563,4 +574,113 @@ public class UserService {
 		return userRepository.loadUserByUsername(user.getUsername());
 	}
 
+	public List<User> getUsersFromOrganization(Long organizationId) {
+		List<UserOrganizationRole> byOrganizationId = userOrganizationRoleRepository
+				.getByOrganizationId(organizationId);
+
+		return userRepository.getAll(byOrganizationId.stream()
+				.map(uor -> uor.getUserId()).collect(Collectors.toList()));
+	}
+
+	public void appendUserOrganizationRoles(
+			List<UserOrganizationRole> userOrganizationRole) {
+		userOrganizationRole.stream().forEach(
+				uor -> userOrganizationRoleRepository.create(uor));
+	}
+
+	public void setUserRoles(List<UserOrganizationRole> userOrganizationRoles) {
+
+		userOrganizationRoles
+				.stream()
+				.collect(
+						Collectors.groupingBy(UserOrganizationRole::getUserId,
+								Collectors.toList()))
+				.forEach(
+						(userId, organizations) -> {
+							for (UserOrganizationRole userOrganizationRole : organizations) {
+								userOrganizationRoleRepository
+										.deleteByUserIdAndOrganizationId(
+												userId, userOrganizationRole
+														.getOrganizationId());
+							}
+						});
+
+		userOrganizationRoles.stream().forEach(
+				uor -> userOrganizationRoleRepository.create(uor));
+
+	}
+
+	public void setUserOrganization(
+			List<UserOrganizationRole> userOrganizationRoles) {
+
+		userOrganizationRoleRepository.deleteByUserId(userOrganizationRoles
+				.get(0).getUserId());
+
+		userOrganizationRoles.stream().forEach(
+				uor -> userOrganizationRoleRepository.create(uor));
+
+	}
+
+	/**
+	 * Enables or disables a given user returning the new state.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public boolean enableDisableUser(Long userId) {
+		return userRepository.enableDisableUser(userId);
+	}
+
+	/**
+	 * Activates an user account, the account must be GUEST and have no other
+	 * role.
+	 * 
+	 * @param userId
+	 * @throws UserNotFoundException
+	 * @throws EmailException
+	 */
+	public void activateUser(Long userId, Long organizationId, User loggedInUser)
+			throws UserNotFoundException {
+		User existingUser = this.getUser(userId);
+
+		if (existingUser.isGuest()) {
+			String newPassword = randomPasswordGenerator.getRandomPassword();
+
+			// Setting the user as Student.
+			this.setUserRoles(Arrays.asList(new UserOrganizationRole(userId,
+					organizationId, RolesEnum.STUDENT.name(), loggedInUser
+							.getUserId())));
+
+			this.changePassword(existingUser.getUserId(), newPassword);
+
+			executorService.execute(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						emailBuilder
+								.to(existingUser.getUsername())
+								.from(environment.getProperty("email.from",
+										"no-reply@vyllage.com"))
+								.fromUserName(
+										environment.getProperty(
+												"email.from.userName",
+												"Chief of Vyllage"))
+								.subject("Account Creation - Vyllage.com")
+								.setNoHtmlMessage(
+										"Your account has been created successfuly. \\n Your password is: "
+												+ newPassword)
+								.templateName("email-account-created")
+								.addTemplateVariable("password", newPassword)
+								.addTemplateVariable("firstName",
+										existingUser.getFirstName()).send();
+					} catch (EmailException e) {
+						logger.severe(ExceptionUtils.getStackTrace(e));
+						NewRelic.noticeError(e);
+					}
+
+				}
+			});
+
+		}
+	}
 }

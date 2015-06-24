@@ -215,7 +215,7 @@ public class DocumentLinkController {
 		if (linkRequest.getDocumentId() == null) {
 			try {
 				linkRequest.setDocumentId(documentService.getUserDocumentId(
-						request, loggedInUser.getUserId()));
+						request, loggedInUser.getUserId()).get(0));
 			} catch (ElementNotFoundException e) {
 				return new ResponseEntity<>(e.getMessage(),
 						HttpStatus.NO_CONTENT);

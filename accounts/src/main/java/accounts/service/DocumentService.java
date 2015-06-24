@@ -69,7 +69,7 @@ public class DocumentService {
 	 * @return
 	 * @throws ElementNotFoundException
 	 */
-	public Long getUserDocumentId(HttpServletRequest request, Long userId)
+	public List<Long> getUserDocumentId(HttpServletRequest request, Long userId)
 			throws ElementNotFoundException {
 
 		HttpEntity<Object> entity = createHeader(request);
@@ -80,7 +80,7 @@ public class DocumentService {
 				.path("/document/user").queryParam("userId", userId);
 
 		@SuppressWarnings("unchecked")
-		List<Integer> responseBody = restTemplate.exchange(
+		List<Long> responseBody = restTemplate.exchange(
 				builder.build().toUriString(), HttpMethod.GET, entity,
 				List.class).getBody();
 
@@ -88,9 +88,7 @@ public class DocumentService {
 			throw new ElementNotFoundException(
 					"No documents found for user with id '" + userId + "'");
 
-		// TODO: currently the user only has one document, this might change in
-		// the future but for now we return the first document id he has
-		return new Long(responseBody.get(0));
+		return responseBody;
 	}
 
 	protected HttpEntity<Object> createHeader(HttpServletRequest request) {

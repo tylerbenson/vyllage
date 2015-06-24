@@ -1,5 +1,8 @@
 package accounts.config;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,5 +91,11 @@ public class BeansConfiguration {
 	@Bean
 	public TextEncryptor TextEncryptor() {
 		return Encryptors.queryableText(SOCIAL_PASSWORD, SOCIAL_SALT);
+	}
+
+	@Bean(name = "accounts.ExecutorService")
+	public ExecutorService executorService() {
+		ExecutorService newCachedThreadPool = Executors.newCachedThreadPool();
+		return newCachedThreadPool;
 	}
 }

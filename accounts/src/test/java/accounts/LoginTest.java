@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -156,7 +155,7 @@ public class LoginTest {
 		String userName = "test";
 		String oldPassword = "password";
 
-		GrantedAuthority auth = new UserOrganizationRole(null, 0L,
+		UserOrganizationRole auth = new UserOrganizationRole(null, 0L,
 				RolesEnum.STUDENT.name().toUpperCase(), 0L);
 
 		boolean enabled = true;
@@ -179,7 +178,7 @@ public class LoginTest {
 				loadedUser.getPassword()));
 
 		String userName2 = "test2";
-		GrantedAuthority auth2 = new UserOrganizationRole(null, 0L,
+		UserOrganizationRole auth2 = new UserOrganizationRole(null, 0L,
 				RolesEnum.STUDENT.name().toUpperCase(), 0L);
 
 		User user2 = new User(userName2, oldPassword, enabled,
@@ -203,7 +202,7 @@ public class LoginTest {
 		String userName = "long-password";
 		String password = "This is my very long password I made up by myself. 123456";
 
-		GrantedAuthority auth = new UserOrganizationRole(null, 0L,
+		UserOrganizationRole auth = new UserOrganizationRole(null, 0L,
 				RolesEnum.STUDENT.name().toUpperCase(), 0L);
 
 		boolean enabled = true;
@@ -269,9 +268,9 @@ public class LoginTest {
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 
-		GrantedAuthority auth1 = new UserOrganizationRole(null, 0L,
+		UserOrganizationRole auth1 = new UserOrganizationRole(null, 0L,
 				RolesEnum.STUDENT.name().toUpperCase(), 0L);
-		GrantedAuthority auth2 = new UserOrganizationRole(null, 0L,
+		UserOrganizationRole auth2 = new UserOrganizationRole(null, 0L,
 				RolesEnum.STUDENT.name().toUpperCase(), 0L);
 
 		User user = new User(userName, password, enabled, accountNonExpired,

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Vyllage Admin | Account Role Management</title>
+  <base href="." th:href="@{/}" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
+
+  <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
+
+  <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
+  <meta th:if="${userInfo} != null" name="email" th:content="${userInfo.email}" id="meta_userInfo_email" />
+  <meta th:if="${userInfo} != null" name="userId" th:content="${userInfo.userId}" id="meta_userInfo_user" />
+  <meta th:if="${userInfo} != null" name="registeredOn" th:content="${userInfo.registeredOn}" id="meta_userInfo_created_at"
+  />
+  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
+</head>
+
+<body class="admin" onload="adminFormOrganizationChange()">
+  <div id="container">
+    <header>
+      <div class="content">
+        <div class="logo">
+          <img src="images/logo-white.png" alt="Vyllage" />
+          <span>Vyllage</span>
+        </div>
+        <span class="page-title">Account Role Management</span>
+        <a th:href="@{/admin/users}"> Users </a> |
+        <a th:href="@{/admin/user/roles}"> Single User Role Editor </a> |
+        <a th:href="@{/admin/users/roles}"> Users Role Editor </a> |
+        <a th:href="@{/admin/user/batch}"> Batch Account </a>
+      </div>
+    </header>
+    <div class="section content">
+      <label> Shows the roles a user has and allows assigning new ones. All the selected roles will be set replacing existing ones,
+        if they are present and deselected then they are removed. </label>
+      <form name="adminForm" class="container" action="#" th:action="@{/admin/user/roles}" th:object="${userRoleManagementForm}"
+      method="post" onsubmit="adminFormSubmit()">
+        <select id='organizationId' name='organizationId' onchange="adminFormOrganizationChange()">
+          <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}">Some organization</option>
+        </select>
+        <select id="userIds" name="userId" onchange="adminFormUserSelected()">
+          <option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.username}">Some User</option>
+        </select>
+        <select id="roles" name="roles" multiple="multiple">
+          <option th:each="rol : ${roles}" th:value="${rol.role}" th:text="${rol.role}">Some Role</option>
+        </select>
+
+        <button name="set-roles" type="submit" class="pull right padded send-btn">Submit</button>
+        <label th:if="*{error != null}" th:text="*{error}" style="color: red;"></label>
+      </form>
+    </div>
+  </div>
+  <footer>
+    <div class="content">
+      <div class="logo">
+        <img src="images/logo-orange.png" alt="Vyllage" />
+        <span>Vyllage</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="">Help</a></li>
+          <li><a href="">Careers</a></li>
+          <li><a href="">Terms</a></li>
+          <li><a href="">Privacy</a></li>
+          <li><a href="">Contact Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+  <script type="text/javascript">
+  // <![CDATA[
+  var el = document.getElementById('organizationId');
+
+  if (el.childNodes.length === 1) {
+    document.adminForm.organizationId.disabled = true;
+  }
+
+  adminFormSubmit = function() {
+    document.adminForm.organizationId.disabled = false;
+  }
+
+  //Updates the select with the users from the selected organization
+  adminFormOrganizationChange = function() {
+    var organizationId = document.adminForm.organizationId.value;
+
+    var request = new XMLHttpRequest();
+
+    request.onreadystatechange = function() {
+      if (request.readyState == 4 && request.status == 200) {
+        var users = JSON.parse(request.responseText);
+        var userSelect = document.getElementById('userIds');
+        userSelect.options.length = 0; //clearing options
+
+        for (i = 0; i < users.length; i++) {
+          userSelect.options[i] = new Option(users[i].username, users[i].userId, false, false);
+        }
+        adminFormUserSelected();
+        //           console.log(request.responseText);
+
+      }
+    }
+    request.open("GET", "/admin/organization/" + organizationId + "/users", true);
+    request.send();
+  }
+
+  //Updates the roles select with the roles from the user.
+  adminFormUserSelected = function() {
+      var userId = document.adminForm.userId.value;
+      var organizationId = document.adminForm.organizationId.value;
+
+      if (userId === null || userId === "") {
+        var rolesSelect = document.getElementById('roles');
+
+        for (i = 0; i < rolesSelect.options.length; i++) {
+          rolesSelect.options[i].selected = false;
+        }
+        return;
+      }
+
+      var request = new XMLHttpRequest();
+
+      request.onreadystatechange = function() {
+
+        if (request.readyState == 4 && request.status == 200) {
+          var roles = JSON.parse(request.responseText);
+          var rolesSelect = document.getElementById('roles');
+
+          for (i = 0; i < rolesSelect.options.length; i++) {
+            rolesSelect.options[i].selected = false;
+
+            roles.filter(function(role) {
+              var found = role === rolesSelect.options[i].value
+              if (found)
+                rolesSelect.options[i].selected = true;
+
+              return found;
+            });
+          }
+        }
+      }
+      request.open("GET", "/account/" + userId + "/organization/" + organizationId + "/roles", true);
+      request.send();
+    }
+    // ]]>
+  </script>
+  <script togglz:active="GOOGLE_ANALYTICS">
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-62026590-1', {
+    'userId': document.getElementById('meta_userInfo_user') === null ? null : document.getElementById(
+      'meta_userInfo_user').getAttribute('content')
+  });
+  ga('send', 'pageview');
+  </script>
+  <div togglz:active="NEW_RELIC" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingFooter()}"></div>
+</body>
+
+</html>
