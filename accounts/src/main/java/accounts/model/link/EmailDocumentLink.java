@@ -10,11 +10,13 @@ import lombok.ToString;
  *
  */
 @ToString
-public class DocumentLink {
+public class EmailDocumentLink {
 	private Long userId;
 	private String generatedPassword;
 	private Long documentId;
 	private String documentType;
+	private String documentURL;
+	private LinkType linkType;
 
 	/**
 	 * 
@@ -51,4 +53,21 @@ public class DocumentLink {
 	public void setDocumentType(String documentType) {
 		this.documentType = documentType;
 	}
+
+	public String getDocumentURL() {
+		return this.documentURL;
+	}
+
+	public void setDocumentURL(String documentURL) {
+		this.documentURL = documentURL;
+	}
+
+	public LinkType getLinkType() {
+		return linkType;
+	}
+
+	public void setLinkType(LinkType linkType) {
+		this.linkType = linkType;
+	}
+
 }

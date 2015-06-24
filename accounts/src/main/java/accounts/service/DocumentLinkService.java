@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import user.common.User;
 import accounts.model.account.ResetPasswordLink;
-import accounts.model.link.DocumentLink;
+import accounts.model.link.EmailDocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.model.link.LinkType;
 import accounts.model.link.SimpleDocumentLink;
@@ -48,7 +48,7 @@ public class DocumentLinkService {
 		this.sharedDocumentRepository = sharedDocumentRepository;
 	}
 
-	public DocumentLink createLink(DocumentLinkRequest linkRequest,
+	public EmailDocumentLink createLink(DocumentLinkRequest linkRequest,
 			User loggedInUser) throws EmailException {
 
 		User user = null;
@@ -57,15 +57,18 @@ public class DocumentLinkService {
 		else
 			user = userService.createUser(linkRequest, loggedInUser);
 
-		DocumentLink doclink = new DocumentLink();
+		EmailDocumentLink doclink = new EmailDocumentLink();
 		doclink.setUserId(user.getUserId());
 		doclink.setGeneratedPassword(randomPasswordGenerator
 				.getRandomPassword());
 		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
+		doclink.setDocumentURL(randomPasswordGenerator.getRandomString(10));
 
 		userCredentialsRepository.createDocumentLinkPassword(doclink,
 				linkRequest.getExpirationDate());
+
+		sharedDocumentRepository.create(doclink);
 
 		return doclink;
 	}
@@ -74,8 +77,8 @@ public class DocumentLinkService {
 	 * Creates a simple document link used to share a document without creating
 	 * a guest account.
 	 */
-	public SimpleDocumentLink createLink(SimpleDocumentLinkRequest linkRequest,
-			User loggedInUser) {
+	public SimpleDocumentLink createSimpleLink(
+			SimpleDocumentLinkRequest linkRequest, User loggedInUser) {
 
 		SimpleDocumentLink doclink = new SimpleDocumentLink();
 		doclink.setUserId(loggedInUser.getUserId());
@@ -109,9 +112,12 @@ public class DocumentLinkService {
 		return userCredentialsRepository.isActive(userId, generatedPassword);
 	}
 
-	public SimpleDocumentLink get(String shortUrl) {
+	public SimpleDocumentLink getSimpleDocumentLink(String shortUrl) {
+		return sharedDocumentRepository.getSimpleDocumentLink(shortUrl);
+	}
 
-		return sharedDocumentRepository.get(shortUrl);
+	public EmailDocumentLink getDocumentLink(String shortUrl) {
+		return sharedDocumentRepository.getDocumentLink(shortUrl);
 	}
 
 }

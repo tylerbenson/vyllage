@@ -33,7 +33,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
 import user.common.social.SocialSessionEnum;
-import accounts.model.link.DocumentLink;
+import accounts.model.link.EmailDocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.model.link.SimpleDocumentLink;
 import accounts.model.link.SimpleDocumentLinkRequest;
@@ -80,15 +80,19 @@ public class DocumentLinkController {
 
 	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
 
-	@RequestMapping(value = "/advice/{encodedDocumentLink}", method = RequestMethod.GET)
+	@RequestMapping(value = "/advice/{shortUrl}", method = RequestMethod.GET)
 	public String sharedLinkLogin(HttpServletRequest request,
-			@PathVariable String encodedDocumentLink)
+			@PathVariable String shortUrl)
 			throws JsonParseException, JsonMappingException, IOException,
 			UserNotFoundException {
 
-		String json = decrypt(encodedDocumentLink);
+		// String json = decrypt(encodedDocumentLink);
 
-		DocumentLink documentLink = mapper.readValue(json, DocumentLink.class);
+		// EmailDocumentLink documentLink = mapper.readValue(json,
+		// EmailDocumentLink.class);
+
+		EmailDocumentLink documentLink = documentLinkService
+				.getDocumentLink(shortUrl);
 
 		if (!documentLinkService.isActive(documentLink.getUserId(),
 				documentLink.getGeneratedPassword()))
@@ -110,14 +114,14 @@ public class DocumentLinkController {
 
 		linkRequest.setSendRegistrationMail(true);
 
-		DocumentLink documentLink = documentLinkService.createLink(linkRequest,
+		EmailDocumentLink documentLink = documentLinkService.createLink(linkRequest,
 				user);
 
-		String json = mapper.writeValueAsString(documentLink);
+		// String json = mapper.writeValueAsString(documentLink);
 
-		String safeString = encrypt(json);
+		// String safeString = encrypt(json);
 
-		return "/link/advice/" + safeString;
+		return "/link/advice/" + documentLink.getDocumentURL();
 	}
 
 	/**
@@ -139,22 +143,23 @@ public class DocumentLinkController {
 		for (DocumentLinkRequest documentLinkRequest : linkRequest) {
 			System.out.println(documentLinkRequest);
 
-			DocumentLink documentLink = documentLinkService.createLink(
+			EmailDocumentLink documentLink = documentLinkService.createLink(
 					documentLinkRequest, user);
 
-			String json = mapper.writeValueAsString(documentLink);
+			// String json = mapper.writeValueAsString(documentLink);
 
-			String safeString = "/link/advice/" + encrypt(json);
-			System.out.println(safeString);
-			links.put(documentLinkRequest.getEmail(), safeString);
+			// String safeString = "/link/advice/" + encrypt(json);
+
+			links.put(documentLinkRequest.getEmail(), "/link/advice/"
+					+ documentLink.getDocumentURL());
 		}
 
 		return links;
 	}
 
-	@RequestMapping(value = "/p/{encodedDocumentLink}", method = RequestMethod.GET)
+	@RequestMapping(value = "/p/{shortUrl}", method = RequestMethod.GET)
 	public String accessSharedDocument(HttpServletRequest request,
-			WebRequest webRequest, @PathVariable String encodedDocumentLink)
+			WebRequest webRequest, @PathVariable String shortUrl)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		// String json = decrypt(encodedDocumentLink);
@@ -163,7 +168,7 @@ public class DocumentLinkController {
 		// SimpleDocumentLink.class);
 
 		SimpleDocumentLink documentLink = documentLinkService
-				.get(encodedDocumentLink);
+				.getSimpleDocumentLink(shortUrl);
 
 		if (LocalDateTime.now().isAfter(documentLink.getExpirationDate()))
 			throw new AccessDeniedException(
@@ -221,7 +226,7 @@ public class DocumentLinkController {
 			}
 		}
 
-		SimpleDocumentLink documentLink = documentLinkService.createLink(
+		SimpleDocumentLink documentLink = documentLinkService.createSimpleLink(
 				linkRequest, loggedInUser);
 
 		// String json = mapper.writeValueAsString(documentLink);

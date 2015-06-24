@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
 
 import accounts.domain.tables.records.UserCredentialsRecord;
 import accounts.model.UserCredential;
-import accounts.model.link.DocumentLink;
+import accounts.model.link.EmailDocumentLink;
 
 /**
  * Handles links to documents. A user can generate links to share his documents
@@ -79,7 +79,7 @@ public class UserCredentialsRepository {
 	 * @param linkRequest
 	 * @param expires
 	 */
-	public void createDocumentLinkPassword(DocumentLink linkRequest,
+	public void createDocumentLinkPassword(EmailDocumentLink linkRequest,
 			LocalDateTime expires) {
 		UserCredentialsRecord newRecord = sql.newRecord(USER_CREDENTIALS);
 		newRecord.setPassword(getEncodedPassword(linkRequest

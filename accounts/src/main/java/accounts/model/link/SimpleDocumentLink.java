@@ -13,7 +13,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 /**
  * Object used to share a document link without creating a new user. Used to
  * share a link to a document to persons outside the system. The user id is to
- * get information about the user who create the link later.
+ * get information about the user who created the link later.
  * 
  * @author uh
  *
@@ -37,7 +37,7 @@ public class SimpleDocumentLink {
 	public SimpleDocumentLink(SharedDocumentRecord record) {
 		this.documentId = record.getDocumentId();
 		this.documentType = record.getDocumentType();
-		this.setLinkType(LinkType.valueOf(record.getLinkType()));
+		this.linkType = LinkType.valueOf(record.getLinkType());
 		this.documentURL = record.getShortUrl();
 		this.userId = record.getUserId();
 		this.expirationDate = record.getExpirationDate().toLocalDateTime();
