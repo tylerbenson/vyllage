@@ -73,6 +73,7 @@ public class SharedDocumentRepository {
 		documentLink.setGeneratedPassword(textEncryptor.decrypt(fetchOne
 				.getGeneratedPassword()));
 		documentLink.setUserId(fetchOne.getUserId());
+		documentLink.setVisits(fetchOne.getVisits());
 
 		return documentLink;
 	}

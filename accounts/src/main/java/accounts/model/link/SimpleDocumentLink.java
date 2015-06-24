@@ -30,6 +30,7 @@ public class SimpleDocumentLink {
 	private LocalDateTime expirationDate;
 	private String documentURL;
 	private LinkType linkType;
+	private Long visits;
 
 	public SimpleDocumentLink() {
 	}
@@ -41,6 +42,7 @@ public class SimpleDocumentLink {
 		this.documentURL = record.getShortUrl();
 		this.userId = record.getUserId();
 		this.expirationDate = record.getExpirationDate().toLocalDateTime();
+		this.visits = record.getVisits();
 	}
 
 	public Long getUserId() {
@@ -89,6 +91,14 @@ public class SimpleDocumentLink {
 
 	public void setLinkType(LinkType linkType) {
 		this.linkType = linkType;
+	}
+
+	public Long getVisits() {
+		return visits;
+	}
+
+	public void setVisits(Long visits) {
+		this.visits = visits;
 	}
 
 }

@@ -17,6 +17,7 @@ public class EmailDocumentLink {
 	private String documentType;
 	private String documentURL;
 	private LinkType linkType;
+	private Long visits;
 
 	/**
 	 * 
@@ -68,6 +69,14 @@ public class EmailDocumentLink {
 
 	public void setLinkType(LinkType linkType) {
 		this.linkType = linkType;
+	}
+
+	public Long getVisits() {
+		return visits;
+	}
+
+	public void setVisits(Long visits) {
+		this.visits = visits;
 	}
 
 }
