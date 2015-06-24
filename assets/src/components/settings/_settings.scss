@@ -8,8 +8,6 @@
 
     .sidebar {
       @include column(2/7);
-      border-bottom-left-radius: 5px;
-      border-top-left-radius: 5px;
       margin-right: 0;
 
       a {
@@ -43,8 +41,6 @@
         }
 
         &:first-child {
-          border-top-left-radius: 5px;
-
           &.active {
             box-shadow: none;
           }
@@ -78,8 +74,6 @@
     .container > .content {
       @include column(5/7);
       background: $inverted-text-color;
-      border-bottom-right-radius: 5px;
-      border-top-right-radius: 5px;
       border-bottom: darken($section-footer-background, 1%) solid 1px;
       margin: 0;
       padding: 1.5em 3em 3em 3em;
