@@ -54,7 +54,6 @@ import com.newrelic.api.agent.NewRelic;
 @RequestMapping("link")
 public class DocumentLinkController {
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(DocumentLinkController.class
 			.getName());
 
@@ -66,9 +65,6 @@ public class DocumentLinkController {
 
 	@Autowired
 	private UserService userService;
-
-	// @Autowired
-	// private Encryptor linkEncryptor;
 
 	@Autowired
 	private SignInUtil signInUtil;
@@ -236,7 +232,7 @@ public class DocumentLinkController {
 	}
 
 	/**
-	 * Encrypts the string and encodes it in Base 64.
+	 * Encrypts a string and encodes it in Base 64.
 	 * 
 	 * @param json
 	 * @return

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,14 +26,22 @@ public class DocumentLinkService {
 	private final Logger logger = Logger.getLogger(DocumentLinkService.class
 			.getName());
 
-	@Autowired
-	private UserCredentialsRepository linkRepository;
+	private UserCredentialsRepository userCredentialsRepository;
 
-	@Autowired
 	private UserService userService;
 
-	@Autowired
 	private RandomPasswordGenerator randomPasswordGenerator;
+
+	@Inject
+	public DocumentLinkService(
+			final UserCredentialsRepository userCredentialsRepository,
+			final UserService userService,
+			final RandomPasswordGenerator randomPasswordGenerator) {
+		super();
+		this.userCredentialsRepository = userCredentialsRepository;
+		this.userService = userService;
+		this.randomPasswordGenerator = randomPasswordGenerator;
+	}
 
 	public DocumentLink createLink(DocumentLinkRequest linkRequest,
 			User loggedInUser) throws EmailException {
@@ -49,14 +59,16 @@ public class DocumentLinkService {
 		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
 
-		linkRepository.createDocumentLinkPassword(doclink,
+		userCredentialsRepository.createDocumentLinkPassword(doclink,
 				linkRequest.getExpirationDate());
-
-		System.out.println(doclink);
 
 		return doclink;
 	}
 
+	/**
+	 * Creates a simple document link used to share a document without creating
+	 * a guest account.
+	 */
 	public SimpleDocumentLink createLink(SimpleDocumentLinkRequest linkRequest,
 			User loggedInUser) {
 
@@ -85,6 +97,6 @@ public class DocumentLinkService {
 	 * @return
 	 */
 	public boolean isActive(Long userId, String generatedPassword) {
-		return linkRepository.isActive(userId, generatedPassword);
+		return userCredentialsRepository.isActive(userId, generatedPassword);
 	}
 }
