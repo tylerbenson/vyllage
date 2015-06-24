@@ -12,7 +12,7 @@ var Print = React.createClass({
 		return (
 			<a href={"/resume/"+this.state.resume.documentId+"/file/pdf"} className="flat print button">
         <i className="ion-printer"></i>
-        Print
+        <span>Print</span>
       </a>
 		);
 	}
