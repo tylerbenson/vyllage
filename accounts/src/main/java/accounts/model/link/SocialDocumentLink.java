@@ -19,7 +19,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
  *
  */
 @ToString
-public class SimpleDocumentLink {
+public class SocialDocumentLink {
 
 	private Long userId;
 	private Long documentId;
@@ -32,10 +32,10 @@ public class SimpleDocumentLink {
 	private LinkType linkType;
 	private Long visits;
 
-	public SimpleDocumentLink() {
+	public SocialDocumentLink() {
 	}
 
-	public SimpleDocumentLink(SharedDocumentRecord record) {
+	public SocialDocumentLink(SharedDocumentRecord record) {
 		this.documentId = record.getDocumentId();
 		this.documentType = record.getDocumentType();
 		this.linkType = LinkType.valueOf(record.getLinkType());

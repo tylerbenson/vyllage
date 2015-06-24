@@ -35,7 +35,7 @@ import user.common.User;
 import user.common.social.SocialSessionEnum;
 import accounts.model.link.EmailDocumentLink;
 import accounts.model.link.DocumentLinkRequest;
-import accounts.model.link.SimpleDocumentLink;
+import accounts.model.link.SocialDocumentLink;
 import accounts.model.link.SimpleDocumentLinkRequest;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
@@ -80,11 +80,10 @@ public class DocumentLinkController {
 
 	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
 
-	@RequestMapping(value = "/advice/{shortUrl}", method = RequestMethod.GET)
+	@RequestMapping(value = "/e/{shortUrl}", method = RequestMethod.GET)
 	public String sharedLinkLogin(HttpServletRequest request,
-			@PathVariable String shortUrl)
-			throws JsonParseException, JsonMappingException, IOException,
-			UserNotFoundException {
+			@PathVariable String shortUrl) throws JsonParseException,
+			JsonMappingException, IOException, UserNotFoundException {
 
 		// String json = decrypt(encodedDocumentLink);
 
@@ -93,6 +92,8 @@ public class DocumentLinkController {
 
 		EmailDocumentLink documentLink = documentLinkService
 				.getDocumentLink(shortUrl);
+
+		documentLinkService.registerVisit(shortUrl);
 
 		if (!documentLinkService.isActive(documentLink.getUserId(),
 				documentLink.getGeneratedPassword()))
@@ -114,14 +115,14 @@ public class DocumentLinkController {
 
 		linkRequest.setSendRegistrationMail(true);
 
-		EmailDocumentLink documentLink = documentLinkService.createLink(linkRequest,
-				user);
+		EmailDocumentLink documentLink = documentLinkService.createLink(
+				linkRequest, user);
 
 		// String json = mapper.writeValueAsString(documentLink);
 
 		// String safeString = encrypt(json);
 
-		return "/link/advice/" + documentLink.getDocumentURL();
+		return "/link/e/" + documentLink.getDocumentURL();
 	}
 
 	/**
@@ -139,9 +140,8 @@ public class DocumentLinkController {
 			EmailException {
 
 		Map<String, String> links = new HashMap<>();
-		System.out.println("linkrequests " + linkRequest);
+
 		for (DocumentLinkRequest documentLinkRequest : linkRequest) {
-			System.out.println(documentLinkRequest);
 
 			EmailDocumentLink documentLink = documentLinkService.createLink(
 					documentLinkRequest, user);
@@ -150,25 +150,27 @@ public class DocumentLinkController {
 
 			// String safeString = "/link/advice/" + encrypt(json);
 
-			links.put(documentLinkRequest.getEmail(), "/link/advice/"
-					+ documentLink.getDocumentURL());
+			links.put(documentLinkRequest.getEmail(),
+					"/link/e/" + documentLink.getDocumentURL());
 		}
 
 		return links;
 	}
 
-	@RequestMapping(value = "/p/{shortUrl}", method = RequestMethod.GET)
+	@RequestMapping(value = "/s/{shortUrl}", method = RequestMethod.GET)
 	public String accessSharedDocument(HttpServletRequest request,
 			WebRequest webRequest, @PathVariable String shortUrl)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		// String json = decrypt(encodedDocumentLink);
 		//
-		// SimpleDocumentLink documentLink = mapper.readValue(json,
-		// SimpleDocumentLink.class);
+		// SocialDocumentLink documentLink = mapper.readValue(json,
+		// SocialDocumentLink.class);
 
-		SimpleDocumentLink documentLink = documentLinkService
+		SocialDocumentLink documentLink = documentLinkService
 				.getSimpleDocumentLink(shortUrl);
+
+		documentLinkService.registerVisit(shortUrl);
 
 		if (LocalDateTime.now().isAfter(documentLink.getExpirationDate()))
 			throw new AccessDeniedException(
@@ -226,7 +228,7 @@ public class DocumentLinkController {
 			}
 		}
 
-		SimpleDocumentLink documentLink = documentLinkService.createSimpleLink(
+		SocialDocumentLink documentLink = documentLinkService.createSimpleLink(
 				linkRequest, loggedInUser);
 
 		// String json = mapper.writeValueAsString(documentLink);
@@ -235,7 +237,7 @@ public class DocumentLinkController {
 
 		return new ResponseEntity<>(
 				environment.getProperty("vyllage.domain", "www.vyllage.com")
-						+ "/link/p/" + documentLink.getDocumentURL(),
+						+ "/link/s/" + documentLink.getDocumentURL(),
 				HttpStatus.OK);
 	}
 

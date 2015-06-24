@@ -14,7 +14,7 @@ import accounts.model.account.ResetPasswordLink;
 import accounts.model.link.EmailDocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.model.link.LinkType;
-import accounts.model.link.SimpleDocumentLink;
+import accounts.model.link.SocialDocumentLink;
 import accounts.model.link.SimpleDocumentLinkRequest;
 import accounts.repository.SharedDocumentRepository;
 import accounts.repository.UserCredentialsRepository;
@@ -22,6 +22,8 @@ import accounts.service.utilities.RandomPasswordGenerator;
 
 @Service
 public class DocumentLinkService {
+
+	private static final int DOCUMENT_SHORT_URL_LENGTH = 10;
 
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(DocumentLinkService.class
@@ -63,7 +65,8 @@ public class DocumentLinkService {
 				.getRandomPassword());
 		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
-		doclink.setDocumentURL(randomPasswordGenerator.getRandomString(10));
+		doclink.setDocumentURL(randomPasswordGenerator
+				.getRandomString(DOCUMENT_SHORT_URL_LENGTH));
 
 		userCredentialsRepository.createDocumentLinkPassword(doclink,
 				linkRequest.getExpirationDate());
@@ -77,17 +80,18 @@ public class DocumentLinkService {
 	 * Creates a simple document link used to share a document without creating
 	 * a guest account.
 	 */
-	public SimpleDocumentLink createSimpleLink(
+	public SocialDocumentLink createSimpleLink(
 			SimpleDocumentLinkRequest linkRequest, User loggedInUser) {
 
-		SimpleDocumentLink doclink = new SimpleDocumentLink();
+		SocialDocumentLink doclink = new SocialDocumentLink();
 		doclink.setUserId(loggedInUser.getUserId());
 		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
 		doclink.setExpirationDate(LocalDateTime.now(ZoneId.of("UTC")).plusDays(
 				30));
-		doclink.setDocumentURL(randomPasswordGenerator.getRandomString(10));
-		doclink.setLinkType(LinkType.PUBLIC);
+		doclink.setDocumentURL(randomPasswordGenerator
+				.getRandomString(DOCUMENT_SHORT_URL_LENGTH));
+		doclink.setLinkType(LinkType.SOCIAL);
 
 		sharedDocumentRepository.create(doclink);
 
@@ -112,12 +116,17 @@ public class DocumentLinkService {
 		return userCredentialsRepository.isActive(userId, generatedPassword);
 	}
 
-	public SimpleDocumentLink getSimpleDocumentLink(String shortUrl) {
+	public SocialDocumentLink getSimpleDocumentLink(String shortUrl) {
 		return sharedDocumentRepository.getSimpleDocumentLink(shortUrl);
 	}
 
 	public EmailDocumentLink getDocumentLink(String shortUrl) {
 		return sharedDocumentRepository.getDocumentLink(shortUrl);
+	}
+
+	public void registerVisit(String shortUrl) {
+		sharedDocumentRepository.registerVisit(shortUrl);
+
 	}
 
 }

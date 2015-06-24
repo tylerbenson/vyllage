@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import accounts.domain.tables.records.SharedDocumentRecord;
 import accounts.model.link.EmailDocumentLink;
 import accounts.model.link.LinkType;
-import accounts.model.link.SimpleDocumentLink;
+import accounts.model.link.SocialDocumentLink;
 
 @Repository
 public class SharedDocumentRepository {
@@ -45,11 +45,11 @@ public class SharedDocumentRepository {
 		sharedDocumentRecord.insert();
 	}
 
-	public void create(SimpleDocumentLink doclink) {
+	public void create(SocialDocumentLink doclink) {
 		SharedDocumentRecord sharedDocumentRecord = sql
 				.newRecord(SHARED_DOCUMENT);
 		sharedDocumentRecord.setShortUrl(doclink.getDocumentURL());
-		sharedDocumentRecord.setLinkType(LinkType.PUBLIC.name());
+		sharedDocumentRecord.setLinkType(LinkType.SOCIAL.name());
 		sharedDocumentRecord.setDocumentId(doclink.getDocumentId());
 		sharedDocumentRecord.setDocumentType(doclink.getDocumentType());
 		sharedDocumentRecord.setExpirationDate(Timestamp.valueOf(doclink
@@ -62,25 +62,34 @@ public class SharedDocumentRepository {
 	}
 
 	public EmailDocumentLink getDocumentLink(String shortUrl) {
-		SharedDocumentRecord fetchOne = sql.fetchOne(SHARED_DOCUMENT,
-				SHARED_DOCUMENT.SHORT_URL.eq(shortUrl));
+		SharedDocumentRecord sharedDocumentRecord = sql.fetchOne(
+				SHARED_DOCUMENT, SHARED_DOCUMENT.SHORT_URL.eq(shortUrl));
 		EmailDocumentLink documentLink = new EmailDocumentLink();
 
-		documentLink.setDocumentId(fetchOne.getDocumentId());
-		documentLink.setDocumentType(fetchOne.getDocumentType());
+		documentLink.setDocumentId(sharedDocumentRecord.getDocumentId());
+		documentLink.setDocumentType(sharedDocumentRecord.getDocumentType());
 		documentLink.setLinkType(LinkType.EMAIL);
-		documentLink.setDocumentURL(fetchOne.getShortUrl());
-		documentLink.setGeneratedPassword(textEncryptor.decrypt(fetchOne
-				.getGeneratedPassword()));
-		documentLink.setUserId(fetchOne.getUserId());
-		documentLink.setVisits(fetchOne.getVisits());
+		documentLink.setDocumentURL(sharedDocumentRecord.getShortUrl());
+		documentLink.setGeneratedPassword(textEncryptor
+				.decrypt(sharedDocumentRecord.getGeneratedPassword()));
+		documentLink.setUserId(sharedDocumentRecord.getUserId());
+		documentLink.setVisits(sharedDocumentRecord.getVisits());
 
 		return documentLink;
 	}
 
-	public SimpleDocumentLink getSimpleDocumentLink(String shortUrl) {
-		return new SimpleDocumentLink(sql.fetchOne(SHARED_DOCUMENT,
+	public SocialDocumentLink getSimpleDocumentLink(String shortUrl) {
+		return new SocialDocumentLink(sql.fetchOne(SHARED_DOCUMENT,
 				SHARED_DOCUMENT.SHORT_URL.eq(shortUrl)));
+	}
+
+	public void registerVisit(String shortUrl) {
+		SharedDocumentRecord sharedDocumentRecord = sql.fetchOne(
+				SHARED_DOCUMENT, SHARED_DOCUMENT.SHORT_URL.eq(shortUrl));
+
+		Long visits = sharedDocumentRecord.getVisits();
+		sharedDocumentRecord.setVisits(visits == null ? 1L : visits + 1);
+		sharedDocumentRecord.insert();
 	}
 
 }
