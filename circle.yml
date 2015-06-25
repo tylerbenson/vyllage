@@ -9,6 +9,7 @@ machine:
 test:
   override:
     - ./gradlew test circlePgTest
+    - npm test
 
 deployment:
   production:
