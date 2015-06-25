@@ -3,7 +3,6 @@ package accounts.model.link;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
-import accounts.domain.tables.records.SharedDocumentRecord;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -33,16 +32,6 @@ public class SocialDocumentLink {
 	private Long visits;
 
 	public SocialDocumentLink() {
-	}
-
-	public SocialDocumentLink(SharedDocumentRecord record) {
-		this.documentId = record.getDocumentId();
-		this.documentType = record.getDocumentType();
-		this.linkType = LinkType.valueOf(record.getLinkType());
-		this.linkKey = record.getLinkKey();
-		this.userId = record.getUserId();
-		this.expirationDate = record.getExpirationDate().toLocalDateTime();
-		this.visits = record.getVisits() == null ? 0L : record.getVisits();
 	}
 
 	public Long getUserId() {
