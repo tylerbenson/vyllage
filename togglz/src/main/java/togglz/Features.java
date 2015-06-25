@@ -22,8 +22,14 @@ public enum Features implements Feature {
 	@Label("New Relic")
 	NEW_RELIC,
 
+	@Label("Printing")
+	PRINTING,
+
 	@Label("Share Resume")
 	SHARE_RESUME,
+
+	@Label("Suggestions")
+	SUGGESTIONS,
 
 	@EnabledByDefault
 	@Label("Zopim Message Client")
