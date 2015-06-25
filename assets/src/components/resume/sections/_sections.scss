@@ -6,11 +6,11 @@
   @include center();
   & > .container {
     background: $section-background;
-    border-radius: 5px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-    margin: 0.75em 1em;
+    margin: 0.75em auto;
     padding: 2em 0 0 0;
     position: relative;
+    width: 80%;
   }
 
   &.mini {
@@ -36,9 +36,18 @@
     .title {
       @include column(2/3);
       text-align: left;
+      font-weight: 700;
 
-      h1:first-letter {
+      h1 {
+        font-weight: 400;
+        font-size: 1em;
         text-transform: uppercase;
+      }
+
+      h2, h3 {
+        input {
+          font-weight: 400;
+        }
       }
     }
     .actions {
@@ -51,6 +60,8 @@
 
   textarea {
     font-weight: 300;
+    font-size: 0.9em;
+    line-height: 1.5;
   }
 
   .footer {
@@ -221,7 +232,7 @@
 
 .subsubsection {
   .header {
-    padding: 1em 2em 0 2em;
+    padding: 1em 0 0 0;
 
     .title {
       h3 {
@@ -233,7 +244,7 @@
   }
 
   .content {
-    padding: 0 2em;
+    padding: 0;
   }
 
   .location {
@@ -245,7 +256,7 @@
 @media (max-width: $medium-portrait) {
   .section {
     & > .container {
-      margin: 0.5em 1em;
+      margin: 0.5em auto;
       padding: 1em 0 0;
     }
     .content {

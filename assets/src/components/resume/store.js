@@ -29,8 +29,9 @@ module.exports = Reflux.createStore({
         lastName: ''
       },
       sections: [],
-      sectionOrder: ['career goal', 'experience', 'education', 'skills']
-    }; 
+      sectionOrder: ['career goal', 'experience', 'education', 'skills'],
+      isNavOpen: false
+    };
   },
   getMaxSectionPostion: function () {
     var section = max(this.resume.sections, 'sectionPosition');
@@ -48,11 +49,11 @@ module.exports = Reflux.createStore({
                 .expand({documentId: this.documentId});
     request
       .put(url)
-      .set(this.tokenHeader, this.tokenValue) 
+      .set(this.tokenHeader, this.tokenValue)
       .send(order)
       .end(function (err, res) {
         //console.log(err, res.body, order, url);
-      }.bind(this)) 
+      }.bind(this))
   },
   onGetResume: function () {
     this.onGetHeader();
@@ -69,7 +70,7 @@ module.exports = Reflux.createStore({
         if (res.ok) {
           this.resume.header = res.body;
           this.trigger(this.resume);
-        } 
+        }
       }.bind(this))
   },
   onUpdateTagline: function (tagline) {
@@ -78,12 +79,12 @@ module.exports = Reflux.createStore({
                 .expand({documentId: this.documentId});
     request
       .put(url)
-      .set(this.tokenHeader, this.tokenValue) 
+      .set(this.tokenHeader, this.tokenValue)
       .send({tagline: tagline})
       .end(function (err, res) {
         this.resume.header.tagline = tagline;
         this.trigger(this.resume);
-      }.bind(this))            
+      }.bind(this))
   },
   onGetSections: function () {
     var url = urlTemplate
@@ -103,7 +104,7 @@ module.exports = Reflux.createStore({
             }
           }.bind(this))
           this.trigger(this.resume);
-        } 
+        }
       }.bind(this))
   },
   onPostSection: function (data) {
@@ -114,7 +115,7 @@ module.exports = Reflux.createStore({
                 });
     request
       .post(url)
-      .set(this.tokenHeader, this.tokenValue) 
+      .set(this.tokenHeader, this.tokenValue)
       .send(data)
       .end(function (err, res) {
         var section = assign({}, res.body);
@@ -154,17 +155,17 @@ module.exports = Reflux.createStore({
                 .expand({
                   documentId: this.documentId,
                   sectionId: sectionId
-                }); 
+                });
     request
       .del(url)
-      .set(this.tokenHeader, this.tokenValue) 
+      .set(this.tokenHeader, this.tokenValue)
       .set('Content-Type', 'application/json')
       .send({documentId: this.documentId, sectionId: sectionId})
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         this.resume.sections.splice(index, 1);
         this.trigger(this.resume);
-      }.bind(this));           
+      }.bind(this));
   },
   onUpdateSectionOrder: function (order) {
     this.resume.sectionOrder = order;
@@ -254,6 +255,10 @@ module.exports = Reflux.createStore({
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showComments = !this.resume.sections[index].showComments;
     console.log(sectionId, index, this.resume.sections[index]);
+    this.trigger(this.resume);
+  },
+  onToggleNav: function() {
+    this.resume.isNavOpen = !this.resume.isNavOpen;
     this.trigger(this.resume);
   },
   getInitialState: function () {

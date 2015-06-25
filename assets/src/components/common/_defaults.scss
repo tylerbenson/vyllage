@@ -22,12 +22,12 @@ body {
   min-height: 100%;
   height: auto !important;
   height: 100%;
-  margin: 0 auto -3.15em;
+  margin: 2.5em auto -2.85em;
 
   &:after {
     content: '';
     display: block;
-    height: 3.15em;
+    height: 2.85em;
   }
 }
 

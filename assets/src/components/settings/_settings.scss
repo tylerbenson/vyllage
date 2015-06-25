@@ -4,12 +4,11 @@
       @include cf();
       background: darken($section-footer-background, 1%);
       padding: 0;
+      width: 100%;
     }
 
     .sidebar {
       @include column(2/7);
-      border-bottom-left-radius: 5px;
-      border-top-left-radius: 5px;
       margin-right: 0;
 
       a {
@@ -43,17 +42,15 @@
         }
 
         &:first-child {
-          border-top-left-radius: 5px;
-
           &.active {
             box-shadow: none;
           }
         }
 
         &.active {
-          background: lighten($banner-background, 65%);
-          border-color: lighten($banner-background, 62%);
-          box-shadow: 0 -1px 0 lighten($banner-background, 62%);
+          background: lighten($banner-background, 67%);
+          border-color: lighten($banner-background, 64%);
+          box-shadow: 0 -1px 0 lighten($banner-background, 64%);
 
           i, span {
             color: lighten($banner-background, 10%);
@@ -78,8 +75,6 @@
     .container > .content {
       @include column(5/7);
       background: $inverted-text-color;
-      border-bottom-right-radius: 5px;
-      border-top-right-radius: 5px;
       border-bottom: darken($section-footer-background, 1%) solid 1px;
       margin: 0;
       padding: 1.5em 3em 3em 3em;

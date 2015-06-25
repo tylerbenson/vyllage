@@ -4,7 +4,6 @@ var actions = require('./actions');
 var resumeStore = require('./store');
 var settingStore = require('../settings/store');
 var filter = require('lodash.filter');
-var Subheader = require('./Subheader');
 var Header = require('./sections/Header');
 var Section = require('./sections');
 var Banner = require('./banner');
@@ -26,12 +25,12 @@ var ResumeEditor = React.createClass({
           key={section.sectionId}
           section={section}
           moveSection={this.moveSection}
-          owner={owner} />  
+          owner={owner} />
     }.bind(this));
     return (
       <div key={Math.random()} className='section'>
         <div className='container'>
-          <Header 
+          <Header
             title={sections[0].title}
             type={sections[0].type}
             owner={owner}
@@ -66,7 +65,6 @@ var ResumeEditor = React.createClass({
     var owner=this.state.resume.header.owner;
     return (
       <div>
-        {owner ? <Subheader documentId={this.state.resume.documentId}/>: null}
         <Banner header={this.state.resume.header} settings={this.state.settings} />
         <div className="sections">
           {this.renderSections()}

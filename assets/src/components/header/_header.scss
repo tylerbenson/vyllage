@@ -1,10 +1,38 @@
 header {
   @extend .inverted;
-  background: $primary-color;
+  background: $neutral-color-1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 1;
 
-  nav ul li a{
-    cursor: pointer;
-    padding: 0.6em;
+  nav {
+    .flat.button {
+      cursor: pointer;
+      opacity: 0.85;
+      padding: 0.425em;
+      transition: opacity .2s ease;
+
+      &.settings {
+        span {
+          display: none;
+        }
+      }
+
+      span,
+      i {
+        color: $inverted-text-color;
+      }
+
+      &:hover {
+        opacity: 1;
+        span,
+        i {
+          color: $inverted-text-color;
+        }
+      }
+    }
 
     i,
     span {
@@ -17,6 +45,18 @@ header {
       i,
       span {
         color: darken($header-color, 6%);
+      }
+    }
+
+    .nav-toggle {
+      display: none;
+      position: absolute;
+      right: 0;
+      font-size: 1.35em;
+      top: -0.25em;
+
+      &.active i {
+        color: lighten($neutral-color-1,40%) !important;
       }
     }
   }
@@ -57,12 +97,12 @@ header {
 .subheader {
   background: #fff;
   box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-  padding: 0.4em 0.6em;
+  padding: 0.2em 0.6em;
 
   .mode {
     display: inline-block;
     float: left;
-    font-size: 1.25em;
+    font-size: 1.15em;
     font-weight: 300;
     margin-top: 0.05em;
 
@@ -85,15 +125,37 @@ header {
 }
 
 @media (max-width: $medium-portrait) {
-  .subheader {
-    .print {
-      i {
-        margin: -0.4em 0 0 -0.4em;
-        font-size: 1.5em;
-        position: absolute;
+  header {
+    nav{
+      .nav-toggle {
+        display: inline-block;
       }
-      span {
-        display: none;
+
+      ul {
+        background: darken($neutral-color-1, 3%);
+        // display: none;
+        padding: 1em;
+        position: fixed;
+        top: 2.5em;
+        right: -50%;
+        z-index: 1;
+        transition: all .4s ease;
+
+        &.active {
+          // display: block;
+          right: 0;
+        }
+
+        li {
+          display: block;
+        }
+        a {
+          &.flat.button {
+            &.settings span {
+              display: inline !important;
+            }
+          }
+        }
       }
     }
   }

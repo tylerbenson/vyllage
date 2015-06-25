@@ -1,17 +1,19 @@
-$primary-color: #e2670d;
+$primary-color: #FF6600;
 $secondary-color: #888;
 $text-color: #555;
 $inverted-text-color: #fff;
 
-$header-color: #863e09;
-$page-title-color: #f9d0b3;
-$footer-background: #47382B;
-$mode-color: #A0612D;
+$neutral-color-1: #333333;
 
 $body-background: #f3f3f3;
 
-$banner-background: #574535;
-$tagline-color: #f93;
+$banner-background: #374047;
+$tagline-color: #D8F0F4;
+
+$header-color: $inverted-text-color;
+$page-title-color: #999999;
+$footer-background: $banner-background;
+$mode-color: lighten($banner-background, 5%);
 
 $section-background: #fff;
 $section-footer-background: #fcfcfc;

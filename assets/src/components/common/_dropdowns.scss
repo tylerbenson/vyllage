@@ -10,7 +10,7 @@
 
 .dropdown-list {
   @extend .inverted;
-  background: darken($primary-color, 5%);
+  background: darken($neutral-color-1, 5%);
   box-shadow: 0 1px 1px rgba(0,0,0,0.3);
   display: none;
   font-size: 0.95em;
@@ -26,7 +26,7 @@
 
   li {
     display: block;
-    border-bottom: darken($primary-color, 10%) solid 1px;
+    border-bottom: darken($neutral-color-1, 10%) solid 1px;
 
     &:last-child {
       border-bottom: none;
@@ -37,7 +37,7 @@
       padding: 0.75em;
 
       &:hover {
-        background: darken($primary-color, 10%);
+        background: darken($neutral-color-1, 10%);
         color: $inverted-text-color;
 
         span {

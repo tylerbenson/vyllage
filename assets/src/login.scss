@@ -12,6 +12,7 @@
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+    margin-top: 0;
   }
 
   &.info {
@@ -118,6 +119,7 @@
   header {
     background: none;
     padding: 2em 1em;
+    position: static;
   }
   .logo {
     font-size: 1.5em;

@@ -574,6 +574,40 @@
       "version": "2.10.3",
       "from": "moment@2.10.3"
     },
+    "multipipe": {
+      "version": "0.1.2",
+      "from": "multipipe@*",
+      "dependencies": {
+        "duplexer2": {
+          "version": "0.0.2",
+          "from": "duplexer2@0.0.2",
+          "dependencies": {
+            "readable-stream": {
+              "version": "1.1.13",
+              "from": "readable-stream@>=1.1.9 <1.2.0",
+              "dependencies": {
+                "core-util-is": {
+                  "version": "1.0.1",
+                  "from": "core-util-is@>=1.0.0 <1.1.0"
+                },
+                "isarray": {
+                  "version": "0.0.1",
+                  "from": "isarray@0.0.1"
+                },
+                "string_decoder": {
+                  "version": "0.10.31",
+                  "from": "string_decoder@>=0.10.0 <0.11.0"
+                },
+                "inherits": {
+                  "version": "2.0.1",
+                  "from": "inherits@>=2.0.1 <2.1.0"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "node-libs-browser": {
       "version": "0.5.2",
       "from": "node-libs-browser@0.5.2",
@@ -660,7 +694,7 @@
             },
             "inherits": {
               "version": "2.0.1",
-              "from": "inherits@>=2.0.1 <2.1.0"
+              "from": "inherits@2.0.1"
             }
           }
         },
@@ -832,7 +866,7 @@
       "dependencies": {
         "object-assign": {
           "version": "2.0.0",
-          "from": "object-assign@>=2.0.0 <3.0.0"
+          "from": "object-assign@2.0.0"
         }
       }
     },
@@ -846,7 +880,7 @@
           "dependencies": {
             "through": {
               "version": "2.3.7",
-              "from": "through@>=2.3.4 <2.4.0"
+              "from": "through@2.3.7"
             },
             "jstransform": {
               "version": "10.1.0",
@@ -962,7 +996,7 @@
           "dependencies": {
             "core-util-is": {
               "version": "1.0.1",
-              "from": "core-util-is@1.0.1"
+              "from": "core-util-is@>=1.0.0 <1.1.0"
             },
             "isarray": {
               "version": "0.0.1",
@@ -970,11 +1004,11 @@
             },
             "string_decoder": {
               "version": "0.10.31",
-              "from": "string_decoder@0.10.31"
+              "from": "string_decoder@>=0.10.0 <0.11.0"
             },
             "inherits": {
               "version": "2.0.1",
-              "from": "inherits@2.0.1"
+              "from": "inherits@>=2.0.0 <3.0.0"
             }
           }
         }
