@@ -1,5 +1,8 @@
 package accounts.model.link;
 
+import lombok.ToString;
+
+@ToString
 public class LinkStats {
 	private LinkStat socialStats;
 	private LinkStat emailStats;

@@ -36,6 +36,7 @@ import user.common.User;
 import user.common.social.SocialSessionEnum;
 import accounts.model.link.EmailDocumentLink;
 import accounts.model.link.DocumentLinkRequest;
+import accounts.model.link.LinkStats;
 import accounts.model.link.SocialDocumentLink;
 import accounts.model.link.SimpleDocumentLinkRequest;
 import accounts.repository.ElementNotFoundException;
@@ -236,9 +237,8 @@ public class DocumentLinkController {
 		//
 		// String safeString = encrypt(json);
 
-		return new ResponseEntity<>(
-				environment.getProperty("vyllage.domain", "www.vyllage.com")
-						+ "/link/s/" + documentLink.getLinkKey(),
+		return new ResponseEntity<>(environment.getProperty("vyllage.domain",
+				"www.vyllage.com") + "/link/s/" + documentLink.getLinkKey(),
 				HttpStatus.OK);
 	}
 
@@ -246,7 +246,8 @@ public class DocumentLinkController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String stats(Model model) {
 
-		documentLinkService.getStats();
+		LinkStats stats = documentLinkService.getStats();
+		model.addAttribute("stats", stats);
 
 		return "linkStats";
 	}

@@ -12,27 +12,10 @@ import lombok.ToString;
  *
  */
 @ToString
-@EqualsAndHashCode
-public class EmailDocumentLink {
-	private Long userId;
+@EqualsAndHashCode(callSuper = true)
+public class EmailDocumentLink extends AbstractDocumentLink {
+
 	private String generatedPassword;
-	private Long documentId;
-	private String documentType;
-	private String linkKey;
-	private LinkType linkType;
-	private Long visits;
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
 
 	public String getGeneratedPassword() {
 		return generatedPassword;
@@ -41,45 +24,4 @@ public class EmailDocumentLink {
 	public void setGeneratedPassword(String generatedPassword) {
 		this.generatedPassword = generatedPassword;
 	}
-
-	public Long getDocumentId() {
-		return documentId;
-	}
-
-	public void setDocumentId(Long documentId) {
-		this.documentId = documentId;
-	}
-
-	public String getDocumentType() {
-		return documentType;
-	}
-
-	public void setDocumentType(String documentType) {
-		this.documentType = documentType;
-	}
-
-	public String getLinkKey() {
-		return this.linkKey;
-	}
-
-	public void setLinkKey(String linkKey) {
-		this.linkKey = linkKey;
-	}
-
-	public LinkType getLinkType() {
-		return linkType;
-	}
-
-	public void setLinkType(LinkType linkType) {
-		this.linkType = linkType;
-	}
-
-	public Long getVisits() {
-		return visits;
-	}
-
-	public void setVisits(Long visits) {
-		this.visits = visits;
-	}
-
 }

@@ -5,10 +5,10 @@ import lombok.ToString;
 @ToString
 public class LinkStat {
 
-	private Long total;
-	private Long totalAccess;
-	private Long mostAccessedDocument;
-	private Long linksWithNoAccess;
+	private Long total = 0L;
+	private Long totalAccess = 0L;
+	private String mostAccessedDocument = "";
+	private Long linksWithNoAccess = 0L;
 
 	public Long getTotal() {
 		return total;
@@ -26,11 +26,11 @@ public class LinkStat {
 		this.totalAccess = totalAccess;
 	}
 
-	public Long getMostAccessedDocument() {
+	public String getMostAccessedDocument() {
 		return mostAccessedDocument;
 	}
 
-	public void setMostAccessedDocument(Long mostAccessedDocument) {
+	public void setMostAccessedDocument(String mostAccessedDocument) {
 		this.mostAccessedDocument = mostAccessedDocument;
 	}
 

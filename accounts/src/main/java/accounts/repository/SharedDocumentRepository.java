@@ -92,7 +92,7 @@ public class SharedDocumentRepository {
 
 	public List<SocialDocumentLink> getAllSocialDocumentLinks() {
 		Result<SharedDocumentRecord> result = sql.fetch(SHARED_DOCUMENT,
-				SHARED_DOCUMENT.DOCUMENT_TYPE.eq(LinkType.SOCIAL.name()));
+				SHARED_DOCUMENT.LINK_TYPE.eq(LinkType.SOCIAL.name()));
 
 		return result.stream().map(this::buildSocialDocumentLink)
 				.collect(Collectors.toList());
@@ -100,7 +100,7 @@ public class SharedDocumentRepository {
 
 	public List<EmailDocumentLink> getAllEmailDocumentLinks() {
 		Result<SharedDocumentRecord> result = sql.fetch(SHARED_DOCUMENT,
-				SHARED_DOCUMENT.DOCUMENT_TYPE.eq(LinkType.EMAIL.name()));
+				SHARED_DOCUMENT.LINK_TYPE.eq(LinkType.EMAIL.name()));
 
 		return result.stream().map(this::buildEmailDocumentLink)
 				.collect(Collectors.toList());

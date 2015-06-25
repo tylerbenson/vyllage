@@ -2,11 +2,14 @@ package accounts.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import user.common.User;
 import accounts.model.account.ResetPasswordLink;
+import accounts.model.link.AbstractDocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.model.link.EmailDocumentLink;
 import accounts.model.link.LinkStat;
@@ -101,6 +105,8 @@ public class DocumentLinkService {
 
 		sharedDocumentRepository.create(doclink);
 
+		System.out.println(doclink);
+
 		return doclink;
 	}
 
@@ -132,7 +138,6 @@ public class DocumentLinkService {
 
 	public void registerVisit(String shortUrl) {
 		sharedDocumentRepository.registerVisit(shortUrl);
-
 	}
 
 	public LinkStats getStats() {
@@ -146,56 +151,90 @@ public class DocumentLinkService {
 
 		LinkStat socialStats = new LinkStat();
 		LinkStat emailStats = new LinkStat();
-		getSocialStats(socialLinks, getEntryWithMostVisits, socialStats);
-		getEmailStats(emailLinks, getEntryWithMostVisits, emailStats);
+		LinkStat totalStats = new LinkStat();
+		getStats(socialLinks, getEntryWithMostVisits, socialStats);
+		getStats(emailLinks, getEntryWithMostVisits, emailStats);
+
+		totalStats.setTotal(socialStats.getTotal() + emailStats.getTotal());
+		totalStats.setLinksWithNoAccess(socialStats.getLinksWithNoAccess()
+				+ emailStats.getLinksWithNoAccess());
+		totalStats.setTotalAccess(socialStats.getTotalAccess()
+				+ emailStats.getTotalAccess());
+		totalStats.setMostAccessedDocument(getMostAccessedDocument(socialLinks,
+				emailLinks, socialStats, emailStats, getEntryWithMostVisits));
 
 		LinkStats stats = new LinkStats();
 		stats.setSocialStats(socialStats);
+		stats.setEmailStats(emailStats);
+		stats.setTotalStats(totalStats);
+
 		return stats;
 	}
 
-	private void getEmailStats(List<EmailDocumentLink> emailLinks,
+	protected void getStats(List<? extends AbstractDocumentLink> links,
 			Comparator<? super Entry<Long, Long>> getEntryWithMostVisits,
-			LinkStat emailStats) {
-		emailStats.setTotal((long) emailLinks.size());
-		emailStats.setTotalAccess(emailLinks.stream()
-				.mapToLong(s -> s.getVisits()).sum());
-		emailStats.setLinksWithNoAccess(emailLinks.stream()
+			LinkStat stats) {
+
+		if (links == null || links.isEmpty())
+			return;
+
+		stats.setTotal((long) links.size());
+		stats.setTotalAccess(links.stream().mapToLong(s -> s.getVisits()).sum());
+		stats.setLinksWithNoAccess(links.stream()
 				.filter(s -> s.getVisits().equals(0L)).count());
 
 		// Groups by document Id and sums the visits, compares to find the one
 		// with most visits and returns it's id.
-		emailStats.setMostAccessedDocument(emailLinks
-				.stream()
-				.collect(
-						Collectors.groupingBy(EmailDocumentLink::getDocumentId,
-								Collectors
-										.reducing(0L,
-												EmailDocumentLink::getVisits,
-												Long::sum))).entrySet()
-				.stream().max(getEntryWithMostVisits).get().getKey());
-
-	}
-
-	private void getSocialStats(List<SocialDocumentLink> socialLinks,
-			Comparator<? super Entry<Long, Long>> getEntryWithMostVisits,
-			LinkStat socialStats) {
-		socialStats.setTotal((long) socialLinks.size());
-		socialStats.setTotalAccess(socialLinks.stream()
-				.mapToLong(s -> s.getVisits()).sum());
-		socialStats.setLinksWithNoAccess(socialLinks.stream()
-				.filter(s -> s.getVisits().equals(0L)).count());
-
-		// Groups by document Id and sums the visits, compares to find the one
-		// with most visits and returns it's id.
-		socialStats.setMostAccessedDocument(socialLinks
+		stats.setMostAccessedDocument(links
 				.stream()
 				.collect(
 						Collectors.groupingBy(
-								SocialDocumentLink::getDocumentId, Collectors
-										.reducing(0L,
-												SocialDocumentLink::getVisits,
-												Long::sum))).entrySet()
-				.stream().max(getEntryWithMostVisits).get().getKey());
+								AbstractDocumentLink::getDocumentId,
+								Collectors.reducing(0L,
+										AbstractDocumentLink::getVisits,
+										Long::sum))).entrySet().stream()
+				.max(getEntryWithMostVisits).get().getKey().toString());
+	}
+
+	protected String getMostAccessedDocument(
+			List<SocialDocumentLink> socialLinks,
+			List<EmailDocumentLink> emailLinks, LinkStat socialStats,
+			LinkStat emailStats,
+			Comparator<? super Entry<Long, Long>> getEntryWithMostVisits) {
+
+		if (socialStats.getMostAccessedDocument() == null
+				|| socialStats.getMostAccessedDocument().isEmpty()
+				&& emailStats.getMostAccessedDocument() == null
+				|| emailStats.getMostAccessedDocument().isEmpty())
+			return "";
+		else if (socialStats.getMostAccessedDocument() == null
+				|| socialStats.getMostAccessedDocument().isEmpty())
+			return emailStats.getMostAccessedDocument();
+		else if (emailStats.getMostAccessedDocument() == null
+				|| emailStats.getMostAccessedDocument().isEmpty())
+			return socialStats.getMostAccessedDocument();
+
+		Map<Long, Long> collectSocial = socialLinks.stream().collect(
+				Collectors.groupingBy(AbstractDocumentLink::getDocumentId,
+						Collectors.reducing(0L,
+								AbstractDocumentLink::getVisits, Long::sum)));
+
+		Map<Long, Long> collectEmails = emailLinks.stream().collect(
+				Collectors.groupingBy(AbstractDocumentLink::getDocumentId,
+						Collectors.reducing(0L,
+								AbstractDocumentLink::getVisits, Long::sum)));
+
+		String documentId = Stream
+				.of(collectSocial, collectEmails)
+				.parallel()
+				.map(Map::entrySet)
+				.flatMap(Collection::stream)
+				.collect(
+						Collectors.toMap(Map.Entry::getKey,
+								Map.Entry::getValue, Long::sum)).entrySet()
+				.stream().max(getEntryWithMostVisits).get().getKey().toString();
+
+		return documentId;
+
 	}
 }

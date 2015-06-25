@@ -7,9 +7,11 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link rel="stylesheet" href="css/homepage.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/admin.css" />
   <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
-  <link href='http://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css' />
+
+  <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css' />
   <meta th:if="${userInfo} != null" name="email" th:content="${userInfo.email}" id="meta_userInfo_email" />
   <meta th:if="${userInfo} != null" name="userId" th:content="${userInfo.userId}" id="meta_userInfo_user" />
   <meta th:if="${userInfo} != null" name="registeredOn" th:content="${userInfo.registeredOn}" id="meta_userInfo_created_at"
@@ -29,10 +31,6 @@
       </div>
     </header>
     <div class="section content">
-      <!--     <label th:text="${'Total Links' + linkStats.totalLinks + ' ' + linkStats.totalLinksPercentage}"></label> -->
-      <!--      <label th:text="${'Social Links' + linkStats.socialLinks + ' ' + linkStats.socialLinksPercentage}"></label> -->
-      <!--      <label th:text="${'Email Links' + linkStats.emailLinks + ' ' + linkStats.emailLinksPercentage}"></label> -->
-
       <table>
         <thead>
           <tr>
@@ -62,7 +60,11 @@
             </td>
             <td th:text="${stats.socialStats.totalAccess}">
             </td>
-            <td th:text="${stats.socialStats.mostAccessedDocument}">
+            <td th:if="${stats.socialStats.mostAccessedDocument != null and !stats.socialStats.mostAccessedDocument.isEmpty()}">
+              <a th:href="@{/resume/{documentId}(documentId=${stats.socialStats.mostAccessedDocument})}" th:text="${'Document ' + stats.socialStats.mostAccessedDocument}"> Document </a>
+            </td>
+            <td th:if="${stats.socialStats.mostAccessedDocument == null or stats.socialStats.mostAccessedDocument.isEmpty()}">
+              -
             </td>
             <td th:text="${stats.socialStats.linksWithNoAccess}">
             </td>
@@ -75,7 +77,11 @@
             </td>
             <td th:text="${stats.emailStats.totalAccess}">
             </td>
-            <td th:text="${stats.emailStats.mostAccessedDocument}">
+            <td th:if="${stats.emailStats.mostAccessedDocument != null and !stats.emailStats.mostAccessedDocument.isEmpty() }">
+              <a th:href="@{/resume/{documentId}(documentId=${stats.emailStats.mostAccessedDocument})}" th:text="${'Document ' + stats.emailStats.mostAccessedDocument}"> Document </a>
+            </td>
+            <td th:if="${stats.emailStats.mostAccessedDocument == null or stats.emailStats.mostAccessedDocument.isEmpty()}">
+              -
             </td>
             <td th:text="${stats.emailStats.linksWithNoAccess}">
             </td>
@@ -88,7 +94,11 @@
             </td>
             <td th:text="${stats.totalStats.totalAccess}">
             </td>
-            <td th:text="${stats.totalStats.mostAccessedDocument}">
+            <td th:if="${stats.totalStats.mostAccessedDocument != null and !stats.totalStats.mostAccessedDocument.isEmpty()}">
+              <a th:href="@{/resume/{documentId}(documentId=${stats.totalStats.mostAccessedDocument})}" th:text="${'Document ' + stats.totalStats.mostAccessedDocument}"> Document </a>
+            </td>
+            <td th:if="${stats.totalStats.mostAccessedDocument == null or stats.totalStats.mostAccessedDocument.isEmpty()}">
+              -
             </td>
             <td th:text="${stats.totalStats.linksWithNoAccess}">
             </td>

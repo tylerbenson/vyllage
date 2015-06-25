@@ -28,10 +28,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/link/advice/**", "/account/reset-password",
+				.antMatchers("/account/reset-password",
 						"/account/reset-password-change/**", "/signin/**",
-						"/signup/**", "/social-login/**", "/link/p/**")
-				.permitAll();
+						"/signup/**", "/social-login/**", "/link/e/**",
+						"/link/s/**").permitAll();
 
 		// disabling CSRF for the togglz console.
 		http.csrf().requireCsrfProtectionMatcher(
