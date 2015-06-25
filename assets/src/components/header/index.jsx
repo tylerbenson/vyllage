@@ -3,6 +3,7 @@ var Reflux = require('reflux');
 var Print = require('../resume/Print');
 var NavToggle = require('./NavToggle');
 var resumeStore = require('../resume/store');
+var FeatureToggle = require('../util/FeatureToggle');
 
 var HeaderContainer = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
@@ -31,7 +32,9 @@ var HeaderContainer = React.createClass({
                 <i className="ion-document"></i>
                 <span>Resume</span>
               </a></li>: null}
-              <li><Print /></li>
+              <FeatureToggle name="PRINTING">
+                <li><Print /></li>
+              </FeatureToggle>
               {showLink ? <li><a href='/resume/get-feedback' className='embossed button'>
                 <i className="ion-person-stalker"></i>
                 <span>Get Feedback</span>
