@@ -87,7 +87,7 @@ public class SharedDocumentRepository {
 
 		Long visits = sharedDocumentRecord.getVisits();
 		sharedDocumentRecord.setVisits(visits == null ? 1L : visits + 1);
-		sharedDocumentRecord.insert();
+		sharedDocumentRecord.update();
 	}
 
 	public List<SocialDocumentLink> getAllSocialDocumentLinks() {

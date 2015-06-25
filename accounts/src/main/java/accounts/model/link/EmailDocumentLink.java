@@ -1,5 +1,6 @@
 package accounts.model.link;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
@@ -11,6 +12,7 @@ import lombok.ToString;
  *
  */
 @ToString
+@EqualsAndHashCode
 public class EmailDocumentLink {
 	private Long userId;
 	private String generatedPassword;
