@@ -16,11 +16,11 @@ describe('header', function() {
     expect(pageTitle).toEqual(jasmine.any(Object));
   });
 
-  it('should have user name', function() {
-    var header = TestUtils.renderIntoDocument(<Header />);
-    var name = TestUtils.findRenderedDOMComponentWithClass(header, 'name');
-    expect(name).toEqual(jasmine.any(Object));
-  });
+  // it('should have user name', function() {
+  //   var header = TestUtils.renderIntoDocument(<Header />);
+  //   var name = TestUtils.findRenderedDOMComponentWithClass(header, 'name');
+  //   expect(name).toEqual(jasmine.any(Object));
+  // });
 
   it('page title should match value passed from prop', function() {
     var header = TestUtils.renderIntoDocument(<Header title={'new title'} />);
@@ -28,11 +28,11 @@ describe('header', function() {
     expect(pageTitle.getDOMNode().textContent).toBe('new title');
   });
 
-  it('user name should match value passed from prop', function() {
-    var header = TestUtils.renderIntoDocument(<Header name={'john'} />);
-    var name = TestUtils.findRenderedDOMComponentWithClass(header, 'name');
-    expect(name.getDOMNode().textContent).toBe('john');
-  });
-  
+  // it('user name should match value passed from prop', function() {
+  //   var header = TestUtils.renderIntoDocument(<Header name={'john'} />);
+  //   var name = TestUtils.findRenderedDOMComponentWithClass(header, 'name');
+  //   expect(name.getDOMNode().textContent).toBe('john');
+  // });
+
 });
 
