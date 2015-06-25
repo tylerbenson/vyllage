@@ -5,8 +5,8 @@ var SuggestionItem = React.createClass({
 		return (
 			<div className="suggestion">
 				<div className="avatar"></div>
-				<div className="name">Darth Vader</div>
-				<div className="tagline">I am your father</div>
+				<div className="name">{this.props.name}</div>
+				<div className="tagline">{this.props.tagline}</div>
 				<button className="normal-caps small inverted get-feedback">
 					<i className="ion-person-stalker"></i>
 					<span>Get Feedback</span>
