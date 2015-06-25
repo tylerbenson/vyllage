@@ -8,8 +8,7 @@ machine:
 
 dependencies:
   pre:
-    - ls $JAVA_HOME
-    - cp .jdk-overlay/jre/lib/security/*.java $JAVA_HOME/jre/lib/security
+    - cp .jdk-overlay/jre/lib/security/*.jar $JAVA_HOME/jre/lib/security
 
 test:
   override:
