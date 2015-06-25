@@ -42,7 +42,7 @@ public class SocialDocumentLink {
 		this.linkKey = record.getLinkKey();
 		this.userId = record.getUserId();
 		this.expirationDate = record.getExpirationDate().toLocalDateTime();
-		this.visits = record.getVisits();
+		this.visits = record.getVisits() == null ? 0L : record.getVisits();
 	}
 
 	public Long getUserId() {

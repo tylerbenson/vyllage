@@ -43,6 +43,7 @@ public class SharedDocumentRepository {
 		sharedDocumentRecord.setUserId(doclink.getUserId());
 		sharedDocumentRecord.setDateCreated(Timestamp.valueOf(LocalDateTime
 				.now(ZoneId.of("UTC"))));
+		sharedDocumentRecord.setVisits(0L);
 		sharedDocumentRecord.insert();
 	}
 
@@ -58,6 +59,7 @@ public class SharedDocumentRepository {
 		sharedDocumentRecord.setUserId(doclink.getUserId());
 		sharedDocumentRecord.setDateCreated(Timestamp.valueOf(LocalDateTime
 				.now(ZoneId.of("UTC"))));
+		sharedDocumentRecord.setVisits(0L);
 		sharedDocumentRecord.insert();
 
 	}
@@ -74,7 +76,8 @@ public class SharedDocumentRepository {
 		documentLink.setGeneratedPassword(textEncryptor
 				.decrypt(sharedDocumentRecord.getGeneratedPassword()));
 		documentLink.setUserId(sharedDocumentRecord.getUserId());
-		documentLink.setVisits(sharedDocumentRecord.getVisits());
+		documentLink.setVisits(sharedDocumentRecord.getVisits() == null ? 0L
+				: sharedDocumentRecord.getVisits());
 
 		return documentLink;
 	}
