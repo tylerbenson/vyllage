@@ -1,4 +1,5 @@
 hooks:
+  early: "sudo cp .jdk-overlay/jre/lib/security/*.jar $JAVA_HOME/jre/lib/security"
   pre_setup: npm install
 
 nodejs:
@@ -18,8 +19,6 @@ postgresql:
     pool: 5
 
 tests:
-  - 'ls -a'
-  - 'sudo cp .jdk-overlay/jre/lib/security/*.jar $JAVA_HOME/jre/lib/security'
   - type: junit
     command: npm test
     report_files:
