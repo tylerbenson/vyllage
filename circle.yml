@@ -6,6 +6,10 @@ machine:
   node:
     version: 0.12.0
 
+dependencies:
+  pre:
+    - cp .jdk-overlay/jre/lib/security/.* $JAVA_HOME/jre/lib/security
+
 test:
   override:
     - ./gradlew test circlePgTest
