@@ -28,27 +28,27 @@ public class SharedDocumentRepositoryTest {
 	@Inject
 	private SharedDocumentRepository sharedDocumentRepository;
 
-	@Test
-	public void createEmailLink() {
-		String emailKey = "emailKey1";
-		EmailDocumentLink docLink = new EmailDocumentLink();
-
-		docLink.setDocumentId(12L);
-		docLink.setGeneratedPassword("aaaa");
-		docLink.setLinkKey(emailKey);
-		docLink.setUserId(42L);
-		docLink.setDocumentType("resume");
-		docLink.setLinkType(LinkType.EMAIL);
-
-		sharedDocumentRepository.create(docLink);
-
-		EmailDocumentLink emailDocumentLink = sharedDocumentRepository
-				.getEmailDocumentLink(emailKey);
-
-		Assert.assertEquals(docLink.getLinkKey(),
-				emailDocumentLink.getLinkKey());
-		Assert.assertTrue(emailDocumentLink.getVisits().equals(0L));
-	}
+	// @Test
+	// public void createEmailLink() {
+	// String emailKey = "emailKey1";
+	// EmailDocumentLink docLink = new EmailDocumentLink();
+	//
+	// docLink.setDocumentId(12L);
+	// docLink.setGeneratedPassword("aaaa");
+	// docLink.setLinkKey(emailKey);
+	// docLink.setUserId(42L);
+	// docLink.setDocumentType("resume");
+	// docLink.setLinkType(LinkType.EMAIL);
+	//
+	// sharedDocumentRepository.create(docLink);
+	//
+	// EmailDocumentLink emailDocumentLink = sharedDocumentRepository
+	// .getEmailDocumentLink(emailKey);
+	//
+	// Assert.assertEquals(docLink.getLinkKey(),
+	// emailDocumentLink.getLinkKey());
+	// Assert.assertTrue(emailDocumentLink.getVisits().equals(0L));
+	// }
 
 	@Test
 	public void createSocialLink() {
@@ -96,20 +96,20 @@ public class SharedDocumentRepositoryTest {
 		socialLink.setLinkType(LinkType.SOCIAL);
 		socialLink.setExpirationDate(LocalDateTime.now());
 
-		sharedDocumentRepository.create(emailLink);
+		// sharedDocumentRepository.create(emailLink);
 		sharedDocumentRepository.create(socialLink);
 
-		sharedDocumentRepository.registerVisit(emailLink.getLinkKey());
-		sharedDocumentRepository.registerVisit(emailLink.getLinkKey());
+		// sharedDocumentRepository.registerVisit(emailLink.getLinkKey());
+		// sharedDocumentRepository.registerVisit(emailLink.getLinkKey());
 		sharedDocumentRepository.registerVisit(socialLink.getLinkKey());
 
-		EmailDocumentLink emailDocumentLink = sharedDocumentRepository
-				.getEmailDocumentLink(emailKey);
+		// EmailDocumentLink emailDocumentLink = sharedDocumentRepository
+		// .getEmailDocumentLink(emailKey);
 
 		SocialDocumentLink socialDocumentLink = sharedDocumentRepository
 				.getSocialDocumentLink(socialKey);
 
-		Assert.assertTrue(emailDocumentLink.getVisits().equals(2L));
+		// Assert.assertTrue(emailDocumentLink.getVisits().equals(2L));
 		Assert.assertTrue(socialDocumentLink.getVisits().equals(1L));
 	}
 
@@ -135,24 +135,25 @@ public class SharedDocumentRepositoryTest {
 				&& !allSocialDocumentLinks.isEmpty());
 	}
 
-	@Test
-	public void getAllEmailLinks() {
-		String emailKey = "emailKey3";
-		EmailDocumentLink docLink = new EmailDocumentLink();
-
-		docLink.setDocumentId(12L);
-		docLink.setGeneratedPassword("aaaa");
-		docLink.setLinkKey(emailKey);
-		docLink.setUserId(42L);
-		docLink.setDocumentType("resume");
-		docLink.setLinkType(LinkType.EMAIL);
-
-		sharedDocumentRepository.create(docLink);
-		List<EmailDocumentLink> allEmailDocumentLinks = sharedDocumentRepository
-				.getAllEmailDocumentLinks();
-
-		Assert.assertTrue(allEmailDocumentLinks != null
-				&& !allEmailDocumentLinks.isEmpty());
-
-	}
+	// @Test
+	// public void getAllEmailLinks() {
+	// String emailKey = "emailKey3";
+	// EmailDocumentLink docLink = new EmailDocumentLink();
+	//
+	// docLink.setDocumentId(12L);
+	// docLink.setGeneratedPassword("aaaa");
+	// docLink.setLinkKey(emailKey);
+	// docLink.setUserId(42L);
+	// docLink.setDocumentType("resume");
+	// docLink.setLinkType(LinkType.EMAIL);
+	//
+	// sharedDocumentRepository.create(docLink);
+	// List<EmailDocumentLink> allEmailDocumentLinks =
+	// sharedDocumentRepository
+	// .getAllEmailDocumentLinks();
+	//
+	// Assert.assertTrue(allEmailDocumentLinks != null
+	// && !allEmailDocumentLinks.isEmpty());
+	//
+	// }
 }
