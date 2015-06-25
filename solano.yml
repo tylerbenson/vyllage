@@ -23,6 +23,7 @@ tests:
     report_files:
     - "assets/build/test-results/*.xml"
   - type: junit
+    command: sudo cp .jdk-overlay/jre/lib/security/*.jar $JAVA_HOME/jre/lib/security
     command: ./gradlew test solanoPgtest
     report_files:
     - "accounts/build/test-results/*.xml"
