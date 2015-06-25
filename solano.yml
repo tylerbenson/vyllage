@@ -1,7 +1,5 @@
 hooks:
-  pre_setup: 
-    - npm install
-    - sudo cp .jdk-overlay/jre/lib/security/*.jar $JAVA_HOME/jre/lib/security
+  pre_setup: npm install sudo cp .jdk-overlay/jre/lib/security/*.jar $JAVA_HOME/jre/lib/security
 
 nodejs:
   version: '0.12.4'
