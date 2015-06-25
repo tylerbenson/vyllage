@@ -3,9 +3,9 @@ var cx = require('react/lib/cx');
 var Actions = require('./actions');
 var isTouch = require('../isTouch');
 
-var Suggesions = React.createClass({
+var Autocomplete = React.createClass({
   getInitialState: function () {
-    return { 
+    return {
       isFocused: false,
       isOpen: false
     };
@@ -61,7 +61,7 @@ var Suggesions = React.createClass({
       }
       return (
         <li key={this.props.suggestions.recent.length + index} className={cx(classes)}>
-          <div 
+          <div
             className='name'
             onClick={!isTouch? this.recommendedClick.bind(this, index): null}
             onTouchStart={isTouch? this.recommendedClick.bind(this, index): null}
@@ -81,7 +81,7 @@ var Suggesions = React.createClass({
         position: 'absolute'
       };
       return (
-        <div 
+        <div
           onMouseDown={!isTouch? this.enterHandler: null}
           onMouseUp={!isTouch? this.leaveHanlder: null}
           onTouchStart={isTouch? this.enterHandler: null}
@@ -97,13 +97,13 @@ var Suggesions = React.createClass({
               Recommended
             </li>: null}
             {this.renderRecommendedList()}
-          </ul>  
+          </ul>
         </div>
       );
     } else {
       return null;
     }
   },
-}); 
+});
 
-module.exports = Suggesions;
+module.exports = Autocomplete;

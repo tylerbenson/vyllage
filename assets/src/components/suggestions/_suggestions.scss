@@ -1,0 +1,46 @@
+.suggestions {
+	.suggestion-group {
+		margin: 2em 0;
+		text-align: center;
+
+		.title {
+			color: $secondary-color;
+			margin-bottom: 1em;
+			padding: 0 0.5em;
+			text-align: left;
+		}
+	}
+	.suggestion {
+		border: lighten($secondary-color, 30%) solid 2px;
+		border-radius: 3px;
+		box-sizing: border-box;
+		display: inline-block;
+		min-width: 160px;
+		margin: 0.5em;
+		max-width: 185px;
+		padding: 1em;
+		text-align: center;
+		width: 25%;
+
+		.avatar {
+			background-image: url(../images/user.png);
+			background-position: center;
+			background-size: cover;
+			background-repeat: no-repeat;
+			border-radius: 50%;
+			display: inline-block;
+			height: 64px;
+			width: 64px;
+		}
+		.name {
+			font-size: 0.85em;
+			font-weight: bold;
+			margin-top: 0.5em;
+		}
+		.tagline {
+			color: $secondary-color;
+			font-size: 0.75em;
+			margin-bottom: 0.75em;
+		}
+	}
+}
