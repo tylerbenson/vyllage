@@ -4,7 +4,8 @@ import lombok.ToString;
 
 /**
  * Object used to share a link for a document. Creating a user in the system for
- * the intended recipient.
+ * the intended recipient. The userId is the user who has access to the
+ * document.
  * 
  * @author uh
  *
@@ -15,7 +16,7 @@ public class EmailDocumentLink {
 	private String generatedPassword;
 	private Long documentId;
 	private String documentType;
-	private String documentURL;
+	private String linkKey;
 	private LinkType linkType;
 	private Long visits;
 
@@ -55,12 +56,12 @@ public class EmailDocumentLink {
 		this.documentType = documentType;
 	}
 
-	public String getDocumentURL() {
-		return this.documentURL;
+	public String getLinkKey() {
+		return this.linkKey;
 	}
 
-	public void setDocumentURL(String documentURL) {
-		this.documentURL = documentURL;
+	public void setLinkKey(String linkKey) {
+		this.linkKey = linkKey;
 	}
 
 	public LinkType getLinkType() {

@@ -24,6 +24,7 @@ import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,9 +81,9 @@ public class DocumentLinkController {
 
 	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
 
-	@RequestMapping(value = "/e/{shortUrl}", method = RequestMethod.GET)
+	@RequestMapping(value = "/e/{linkKey}", method = RequestMethod.GET)
 	public String sharedLinkLogin(HttpServletRequest request,
-			@PathVariable String shortUrl) throws JsonParseException,
+			@PathVariable String linkKey) throws JsonParseException,
 			JsonMappingException, IOException, UserNotFoundException {
 
 		// String json = decrypt(encodedDocumentLink);
@@ -91,9 +92,9 @@ public class DocumentLinkController {
 		// EmailDocumentLink.class);
 
 		EmailDocumentLink documentLink = documentLinkService
-				.getDocumentLink(shortUrl);
+				.getDocumentLink(linkKey);
 
-		documentLinkService.registerVisit(shortUrl);
+		documentLinkService.registerVisit(linkKey);
 
 		if (!documentLinkService.isActive(documentLink.getUserId(),
 				documentLink.getGeneratedPassword()))
@@ -115,14 +116,14 @@ public class DocumentLinkController {
 
 		linkRequest.setSendRegistrationMail(true);
 
-		EmailDocumentLink documentLink = documentLinkService.createLink(
+		EmailDocumentLink documentLink = documentLinkService.createEmailLink(
 				linkRequest, user);
 
 		// String json = mapper.writeValueAsString(documentLink);
 
 		// String safeString = encrypt(json);
 
-		return "/link/e/" + documentLink.getDocumentURL();
+		return "/link/e/" + documentLink.getLinkKey();
 	}
 
 	/**
@@ -143,23 +144,23 @@ public class DocumentLinkController {
 
 		for (DocumentLinkRequest documentLinkRequest : linkRequest) {
 
-			EmailDocumentLink documentLink = documentLinkService.createLink(
-					documentLinkRequest, user);
+			EmailDocumentLink documentLink = documentLinkService
+					.createEmailLink(documentLinkRequest, user);
 
 			// String json = mapper.writeValueAsString(documentLink);
 
 			// String safeString = "/link/advice/" + encrypt(json);
 
 			links.put(documentLinkRequest.getEmail(),
-					"/link/e/" + documentLink.getDocumentURL());
+					"/link/e/" + documentLink.getLinkKey());
 		}
 
 		return links;
 	}
 
-	@RequestMapping(value = "/s/{shortUrl}", method = RequestMethod.GET)
+	@RequestMapping(value = "/s/{linkKey}", method = RequestMethod.GET)
 	public String accessSharedDocument(HttpServletRequest request,
-			WebRequest webRequest, @PathVariable String shortUrl)
+			WebRequest webRequest, @PathVariable String linkKey)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		// String json = decrypt(encodedDocumentLink);
@@ -168,9 +169,9 @@ public class DocumentLinkController {
 		// SocialDocumentLink.class);
 
 		SocialDocumentLink documentLink = documentLinkService
-				.getSimpleDocumentLink(shortUrl);
+				.getSimpleDocumentLink(linkKey);
 
-		documentLinkService.registerVisit(shortUrl);
+		documentLinkService.registerVisit(linkKey);
 
 		if (LocalDateTime.now().isAfter(documentLink.getExpirationDate()))
 			throw new AccessDeniedException(
@@ -228,7 +229,7 @@ public class DocumentLinkController {
 			}
 		}
 
-		SocialDocumentLink documentLink = documentLinkService.createSimpleLink(
+		SocialDocumentLink documentLink = documentLinkService.createSocialLink(
 				linkRequest, loggedInUser);
 
 		// String json = mapper.writeValueAsString(documentLink);
@@ -237,8 +238,17 @@ public class DocumentLinkController {
 
 		return new ResponseEntity<>(
 				environment.getProperty("vyllage.domain", "www.vyllage.com")
-						+ "/link/s/" + documentLink.getDocumentURL(),
+						+ "/link/s/" + documentLink.getLinkKey(),
 				HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/stats", method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String stats(Model model) {
+
+		documentLinkService.getStats();
+
+		return "linkStats";
 	}
 
 	/**
@@ -259,7 +269,7 @@ public class DocumentLinkController {
 	}
 
 	/**
-	 * Decodes and decrypts the string.
+	 * Decodes and decrypts the string. documentLinkService
 	 * 
 	 * @param encodedDocumentLink
 	 * @return

@@ -5,6 +5,7 @@ import static accounts.domain.tables.SharedDocument.SHARED_DOCUMENT;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class SharedDocumentRepository {
 		SharedDocumentRecord sharedDocumentRecord = sql
 				.newRecord(SHARED_DOCUMENT);
 
-		sharedDocumentRecord.setShortUrl(doclink.getDocumentURL());
+		sharedDocumentRecord.setLinkKey(doclink.getLinkKey());
 		sharedDocumentRecord.setLinkType(LinkType.EMAIL.name());
 		sharedDocumentRecord.setDocumentId(doclink.getDocumentId());
 		sharedDocumentRecord.setDocumentType(doclink.getDocumentType());
@@ -48,7 +49,7 @@ public class SharedDocumentRepository {
 	public void create(SocialDocumentLink doclink) {
 		SharedDocumentRecord sharedDocumentRecord = sql
 				.newRecord(SHARED_DOCUMENT);
-		sharedDocumentRecord.setShortUrl(doclink.getDocumentURL());
+		sharedDocumentRecord.setLinkKey(doclink.getLinkKey());
 		sharedDocumentRecord.setLinkType(LinkType.SOCIAL.name());
 		sharedDocumentRecord.setDocumentId(doclink.getDocumentId());
 		sharedDocumentRecord.setDocumentType(doclink.getDocumentType());
@@ -61,15 +62,15 @@ public class SharedDocumentRepository {
 
 	}
 
-	public EmailDocumentLink getDocumentLink(String shortUrl) {
+	public EmailDocumentLink getEmailDocumentLink(String shortUrl) {
 		SharedDocumentRecord sharedDocumentRecord = sql.fetchOne(
-				SHARED_DOCUMENT, SHARED_DOCUMENT.SHORT_URL.eq(shortUrl));
+				SHARED_DOCUMENT, SHARED_DOCUMENT.LINK_KEY.eq(shortUrl));
 		EmailDocumentLink documentLink = new EmailDocumentLink();
 
 		documentLink.setDocumentId(sharedDocumentRecord.getDocumentId());
 		documentLink.setDocumentType(sharedDocumentRecord.getDocumentType());
 		documentLink.setLinkType(LinkType.EMAIL);
-		documentLink.setDocumentURL(sharedDocumentRecord.getShortUrl());
+		documentLink.setLinkKey(sharedDocumentRecord.getLinkKey());
 		documentLink.setGeneratedPassword(textEncryptor
 				.decrypt(sharedDocumentRecord.getGeneratedPassword()));
 		documentLink.setUserId(sharedDocumentRecord.getUserId());
@@ -78,18 +79,28 @@ public class SharedDocumentRepository {
 		return documentLink;
 	}
 
-	public SocialDocumentLink getSimpleDocumentLink(String shortUrl) {
+	public SocialDocumentLink getSocialDocumentLink(String shortUrl) {
 		return new SocialDocumentLink(sql.fetchOne(SHARED_DOCUMENT,
-				SHARED_DOCUMENT.SHORT_URL.eq(shortUrl)));
+				SHARED_DOCUMENT.LINK_KEY.eq(shortUrl)));
 	}
 
 	public void registerVisit(String shortUrl) {
 		SharedDocumentRecord sharedDocumentRecord = sql.fetchOne(
-				SHARED_DOCUMENT, SHARED_DOCUMENT.SHORT_URL.eq(shortUrl));
+				SHARED_DOCUMENT, SHARED_DOCUMENT.LINK_KEY.eq(shortUrl));
 
 		Long visits = sharedDocumentRecord.getVisits();
 		sharedDocumentRecord.setVisits(visits == null ? 1L : visits + 1);
 		sharedDocumentRecord.insert();
+	}
+
+	public List<SocialDocumentLink> getAllSocialDocumentLinks() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<EmailDocumentLink> getAllEmailDocumentLinks() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

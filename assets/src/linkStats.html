@@ -54,8 +54,43 @@
           </tr>
         </thead>
         <tbody>
-          <tr th:each="stat, ${linkStats}">
+          <tr>
             <td>
+              Social
+            </td>
+            <td th:text="${stats.socialStats.total}">
+            </td>
+            <td th:text="${stats.socialStats.totalAccess}">
+            </td>
+            <td th:text="${stats.socialStats.mostAccessedDocument}">
+            </td>
+            <td th:text="${stats.socialStats.linksWithNoAccess}">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Email
+            </td>
+            <td th:text="${stats.emailStats.total}">
+            </td>
+            <td th:text="${stats.emailStats.totalAccess}">
+            </td>
+            <td th:text="${stats.emailStats.mostAccessedDocument}">
+            </td>
+            <td th:text="${stats.emailStats.linksWithNoAccess}">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Total
+            </td>
+            <td th:text="${stats.totalStats.total}">
+            </td>
+            <td th:text="${stats.totalStats.totalAccess}">
+            </td>
+            <td th:text="${stats.totalStats.mostAccessedDocument}">
+            </td>
+            <td th:text="${stats.totalStats.linksWithNoAccess}">
             </td>
           </tr>
         </tbody>

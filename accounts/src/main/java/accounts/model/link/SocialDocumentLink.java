@@ -28,7 +28,7 @@ public class SocialDocumentLink {
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime expirationDate;
-	private String documentURL;
+	private String linkKey;
 	private LinkType linkType;
 	private Long visits;
 
@@ -39,7 +39,7 @@ public class SocialDocumentLink {
 		this.documentId = record.getDocumentId();
 		this.documentType = record.getDocumentType();
 		this.linkType = LinkType.valueOf(record.getLinkType());
-		this.documentURL = record.getShortUrl();
+		this.linkKey = record.getLinkKey();
 		this.userId = record.getUserId();
 		this.expirationDate = record.getExpirationDate().toLocalDateTime();
 		this.visits = record.getVisits();
@@ -77,14 +77,6 @@ public class SocialDocumentLink {
 		this.expirationDate = expirationDate;
 	}
 
-	public String getDocumentURL() {
-		return this.documentURL;
-	}
-
-	public void setDocumentURL(String documentURL) {
-		this.documentURL = documentURL;
-	}
-
 	public LinkType getLinkType() {
 		return linkType;
 	}
@@ -99,6 +91,14 @@ public class SocialDocumentLink {
 
 	public void setVisits(Long visits) {
 		this.visits = visits;
+	}
+
+	public String getLinkKey() {
+		return linkKey;
+	}
+
+	public void setLinkKey(String linkKey) {
+		this.linkKey = linkKey;
 	}
 
 }
