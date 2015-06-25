@@ -29,7 +29,6 @@ var GetFeedback = React.createClass({
 			case 'suggestions':
 				InviteType = <Suggestions />;
 		}
-		InviteType = <Suggestions />;
 
 		return (
 			<div>
