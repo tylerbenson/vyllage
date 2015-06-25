@@ -108,7 +108,8 @@ var RecipientEdit = React.createClass({
               value={recipient.lastName}
               onChange={this.changeHandler.bind(this, 'lastName')}
               onFocus={this.focusHandler}
-              onKeyDown={this.keyPress} />
+              onKeyDown={this.keyPress}
+              autoComplete='off' />
             {this.state.lastNameError? <p className='error'><i className='ion-android-warning'></i>Required field.</p>: null}
           </div>
           <div className='field'>
@@ -119,7 +120,8 @@ var RecipientEdit = React.createClass({
               value={recipient.email}
               onChange={this.changeHandler.bind(this, 'email')}
               onFocus={this.focusHandler}
-              onKeyDown={this.keyPress} />
+              onKeyDown={this.keyPress}
+              autoComplete='off' />
             {this.state.emailError? <p className='error'><i className='ion-android-warning'></i>Invalid e-mail address.</p>: null}
           </div>
           <div className='field'>
