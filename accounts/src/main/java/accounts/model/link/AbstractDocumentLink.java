@@ -1,5 +1,12 @@
 package accounts.model.link;
 
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -13,6 +20,10 @@ public class AbstractDocumentLink {
 	protected String linkKey;
 	protected LinkType linkType;
 	protected Long visits;
+
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime expirationDate;
 
 	public AbstractDocumentLink() {
 		super();
@@ -64,6 +75,14 @@ public class AbstractDocumentLink {
 
 	public void setLinkKey(String linkKey) {
 		this.linkKey = linkKey;
+	}
+
+	public LocalDateTime getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(LocalDateTime expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 
 }

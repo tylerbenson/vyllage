@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Repository;
 
 import accounts.domain.tables.records.SharedDocumentRecord;
@@ -25,9 +24,6 @@ public class SharedDocumentRepository {
 	@Autowired
 	private DSLContext sql;
 
-	@Autowired
-	private TextEncryptor textEncryptor;
-
 	public void create(EmailDocumentLink doclink) {
 		SharedDocumentRecord sharedDocumentRecord = sql
 				.newRecord(SHARED_DOCUMENT);
@@ -36,11 +32,8 @@ public class SharedDocumentRepository {
 		sharedDocumentRecord.setLinkType(LinkType.EMAIL.name());
 		sharedDocumentRecord.setDocumentId(doclink.getDocumentId());
 		sharedDocumentRecord.setDocumentType(doclink.getDocumentType());
-		// handled by user credentials
-		sharedDocumentRecord.setExpirationDate(null);
-
-		sharedDocumentRecord.setGeneratedPassword(textEncryptor.encrypt(doclink
-				.getGeneratedPassword()));
+		sharedDocumentRecord.setExpirationDate(Timestamp.valueOf(doclink
+				.getExpirationDate()));
 
 		sharedDocumentRecord.setUserId(doclink.getUserId());
 		sharedDocumentRecord.setDateCreated(Timestamp.valueOf(LocalDateTime
@@ -114,9 +107,9 @@ public class SharedDocumentRepository {
 		documentLink.setDocumentType(sharedDocumentRecord.getDocumentType());
 		documentLink.setLinkType(LinkType.valueOf(sharedDocumentRecord
 				.getLinkType()));
+		documentLink.setExpirationDate(sharedDocumentRecord.getExpirationDate()
+				.toLocalDateTime());
 		documentLink.setLinkKey(sharedDocumentRecord.getLinkKey());
-		documentLink.setGeneratedPassword(textEncryptor
-				.decrypt(sharedDocumentRecord.getGeneratedPassword()));
 		documentLink.setUserId(sharedDocumentRecord.getUserId());
 		documentLink.setVisits(sharedDocumentRecord.getVisits() == null ? 0L
 				: sharedDocumentRecord.getVisits());

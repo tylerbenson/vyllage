@@ -2,7 +2,6 @@ package accounts.repository;
 
 import static accounts.domain.tables.UserCredentials.USER_CREDENTIALS;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.logging.Logger;
 
@@ -14,11 +13,9 @@ import org.springframework.util.Assert;
 
 import accounts.domain.tables.records.UserCredentialsRecord;
 import accounts.model.UserCredential;
-import accounts.model.link.EmailDocumentLink;
 
 /**
- * Handles links to documents. A user can generate links to share his documents
- * to other users.
+ * Handles user's passwords.
  * 
  * @author uh
  *
@@ -48,9 +45,6 @@ public class UserCredentialsRepository {
 						USER_CREDENTIALS.EXPIRES.isNull())).into(
 				UserCredential.class);
 
-		// logger.info("Loaded credentials " + userCredential);
-		// Assert.notNull(userCredential.getUserId(),
-		// "Loading credential failed! Userid is null!");
 		userCredential.setUserId(userId);
 
 		return userCredential;
@@ -74,23 +68,6 @@ public class UserCredentialsRepository {
 	}
 
 	/**
-	 * Creates an expiring credential for document access.
-	 * 
-	 * @param linkRequest
-	 * @param expires
-	 */
-	public void createDocumentLinkPassword(EmailDocumentLink linkRequest,
-			LocalDateTime expires) {
-		UserCredentialsRecord newRecord = sql.newRecord(USER_CREDENTIALS);
-		newRecord.setPassword(getEncodedPassword(linkRequest
-				.getGeneratedPassword()));
-		newRecord.setEnabled(true);
-		newRecord.setUserId(linkRequest.getUserId());
-		newRecord.setExpires(Timestamp.valueOf(expires));
-		newRecord.insert();
-	}
-
-	/**
 	 * Deactivates the user credential used to login, etc.
 	 * 
 	 * @param userId
@@ -107,8 +84,7 @@ public class UserCredentialsRepository {
 	}
 
 	/**
-	 * For link generated passwords only, determines if the given password is
-	 * active.
+	 * Determines if the given password is active.
 	 * 
 	 * @param userId
 	 * @param password
@@ -122,7 +98,7 @@ public class UserCredentialsRepository {
 						.and(USER_CREDENTIALS.ENABLED.isTrue())
 						.and(USER_CREDENTIALS.EXPIRES.isNotNull()))) {
 
-			// the password is active if the encoder matches and the expiration
+			// the password is active if the encoder matches and the
 			// current date is before the expiration date.
 			if (encoder.matches(password, record.getPassword())
 					&& LocalDateTime.now().isBefore(

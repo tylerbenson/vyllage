@@ -93,13 +93,13 @@ public class DocumentLinkController {
 		// EmailDocumentLink.class);
 
 		EmailDocumentLink documentLink = documentLinkService
-				.getDocumentLink(linkKey);
+				.getEmailDocumentLink(linkKey);
 
 		documentLinkService.registerVisit(linkKey);
 
-		if (!documentLinkService.isActive(documentLink.getUserId(),
-				documentLink.getGeneratedPassword()))
-			throw new UserNotFoundException("Invalid link provided.");
+		if (LocalDateTime.now().isAfter(documentLink.getExpirationDate()))
+			throw new AccessDeniedException(
+					"You are not authorized to access this resource. The link has expired.");
 
 		// login
 		signInUtil.signIn(documentLink.getUserId());
@@ -170,7 +170,7 @@ public class DocumentLinkController {
 		// SocialDocumentLink.class);
 
 		SocialDocumentLink documentLink = documentLinkService
-				.getSimpleDocumentLink(linkKey);
+				.getSocialDocumentLink(linkKey);
 
 		documentLinkService.registerVisit(linkKey);
 

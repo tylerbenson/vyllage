@@ -34,11 +34,11 @@ public class SharedDocumentRepositoryTest {
 		EmailDocumentLink docLink = new EmailDocumentLink();
 
 		docLink.setDocumentId(12L);
-		docLink.setGeneratedPassword("aaaa");
 		docLink.setLinkKey(emailKey);
 		docLink.setUserId(42L);
 		docLink.setDocumentType("resume");
 		docLink.setLinkType(LinkType.EMAIL);
+		docLink.setExpirationDate(LocalDateTime.now());
 
 		sharedDocumentRepository.create(docLink);
 
@@ -80,12 +80,12 @@ public class SharedDocumentRepositoryTest {
 		EmailDocumentLink emailLink = new EmailDocumentLink();
 
 		emailLink.setDocumentId(12L);
-		emailLink.setGeneratedPassword("aaaa");
 
 		emailLink.setLinkKey(emailKey);
 		emailLink.setUserId(42L);
 		emailLink.setDocumentType("resume");
 		emailLink.setLinkType(LinkType.EMAIL);
+		emailLink.setExpirationDate(LocalDateTime.now());
 
 		SocialDocumentLink socialLink = new SocialDocumentLink();
 
@@ -141,11 +141,11 @@ public class SharedDocumentRepositoryTest {
 		EmailDocumentLink docLink = new EmailDocumentLink();
 
 		docLink.setDocumentId(12L);
-		docLink.setGeneratedPassword("aaaa");
 		docLink.setLinkKey(emailKey);
 		docLink.setUserId(42L);
 		docLink.setDocumentType("resume");
 		docLink.setLinkType(LinkType.EMAIL);
+		docLink.setExpirationDate(LocalDateTime.now());
 
 		sharedDocumentRepository.create(docLink);
 		List<EmailDocumentLink> allEmailDocumentLinks = sharedDocumentRepository

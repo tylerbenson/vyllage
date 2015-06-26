@@ -15,13 +15,4 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class EmailDocumentLink extends AbstractDocumentLink {
 
-	private String generatedPassword;
-
-	public String getGeneratedPassword() {
-		return generatedPassword;
-	}
-
-	public void setGeneratedPassword(String generatedPassword) {
-		this.generatedPassword = generatedPassword;
-	}
 }

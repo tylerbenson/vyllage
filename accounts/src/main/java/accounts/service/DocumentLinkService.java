@@ -35,6 +35,8 @@ public class DocumentLinkService {
 
 	private static final int DOCUMENT_SHORT_URL_LENGTH = 10;
 
+	private static final int LINK_EXPIRATION_DAYS = 30;
+
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(DocumentLinkService.class
 			.getName());
@@ -71,15 +73,12 @@ public class DocumentLinkService {
 
 		EmailDocumentLink doclink = new EmailDocumentLink();
 		doclink.setUserId(user.getUserId());
-		doclink.setGeneratedPassword(randomPasswordGenerator
-				.getRandomPassword());
 		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
+		doclink.setExpirationDate(LocalDateTime.now(ZoneId.of("UTC")).plusDays(
+				LINK_EXPIRATION_DAYS));
 		doclink.setLinkKey(randomPasswordGenerator
 				.getRandomString(DOCUMENT_SHORT_URL_LENGTH));
-
-		userCredentialsRepository.createDocumentLinkPassword(doclink,
-				linkRequest.getExpirationDate());
 
 		sharedDocumentRepository.create(doclink);
 
@@ -98,14 +97,12 @@ public class DocumentLinkService {
 		doclink.setDocumentType(linkRequest.getDocumentType());
 		doclink.setDocumentId(linkRequest.getDocumentId());
 		doclink.setExpirationDate(LocalDateTime.now(ZoneId.of("UTC")).plusDays(
-				30));
+				LINK_EXPIRATION_DAYS));
 		doclink.setLinkKey(randomPasswordGenerator
 				.getRandomString(DOCUMENT_SHORT_URL_LENGTH));
 		doclink.setLinkType(LinkType.SOCIAL);
 
 		sharedDocumentRepository.create(doclink);
-
-		System.out.println(doclink);
 
 		return doclink;
 	}
@@ -128,11 +125,11 @@ public class DocumentLinkService {
 		return userCredentialsRepository.isActive(userId, generatedPassword);
 	}
 
-	public SocialDocumentLink getSimpleDocumentLink(String shortUrl) {
+	public SocialDocumentLink getSocialDocumentLink(String shortUrl) {
 		return sharedDocumentRepository.getSocialDocumentLink(shortUrl);
 	}
 
-	public EmailDocumentLink getDocumentLink(String shortUrl) {
+	public EmailDocumentLink getEmailDocumentLink(String shortUrl) {
 		return sharedDocumentRepository.getEmailDocumentLink(shortUrl);
 	}
 
