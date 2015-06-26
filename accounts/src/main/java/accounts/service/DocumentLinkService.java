@@ -182,15 +182,19 @@ public class DocumentLinkService {
 
 		// Groups by document Id and sums the visits, compares to find the one
 		// with most visits and returns it's id.
-		stats.setMostAccessedDocument(links
-				.stream()
-				.collect(
-						Collectors.groupingBy(
-								AbstractDocumentLink::getDocumentId,
-								Collectors.reducing(0L,
-										AbstractDocumentLink::getVisits,
-										Long::sum))).entrySet().stream()
-				.max(getEntryWithMostVisits).get().getKey().toString());
+		if (links.stream().allMatch(l -> l.getVisits().equals(0L)))
+			stats.setMostAccessedDocument("");
+		else
+			stats.setMostAccessedDocument(links
+					.stream()
+					.parallel()
+					.collect(
+							Collectors.groupingBy(
+									AbstractDocumentLink::getDocumentId,
+									Collectors.reducing(0L,
+											AbstractDocumentLink::getVisits,
+											Long::sum))).entrySet().stream()
+					.max(getEntryWithMostVisits).get().getKey().toString());
 	}
 
 	protected String getMostAccessedDocument(
@@ -199,10 +203,10 @@ public class DocumentLinkService {
 			LinkStat emailStats,
 			Comparator<? super Entry<Long, Long>> getEntryWithMostVisits) {
 
-		if (socialStats.getMostAccessedDocument() == null
-				|| socialStats.getMostAccessedDocument().isEmpty()
-				&& emailStats.getMostAccessedDocument() == null
-				|| emailStats.getMostAccessedDocument().isEmpty())
+		if ((socialStats.getMostAccessedDocument() == null || socialStats
+				.getMostAccessedDocument().isEmpty())
+				&& (emailStats.getMostAccessedDocument() == null || emailStats
+						.getMostAccessedDocument().isEmpty()))
 			return "";
 		else if (socialStats.getMostAccessedDocument() == null
 				|| socialStats.getMostAccessedDocument().isEmpty())
@@ -211,15 +215,25 @@ public class DocumentLinkService {
 				|| emailStats.getMostAccessedDocument().isEmpty())
 			return socialStats.getMostAccessedDocument();
 
-		Map<Long, Long> collectSocial = socialLinks.stream().collect(
-				Collectors.groupingBy(AbstractDocumentLink::getDocumentId,
-						Collectors.reducing(0L,
-								AbstractDocumentLink::getVisits, Long::sum)));
+		Map<Long, Long> collectSocial = socialLinks
+				.stream()
+				.parallel()
+				.collect(
+						Collectors.groupingBy(
+								AbstractDocumentLink::getDocumentId,
+								Collectors.reducing(0L,
+										AbstractDocumentLink::getVisits,
+										Long::sum)));
 
-		Map<Long, Long> collectEmails = emailLinks.stream().collect(
-				Collectors.groupingBy(AbstractDocumentLink::getDocumentId,
-						Collectors.reducing(0L,
-								AbstractDocumentLink::getVisits, Long::sum)));
+		Map<Long, Long> collectEmails = emailLinks
+				.stream()
+				.parallel()
+				.collect(
+						Collectors.groupingBy(
+								AbstractDocumentLink::getDocumentId,
+								Collectors.reducing(0L,
+										AbstractDocumentLink::getVisits,
+										Long::sum)));
 
 		String documentId = Stream
 				.of(collectSocial, collectEmails)
