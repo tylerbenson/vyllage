@@ -7,6 +7,7 @@ var Reflux = require('reflux');
 var GetFeedbackStore = require('./store');
 var Actions = require('./actions');
 var Modal = require('../modal');
+var SuggestionSidebar = require('../suggestions/SuggestionSidebar');
 
 var InviteForm = React.createClass({
   mixins: [Reflux.connect(GetFeedbackStore)],
@@ -20,7 +21,7 @@ var InviteForm = React.createClass({
   render: function () {
     return (
       <div className="sections">
-        <div className='section'>
+        <div className='invite-form section'>
           <div className='container'>
             <RecipientList
               users={this.state.users}
@@ -46,6 +47,7 @@ var InviteForm = React.createClass({
             </Modal>
           </div>
         </div>
+        <SuggestionSidebar />
       </div>
     );
   }

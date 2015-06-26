@@ -10,18 +10,12 @@ var Suggestions = React.createClass({
 		Actions.getSuggestions();
 	},
 	render: function(){
-		var suggestionGroups = this.state.suggestions.map(function (group) {
-      return (
-        <SuggestionGroup title={group.title} users={group.users} />
-      );
-    });
-
 		return (
 			<div className="sections">
 				<div className="section suggestions">
 					<div className="container">
 						<div className="content">
-							{suggestionGroups}
+							<SuggestionGroup users={this.state.suggestions} />
 						</div>
 					</div>
 				</div>

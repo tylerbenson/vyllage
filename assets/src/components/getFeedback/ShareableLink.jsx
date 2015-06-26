@@ -1,5 +1,6 @@
 var React = require('react');
 var Clipboard = require('react-zeroclipboard');
+var SuggestionSidebar = require('../suggestions/SuggestionSidebar');
 
 var ShareableLink = React.createClass({
 	getInitialState: function(){
@@ -43,7 +44,7 @@ var ShareableLink = React.createClass({
 
 		return (
 			<div className="sections">
-				<div className="section shareable">
+				<div className="shareable section">
 					<div className="container">
 						<div className="content">
 							<p className="tip">Anyone with the link below will be able to add feedback to your resume.</p>
@@ -57,6 +58,7 @@ var ShareableLink = React.createClass({
 						</div>
 					</div>
 				</div>
+				<SuggestionSidebar />
 			</div>
 		);
 	}

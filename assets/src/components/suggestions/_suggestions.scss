@@ -1,56 +1,147 @@
 .suggestions {
-	.suggestion-group {
-		margin: 2em 0;
-		text-align: center;
+	& > .container {
+		.content {
+			padding: 0.5em 2em;
+		}
+	}
+}
+.suggestion-group {
+	margin: 2em 0;
+	text-align: center;
 
-		.title {
-			color: $secondary-color;
-			margin-bottom: 1em;
+	.title {
+		color: $secondary-color;
+		margin-bottom: 1em;
+		padding: 0 0.5em;
+		text-align: left;
+	}
+
+  .view-more {
+    background-color: transparent;
+    border-radius: 2em;
+    border-color: $banner-background;
+    color: $banner-background;
+    font-size: 0.8em;
+    margin-top: 2em;
+    padding: 0.5em 1.5em;
+
+    &:hover,
+    &:focus {
+      background-color: $banner-background;
+      border-color: $banner-background;
+      color: $inverted-text-color;
+    }
+
+    &:active {
+      background-color: darken($banner-background, 5%);
+      border-color: darken($banner-background, 5%);
+    }
+  }
+}
+.suggestion {
+	border: lighten($secondary-color, 30%) solid 2px;
+	border-radius: 3px;
+	box-sizing: border-box;
+	display: inline-block;
+	min-width: 160px;
+	margin: 0.5em;
+	max-width: 185px;
+	padding: 1em;
+	text-align: center;
+	width: 25%;
+
+	.avatar {
+		background-image: url(../images/user.png);
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+		border-radius: 50%;
+		display: inline-block;
+		height: 64px;
+		width: 64px;
+	}
+	.name {
+		font-size: 0.85em;
+		font-weight: bold;
+		margin-top: 0.5em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.tagline {
+		color: $secondary-color;
+		font-size: 0.75em;
+		margin-bottom: 0.75em;
+		display: block; /* Fallback for non-webkit */
+		display: -webkit-box;
+		max-width: 400px;
+		height: 2.5em;
+		max-height: 2.5em;
+		margin: 0.25em auto 0.75em auto;
+		font-size: 0.75em;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+.suggestion-sidebar {
+	.suggestion {
+		@include cf();
+		border: none;
+		border-bottom: rgba(0,0,0,0.1) solid 1px;
+		display: block;
+		margin: 0;
+		padding: 0.65em 1em;
+		width: 100%;
+		max-width: none;
+
+		.avatar {
+			float: left;
+			height: 48px;
+			margin-right: 0.5em;
+			width: 48px;
+		}
+		.info {
+			float: left;
+			font-size: 0.85em;
+			max-width: 75%;
+			text-align: left;
+		}
+		.name {
+			margin-top: 0;
+			text-align: left;
+			padding: 0 0.5em;
+		}
+		.tagline {
+			height: auto;
+			margin-bottom: 0.25em;
 			padding: 0 0.5em;
 			text-align: left;
 		}
+		button {
+			border: none;
+			margin: 0;
+			text-align: left;
+			padding: 0.25em 0.5em;
+			text-transform: uppercase;
+		}
 	}
-	.suggestion {
-		border: lighten($secondary-color, 30%) solid 2px;
-		border-radius: 3px;
-		box-sizing: border-box;
-		display: inline-block;
-		min-width: 160px;
-		margin: 0.5em;
-		max-width: 185px;
-		padding: 1em;
-		text-align: center;
-		width: 25%;
 
-		.avatar {
-			background-image: url(../images/user.png);
-			background-position: center;
-			background-size: cover;
-			background-repeat: no-repeat;
-			border-radius: 50%;
-			display: inline-block;
-			height: 64px;
-			width: 64px;
-		}
-		.name {
-			font-size: 0.85em;
-			font-weight: bold;
-			margin-top: 0.5em;
-		}
-		.tagline {
-			color: $secondary-color;
-			font-size: 0.75em;
-			margin-bottom: 0.75em;
-			display: block; /* Fallback for non-webkit */
-		  display: -webkit-box;
-		  max-width: 400px;
-		  height: 2.5em;
-		  margin: 0.25em auto 0.75em auto;
-		  font-size: 0.75em;
-		  -webkit-line-clamp: 2;
-		  -webkit-box-orient: vertical;
-		  overflow: hidden;
-		  text-overflow: ellipsis;
+	.view-more {
+		border-radius: 0;
+		display: block;
+		text-align: center;
+		width: 100%;
+		margin: 0;
+		padding: 1em;
+		background: $inverted-text-color;
+		color: $banner-background;
+		font-size: 0.7em;
+		font-weight: bold;
+
+		&:hover {
+			background: $section-footer-background;
 		}
 	}
 }

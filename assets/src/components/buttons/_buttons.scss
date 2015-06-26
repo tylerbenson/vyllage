@@ -89,29 +89,6 @@ input[type="reset"] {
     }
   }
 
-
-  &.view-more {
-    @extend .inverted;
-    @extend .small;
-    border-radius: 2em;
-    border-color: $banner-background;
-    color: $banner-background;
-    margin-top: 2em;
-    padding: 0.5em 1.5em;
-
-    &:hover,
-    &:focus {
-      background-color: $banner-background;
-      border-color: $banner-background;
-    }
-
-    &:active {
-      background-color: darken($banner-background, 5%);
-      border-color: darken($banner-background, 5%);
-    }
-  }
-
-
   &.secondary {
     background: $secondary-color;
 
