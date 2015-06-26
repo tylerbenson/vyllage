@@ -2,10 +2,7 @@ package documents.controller;
 
 import java.nio.file.AccessDeniedException;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import documents.model.Document;
-import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 
 @Controller
@@ -69,26 +64,6 @@ public class DocumentController {
 
 		Document documentByUser = documentService.getDocumentByUser(userId);
 
-		try {
-			documentService.getDocumentSections(documentByUser.getDocumentId());
-		} catch (ElementNotFoundException e) {
-			return Collections.emptyList();
-		}
-		// TODO: currently the user only has one document, this might change in
-		// the future but for now we return the document id the user has
 		return Arrays.asList(documentByUser.getDocumentId());
-	}
-
-	@ExceptionHandler(value = { AccessDeniedException.class })
-	@ResponseStatus(value = HttpStatus.FORBIDDEN)
-	public @ResponseBody Map<String, Object> handleAccessDeniedException(
-			Exception ex) {
-		Map<String, Object> map = new HashMap<>();
-		if (ex.getCause() != null) {
-			map.put("error", ex.getCause().getMessage());
-		} else {
-			map.put("error", ex.getMessage());
-		}
-		return map;
 	}
 }
