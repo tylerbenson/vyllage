@@ -188,8 +188,8 @@ public class ResumeController {
 		DocumentHeader resumeHeader = this.getResumeHeader(request, documentId,
 				user);
 
-		List<DocumentSection> documentSections = this
-				.getResumeSections(documentId);
+		List<DocumentSection> documentSections = documentService
+				.getDocumentSections(documentId);
 
 		copyPDF(response, resumePdfService.generatePdfDocument(resumeHeader,
 				documentSections));
