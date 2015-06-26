@@ -1,5 +1,5 @@
 hooks:
-  early: "sudo cp .jdk-overlay/jre/lib/security/*.jar $JAVA_HOME/jre/lib/security"
+  early: "cp .jdk-overlay/jre/lib/security/*.jar $JAVA_HOME/jre/lib/security"
   pre_setup: npm install
 
 nodejs:
