@@ -80,7 +80,7 @@ public class DocumentService {
 				.path("/document/user").queryParam("userId", userId);
 
 		@SuppressWarnings("unchecked")
-		List<Long> responseBody = restTemplate.exchange(
+		List<Integer> responseBody = restTemplate.exchange(
 				builder.build().toUriString(), HttpMethod.GET, entity,
 				List.class).getBody();
 
@@ -88,7 +88,8 @@ public class DocumentService {
 			throw new ElementNotFoundException(
 					"No documents found for user with id '" + userId + "'");
 
-		return responseBody;
+		return responseBody.stream().map(i -> i.longValue())
+				.collect(Collectors.toList());
 	}
 
 	protected HttpEntity<Object> createHeader(HttpServletRequest request) {

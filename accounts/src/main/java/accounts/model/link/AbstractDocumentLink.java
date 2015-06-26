@@ -2,31 +2,32 @@ package accounts.model.link;
 
 import java.time.LocalDateTime;
 
-import lombok.ToString;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-/**
- * Object used to share a document link without creating a new user. Used to
- * share a link to a document to persons outside the system. The user id is to
- * get information about the user who create the link later.
- * 
- * @author uh
- *
- */
-@ToString
-public class SimpleDocumentLink {
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-	private Long userId;
-	private Long documentId;
-	private String documentType;
+@ToString
+@EqualsAndHashCode
+public class AbstractDocumentLink {
+
+	protected Long userId;
+	protected Long documentId;
+	protected String documentType;
+	protected String linkKey;
+	protected LinkType linkType;
+	protected Long visits;
 
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime expirationDate;
+
+	public AbstractDocumentLink() {
+		super();
+	}
 
 	public Long getUserId() {
 		return userId;
@@ -50,6 +51,30 @@ public class SimpleDocumentLink {
 
 	public void setDocumentType(String documentType) {
 		this.documentType = documentType;
+	}
+
+	public LinkType getLinkType() {
+		return linkType;
+	}
+
+	public void setLinkType(LinkType linkType) {
+		this.linkType = linkType;
+	}
+
+	public Long getVisits() {
+		return visits;
+	}
+
+	public void setVisits(Long visits) {
+		this.visits = visits;
+	}
+
+	public String getLinkKey() {
+		return linkKey;
+	}
+
+	public void setLinkKey(String linkKey) {
+		this.linkKey = linkKey;
 	}
 
 	public LocalDateTime getExpirationDate() {
