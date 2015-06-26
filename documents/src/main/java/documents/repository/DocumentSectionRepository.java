@@ -33,13 +33,8 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	@Autowired
 	private DSLContext sql;
 
-	@Autowired
-	private IRepository<Document> documentRepository;
-
 	@Override
 	public DocumentSection get(Long id) throws ElementNotFoundException {
-		// Result<DocumentSectionsRecord> existingRecords = sql.fetch(
-		// DOCUMENT_SECTIONS, DOCUMENT_SECTIONS.ID.eq(id));
 
 		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");

@@ -20,6 +20,7 @@ import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import user.common.User;
 import documents.domain.tables.Comments;
 import documents.domain.tables.DocumentSections;
 import documents.domain.tables.Suggestions;
@@ -34,6 +35,9 @@ public class DocumentRepository implements IRepository<Document> {
 
 	@Autowired
 	private DSLContext sql;
+
+	@Autowired
+	private DocumentSectionRepository documentSectionRepository;
 
 	@Override
 	public Document get(Long id) throws ElementNotFoundException {
@@ -166,5 +170,40 @@ public class DocumentRepository implements IRepository<Document> {
 		DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
 				DOCUMENTS.USER_ID.eq(userId));
 		existingRecord.delete();
+	}
+
+	/**
+	 * Checks if a given document id exists for a given user. A document will
+	 * exist for a given user if, it exists, has sections and the user owns the
+	 * document.
+	 * 
+	 * If a document exists, has no sections but the user is the owner then it
+	 * just means he has not added any sections yet.
+	 * 
+	 * @param user
+	 * @param documentId
+	 * @return
+	 */
+	public boolean existsForUser(User user, Long documentId) {
+		boolean exists = true;
+
+		DocumentsRecord documentRecord = sql.fetchOne(DOCUMENTS,
+				DOCUMENTS.DOCUMENT_ID.eq(documentId));
+
+		if (documentRecord == null)
+			return !exists;
+
+		boolean hasSections = documentSectionRepository.exists(documentId);
+
+		boolean userIsOwner = user.getUserId().equals(
+				documentRecord.getUserId());
+
+		if (!userIsOwner && !hasSections)
+			return !exists;
+
+		if (userIsOwner && !hasSections)
+			return exists;
+
+		return exists && hasSections;
 	}
 }

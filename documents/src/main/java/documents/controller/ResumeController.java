@@ -143,21 +143,9 @@ public class ResumeController {
 			throws ElementNotFoundException {
 
 		// if document has no sections and I'm not the owner throw exception...
-		try {
-
-			documentService.getDocumentSections(documentId);
-		} catch (ElementNotFoundException e) {
-			Document document = null;
-			try {
-				document = documentService.getDocument(documentId);
-			} catch (ElementNotFoundException e1) {
-				// just... throw it...
-				throw e1;
-			}
-
-			if (!user.getUserId().equals(document.getUserId()))
-				throw e;
-		}
+		if (!documentService.existsForUser(user, documentId))
+			throw new ElementNotFoundException("Document with id '"
+					+ documentId + "' could not be found.");
 
 		model.addAttribute("accountName", accountName(request, user));
 		model.addAttribute("userInfo", userInfo(request, user));
