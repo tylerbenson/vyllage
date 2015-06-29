@@ -179,7 +179,8 @@ public class DocumentService {
 	}
 
 	/**
-	 * Returns the user's document, if it can't find one creates it.
+	 * Returns the user's document, if it can't find one creates one with no
+	 * sections.
 	 * 
 	 * @param userId
 	 * @return

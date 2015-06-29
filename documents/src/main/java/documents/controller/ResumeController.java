@@ -122,12 +122,7 @@ public class ResumeController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String resume(HttpServletRequest request,
-			@AuthenticationPrincipal User user) throws ElementNotFoundException {
-
-		if (user.isGuest()) {
-			request.getSession().invalidate();
-			return "redirect:/";
-		}
+			@AuthenticationPrincipal User user) {
 
 		Document documentByUser = documentService.getDocumentByUser(user
 				.getUserId());
