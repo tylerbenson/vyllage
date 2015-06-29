@@ -1,6 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+  <base href="." th:href="@{/}" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
   <title>Hello Facebook</title>
 </head>
 
@@ -8,7 +14,8 @@
   <h3>Connect to Facebook</h3>
 
   <form action="/connect/facebook" method="POST">
-    <input type="hidden" name="scope" value="email" />
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
+    <input type="hidden" name="scope" value="email,publish_actions" />
     <div class="formInfo">
       <p>You aren't connected to Facebook yet. Click the button to connect this application with your Facebook account.</p>
     </div>
