@@ -20,6 +20,7 @@ var SuggestionSidebar = React.createClass({
 			<div className="suggestion-sidebar section">
 				<div className="container">
 					<div className="content">
+						<div className="title">Suggestions for You</div>
 						{suggestionItems}
 						<button className="view-more">View More</button>
 					</div>

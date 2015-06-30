@@ -86,10 +86,17 @@
 	}
 }
 .suggestion-sidebar {
+	.title {
+		padding: 0.65em 1em;
+	  font-size: 0.8em;
+	  text-transform: uppercase;
+	  color: $secondary-color;
+	  border-bottom: rgba(0,0,0,0.05) solid 1px;
+	}
 	.suggestion {
 		@include cf();
 		border: none;
-		border-bottom: rgba(0,0,0,0.1) solid 1px;
+		border-bottom: rgba(0,0,0,0.05) solid 1px;
 		display: block;
 		margin: 0;
 		padding: 0.65em 1em;
@@ -97,15 +104,13 @@
 		max-width: none;
 
 		.avatar {
-			float: left;
+			@include column(0.2);
 			height: 48px;
-			margin-right: 0.5em;
 			width: 48px;
 		}
 		.info {
-			float: left;
+			@include column(0.6);
 			font-size: 0.85em;
-			max-width: 75%;
 			text-align: left;
 		}
 		.name {
@@ -119,12 +124,22 @@
 			padding: 0 0.5em;
 			text-align: left;
 		}
+		.actions {
+			@include column(0.14);
+		}
 		button {
-			border: none;
-			margin: 0;
+			border-radius: 50%;
+			font-size: 0.8em;
+			margin: 0.65em 0 0 0;
 			text-align: left;
-			padding: 0.25em 0.5em;
-			text-transform: uppercase;
+			padding: 0.25em 0.435em;
+
+			i {
+				margin: 0;
+			}
+			span {
+				display: none;
+			}
 		}
 	}
 
