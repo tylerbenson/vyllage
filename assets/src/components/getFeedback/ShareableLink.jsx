@@ -1,6 +1,7 @@
 var React = require('react');
 var Clipboard = require('react-zeroclipboard');
 var SuggestionSidebar = require('../suggestions/SuggestionSidebar');
+var FeatureToggle = require('../util/FeatureToggle');
 
 var ShareableLink = React.createClass({
 	getInitialState: function(){
@@ -58,7 +59,9 @@ var ShareableLink = React.createClass({
 						</div>
 					</div>
 				</div>
-				<SuggestionSidebar />
+				<FeatureToggle name="SUGGESTIONS">
+					<SuggestionSidebar />
+				</ FeatureToggle>
 			</div>
 		);
 	}

@@ -8,6 +8,7 @@ var GetFeedbackStore = require('./store');
 var Actions = require('./actions');
 var Modal = require('../modal');
 var SuggestionSidebar = require('../suggestions/SuggestionSidebar');
+var FeatureToggle = require('../util/FeatureToggle');
 
 var InviteForm = React.createClass({
   mixins: [Reflux.connect(GetFeedbackStore)],
@@ -47,7 +48,9 @@ var InviteForm = React.createClass({
             </Modal>
           </div>
         </div>
-        <SuggestionSidebar />
+        <FeatureToggle name="SUGGESTIONS">
+          <SuggestionSidebar />
+        </FeatureToggle>
       </div>
     );
   }
