@@ -541,10 +541,6 @@ public class UserDetailRepository implements UserDetailsManager,
 				.map(r -> r.getValue(USER_ORGANIZATION_ROLES.ORGANIZATION_ID))
 				.collect(Collectors.toList());
 
-		/*
-		 * TODO: the above query could probably be combined into this one using
-		 * another join instead of a sub-select.
-		 */
 		Users u = USERS.as("u");
 		UserOrganizationRoles uor = USER_ORGANIZATION_ROLES.as("uor");
 
@@ -553,7 +549,7 @@ public class UserDetailRepository implements UserDetailsManager,
 				.where(uor.ORGANIZATION_ID.in(organizationIds))
 				.and(uor.ROLE.eq("ADVISOR"));
 
-		if (filters != null) {
+		if (filters != null && !filters.isEmpty()) {
 
 			if (filters.containsKey("firstName"))
 				select.and(u.FIRST_NAME.like("%" + filters.get("firstName")
