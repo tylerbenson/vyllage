@@ -89,11 +89,6 @@ public class AdviceRequestController {
 	public String askAdvice(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
 
-		if (user.isGuest()) {
-			request.getSession().invalidate();
-			return "redirect:/";
-		}
-
 		return "getFeedback";
 	}
 
