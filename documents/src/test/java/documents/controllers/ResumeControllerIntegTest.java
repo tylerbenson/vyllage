@@ -33,6 +33,7 @@ import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
+import documents.model.constants.DocumentTypeEnum;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -534,6 +535,7 @@ public class ResumeControllerIntegTest {
 		doc1.setUserId(0L);
 		doc1.setVisibility(false);
 		doc1.setTagline("my curious tagline");
+		doc1.setDocumentType(DocumentTypeEnum.RESUME.name());
 		return doc1;
 	}
 

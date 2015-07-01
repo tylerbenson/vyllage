@@ -22,6 +22,7 @@ import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentSection;
+import documents.model.constants.DocumentTypeEnum;
 import documents.repository.CommentRepository;
 import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
@@ -197,6 +198,7 @@ public class DocumentService {
 			Document newDocument = new Document();
 			newDocument.setUserId(userId);
 			newDocument.setVisibility(true);
+			newDocument.setDocumentType(DocumentTypeEnum.RESUME.name());
 			document = documentRepository.save(newDocument);
 		}
 
@@ -315,6 +317,12 @@ public class DocumentService {
 	 */
 	public boolean existsForUser(User user, Long documentId) {
 		return documentRepository.existsForUser(user, documentId);
+	}
+
+	public List<Document> getDocumentByUserAndType(Long userId,
+			DocumentTypeEnum documentTypeEnum) {
+		return documentRepository.getDocumentByUserAndType(userId,
+				documentTypeEnum);
 	}
 
 }
