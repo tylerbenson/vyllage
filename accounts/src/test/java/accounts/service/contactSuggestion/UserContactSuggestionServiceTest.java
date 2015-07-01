@@ -61,6 +61,18 @@ public class UserContactSuggestionServiceTest {
 	}
 
 	@Test
+	public void guestTestNoAdvisorsFound() {
+		Long university2 = 2L;
+		User guest = createTestUser("guest-test2", RolesEnum.GUEST, university2);
+
+		List<User> suggestions = userContactSuggestionService.getSuggestions(
+				guest, null, 5);
+
+		Assert.assertNotNull("Should not be null.", suggestions);
+		Assert.assertTrue("Result not empty", suggestions.isEmpty());
+	}
+
+	@Test
 	public void studentTest() {
 		User student = createTestUser("student-test", RolesEnum.STUDENT);
 		createTestUser("academic-test", RolesEnum.ACADEMIC_ADVISOR);
@@ -111,14 +123,9 @@ public class UserContactSuggestionServiceTest {
 
 	@Test
 	public void alumniTest() {
-		User alumni = createTestUser("student-test", RolesEnum.ALUMNI);
+		User alumni = createTestUser("alumni-test", RolesEnum.ALUMNI);
 		createTestUser("career2-test", RolesEnum.CAREER_ADVISOR);
 		createTestUser("transfer-test", RolesEnum.TRANSFER_ADVISOR);
-
-		AccountSetting setting = new AccountSetting(null, alumni.getUserId(),
-				"graduationDate", LocalDateTime.now().plusDays(10).toString(),
-				Privacy.PUBLIC.name());
-		accountSettingRepository.set(alumni.getUserId(), setting);
 
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				alumni, null, 5);
@@ -126,7 +133,7 @@ public class UserContactSuggestionServiceTest {
 		Assert.assertNotNull("No users found.", suggestions);
 		Assert.assertFalse("No users found.", suggestions.isEmpty());
 		Assert.assertTrue(
-				"Only one Advisors found, should have been 2, Career and Transfer",
+				"Only one Advisor found, should have been 2, Career and Transfer",
 				suggestions.size() >= 2);
 		Assert.assertTrue(
 				"No Academic Advisor found.",
@@ -145,6 +152,26 @@ public class UserContactSuggestionServiceTest {
 		Long university1 = 1L;
 
 		UserOrganizationRole auth = new UserOrganizationRole(null, university1,
+				role.name().toUpperCase(), 0L);
+
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+
+		User user = new User(userName, oldPassword, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
+
+		userRepository.createUser(user);
+
+		User loadedUser = userRepository.loadUserByUsername(userName);
+		return loadedUser;
+	}
+
+	public User createTestUser(String userName, RolesEnum role, Long university) {
+		String oldPassword = "password";
+
+		UserOrganizationRole auth = new UserOrganizationRole(null, university,
 				role.name().toUpperCase(), 0L);
 
 		boolean enabled = true;

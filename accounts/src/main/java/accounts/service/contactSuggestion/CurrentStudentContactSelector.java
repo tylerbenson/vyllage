@@ -39,8 +39,8 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 	@Override
 	protected Optional<SelectConditionStep<Record>> getSuggestions(User user) {
 
-		// check if it's a student
-		if (isStudent(user)) {
+		// check if it's a student or alumni
+		if (isStudentOrAlumni(user)) {
 			Users u = USERS.as("u");
 			UserOrganizationRoles uor = USER_ORGANIZATION_ROLES.as("uor");
 
@@ -109,13 +109,15 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 		return isAlumni || isWithinGraduationDateRange;
 	}
 
-	public boolean isStudent(User user) {
+	public boolean isStudentOrAlumni(User user) {
 		return user
 				.getAuthorities()
 				.stream()
 				.anyMatch(
 						a -> a.getAuthority()
-								.contains(RolesEnum.STUDENT.name()));
+								.contains(RolesEnum.STUDENT.name())
+								|| a.getAuthority().contains(
+										RolesEnum.ALUMNI.name()));
 	}
 
 	@Override

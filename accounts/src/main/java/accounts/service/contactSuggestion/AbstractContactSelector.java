@@ -12,7 +12,6 @@ import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.SelectConditionStep;
-import org.springframework.util.Assert;
 
 import user.common.User;
 import accounts.repository.UserOrganizationRoleRepository;
@@ -25,8 +24,6 @@ import accounts.repository.UserOrganizationRoleRepository;
  *
  */
 public abstract class AbstractContactSelector {
-
-	private String ROLE = "ADVISOR";
 
 	private final DSLContext sql;
 
@@ -44,8 +41,6 @@ public abstract class AbstractContactSelector {
 
 		Optional<SelectConditionStep<Record>> suggestions = getSuggestions(loggedInUser);
 
-		Assert.isTrue(suggestions.isPresent());
-
 		if (!suggestions.isPresent())
 			return Collections.emptyList();
 
@@ -60,8 +55,13 @@ public abstract class AbstractContactSelector {
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
 
+		Result<Record> records = select.limit(limit).fetch();
+
+		if (records == null || records.isEmpty())
+			return Collections.emptyList();
+
 		return recordsToUser(accountNonExpired, credentialsNonExpired,
-				accountNonLocked, select.limit(limit).fetch());
+				accountNonLocked, records);
 	}
 
 	private List<User> recordsToUser(final boolean accountNonExpired,
@@ -89,14 +89,6 @@ public abstract class AbstractContactSelector {
 
 	public DSLContext sql() {
 		return sql;
-	}
-
-	public String getROLE() {
-		return ROLE;
-	}
-
-	public void setROLE(String ROLE) {
-		this.ROLE = ROLE;
 	}
 
 	protected abstract Optional<SelectConditionStep<Record>> getSuggestions(
