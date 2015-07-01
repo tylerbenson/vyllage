@@ -96,8 +96,7 @@ var RecipientEdit = React.createClass({
               onChange={this.changeHandler.bind(this, 'firstName')}
               onFocus={this.focusHandler}
               onKeyDown={this.keyPress}
-              autoComplete='off'
-              autoFocus />
+              autoComplete='off' />
             {this.state.firstNameError? <p className='error'><i className='ion-android-warning'></i>Required field.</p>: null}
           </div>
           <div className='field'>
