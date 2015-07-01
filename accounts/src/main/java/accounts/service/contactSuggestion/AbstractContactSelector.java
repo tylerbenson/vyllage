@@ -12,34 +12,39 @@ import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.SelectConditionStep;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import user.common.User;
 import accounts.repository.UserOrganizationRoleRepository;
 
 /**
- * Class that's used to suggest other users to parameterized one based on it's
- * roles and organization.
+ * Class that's used to suggest other users to the parameterized one based on
+ * it's roles and organization.
  * 
  * @author uh
  *
  */
-@Component
 public abstract class AbstractContactSelector {
 
 	private String ROLE = "ADVISOR";
 
-	@Autowired
-	private final DSLContext sql = null;
+	private final DSLContext sql;
 
-	@Autowired
-	private UserOrganizationRoleRepository userOrganizationRoleRepository;
+	private final UserOrganizationRoleRepository userOrganizationRoleRepository;
+
+	public AbstractContactSelector(DSLContext sql,
+			UserOrganizationRoleRepository userOrganizationRoleRepository) {
+		this.sql = sql;
+		this.userOrganizationRoleRepository = userOrganizationRoleRepository;
+
+	}
 
 	public List<User> select(User loggedInUser, Map<String, String> filters,
 			int limit) {
 
 		Optional<SelectConditionStep<Record>> suggestions = getSuggestions(loggedInUser);
+
+		Assert.isTrue(suggestions.isPresent());
 
 		if (!suggestions.isPresent())
 			return Collections.emptyList();

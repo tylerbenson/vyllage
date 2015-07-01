@@ -5,19 +5,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import org.jooq.DSLContext;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import user.common.User;
 import user.common.constants.RolesEnum;
+import accounts.repository.UserOrganizationRoleRepository;
+import accounts.service.AccountSettingsService;
 
 @Service
 public class UserContactSuggestionService {
 
 	private Map<RolesEnum, AbstractContactSelector> roleToSelector = new HashMap<>();
 
-	public UserContactSuggestionService() {
-		roleToSelector.put(RolesEnum.GUEST, new GuestContactSelector());
+	@Inject
+	public UserContactSuggestionService(DSLContext sql,
+			UserOrganizationRoleRepository userOrganizationRoleRepository,
+			AccountSettingsService accountSettingsService) {
+		roleToSelector.put(RolesEnum.GUEST, new GuestContactSelector(sql,
+				userOrganizationRoleRepository));
+		roleToSelector
+				.put(RolesEnum.STUDENT, new CurrentStudentContactSelector(sql,
+						userOrganizationRoleRepository, accountSettingsService));
+		roleToSelector.put(RolesEnum.ALUMNI, new CurrentStudentContactSelector(
+				sql, userOrganizationRoleRepository, accountSettingsService));
 	}
 
 	public List<User> getSuggestions(final User loggedInUser,

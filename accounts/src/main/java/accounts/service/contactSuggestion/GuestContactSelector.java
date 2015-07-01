@@ -7,17 +7,23 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.SelectConditionStep;
-import org.springframework.stereotype.Component;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
+import user.common.constants.RolesEnum;
 import accounts.domain.tables.UserOrganizationRoles;
 import accounts.domain.tables.Users;
+import accounts.repository.UserOrganizationRoleRepository;
 
-@Component
 public class GuestContactSelector extends AbstractContactSelector {
+
+	public GuestContactSelector(DSLContext sql,
+			UserOrganizationRoleRepository userOrganizationRoleRepository) {
+		super(sql, userOrganizationRoleRepository);
+	}
 
 	@Override
 	public Optional<SelectConditionStep<Record>> getSuggestions(
@@ -38,11 +44,11 @@ public class GuestContactSelector extends AbstractContactSelector {
 							.map(a -> ((UserOrganizationRole) a)
 									.getOrganizationId())
 							.collect(Collectors.toList())))
-					.and(uor.ROLE.contains(getROLE()));
+					.and(uor.ROLE.contains(RolesEnum.ADMISSIONS_ADVISOR.name()));
 			return Optional.of(select);
+		}
 
-		} else
-			return Optional.empty();
+		return Optional.empty();
 	}
 
 	@Override
