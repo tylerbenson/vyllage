@@ -39,6 +39,17 @@
         <p class="location" th:text="${section.location}"></p>
         <p th:utext="${section.roleDescription}"></p>
       </th:block>
+      <th:block th:case="'EXPERIENCE'">
+        <h3 th:text="${#strings.capitalizeWords(section.title)}">
+        </h3>
+        <h4 th:text="${section.organizationName}">
+        </h4>
+        <p th:text="${section.organizationDescription}"></p>
+        <p class="role" th:text="${section.role}"></p>
+        <p th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</p>
+        <p class="location" th:text="${section.location}"></p>
+        <p th:utext="${section.roleDescription}"></p>
+      </th:block>
     </th:block>
   </th:block>
 </body>

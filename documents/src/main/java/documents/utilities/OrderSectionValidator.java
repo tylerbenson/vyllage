@@ -22,7 +22,7 @@ public class OrderSectionValidator {
 		if (documentId == null || documentSectionIds == null
 				|| documentSectionIds.isEmpty()) {
 			IllegalArgumentException e = new IllegalArgumentException(
-					"The amount of section ids does not match the number of existing sections in the database.");
+					"Expected at least one section id. Received none.");
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			throw e;
@@ -45,7 +45,18 @@ public class OrderSectionValidator {
 			List<DocumentSection> documentSections) {
 		if (documentSectionIds.size() != documentSections.size()) {
 			IllegalArgumentException e = new IllegalArgumentException(
-					"The amount of section ids does not match the number of existing sections in the database.");
+					"The amount of section ids does not match the number of existing sections in the database. "
+							+ "Expected: "
+							+ documentSections.size()
+							+ " ids ["
+							+ documentSections.stream()
+									.map(ds -> ds.getSectionId().toString())
+									.collect(Collectors.joining(","))
+									.toString()
+							+ "] received: "
+							+ documentSectionIds.size()
+							+ " "
+							+ documentSectionIds.toString());
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			throw e;

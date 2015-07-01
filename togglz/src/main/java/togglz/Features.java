@@ -7,6 +7,7 @@ import org.togglz.core.context.FeatureContext;
 
 public enum Features implements Feature {
 
+	@EnabledByDefault
 	@Label("Facebook SDK")
 	FACEBOOK_SDK,
 
@@ -25,6 +26,7 @@ public enum Features implements Feature {
 	@Label("Printing")
 	PRINTING,
 
+	@EnabledByDefault
 	@Label("Share Resume")
 	SHARE_RESUME,
 

@@ -10,4 +10,8 @@ public class RandomPasswordGenerator {
 		return RandomStringUtils.randomAlphanumeric(20);
 	}
 
+	public String getRandomString(int size) {
+		return RandomStringUtils.randomAlphanumeric(size);
+	}
+
 }

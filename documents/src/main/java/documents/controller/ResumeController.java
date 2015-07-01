@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +23,6 @@ import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -124,12 +122,7 @@ public class ResumeController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String resume(HttpServletRequest request,
-			@AuthenticationPrincipal User user) throws ElementNotFoundException {
-
-		if (user.isGuest()) {
-			request.getSession().invalidate();
-			return "redirect:/";
-		}
+			@AuthenticationPrincipal User user) {
 
 		Document documentByUser = documentService.getDocumentByUser(user
 				.getUserId());
@@ -137,11 +130,17 @@ public class ResumeController {
 		return "redirect:/resume/" + documentByUser.getDocumentId();
 	}
 
-	@RequestMapping(value = "{documentId}", method = RequestMethod.GET)
+	@RequestMapping(value = "{documentId}", method = RequestMethod.GET, produces = "text/html")
 	@CheckReadAccess
 	public String getResume(HttpServletRequest request,
 			@PathVariable final Long documentId,
-			@AuthenticationPrincipal User user, Model model) {
+			@AuthenticationPrincipal User user, Model model)
+			throws ElementNotFoundException {
+
+		// if document has no sections and I'm not the owner throw exception...
+		if (!documentService.existsForUser(user, documentId))
+			throw new ElementNotFoundException("Document with id '"
+					+ documentId + "' could not be found.");
 
 		model.addAttribute("accountName", accountName(request, user));
 		model.addAttribute("userInfo", userInfo(request, user));
@@ -188,8 +187,8 @@ public class ResumeController {
 		DocumentHeader resumeHeader = this.getResumeHeader(request, documentId,
 				user);
 
-		List<DocumentSection> documentSections = this
-				.getResumeSections(documentId);
+		List<DocumentSection> documentSections = documentService
+				.getDocumentSections(documentId);
 
 		copyPDF(response, resumePdfService.generatePdfDocument(resumeHeader,
 				documentSections));
@@ -445,46 +444,6 @@ public class ResumeController {
 
 		if (comment.getUserName() == null || comment.getUserName().isEmpty())
 			comment.setUserName(user.getFirstName() + " " + user.getLastName());
-	}
-
-	@ExceptionHandler(value = { JsonProcessingException.class,
-			IOException.class })
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-	public @ResponseBody Map<String, Object> handleInternalServerErrorException(
-			Exception ex) {
-		Map<String, Object> map = new HashMap<>();
-		if (ex.getCause() != null) {
-			map.put("error", ex.getCause().getMessage());
-		} else {
-			map.put("error", ex.getMessage());
-		}
-		return map;
-	}
-
-	@ExceptionHandler(value = { ElementNotFoundException.class })
-	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-	public @ResponseBody Map<String, Object> handleDocumentNotFoundException(
-			Exception ex) {
-		Map<String, Object> map = new HashMap<>();
-		if (ex.getCause() != null) {
-			map.put("error", ex.getCause().getMessage());
-		} else {
-			map.put("error", ex.getMessage());
-		}
-		return map;
-	}
-
-	@ExceptionHandler(value = { IllegalArgumentException.class })
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public @ResponseBody Map<String, Object> handleIllegalArgumentException(
-			Exception ex) {
-		Map<String, Object> map = new HashMap<>();
-		if (ex.getCause() != null) {
-			map.put("error", ex.getCause().getMessage());
-		} else {
-			map.put("error", ex.getMessage());
-		}
-		return map;
 	}
 
 }

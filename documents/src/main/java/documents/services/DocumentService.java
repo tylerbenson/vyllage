@@ -14,6 +14,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import user.common.User;
+
 import com.newrelic.api.agent.NewRelic;
 
 import documents.model.AccountNames;
@@ -177,7 +179,8 @@ public class DocumentService {
 	}
 
 	/**
-	 * Returns the user's document, if it can't find one creates it.
+	 * Returns the user's document, if it can't find one creates one with no
+	 * sections.
 	 * 
 	 * @param userId
 	 * @return
@@ -300,6 +303,18 @@ public class DocumentService {
 		documentSections.stream().forEachOrdered(
 				s -> documentSectionRepository.save(s));
 
+	}
+
+	/**
+	 * Checks if a given document id exists for a given user. A document will
+	 * exist if, it exists, has sections and the user owns the document.
+	 * 
+	 * @param user
+	 * @param documentId
+	 * @return
+	 */
+	public boolean existsForUser(User user, Long documentId) {
+		return documentRepository.existsForUser(user, documentId);
 	}
 
 }

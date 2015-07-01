@@ -70,6 +70,9 @@
           <div class="row" th:if="${exception != null and trace != null}">
             <textarea class="stack-trace" rows="50" cols="90" th:text="${trace}"></textarea>
           </div>
+          <div class="row" th:if="${exception == null and message != null}">
+            <h2 th:text="'Message: ' + ${message}">Message Error</h2>
+          </div>
         </th:block>
       </div>
     </form>
