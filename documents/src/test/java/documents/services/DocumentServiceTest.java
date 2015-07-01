@@ -221,6 +221,7 @@ public class DocumentServiceTest {
 		document.setDocumentId(1L);
 		document.setLastModified(LocalDateTime.now());
 		document.setDateCreated(LocalDateTime.now());
+		document.setDocumentType(DocumentTypeEnum.RESUME.name());
 		return document;
 	}
 

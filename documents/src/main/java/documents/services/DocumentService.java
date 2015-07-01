@@ -197,6 +197,7 @@ public class DocumentService {
 			Document newDocument = new Document();
 			newDocument.setUserId(userId);
 			newDocument.setVisibility(true);
+			newDocument.setDocumentType(DocumentTypeEnum.RESUME.name());
 			document = documentRepository.save(newDocument);
 		}
 

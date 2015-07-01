@@ -19,10 +19,30 @@
 	++ userIds=0,3 - comma separated list of user ids
 + Response 204
 
-This endpoint is not intended for consumption from the UI. (Currently it can only be called from 127.0.0.1, might be replaced with role validation)
+This endpoint is not intended for consumption from the UI. Only admins can use this endpoint.
 
 # Returns a PDF file conversion of the selected document
 ## /resume/{documentId}/file/pdf
 + Parameters
 	++ documentId (string, `1`) - The id of the document.
 + Response 200 (application/pdf)
+
+
+# Returns an object mapping document ids by document type 
+## /document/user/{userId}/document-type/{documentType}
++ Parameters
+	++ userId (string, `1`) - The id of the user.
+	++ userId (string, `RESUME`) - The document type (resume).
+
+```
+{"resume":[0, 1, 2, n]}
+```
+
+# Returns an object mapping document ids by document type for the logged in user
+## /document/user/document-type/{documentType}
++ Parameters
+	++ userId (string, `RESUME`) - The document type (resume).
+
+```
+{"resume":[0, 1, 2, n]}
+```
