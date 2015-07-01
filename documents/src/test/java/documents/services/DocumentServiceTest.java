@@ -21,6 +21,7 @@ import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentSection;
+import documents.model.constants.DocumentTypeEnum;
 import documents.repository.CommentRepository;
 import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
@@ -202,6 +203,16 @@ public class DocumentServiceTest {
 
 		Mockito.verify(documentRepository).deleteForUser(userId);
 
+	}
+
+	public void getDocumentsByType() {
+		List<Document> documentByUserAndType = service
+				.getDocumentByUserAndType(0L, DocumentTypeEnum.RESUME);
+
+		Assert.assertNotNull(documentByUserAndType);
+		Assert.assertFalse(documentByUserAndType.isEmpty());
+		Assert.assertTrue(documentByUserAndType.get(0).getDocumentType()
+				.equals(DocumentTypeEnum.RESUME.name()));
 	}
 
 	private Document document(Long userId) {

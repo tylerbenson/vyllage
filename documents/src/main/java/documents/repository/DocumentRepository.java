@@ -26,6 +26,7 @@ import documents.domain.tables.DocumentSections;
 import documents.domain.tables.Suggestions;
 import documents.domain.tables.records.DocumentsRecord;
 import documents.model.Document;
+import documents.model.constants.DocumentTypeEnum;
 
 @Repository
 public class DocumentRepository implements IRepository<Document> {
@@ -74,6 +75,7 @@ public class DocumentRepository implements IRepository<Document> {
 				.toLocalDateTime());
 		document.setVisibility(documentsRecord.getVisibility());
 		document.setTagline(documentsRecord.getTagline());
+		document.setDocumentType(documentsRecord.getDocumentType());
 		return document;
 	}
 
@@ -93,6 +95,7 @@ public class DocumentRepository implements IRepository<Document> {
 					.now(ZoneId.of("UTC"))));
 			newRecord.setVisibility(document.getVisibility());
 			newRecord.setTagline(document.getTagline());
+			newRecord.setDocumentType(document.getDocumentType());
 
 			newRecord.store();
 			document.setDocumentId(newRecord.getDocumentId());
@@ -205,5 +208,17 @@ public class DocumentRepository implements IRepository<Document> {
 			return exists;
 
 		return exists && hasSections;
+	}
+
+	public List<Document> getDocumentByUserAndType(Long userId,
+			DocumentTypeEnum documentTypeEnum) {
+		Result<DocumentsRecord> result = sql.fetch(DOCUMENTS,
+				DOCUMENTS.DOCUMENT_TYPE.contains(documentTypeEnum.name()));
+
+		List<Document> allDocs = new ArrayList<>();
+		for (DocumentsRecord documentsRecord : result)
+			allDocs.add(recordToDocument(documentsRecord));
+
+		return allDocs;
 	}
 }

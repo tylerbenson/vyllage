@@ -12,6 +12,7 @@ public class Document {
 	private Boolean visibility;
 	private LocalDateTime dateCreated;
 	private LocalDateTime lastModified;
+	private String documentType;
 
 	public Long getUserId() {
 		return userId;
@@ -59,6 +60,14 @@ public class Document {
 
 	public void setTagline(String tagline) {
 		this.tagline = tagline;
+	}
+
+	public String getDocumentType() {
+		return this.documentType;
+	}
+
+	public void setDocumentType(String documentType) {
+		this.documentType = documentType;
 	}
 
 }
