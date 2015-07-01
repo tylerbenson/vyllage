@@ -13,9 +13,6 @@ require('./components/intercom');
 React.initializeTouchEvents(true);
 var GetFeedback = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
-	componentWillMount: function(){
-		actions.getShareableLink();
-	},
 	render: function(){
 		var InviteType = null;
 
@@ -28,12 +25,15 @@ var GetFeedback = React.createClass({
 				break;
 			case 'suggestions':
 				InviteType = <Suggestions />;
+				break;
+			default:
+				InviteType = <InviteForm />;
 		}
 
 		return (
 			<div>
-			<InviteOptions url={this.state.shareableLink} />
-			{InviteType}
+			<InviteOptions />
+				{InviteType}
 			</div>
 		);
 	}

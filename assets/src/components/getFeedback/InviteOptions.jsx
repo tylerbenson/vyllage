@@ -2,18 +2,13 @@ var React = require('react');
 var Reflux = require('reflux');
 var GetFeedbackStore = require('./store');
 var FeatureToggle = require('../util/FeatureToggle');
+var FacebookInvite = require('./FacebookInvite');
 var actions = require('./actions');
 
 var InviteOptions = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
 	select: function(type, e) {
 		actions.setInviteType(type);
-	},
-	shareOnFacebook: function(){
-		FB.ui({
-		  method: 'share',
-		  href: this.props.url,
-		}, function(response){});
 	},
 	render: function() {
 		return (
@@ -40,10 +35,6 @@ var InviteOptions = React.createClass({
 			          ><i className="ion-ios-people"></i> Suggestions</button>
 			        </li>
 			      </FeatureToggle>
-
-		        <FeatureToggle name="FACEBOOK_SDK">
-			        <li ><button onClick={this.shareOnFacebook} className="secondary flat facebook"><i className="ion-social-facebook"></i> Share on Facebook</button></li>
-		        </FeatureToggle>
 		      </ul>
 		    </div>
 	    </div>

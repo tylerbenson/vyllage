@@ -43,18 +43,6 @@
           }
         }
       }
-      .facebook {
-        span {
-          text-transform: uppercase;
-        }
-        &:hover {
-          border-bottom-color: $facebook-color;
-          color: $facebook-color;
-          i, span {
-            color: $facebook-color;
-          }
-        }
-      }
     }
   }
 
@@ -81,15 +69,15 @@
 
   .shareable {
     .content {
-      text-align: center;
-      padding: 3em 0;
+      padding: 2em;
     }
 
     .tip {
-      color: $secondary-color;
+      color: darken($secondary-color, 10%);
       font-size: 0.8em;
       line-height: 1.4;
-      margin: 0 auto 0.75em auto;
+      margin: 0 auto 0.5em auto;
+      text-align: left;
     }
 
     .copy {

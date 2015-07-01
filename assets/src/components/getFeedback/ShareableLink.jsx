@@ -1,14 +1,22 @@
 var React = require('react');
+var Reflux = require('reflux');
+var GetFeedbackStore = require('./store');
 var Clipboard = require('react-zeroclipboard');
 var SuggestionSidebar = require('../suggestions/SuggestionSidebar');
 var FeatureToggle = require('../util/FeatureToggle');
+var FacebookInvite = require('./FacebookInvite');
+var actions = require('./actions');
 
 var ShareableLink = React.createClass({
+	mixins: [Reflux.connect(GetFeedbackStore)],
 	getInitialState: function(){
 		return {
 			isReady: false,
 			isCopied: false
 		}
+	},
+	componentWillMount: function(){
+		actions.getShareableLink();
 	},
 	copyHandler: function(){
 		this.setState({
@@ -48,14 +56,21 @@ var ShareableLink = React.createClass({
 				<div className="shareable section">
 					<div className="container">
 						<div className="content">
-							<p className="tip">Anyone with the link below will be able to add feedback to your resume.</p>
+							<p className="tip">Paste this link anywhere on the web to share.</p>
 							<input id="shareable-link" className="padded" type="text" value={this.props.url} readOnly />
-							<Clipboard text={this.props.url} onAfterCopy={this.copyHandler} onReady={this.readyHandler}>
+							<Clipboard text={this.state.shareableLink} onAfterCopy={this.copyHandler} onReady={this.readyHandler}>
 								<button className={classes}>
 									<i className={icon}></i>
 									{message}
 								</button>
 	            </Clipboard>
+							<FeatureToggle name="FACEBOOK_SDK">
+								<div className="or">
+									<span>OR</span>
+								</div>
+								<p className="tip">Click the following buttons to share:</p>
+				        <FacebookInvite url={this.state.shareableLink} />
+			        </FeatureToggle>
 						</div>
 					</div>
 				</div>

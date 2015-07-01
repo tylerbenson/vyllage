@@ -17,6 +17,26 @@
   }
 }
 
+.or {
+  width: 100%;
+  border-bottom: lighten($secondary-color, 20%) solid 1px;
+  text-align: center;
+  margin: 3em 0;
+
+  span {
+    display: inline-block;
+    background-color: lighten($secondary-color, 20%);
+    color: $inverted-text-color;
+    border-radius: 50%;
+    border: $inverted-text-color solid 2px;
+    padding: .5em .45em;
+    font-size: 0.75em;
+    position: absolute;
+    margin-top: -1em;
+    text-align: center;
+  }
+}
+
 .caret {
   @extend .ion-arrow-down-b;
   font-size: 0.8em;
