@@ -13,7 +13,7 @@ var InviteOptions = React.createClass({
 	render: function() {
 		return (
 			<FeatureToggle name="SHARE_RESUME">
-			<div className="banner">
+			<div className="invite-options">
 				<div className="content">
 		      <ul className="channels">
 		        <li>

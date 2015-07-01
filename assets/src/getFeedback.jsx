@@ -32,6 +32,13 @@ var GetFeedback = React.createClass({
 
 		return (
 			<div>
+			<div className="banner">
+				<div className="content">
+					<i className="header-icon ion-person-stalker"></i>
+					<h1>Get Feedback</h1>
+					<p>Have a better resumé by inviting your friends for feedback.</p>
+				</div>
+			</div>
 			<InviteOptions />
 				{InviteType}
 			</div>

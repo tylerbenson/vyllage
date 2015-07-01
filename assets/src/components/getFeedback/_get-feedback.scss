@@ -1,7 +1,30 @@
 .get-feedback {
-  .banner {
+  .invite-options {
     background: $inverted-text-color;
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  }
+
+  .banner {
+    background-color: $banner-background;
+    background-image: url(../images/banner-bg.png);
+    background-size: cover;
+    background-position: center;
+    padding: 1.5em 2em 1em 2em;
+
+    h1 {
+      color: $inverted-text-color;
+    }
+    p {
+      color: $tagline-color;
+      margin: 0;
+    }
+    .header-icon {
+      color: $inverted-text-color;
+      font-size: 3.5em;
+      float: left;
+      margin-right: 0.25em;
+      margin-top: -0.15em;
+    }
   }
 
   .channels {
@@ -69,7 +92,7 @@
 
   .shareable {
     .content {
-      padding: 2em;
+      padding: 1.5em 2.75em;
     }
 
     .tip {
@@ -81,12 +104,15 @@
     }
 
     .copy {
-      min-width: 9em;
+      background-color: $banner-background;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
       margin-left: 0.3em;
+      min-width: 8.5em;
       transition: background-color .2s ease;
 
       &.copied {
-        background-color: $success-color;
+        background-color: saturate(lighten($banner-background, 20%), 40%);
         pointer-events: none;
       }
 
@@ -94,6 +120,14 @@
         background-color: lighten($secondary-color, 20%);
         pointer-events: none;
       }
+    }
+
+    #shareable-link {
+      border-right: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      max-width: 19em;
+      margin-right: -0.275em;
     }
 
     input {
