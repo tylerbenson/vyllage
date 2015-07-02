@@ -2,11 +2,13 @@ var React = require('react');
 var SuggestionItem = require('./SuggestionItem');
 
 var SuggestionGroup = React.createClass({
+	componentWillMount: function() {
 
+	},
 	render: function() {
 		var suggestionItems = this.props.users.map(function(user){
 			return (
-				<SuggestionItem id={user.id} key={user.name} name={user.name} tagline={user.tagline} />
+				<SuggestionItem avatar={user.avatar} key={user.name} name={user.name} tagline={user.tagline} />
 			);
 		});
 
