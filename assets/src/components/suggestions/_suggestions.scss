@@ -21,8 +21,9 @@
     border-radius: 2em;
     border-color: $banner-background;
     color: $banner-background;
+    display: block;
     font-size: 0.8em;
-    margin-top: 2em;
+    margin: 2em auto 0 auto;
     padding: 0.5em 1.5em;
 
     &:hover,
@@ -39,14 +40,14 @@
   }
 }
 .suggestion {
-	border: lighten($secondary-color, 30%) solid 2px;
+	border: lighten($secondary-color, 40%) solid 2px;
 	border-radius: 3px;
 	box-sizing: border-box;
 	display: inline-block;
 	min-width: 160px;
 	margin: 0.5em;
 	max-width: 185px;
-	padding: 1em;
+	padding: 1em 0.5em;
 	text-align: center;
 	width: 25%;
 
@@ -74,15 +75,19 @@
 		margin-bottom: 0.75em;
 		display: block; /* Fallback for non-webkit */
 		display: -webkit-box;
-		max-width: 400px;
-		height: 2.5em;
-		max-height: 2.5em;
-		margin: 0.25em auto 0.75em auto;
-		font-size: 0.75em;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
+	  max-width: 400px;
+	  height: 3em;
+	  max-height: 3em;
+	  margin: .25em auto .75em;
+	  font-size: .65em;
+	  -webkit-line-clamp: 2;
+	  -webkit-box-orient: vertical;
+	  line-height: 1.4;
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+	button {
+		font-size: 0.7em;
 	}
 }
 .suggestion-sidebar {
@@ -123,16 +128,17 @@
 			margin-bottom: 0.25em;
 			padding: 0 0.5em;
 			text-align: left;
+			font-size: 0.75em;
 		}
 		.actions {
 			@include column(0.14);
 		}
 		button {
 		  border-radius: 50%;
-		  font-size: .7em;
-		  margin: .9em 0 0;
+		  font-size: .9em;
+		  margin: .8em 0 0;
 		  text-align: left;
-		  padding: .25em .435em;
+		  padding: .125em .315em;
 
 			i {
 				margin: 0;

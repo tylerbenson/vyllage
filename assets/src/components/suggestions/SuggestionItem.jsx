@@ -11,7 +11,7 @@ var SuggestionItem = React.createClass({
 				</div>
 				<div className="actions">
 					<button className="normal-caps small inverted get-feedback">
-						<i className="ion-person-stalker"></i>
+						<i className="ion-person-add"></i>
 						<span>Get Feedback</span>
 					</button>
 				</div>
