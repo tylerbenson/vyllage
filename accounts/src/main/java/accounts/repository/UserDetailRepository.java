@@ -9,16 +9,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
-import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
-import org.jooq.SelectConditionStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -40,10 +37,7 @@ import org.springframework.util.Assert;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
-import user.common.constants.RolesEnum;
 import user.common.social.SocialUser;
-import accounts.domain.tables.UserOrganizationRoles;
-import accounts.domain.tables.Users;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.UserCredential;
 import accounts.model.account.AccountNames;
@@ -513,81 +507,6 @@ public class UserDetailRepository implements UserDetailsManager,
 		newAuthentication.setDetails(currentAuth.getDetails());
 
 		return newAuthentication;
-	}
-
-	/**
-	 * Searches for advisors related to the user filtering by firstName,
-	 * lastName and email. Filters are optional.
-	 * 
-	 * @param loggedUser
-	 * @param filters
-	 * @param limit
-	 * @return
-	 */
-	public List<User> getAdvisors(User loggedUser, Map<String, String> filters,
-			int limit) {
-		final boolean accountNonExpired = true;
-		final boolean credentialsNonExpired = true;
-		final boolean accountNonLocked = true;
-
-		// get all the Organizations and Roles for the user executing the search
-		Result<Record1<Long>> organizationRecordsIds = sql
-				.select(USER_ORGANIZATION_ROLES.ORGANIZATION_ID)
-				.from(USER_ORGANIZATION_ROLES)
-				.where(USER_ORGANIZATION_ROLES.USER_ID.eq(loggedUser
-						.getUserId())).fetch();
-
-		// get all the organizations ids to filter the other users with
-		List<Long> organizationIds = organizationRecordsIds.stream()
-				.map(r -> r.getValue(USER_ORGANIZATION_ROLES.ORGANIZATION_ID))
-				.collect(Collectors.toList());
-
-		Users u = USERS.as("u");
-		UserOrganizationRoles uor = USER_ORGANIZATION_ROLES.as("uor");
-
-		SelectConditionStep<Record> select = sql.select(u.fields()).from(u)
-				.join(uor).on(u.USER_ID.eq(uor.USER_ID))
-				.where(uor.ORGANIZATION_ID.in(organizationIds))
-				.and(uor.ROLE.contains(RolesEnum.ADVISOR.name()));
-
-		if (filters != null && !filters.isEmpty()) {
-
-			if (filters.containsKey("firstName"))
-				select.and(u.FIRST_NAME.like("%" + filters.get("firstName")
-						+ "%"));
-
-			if (filters.containsKey("lastName"))
-				select.and(u.LAST_NAME.like("%" + filters.get("lastName") + "%"));
-
-			if (filters.containsKey("email"))
-				select.and(u.USER_NAME.like("%" + filters.get("email") + "%"));
-		}
-
-		Result<Record> records = select.limit(limit).fetch();
-
-		return advisorRecordsToUser(accountNonExpired, credentialsNonExpired,
-				accountNonLocked, records);
-	}
-
-	private List<User> advisorRecordsToUser(final boolean accountNonExpired,
-			final boolean credentialsNonExpired,
-			final boolean accountNonLocked, Result<Record> records) {
-		return records
-				.stream()
-				.map((Record ur) -> new User(ur.getValue(USERS.USER_ID), ur
-						.getValue(USERS.FIRST_NAME), ur
-						.getValue(USERS.MIDDLE_NAME), ur
-						.getValue(USERS.LAST_NAME), ur
-						.getValue(USERS.USER_NAME), credentialsRepository.get(
-						ur.getValue(USERS.USER_ID)).getPassword(), ur
-						.getValue(USERS.ENABLED), accountNonExpired,
-						credentialsNonExpired, accountNonLocked,
-						userOrganizationRoleRepository.getByUserId(ur
-								.getValue(USERS.USER_ID)), ur.getValue(
-								USERS.DATE_CREATED).toLocalDateTime(), ur
-								.getValue(USERS.LAST_MODIFIED)
-								.toLocalDateTime()))
-				.collect(Collectors.toList());
 	}
 
 	public List<AccountNames> getNames(List<Long> userIds) {

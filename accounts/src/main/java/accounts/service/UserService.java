@@ -354,11 +354,6 @@ public class UserService {
 
 	}
 
-	public List<User> getAdvisors(User loggedUser, Map<String, String> filters,
-			int maxsize) {
-		return userRepository.getAdvisors(loggedUser, filters, maxsize);
-	}
-
 	/**
 	 * Returns names of the requested user ids.
 	 * 
