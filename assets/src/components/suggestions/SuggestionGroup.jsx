@@ -6,7 +6,7 @@ var SuggestionGroup = React.createClass({
 	render: function() {
 		var suggestionItems = this.props.users.map(function(user){
 			return (
-				<SuggestionItem key={user.name} name={user.name} tagline={user.tagline} />
+				<SuggestionItem id={user.id} key={user.name} name={user.name} tagline={user.tagline} />
 			);
 		});
 

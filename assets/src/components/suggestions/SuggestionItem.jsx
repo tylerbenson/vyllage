@@ -4,7 +4,7 @@ var SuggestionItem = React.createClass({
 	render: function() {
 		return (
 			<div className="suggestion">
-				<div className="avatar"></div>
+				<div className="avatar" style={{"backgroundImage" : "url(/images/avatars/" + this.props.id + ".jpg);"}}></div>
 				<div className="info">
 					<div className="name">{this.props.name}</div>
 					<div className="tagline">{this.props.tagline}</div>

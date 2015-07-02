@@ -6,23 +6,28 @@ var SuggestionStore = Reflux.createStore({
 		this.suggestions = [
 			{
 				id: '1',
-				name: 'Darth Vader',
-				tagline: 'I am your father'
+				name: 'David Greene',
+				tagline: 'Helping People Achieve Greater Careers'
 			},
 			{
 				id: '2',
-				name: 'R2-D2',
-				tagline: '!@#$%^&*()'
+				name: 'Stefanie Reyes',
+				tagline: 'Making Change through Strong Leadership'
 			},
 			{
 				id: '3',
-				name: 'C3PO',
-				tagline: 'Navigating an asteroid field in approximately 3,720 to 1'
+				name: 'John Lee',
+				tagline: 'Aspiring Project Management Technologist'
 			},
 			{
 				id: '4',
-				name: 'Chubaka',
-				tagline: 'Ahrhrhrhh'
+				name: 'Jessica Knight',
+				tagline: 'Executive Team Lead'
+			},
+			{
+				id: '5',
+				name: 'Carl Jensen',
+				tagline: 'Success through Sales'
 			}
 		];
 	},

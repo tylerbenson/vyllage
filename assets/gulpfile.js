@@ -53,7 +53,7 @@ gulp.task('inline', ['styles'], function () {
 });
 
 gulp.task('copy-images', function () {
-  return gulp.src(['src/images/*'])
+  return gulp.src(['src/images/**/*'])
     .pipe(gulp.dest('public/images'));
 });
 
