@@ -4,7 +4,6 @@ import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROL
 import static accounts.domain.tables.Users.USERS;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.jooq.Condition;
@@ -35,10 +34,7 @@ public class AlumniContactSelector extends AbstractContactSelector {
 				.map(a -> ((UserOrganizationRole) a).getOrganizationId())
 				.collect(Collectors.toList());
 
-		return sql()
-				.select(u.fields())
-				.from(u)
-				.join(uor)
+		return sql().select(u.fields()).from(u).join(uor)
 				.on(u.USER_ID.eq(uor.USER_ID))
 				.where(uor.ORGANIZATION_ID.in(organizationIds))
 				.and(alumniSearchCondition(uor));
@@ -47,14 +43,6 @@ public class AlumniContactSelector extends AbstractContactSelector {
 	private Condition alumniSearchCondition(UserOrganizationRoles uor) {
 		return uor.ROLE.contains(RolesEnum.CAREER_ADVISOR.name()).or(
 				uor.ROLE.contains(RolesEnum.TRANSFER_ADVISOR.name()));
-	}
-
-	@Override
-	protected void applyFilters(
-			SelectConditionStep<Record> selectConditionStep,
-			Map<String, String> filters) {
-		// nothing right now
-
 	}
 
 }

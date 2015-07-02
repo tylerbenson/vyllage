@@ -40,32 +40,31 @@ public abstract class AbstractContactSelector {
 
 	}
 
-	public List<User> select(User loggedInUser, Map<String, String> filters,
-			int limit) {
+	public List<User> select(User user, Map<String, String> filters, int limit) {
 
-		SelectConditionStep<Record> suggestions = getSuggestions(loggedInUser);
+		SelectConditionStep<Record> select = getSuggestions(user);
 
-		if (filters != null && !filters.isEmpty())
-			applyFilters(suggestions, filters);
-		return execute(loggedInUser, suggestions, limit);
+		return execute(user, select, filters, limit);
 
 	}
 
 	protected List<User> execute(User user, SelectConditionStep<Record> select,
-			int limit) {
+			Map<String, String> filters, int limit) {
 		final boolean accountNonExpired = true;
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
+
+		if (filters != null && !filters.isEmpty())
+			applyFilters(select, filters);
 
 		Result<Record> records = select.limit(limit).fetch();
 
 		if (records == null || records.isEmpty()) {
 			// maybe the org only has normal advisors, try to find those
 			UserOrganizationRoles uor = USER_ORGANIZATION_ROLES.as("uor");
-
 			Users u = USERS.as("u");
 
-			records = sql()
+			select = sql()
 					.select(u.fields())
 					.from(u)
 					.join(uor)
@@ -76,8 +75,12 @@ public abstract class AbstractContactSelector {
 							.map(a -> ((UserOrganizationRole) a)
 									.getOrganizationId())
 							.collect(Collectors.toList())))
-					.and(uor.ROLE.contains(RolesEnum.ADVISOR.name()))
-					.limit(limit).fetch();
+					.and(uor.ROLE.contains(RolesEnum.ADVISOR.name()));
+
+			applyFilters(select, filters);
+
+			records = select.limit(limit).fetch();
+
 		} else if (records == null || records.isEmpty())
 			return Collections.emptyList(); // nothing...
 
@@ -112,10 +115,28 @@ public abstract class AbstractContactSelector {
 		return sql;
 	}
 
-	protected abstract SelectConditionStep<Record> getSuggestions(User user);
+	protected void applyFilters(SelectConditionStep<Record> select,
+			Map<String, String> filters) {
 
-	protected abstract void applyFilters(
-			SelectConditionStep<Record> selectConditionStep,
-			Map<String, String> filters);
+		Users u = USERS.as("u");
+
+		// TODO: find out a way to obtain the table field from u without using
+		// the table fields names or a map for "tableField" -> "TABLE_FIELD"
+
+		if (filters != null && !filters.isEmpty()) {
+
+			if (filters.containsKey("firstName"))
+				select.and(u.FIRST_NAME.like("%" + filters.get("firstName")
+						+ "%"));
+
+			if (filters.containsKey("lastName"))
+				select.and(u.LAST_NAME.like("%" + filters.get("lastName") + "%"));
+
+			if (filters.containsKey("email"))
+				select.and(u.USER_NAME.contains(filters.get("email")));
+		}
+	}
+
+	protected abstract SelectConditionStep<Record> getSuggestions(User user);
 
 }

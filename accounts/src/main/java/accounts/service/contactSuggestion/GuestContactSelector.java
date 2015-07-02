@@ -3,7 +3,6 @@ package accounts.service.contactSuggestion;
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 import static accounts.domain.tables.Users.USERS;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.jooq.Condition;
@@ -26,7 +25,7 @@ public class GuestContactSelector extends AbstractContactSelector {
 	}
 
 	@Override
-	protected SelectConditionStep<Record> getSuggestions(User loggedInUser) {
+	protected SelectConditionStep<Record> getSuggestions(User user) {
 
 		UserOrganizationRoles uor = USER_ORGANIZATION_ROLES.as("uor");
 
@@ -37,7 +36,7 @@ public class GuestContactSelector extends AbstractContactSelector {
 				.from(u)
 				.join(uor)
 				.on(u.USER_ID.eq(uor.USER_ID))
-				.where(uor.ORGANIZATION_ID.in(loggedInUser
+				.where(uor.ORGANIZATION_ID.in(user
 						.getAuthorities()
 						.stream()
 						.map(a -> ((UserOrganizationRole) a)
@@ -51,10 +50,4 @@ public class GuestContactSelector extends AbstractContactSelector {
 		return uor.ROLE.contains(RolesEnum.ADMISSIONS_ADVISOR.name());
 	}
 
-	@Override
-	protected void applyFilters(
-			SelectConditionStep<Record> selectConditionStep,
-			Map<String, String> filters) {
-		// none for now
-	}
 }

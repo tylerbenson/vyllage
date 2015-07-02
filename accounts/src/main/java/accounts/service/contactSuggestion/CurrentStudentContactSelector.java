@@ -5,7 +5,6 @@ import static accounts.domain.tables.Users.USERS;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.jooq.Condition;
@@ -102,13 +101,6 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 		}
 
 		return isWithinGraduationDateRange;
-	}
-
-	@Override
-	protected void applyFilters(
-			SelectConditionStep<Record> selectConditionStep,
-			Map<String, String> filters) {
-		// nothing right now
 	}
 
 }

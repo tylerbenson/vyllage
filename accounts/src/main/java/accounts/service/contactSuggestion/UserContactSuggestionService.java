@@ -34,16 +34,16 @@ public class UserContactSuggestionService {
 				userOrganizationRoleRepository));
 	}
 
-	public List<User> getSuggestions(final User loggedInUser,
+	public List<User> getSuggestions(final User user,
 			Map<String, String> filters, int limit) {
 
 		List<User> users = new ArrayList<>();
 
-		for (GrantedAuthority grantedAuthority : loggedInUser.getAuthorities()) {
+		for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
 			RolesEnum rolesEnum = RolesEnum.valueOf(grantedAuthority
 					.getAuthority());
 			if (roleToSelector.containsKey(rolesEnum))
-				users.addAll(roleToSelector.get(rolesEnum).select(loggedInUser,
+				users.addAll(roleToSelector.get(rolesEnum).select(user,
 						filters, limit));
 
 		}

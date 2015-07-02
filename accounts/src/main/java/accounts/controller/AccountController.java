@@ -50,6 +50,7 @@ import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
+import accounts.service.contactSuggestion.UserContactSuggestionService;
 import accounts.service.utilities.TokenHelper;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -76,6 +77,8 @@ public class AccountController {
 
 	private final AccountSettingsService accountSettingsService;
 
+	private final UserContactSuggestionService userContactSuggestionService;
+
 	private final ObjectMapper mapper;
 
 	@Autowired
@@ -87,12 +90,14 @@ public class AccountController {
 			final UserService userService,
 			final DocumentLinkService documentLinkService,
 			final AccountSettingsService accountSettingsService,
+			final UserContactSuggestionService userContactSuggestionService,
 			final ObjectMapper mapper) {
 		super();
 		this.environment = environment;
 		this.userService = userService;
 		this.documentLinkService = documentLinkService;
 		this.accountSettingsService = accountSettingsService;
+		this.userContactSuggestionService = userContactSuggestionService;
 		this.mapper = mapper;
 	}
 
@@ -157,15 +162,21 @@ public class AccountController {
 		if (emailFilter != null)
 			filters.put("email", emailFilter);
 
-		List<AccountNames> response = userService
-				.getAdvisors(user, filters, limitForEmptyFilter)
-				.stream()
-				.filter(u -> !excludeIds.contains(u.getUserId()))
-				.map(u -> new AccountNames(u.getUserId(), u.getFirstName(), u
-						.getMiddleName(), u.getLastName()))
-				.collect(Collectors.toList());
-
-		return response;
+		if (excludeIds != null && !excludeIds.isEmpty())
+			return userContactSuggestionService
+					.getSuggestions(user, filters, limitForEmptyFilter)
+					.stream()
+					.filter(u -> !excludeIds.contains(u.getUserId()))
+					.map(u -> new AccountNames(u.getUserId(), u.getFirstName(),
+							u.getMiddleName(), u.getLastName()))
+					.collect(Collectors.toList());
+		else
+			return userContactSuggestionService
+					.getSuggestions(user, filters, limitForEmptyFilter)
+					.stream()
+					.map(u -> new AccountNames(u.getUserId(), u.getFirstName(),
+							u.getMiddleName(), u.getLastName()))
+					.collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,

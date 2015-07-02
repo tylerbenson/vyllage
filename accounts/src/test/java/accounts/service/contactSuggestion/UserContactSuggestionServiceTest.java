@@ -2,7 +2,9 @@ package accounts.service.contactSuggestion;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -61,6 +63,18 @@ public class UserContactSuggestionServiceTest {
 	}
 
 	@Test
+	public void guestTestNoAdmissionAdvisorFoundReturnsAdvisor() {
+		Long university1 = 1L;
+		User guest = createTestUser("guest-test2", RolesEnum.GUEST, university1);
+
+		List<User> suggestions = userContactSuggestionService.getSuggestions(
+				guest, null, 5);
+
+		Assert.assertNotNull("Should not be null.", suggestions);
+		Assert.assertFalse("Result not empty", suggestions.isEmpty());
+	}
+
+	@Test
 	public void guestTestNoAdvisorsFound() {
 		Long university2 = 2L;
 		User guest = createTestUser("guest-test2", RolesEnum.GUEST, university2);
@@ -91,6 +105,27 @@ public class UserContactSuggestionServiceTest {
 						.anyMatch(
 								a -> a.getAuthority().contains(
 										RolesEnum.ACADEMIC_ADVISOR.name())));
+
+	}
+
+	@Test
+	public void studentFilterTest() {
+		User student = createTestUser("student-test", RolesEnum.STUDENT);
+		String userName = "academic-test";
+
+		createTestUser(userName, RolesEnum.ADVISOR);
+
+		Map<String, String> filters = new HashMap<>();
+		filters.put("email", userName);
+
+		List<User> suggestions = userContactSuggestionService.getSuggestions(
+				student, filters, 5);
+
+		Assert.assertNotNull("No users found.", suggestions);
+		Assert.assertFalse("No users found.", suggestions.isEmpty());
+
+		Assert.assertTrue("No Advisor found.", suggestions.get(0).getUsername()
+				.equals(userName));
 
 	}
 
