@@ -41,16 +41,10 @@ public class AlumniContactSelector extends AbstractContactSelector {
 				.join(uor)
 				.on(u.USER_ID.eq(uor.USER_ID))
 				.where(uor.ORGANIZATION_ID.in(organizationIds))
-				.and(uor.ROLE.contains(RolesEnum.CAREER_ADVISOR.name()).or(
-						uor.ROLE.contains(RolesEnum.TRANSFER_ADVISOR.name())));
+				.and(alumniSearchCondition(uor));
 	}
 
-	private Condition alumniCondition(UserOrganizationRoles uor) {
-		// .and(uor.ROLE.like("'%" + RolesEnum.CAREER_ADVISOR.name())
-		// + "%'")
-		// .or(uor.ROLE.like("'%" + RolesEnum.TRANSFER_ADVISOR.name())
-		// + "%'")
-
+	private Condition alumniSearchCondition(UserOrganizationRoles uor) {
 		return uor.ROLE.contains(RolesEnum.CAREER_ADVISOR.name()).or(
 				uor.ROLE.contains(RolesEnum.TRANSFER_ADVISOR.name()));
 	}

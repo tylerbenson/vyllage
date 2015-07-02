@@ -57,7 +57,6 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 							.map(a -> ((UserOrganizationRole) a)
 									.getOrganizationId())
 							.collect(Collectors.toList())))
-					.or(uor.ROLE.eq(RolesEnum.ADVISOR.name()))
 					.and(nearGraduationSearchCondition(uor));
 
 		}
@@ -74,7 +73,6 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 						.map(a -> ((UserOrganizationRole) a)
 								.getOrganizationId())
 						.collect(Collectors.toList())))
-				.or(uor.ROLE.eq(RolesEnum.ADVISOR.name()))
 				.and(studentSearchCondition(uor));
 
 	}

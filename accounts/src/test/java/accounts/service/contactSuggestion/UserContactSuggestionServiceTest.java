@@ -134,26 +134,33 @@ public class UserContactSuggestionServiceTest {
 
 		Assert.assertNotNull("No users found.", suggestions);
 		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		// Assert.assertTrue("Should have been 2, Career and Transfer",
-		// suggestions.size() == 2);
+		Assert.assertTrue("Should have been 2, Career and Transfer",
+				suggestions.size() == 2);
+
 		Assert.assertTrue(
 				"No Career Advisor found.",
 				suggestions
-						.get(0)
-						.getAuthorities()
 						.stream()
+						.map(u -> u.getAuthorities())
 						.anyMatch(
-								a -> a.getAuthority().contains(
-										RolesEnum.CAREER_ADVISOR.name())));
+								auths -> auths
+										.stream()
+										.anyMatch(
+												uor -> uor
+														.getAuthority()
+														.contains(
+																RolesEnum.CAREER_ADVISOR
+																		.name()))));
 		Assert.assertTrue(
 				"No Transfer Advisor found.",
 				suggestions
-						.get(0)
-						.getAuthorities()
 						.stream()
+						.map(u -> u.getAuthorities())
 						.anyMatch(
-								a -> a.getAuthority().contains(
-										RolesEnum.TRANSFER_ADVISOR.name())));
+								auths -> auths.stream().anyMatch(
+										uor -> uor.getAuthority().contains(
+												RolesEnum.TRANSFER_ADVISOR
+														.name()))));
 
 	}
 

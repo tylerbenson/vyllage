@@ -1,5 +1,6 @@
 package accounts.service.contactSuggestion;
 
+import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 import static accounts.domain.tables.Users.USERS;
 
 import java.util.Collections;
@@ -13,6 +14,10 @@ import org.jooq.Result;
 import org.jooq.SelectConditionStep;
 
 import user.common.User;
+import user.common.UserOrganizationRole;
+import user.common.constants.RolesEnum;
+import accounts.domain.tables.UserOrganizationRoles;
+import accounts.domain.tables.Users;
 import accounts.repository.UserOrganizationRoleRepository;
 
 /**
@@ -42,19 +47,39 @@ public abstract class AbstractContactSelector {
 
 		if (filters != null && !filters.isEmpty())
 			applyFilters(suggestions, filters);
-		return execute(suggestions, limit);
+		return execute(loggedInUser, suggestions, limit);
 
 	}
 
-	protected List<User> execute(SelectConditionStep<Record> select, int limit) {
+	protected List<User> execute(User user, SelectConditionStep<Record> select,
+			int limit) {
 		final boolean accountNonExpired = true;
 		final boolean credentialsNonExpired = true;
 		final boolean accountNonLocked = true;
 
 		Result<Record> records = select.limit(limit).fetch();
 
-		if (records == null || records.isEmpty())
-			return Collections.emptyList();
+		if (records == null || records.isEmpty()) {
+			// maybe the org only has normal advisors, try to find those
+			UserOrganizationRoles uor = USER_ORGANIZATION_ROLES.as("uor");
+
+			Users u = USERS.as("u");
+
+			records = sql()
+					.select(u.fields())
+					.from(u)
+					.join(uor)
+					.on(u.USER_ID.eq(uor.USER_ID))
+					.where(uor.ORGANIZATION_ID.in(user
+							.getAuthorities()
+							.stream()
+							.map(a -> ((UserOrganizationRole) a)
+									.getOrganizationId())
+							.collect(Collectors.toList())))
+					.and(uor.ROLE.contains(RolesEnum.ADVISOR.name()))
+					.limit(limit).fetch();
+		} else if (records == null || records.isEmpty())
+			return Collections.emptyList(); // nothing...
 
 		return recordsToUser(accountNonExpired, credentialsNonExpired,
 				accountNonLocked, records);
@@ -83,7 +108,7 @@ public abstract class AbstractContactSelector {
 				.collect(Collectors.toList());
 	}
 
-	public DSLContext sql() {
+	protected DSLContext sql() {
 		return sql;
 	}
 
