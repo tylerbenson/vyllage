@@ -548,7 +548,7 @@ public class UserDetailRepository implements UserDetailsManager,
 		SelectConditionStep<Record> select = sql.select(u.fields()).from(u)
 				.join(uor).on(u.USER_ID.eq(uor.USER_ID))
 				.where(uor.ORGANIZATION_ID.in(organizationIds))
-				.and(uor.ROLE.contains(RolesEnum.ACADEMIC_ADVISOR.name()));
+				.and(uor.ROLE.contains(RolesEnum.ADVISOR.name()));
 
 		if (filters != null && !filters.isEmpty()) {
 

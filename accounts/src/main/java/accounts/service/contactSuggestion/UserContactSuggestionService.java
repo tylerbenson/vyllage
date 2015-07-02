@@ -30,8 +30,8 @@ public class UserContactSuggestionService {
 		roleToSelector
 				.put(RolesEnum.STUDENT, new CurrentStudentContactSelector(sql,
 						userOrganizationRoleRepository, accountSettingsService));
-		roleToSelector.put(RolesEnum.ALUMNI, new CurrentStudentContactSelector(
-				sql, userOrganizationRoleRepository, accountSettingsService));
+		roleToSelector.put(RolesEnum.ALUMNI, new AlumniContactSelector(sql,
+				userOrganizationRoleRepository));
 	}
 
 	public List<User> getSuggestions(final User loggedInUser,

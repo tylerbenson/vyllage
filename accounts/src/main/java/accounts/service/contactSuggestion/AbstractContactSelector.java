@@ -5,7 +5,6 @@ import static accounts.domain.tables.Users.USERS;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
@@ -39,14 +38,11 @@ public abstract class AbstractContactSelector {
 	public List<User> select(User loggedInUser, Map<String, String> filters,
 			int limit) {
 
-		Optional<SelectConditionStep<Record>> suggestions = getSuggestions(loggedInUser);
-
-		if (!suggestions.isPresent())
-			return Collections.emptyList();
+		SelectConditionStep<Record> suggestions = getSuggestions(loggedInUser);
 
 		if (filters != null && !filters.isEmpty())
-			applyFilters(suggestions.get(), filters);
-		return execute(suggestions.get(), limit);
+			applyFilters(suggestions, filters);
+		return execute(suggestions, limit);
 
 	}
 
@@ -91,8 +87,7 @@ public abstract class AbstractContactSelector {
 		return sql;
 	}
 
-	protected abstract Optional<SelectConditionStep<Record>> getSuggestions(
-			User user);
+	protected abstract SelectConditionStep<Record> getSuggestions(User user);
 
 	protected abstract void applyFilters(
 			SelectConditionStep<Record> selectConditionStep,
