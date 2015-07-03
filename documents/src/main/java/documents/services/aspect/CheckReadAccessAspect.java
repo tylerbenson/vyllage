@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.OrganizationEnum;
+import user.common.constants.RolesEnum;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -66,7 +67,8 @@ public class CheckReadAccessAspect {
 														.getOrganizationId())
 										&& ((UserOrganizationRole) uor)
 												.getAuthority()
-												.equalsIgnoreCase("ADMIN"));
+												.equalsIgnoreCase(
+														RolesEnum.ADMIN.name()));
 	}
 
 	protected User getUser() {

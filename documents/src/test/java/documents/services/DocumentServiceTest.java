@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,9 +21,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
+import documents.model.DocumentAccess;
 import documents.model.DocumentSection;
+import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
 import documents.repository.CommentRepository;
+import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
@@ -59,6 +63,9 @@ public class DocumentServiceTest {
 
 	@Mock
 	private DocumentRepository documentRepository;
+
+	@Mock
+	private DocumentAccessRepository documentAccessRepository;
 
 	@Before
 	public void initMocks() {
@@ -202,6 +209,70 @@ public class DocumentServiceTest {
 		service.deleteDocumentsFromUser(userId);
 
 		Mockito.verify(documentRepository).deleteForUser(userId);
+
+	}
+
+	@Test
+	public void checkAccessWriteOk() {
+		Long userId = 3L;
+		Long documentId = 42L;
+
+		DocumentAccess documentAccess = new DocumentAccess();
+		documentAccess.setAccess(DocumentAccessEnum.WRITE);
+
+		Mockito.when(documentAccessRepository.get(userId, documentId))
+				.thenReturn(Optional.ofNullable(documentAccess));
+
+		Assert.assertTrue(service.checkAccess(userId, documentId,
+				DocumentAccessEnum.WRITE));
+
+	}
+
+	@Test
+	public void checkAccessWriteFalse() {
+		Long userId = 3L;
+		Long documentId = 42L;
+
+		DocumentAccess documentAccess = new DocumentAccess();
+		documentAccess.setAccess(DocumentAccessEnum.READ);
+
+		Mockito.when(documentAccessRepository.get(userId, documentId))
+				.thenReturn(Optional.ofNullable(documentAccess));
+
+		Assert.assertFalse(service.checkAccess(userId, documentId,
+				DocumentAccessEnum.WRITE));
+
+	}
+
+	@Test
+	public void checkAccessReadOk() {
+		Long userId = 3L;
+		Long documentId = 42L;
+
+		DocumentAccess documentAccess = new DocumentAccess();
+		documentAccess.setAccess(DocumentAccessEnum.READ);
+
+		Mockito.when(documentAccessRepository.get(userId, documentId))
+				.thenReturn(Optional.ofNullable(documentAccess));
+
+		Assert.assertTrue(service.checkAccess(userId, documentId,
+				DocumentAccessEnum.READ));
+
+	}
+
+	@Test
+	public void checkAccessReadWhenAccessIsWriteOK() {
+		Long userId = 3L;
+		Long documentId = 42L;
+
+		DocumentAccess documentAccess = new DocumentAccess();
+		documentAccess.setAccess(DocumentAccessEnum.WRITE);
+
+		Mockito.when(documentAccessRepository.get(userId, documentId))
+				.thenReturn(Optional.ofNullable(documentAccess));
+
+		Assert.assertTrue(service.checkAccess(userId, documentId,
+				DocumentAccessEnum.READ));
 
 	}
 

@@ -9,12 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import user.common.User;
+import documents.model.constants.DocumentAccessEnum;
 import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 
 @Aspect
 @Component("documents.CheckWriteAspect")
-public class CheckWriteAspect {
+public class CheckWriteAccessAspect {
 
 	@Autowired
 	private DocumentService documentService;
@@ -28,7 +29,11 @@ public class CheckWriteAspect {
 		Long documentUserId = documentService.getDocument(documentId)
 				.getUserId();
 
-		if (!userId.equals(documentUserId))
+		if (userId.equals(documentUserId))
+			return;
+
+		if (!documentService.checkAccess(userId, documentId,
+				DocumentAccessEnum.WRITE))
 			throw new AccessDeniedException(
 					"You are not authorized to access this document.");
 
