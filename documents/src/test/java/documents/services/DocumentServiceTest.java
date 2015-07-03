@@ -276,6 +276,32 @@ public class DocumentServiceTest {
 
 	}
 
+	@Test
+	public void checkAccessReadWhenAccessIsNull() {
+		Long userId = 3L;
+		Long documentId = 42L;
+
+		Mockito.when(documentAccessRepository.get(userId, documentId))
+				.thenReturn(Optional.ofNullable(null));
+
+		Assert.assertFalse(service.checkAccess(userId, documentId,
+				DocumentAccessEnum.READ));
+
+	}
+
+	@Test
+	public void checkAccessWriteWhenAccessIsNull() {
+		Long userId = 3L;
+		Long documentId = 42L;
+
+		Mockito.when(documentAccessRepository.get(userId, documentId))
+				.thenReturn(Optional.ofNullable(null));
+
+		Assert.assertFalse(service.checkAccess(userId, documentId,
+				DocumentAccessEnum.WRITE));
+
+	}
+
 	public void getDocumentsByType() {
 		List<Document> documentByUserAndType = service
 				.getDocumentByUserAndType(0L, DocumentTypeEnum.RESUME);
