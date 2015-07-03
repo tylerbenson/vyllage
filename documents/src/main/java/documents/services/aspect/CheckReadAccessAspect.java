@@ -14,6 +14,7 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
+import documents.model.constants.DocumentAccessEnum;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -33,22 +34,26 @@ public class CheckReadAccessAspect {
 			HttpServletRequest request, Long documentId)
 			throws AccessDeniedException, ElementNotFoundException {
 
-		Long firstUserId = documentService.getDocument(documentId).getUserId();
+		Long documentUserIdUserId = documentService.getDocument(documentId)
+				.getUserId();
 
-		Long secondUserId = getUser().getUserId();
+		Long accessingUserId = getUser().getUserId();
 
-		System.out.println("firstUserId " + firstUserId + " secondUserId "
-				+ secondUserId);
+		System.out.println("firstUserId " + documentUserIdUserId
+				+ " secondUserId " + accessingUserId);
 
-		if (sameUserOrVyllageAdministrator(firstUserId, secondUserId))
+		if (sameUserOrVyllageAdministrator(documentUserIdUserId,
+				accessingUserId))
 			return;
 
 		// Users belong to the same organization?
 		boolean usersBelongToSameOrganization = accountService
-				.usersBelongToSameOrganization(request, firstUserId,
-						secondUserId);
+				.usersBelongToSameOrganization(request, documentUserIdUserId,
+						accessingUserId);
 
-		if (!usersBelongToSameOrganization)
+		if (!usersBelongToSameOrganization
+				|| !documentService.checkAccess(accessingUserId, documentId,
+						DocumentAccessEnum.READ))
 			throw new AccessDeniedException(
 					"You are not authorized to access this document.");
 

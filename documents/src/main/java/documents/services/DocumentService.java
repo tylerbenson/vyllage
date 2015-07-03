@@ -331,7 +331,7 @@ public class DocumentService {
 	 * 
 	 * @param user
 	 * @param documentId
-	 * @return
+	 * @return true | false
 	 */
 	public boolean existsForUser(User user, Long documentId) {
 		return documentRepository.existsForUser(user, documentId);
