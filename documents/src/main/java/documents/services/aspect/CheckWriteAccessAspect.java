@@ -1,9 +1,12 @@
 package documents.services.aspect;
 
+import java.util.logging.Logger;
+
+import javax.inject.Inject;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -16,17 +19,17 @@ import documents.services.DocumentService;
 @Aspect
 @Component("documents.CheckWriteAspect")
 public class CheckWriteAccessAspect {
-	@Autowired
+
+	private final Logger logger = Logger.getLogger(CheckWriteAccessAspect.class
+			.getName());
+
 	private DocumentService documentService;
 
-	// public CheckWriteAccessAspect() {
-	// }
-	//
-	// @Inject
-	// public CheckWriteAccessAspect(DocumentService documentService) {
-	// super();
-	// this.documentService = documentService;
-	// }
+	@Inject
+	public CheckWriteAccessAspect(DocumentService documentService) {
+		super();
+		this.documentService = documentService;
+	}
 
 	@Before("execution(* *(..)) && args(documentId,..) && @annotation(CheckWriteAccess)")
 	public void checkWriteAccess(JoinPoint joinPoint, Long documentId)
@@ -36,6 +39,8 @@ public class CheckWriteAccessAspect {
 
 		Long documentUserId = documentService.getDocument(documentId)
 				.getUserId();
+
+		logger.info("firstUserId " + userId + " secondUserId " + documentUserId);
 
 		if (userId.equals(documentUserId))
 			return;

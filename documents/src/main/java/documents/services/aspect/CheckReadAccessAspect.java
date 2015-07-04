@@ -1,11 +1,13 @@
 package documents.services.aspect;
 
+import java.util.logging.Logger;
+
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -22,22 +24,21 @@ import documents.services.DocumentService;
 @Aspect
 @Component("documents.CheckAccessAspect")
 public class CheckReadAccessAspect {
-	@Autowired
+
+	private final Logger logger = Logger.getLogger(CheckReadAccessAspect.class
+			.getName());
+
 	private DocumentService documentService;
-	@Autowired
+
 	private AccountService accountService;
 
-	//
-	// public CheckReadAccessAspect() {
-	// }
-	//
-	// @Inject
-	// public CheckReadAccessAspect(DocumentService documentService,
-	// AccountService accountService) {
-	// super();
-	// this.documentService = documentService;
-	// this.accountService = accountService;
-	// }
+	@Inject
+	public CheckReadAccessAspect(DocumentService documentService,
+			AccountService accountService) {
+		super();
+		this.documentService = documentService;
+		this.accountService = accountService;
+	}
 
 	@Before("execution(* *(..)) && args(request, documentId,..) && @annotation(CheckReadAccess)")
 	public void checkReadAccess(JoinPoint joinPoint,
@@ -49,8 +50,8 @@ public class CheckReadAccessAspect {
 
 		Long accessingUserId = getUser().getUserId();
 
-		System.out.println("firstUserId " + documentUserIdUserId
-				+ " secondUserId " + accessingUserId);
+		logger.info("firstUserId " + documentUserIdUserId + " secondUserId "
+				+ accessingUserId);
 
 		if (sameUserOrVyllageAdministrator(documentUserIdUserId,
 				accessingUserId))
