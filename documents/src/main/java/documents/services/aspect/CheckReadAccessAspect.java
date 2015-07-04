@@ -22,12 +22,22 @@ import documents.services.DocumentService;
 @Aspect
 @Component("documents.CheckAccessAspect")
 public class CheckReadAccessAspect {
-
 	@Autowired
 	private DocumentService documentService;
-
 	@Autowired
 	private AccountService accountService;
+
+	//
+	// public CheckReadAccessAspect() {
+	// }
+	//
+	// @Inject
+	// public CheckReadAccessAspect(DocumentService documentService,
+	// AccountService accountService) {
+	// super();
+	// this.documentService = documentService;
+	// this.accountService = accountService;
+	// }
 
 	@Before("execution(* *(..)) && args(request, documentId,..) && @annotation(CheckReadAccess)")
 	public void checkReadAccess(JoinPoint joinPoint,

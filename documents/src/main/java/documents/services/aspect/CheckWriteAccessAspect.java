@@ -16,12 +16,20 @@ import documents.services.DocumentService;
 @Aspect
 @Component("documents.CheckWriteAspect")
 public class CheckWriteAccessAspect {
-
 	@Autowired
 	private DocumentService documentService;
 
+	// public CheckWriteAccessAspect() {
+	// }
+	//
+	// @Inject
+	// public CheckWriteAccessAspect(DocumentService documentService) {
+	// super();
+	// this.documentService = documentService;
+	// }
+
 	@Before("execution(* *(..)) && args(documentId,..) && @annotation(CheckWriteAccess)")
-	public void checkOwner(JoinPoint joinPoint, Long documentId)
+	public void checkWriteAccess(JoinPoint joinPoint, Long documentId)
 			throws AccessDeniedException, ElementNotFoundException {
 
 		Long userId = getUserId();
