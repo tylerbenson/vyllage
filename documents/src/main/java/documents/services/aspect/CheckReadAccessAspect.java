@@ -27,7 +27,7 @@ public class CheckReadAccessAspect {
 	@Autowired
 	private AccountService accountService;
 
-	@Before("execution(* *(..)) && args(request, documentId) && @annotation(CheckReadAccess)")
+	@Before("execution(* *(..)) && args(request, documentId,..) && @annotation(CheckReadAccess)")
 	public void checkReadAccess(JoinPoint joinPoint,
 			HttpServletRequest request, Long documentId)
 			throws AccessDeniedException, ElementNotFoundException {
