@@ -1,0 +1,16 @@
+dependencies {
+    apiCompile 'commons-codec:commons-codec:1.5'
+
+    implCompile sourceSets.api.output
+    implCompile 'commons-lang:commons-lang:2.6'    
+    classpath 'org.springframework.security.oauth-spring-security-oauth:2.0.8.BUILD-SNAPSHOT'
+    testCompile 'junit:junit:4.9'
+    testCompile sourceSets.api.output
+    testCompile sourceSets.impl.output
+    runtime configurations.apiRuntime
+    runtime configurations.implRuntime
+}
+
+jar {
+    baseName = 'spring-security-oauth-provider'
+}
