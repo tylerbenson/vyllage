@@ -1,14 +1,14 @@
 var React = require('react');
 var Reflux = require('reflux');
-var SuggestionStore = require('./store');
-var Actions = require('./actions');
+var GetFeedbackStore = require('../store');
+var Actions = require('../actions');
 
 var SuggestionItem = React.createClass({
-	mixins: [Reflux.connect(SuggestionStore)],
+	mixins: [Reflux.connect(GetFeedbackStore)],
 	render: function() {
 		var badge = <i className="sponsored badge ion-arrow-graph-up-right"></i>;
 		return (
-			<div className="suggestion">
+			<div className={(this.props.user.is_sponsored ? 'sponsored ' : '') + 'suggestion'}>
 				<div className="avatar" style={{"backgroundImage" : "url(" + this.props.user.avatar + ")"}}></div>
 				<div className="info">
 					<div className="name">

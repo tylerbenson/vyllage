@@ -33,6 +33,7 @@ var GetFeedbackStore = Reflux.createStore({
     this.message = "I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?\n\nThanks,\n" + firstName;
     this.shareableLink = null;
     this.inviteType = 'form';
+    this.recommendations = [];
   },
   onSetInviteType: function(type){
     this.inviteType = type;
@@ -201,6 +202,46 @@ var GetFeedbackStore = Reflux.createStore({
     this.message = message;
     this.update();
   },
+  onGetRecommendations: function(){
+    //AJAX here
+    var response = [{
+      id: '1',
+      name: 'David Greene',
+      tagline: 'Helping People Achieve Greater Careers',
+      avatar: '/images/avatars/1.jpg',
+      is_sponsored: true
+    },
+    {
+      id: '2',
+      name: 'Stefanie Reyes',
+      tagline: 'Making Change through Strong Leadership',
+      avatar: '/images/avatars/2.jpg',
+      is_sponsored: false
+    },
+    {
+      id: '3',
+      name: 'John Lee',
+      tagline: 'Aspiring Project Management Technologist',
+      avatar: '/images/avatars/3.jpg',
+      is_sponsored: false
+    },
+    {
+      id: '4',
+      name: 'Jessica Knight',
+      tagline: 'Executive Team Lead',
+      avatar: '/images/avatars/4.jpg',
+      is_sponsored: false
+    },
+    {
+      id: '5',
+      name: 'Carl Jensen',
+      tagline: 'Success through Sales',
+      avatar: '/images/avatars/5.jpg',
+      is_sponsored: true
+    }];
+    this.recommendations = response;
+    this.update();
+  },
   update: function () {
     this.trigger({
       users: this.users,
@@ -215,6 +256,7 @@ var GetFeedbackStore = Reflux.createStore({
       processing: this.processing,
       shareableLink: this.shareableLink,
       inviteType: this.inviteType,
+      recommendations: this.recommendations
     });
   },
   getInitialState: function () {
@@ -232,6 +274,7 @@ var GetFeedbackStore = Reflux.createStore({
       processing: this.processing,
       shareableLink: this.shareableLink,
       inviteType: this.inviteType,
+      recommendations: this.recommendations
     }
   }
 });

@@ -1,17 +1,20 @@
 var React = require('react');
 var Reflux = require('reflux');
-var SuggestionStore = require('./store');
-var Actions = require('./actions');
+var GetFeedbackStore = require('../store');
+var Actions = require('../actions');
 var SuggestionItem = require('./SuggestionItem');
 
 var SuggestionSidebar = React.createClass({
-	mixins: [Reflux.connect(SuggestionStore)],
+	mixins: [Reflux.connect(GetFeedbackStore)],
 	componentWillMount: function(){
-		Actions.getSuggestions();
+		Actions.getRecommendations();
+	},
+	viewMore: function(){
+		Actions.setInviteType('suggestions');
 	},
 	render: function() {
 		var index = 0;
-		var suggestionItems = this.state.suggestions.map(function(user){
+		var suggestionItems = this.state.recommendations.map(function(user){
 			return (
 				<SuggestionItem key={index++} user={user} />
 			);
@@ -23,7 +26,7 @@ var SuggestionSidebar = React.createClass({
 					<div className="content">
 						<div className="title">Suggestions for You</div>
 						{suggestionItems}
-						<button className="view-more">
+						<button onClick={this.viewMore} className="view-more">
 							<span>View More</span>
 						</button>
 					</div>

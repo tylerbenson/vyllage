@@ -56,6 +56,11 @@
 	text-align: center;
 	width: 25%;
 
+	&.sponsored {
+		background-color: lighten($warning-color, 43%);
+		border-color: lighten($warning-color, 39%);
+	}
+
 	.avatar {
 		background-image: url(../images/user.png);
 		background-position: center;
@@ -107,6 +112,7 @@
 		@include cf();
 		border: none;
 		border-bottom: rgba(0,0,0,0.05) solid 1px;
+		border-radius: 0;
 		display: block;
 		margin: 0;
 		padding: 0.65em 1em;
@@ -160,7 +166,7 @@
 		text-align: center;
 		width: 100%;
 		margin: 0;
-		padding: 1em;
+		padding: 0.75em 1em;
 		background: $inverted-text-color;
 		font-size: 0.7em;
 		font-weight: bold;

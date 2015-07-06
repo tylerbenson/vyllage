@@ -7,7 +7,7 @@ var Reflux = require('reflux');
 var GetFeedbackStore = require('./store');
 var Actions = require('./actions');
 var Modal = require('../modal');
-var SuggestionSidebar = require('../suggestions/SuggestionSidebar');
+var SuggestionSidebar = require('./suggestions/SuggestionSidebar');
 var FeatureToggle = require('../util/FeatureToggle');
 
 var InviteForm = React.createClass({
