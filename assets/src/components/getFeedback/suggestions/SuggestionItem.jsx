@@ -5,6 +5,9 @@ var Actions = require('../actions');
 
 var SuggestionItem = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
+	requestForFeedback: function(index, e) {
+		Actions.requestForFeedback(index);
+	},
 	render: function() {
 		var badge = <i className="sponsored badge ion-arrow-graph-up-right"></i>;
 		return (
@@ -18,7 +21,7 @@ var SuggestionItem = React.createClass({
 					<div className="tagline">{this.props.user.tagline}</div>
 				</div>
 				<div className="actions">
-					<button className="normal-caps small inverted get-feedback">
+					<button onClick={this.requestForFeedback.bind(this, this.props.index)} className="normal-caps small inverted get-feedback">
 						<i className="ion-person-add"></i>
 						<span>Get Feedback</span>
 					</button>

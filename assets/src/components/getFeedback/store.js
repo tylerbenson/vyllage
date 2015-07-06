@@ -205,41 +205,49 @@ var GetFeedbackStore = Reflux.createStore({
   onGetRecommendations: function(){
     //AJAX here
     var response = [{
-      id: '1',
+      id: 1,
       name: 'David Greene',
       tagline: 'Helping People Achieve Greater Careers',
       avatar: '/images/avatars/1.jpg',
       is_sponsored: true
     },
     {
-      id: '2',
+      id: 2,
       name: 'Stefanie Reyes',
       tagline: 'Making Change through Strong Leadership',
       avatar: '/images/avatars/2.jpg',
       is_sponsored: false
     },
     {
-      id: '3',
+      id: 3,
       name: 'John Lee',
       tagline: 'Aspiring Project Management Technologist',
       avatar: '/images/avatars/3.jpg',
       is_sponsored: false
     },
     {
-      id: '4',
+      id: 4,
       name: 'Jessica Knight',
       tagline: 'Executive Team Lead',
       avatar: '/images/avatars/4.jpg',
       is_sponsored: false
     },
     {
-      id: '5',
+      id: 5,
       name: 'Carl Jensen',
       tagline: 'Success through Sales',
       avatar: '/images/avatars/5.jpg',
       is_sponsored: true
     }];
     this.recommendations = response;
+    this.update();
+  },
+  onRequestForFeedback: function(index){
+    var invited_user = this.recommendations[index];
+    //Request here
+
+    //Remove from recommendations
+    this.recommendations.splice(index, 1);
     this.update();
   },
   update: function () {

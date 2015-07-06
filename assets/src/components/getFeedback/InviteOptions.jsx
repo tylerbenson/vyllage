@@ -3,12 +3,12 @@ var Reflux = require('reflux');
 var GetFeedbackStore = require('./store');
 var FeatureToggle = require('../util/FeatureToggle');
 var FacebookInvite = require('./FacebookInvite');
-var actions = require('./actions');
+var Actions = require('./actions');
 
 var InviteOptions = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
 	select: function(type, e) {
-		actions.setInviteType(type);
+		Actions.setInviteType(type);
 	},
 	render: function() {
 		return (
