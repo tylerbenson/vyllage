@@ -1,21 +1,29 @@
 var React = require('react');
+var Reflux = require('reflux');
+var SuggestionStore = require('./store');
+var Actions = require('./actions');
 var SuggestionItem = require('./SuggestionItem');
 
 var SuggestionGroup = React.createClass({
-	componentWillMount: function() {
-
+	mixins: [Reflux.connect(SuggestionStore)],
+	componentWillMount: function(){
+		Actions.getSuggestions();
 	},
 	render: function() {
-		var suggestionItems = this.props.users.map(function(user){
+		var index = 0;
+		var suggestionItems = this.state.suggestions.map(function(user){
 			return (
-				<SuggestionItem avatar={user.avatar} key={user.name} name={user.name} tagline={user.tagline} />
+				<SuggestionItem key={index++} user={user} />
 			);
 		});
 
 		return (
 			<div className="suggestion-group">
 				{suggestionItems}
-				<button className="view-more">View More</button>
+				<button className="view-more">
+					<i className="ion-chevron-down"></i>
+					<span>Load More Suggestions</span>
+				</button>
 			</div>
 		);
 	}

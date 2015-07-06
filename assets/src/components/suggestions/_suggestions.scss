@@ -20,17 +20,22 @@
     background-color: transparent;
     border-radius: 2em;
     border-color: $banner-background;
-    color: $banner-background;
     display: block;
     font-size: 0.8em;
     margin: 2em auto 0 auto;
     padding: 0.5em 1.5em;
 
+    i, span {
+	    color: $banner-background;
+    }
+
     &:hover,
     &:focus {
       background-color: $banner-background;
       border-color: $banner-background;
-      color: $inverted-text-color;
+      i, span {
+		    color: $inverted-text-color;
+	    }
     }
 
     &:active {
@@ -138,7 +143,7 @@
 		  font-size: .9em;
 		  margin: .8em 0 0;
 		  text-align: left;
-		  padding: .125em .315em;
+		  padding: .125em .3025em;
 
 			i {
 				margin: 0;
@@ -157,9 +162,12 @@
 		margin: 0;
 		padding: 1em;
 		background: $inverted-text-color;
-		color: $banner-background;
 		font-size: 0.7em;
 		font-weight: bold;
+
+		span {
+			color: $banner-background;
+		}
 
 		&:hover {
 			background: $section-footer-background;
