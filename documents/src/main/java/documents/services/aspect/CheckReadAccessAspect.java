@@ -18,7 +18,6 @@ import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
 import documents.model.constants.DocumentAccessEnum;
 import documents.repository.ElementNotFoundException;
-import documents.services.AccountService;
 import documents.services.DocumentService;
 
 @Aspect
@@ -30,14 +29,10 @@ public class CheckReadAccessAspect {
 
 	private DocumentService documentService;
 
-	private AccountService accountService;
-
 	@Inject
-	public CheckReadAccessAspect(DocumentService documentService,
-			AccountService accountService) {
+	public CheckReadAccessAspect(DocumentService documentService) {
 		super();
 		this.documentService = documentService;
-		this.accountService = accountService;
 	}
 
 	@Before("execution(* *(..)) && args(request, documentId,..) && @annotation(CheckReadAccess)")
@@ -57,14 +52,8 @@ public class CheckReadAccessAspect {
 				accessingUserId))
 			return;
 
-		// Users belong to the same organization?
-		boolean usersBelongToSameOrganization = accountService
-				.usersBelongToSameOrganization(request, documentUserIdUserId,
-						accessingUserId);
-
-		if (!usersBelongToSameOrganization
-				|| !documentService.checkAccess(accessingUserId, documentId,
-						DocumentAccessEnum.READ))
+		if (!documentService.checkAccess(accessingUserId, documentId,
+				DocumentAccessEnum.READ))
 			throw new AccessDeniedException(
 					"You are not authorized to access this document.");
 

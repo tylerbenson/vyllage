@@ -76,8 +76,6 @@ public class ResumeControllerTest {
 	@Test
 	public void getSectionFromResumeTest() throws ElementNotFoundException {
 
-		accountNamesMock();
-
 		Mockito.when(documentService.getDocumentSection(124L)).thenReturn(
 				DocumentSection.fromJSON(SECTION_124));
 
@@ -104,8 +102,6 @@ public class ResumeControllerTest {
 	public void getAllSectionsFromResumeTest() throws ElementNotFoundException {
 
 		long documentId = 0;
-
-		accountNamesMock();
 
 		Mockito.when(documentService.getDocumentSections(documentId))
 				.thenReturn(
@@ -143,7 +139,6 @@ public class ResumeControllerTest {
 	@Test
 	public void getSectionFromResumeNotFoundTest()
 			throws ElementNotFoundException {
-		accountNamesMock();
 
 		long documentSectionId = -1;
 
