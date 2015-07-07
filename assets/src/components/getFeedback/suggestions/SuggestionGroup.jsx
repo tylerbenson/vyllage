@@ -20,9 +20,11 @@ var SuggestionGroup = React.createClass({
 
 		return (
 			<div className="suggestion-group">
+				{(this.state.recommendations.length > 0 ?
 				<ReactCSSTransitionGroup transitionName="suggestion" transitionAppear={false}>
 					{suggestionItems}
 				</ReactCSSTransitionGroup>
+				: null)}
 				<button className="view-more">
 					<i className="ion-chevron-down"></i>
 					<span>Load More Suggestions</span>

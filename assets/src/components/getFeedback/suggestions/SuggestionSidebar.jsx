@@ -26,9 +26,11 @@ var SuggestionSidebar = React.createClass({
 				<div className="container">
 					<div className="content">
 						<div className="title">Suggestions for You</div>
+						{(this.state.recommendations.length > 0 ?
 						<ReactCSSTransitionGroup transitionName="suggestion" transitionAppear={false}>
 							{suggestionItems}
 						</ReactCSSTransitionGroup>
+						: null)}
 						<button onClick={this.viewMore} className="view-more">
 							<span>View More</span>
 						</button>
