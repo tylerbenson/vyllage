@@ -193,7 +193,6 @@ public class AccountSettingsService {
 			for (GrantedAuthority grantedAuthority : user.getAuthorities())
 				uor.add((UserOrganizationRole) grantedAuthority);
 
-			@SuppressWarnings("unchecked")
 			User newUser = new User(user.getUserId(), user.getFirstName(),
 					user.getMiddleName(), user.getLastName(),
 					setting.getValue(), "a password we don't care about",

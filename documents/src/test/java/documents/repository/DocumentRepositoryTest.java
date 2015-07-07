@@ -10,8 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import documents.Application;
 import documents.model.Document;
-import documents.repository.ElementNotFoundException;
-import documents.repository.IRepository;
+import documents.model.constants.DocumentTypeEnum;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -65,6 +64,7 @@ public class DocumentRepositoryTest {
 		doc1.setUserId(0L);
 		doc1.setVisibility(false);
 		doc1.setTagline("my tagline");
+		doc1.setDocumentType(DocumentTypeEnum.RESUME.name());
 		return doc1;
 	}
 }

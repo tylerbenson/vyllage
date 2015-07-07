@@ -3,6 +3,7 @@ package documents.model;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
+import documents.model.constants.DocumentTypeEnum;
 
 @ToString
 public class Document {
@@ -12,6 +13,8 @@ public class Document {
 	private Boolean visibility;
 	private LocalDateTime dateCreated;
 	private LocalDateTime lastModified;
+	// TODO: currently all documents are resume
+	private String documentType = DocumentTypeEnum.RESUME.name();
 
 	public Long getUserId() {
 		return userId;
@@ -59,6 +62,14 @@ public class Document {
 
 	public void setTagline(String tagline) {
 		this.tagline = tagline;
+	}
+
+	public String getDocumentType() {
+		return this.documentType;
+	}
+
+	public void setDocumentType(String documentType) {
+		this.documentType = documentType;
 	}
 
 }

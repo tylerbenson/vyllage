@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <h1 th:text="${header.firstName + ' ' + header.middleName + ' ' + header.lastName}">Names!</h1>
+  <h1 th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '') + ' ' + (header.lastName != null ? header.lastName : '')}">Names!</h1>
   <h2 th:text="${header.tagline}">This is my tagline</h2>
   <label th:text="${header.address}">Casa 123</label>
   <br/>

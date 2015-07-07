@@ -33,6 +33,7 @@ import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
+import documents.model.constants.DocumentTypeEnum;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -41,7 +42,7 @@ import documents.services.NotificationService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ResumeControllerIntegTest {
 
 	@Autowired
@@ -124,104 +125,6 @@ public class ResumeControllerIntegTest {
 				sectionId);
 
 		Assert.assertNull(resumeSection);
-	}
-
-	@Test
-	public void orderSectionsOK() throws JsonProcessingException,
-			ElementNotFoundException {
-
-		generateAndLoginUser();
-
-		Long documentId = 0L;
-		controller.saveSectionPositions(documentId,
-				Arrays.asList(123L, 125L, 126L, 124L));
-
-		List<DocumentSection> resumeSections = controller
-				.getResumeSections(documentId);
-
-		Assert.assertNotNull(resumeSections);
-		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(123L)
-						&& rs.getSectionPosition().equals(1L)));
-		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(125L)
-						&& rs.getSectionPosition().equals(2L)));
-		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(126L)
-						&& rs.getSectionPosition().equals(3L)));
-		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(124L)
-						&& rs.getSectionPosition().equals(4L)));
-
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void orderSectionsWrongNumberOfSections()
-			throws JsonProcessingException, ElementNotFoundException {
-
-		generateAndLoginUser();
-
-		Long documentId = 0L;
-		controller.saveSectionPositions(documentId, Arrays.asList(123L));
-
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void orderSectionsNumberOfSectionsCorrectIdsDoNotMatch()
-			throws JsonProcessingException, ElementNotFoundException {
-
-		generateAndLoginUser();
-
-		Long documentId = 0L;
-		controller.saveSectionPositions(documentId,
-				Arrays.asList(123L, 200L, 201L, 245L));
-
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void orderSectionsWrongNumberOfSectionsNull()
-			throws JsonProcessingException, ElementNotFoundException {
-
-		generateAndLoginUser();
-
-		Long documentId = 0L;
-		List<Long> documentSectionIds = null;
-		controller.saveSectionPositions(documentId, documentSectionIds);
-
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void orderSectionsWrongNumberOfSectionsEmpty()
-			throws JsonProcessingException, ElementNotFoundException {
-
-		generateAndLoginUser();
-
-		Long documentId = 0L;
-		controller.saveSectionPositions(documentId, Arrays.asList());
-
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void orderSectionsDuplicateSectionIds()
-			throws JsonProcessingException, ElementNotFoundException {
-
-		generateAndLoginUser();
-
-		Long documentId = 0L;
-		controller.saveSectionPositions(documentId, Arrays.asList(123L, 123L));
-
-	}
-
-	@Test(expected = ElementNotFoundException.class)
-	public void orderSectionsDocumentDoesNotExist()
-			throws JsonProcessingException, ElementNotFoundException {
-
-		generateAndLoginUser();
-
-		Long documentId = 9999999999L;
-		controller.saveSectionPositions(documentId,
-				Arrays.asList(123L, 124L, 125L, 126L));
-
 	}
 
 	@Test
@@ -534,6 +437,7 @@ public class ResumeControllerIntegTest {
 		doc1.setUserId(0L);
 		doc1.setVisibility(false);
 		doc1.setTagline("my curious tagline");
+		doc1.setDocumentType(DocumentTypeEnum.RESUME.name());
 		return doc1;
 	}
 
