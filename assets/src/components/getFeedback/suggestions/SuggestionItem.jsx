@@ -25,6 +25,10 @@ var SuggestionItem = React.createClass({
 						<i className="ion-person-add"></i>
 						<span>Get Feedback</span>
 					</button>
+					<button disabled="disabled" className="normal-caps small inverted success">
+						<i className="ion-checkmark"></i>
+						<span>Request Sent</span>
+					</button>
 				</div>
 			</div>
 		);

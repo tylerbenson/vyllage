@@ -56,15 +56,6 @@
 	text-align: center;
 	width: 25%;
 
-	&.suggestion-leave {
-	  opacity: 1;
-	  transition: opacity .5s ease-in;
-	}
-
-	&.suggestion-leave.suggestion-leave-active {
-	  opacity: 0.01;
-	}
-
 	&.sponsored {
 		background-color: lighten($warning-color, 43%);
 		border-color: lighten($warning-color, 39%);
@@ -107,6 +98,34 @@
 	}
 	button {
 		font-size: 0.7em;
+
+		&.success {
+			display: none;
+			border-color: $success-color;
+			background: $inverted-text-color !important;
+
+			i, span {
+				color: $success-color;
+			}
+		}
+	}
+
+	&.suggestion-leave {
+	  opacity: 1;
+	  transition: opacity .8s ease-out .4s;
+
+	  button {
+	  	&.get-feedback {
+	  		display: none;
+	  	}
+	  	&.success {
+	  		display: inline-block;
+	  	}
+	  }
+	}
+
+	&.suggestion-leave.suggestion-leave-active {
+	  opacity: 0.01;
 	}
 }
 .suggestion-sidebar {

@@ -8,7 +8,9 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var SuggestionGroup = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
 	componentWillMount: function(){
-		Actions.getRecommendations();
+		if(this.state.recommendations.length<1){
+			Actions.getRecommendations();
+		}
 	},
 	render: function() {
 		var index = 0;

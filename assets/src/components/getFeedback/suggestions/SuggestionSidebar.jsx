@@ -8,7 +8,9 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var SuggestionSidebar = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
 	componentWillMount: function(){
-		Actions.getRecommendations();
+		if(this.state.recommendations.length<1){
+			Actions.getRecommendations();
+		}
 	},
 	viewMore: function(){
 		Actions.setInviteType('suggestions');
