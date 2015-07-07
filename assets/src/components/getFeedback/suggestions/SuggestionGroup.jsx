@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react/addons');
 var Reflux = require('reflux');
 var GetFeedbackStore = require('../store');
 var Actions = require('../actions');
