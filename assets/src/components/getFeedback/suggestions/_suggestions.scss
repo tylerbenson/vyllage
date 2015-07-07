@@ -56,6 +56,15 @@
 	text-align: center;
 	width: 25%;
 
+	&.suggestion-leave {
+	  opacity: 1;
+	  transition: opacity .5s ease-in;
+	}
+
+	&.suggestion-leave.suggestion-leave-active {
+	  opacity: 0.01;
+	}
+
 	&.sponsored {
 		background-color: lighten($warning-color, 43%);
 		border-color: lighten($warning-color, 39%);

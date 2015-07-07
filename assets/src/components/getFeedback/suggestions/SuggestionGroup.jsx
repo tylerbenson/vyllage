@@ -3,6 +3,7 @@ var Reflux = require('reflux');
 var GetFeedbackStore = require('../store');
 var Actions = require('../actions');
 var SuggestionItem = require('./SuggestionItem');
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var SuggestionGroup = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
@@ -19,7 +20,9 @@ var SuggestionGroup = React.createClass({
 
 		return (
 			<div className="suggestion-group">
-				{suggestionItems}
+				<ReactCSSTransitionGroup transitionName="suggestion" transitionAppear={false}>
+					{suggestionItems}
+				</ReactCSSTransitionGroup>
 				<button className="view-more">
 					<i className="ion-chevron-down"></i>
 					<span>Load More Suggestions</span>

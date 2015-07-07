@@ -1,8 +1,9 @@
-var React = require('react');
+var React = require('react/addons');
 var Reflux = require('reflux');
 var GetFeedbackStore = require('../store');
 var Actions = require('../actions');
 var SuggestionItem = require('./SuggestionItem');
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var SuggestionSidebar = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
@@ -25,7 +26,9 @@ var SuggestionSidebar = React.createClass({
 				<div className="container">
 					<div className="content">
 						<div className="title">Suggestions for You</div>
-						{suggestionItems}
+						<ReactCSSTransitionGroup transitionName="suggestion" transitionAppear={false}>
+							{suggestionItems}
+						</ReactCSSTransitionGroup>
 						<button onClick={this.viewMore} className="view-more">
 							<span>View More</span>
 						</button>
