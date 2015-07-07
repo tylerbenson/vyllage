@@ -34,6 +34,7 @@ var GetFeedbackStore = Reflux.createStore({
     this.shareableLink = null;
     this.inviteType = 'form';
     this.recommendations = [];
+    this.useDummyData = false;
   },
   onSetInviteType: function(type){
     this.inviteType = type;
@@ -203,67 +204,85 @@ var GetFeedbackStore = Reflux.createStore({
     this.update();
   },
   onGetRecommendations: function(){
+    var url = urlTemplate
+      .parse(endpoints.togglz)
+      .expand({feature: 'DUMMY_SUGGESTIONS'});
+
     request
-      .get(endpoints.getFeedbackSuggestions)
-      .set('Accept', 'application/json')
-      .end(function (err, res) {
-        if(res.ok) {
-          this.recommendations = res.body.recommended;
+      .get(url)
+      .end(function(err, res) {
+        this.useDummyData = res.body;
+        this.update();
+
+        if(this.useDummyData) {
+          this.recommendations = [{
+            userId: 1,
+            firstName: 'David',
+            lastName: 'Greene',
+            tagline: 'Helping People Achieve Greater Careers',
+            avatar: '/images/avatars/1.jpg',
+            is_sponsored: true
+          },
+          {
+            userId: 2,
+            firstName: 'Stefanie',
+            lastName: 'Reyes',
+            tagline: 'Making Change through Strong Leadership',
+            avatar: '/images/avatars/2.jpg',
+            is_sponsored: false
+          },
+          {
+            userId: 3,
+            firstName: 'John',
+            lastName: 'Lee',
+            tagline: 'Aspiring Project Management Technologist',
+            avatar: '/images/avatars/3.jpg',
+            is_sponsored: false
+          },
+          {
+            userId: 4,
+            firstName: 'Jessica',
+            lastName: 'Knight',
+            tagline: 'Executive Team Lead',
+            avatar: '/images/avatars/4.jpg',
+            is_sponsored: false
+          },
+          {
+            userId: 5,
+            firstName: 'Carl',
+            lastName: 'Jensen',
+            tagline: 'Success through Sales',
+            avatar: '/images/avatars/5.jpg',
+            is_sponsored: true
+          }];
+          this.update();
         }
         else {
-          this.recommendations = [];
+          request
+            .get(endpoints.getFeedbackSuggestions)
+            .set('Accept', 'application/json')
+            .end(function (err, res) {
+              if(res.ok) {
+                this.recommendations = res.body.recommended;
+              }
+              else {
+                this.recommendations = [];
+              }
+              this.update();
+            }.bind(this));
         }
-        this.update();
       }.bind(this));
-    // var response = [{
-    //   userId: 1,
-    //   name: 'David Greene',
-    //   tagline: 'Helping People Achieve Greater Careers',
-    //   avatar: '/images/avatars/1.jpg',
-    //   is_sponsored: true
-    // },
-    // {
-    //   userId: 2,
-    //   firstName: 'Stefanie',
-    //   lastName: 'Reyes',
-    //   tagline: 'Making Change through Strong Leadership',
-    //   avatar: '/images/avatars/2.jpg',
-    //   is_sponsored: false
-    // },
-    // {
-    //   userId: 3,
-    //   firstName: 'John',
-    //   lastName: 'Lee',
-    //   tagline: 'Aspiring Project Management Technologist',
-    //   avatar: '/images/avatars/3.jpg',
-    //   is_sponsored: false
-    // },
-    // {
-    //   userId: 4,
-    //   firstName: 'Jessica',
-    //   lastName: 'Knight',
-    //   tagline: 'Executive Team Lead',
-    //   avatar: '/images/avatars/4.jpg',
-    //   is_sponsored: false
-    // },
-    // {
-    //   userId: 5,
-    //   firstName: 'Carl',
-    //   lastName: 'Jensen',
-    //   tagline: 'Success through Sales',
-    //   avatar: '/images/avatars/5.jpg',
-    //   is_sponsored: true
-    // }];
   },
   onRequestForFeedback: function(index){
     var invited_user = this.recommendations[index];
-    //Request here
+
+    if(!this.useDummyData){
     request
       .post(endpoints.getFeedback)
       .set(this.tokenHeader, this.tokenValue)
       .send({
         csrftoken: this.tokenValue,
-        users: [this.recommendations[index]],
+        users: [invited_user],
         notRegisteredUsers: [],
         subject: this.subject,
         message: this.message
@@ -275,6 +294,12 @@ var GetFeedbackStore = Reflux.createStore({
           this.update();
         }
       }.bind(this));
+    }
+    else {
+      //Remove from recommendations
+      this.recommendations.splice(index, 1);
+      this.update();
+    }
   },
   update: function () {
     this.trigger({
@@ -290,7 +315,8 @@ var GetFeedbackStore = Reflux.createStore({
       processing: this.processing,
       shareableLink: this.shareableLink,
       inviteType: this.inviteType,
-      recommendations: this.recommendations
+      recommendations: this.recommendations,
+      useDummyData: this.useDummyData
     });
   },
   getInitialState: function () {
@@ -308,7 +334,8 @@ var GetFeedbackStore = Reflux.createStore({
       processing: this.processing,
       shareableLink: this.shareableLink,
       inviteType: this.inviteType,
-      recommendations: this.recommendations
+      recommendations: this.recommendations,
+      useDummyData: this.useDummyData
     }
   }
 });

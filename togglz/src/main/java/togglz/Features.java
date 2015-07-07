@@ -7,6 +7,9 @@ import org.togglz.core.context.FeatureContext;
 
 public enum Features implements Feature {
 
+	@Label("Dummy Suggestions")
+	DUMMY_SUGGESTIONS,
+
 	@EnabledByDefault
 	@Label("Facebook SDK")
 	FACEBOOK_SDK,
