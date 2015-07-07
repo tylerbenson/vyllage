@@ -9,6 +9,14 @@
 	margin: 2em 0;
 	text-align: center;
 
+	.empty {
+		font-size: 0.9em !important;
+		line-height: 1.4;
+		max-width: 540px;
+		margin: auto;
+		padding: 2em !important;
+	}
+
 	.title {
 		color: $secondary-color;
 		margin-bottom: 1em;
@@ -129,6 +137,12 @@
 	}
 }
 .suggestion-sidebar {
+	.empty {
+		font-size: 0.8em !important;
+		line-height: 1.4;
+		margin: auto;
+		padding: 2em 1em 2.5em 1em !important;
+	}
 	.title {
 		padding: 0.65em 1em;
 	  font-size: 0.8em;

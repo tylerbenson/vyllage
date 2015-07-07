@@ -20,17 +20,23 @@ var SuggestionGroup = React.createClass({
 			);
 		});
 
+		var empty = (
+			<div className="empty">We cannot find any more users matching your profile. Update your information and invite your friends to get more suggestions.</div>
+		);
+
 		return (
 			<div className="suggestion-group">
 				{(this.state.recommendations.length > 0 ?
-				<ReactCSSTransitionGroup transitionName="suggestion" transitionAppear={false}>
-					{suggestionItems}
-				</ReactCSSTransitionGroup>
-				: null)}
-				<button className="view-more">
-					<i className="ion-chevron-down"></i>
-					<span>Load More Suggestions</span>
-				</button>
+					<div>
+						<ReactCSSTransitionGroup transitionName="suggestion" transitionAppear={false}>
+							{suggestionItems}
+						</ReactCSSTransitionGroup>
+						<button className="view-more">
+							<i className="ion-chevron-down"></i>
+							<span>Load More Suggestions</span>
+						</button>
+					</div>
+				: empty)}
 			</div>
 		);
 	}

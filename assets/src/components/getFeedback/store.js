@@ -240,6 +240,7 @@ var GetFeedbackStore = Reflux.createStore({
       is_sponsored: true
     }];
     this.recommendations = response;
+    this.recommendations = [];
     this.update();
   },
   onRequestForFeedback: function(index){
