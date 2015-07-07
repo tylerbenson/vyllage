@@ -31,10 +31,10 @@ var SuggestionGroup = React.createClass({
 						<ReactCSSTransitionGroup transitionName="suggestion" transitionAppear={false}>
 							{suggestionItems}
 						</ReactCSSTransitionGroup>
-						<button className="view-more">
+						{/*<button className="view-more">
 							<i className="ion-chevron-down"></i>
 							<span>Load More Suggestions</span>
-						</button>
+						</button>*/}
 					</div>
 				: empty)}
 			</div>
