@@ -1,9 +1,6 @@
 package accounts.service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.mail.EmailException;
 import org.junit.Assert;
@@ -13,8 +10,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -114,40 +109,6 @@ public class UserServiceTest {
 		Assert.assertFalse(service.userExists("diez@gmail.com"));
 		Assert.assertFalse(service.userExists("once.@"));
 		Assert.assertFalse(service.userExists("doce@yahoo.com"));
-	}
-
-	@Test
-	public void getAdvisorsWithoutFilterTest() {
-
-		User user = service.getUser("user@vyllage.com");
-
-		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
-				user, user.getPassword(), user.getAuthorities());
-
-		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
-
-		List<User> advisors = service.getAdvisors(user, null, 5);
-
-		Assert.assertFalse(advisors.isEmpty());
-	}
-
-	@Test
-	public void getAdvisorsWithFilterTest() {
-
-		User user = service.getUser("user@vyllage.com");
-
-		Map<String, String> filters = new HashMap<>();
-
-		filters.put("email", "ean");
-
-		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
-				user, user.getPassword(), user.getAuthorities());
-
-		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
-
-		List<User> advisors = service.getAdvisors(user, filters, 5);
-
-		Assert.assertFalse(advisors.isEmpty());
 	}
 
 	@Test(expected = UserNotFoundException.class)
