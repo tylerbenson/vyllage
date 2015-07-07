@@ -216,36 +216,40 @@ var GetFeedbackStore = Reflux.createStore({
         this.update();
       }.bind(this));
     // var response = [{
-    //   id: 1,
+    //   userId: 1,
     //   name: 'David Greene',
     //   tagline: 'Helping People Achieve Greater Careers',
     //   avatar: '/images/avatars/1.jpg',
     //   is_sponsored: true
     // },
     // {
-    //   id: 2,
-    //   name: 'Stefanie Reyes',
+    //   userId: 2,
+    //   firstName: 'Stefanie',
+    //   lastName: 'Reyes',
     //   tagline: 'Making Change through Strong Leadership',
     //   avatar: '/images/avatars/2.jpg',
     //   is_sponsored: false
     // },
     // {
-    //   id: 3,
-    //   name: 'John Lee',
+    //   userId: 3,
+    //   firstName: 'John',
+    //   lastName: 'Lee',
     //   tagline: 'Aspiring Project Management Technologist',
     //   avatar: '/images/avatars/3.jpg',
     //   is_sponsored: false
     // },
     // {
-    //   id: 4,
-    //   name: 'Jessica Knight',
+    //   userId: 4,
+    //   firstName: 'Jessica',
+    //   lastName: 'Knight',
     //   tagline: 'Executive Team Lead',
     //   avatar: '/images/avatars/4.jpg',
     //   is_sponsored: false
     // },
     // {
-    //   id: 5,
-    //   name: 'Carl Jensen',
+    //   userId: 5,
+    //   firstName: 'Carl',
+    //   lastName: 'Jensen',
     //   tagline: 'Success through Sales',
     //   avatar: '/images/avatars/5.jpg',
     //   is_sponsored: true
