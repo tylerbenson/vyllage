@@ -203,53 +203,74 @@ var GetFeedbackStore = Reflux.createStore({
     this.update();
   },
   onGetRecommendations: function(){
-    //AJAX here
-    var response = [{
-      id: 1,
-      name: 'David Greene',
-      tagline: 'Helping People Achieve Greater Careers',
-      avatar: '/images/avatars/1.jpg',
-      is_sponsored: true
-    },
-    {
-      id: 2,
-      name: 'Stefanie Reyes',
-      tagline: 'Making Change through Strong Leadership',
-      avatar: '/images/avatars/2.jpg',
-      is_sponsored: false
-    },
-    {
-      id: 3,
-      name: 'John Lee',
-      tagline: 'Aspiring Project Management Technologist',
-      avatar: '/images/avatars/3.jpg',
-      is_sponsored: false
-    },
-    {
-      id: 4,
-      name: 'Jessica Knight',
-      tagline: 'Executive Team Lead',
-      avatar: '/images/avatars/4.jpg',
-      is_sponsored: false
-    },
-    {
-      id: 5,
-      name: 'Carl Jensen',
-      tagline: 'Success through Sales',
-      avatar: '/images/avatars/5.jpg',
-      is_sponsored: true
-    }];
-    this.recommendations = response;
-    this.recommendations = [];
-    this.update();
+    request
+      .get(endpoints.getFeedbackSuggestions)
+      .set('Accept', 'application/json')
+      .end(function (err, res) {
+        if(res.ok) {
+          this.recommendations = res.body.recommended;
+        }
+        else {
+          this.recommendations = [];
+        }
+        this.update();
+      }.bind(this));
+    // var response = [{
+    //   id: 1,
+    //   name: 'David Greene',
+    //   tagline: 'Helping People Achieve Greater Careers',
+    //   avatar: '/images/avatars/1.jpg',
+    //   is_sponsored: true
+    // },
+    // {
+    //   id: 2,
+    //   name: 'Stefanie Reyes',
+    //   tagline: 'Making Change through Strong Leadership',
+    //   avatar: '/images/avatars/2.jpg',
+    //   is_sponsored: false
+    // },
+    // {
+    //   id: 3,
+    //   name: 'John Lee',
+    //   tagline: 'Aspiring Project Management Technologist',
+    //   avatar: '/images/avatars/3.jpg',
+    //   is_sponsored: false
+    // },
+    // {
+    //   id: 4,
+    //   name: 'Jessica Knight',
+    //   tagline: 'Executive Team Lead',
+    //   avatar: '/images/avatars/4.jpg',
+    //   is_sponsored: false
+    // },
+    // {
+    //   id: 5,
+    //   name: 'Carl Jensen',
+    //   tagline: 'Success through Sales',
+    //   avatar: '/images/avatars/5.jpg',
+    //   is_sponsored: true
+    // }];
   },
   onRequestForFeedback: function(index){
     var invited_user = this.recommendations[index];
     //Request here
-
-    //Remove from recommendations
-    this.recommendations.splice(index, 1);
-    this.update();
+    request
+      .post(endpoints.getFeedback)
+      .set(this.tokenHeader, this.tokenValue)
+      .send({
+        csrftoken: this.tokenValue,
+        users: [this.recommendations[index]],
+        notRegisteredUsers: [],
+        subject: this.subject,
+        message: this.message
+      })
+      .end(function (err, res) {
+        if (res.status === 200) {
+          //Remove from recommendations
+          this.recommendations.splice(index, 1);
+          this.update();
+        }
+      }.bind(this));
   },
   update: function () {
     this.trigger({

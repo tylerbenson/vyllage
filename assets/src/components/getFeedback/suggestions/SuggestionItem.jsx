@@ -10,15 +10,16 @@ var SuggestionItem = React.createClass({
 	},
 	render: function() {
 		var badge = <i className="sponsored badge ion-arrow-graph-up-right"></i>;
+		var user = this.props.user;
 		return (
-			<div className={(this.props.user.is_sponsored ? 'sponsored ' : '') + 'suggestion'}>
-				<div className="avatar" style={{"backgroundImage" : "url(" + this.props.user.avatar + ")"}}></div>
+			<div className={(user.is_sponsored ? 'sponsored ' : '') + 'suggestion'}>
+				<div className="avatar" style={user.avatar ? {"backgroundImage" : "url(" + user.avatar + ")"} : {}}></div>
 				<div className="info">
 					<div className="name">
-						{this.props.user.name}
-						{this.props.user.is_sponsored ? badge : null}
+						{user.firstName + user.lastName}
+						{user.is_sponsored ? badge : null}
 					</div>
-					<div className="tagline">{this.props.user.tagline}</div>
+					<div className="tagline">{user.tagline ? user.tagline : 'Vyllage User'}</div>
 				</div>
 				<div className="actions">
 					<button onClick={this.requestForFeedback.bind(this, this.props.index)} className="normal-caps small inverted get-feedback">
