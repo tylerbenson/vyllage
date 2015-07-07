@@ -210,6 +210,23 @@ public class DocumentRepository implements IRepository<Document> {
 		return exists && hasSections;
 	}
 
+	/**
+	 * Checks that a document exists.
+	 * 
+	 * @param documentId
+	 * @return
+	 */
+	public boolean exists(Long documentId) {
+		boolean exists = true;
+
+		DocumentsRecord documentRecord = sql.fetchOne(DOCUMENTS,
+				DOCUMENTS.DOCUMENT_ID.eq(documentId));
+
+		if (documentRecord == null)
+			return !exists;
+		return exists;
+	}
+
 	public List<Document> getDocumentByUserAndType(Long userId,
 			DocumentTypeEnum documentTypeEnum) {
 		Result<DocumentsRecord> result = sql.fetch(
@@ -224,4 +241,5 @@ public class DocumentRepository implements IRepository<Document> {
 
 		return allDocs;
 	}
+
 }

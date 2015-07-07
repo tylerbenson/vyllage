@@ -274,6 +274,10 @@ public class ResumeController {
 			@RequestBody final DocumentSection documentSection)
 			throws JsonProcessingException, ElementNotFoundException {
 
+		if (!documentService.exists(documentId))
+			throw new ElementNotFoundException("Document '" + documentId
+					+ "' does not exist.");
+
 		documentSection.setDocumentId(documentId);
 		return documentService.saveDocumentSection(documentSection);
 	}

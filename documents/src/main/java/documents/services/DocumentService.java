@@ -337,6 +337,10 @@ public class DocumentService {
 		return documentRepository.existsForUser(user, documentId);
 	}
 
+	public boolean exists(Long documentId) {
+		return documentRepository.exists(documentId);
+	}
+
 	public List<Document> getDocumentByUserAndType(Long userId,
 			DocumentTypeEnum documentTypeEnum) {
 		return documentRepository.getDocumentByUserAndType(userId,
@@ -360,4 +364,5 @@ public class DocumentService {
 			return documentAccess.get().checkAccess(access);
 		return false;
 	}
+
 }

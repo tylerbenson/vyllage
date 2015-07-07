@@ -219,8 +219,7 @@ public class ResumeControllerIntegTest {
 				documentSection);
 	}
 
-	// from the aspect
-	@Test(expected = ElementNotFoundException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void updateSectionFailsDocumentNull()
 			throws JsonProcessingException, ElementNotFoundException {
 		generateAndLoginUser();

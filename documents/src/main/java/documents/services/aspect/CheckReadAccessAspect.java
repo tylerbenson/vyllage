@@ -1,13 +1,15 @@
 package documents.services.aspect;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -35,13 +37,21 @@ public class CheckReadAccessAspect {
 		this.documentService = documentService;
 	}
 
-	@Before("execution(* *(..)) && args(request, documentId,..) && @annotation(CheckReadAccess)")
-	public void checkReadAccess(JoinPoint joinPoint,
-			HttpServletRequest request, Long documentId)
-			throws AccessDeniedException, ElementNotFoundException {
+	@Before("execution(* *(..)) && @annotation(CheckReadAccess)")
+	public void checkReadAccess(JoinPoint joinPoint)
+			throws AccessDeniedException {
+		Map<String, Object> params = getParameters(joinPoint);
 
-		Long documentUserIdUserId = documentService.getDocument(documentId)
-				.getUserId();
+		Long documentId = (Long) params.get("documentId");
+
+		Long documentUserIdUserId = null;
+		try {
+			documentUserIdUserId = documentService.getDocument(documentId)
+					.getUserId();
+		} catch (ElementNotFoundException e) {
+			// nothing to do here.
+			return;
+		}
 
 		Long accessingUserId = getUser().getUserId();
 
@@ -57,6 +67,18 @@ public class CheckReadAccessAspect {
 			throw new AccessDeniedException(
 					"You are not authorized to access this document.");
 
+	}
+
+	private Map<String, Object> getParameters(JoinPoint joinPoint) {
+		Map<String, Object> params = new HashMap<>();
+		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+
+		int i = 0;
+		for (String param : signature.getParameterNames()) {
+			params.put(param, joinPoint.getArgs()[i]);
+			i++;
+		}
+		return params;
 	}
 
 	public boolean sameUserOrVyllageAdministrator(Long firstUserId,
