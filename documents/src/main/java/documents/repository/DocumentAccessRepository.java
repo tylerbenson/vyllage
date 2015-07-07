@@ -5,8 +5,11 @@ import static documents.domain.tables.DocumentAccess.DOCUMENT_ACCESS;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
 import org.jooq.Result;
@@ -47,7 +50,7 @@ public class DocumentAccessRepository {
 
 		// if exists call update instead...
 		if (result != null && result.isNotEmpty())
-			this.update(documentAccess, result.get(0));
+			this.update(documentAccess);
 
 		DocumentAccessRecord newRecord = sql.newRecord(DOCUMENT_ACCESS);
 		newRecord.setAccess(documentAccess.getAccess().name());
@@ -57,17 +60,9 @@ public class DocumentAccessRepository {
 				.of("UTC"))));
 		newRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now(ZoneId
 				.of("UTC"))));
+		newRecord.setExpirationDate(getExpirationDateOrNull(documentAccess));
 
 		newRecord.insert();
-	}
-
-	private void update(DocumentAccess documentAccess,
-			DocumentAccessRecord record) {
-		record.setAccess(documentAccess.getAccess().name());
-		record.setLastModified(Timestamp.valueOf(LocalDateTime.now(ZoneId
-				.of("UTC"))));
-
-		record.update();
 	}
 
 	public void update(DocumentAccess documentAccess) {
@@ -83,6 +78,8 @@ public class DocumentAccessRepository {
 		documentAccessRecord.setAccess(documentAccess.getAccess().name());
 		documentAccessRecord.setLastModified(Timestamp.valueOf(LocalDateTime
 				.now(ZoneId.of("UTC"))));
+		documentAccessRecord
+				.setExpirationDate(getExpirationDateOrNull(documentAccess));
 
 		documentAccessRecord.update();
 	}
@@ -95,6 +92,29 @@ public class DocumentAccessRepository {
 
 		if (result != null && result.isNotEmpty())
 			result.forEach(r -> r.delete());
+	}
+
+	/**
+	 * Returns all permissions for a given document.
+	 * 
+	 * @param documentId
+	 * @return
+	 */
+	public List<DocumentAccess> get(Long documentId) {
+		Result<DocumentAccessRecord> result = sql.fetch(DOCUMENT_ACCESS,
+				DOCUMENT_ACCESS.DOCUMENT_ID.eq(documentId));
+
+		if (result == null || result.isEmpty())
+			return Collections.emptyList();
+		return result.stream().map(DocumentAccess::new)
+				.collect(Collectors.toList());
+	}
+
+	private Timestamp getExpirationDateOrNull(DocumentAccess documentAccess) {
+		if (documentAccess.getExpirationDate() == null)
+			return null;
+
+		return Timestamp.valueOf(documentAccess.getExpirationDate());
 	}
 
 }

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import documents.model.Document;
+import documents.model.DocumentAccess;
 import documents.model.constants.DocumentTypeEnum;
 import documents.services.DocumentService;
 
@@ -104,5 +105,11 @@ public class DocumentController {
 						.collect(Collectors.toList()));
 
 		return documents;
+	}
+
+	@RequestMapping(value = "{documentId}/permissions", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<DocumentAccess> getDocumentPermissions(
+			@PathVariable(value = "documentId") Long documentId) {
+		return documentService.getDocumentPermissions(documentId);
 	}
 }

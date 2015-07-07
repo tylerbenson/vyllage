@@ -365,4 +365,8 @@ public class DocumentService {
 		return false;
 	}
 
+	public List<DocumentAccess> getDocumentPermissions(Long documentId) {
+		return documentAccessRepository.get(documentId);
+	}
+
 }

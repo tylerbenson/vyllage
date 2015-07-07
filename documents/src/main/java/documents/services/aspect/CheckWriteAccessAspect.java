@@ -23,6 +23,7 @@ import documents.services.DocumentService;
 @Component("documents.CheckWriteAspect")
 public class CheckWriteAccessAspect {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(CheckWriteAccessAspect.class
 			.getName());
 
@@ -53,7 +54,8 @@ public class CheckWriteAccessAspect {
 			return;
 		}
 
-		logger.info("firstUserId " + userId + " secondUserId " + documentUserId);
+		// logger.info("firstUserId " + userId + " secondUserId " +
+		// documentUserId);
 
 		if (userId.equals(documentUserId))
 			return;

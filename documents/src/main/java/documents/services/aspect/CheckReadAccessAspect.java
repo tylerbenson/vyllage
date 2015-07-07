@@ -26,6 +26,7 @@ import documents.services.DocumentService;
 @Component("documents.CheckAccessAspect")
 public class CheckReadAccessAspect {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(CheckReadAccessAspect.class
 			.getName());
 
@@ -55,8 +56,8 @@ public class CheckReadAccessAspect {
 
 		Long accessingUserId = getUser().getUserId();
 
-		logger.info("firstUserId " + documentUserIdUserId + " secondUserId "
-				+ accessingUserId);
+		// logger.info("firstUserId " + documentUserIdUserId + " secondUserId "
+		// + accessingUserId);
 
 		if (sameUserOrVyllageAdministrator(documentUserIdUserId,
 				accessingUserId))

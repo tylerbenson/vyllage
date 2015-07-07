@@ -67,7 +67,7 @@ public class DocumentAccessRepositoryTest {
 	public void deleteTest() {
 		DocumentAccess documentAccess = new DocumentAccess();
 		documentAccess.setAccess(DocumentAccessEnum.READ);
-		documentAccess.setUserId(3L);
+		documentAccess.setUserId(5L);
 		documentAccess.setDocumentId(0L);
 
 		repository.create(documentAccess);

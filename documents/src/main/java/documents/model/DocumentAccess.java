@@ -13,19 +13,22 @@ public class DocumentAccess {
 	private DocumentAccessEnum access;
 	private LocalDateTime dateCreated;
 	private LocalDateTime lastModified;
+	private LocalDateTime expirationDate;
 
 	public DocumentAccess() {
 	}
 
 	public DocumentAccess(DocumentAccessRecord documentAccessRecord) {
 		this.documentId = documentAccessRecord.getDocumentId();
-		this.documentId = documentAccessRecord.getUserId();
+		this.userId = documentAccessRecord.getUserId();
 		this.access = DocumentAccessEnum.valueOf(documentAccessRecord
 				.getAccess());
 		this.dateCreated = documentAccessRecord.getDateCreated()
 				.toLocalDateTime();
 		this.lastModified = documentAccessRecord.getLastModified()
 				.toLocalDateTime();
+		this.expirationDate = documentAccessRecord.getExpirationDate() != null ? documentAccessRecord
+				.getExpirationDate().toLocalDateTime() : null;
 	}
 
 	public Long getDocumentId() {
@@ -75,5 +78,13 @@ public class DocumentAccess {
 		return this.access.equals(access)
 				|| (DocumentAccessEnum.WRITE.equals(this.access) && DocumentAccessEnum.READ
 						.equals(access));
+	}
+
+	public LocalDateTime getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(LocalDateTime expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 }

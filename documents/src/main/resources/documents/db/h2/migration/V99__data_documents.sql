@@ -63,3 +63,6 @@ insert into DOCUMENTS.suggestions(section_Id, section_Version, user_id, json_Doc
 	"state": "shown",
 	"description": "This is my AWESOME goal statement."
 }', CURRENT_TIMESTAMP());
+
+insert into DOCUMENTS.document_access(document_id, user_id, access, date_created, last_modified, expiration_date) 
+values(0, 3, 'READ', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), null);
