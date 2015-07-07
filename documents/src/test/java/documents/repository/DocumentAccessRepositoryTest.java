@@ -1,5 +1,7 @@
 package documents.repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Assert;
@@ -12,6 +14,9 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import user.common.User;
+import user.common.UserOrganizationRole;
+import user.common.constants.RolesEnum;
 import documents.Application;
 import documents.model.DocumentAccess;
 import documents.model.constants.DocumentAccessEnum;
@@ -32,13 +37,37 @@ public class DocumentAccessRepositoryTest {
 	}
 
 	@Test
+	public void getPermissionsFromUserDocuments() {
+		Long userId = 0L;
+
+		List<UserOrganizationRole> userOrganizationRole = new ArrayList<>();
+		userOrganizationRole.add(new UserOrganizationRole(userId, 1L,
+				RolesEnum.STUDENT.name(), 0L));
+		User user = new User("a", "b", true, true, true, true,
+				userOrganizationRole);
+		user.setUserId(userId);
+
+		List<DocumentAccess> fromUserDocuments = repository
+				.getFromUserDocuments(user);
+
+		Assert.assertNotNull(fromUserDocuments);
+		Assert.assertFalse(fromUserDocuments.isEmpty());
+	}
+
+	@Test
 	public void createTest() {
+		Long userId = 2L;
+		Long documentId = 0L;
+
 		DocumentAccess documentAccess = new DocumentAccess();
 		documentAccess.setAccess(DocumentAccessEnum.READ);
-		documentAccess.setUserId(2L);
-		documentAccess.setDocumentId(0L);
+		documentAccess.setUserId(userId);
+		documentAccess.setDocumentId(documentId);
 
 		repository.create(documentAccess);
+
+		Optional<DocumentAccess> optional = repository.get(userId, documentId);
+		Assert.assertTrue(optional.isPresent());
 	}
 
 	@Test

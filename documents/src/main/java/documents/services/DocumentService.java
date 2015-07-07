@@ -369,4 +369,8 @@ public class DocumentService {
 		return documentAccessRepository.get(documentId);
 	}
 
+	public List<DocumentAccess> getUserDocumentsPermissions(User user) {
+		return documentAccessRepository.getFromUserDocuments(user);
+	}
+
 }

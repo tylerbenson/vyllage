@@ -107,9 +107,9 @@ public class DocumentController {
 		return documents;
 	}
 
-	@RequestMapping(value = "{documentId}/permissions", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<DocumentAccess> getDocumentPermissions(
-			@PathVariable(value = "documentId") Long documentId) {
-		return documentService.getDocumentPermissions(documentId);
+	@RequestMapping(value = "permissions", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<DocumentAccess> getUserDocumentsPermissions(
+			@AuthenticationPrincipal User user) {
+		return documentService.getUserDocumentsPermissions(user);
 	}
 }

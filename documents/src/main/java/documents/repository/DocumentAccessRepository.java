@@ -16,6 +16,8 @@ import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import user.common.User;
+import documents.domain.tables.Documents;
 import documents.domain.tables.records.DocumentAccessRecord;
 import documents.model.DocumentAccess;
 
@@ -103,6 +105,26 @@ public class DocumentAccessRepository {
 	public List<DocumentAccess> get(Long documentId) {
 		Result<DocumentAccessRecord> result = sql.fetch(DOCUMENT_ACCESS,
 				DOCUMENT_ACCESS.DOCUMENT_ID.eq(documentId));
+
+		if (result == null || result.isEmpty())
+			return Collections.emptyList();
+		return result.stream().map(DocumentAccess::new)
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Returns all permissions from a given user's documents
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public List<DocumentAccess> getFromUserDocuments(User user) {
+		documents.domain.tables.DocumentAccess da = DOCUMENT_ACCESS.as("da");
+		Documents docs = Documents.DOCUMENTS.as("docs");
+		List<DocumentAccessRecord> result = sql.select().from(da).join(docs)
+				.on(docs.DOCUMENT_ID.eq(da.DOCUMENT_ID))
+				.where(docs.USER_ID.eq(user.getUserId()))
+				.fetchInto(DocumentAccessRecord.class);
 
 		if (result == null || result.isEmpty())
 			return Collections.emptyList();
