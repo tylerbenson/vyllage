@@ -1,5 +1,7 @@
 package accounts.service;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -102,12 +104,16 @@ public class DocumentService {
 		builder.scheme("http").port(DOCUMENTS_PORT).host(DOCUMENTS_HOST)
 				.path("/document/permissions");
 
-		@SuppressWarnings("unchecked")
-		List<DocumentAccess> responseBody = restTemplate.exchange(
-				builder.build().toUriString(), HttpMethod.GET, entity,
-				List.class).getBody();
+		// List can't be used because exchange returns a list of
+		// linkedHashMaps...
 
-		return responseBody;
+		DocumentAccess[] responseBody = restTemplate.exchange(
+				builder.build().toUriString(), HttpMethod.GET, entity,
+				DocumentAccess[].class).getBody();
+
+		if (responseBody != null)
+			return Arrays.asList(responseBody);
+		return Collections.emptyList();
 	}
 
 	protected HttpEntity<Object> createHeader(HttpServletRequest request) {

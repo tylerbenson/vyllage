@@ -1,6 +1,7 @@
 package accounts.controller;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -259,10 +260,40 @@ public class AccountSettingsController {
 	@RequestMapping(value = "document/permissions", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<DocumentPermission> getDocumentPermissions(
 			HttpServletRequest request, @AuthenticationPrincipal User user) {
+
 		List<DocumentAccess> documentAccess = documentService
 				.getUserDocumentsAccess(request);
 
-		return null;
+		if (documentAccess == null || documentAccess.isEmpty())
+			return Collections.emptyList();
+
+		// TODO: flatten map into <Long, AccountNames>
+		Map<Long, List<AccountNames>> names = userService
+				.getNames(
+						documentAccess.stream().map(da -> da.getUserId())
+								.collect(Collectors.toList())).stream()
+				.collect(Collectors.groupingBy(AccountNames::getUserId));
+
+		// TODO: add tagline
+		List<DocumentPermission> permissions = documentAccess
+				.stream()
+				.map(da -> {
+					DocumentPermission dp = new DocumentPermission();
+					dp.setUserId(da.getUserId());
+					dp.setDocumentId(da.getDocumentId());
+					dp.setDateCreated(da.getDateCreated());
+					dp.setExpirationDate(da.getExpirationDate());
+					// mapped by id, only has one object
+					dp.setFirstName(names.get(da.getUserId()).get(0)
+							.getFirstName());
+					dp.setMiddleName(names.get(da.getUserId()).get(0)
+							.getMiddleName());
+					dp.setLastName(names.get(da.getUserId()).get(0)
+							.getLastName());
+					return dp;
+				}).collect(Collectors.toList());
+
+		return permissions;
 	}
 
 	@ExceptionHandler(value = { IllegalArgumentException.class })
