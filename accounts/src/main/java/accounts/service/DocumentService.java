@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import accounts.model.CSRFToken;
+import accounts.model.account.settings.DocumentAccess;
 import accounts.repository.ElementNotFoundException;
 
 @Service("accounts.DocumentService")
@@ -90,6 +91,23 @@ public class DocumentService {
 
 		return responseBody.stream().map(i -> i.longValue())
 				.collect(Collectors.toList());
+	}
+
+	public List<DocumentAccess> getUserDocumentsAccess(
+			HttpServletRequest request) {
+		HttpEntity<Object> entity = createHeader(request);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http").port(DOCUMENTS_PORT).host(DOCUMENTS_HOST)
+				.path("/document/permissions");
+
+		@SuppressWarnings("unchecked")
+		List<DocumentAccess> responseBody = restTemplate.exchange(
+				builder.build().toUriString(), HttpMethod.GET, entity,
+				List.class).getBody();
+
+		return responseBody;
 	}
 
 	protected HttpEntity<Object> createHeader(HttpServletRequest request) {

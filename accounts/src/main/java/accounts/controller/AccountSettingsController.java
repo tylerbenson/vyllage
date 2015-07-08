@@ -31,11 +31,14 @@ import user.common.constants.RolesEnum;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.DocumentAccess;
+import accounts.model.account.settings.DocumentPermission;
 import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.service.AccountSettingsService;
+import accounts.service.DocumentService;
 import accounts.service.UserService;
 import accounts.service.aspects.CheckWriteAccess;
 import accounts.validation.EmailSettingValidator;
@@ -61,16 +64,18 @@ public class AccountSettingsController {
 	private final UserService userService;
 
 	private final AccountSettingsService accountSettingsService;
-
+	private final DocumentService documentService;
 	private final OrganizationRepository organizationRepository;
 
 	@Inject
 	public AccountSettingsController(final UserService userService,
 			final AccountSettingsService accountSettingsService,
+			final DocumentService documentService,
 			final OrganizationRepository organizationRepository) {
 		super();
 		this.userService = userService;
 		this.accountSettingsService = accountSettingsService;
+		this.documentService = documentService;
 		this.organizationRepository = organizationRepository;
 
 		validators.put("phoneNumber", new PhoneNumberValidator());
@@ -251,28 +256,14 @@ public class AccountSettingsController {
 		return settingValues.get(parameter);
 	}
 
-	// @RequestMapping(value = "graduationDate", method = RequestMethod.PUT)
-	// @ResponseStatus(value = HttpStatus.OK)
-	// public void saveGraduationDate(@RequestBody String graduationDate) {
-	// Long userId = getUserId();
-	//
-	// PersonalInformation userPersonalInformation = userService
-	// .getUserPersonalInformation(userId);
-	// // "startDate": "September 2010"
-	//
-	// graduationDate += " 01 00:00:00"; // Can't be parsed if it's incomplete
-	//
-	// LocalDateTime date = LocalDateTime.parse(graduationDate,
-	// DateTimeFormatter.ofPattern(MMMM_YYYY_DD));
-	//
-	// // not sure if needed?
-	// if (date.isBefore(LocalDateTime.now()))
-	// throw new IllegalArgumentException(
-	// "Graduation date can't be in the past.");
-	//
-	// userPersonalInformation.setGraduationDate(date);
-	// userService.savePersonalInformation(userPersonalInformation);
-	// }
+	@RequestMapping(value = "document/permissions", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<DocumentPermission> getDocumentPermissions(
+			HttpServletRequest request, @AuthenticationPrincipal User user) {
+		List<DocumentAccess> documentAccess = documentService
+				.getUserDocumentsAccess(request);
+
+		return null;
+	}
 
 	@ExceptionHandler(value = { IllegalArgumentException.class })
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)

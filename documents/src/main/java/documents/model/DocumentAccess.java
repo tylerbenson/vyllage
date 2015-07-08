@@ -3,6 +3,9 @@ package documents.model;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import documents.domain.tables.records.DocumentAccessRecord;
 import documents.model.constants.DocumentAccessEnum;
 
@@ -10,7 +13,11 @@ import documents.model.constants.DocumentAccessEnum;
 public class DocumentAccess {
 	private Long documentId;
 	private Long userId;
+
+	// we don't need to send this outside right now.
+	@JsonIgnore
 	private DocumentAccessEnum access;
+
 	private LocalDateTime dateCreated;
 	private LocalDateTime lastModified;
 	private LocalDateTime expirationDate;
