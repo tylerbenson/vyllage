@@ -101,8 +101,7 @@ public class DocumentAccessRepositoryTest {
 
 		repository.create(documentAccess);
 
-		repository.delete(documentAccess.getUserId(),
-				documentAccess.getDocumentId());
+		repository.delete(documentAccess);
 
 		Optional<DocumentAccess> deletedDocument = repository.get(
 				documentAccess.getUserId(), documentAccess.getDocumentId());

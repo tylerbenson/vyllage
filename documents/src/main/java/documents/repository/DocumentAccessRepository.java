@@ -86,11 +86,12 @@ public class DocumentAccessRepository {
 		documentAccessRecord.update();
 	}
 
-	public void delete(Long userId, Long documentId) {
+	public void delete(DocumentAccess documentAccess) {
 		Result<DocumentAccessRecord> result = sql.fetch(
 				DOCUMENT_ACCESS,
-				DOCUMENT_ACCESS.USER_ID.eq(userId).and(
-						DOCUMENT_ACCESS.DOCUMENT_ID.eq(documentId)));
+				DOCUMENT_ACCESS.DOCUMENT_ID.eq(documentAccess.getDocumentId())
+						.and(DOCUMENT_ACCESS.USER_ID.eq(documentAccess
+								.getUserId())));
 
 		if (result != null && result.isNotEmpty())
 			result.forEach(r -> r.delete());

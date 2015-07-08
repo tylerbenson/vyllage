@@ -373,4 +373,8 @@ public class DocumentService {
 		return documentAccessRepository.getFromUserDocuments(user);
 	}
 
+	public void deleteDocumentAccess(DocumentAccess documentAccess) {
+		documentAccessRepository.delete(documentAccess);
+	}
+
 }

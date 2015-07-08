@@ -28,6 +28,7 @@ import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.constants.DocumentTypeEnum;
 import documents.services.DocumentService;
+import documents.services.aspect.CheckWriteAccess;
 
 @Controller
 @RequestMapping("document")
@@ -111,5 +112,28 @@ public class DocumentController {
 	public @ResponseBody List<DocumentAccess> getUserDocumentsPermissions(
 			@AuthenticationPrincipal User user) {
 		return documentService.getUserDocumentsPermissions(user);
+	}
+
+	@RequestMapping(value = "{documentId}/permissions/user/{userId}", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	@CheckWriteAccess
+	public void removePermissions(
+			@PathVariable(value = "documentId") Long documentId,
+			@PathVariable(value = "userId") Long userId) {
+
+		List<DocumentAccess> access = documentService
+				.getDocumentPermissions(documentId);
+
+		if (access == null || access.isEmpty())
+			return;
+
+		List<DocumentAccess> filtered = access.stream()
+				.filter(f -> f.getUserId().equals(userId))
+				.collect(Collectors.toList());
+
+		if (filtered == null || filtered.isEmpty())
+			return;
+
+		documentService.deleteDocumentAccess(filtered.get(0));
 	}
 }
