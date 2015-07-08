@@ -7,6 +7,9 @@ import org.togglz.core.context.FeatureContext;
 
 public enum Features implements Feature {
 
+	@Label("Dummy Suggestions")
+	DUMMY_SUGGESTIONS,
+
 	@EnabledByDefault
 	@Label("Facebook SDK")
 	FACEBOOK_SDK,
@@ -23,9 +26,15 @@ public enum Features implements Feature {
 	@Label("New Relic")
 	NEW_RELIC,
 
+	@Label("Printing")
+	PRINTING,
+
 	@EnabledByDefault
 	@Label("Share Resume")
 	SHARE_RESUME,
+
+	@Label("Suggestions")
+	SUGGESTIONS,
 
 	@EnabledByDefault
 	@Label("Zopim Message Client")

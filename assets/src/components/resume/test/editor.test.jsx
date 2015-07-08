@@ -9,7 +9,7 @@ describe('Editor', function() {
     this.server.respondWith("GET", "/resume//header.json", [200, { "Content-Type": "application/json" }, '']);
     this.server.respondWith("GET", "/resume//section.json", [200, { "Content-Type": "application/json" }, '']);
   });
-  
+
   it('Should render properly', function() {
     var resumeEditor = TestUtils.renderIntoDocument(<ResumeEditor />)
     expect(TestUtils.isCompositeComponent(resumeEditor)).toBe(true);
@@ -25,5 +25,5 @@ describe('Editor', function() {
     var nodes = TestUtils.scryRenderedDOMComponentsWithClass(resumeEditor, 'subheader');
     expect(nodes.length).toBe(0);
   });
-  
+
 });

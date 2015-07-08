@@ -1,26 +1,52 @@
 .get-feedback {
+  .invite-options {
+    background: $inverted-text-color;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  }
+
   .banner {
-    padding: 1em 3em 0 3em;
+    background-color: $banner-background;
+    background-image: url(../images/banner-bg.png);
+    background-size: cover;
+    background-position: center;
+    padding: 1.5em 2em 1em 2em;
+
+    h1 {
+      color: $inverted-text-color;
+    }
+    p {
+      color: $tagline-color;
+      margin: 0;
+    }
+    .header-icon {
+      color: $inverted-text-color;
+      font-size: 3.5em;
+      float: left;
+      margin-right: 0.25em;
+      margin-top: -0.15em;
+    }
   }
 
   .channels {
     list-style: none;
-    text-align: center;
+    text-align: left;
     margin-bottom: 0;
-    // margin-top: 2em;
+    margin-top: 0.25em;
 
     li {
       display: inline-block;
       button {
         border: none;
-        border-bottom: lighten($secondary-color, 35%) solid 2px;
+        border-bottom: transparent solid 2px;
         border-radius: 0;
+        font-size: 0.85em;
         margin: 0;
         padding: 0.85em 1em;
         transition: color .2s ease,
           border .2s ease;
 
         i, span {
+          color: $banner-background;
           transition: color .2s ease;
         }
 
@@ -35,59 +61,11 @@
           border-bottom-color: $primary-color;
           &:hover {
             i, span {
-              color: $primary-color;
+              color: lighten($banner-background, 3%);
             }
           }
         }
       }
-      .facebook {
-        span {
-          text-transform: uppercase;
-        }
-        &:hover {
-          border-bottom-color: $facebook-color;
-          color: $facebook-color;
-          i, span {
-            color: $facebook-color;
-          }
-        }
-      }
-    }
-  }
-
-  .shareable {
-    .content {
-      text-align: center;
-      padding: 3em 0;
-    }
-
-    .tip {
-      color: $secondary-color;
-      font-size: 0.8em;
-      line-height: 1.4;
-      margin: 0 auto 0.75em auto;
-    }
-
-    .copy {
-      min-width: 9em;
-      margin-left: 0.3em;
-      transition: background-color .2s ease;
-
-      &.copied {
-        background-color: $success-color;
-        pointer-events: none;
-      }
-
-      &.disabled {
-        background-color: lighten($secondary-color, 20%);
-        pointer-events: none;
-      }
-    }
-
-    input {
-      max-width: 360px;
-      margin: 0 auto 0.75em auto;
-      display: inline-block;
     }
   }
 
@@ -98,12 +76,80 @@
     text-transform: uppercase;
     padding: 0 0 0 0.25em;
   }
+
+  .sections {
+    @include cf();
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
   .section {
     & > .container {
       padding: 0;
       width: 100%;
     }
   }
+
+  .shareable {
+    .content {
+      padding: 1.5em 2.75em;
+    }
+
+    .tip {
+      color: darken($secondary-color, 10%);
+      font-size: 0.8em;
+      line-height: 1.4;
+      margin: 0 auto 0.5em auto;
+      text-align: left;
+    }
+
+    .copy {
+      background-color: $banner-background;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-left: 0.3em;
+      min-width: 8.5em;
+      transition: background-color .2s ease;
+
+      &.copied {
+        background-color: saturate(lighten($banner-background, 20%), 40%);
+        pointer-events: none;
+      }
+
+      &.disabled {
+        background-color: lighten($secondary-color, 20%);
+        pointer-events: none;
+      }
+    }
+
+    #shareable-link {
+      border-right: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      max-width: 19em;
+      margin-right: -0.275em;
+    }
+
+    input {
+      max-width: 360px;
+      margin: 0 auto 0.75em auto;
+      display: inline-block;
+    }
+  }
+
+  .shareable,
+  .invite-form {
+    @include column(2/3);
+    margin-right: 1em;
+  }
+
+  .suggestion-sidebar {
+    @include column(1/3);
+    .content {
+      padding: 0;
+    }
+  }
+
   .recipients.header {
     padding: 1.25em 4em;
 
@@ -117,7 +163,6 @@
       font-weight: 300;
       padding: 0.55em 0.25em;
       text-align: center;
-      white-space: nowrap;
     }
   }
   .recipient {

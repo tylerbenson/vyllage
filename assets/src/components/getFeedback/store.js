@@ -33,6 +33,8 @@ var GetFeedbackStore = Reflux.createStore({
     this.message = "I could really use your assistance on giving me some career or resume advice. Do you think you could take a couple of minutes and look over this for me?\n\nThanks,\n" + firstName;
     this.shareableLink = null;
     this.inviteType = 'form';
+    this.recommendations = [];
+    this.useDummyData = false;
   },
   onSetInviteType: function(type){
     this.inviteType = type;
@@ -201,6 +203,104 @@ var GetFeedbackStore = Reflux.createStore({
     this.message = message;
     this.update();
   },
+  onGetRecommendations: function(){
+    var url = urlTemplate
+      .parse(endpoints.togglz)
+      .expand({feature: 'DUMMY_SUGGESTIONS'});
+
+    request
+      .get(url)
+      .end(function(err, res) {
+        this.useDummyData = res.body;
+        this.update();
+
+        if(this.useDummyData) {
+          this.recommendations = [{
+            userId: 1,
+            firstName: 'David',
+            lastName: 'Greene',
+            tagline: 'Helping People Achieve Greater Careers',
+            avatar: '/images/avatars/1.jpg',
+            is_sponsored: true
+          },
+          {
+            userId: 2,
+            firstName: 'Stefanie',
+            lastName: 'Reyes',
+            tagline: 'Making Change through Strong Leadership',
+            avatar: '/images/avatars/2.jpg',
+            is_sponsored: false
+          },
+          {
+            userId: 3,
+            firstName: 'John',
+            lastName: 'Lee',
+            tagline: 'Aspiring Project Management Technologist',
+            avatar: '/images/avatars/3.jpg',
+            is_sponsored: false
+          },
+          {
+            userId: 4,
+            firstName: 'Jessica',
+            lastName: 'Knight',
+            tagline: 'Executive Team Lead',
+            avatar: '/images/avatars/4.jpg',
+            is_sponsored: false
+          },
+          {
+            userId: 5,
+            firstName: 'Carl',
+            lastName: 'Jensen',
+            tagline: 'Success through Sales',
+            avatar: '/images/avatars/5.jpg',
+            is_sponsored: true
+          }];
+          this.update();
+        }
+        else {
+          request
+            .get(endpoints.getFeedbackSuggestions)
+            .set('Accept', 'application/json')
+            .end(function (err, res) {
+              if(res.ok) {
+                this.recommendations = res.body.recommended;
+              }
+              else {
+                this.recommendations = [];
+              }
+              this.update();
+            }.bind(this));
+        }
+      }.bind(this));
+  },
+  onRequestForFeedback: function(index){
+    var invited_user = this.recommendations[index];
+
+    if(!this.useDummyData){
+    request
+      .post(endpoints.getFeedback)
+      .set(this.tokenHeader, this.tokenValue)
+      .send({
+        csrftoken: this.tokenValue,
+        users: [invited_user],
+        notRegisteredUsers: [],
+        subject: this.subject,
+        message: this.message
+      })
+      .end(function (err, res) {
+        if (res.status === 200) {
+          //Remove from recommendations
+          this.recommendations.splice(index, 1);
+          this.update();
+        }
+      }.bind(this));
+    }
+    else {
+      //Remove from recommendations
+      this.recommendations.splice(index, 1);
+      this.update();
+    }
+  },
   update: function () {
     this.trigger({
       users: this.users,
@@ -215,6 +315,8 @@ var GetFeedbackStore = Reflux.createStore({
       processing: this.processing,
       shareableLink: this.shareableLink,
       inviteType: this.inviteType,
+      recommendations: this.recommendations,
+      useDummyData: this.useDummyData
     });
   },
   getInitialState: function () {
@@ -232,6 +334,8 @@ var GetFeedbackStore = Reflux.createStore({
       processing: this.processing,
       shareableLink: this.shareableLink,
       inviteType: this.inviteType,
+      recommendations: this.recommendations,
+      useDummyData: this.useDummyData
     }
   }
 });

@@ -3,6 +3,10 @@ var TestUtils = React.addons.TestUtils;
 var Header = require('../index');
 
 describe('header', function() {
+	beforeEach(function () {
+    this.server = sinon.fakeServer.create();
+    this.server.respondWith("GET", "/togglz-feature//PRINTING//is-active.json", [200, { "Content-Type": "application/json" }, 'true']);
+  });
 
   it('should have logo', function() {
     var header = TestUtils.renderIntoDocument(<Header />);
@@ -35,4 +39,3 @@ describe('header', function() {
   // });
 
 });
-

@@ -22,7 +22,9 @@ body {
   min-height: 100%;
   height: auto !important;
   height: 100%;
-  margin: 2.5em auto -2.85em;
+  margin: 0 auto -2.85em;
+  padding-top: 2.5em;
+  box-sizing: border-box;
 
   &:after {
     content: '';

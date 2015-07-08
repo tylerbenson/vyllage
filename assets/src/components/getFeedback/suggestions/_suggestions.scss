@@ -1,0 +1,224 @@
+.suggestions {
+	& > .container {
+		.content {
+			padding: 0.5em 2em;
+		}
+	}
+}
+.suggestion-group {
+	margin: 2em 0;
+	text-align: center;
+
+	.empty {
+		font-size: 0.9em !important;
+		line-height: 1.4;
+		max-width: 540px;
+		margin: auto;
+		padding: 2em !important;
+	}
+
+	.title {
+		color: $secondary-color;
+		margin-bottom: 1em;
+		padding: 0 0.5em;
+		text-align: left;
+	}
+
+  .view-more {
+    background-color: transparent;
+    border-radius: 2em;
+    border-color: $banner-background;
+    display: block;
+    font-size: 0.8em;
+    margin: 2em auto 0 auto;
+    padding: 0.5em 1.5em;
+
+    i, span {
+	    color: $banner-background;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: $banner-background;
+      border-color: $banner-background;
+      i, span {
+		    color: $inverted-text-color;
+	    }
+    }
+
+    &:active {
+      background-color: darken($banner-background, 5%);
+      border-color: darken($banner-background, 5%);
+    }
+  }
+}
+.suggestion {
+	border: lighten($secondary-color, 40%) solid 2px;
+	border-radius: 3px;
+	box-sizing: border-box;
+	display: inline-block;
+	min-width: 160px;
+	margin: 0.5em;
+	max-width: 185px;
+	padding: 1em 0.5em;
+	text-align: center;
+	width: 25%;
+
+	&.sponsored {
+		background-color: lighten($warning-color, 43%);
+		border-color: lighten($warning-color, 39%);
+	}
+
+	.avatar {
+		background-image: url(../images/user.png);
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+		border-radius: 50%;
+		display: inline-block;
+		height: 64px;
+		width: 64px;
+	}
+	.name {
+		font-size: 0.85em;
+		font-weight: bold;
+		margin-top: 0.5em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.tagline {
+		color: $secondary-color;
+		font-size: 0.75em;
+		margin-bottom: 0.75em;
+		display: block; /* Fallback for non-webkit */
+		display: -webkit-box;
+	  max-width: 400px;
+	  height: 3em;
+	  max-height: 3em;
+	  margin: .25em auto .75em;
+	  font-size: .65em;
+	  -webkit-line-clamp: 2;
+	  -webkit-box-orient: vertical;
+	  line-height: 1.4;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	button {
+		font-size: 0.7em;
+
+		&.success {
+			display: none;
+			border-color: $success-color;
+			background: $inverted-text-color !important;
+
+			i, span {
+				color: $success-color;
+			}
+		}
+	}
+
+	&.suggestion-leave {
+	  opacity: 1;
+	  transition: opacity .8s ease-out .4s;
+
+	  button {
+	  	&.get-feedback {
+	  		display: none;
+	  	}
+	  	&.success {
+	  		display: inline-block;
+	  	}
+	  }
+	}
+
+	&.suggestion-leave.suggestion-leave-active {
+	  opacity: 0.01;
+	}
+}
+.suggestion-sidebar {
+	.empty {
+		font-size: 0.8em !important;
+		line-height: 1.4;
+		margin: auto;
+		padding: 2em 1em 2.5em 1em !important;
+	}
+	.title {
+		padding: 0.65em 1em;
+	  font-size: 0.8em;
+	  text-transform: uppercase;
+	  color: $secondary-color;
+	  border-bottom: rgba(0,0,0,0.05) solid 1px;
+	}
+	.suggestion {
+		@include cf();
+		border: none;
+		border-bottom: rgba(0,0,0,0.05) solid 1px;
+		border-radius: 0;
+		display: block;
+		margin: 0;
+		padding: 0.65em 1em;
+		width: 100%;
+		max-width: none;
+
+		.avatar {
+			@include column(0.2);
+			height: 48px;
+			width: 48px;
+		}
+		.info {
+			@include column(0.6);
+			font-size: 0.85em;
+			text-align: left;
+		}
+		.name {
+			margin-top: 0;
+			text-align: left;
+			padding: 0 0.5em;
+		}
+		.tagline {
+			height: auto;
+			margin-bottom: 0.25em;
+			padding: 0 0.5em;
+			text-align: left;
+			font-size: 0.75em;
+		}
+		.actions {
+			@include column(0.14);
+		}
+		button {
+		  border-radius: 50%;
+		  font-size: .9em;
+		  margin: .8em 0 0;
+		  text-align: left;
+		  padding: .125em .3025em;
+
+			i {
+				margin: 0;
+			}
+			span {
+				display: none;
+			}
+		}
+	}
+
+	.view-more {
+		border-radius: 0;
+		display: block;
+		text-align: center;
+		width: 100%;
+		margin: 0;
+		padding: 0.75em 1em;
+		background: $inverted-text-color;
+		font-size: 0.7em;
+		font-weight: bold;
+
+		span {
+			color: $banner-background;
+		}
+
+		&:hover {
+			background: $section-footer-background;
+		}
+	}
+}
