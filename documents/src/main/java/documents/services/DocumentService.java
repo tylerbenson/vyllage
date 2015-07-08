@@ -365,14 +365,31 @@ public class DocumentService {
 		return false;
 	}
 
+	/**
+	 * Returns all the permissions for a given document.
+	 * 
+	 * @param documentId
+	 * @return
+	 */
 	public List<DocumentAccess> getDocumentPermissions(Long documentId) {
 		return documentAccessRepository.get(documentId);
 	}
 
+	/**
+	 * Returns all the user's document access permissions he granted.
+	 * 
+	 * @param user
+	 * @return
+	 */
 	public List<DocumentAccess> getUserDocumentsPermissions(User user) {
 		return documentAccessRepository.getFromUserDocuments(user);
 	}
 
+	/**
+	 * Revokes a documentAccess, deleting it.
+	 * 
+	 * @param documentAccess
+	 */
 	public void deleteDocumentAccess(DocumentAccess documentAccess) {
 		documentAccessRepository.delete(documentAccess);
 	}

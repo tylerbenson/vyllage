@@ -114,7 +114,7 @@ public class DocumentAccessRepository {
 	}
 
 	/**
-	 * Returns all permissions from a given user's documents
+	 * Returns all the user's document access permissions he granted.
 	 * 
 	 * @param user
 	 * @return
