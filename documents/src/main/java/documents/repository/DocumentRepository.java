@@ -10,11 +10,15 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.Record2;
 import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -240,6 +244,21 @@ public class DocumentRepository implements IRepository<Document> {
 			allDocs.add(recordToDocument(documentsRecord));
 
 		return allDocs;
+	}
+
+	public Map<Long, String> getTaglines(List<Long> userIds) {
+		Result<Record> fetch = sql.select().from(DOCUMENTS)
+				.where(DOCUMENTS.USER_ID.in(userIds)).fetch();
+
+		if (fetch == null || fetch.isEmpty())
+			return Collections.emptyMap();
+
+		Map<Long, String> taglinesById = new HashMap<>();
+		fetch.stream().forEach(
+				r -> taglinesById.put(r.getValue(DOCUMENTS.USER_ID),
+						r.getValue(DOCUMENTS.TAGLINE)));
+
+		return taglinesById;
 	}
 
 }

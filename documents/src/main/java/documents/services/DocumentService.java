@@ -394,4 +394,8 @@ public class DocumentService {
 		documentAccessRepository.delete(documentAccess);
 	}
 
+	public Map<Long, String> getTaglines(List<Long> userIds) {
+		return documentRepository.getTaglines(userIds);
+	}
+
 }

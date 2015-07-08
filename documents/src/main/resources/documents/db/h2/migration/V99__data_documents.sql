@@ -1,5 +1,7 @@
 
 insert into DOCUMENTS.documents(user_id, visibility, tagline, date_created, last_modified) values(0, true, 'My tagline.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+--Mario
+insert into DOCUMENTS.documents(user_id, visibility, tagline, date_created, last_modified) values(3, true, 'Awesome adventurous plumber.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(123, 1, 0, 1, '{
 	"type": "freeform",

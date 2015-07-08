@@ -274,7 +274,6 @@ public class AccountSettingsController {
 								.collect(Collectors.toList())).stream()
 				.collect(Collectors.groupingBy(AccountNames::getUserId));
 
-		// TODO: add tagline
 		List<DocumentPermission> permissions = documentAccess
 				.stream()
 				.map(da -> {
@@ -292,6 +291,16 @@ public class AccountSettingsController {
 							.getLastName());
 					return dp;
 				}).collect(Collectors.toList());
+
+		Map<String, String> taglines = documentService
+				.getDocumentHeaderTagline(
+						request,
+						permissions.stream().map(p -> p.getUserId())
+								.collect(Collectors.toList()));
+
+		if (taglines != null && !taglines.isEmpty())
+			permissions.forEach(p -> p.setTagline(taglines.getOrDefault(p
+					.getUserId().toString(), "")));
 
 		return permissions;
 	}

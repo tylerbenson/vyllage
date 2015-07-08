@@ -266,6 +266,12 @@ public class ResumeController {
 		return header;
 	}
 
+	@RequestMapping(value = "/header/taglines", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Map<Long, String> getResumeHeaderTagline(
+			@RequestParam final List<Long> userIds) {
+		return documentService.getTaglines(userIds);
+	}
+
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckWriteAccess

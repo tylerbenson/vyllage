@@ -2,7 +2,9 @@ package accounts.service;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -114,6 +116,32 @@ public class DocumentService {
 		if (responseBody != null)
 			return Arrays.asList(responseBody);
 		return Collections.emptyList();
+	}
+
+	public Map<String, String> getDocumentHeaderTagline(
+			HttpServletRequest request, List<Long> userIds) {
+		assert userIds != null && !userIds.isEmpty();
+
+		HttpEntity<Object> entity = createHeader(request);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http")
+				.port(DOCUMENTS_PORT)
+				.host(DOCUMENTS_HOST)
+				.path("/resume/header/taglines")
+				.queryParam(
+						"userIds",
+						userIds.stream().map(Object::toString)
+								.collect(Collectors.joining(",")));
+
+		@SuppressWarnings("unchecked")
+		// RestTemplate returns the key of the map as String.
+		Map<String, String> response = restTemplate.exchange(
+				builder.build().toUriString(), HttpMethod.GET, entity,
+				HashMap.class).getBody();
+
+		return response;
 	}
 
 	protected HttpEntity<Object> createHeader(HttpServletRequest request) {
