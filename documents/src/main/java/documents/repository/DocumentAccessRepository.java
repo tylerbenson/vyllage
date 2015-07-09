@@ -99,6 +99,14 @@ public class DocumentAccessRepository {
 			result.forEach(r -> r.delete());
 	}
 
+	public void delete(Long documentId) {
+		Result<DocumentAccessRecord> result = sql.fetch(DOCUMENT_ACCESS,
+				DOCUMENT_ACCESS.DOCUMENT_ID.eq(documentId));
+
+		if (result != null && result.isNotEmpty())
+			result.forEach(r -> r.delete());
+	}
+
 	/**
 	 * Returns all permissions for a given document.
 	 * 

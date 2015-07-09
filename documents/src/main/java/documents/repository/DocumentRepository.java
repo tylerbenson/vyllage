@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Record2;
@@ -41,8 +43,17 @@ public class DocumentRepository implements IRepository<Document> {
 	@Autowired
 	private DSLContext sql;
 
-	@Autowired
 	private DocumentSectionRepository documentSectionRepository;
+
+	private DocumentAccessRepository documentAccessRepository;
+
+	@Inject
+	public DocumentRepository(
+			DocumentSectionRepository documentSectionRepository,
+			DocumentAccessRepository documentAccessRepository) {
+		this.documentSectionRepository = documentSectionRepository;
+		this.documentAccessRepository = documentAccessRepository;
+	}
 
 	@Override
 	public Document get(Long id) throws ElementNotFoundException {
@@ -176,6 +187,9 @@ public class DocumentRepository implements IRepository<Document> {
 	public void deleteForUser(Long userId) {
 		DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
 				DOCUMENTS.USER_ID.eq(userId));
+
+		documentAccessRepository.delete(existingRecord.getDocumentId());
+
 		existingRecord.delete();
 	}
 
