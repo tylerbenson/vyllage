@@ -212,8 +212,11 @@ public class DocumentRepository implements IRepository<Document> {
 
 	public List<Document> getDocumentByUserAndType(Long userId,
 			DocumentTypeEnum documentTypeEnum) {
-		Result<DocumentsRecord> result = sql.fetch(DOCUMENTS,
-				DOCUMENTS.DOCUMENT_TYPE.contains(documentTypeEnum.name()));
+		Result<DocumentsRecord> result = sql.fetch(
+				DOCUMENTS,
+				DOCUMENTS.USER_ID.eq(userId).and(
+						DOCUMENTS.DOCUMENT_TYPE.contains(documentTypeEnum
+								.name())));
 
 		List<Document> allDocs = new ArrayList<>();
 		for (DocumentsRecord documentsRecord : result)
