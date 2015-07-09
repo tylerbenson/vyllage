@@ -72,7 +72,6 @@ var GetFeedbackStore = Reflux.createStore({
         .post(endpoints.getFeedback)
         .set(this.tokenHeader, this.tokenValue)
         .send({
-          csrftoken: this.tokenValue,
           users: this.users,
           notRegisteredUsers: this.notRegisteredUsers,
           subject: this.subject,

@@ -7,8 +7,6 @@ import lombok.ToString;
 @ToString
 public class AdviceRequest {
 
-	private CSRFToken CSRFToken;
-
 	private List<AccountNames> users;
 
 	private List<NotRegisteredUser> notRegisteredUsers;
@@ -31,14 +29,6 @@ public class AdviceRequest {
 
 	public void setNotRegisteredUsers(List<NotRegisteredUser> notRegisteredUsers) {
 		this.notRegisteredUsers = notRegisteredUsers;
-	}
-
-	public CSRFToken getCSRFToken() {
-		return CSRFToken;
-	}
-
-	public void setCSRFToken(CSRFToken cSRFToken) {
-		CSRFToken = cSRFToken;
 	}
 
 	public String getSubject() {

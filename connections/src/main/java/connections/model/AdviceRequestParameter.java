@@ -20,8 +20,6 @@ public class AdviceRequestParameter {
 
 	private LocalDateTime linkExpirationDate;
 
-	private CSRFToken CSRFToken;
-
 	private String subject;
 
 	private String message;
@@ -73,14 +71,6 @@ public class AdviceRequestParameter {
 
 	public void setLinkExpirationDate(LocalDateTime linkExpirationDate) {
 		this.linkExpirationDate = linkExpirationDate;
-	}
-
-	public CSRFToken getCSRFToken() {
-		return CSRFToken;
-	}
-
-	public void setCSRFToken(CSRFToken cSRFToken) {
-		CSRFToken = cSRFToken;
 	}
 
 	public String getSubject() {

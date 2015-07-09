@@ -115,7 +115,6 @@ public class AdviceRequestController {
 
 		AdviceRequestParameter adviceRequestParameters = new AdviceRequestParameter();
 		adviceRequestParameters.setDocumentId(documentId);
-		adviceRequestParameters.setCSRFToken(adviceRequest.getCSRFToken());
 		adviceRequestParameters
 				.setRegisteredUsersContactData(emailsFromRegisteredUsers);
 		adviceRequestParameters.setNotRegisteredUsers(adviceRequest

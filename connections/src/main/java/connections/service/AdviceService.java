@@ -24,6 +24,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
@@ -256,8 +257,7 @@ public class AdviceService {
 			requestBody.add(linkRequest);
 		}
 
-		HttpEntity<Object> entity = createHeader(requestBody, request,
-				adviceRequest);
+		HttpEntity<Object> entity = createHeader(requestBody, request);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -298,8 +298,7 @@ public class AdviceService {
 			requestBody.add(linkRequest);
 		}
 
-		HttpEntity<Object> entity = createHeader(requestBody, request,
-				adviceRequest);
+		HttpEntity<Object> entity = createHeader(requestBody, request);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -396,9 +395,11 @@ public class AdviceService {
 	}
 
 	protected HttpEntity<Object> createHeader(Object object,
-			HttpServletRequest request, AdviceRequestParameter adviceRequest) {
+			HttpServletRequest request) {
+		CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
+
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("X-CSRF-TOKEN", adviceRequest.getCSRFToken().getValue());
+		headers.set("X-CSRF-TOKEN", token.getToken());
 		headers.set("Cookie", request.getHeader("Cookie"));
 		headers.setContentType(MediaType.APPLICATION_JSON);
 

@@ -15,8 +15,7 @@
 
 ```
     {
-      "csrftoken":"71625f7a-4520-407f-b673-b0ed79e1a678",
- 	    "users":[{"userId":4,"firstName":"aName","middleName":null,"lastName":"aLastName"}],
+ 	  "users":[{"userId":4,"firstName":"aName","middleName":null,"lastName":"aLastName"}],
       "notRegisteredUsers":[{"firstName":"aName","lastName":"aLastName","email":"anemail@gmail.com"}],
       "subject": "subject text"
       "message": "message of request"
