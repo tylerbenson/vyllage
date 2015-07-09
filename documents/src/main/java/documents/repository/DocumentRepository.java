@@ -45,14 +45,10 @@ public class DocumentRepository implements IRepository<Document> {
 
 	private DocumentSectionRepository documentSectionRepository;
 
-	private DocumentAccessRepository documentAccessRepository;
-
 	@Inject
 	public DocumentRepository(
-			DocumentSectionRepository documentSectionRepository,
-			DocumentAccessRepository documentAccessRepository) {
+			DocumentSectionRepository documentSectionRepository) {
 		this.documentSectionRepository = documentSectionRepository;
-		this.documentAccessRepository = documentAccessRepository;
 	}
 
 	@Override
@@ -187,8 +183,6 @@ public class DocumentRepository implements IRepository<Document> {
 	public void deleteForUser(Long userId) {
 		DocumentsRecord existingRecord = sql.fetchOne(DOCUMENTS,
 				DOCUMENTS.USER_ID.eq(userId));
-
-		documentAccessRepository.delete(existingRecord.getDocumentId());
 
 		existingRecord.delete();
 	}
