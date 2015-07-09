@@ -16,12 +16,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import accounts.model.CSRFToken;
 import accounts.model.account.settings.DocumentAccess;
+import accounts.model.link.AbstractDocumentLink;
 import accounts.repository.ElementNotFoundException;
 
 @Service("accounts.DocumentService")
@@ -46,11 +47,10 @@ public class DocumentService {
 	 * @param request
 	 * @param token
 	 */
-	public void deleteUsers(HttpServletRequest request, List<Long> userIds,
-			CSRFToken token) {
+	public void deleteUsers(HttpServletRequest request, List<Long> userIds) {
 		assert userIds != null && !userIds.isEmpty();
 
-		HttpEntity<Object> entity = createHeader(request, token);
+		HttpEntity<Object> entity = createHeader(request);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -144,23 +144,38 @@ public class DocumentService {
 		return response;
 	}
 
+	/**
+	 * Creates document permissions for the given document and user.
+	 * 
+	 * @param doclink
+	 * @param request
+	 */
+	public void createDocumentPermission(HttpServletRequest request,
+			AbstractDocumentLink doclink) {
+		HttpEntity<Object> entity = createHeader(request);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http")
+				.port(DOCUMENTS_PORT)
+				.host(DOCUMENTS_HOST)
+				.path("document/" + doclink.getDocumentId()
+						+ "/permissions/user/" + doclink.getUserId());
+
+		restTemplate.exchange(builder.build().toUriString(), HttpMethod.POST,
+				entity, Void.class);
+
+	}
+
 	protected HttpEntity<Object> createHeader(HttpServletRequest request) {
+		CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Cookie", request.getHeader("Cookie"));
+		headers.set("X-CSRF-TOKEN", token.getToken());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
-		return entity;
-	}
-
-	protected HttpEntity<Object> createHeader(HttpServletRequest request,
-			CSRFToken token) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Cookie", request.getHeader("Cookie"));
-		headers.set("X-CSRF-TOKEN", token.getValue());
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		HttpEntity<Object> entity = new HttpEntity<Object>(headers);
 		return entity;
 	}
 

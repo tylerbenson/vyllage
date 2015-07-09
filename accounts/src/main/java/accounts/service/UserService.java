@@ -32,7 +32,6 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
 import accounts.model.BatchAccount;
-import accounts.model.CSRFToken;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
@@ -504,7 +503,7 @@ public class UserService {
 	 * @throws ServletException
 	 * @throws UserNotFoundException
 	 */
-	public void delete(HttpServletRequest request, Long userId, CSRFToken token)
+	public void delete(HttpServletRequest request, Long userId)
 			throws ServletException, UserNotFoundException {
 		User user = userRepository.get(userId);
 
@@ -512,7 +511,7 @@ public class UserService {
 		userRepository.deleteUser(user.getUsername());
 
 		logger.info("Deleting user documents.");
-		documentService.deleteUsers(request, Arrays.asList(userId), token);
+		documentService.deleteUsers(request, Arrays.asList(userId));
 
 		logger.info("Have a nice day.");
 		request.logout(); // good bye :)
