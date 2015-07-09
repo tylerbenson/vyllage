@@ -51,8 +51,10 @@ public class DocumentAccessRepository {
 								.getDocumentId())));
 
 		// if exists call update instead...
-		if (result != null && result.isNotEmpty())
+		if (result != null && result.isNotEmpty()) {
 			this.update(documentAccess);
+			return;
+		}
 
 		DocumentAccessRecord newRecord = sql.newRecord(DOCUMENT_ACCESS);
 		newRecord.setAccess(documentAccess.getAccess().name());

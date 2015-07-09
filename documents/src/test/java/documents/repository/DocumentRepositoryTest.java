@@ -1,5 +1,8 @@
 package documents.repository;
 
+import java.util.Arrays;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +62,16 @@ public class DocumentRepositoryTest {
 		Assert.assertNull("Document is not null.", document);
 	}
 
+	@Test
+	public void getTaglinesTest() {
+		Map<Long, String> taglines = ((DocumentRepository) repository)
+				.getTaglines(Arrays.asList(3L));
+
+		Assert.assertNotNull(taglines);
+		Assert.assertEquals("Awesome adventurous plumber.", taglines.get(3L));
+
+	}
+
 	private Document generateDocument() {
 		Document doc1 = new Document();
 		doc1.setUserId(0L);
@@ -67,4 +80,5 @@ public class DocumentRepositoryTest {
 		doc1.setDocumentType(DocumentTypeEnum.RESUME.name());
 		return doc1;
 	}
+
 }

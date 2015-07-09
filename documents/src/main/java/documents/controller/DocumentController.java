@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import user.common.User;
 import documents.model.Document;
 import documents.model.DocumentAccess;
+import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
 import documents.services.DocumentService;
 import documents.services.aspect.CheckWriteAccess;
@@ -112,6 +113,23 @@ public class DocumentController {
 	public @ResponseBody List<DocumentAccess> getUserDocumentsPermissions(
 			@AuthenticationPrincipal User user) {
 		return documentService.getUserDocumentsPermissions(user);
+	}
+
+	@RequestMapping(value = "{documentId}/permissions/user/{userId}", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	@CheckWriteAccess
+	public void setUserDocumentsPermission(
+			@PathVariable("documentId") Long documentId,
+			@PathVariable("userId") Long userId,
+			@AuthenticationPrincipal User user) {
+
+		DocumentAccess documentAccess = new DocumentAccess();
+		documentAccess.setDocumentId(documentId);
+		documentAccess.setUserId(userId);
+
+		// We'll support READ permissions for now.
+		documentAccess.setAccess(DocumentAccessEnum.READ);
+		documentService.setUserDocumentsPermissions(user, documentAccess);
 	}
 
 	@RequestMapping(value = "{documentId}/permissions/user/{userId}", method = RequestMethod.DELETE, produces = "application/json")
