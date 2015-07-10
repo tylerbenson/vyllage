@@ -27,6 +27,7 @@ import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
+import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 import documents.services.aspect.CheckWriteAccess;
 
@@ -151,5 +152,22 @@ public class DocumentController {
 			return;
 
 		documentService.deleteDocumentAccess(filtered.get(0));
+	}
+	
+	@RequestMapping(value = "{documentId}/guest-comment", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody boolean areGuestCommentsAllowed(
+			@PathVariable(value = "documentId") Long documentid)
+			throws ElementNotFoundException {
+
+		return documentService.areCommentsAllowed(documentid);
+	}
+
+	@RequestMapping(value = "{documentId}/guest-comment/toggle", method = RequestMethod.POST, produces = "application/json")
+	@ResponseStatus(HttpStatus.OK)
+	public void setGuestCommentsEnabledDisabled(
+			@PathVariable(value = "documentId") Long documentid)
+			throws ElementNotFoundException {
+
+		documentService.toggleCommentsAllowed(documentid);
 	}
 }

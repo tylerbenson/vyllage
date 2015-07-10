@@ -348,6 +348,7 @@ public class DocumentService {
 	}
 
 	/**
+<<<<<<< Upstream, based on origin/master
 	 * Checks that a given user can read or write a given document.
 	 * 
 	 * @param userId
@@ -401,6 +402,24 @@ public class DocumentService {
 	public void setUserDocumentsPermissions(User user,
 			DocumentAccess documentAccess) {
 		documentAccessRepository.create(documentAccess);
+=======
+	 * REturns if comments are allowed for a document.
+	 * 
+	 * @param documentid
+	 * @return
+	 * @throws ElementNotFoundException
+	 */
+	public boolean areCommentsAllowed(Long documentid)
+			throws ElementNotFoundException {
+		return documentRepository.get(documentid).getAllowGuestComments();
+	}
+
+	public void toggleCommentsAllowed(Long documentid)
+			throws ElementNotFoundException {
+		Document document = documentRepository.get(documentid);
+		document.setAllowGuestComments(!document.getAllowGuestComments());
+		documentRepository.save(document);
+>>>>>>> 92e2504 Started guest comments toggle.
 	}
 
 }

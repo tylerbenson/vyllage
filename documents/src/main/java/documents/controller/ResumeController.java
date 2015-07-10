@@ -405,6 +405,10 @@ public class ResumeController {
 			throw e;
 		}
 
+		if (user.isGuest() && !document.getAllowGuestComments())
+			throw new AccessDeniedException(
+					"You are not authorized to comment on this document.");
+
 		// Check user ids before going to DB...
 		// don't notify if the user commenting is the owner of the document...
 		if (!comment.getUserId().equals(user.getUserId())) {
@@ -434,7 +438,22 @@ public class ResumeController {
 			@PathVariable final Long sectionId,
 			@PathVariable final Long commentId,
 			@RequestBody final Comment comment,
-			@AuthenticationPrincipal User user) {
+			@AuthenticationPrincipal User user) throws ElementNotFoundException {
+
+		// to check if we are allowed to comment
+		Document document = null;
+
+		try {
+			document = documentService.getDocument(documentId);
+		} catch (ElementNotFoundException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			throw e;
+		}
+
+		if (user.isGuest() && !document.getAllowGuestComments())
+			throw new AccessDeniedException(
+					"You are not authorized to comment on this document.");
 
 		setCommentData(sectionId, comment, user);
 

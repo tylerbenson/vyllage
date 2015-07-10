@@ -1,1 +1,1 @@
-alter table DOCUMENTS.documents add column allow_guest_comment boolean default true;
+alter table DOCUMENTS.documents add column allow_guest_comments boolean default true;
