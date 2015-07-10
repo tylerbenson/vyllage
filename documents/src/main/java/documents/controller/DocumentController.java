@@ -27,7 +27,6 @@ import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
-import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 import documents.services.aspect.CheckWriteAccess;
 
@@ -106,6 +105,7 @@ public class DocumentController {
 						.collect(Collectors.toList()));
 
 		return documents;
+<<<<<<< Upstream, based on origin/master
 	}
 
 	@RequestMapping(value = "permissions", method = RequestMethod.GET, produces = "application/json")
@@ -169,5 +169,7 @@ public class DocumentController {
 			throws ElementNotFoundException {
 
 		documentService.toggleCommentsAllowed(documentid);
+=======
+>>>>>>> db6cf5e Added documentation. Moved things a bit.
 	}
 }

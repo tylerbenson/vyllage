@@ -386,13 +386,13 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
+	@CheckReadAccess
 	public @ResponseBody Comment saveCommentsForSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@RequestBody final Comment comment,
-			@AuthenticationPrincipal User user) throws ElementNotFoundException {
-
-		setCommentData(sectionId, comment, user);
+			@AuthenticationPrincipal User user) throws AccessDeniedException,
+			ElementNotFoundException {
 
 		// notification
 		Document document = null;
@@ -408,6 +408,8 @@ public class ResumeController {
 		if (user.isGuest() && !document.getAllowGuestComments())
 			throw new AccessDeniedException(
 					"You are not authorized to comment on this document.");
+
+		setCommentData(sectionId, comment, user);
 
 		// Check user ids before going to DB...
 		// don't notify if the user commenting is the owner of the document...
@@ -434,11 +436,13 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
+	@CheckReadAccess
 	public void saveCommentsForComment(@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@PathVariable final Long commentId,
 			@RequestBody final Comment comment,
-			@AuthenticationPrincipal User user) throws ElementNotFoundException {
+			@AuthenticationPrincipal User user) throws AccessDeniedException,
+			ElementNotFoundException {
 
 		// to check if we are allowed to comment
 		Document document = null;
@@ -461,6 +465,24 @@ public class ResumeController {
 			comment.setOtherCommentId(commentId);
 
 		documentService.saveComment(comment);
+	}
+
+	@RequestMapping(value = "{documentId}/guest-comment", method = RequestMethod.GET, produces = "application/json")
+	@CheckReadAccess
+	public @ResponseBody boolean areGuestCommentsAllowed(
+			@PathVariable(value = "documentId") Long documentid)
+			throws ElementNotFoundException {
+
+		return documentService.areCommentsAllowed(documentid);
+	}
+
+	@RequestMapping(value = "{documentId}/guest-comment/toggle", method = RequestMethod.POST, produces = "application/json")
+	@CheckWriteAccess
+	public @ResponseBody boolean setGuestCommentsEnabledDisabled(
+			@PathVariable(value = "documentId") Long documentid)
+			throws ElementNotFoundException {
+
+		return documentService.toggleCommentsAllowed(documentid);
 	}
 
 	private void setCommentData(final Long sectionId, final Comment comment,

@@ -107,11 +107,14 @@ public class DocumentRepository implements IRepository<Document> {
 					.now(ZoneId.of("UTC"))));
 			existingRecord.setVisibility(document.getVisibility());
 			existingRecord.setTagline(document.getTagline());
-			existingRecord.update();
-			document.setLastModified(existingRecord.getLastModified()
-					.toLocalDateTime());
 			existingRecord.setAllowGuestComments(document
 					.getAllowGuestComments());
+
+			existingRecord.update();
+
+			document.setLastModified(existingRecord.getLastModified()
+					.toLocalDateTime());
+
 		}
 
 		logger.info("Saved document: " + document);
