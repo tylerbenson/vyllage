@@ -280,8 +280,6 @@ public class AccountSettingsController {
 					DocumentPermission dp = new DocumentPermission();
 					dp.setUserId(da.getUserId());
 					dp.setDocumentId(da.getDocumentId());
-					dp.setDateCreated(da.getDateCreated());
-					dp.setExpirationDate(da.getExpirationDate());
 					// mapped by id, only has one object
 					dp.setFirstName(names.get(da.getUserId()).get(0)
 							.getFirstName());

@@ -93,7 +93,6 @@ Privacy settings.
 			"middleName":null,
 			"lastName":"Mario",
 			"tagline":"Awesome adventurous plumber.",
-			"dateCreated":[2015,7,9,0,56,59,451000000],
 			"expirationDate":null
 		}
 	]

@@ -1,13 +1,6 @@
 package accounts.model.account.settings;
 
-import java.time.LocalDateTime;
-
 import lombok.ToString;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 @ToString
 public class DocumentPermission {
@@ -19,14 +12,6 @@ public class DocumentPermission {
 	private String middleName;
 	private String lastName;
 	private String tagline;
-
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	private LocalDateTime dateCreated;
-
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	private LocalDateTime expirationDate;
 
 	public Long getDocumentId() {
 		return documentId;
@@ -74,22 +59,6 @@ public class DocumentPermission {
 
 	public void setTagline(String tagline) {
 		this.tagline = tagline;
-	}
-
-	public LocalDateTime getDateCreated() {
-		return dateCreated;
-	}
-
-	public void setDateCreated(LocalDateTime dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-
-	public LocalDateTime getExpirationDate() {
-		return expirationDate;
-	}
-
-	public void setExpirationDate(LocalDateTime expirationDate) {
-		this.expirationDate = expirationDate;
 	}
 
 }
