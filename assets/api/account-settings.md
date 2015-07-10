@@ -61,17 +61,20 @@
 + setting: (String, `firstName`) The name of the setting. (emailUpdates | role | organization | privacy) 
 + Response (application/json)
 
+Email Updates.
 ```
 	["weekly","biweekly","monthly","never"]
 ```
 
 For Users with Student role, only the following values are available.
-
 ```
 	["STUDENT","ALUMNI"]
-	
 ```
 
+Privacy settings. 
+```
+ ["private","public","organization"]
+```
 
 ### Other settings: 
 
