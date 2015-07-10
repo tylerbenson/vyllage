@@ -92,8 +92,7 @@ Privacy settings.
 			"firstName":"Mario",
 			"middleName":null,
 			"lastName":"Mario",
-			"tagline":"Awesome adventurous plumber.",
-			"expirationDate":null
+			"tagline":"Awesome adventurous plumber."
 		}
 	]
 ```
