@@ -186,7 +186,7 @@ configure(dbProjects) {
 	task verifySQLScripts() {
 		FileTree tree = fileTree("src/main/resources/${project.name}/db/pg/migration/").include('**/*.sql')
 		tree.each {File file ->
-			assert file.name.startsWith("V") 
+			assert file.name.matches('^V([0-9])([A-Za-z0-9_]).*$') && file.name.matches('^.*\\.(sql|SQL)$')
 		}
 		
 	}
