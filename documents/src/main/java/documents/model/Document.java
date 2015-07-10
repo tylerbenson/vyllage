@@ -16,6 +16,8 @@ public class Document {
 	// TODO: currently all documents are resume
 	private String documentType = DocumentTypeEnum.RESUME.name();
 
+	private boolean allowGuestComment;
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -70,6 +72,14 @@ public class Document {
 
 	public void setDocumentType(String documentType) {
 		this.documentType = documentType;
+	}
+
+	public boolean isAllowGuestComment() {
+		return allowGuestComment;
+	}
+
+	public void setAllowGuestComment(boolean allowGuestComment) {
+		this.allowGuestComment = allowGuestComment;
 	}
 
 }
