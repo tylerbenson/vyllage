@@ -17,8 +17,8 @@ public class AccountNames {
 		super();
 		this.userId = userId;
 		this.firstName = firstName;
-		this.setMiddleName(middleName);
-		this.setLastName(lastName);
+		this.middleName = middleName;
+		this.lastName = lastName;
 	}
 
 	public Long getUserId() {

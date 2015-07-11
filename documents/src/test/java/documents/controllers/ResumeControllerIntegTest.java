@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -219,8 +220,7 @@ public class ResumeControllerIntegTest {
 				documentSection);
 	}
 
-	// from the aspect
-	@Test(expected = ElementNotFoundException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void updateSectionFailsDocumentNull()
 			throws JsonProcessingException, ElementNotFoundException {
 		generateAndLoginUser();
@@ -405,6 +405,56 @@ public class ResumeControllerIntegTest {
 		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 
 		controller.getResumeHeader(request, documentId, user);
+
+	}
+
+	@Test(expected = AccessDeniedException.class)
+	public void createSectionDenied() throws JsonProcessingException,
+			ElementNotFoundException {
+		User o = Mockito.mock(User.class);
+
+		Authentication authentication = Mockito.mock(Authentication.class);
+		Mockito.when(authentication.getPrincipal()).thenReturn(o);
+		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+		Mockito.when(securityContext.getAuthentication()).thenReturn(
+				authentication);
+		Mockito.when(o.getUserId()).thenReturn(5L);
+		SecurityContextHolder.setContext(securityContext);
+
+		Long documentId = 0L;
+		DocumentSection documentSection = createSection();
+
+		controller.createSection(documentId, documentSection);
+
+	}
+
+	@Test(expected = AccessDeniedException.class)
+	public void updateSectionDenied() throws JsonProcessingException,
+			ElementNotFoundException {
+		generateAndLoginUser();
+
+		Long documentId = 0L;
+		DocumentSection documentSection = createSection();
+
+		DocumentSection createdSection = controller.createSection(documentId,
+				documentSection);
+
+		String newDescription = "Updated!";
+		createdSection.setDescription(newDescription);
+
+		// different user
+		User o = Mockito.mock(User.class);
+
+		Authentication authentication = Mockito.mock(Authentication.class);
+		Mockito.when(authentication.getPrincipal()).thenReturn(o);
+		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+		Mockito.when(securityContext.getAuthentication()).thenReturn(
+				authentication);
+		Mockito.when(o.getUserId()).thenReturn(5L);
+		SecurityContextHolder.setContext(securityContext);
+
+		controller.saveSection(documentId, createdSection.getSectionId(),
+				createdSection);
 
 	}
 

@@ -1,3 +1,7 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 def vJavaLang = '1.8'
 def gradleDir = "${rootProject.rootDir}/gradle"
 ext.javascriptProjects = [ project(':assets') ]
@@ -151,7 +155,8 @@ configure(dbProjects) {
         flywayClean.dependsOn -= testClasses
         flywayMigrate.dependsOn = [
             processResources,
-            processTestResources
+            processTestResources,
+			verifySQLScripts
         ]
     }
 
@@ -178,6 +183,15 @@ configure(dbProjects) {
     generateH2JooqSchemaSource.outputs.dir "$buildDir/generated-src"
     generateH2JooqSchemaSource.dependsOn flywayMigrate
 	
+	
+	task verifySQLScripts() {
+		FileTree tree = fileTree("src/main/resources/${project.name}/db/pg/migration/").include('**/*')
+		tree.each {File file ->
+			assert file.name.matches(~/^V([0-9])([A-Za-z0-9_]).*/) && file.name.endsWith(".sql")
+		}
+		
+	}
+	 
 	//https://stackoverflow.com/questions/18136038/manage-multiple-database-with-the-flyway-migrations-gradle-plugin/18142219#18142219
 	
 	task circlePgTest(type: org.flywaydb.gradle.task.FlywayMigrateTask) {

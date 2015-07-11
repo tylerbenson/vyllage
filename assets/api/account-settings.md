@@ -1,5 +1,5 @@
 # Get all account setting
-## GET /account/setting*
+## GET /account/setting
 + Response (application/json)	
 
 ```
@@ -13,7 +13,7 @@
 ```
 
 # Updates all settings 
-## PUT /account/setting*
+## PUT /account/setting
 + Response (application/json)	
 
 ```
@@ -27,7 +27,7 @@
 ```
 
 # Get account setting
-## GET /account/setting/{setting}*
+## GET /account/setting/{setting}
 + setting: (String, `firstName`) The name of the setting. 
 + Response (application/json)
 
@@ -42,7 +42,7 @@
 ```
 
 # Save account setting 
-## PUT /account/setting/{setting}*
+## PUT /account/setting/{setting}
 + Body (application/json)
 
 ```
@@ -57,34 +57,42 @@
 + Response 200
 
 # Get values for an specific setting.
-## GET /account/setting/{setting}/values*
+## GET /account/setting/{setting}/values
 + setting: (String, `firstName`) The name of the setting. (emailUpdates | role | organization | privacy) 
 + Response (application/json)
 
+Email Updates.
 ```
 	["weekly","biweekly","monthly","never"]
 ```
 
 For Users with Student role, only the following values are available.
-
 ```
 	["STUDENT","ALUMNI"]
-	
 ```
 
+Privacy settings. 
 ```
-	["ADVISOR","ADMIN","STAFF","STUDENT","ALUMNI","GUEST"]
-```
-
-```
-	["University 1","University 2"]
-```
-
-```
-	["private","public","organization"]
+ ["private","public","organization"]
 ```
 
 ### Other settings: 
 
 + emailUpdates (weekly|biweekly|monthly|never) 
-+ **Role and Organization can only be saved using the mass update endpoint.**  
++ **Role and Organization can only be saved using the administration pages.**  
+
+
+# Returns document permissions plus user information.
+## GET /account/document/permissions
+```
+	[
+		{
+			"documentId":0,
+			"userId":3,
+			"firstName":"Mario",
+			"middleName":null,
+			"lastName":"Mario",
+			"tagline":"Awesome adventurous plumber."
+		}
+	]
+```

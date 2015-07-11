@@ -34,11 +34,11 @@ import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
 import user.common.social.SocialSessionEnum;
-import accounts.model.link.EmailDocumentLink;
 import accounts.model.link.DocumentLinkRequest;
+import accounts.model.link.EmailDocumentLink;
 import accounts.model.link.LinkStats;
-import accounts.model.link.SocialDocumentLink;
 import accounts.model.link.SimpleDocumentLinkRequest;
+import accounts.model.link.SocialDocumentLink;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
@@ -110,7 +110,7 @@ public class DocumentLinkController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public @ResponseBody String create(
+	public @ResponseBody String create(HttpServletRequest request,
 			@RequestBody DocumentLinkRequest linkRequest,
 			@AuthenticationPrincipal User user) throws JsonProcessingException,
 			EmailException {
@@ -118,7 +118,7 @@ public class DocumentLinkController {
 		linkRequest.setSendRegistrationMail(true);
 
 		EmailDocumentLink documentLink = documentLinkService.createEmailLink(
-				linkRequest, user);
+				request, linkRequest, user);
 
 		// String json = mapper.writeValueAsString(documentLink);
 
@@ -137,6 +137,7 @@ public class DocumentLinkController {
 	 */
 	@RequestMapping(value = "/create-many", method = RequestMethod.POST)
 	public @ResponseBody Map<String, String> massCreate(
+			HttpServletRequest request,
 			@RequestBody List<DocumentLinkRequest> linkRequest,
 			@AuthenticationPrincipal User user) throws JsonProcessingException,
 			EmailException {
@@ -146,7 +147,7 @@ public class DocumentLinkController {
 		for (DocumentLinkRequest documentLinkRequest : linkRequest) {
 
 			EmailDocumentLink documentLink = documentLinkService
-					.createEmailLink(documentLinkRequest, user);
+					.createEmailLink(request, documentLinkRequest, user);
 
 			// String json = mapper.writeValueAsString(documentLink);
 

@@ -31,7 +31,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,7 +39,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
-import accounts.model.CSRFToken;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangePasswordForm;
@@ -51,7 +49,6 @@ import accounts.service.AccountSettingsService;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
 import accounts.service.contactSuggestion.UserContactSuggestionService;
-import accounts.service.utilities.TokenHelper;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -185,21 +182,8 @@ public class AccountController {
 			@AuthenticationPrincipal User user) throws ServletException,
 			UserNotFoundException {
 
-		CSRFToken token = new CSRFToken();
-		token.setValue(TokenHelper.getToken(request).getToken());
+		userService.delete(request, user.getUserId());
 
-		userService.delete(request, user.getUserId(), token);
-
-		return "user-deleted";
-	}
-
-	@RequestMapping(value = "{userId}/delete", method = RequestMethod.DELETE, produces = "application/json")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public String adminDeleteUser(HttpServletRequest request,
-			@PathVariable Long userId, @RequestBody CSRFToken token)
-			throws ServletException, UserNotFoundException {
-
-		userService.delete(request, userId, token);
 		return "user-deleted";
 	}
 

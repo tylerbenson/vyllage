@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
 import org.springframework.stereotype.Service;
@@ -49,21 +50,26 @@ public class DocumentLinkService {
 
 	private final SharedDocumentRepository sharedDocumentRepository;
 
+	private final DocumentService documentService;
+
 	@Inject
 	public DocumentLinkService(
 			final UserCredentialsRepository userCredentialsRepository,
 			final UserService userService,
 			final RandomPasswordGenerator randomPasswordGenerator,
-			final SharedDocumentRepository sharedDocumentRepository) {
+			final SharedDocumentRepository sharedDocumentRepository,
+			final DocumentService documentService) {
 		super();
 		this.userCredentialsRepository = userCredentialsRepository;
 		this.userService = userService;
 		this.randomPasswordGenerator = randomPasswordGenerator;
 		this.sharedDocumentRepository = sharedDocumentRepository;
+		this.documentService = documentService;
 	}
 
-	public EmailDocumentLink createEmailLink(DocumentLinkRequest linkRequest,
-			User loggedInUser) throws EmailException {
+	public EmailDocumentLink createEmailLink(HttpServletRequest request,
+			DocumentLinkRequest linkRequest, User loggedInUser)
+			throws EmailException {
 
 		User user = null;
 		if (userService.userExists(linkRequest.getEmail()))
@@ -81,6 +87,7 @@ public class DocumentLinkService {
 				.getRandomString(DOCUMENT_SHORT_URL_LENGTH));
 
 		sharedDocumentRepository.create(doclink);
+		documentService.createDocumentPermission(request, doclink);
 
 		return doclink;
 	}

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,8 +24,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import documents.model.Document;
+import documents.model.DocumentAccess;
+import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
 import documents.services.DocumentService;
+import documents.services.aspect.CheckWriteAccess;
 
 @Controller
 @RequestMapping("document")
@@ -44,7 +46,6 @@ public class DocumentController {
 
 	@RequestMapping(value = "delete", method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@PreAuthorize("hasAuthority('ADMIN')")
 	public void delete(HttpServletRequest request,
 			@RequestParam(value = "userIds") List<Long> userIds)
 			throws AccessDeniedException {
@@ -104,5 +105,51 @@ public class DocumentController {
 						.collect(Collectors.toList()));
 
 		return documents;
+	}
+
+	@RequestMapping(value = "permissions", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<DocumentAccess> getUserDocumentsPermissions(
+			@AuthenticationPrincipal User user) {
+		return documentService.getUserDocumentsPermissions(user);
+	}
+
+	@RequestMapping(value = "{documentId}/permissions/user/{userId}", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	@CheckWriteAccess
+	public void setUserDocumentsPermission(
+			@PathVariable("documentId") Long documentId,
+			@PathVariable("userId") Long userId,
+			@AuthenticationPrincipal User user) {
+
+		DocumentAccess documentAccess = new DocumentAccess();
+		documentAccess.setDocumentId(documentId);
+		documentAccess.setUserId(userId);
+
+		// We'll support READ permissions for now.
+		documentAccess.setAccess(DocumentAccessEnum.READ);
+		documentService.setUserDocumentsPermissions(user, documentAccess);
+	}
+
+	@RequestMapping(value = "{documentId}/permissions/user/{userId}", method = RequestMethod.DELETE, produces = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	@CheckWriteAccess
+	public void removePermissions(
+			@PathVariable(value = "documentId") Long documentId,
+			@PathVariable(value = "userId") Long userId) {
+
+		List<DocumentAccess> access = documentService
+				.getDocumentPermissions(documentId);
+
+		if (access == null || access.isEmpty())
+			return;
+
+		List<DocumentAccess> filtered = access.stream()
+				.filter(f -> f.getUserId().equals(userId))
+				.collect(Collectors.toList());
+
+		if (filtered == null || filtered.isEmpty())
+			return;
+
+		documentService.deleteDocumentAccess(filtered.get(0));
 	}
 }

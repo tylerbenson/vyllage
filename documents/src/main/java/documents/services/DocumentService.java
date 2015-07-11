@@ -8,10 +8,10 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import user.common.User;
@@ -21,9 +21,12 @@ import com.newrelic.api.agent.NewRelic;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
+import documents.model.DocumentAccess;
 import documents.model.DocumentSection;
+import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
 import documents.repository.CommentRepository;
+import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
@@ -42,23 +45,38 @@ public class DocumentService {
 	private final Logger logger = Logger.getLogger(DocumentService.class
 			.getName());
 
-	@Autowired
 	private DocumentRepository documentRepository;
 
-	@Autowired
 	private DocumentSectionRepository documentSectionRepository;
 
-	@Autowired
 	private CommentRepository commentRepository;
 
-	@Autowired
+	@SuppressWarnings("unused")
 	private SuggestionRepository suggestionRepository;
 
-	@Autowired
 	private AccountService accountService;
 
-	@Autowired
 	private OrderSectionValidator orderSectionValidator;
+
+	private DocumentAccessRepository documentAccessRepository;
+
+	@Inject
+	public DocumentService(DocumentRepository documentRepository,
+			DocumentSectionRepository documentSectionRepository,
+			CommentRepository commentRepository,
+			SuggestionRepository suggestionRepository,
+			AccountService accountService,
+			OrderSectionValidator orderSectionValidator,
+			DocumentAccessRepository documentAccessRepository) {
+		super();
+		this.documentRepository = documentRepository;
+		this.documentSectionRepository = documentSectionRepository;
+		this.commentRepository = commentRepository;
+		this.suggestionRepository = suggestionRepository;
+		this.accountService = accountService;
+		this.orderSectionValidator = orderSectionValidator;
+		this.documentAccessRepository = documentAccessRepository;
+	}
 
 	public Document saveDocument(Document document) {
 		logger.info("Saving document " + document);
@@ -313,16 +331,76 @@ public class DocumentService {
 	 * 
 	 * @param user
 	 * @param documentId
-	 * @return
+	 * @return true | false
 	 */
 	public boolean existsForUser(User user, Long documentId) {
 		return documentRepository.existsForUser(user, documentId);
+	}
+
+	public boolean exists(Long documentId) {
+		return documentRepository.exists(documentId);
 	}
 
 	public List<Document> getDocumentByUserAndType(Long userId,
 			DocumentTypeEnum documentTypeEnum) {
 		return documentRepository.getDocumentByUserAndType(userId,
 				documentTypeEnum);
+	}
+
+	/**
+	 * Checks that a given user can read or write a given document.
+	 * 
+	 * @param userId
+	 * @param documentId
+	 * @param access
+	 * @return true | false
+	 */
+	public boolean checkAccess(Long userId, Long documentId,
+			DocumentAccessEnum access) {
+		Optional<DocumentAccess> documentAccess = documentAccessRepository.get(
+				userId, documentId);
+
+		if (documentAccess.isPresent())
+			return documentAccess.get().checkAccess(access);
+		return false;
+	}
+
+	/**
+	 * Returns all the permissions for a given document.
+	 * 
+	 * @param documentId
+	 * @return
+	 */
+	public List<DocumentAccess> getDocumentPermissions(Long documentId) {
+		return documentAccessRepository.get(documentId);
+	}
+
+	/**
+	 * Returns all the user's document access permissions he granted.
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public List<DocumentAccess> getUserDocumentsPermissions(User user) {
+		return documentAccessRepository.getFromUserDocuments(user);
+	}
+
+	/**
+	 * Revokes a documentAccess, deleting it.
+	 * 
+	 * @param documentAccess
+	 */
+	public void deleteDocumentAccess(DocumentAccess documentAccess) {
+		documentAccessRepository.delete(documentAccess);
+	}
+
+	public Map<Long, String> getTaglines(List<Long> userIds) {
+		return documentRepository.getTaglines(userIds);
+	}
+
+	public void setUserDocumentsPermissions(User user,
+			DocumentAccess documentAccess) {
+		documentAccessRepository.create(documentAccess);
 	}
 
 }

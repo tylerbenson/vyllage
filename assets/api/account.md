@@ -39,24 +39,7 @@
 
 # Delete a user account and remove his documents.
 ## DELETE /account/delete
-+ Parameters
-	++ Body:
-```
-		{"value" : _csfr.token}
-``` 
 + Response 200
-The csfr token value is required to use the service in Documents.
-
-# Delete a user account and remove his documents.
-## DELETE /account/{userId}/delete
-+ Parameters
-	++ userId  (string, `1`) - The id of the user.
-	++ Body:
-```
-		{"value" : _csfr.token}
-``` 
-+ Response 200 (txt/html) - user-deleted.html
-The csfr token value is required to use the service in Documents.
 
 
 # Ping to prevent sessions expiration.

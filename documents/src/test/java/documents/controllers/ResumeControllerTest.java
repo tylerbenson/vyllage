@@ -16,7 +16,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import documents.controller.ResumeController;
 import documents.files.pdf.ResumePdfService;
-import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentSection;
@@ -76,8 +75,6 @@ public class ResumeControllerTest {
 	@Test
 	public void getSectionFromResumeTest() throws ElementNotFoundException {
 
-		accountNamesMock();
-
 		Mockito.when(documentService.getDocumentSection(124L)).thenReturn(
 				DocumentSection.fromJSON(SECTION_124));
 
@@ -88,24 +85,11 @@ public class ResumeControllerTest {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	private void accountNamesMock() {
-		List<AccountNames> accountNames = new ArrayList<>();
-		AccountNames ac = Mockito.mock(AccountNames.class);
-		accountNames.add(ac);
-
-		Mockito.when(
-				accountService.getNamesForUsers(Mockito.anyList(),
-						Mockito.anyObject())).thenReturn(accountNames);
-	}
-
 	// resume/0/section
 	@Test
 	public void getAllSectionsFromResumeTest() throws ElementNotFoundException {
 
 		long documentId = 0;
-
-		accountNamesMock();
 
 		Mockito.when(documentService.getDocumentSections(documentId))
 				.thenReturn(
@@ -139,11 +123,9 @@ public class ResumeControllerTest {
 
 	// resume/0/section/1000
 	@SuppressWarnings("unchecked")
-	// @Test(expected = ElementNotFoundException.class)
 	@Test
 	public void getSectionFromResumeNotFoundTest()
 			throws ElementNotFoundException {
-		accountNamesMock();
 
 		long documentSectionId = -1;
 
