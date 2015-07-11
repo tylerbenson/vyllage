@@ -1,0 +1,1 @@
+alter table DOCUMENTS.documents add column allow_guest_comments boolean default true;

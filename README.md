@@ -31,7 +31,7 @@ cp *.jar "$JAVA_HOME"/jre/lib/security
 ---
 To run http server without gulp optimizations
 
-```
+``` 
 cd assets
 npm install
 npm run watch &

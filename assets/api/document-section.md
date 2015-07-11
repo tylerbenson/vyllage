@@ -104,7 +104,7 @@
 ```
 
 #Save Comment for a Section
-## POST resume/{documentId}/section/{sectionId}/comment
+## POST /resume/{documentId}/section/{sectionId}/comment
 + Parameters
   + documentId (string, `1`) - The id of the document.
   + sectionId (string, `1`) - The id of the section. 
@@ -124,7 +124,7 @@
  + Response 200
 
 #Save Comment in response to another comment
-## POST resume/{documentId}/section/{sectionId}/comment/{commentId}
+## POST /resume/{documentId}/section/{sectionId}/comment/{commentId}
 + Parameters
   + documentId (string, `1`) - The id of the document.
   + sectionId (string, `1`) - The id of the section. 
@@ -146,7 +146,7 @@
  + Response 200
 
 # Change a document's sections positions
-## PUT resume/{documentId}/section-order
+## PUT /resume/{documentId}/section-order
 + Parameters 
   + documentId (string, `1`) - The id of the document.
 +Body, sectionIds in their intended order. The position will be derived from their position in the array.  
@@ -156,3 +156,19 @@
 ```
 + Response 200 (application/json)
 
+
+# Check if guests can post comments.
+## GET /resume/{documentId}/guest-comment
++ Parameters 
+  + documentId (string, `1`) - The id of the document.
+
++ Body response (true|false)
+
+# Toggle between allowing guests comments or not
+## POST /resume/{documentId}/guest-comment/toggle
++ Parameters 
+  + documentId (string, `1`) - The id of the document.
+
++ Body response (true|false)
+
+  

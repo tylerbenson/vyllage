@@ -105,6 +105,7 @@ public class DocumentController {
 						.collect(Collectors.toList()));
 
 		return documents;
+<<<<<<< Upstream, based on origin/master
 	}
 
 	@RequestMapping(value = "permissions", method = RequestMethod.GET, produces = "application/json")
@@ -151,5 +152,24 @@ public class DocumentController {
 			return;
 
 		documentService.deleteDocumentAccess(filtered.get(0));
+	}
+	
+	@RequestMapping(value = "{documentId}/guest-comment", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody boolean areGuestCommentsAllowed(
+			@PathVariable(value = "documentId") Long documentid)
+			throws ElementNotFoundException {
+
+		return documentService.areCommentsAllowed(documentid);
+	}
+
+	@RequestMapping(value = "{documentId}/guest-comment/toggle", method = RequestMethod.POST, produces = "application/json")
+	@ResponseStatus(HttpStatus.OK)
+	public void setGuestCommentsEnabledDisabled(
+			@PathVariable(value = "documentId") Long documentid)
+			throws ElementNotFoundException {
+
+		documentService.toggleCommentsAllowed(documentid);
+=======
+>>>>>>> db6cf5e Added documentation. Moved things a bit.
 	}
 }

@@ -402,5 +402,27 @@ public class DocumentService {
 			DocumentAccess documentAccess) {
 		documentAccessRepository.create(documentAccess);
 	}
+	/**
+	 * Returns if comments are allowed for a document.
+	 * 
+	 * @param documentid
+	 * @return
+	 * @throws ElementNotFoundException
+	 */
+	public boolean areCommentsAllowed(Long documentid)
+			throws ElementNotFoundException {
+		return documentRepository.get(documentid).getAllowGuestComments();
+	}
+
+	public boolean toggleCommentsAllowed(Long documentid)
+			throws ElementNotFoundException {
+		Document document = documentRepository.get(documentid);
+
+		boolean newValue = !document.getAllowGuestComments();
+		document.setAllowGuestComments(newValue);
+		documentRepository.save(document);
+
+		return newValue;
+	}
 
 }

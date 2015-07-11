@@ -75,21 +75,6 @@ public class DocumentRepository implements IRepository<Document> {
 		return allDocs;
 	}
 
-	private Document recordToDocument(DocumentsRecord documentsRecord) {
-		Document document = new Document();
-
-		document.setDocumentId(documentsRecord.getDocumentId());
-		document.setUserId(documentsRecord.getUserId());
-		document.setDateCreated(documentsRecord.getDateCreated()
-				.toLocalDateTime());
-		document.setLastModified(documentsRecord.getLastModified()
-				.toLocalDateTime());
-		document.setVisibility(documentsRecord.getVisibility());
-		document.setTagline(documentsRecord.getTagline());
-		document.setDocumentType(documentsRecord.getDocumentType());
-		return document;
-	}
-
 	@Override
 	public Document save(Document document) {
 
@@ -98,7 +83,6 @@ public class DocumentRepository implements IRepository<Document> {
 
 		if (existingRecord == null) {
 			DocumentsRecord newRecord = sql.newRecord(DOCUMENTS);
-
 			newRecord.setUserId(document.getUserId());
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
@@ -114,6 +98,7 @@ public class DocumentRepository implements IRepository<Document> {
 					.toLocalDateTime());
 			document.setLastModified(newRecord.getLastModified()
 					.toLocalDateTime());
+			newRecord.setAllowGuestComments(document.getAllowGuestComments());
 
 		} else {
 
@@ -122,9 +107,14 @@ public class DocumentRepository implements IRepository<Document> {
 					.now(ZoneId.of("UTC"))));
 			existingRecord.setVisibility(document.getVisibility());
 			existingRecord.setTagline(document.getTagline());
+			existingRecord.setAllowGuestComments(document
+					.getAllowGuestComments());
+
 			existingRecord.update();
+
 			document.setLastModified(existingRecord.getLastModified()
 					.toLocalDateTime());
+
 		}
 
 		logger.info("Saved document: " + document);
@@ -267,6 +257,22 @@ public class DocumentRepository implements IRepository<Document> {
 						r.getValue(DOCUMENTS.TAGLINE)));
 
 		return taglinesById;
+	}
+	
+	private Document recordToDocument(DocumentsRecord documentsRecord) {
+		Document document = new Document();
+
+		document.setDocumentId(documentsRecord.getDocumentId());
+		document.setUserId(documentsRecord.getUserId());
+		document.setDateCreated(documentsRecord.getDateCreated()
+				.toLocalDateTime());
+		document.setLastModified(documentsRecord.getLastModified()
+				.toLocalDateTime());
+		document.setVisibility(documentsRecord.getVisibility());
+		document.setTagline(documentsRecord.getTagline());
+		document.setDocumentType(documentsRecord.getDocumentType());
+		document.setAllowGuestComments(documentsRecord.getAllowGuestComments());
+		return document;
 	}
 
 }
