@@ -5,6 +5,10 @@ footer {
     float: left;
     font-size: 0.85em;
     margin-right: 1em;
+
+    span {
+      display: none;
+    }
   }
 
   nav {
