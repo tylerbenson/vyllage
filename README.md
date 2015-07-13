@@ -3,7 +3,7 @@
 # Vyllage
 
 ## Initial Setup
-* Install Java 8, version 1.8._045 or greater.
+* Install Java 8, version 1.8.0_45 or greater.
 * Install Node.js
 * Install Java JCE 8
 
