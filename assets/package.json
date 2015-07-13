@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Static assets for project, bundled into a WebJar format.",
   "dependencies": {
+    "bluebird": "^2.9.33",
     "classnames": "^1.2.0",
     "lodash.assign": "^3.0.0",
     "lodash.difference": "^3.1.0",
