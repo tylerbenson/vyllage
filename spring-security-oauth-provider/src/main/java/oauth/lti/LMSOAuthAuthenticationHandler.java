@@ -53,7 +53,7 @@ public class LMSOAuthAuthenticationHandler implements OAuthAuthenticationHandler
             authorities.add(learnerGA);
         }
 
-        Principal principal = new oauth.model.service.LMSOAuthAuthenticationHandler.NamedOAuthPrincipal(username, authorities,
+        Principal principal = new oauth.model.service.LMSAuthenticationHandler.NamedOAuthPrincipal(username, authorities,
                 authentication.getConsumerCredentials().getConsumerKey(),
                 authentication.getConsumerCredentials().getSignature(),
                 authentication.getConsumerCredentials().getSignatureMethod(),

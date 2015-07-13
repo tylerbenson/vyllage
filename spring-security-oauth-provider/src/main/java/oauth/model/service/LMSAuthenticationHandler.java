@@ -21,9 +21,9 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Component
-public class LMSOAuthAuthenticationHandler implements OAuthAuthenticationHandler {
+public class LMSAuthenticationHandler implements OAuthAuthenticationHandler {
 
-    final static Logger log = LoggerFactory.getLogger(LMSOAuthAuthenticationHandler.class);
+    final static Logger log = LoggerFactory.getLogger(LMSAuthenticationHandler.class);
 
     public static SimpleGrantedAuthority userGA = new SimpleGrantedAuthority(Contant.ROLE_USER);
     public static SimpleGrantedAuthority adminGA = new SimpleGrantedAuthority(Contant.ROLE_ADMIN);
