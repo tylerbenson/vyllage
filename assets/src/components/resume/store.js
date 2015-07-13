@@ -31,7 +31,8 @@ module.exports = Reflux.createStore({
       },
       sections: [],
       sectionOrder: ['career goal', 'experience', 'education', 'skills'],
-      isNavOpen: false
+      isNavOpen: false,
+      isEmptyResumeModalOpen: false
     };
   },
   getMaxSectionPostion: function () {
@@ -281,6 +282,14 @@ module.exports = Reflux.createStore({
   },
   onToggleNav: function() {
     this.resume.isNavOpen = !this.resume.isNavOpen;
+    this.trigger(this.resume);
+  },
+  onCloseEmptyResumeModal: function () {
+    this.resume.isEmptyResumeModalOpen = false;
+    this.trigger(this.resume);
+  },
+  onOpenEmptyResumeModal: function () {
+    this.resume.isEmptyResumeModalOpen = true;
     this.trigger(this.resume);
   },
   getInitialState: function () {
