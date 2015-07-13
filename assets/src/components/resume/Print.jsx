@@ -42,7 +42,7 @@ var Print = React.createClass({
           </div>
           <div className="footer">
             <button onClick={this.closeModal} className="small inverted">
-              <i className="ion-trash-a"></i>
+              <i className="ion-checkmark"></i>
               Okay
             </button>
           </div>
