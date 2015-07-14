@@ -22,6 +22,7 @@ public class LMSOAuthProviderProcessingFilter extends ProtectedResourceProcessin
         setConsumerDetailsService(oAuthConsumerDetailsService);
         setNonceServices(oAuthNonceServices);
         setTokenServices(oAuthProviderTokenServices);
+        
     }
 
     @Override
@@ -30,7 +31,7 @@ public class LMSOAuthProviderProcessingFilter extends ProtectedResourceProcessin
     	if (!(servletRequest instanceof HttpServletRequest)) {
             throw new IllegalStateException("LTI request MUST be an HttpServletRequest (cannot only be a ServletRequest)");
         }
-        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+    	HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         LMSRequest ltiRequest = new LMSRequest(httpServletRequest); 
         httpServletRequest.setAttribute("LTI", true); 
         httpServletRequest.setAttribute("lti_valid", ltiRequest.isComplete()); 

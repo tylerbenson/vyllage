@@ -62,6 +62,7 @@ public class LMSRequest {
 
 
     public static synchronized LMSRequest getInstance() {
+    	
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest req = sra.getRequest();
         if (req == null) {
@@ -70,9 +71,6 @@ public class LMSRequest {
         LMSRequest ltiRequest = (LMSRequest) req.getAttribute(LMSRequest.class.getName());
         if (ltiRequest == null) {
             ltiRequest = new LMSRequest(req);
-        }
-        if (ltiRequest == null) {
-            throw new IllegalStateException("Invalid LTI request");
         }
         return ltiRequest;
     }
@@ -95,6 +93,7 @@ public class LMSRequest {
     }
 
     public boolean processRequestParameters(HttpServletRequest request) {
+    	
         if (request != null && this.httpServletRequest != request) {
             this.httpServletRequest = request;
         }
@@ -102,7 +101,7 @@ public class LMSRequest {
         ltiConsumerKey = getParam(LTI_CONSUMER_KEY);
         ltiLinkId = getParam(LTI_LINK_ID);
         ltiUserId = getParam(LTI_USER_ID);
-        complete = checkCompleteLTIRequest(false);
+        complete = checkCompleteLTIRequest(true);
         
         ltiUserEmail = getParam(LTI_USER_EMAIL);
         rawUserRoles = getParam(LTI_USER_ROLES);
@@ -169,6 +168,7 @@ public class LMSRequest {
     }
 
     public static String makeLTICompositeKey(HttpServletRequest request, String sessionSalt) {
+    	
         if (StringUtils.isBlank(sessionSalt)) {
             sessionSalt = "A7k254A0itEuQ9ndKJuZ";
         }

@@ -23,9 +23,15 @@ public class LMSConsumerDetailsService implements ConsumerDetailsService {
 
     @Override
     public ConsumerDetails loadConsumerByConsumerKey(String consumerKey) throws OAuthException {
+    	
         consumerKey = StringUtils.trimToNull(consumerKey);
         BaseConsumerDetails cd;
+        
+        //TODO: Read the key and secret value from properties file 
+        //LMSKey ltiKey = new LMSKey(environment.getProperty(Contant.OAUTH_KEY), environment.getProperty(Contant.OAUTH_SECRET)) ;
+        
         LMSKey ltiKey = new LMSKey(Contant.OAUTH_KEY, Contant.OAUTH_SECRET) ;
+        
         cd = new BaseConsumerDetails();
         cd.setConsumerKey(consumerKey);
         cd.setSignatureSecret(new SharedConsumerSecretImpl(ltiKey.getSecret()));

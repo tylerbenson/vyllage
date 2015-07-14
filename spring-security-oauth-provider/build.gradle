@@ -15,5 +15,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("javax.ws.rs:jsr311-api:0.11")
     compile("org.apache.commons:commons-lang3:3.0")
+    compile("javax.inject:javax.inject:1")
     
 }

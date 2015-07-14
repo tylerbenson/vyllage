@@ -29,12 +29,12 @@ public class LMSOAuthAuthenticationHandler implements OAuthAuthenticationHandler
 
     @Override
     public Authentication createAuthentication(HttpServletRequest request, ConsumerAuthentication authentication, OAuthAccessProviderToken authToken) {
-        Collection<GrantedAuthority> authorities = new HashSet<>(authentication.getAuthorities());
+    	
+    	Collection<GrantedAuthority> authorities = new HashSet<>(authentication.getAuthorities());
         LMSRequest ltiRequest = (LMSRequest) request.getAttribute(LMSRequest.class.getName());
         if (ltiRequest == null) {
             throw new IllegalStateException("Cannot create authentication for LTI because the LTIRequest is null");
         }
-        
         String username = ltiRequest.getLtiUserId();
         if (StringUtils.isBlank(username)) {
             username = authentication.getName();
