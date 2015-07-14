@@ -1,4 +1,5 @@
 @import './components/common/variables';
+@import url(http://fonts.googleapis.com/css?family=Raleway:400&text=Vyllage);
 
 .clearfix:after {
   font-size: 0;
@@ -16,7 +17,7 @@
 }
 
 * {
-  font-family: 'Raleway', Helvetica, Arial, sans-serif;
+  font-family: 'Lato', Helvetica, Arial, sans-serif;
 }
 
 html,
@@ -94,6 +95,7 @@ body {
     height: 45px;
   }
   span {
+    font-family: 'Raleway';
     font-size: 1.75em;
     font-weight: 500;
     position: relative;

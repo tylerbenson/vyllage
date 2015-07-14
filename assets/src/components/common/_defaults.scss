@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Raleway:400&text=Vyllage);
+
 ::selection {
   background: rgba($primary-color, 0.35);
 }
@@ -7,7 +9,7 @@
 
 * {
   color: $text-color;
-  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-kerning: initial;
 }
 
@@ -63,6 +65,7 @@ textarea {
     height: 1.75em;
   }
   span {
+    font-family: 'Raleway';
     font-size: 1.25em;
     font-weight: 600;
     position: relative;
