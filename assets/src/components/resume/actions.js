@@ -2,6 +2,7 @@ var Reflux = require('reflux');
 
 module.exports = Reflux.createActions([
   //
+  'getDocumentId',
   'getResume',
   'getHeader',
   'updateTagline',
@@ -21,5 +22,7 @@ module.exports = Reflux.createActions([
   'showComments',
   'hideComments',
   'toggleComments',
-  'toggleNav'
+  'toggleNav',
+  'openEmptyResumeModal',
+  'closeEmptyResumeModal'
 ]);

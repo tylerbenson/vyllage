@@ -309,7 +309,7 @@
       white-space: normal;
     }
   }
-  .footer {
+  & > .footer {
     @include cf();
     padding: 1.25em 4em;
   }
