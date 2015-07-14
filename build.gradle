@@ -3,7 +3,7 @@ def gradleDir = "${rootProject.rootDir}/gradle"
 ext.javascriptProjects = [ project(':assets') ]
 ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections'), project(':email'), project(':user-common'), project(':togglz'), project(':util') , project(':spring-security-oauth-provider') ]
 ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') , project(':spring-security-oauth-provider')  ]
-ext.dbProjects = [ project(':accounts'), project(':documents'), project(':togglz'), project(':spring-security-oauth-provider') ]
+ext.dbProjects = [ project(':accounts'), project(':documents'), project(':togglz') ]
 
 wrapper.gradleVersion = '2.1'
 

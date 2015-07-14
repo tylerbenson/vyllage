@@ -13,11 +13,11 @@ import oauth.lti.LMSRequest;
 
 @Controller
 @RequestMapping("/lti")
-public class AccessConfirmationController {
+public class LTIController {
 
-	 @RequestMapping({"", "/"})
+	 	@RequestMapping({"", "/"})
 	    public String home(HttpServletRequest req, Principal principal, Model model) {
-	    	
+	    	System.out.println("--------------------lti-----------------");
 	    	model.addAttribute("today", new Date());
 	        model.addAttribute("basicUser", "admin");
 	        model.addAttribute("basicPass", "admin");
@@ -37,6 +37,6 @@ public class AccessConfirmationController {
 	            model.addAttribute("ltiUser", ltiRequest.getLtiUserDisplayName());
 	            model.addAttribute("ltiLink", ltiRequest.getLtiLinkId());
 	        }
-	        return "login"; 
+	        return "home"; 
 	    }
 }

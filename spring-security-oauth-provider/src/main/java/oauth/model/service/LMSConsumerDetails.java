@@ -14,12 +14,13 @@ import org.springframework.stereotype.Component;
 import oauth.utilities.Contant;
 
 @Component
-public class LMSOConsumerDetails implements ConsumerDetailsService {
+public class LMSConsumerDetails implements ConsumerDetailsService {
 
-    final static Logger log = LoggerFactory.getLogger(LMSOConsumerDetails.class);
+    final static Logger log = LoggerFactory.getLogger(LMSConsumerDetails.class);
 
     @Override
     public ConsumerDetails loadConsumerByConsumerKey(String consumerKey) throws OAuthException {
+    	
         BaseConsumerDetails cd;
         if (Contant.OAUTH_KEY.equals(consumerKey)) {
             cd = new BaseConsumerDetails();
