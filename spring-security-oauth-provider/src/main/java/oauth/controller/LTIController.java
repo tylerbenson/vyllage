@@ -37,6 +37,6 @@ public class LTIController {
 	            model.addAttribute("ltiUser", ltiRequest.getLtiUserDisplayName());
 	            model.addAttribute("ltiLink", ltiRequest.getLtiLinkId());
 	        }
-	        return "login"; 
+	        return "home"; 
 	    }
 }
