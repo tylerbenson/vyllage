@@ -1,5 +1,6 @@
 var Reflux = require('reflux');
 var request = require('superagent');
+var Promise = require('bluebird');
 var endpoints = require('../endpoints');
 var urlTemplate = require('url-template');
 var findindex = require('lodash.findindex');
@@ -30,7 +31,8 @@ module.exports = Reflux.createStore({
       },
       sections: [],
       sectionOrder: ['career goal', 'experience', 'education', 'skills'],
-      isNavOpen: false
+      isNavOpen: false,
+      isEmptyResumeModalOpen: false
     };
   },
   getMaxSectionPostion: function () {
@@ -55,9 +57,30 @@ module.exports = Reflux.createStore({
         //console.log(err, res.body, order, url);
       }.bind(this))
   },
+  onGetDocumentId: function() {
+    var promise = new Promise(function(resolve, reject) {
+      var url = urlTemplate
+                .parse(endpoints.documentId)
+                .expand({documentType: 'RESUME'});
+      request
+        .get(url)
+        .end(function (err, res) {
+          if(res.status == 200 && res.body.RESUME.length > 0) {
+            this.documentId = res.body.RESUME[0]; //first document
+            this.resume.documentId = this.documentId;
+            this.trigger(this.resume);
+            resolve();
+          }
+        }.bind(this));
+    }.bind(this));
+
+    return promise;
+  },
   onGetResume: function () {
-    this.onGetHeader();
-    this.onGetSections();
+    this.onGetDocumentId().then(function() {
+      this.onGetHeader();
+      this.onGetSections();
+    }.bind(this));
   },
   onGetHeader: function () {
     var url = urlTemplate
@@ -259,6 +282,14 @@ module.exports = Reflux.createStore({
   },
   onToggleNav: function() {
     this.resume.isNavOpen = !this.resume.isNavOpen;
+    this.trigger(this.resume);
+  },
+  onCloseEmptyResumeModal: function () {
+    this.resume.isEmptyResumeModalOpen = false;
+    this.trigger(this.resume);
+  },
+  onOpenEmptyResumeModal: function () {
+    this.resume.isEmptyResumeModalOpen = true;
     this.trigger(this.resume);
   },
   getInitialState: function () {
