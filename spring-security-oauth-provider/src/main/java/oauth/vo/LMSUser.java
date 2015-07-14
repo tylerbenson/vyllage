@@ -1,11 +1,8 @@
 package oauth.vo;
 
-import org.apache.commons.lang3.StringUtils;
-
-import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class LMSUser {
 
