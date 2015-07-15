@@ -42,8 +42,8 @@ header {
 
     &:hover,
     &:focus {
-      & > i,
-      & > span {
+      i,
+      span {
         color: darken($header-color, 6%);
       }
     }
