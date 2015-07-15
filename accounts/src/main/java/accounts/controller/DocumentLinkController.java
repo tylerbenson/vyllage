@@ -159,7 +159,7 @@ public class DocumentLinkController {
 					SocialSessionEnum.LINK_KEY.name(),
 					documentLink.getLinkKey());
 
-			return "redirect:/social-login";
+			return "social-login";
 		}
 
 		User user = (User) SecurityContextHolder.getContext()

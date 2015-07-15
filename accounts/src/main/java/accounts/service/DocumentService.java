@@ -158,28 +158,21 @@ public class DocumentService {
 		lp.setDocumentId(doclink.getDocumentId());
 		lp.setUserId(doclink.getUserId());
 
-		// HttpEntity<Object> entity = createHeader(request, lp);
+		HttpEntity<Object> entity = createHeader(request, lp);
 
-		CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Cookie", request.getHeader("Cookie"));
-		if (token != null) {
-			headers.set("X-CSRF-TOKEN", token.getToken());
-			// headers.set("X-CSRF-HEADER", token.getHeaderName());
-			// headers.set("X-CSRF-PARAM", token.getParameterName());
-		}
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		HttpEntity<LinkPermissions> entity = new HttpEntity<LinkPermissions>(
-				lp, headers);
+		// HttpHeaders headers = new HttpHeaders();
+		// headers.set("Cookie", request.getHeader("Cookie"));
+		// headers.setContentType(MediaType.APPLICATION_JSON);
+		//
+		// HttpEntity<LinkPermissions> entity = new HttpEntity<LinkPermissions>(
+		// lp, headers);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
 		builder.scheme("http")
 				.port(DOCUMENTS_PORT)
 				.host(DOCUMENTS_HOST)
-				.path("document/" + doclink.getDocumentId()
+				.path("/document/" + doclink.getDocumentId()
 						+ "/permissions/user/" + doclink.getUserId());
 
 		restTemplate.exchange(builder.build().toUriString(), HttpMethod.POST,

@@ -52,7 +52,7 @@ public class SocialLoginController {
 	}
 
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)
-	public String socialLogin(WebRequest request) {
+	public String socialLogin() {
 		return "social-login";
 	}
 
@@ -92,7 +92,6 @@ public class SocialLoginController {
 			SocialDocumentLink doclink = sharedDocumentRepository
 					.getSocialDocumentLink((String) request.getSession(false)
 							.getAttribute(SocialSessionEnum.LINK_KEY.name()));
-
 			// create user
 			String userName = email != null && !email.isEmpty() ? email
 					: generateName(userProfile);
@@ -105,11 +104,10 @@ public class SocialLoginController {
 
 			// login
 			signInUtil.signIn(newUser);
-
-			documentService.createDocumentPermission(request, doclink);
-
 			// saves social account information
 			providerSignInUtils.doPostSignUp(userName, webRequest);
+
+			documentService.createDocumentPermission(request, doclink);
 
 			return "redirect:" + "/" + doclink.getDocumentType() + "/"
 					+ doclink.getDocumentId();
