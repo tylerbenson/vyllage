@@ -34,6 +34,8 @@ public class DocumentAccess {
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime expirationDate;
 
+	private boolean allowGuestComments;
+
 	public DocumentAccess() {
 	}
 
@@ -48,6 +50,7 @@ public class DocumentAccess {
 				.toLocalDateTime();
 		this.expirationDate = documentAccessRecord.getExpirationDate() != null ? documentAccessRecord
 				.getExpirationDate().toLocalDateTime() : null;
+		this.allowGuestComments = documentAccessRecord.getAllowGuestComments();
 	}
 
 	public Long getDocumentId() {
@@ -106,4 +109,13 @@ public class DocumentAccess {
 	public void setExpirationDate(LocalDateTime expirationDate) {
 		this.expirationDate = expirationDate;
 	}
+
+	public boolean getAllowGuestComments() {
+		return allowGuestComments;
+	}
+
+	public void setAllowGuestComments(boolean allowGuestComments) {
+		this.allowGuestComments = allowGuestComments;
+	}
+
 }

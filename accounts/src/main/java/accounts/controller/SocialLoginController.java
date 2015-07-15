@@ -19,6 +19,9 @@ import org.springframework.web.context.request.WebRequest;
 import user.common.User;
 import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
+import accounts.model.link.SocialDocumentLink;
+import accounts.repository.SharedDocumentRepository;
+import accounts.service.DocumentService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
 
@@ -30,15 +33,22 @@ public class SocialLoginController {
 
 	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
 
-	private SignInUtil signInUtil;
+	private final SignInUtil signInUtil;
 
-	private UserService userService;
+	private final UserService userService;
+
+	private final DocumentService documentService;
+
+	private final SharedDocumentRepository sharedDocumentRepository;
 
 	@Inject
 	public SocialLoginController(final SignInUtil signInUtil,
-			final UserService userService) {
+			final UserService userService, DocumentService documentService,
+			SharedDocumentRepository sharedDocumentRepository) {
 		this.signInUtil = signInUtil;
 		this.userService = userService;
+		this.documentService = documentService;
+		this.sharedDocumentRepository = sharedDocumentRepository;
 	}
 
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)
@@ -79,26 +89,30 @@ public class SocialLoginController {
 
 		} else {
 			// user doesn't exist, social account information not present
+			SocialDocumentLink doclink = sharedDocumentRepository
+					.getSocialDocumentLink((String) request.getSession(false)
+							.getAttribute(SocialSessionEnum.LINK_KEY.name()));
 
 			// create user
 			String userName = email != null && !email.isEmpty() ? email
 					: generateName(userProfile);
-			User newUser = userService.createUser(
-					userName,
-					firstName,
-					null,
-					lastName,
-					(Long) request.getSession(false).getAttribute(
-							SocialSessionEnum.SOCIAL_USER_ID.name()));
+			User newUser = userService.createUser(userName, firstName, null,
+					lastName, doclink.getUserId());
+
+			// replacing userId that created the link with the userId of the
+			// user that will have his permissions created
+			doclink.setUserId(newUser.getUserId());
+
 			// login
 			signInUtil.signIn(newUser);
+
+			documentService.createDocumentPermission(request, doclink);
 
 			// saves social account information
 			providerSignInUtils.doPostSignUp(userName, webRequest);
 
-			return "redirect:"
-					+ (String) request.getSession(false).getAttribute(
-							SocialSessionEnum.SOCIAL_REDIRECT_URL.name());
+			return "redirect:" + "/" + doclink.getDocumentType() + "/"
+					+ doclink.getDocumentId();
 		}
 
 	}

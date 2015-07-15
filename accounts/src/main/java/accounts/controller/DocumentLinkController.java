@@ -1,9 +1,7 @@
 package accounts.controller;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +9,6 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -19,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
@@ -44,29 +41,21 @@ import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
 import accounts.service.DocumentService;
 import accounts.service.SignInUtil;
-import accounts.service.UserService;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.newrelic.api.agent.NewRelic;
 
 @Controller
 @RequestMapping("link")
 public class DocumentLinkController {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(DocumentLinkController.class
 			.getName());
 
 	@Autowired
-	private ObjectMapper mapper;
-
-	@Autowired
 	private DocumentLinkService documentLinkService;
-
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private SignInUtil signInUtil;
@@ -77,20 +66,12 @@ public class DocumentLinkController {
 	@Autowired
 	private DocumentService documentService;
 
-	@Autowired
-	private TextEncryptor textEncryptor;
-
 	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
 
 	@RequestMapping(value = "/e/{linkKey}", method = RequestMethod.GET)
 	public String sharedLinkLogin(HttpServletRequest request,
 			@PathVariable String linkKey) throws JsonParseException,
 			JsonMappingException, IOException, UserNotFoundException {
-
-		// String json = decrypt(encodedDocumentLink);
-
-		// EmailDocumentLink documentLink = mapper.readValue(json,
-		// EmailDocumentLink.class);
 
 		EmailDocumentLink documentLink = documentLinkService
 				.getEmailDocumentLink(linkKey);
@@ -120,10 +101,6 @@ public class DocumentLinkController {
 		EmailDocumentLink documentLink = documentLinkService.createEmailLink(
 				request, linkRequest, user);
 
-		// String json = mapper.writeValueAsString(documentLink);
-
-		// String safeString = encrypt(json);
-
 		return "/link/e/" + documentLink.getLinkKey();
 	}
 
@@ -149,10 +126,6 @@ public class DocumentLinkController {
 			EmailDocumentLink documentLink = documentLinkService
 					.createEmailLink(request, documentLinkRequest, user);
 
-			// String json = mapper.writeValueAsString(documentLink);
-
-			// String safeString = "/link/advice/" + encrypt(json);
-
 			links.put(documentLinkRequest.getEmail(),
 					"/link/e/" + documentLink.getLinkKey());
 		}
@@ -164,11 +137,6 @@ public class DocumentLinkController {
 	public String accessSharedDocument(HttpServletRequest request,
 			WebRequest webRequest, @PathVariable String linkKey)
 			throws JsonParseException, JsonMappingException, IOException {
-
-		// String json = decrypt(encodedDocumentLink);
-		//
-		// SocialDocumentLink documentLink = mapper.readValue(json,
-		// SocialDocumentLink.class);
 
 		SocialDocumentLink documentLink = documentLinkService
 				.getSocialDocumentLink(linkKey);
@@ -186,19 +154,21 @@ public class DocumentLinkController {
 		// not logged in on social provider? redirect them and keep data in
 		// session to redirect later
 		if (connection == null || connection.hasExpired()) {
-			// if there's no session, create one to store link information
+			// saving the link key to use later
 			request.getSession(true).setAttribute(
-					SocialSessionEnum.SOCIAL_REDIRECT_URL.name(),
-					"/" + documentLink.getDocumentType() + "/"
-							+ documentLink.getDocumentId());
-
-			// storing the id of the link creator for later
-			request.getSession().setAttribute(
-					SocialSessionEnum.SOCIAL_USER_ID.name(),
-					documentLink.getUserId());
+					SocialSessionEnum.LINK_KEY.name(),
+					documentLink.getLinkKey());
 
 			return "redirect:/social-login";
 		}
+
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+
+		// replacing userId that created the link with the userId of the
+		// user that will have his permissions created
+		documentLink.setUserId(user.getUserId());
+		documentService.createDocumentPermission(request, documentLink);
 
 		return "redirect:" + "/ " + documentLink.getDocumentType() + "/"
 				+ documentLink.getDocumentId();
@@ -234,10 +204,6 @@ public class DocumentLinkController {
 		SocialDocumentLink documentLink = documentLinkService.createSocialLink(
 				linkRequest, loggedInUser);
 
-		// String json = mapper.writeValueAsString(documentLink);
-		//
-		// String safeString = encrypt(json);
-
 		return new ResponseEntity<>(environment.getProperty("vyllage.domain",
 				"www.vyllage.com") + "/link/s/" + documentLink.getLinkKey(),
 				HttpStatus.OK);
@@ -253,31 +219,4 @@ public class DocumentLinkController {
 		return "linkStats";
 	}
 
-	/**
-	 * Encrypts a string and encodes it in Base 64.
-	 * 
-	 * @param json
-	 * @return
-	 */
-	public String encrypt(String json) {
-		try {
-			return Base64.getUrlEncoder().encodeToString(
-					textEncryptor.encrypt(json).getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
-		return null;
-	}
-
-	/**
-	 * Decodes and decrypts the string. documentLinkService
-	 * 
-	 * @param encodedDocumentLink
-	 * @return
-	 */
-	public String decrypt(String encodedDocumentLink) {
-		return textEncryptor.decrypt(new String(Base64.getUrlDecoder().decode(
-				encodedDocumentLink)));
-	}
 }

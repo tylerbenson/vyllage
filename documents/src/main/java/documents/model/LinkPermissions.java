@@ -1,15 +1,21 @@
-package accounts.model.link;
+package documents.model;
 
 import lombok.ToString;
 
 @ToString
-public class SimpleDocumentLinkRequest {
+public class LinkPermissions {
 
+	private Long userId;
 	private Long documentId;
+	private boolean allowGuestComments;
 
-	private String documentType;
+	public Long getUserId() {
+		return userId;
+	}
 
-	private boolean allowGuestComments = false;
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
 	public Long getDocumentId() {
 		return documentId;
@@ -17,14 +23,6 @@ public class SimpleDocumentLinkRequest {
 
 	public void setDocumentId(Long documentId) {
 		this.documentId = documentId;
-	}
-
-	public String getDocumentType() {
-		return documentType;
-	}
-
-	public void setDocumentType(String documentType) {
-		this.documentType = documentType;
 	}
 
 	public boolean getAllowGuestComments() {

@@ -15,18 +15,28 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * @author uh
  *
  */
-public class TogglzConsoleRequestMatcher implements RequestMatcher {
+public class RequestMatcherDisable implements RequestMatcher {
 	private Pattern allowedMethods = Pattern
 			.compile("^(GET|HEAD|TRACE|OPTIONS)$");
 	private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher(
 			"/togglz/edit", null);
 
+	// unfortunately for social links the CSRF protection prevents the creation
+	// of document permissions
+	private RegexRequestMatcher unprotectedMatcherDoc = new RegexRequestMatcher(
+			"^/document/[0-9]+/permissions/user/[0-9]+$", null);
+
 	@Override
 	public boolean matches(HttpServletRequest request) {
-		if (allowedMethods.matcher(request.getMethod()).matches()) {
+		if (allowedMethods.matcher(request.getMethod()).matches())
 			return false;
-		}
 
-		return !unprotectedMatcher.matches(request);
+		if (unprotectedMatcher.matches(request))
+			return false;
+
+		if (unprotectedMatcherDoc.matches(request))
+			return false;
+
+		return true;
 	}
 }

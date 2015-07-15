@@ -23,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import accounts.model.account.settings.DocumentAccess;
 import accounts.model.link.AbstractDocumentLink;
+import accounts.model.link.LinkPermissions;
 import accounts.repository.ElementNotFoundException;
 
 @Service("accounts.DocumentService")
@@ -50,7 +51,7 @@ public class DocumentService {
 	public void deleteUsers(HttpServletRequest request, List<Long> userIds) {
 		assert userIds != null && !userIds.isEmpty();
 
-		HttpEntity<Object> entity = createHeader(request);
+		HttpEntity<Object> entity = createHeader(request, null);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -77,7 +78,7 @@ public class DocumentService {
 	public List<Long> getUserDocumentId(HttpServletRequest request, Long userId)
 			throws ElementNotFoundException {
 
-		HttpEntity<Object> entity = createHeader(request);
+		HttpEntity<Object> entity = createHeader(request, null);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -99,7 +100,7 @@ public class DocumentService {
 
 	public List<DocumentAccess> getUserDocumentsAccess(
 			HttpServletRequest request) {
-		HttpEntity<Object> entity = createHeader(request);
+		HttpEntity<Object> entity = createHeader(request, null);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -122,7 +123,7 @@ public class DocumentService {
 			HttpServletRequest request, List<Long> userIds) {
 		assert userIds != null && !userIds.isEmpty();
 
-		HttpEntity<Object> entity = createHeader(request);
+		HttpEntity<Object> entity = createHeader(request, null);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -152,7 +153,26 @@ public class DocumentService {
 	 */
 	public void createDocumentPermission(HttpServletRequest request,
 			AbstractDocumentLink doclink) {
-		HttpEntity<Object> entity = createHeader(request);
+		LinkPermissions lp = new LinkPermissions();
+		lp.setAllowGuestComments(doclink.getAllowGuestComments());
+		lp.setDocumentId(doclink.getDocumentId());
+		lp.setUserId(doclink.getUserId());
+
+		// HttpEntity<Object> entity = createHeader(request, lp);
+
+		CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Cookie", request.getHeader("Cookie"));
+		if (token != null) {
+			headers.set("X-CSRF-TOKEN", token.getToken());
+			// headers.set("X-CSRF-HEADER", token.getHeaderName());
+			// headers.set("X-CSRF-PARAM", token.getParameterName());
+		}
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<LinkPermissions> entity = new HttpEntity<LinkPermissions>(
+				lp, headers);
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
@@ -167,15 +187,20 @@ public class DocumentService {
 
 	}
 
-	protected HttpEntity<Object> createHeader(HttpServletRequest request) {
+	protected HttpEntity<Object> createHeader(HttpServletRequest request,
+			Object object) {
 		CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Cookie", request.getHeader("Cookie"));
-		headers.set("X-CSRF-TOKEN", token.getToken());
+		if (token != null) {
+			headers.set("X-CSRF-TOKEN", token.getToken());
+			// headers.set("X-CSRF-HEADER", token.getHeaderName());
+			// headers.set("X-CSRF-PARAM", token.getParameterName());
+		}
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
+		HttpEntity<Object> entity = new HttpEntity<Object>(object, headers);
 		return entity;
 	}
 

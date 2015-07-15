@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// disabling CSRF for the togglz console.
 		http.csrf().requireCsrfProtectionMatcher(
-				new TogglzConsoleRequestMatcher());
+				new RequestMatcherDisable());
 
 		// Allow frames to enable the h2 console.
 		http.headers().addHeaderWriter(

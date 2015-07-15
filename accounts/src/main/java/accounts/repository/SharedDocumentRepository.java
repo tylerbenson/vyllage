@@ -39,6 +39,8 @@ public class SharedDocumentRepository {
 		sharedDocumentRecord.setDateCreated(Timestamp.valueOf(LocalDateTime
 				.now(ZoneId.of("UTC"))));
 		sharedDocumentRecord.setVisits(0L);
+		sharedDocumentRecord.setAllowGuestComments(doclink
+				.getAllowGuestComments());
 		sharedDocumentRecord.insert();
 	}
 
@@ -55,6 +57,8 @@ public class SharedDocumentRepository {
 		sharedDocumentRecord.setDateCreated(Timestamp.valueOf(LocalDateTime
 				.now(ZoneId.of("UTC"))));
 		sharedDocumentRecord.setVisits(0L);
+		sharedDocumentRecord.setAllowGuestComments(doclink
+				.getAllowGuestComments());
 		sharedDocumentRecord.insert();
 
 	}
@@ -113,6 +117,8 @@ public class SharedDocumentRepository {
 		documentLink.setUserId(sharedDocumentRecord.getUserId());
 		documentLink.setVisits(sharedDocumentRecord.getVisits() == null ? 0L
 				: sharedDocumentRecord.getVisits());
+		documentLink.setAllowGuestComments(sharedDocumentRecord
+				.getAllowGuestComments());
 		return documentLink;
 	}
 
@@ -130,6 +136,8 @@ public class SharedDocumentRepository {
 				.toLocalDateTime());
 		documentLink.setVisits(sharedDocumentRecord.getVisits() == null ? 0L
 				: sharedDocumentRecord.getVisits());
+		documentLink.setAllowGuestComments(sharedDocumentRecord
+				.getAllowGuestComments());
 		return documentLink;
 	}
 

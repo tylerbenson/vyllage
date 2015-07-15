@@ -42,9 +42,11 @@ import documents.model.AccountContact;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
+import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
 import documents.model.UserNotification;
+import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -67,15 +69,19 @@ public class ResumeController {
 
 	private final ResumePdfService resumePdfService;
 
+	private final DocumentAccessRepository documentAccessRepository;
+
 	@Inject
 	public ResumeController(final DocumentService documentService,
 			final AccountService accountService,
 			final NotificationService notificationService,
-			final ResumePdfService resumePdfService) {
+			final ResumePdfService resumePdfService,
+			final DocumentAccessRepository documentAccessRepository) {
 		this.documentService = documentService;
 		this.accountService = accountService;
 		this.notificationService = notificationService;
 		this.resumePdfService = resumePdfService;
+		this.documentAccessRepository = documentAccessRepository;
 
 	}
 
@@ -392,18 +398,27 @@ public class ResumeController {
 			@RequestBody final Comment comment,
 			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
-		setCommentData(sectionId, comment, user);
+		Optional<DocumentAccess> documentAccess = documentAccessRepository.get(
+				user.getUserId(), documentId);
+
+		if (documentAccess.isPresent()
+				&& !documentAccess.get().getAllowGuestComments())
+			throw new AccessDeniedException(
+					"You are not allowed to comment on this document.");
 
 		// notification
 		Document document = null;
 
 		try {
 			document = documentService.getDocument(documentId);
+
 		} catch (ElementNotFoundException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			throw e;
 		}
+
+		setCommentData(sectionId, comment, user);
 
 		// Check user ids before going to DB...
 		// don't notify if the user commenting is the owner of the document...
@@ -435,6 +450,14 @@ public class ResumeController {
 			@PathVariable final Long commentId,
 			@RequestBody final Comment comment,
 			@AuthenticationPrincipal User user) {
+
+		Optional<DocumentAccess> documentAccess = documentAccessRepository.get(
+				user.getUserId(), documentId);
+
+		if (documentAccess.isPresent()
+				&& !documentAccess.get().getAllowGuestComments())
+			throw new AccessDeniedException(
+					"You are not allowed to comment on this document.");
 
 		setCommentData(sectionId, comment, user);
 

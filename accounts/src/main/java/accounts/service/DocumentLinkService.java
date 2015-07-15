@@ -85,6 +85,7 @@ public class DocumentLinkService {
 				LINK_EXPIRATION_DAYS));
 		doclink.setLinkKey(randomPasswordGenerator
 				.getRandomString(DOCUMENT_SHORT_URL_LENGTH));
+		doclink.setAllowGuestComments(linkRequest.getAllowGuestComments());
 
 		sharedDocumentRepository.create(doclink);
 		documentService.createDocumentPermission(request, doclink);
@@ -108,6 +109,7 @@ public class DocumentLinkService {
 		doclink.setLinkKey(randomPasswordGenerator
 				.getRandomString(DOCUMENT_SHORT_URL_LENGTH));
 		doclink.setLinkType(LinkType.SOCIAL);
+		doclink.setAllowGuestComments(linkRequest.getAllowGuestComments());
 
 		sharedDocumentRepository.create(doclink);
 

@@ -19,6 +19,7 @@ import documents.files.pdf.ResumePdfService;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentSection;
+import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -65,10 +66,13 @@ public class ResumeControllerTest {
 	private ResumePdfService resumePdfService = Mockito
 			.mock(ResumePdfService.class);
 
+	private DocumentAccessRepository documentAccessRepository = Mockito
+			.mock(DocumentAccessRepository.class);;
+
 	@Before
 	public void setUp() {
 		controller = new ResumeController(documentService, accountService,
-				notificationService, resumePdfService);
+				notificationService, resumePdfService, documentAccessRepository);
 	}
 
 	// resume/0/section/124

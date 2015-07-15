@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import user.common.User;
 import documents.model.Document;
 import documents.model.DocumentAccess;
+import documents.model.LinkPermissions;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
 import documents.services.DocumentService;
@@ -115,15 +117,20 @@ public class DocumentController {
 
 	@RequestMapping(value = "{documentId}/permissions/user/{userId}", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	@CheckWriteAccess
+	// @CheckWriteAccess
 	public void setUserDocumentsPermission(
 			@PathVariable("documentId") Long documentId,
 			@PathVariable("userId") Long userId,
+			@RequestBody LinkPermissions linkPermissions,
 			@AuthenticationPrincipal User user) {
 
 		DocumentAccess documentAccess = new DocumentAccess();
 		documentAccess.setDocumentId(documentId);
 		documentAccess.setUserId(userId);
+		documentAccess.setAllowGuestComments(linkPermissions
+				.getAllowGuestComments());
+
+		System.out.println(documentAccess);
 
 		// We'll support READ permissions for now.
 		documentAccess.setAccess(DocumentAccessEnum.READ);
