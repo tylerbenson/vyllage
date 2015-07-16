@@ -2,6 +2,10 @@
   "name": "project-assets",
   "version": "0.0.0",
   "dependencies": {
+    "bluebird": {
+      "version": "2.9.33",
+      "from": "bluebird@2.9.33"
+    },
     "classnames": {
       "version": "1.2.2",
       "from": "classnames@1.2.2"
@@ -752,7 +756,7 @@
         },
         "string_decoder": {
           "version": "0.10.31",
-          "from": "string_decoder@0.10.31"
+          "from": "string_decoder@>=0.10.0 <0.11.0"
         },
         "timers-browserify": {
           "version": "1.4.1",
@@ -778,7 +782,7 @@
           "dependencies": {
             "inherits": {
               "version": "2.0.1",
-              "from": "inherits@2.0.1"
+              "from": "inherits@>=2.0.1 <2.1.0"
             }
           }
         },
