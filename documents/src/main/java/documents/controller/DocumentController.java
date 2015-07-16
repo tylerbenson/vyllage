@@ -117,7 +117,7 @@ public class DocumentController {
 
 	@RequestMapping(value = "{documentId}/permissions/user/{userId}", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
-	// @CheckWriteAccess
+	@CheckWriteAccess
 	public void setUserDocumentsPermission(
 			@PathVariable("documentId") Long documentId,
 			@PathVariable("userId") Long userId,
@@ -130,11 +130,9 @@ public class DocumentController {
 		documentAccess.setAllowGuestComments(linkPermissions
 				.getAllowGuestComments());
 
-		System.out.println(documentAccess);
-
 		// We'll support READ permissions for now.
 		documentAccess.setAccess(DocumentAccessEnum.READ);
-		documentService.setUserDocumentsPermissions(user, documentAccess);
+		documentService.setUserDocumentsPermissions(documentAccess);
 	}
 
 	@RequestMapping(value = "{documentId}/permissions/user/{userId}", method = RequestMethod.DELETE, produces = "application/json")

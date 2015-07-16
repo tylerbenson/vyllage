@@ -22,8 +22,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import accounts.model.account.settings.DocumentAccess;
-import accounts.model.link.AbstractDocumentLink;
-import accounts.model.link.LinkPermissions;
 import accounts.repository.ElementNotFoundException;
 
 @Service("accounts.DocumentService")
@@ -145,40 +143,42 @@ public class DocumentService {
 		return response;
 	}
 
-	/**
-	 * Creates document permissions for the given document and user.
-	 * 
-	 * @param doclink
-	 * @param request
-	 */
-	public void createDocumentPermission(HttpServletRequest request,
-			AbstractDocumentLink doclink) {
-		LinkPermissions lp = new LinkPermissions();
-		lp.setAllowGuestComments(doclink.getAllowGuestComments());
-		lp.setDocumentId(doclink.getDocumentId());
-		lp.setUserId(doclink.getUserId());
-
-		HttpEntity<Object> entity = createHeader(request, lp);
-
-		// HttpHeaders headers = new HttpHeaders();
-		// headers.set("Cookie", request.getHeader("Cookie"));
-		// headers.setContentType(MediaType.APPLICATION_JSON);
-		//
-		// HttpEntity<LinkPermissions> entity = new HttpEntity<LinkPermissions>(
-		// lp, headers);
-
-		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-
-		builder.scheme("http")
-				.port(DOCUMENTS_PORT)
-				.host(DOCUMENTS_HOST)
-				.path("/document/" + doclink.getDocumentId()
-						+ "/permissions/user/" + doclink.getUserId());
-
-		restTemplate.exchange(builder.build().toUriString(), HttpMethod.POST,
-				entity, Void.class);
-
-	}
+	// unfortunately POST from Accounts to Documents after a programatic login
+	// doesn't work.
+	// /**
+	// * Creates document permissions for the given document and user.
+	// *
+	// * @param doclink
+	// * @param request
+	// */
+	// public void createDocumentPermission(HttpServletRequest request,
+	// AbstractDocumentLink doclink) {
+	// LinkPermissions lp = new LinkPermissions();
+	// lp.setAllowGuestComments(doclink.getAllowGuestComments());
+	// lp.setDocumentId(doclink.getDocumentId());
+	// lp.setUserId(doclink.getUserId());
+	//
+	// HttpEntity<Object> entity = createHeader(request, lp);
+	//
+	// // HttpHeaders headers = new HttpHeaders();
+	// // headers.set("Cookie", request.getHeader("Cookie"));
+	// // headers.setContentType(MediaType.APPLICATION_JSON);
+	// //
+	// // HttpEntity<LinkPermissions> entity = new HttpEntity<LinkPermissions>(
+	// // lp, headers);
+	//
+	// UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+	//
+	// builder.scheme("http")
+	// .port(DOCUMENTS_PORT)
+	// .host(DOCUMENTS_HOST)
+	// .path("/document/" + doclink.getDocumentId()
+	// + "/permissions/user/" + doclink.getUserId());
+	//
+	// restTemplate.exchange(builder.build().toUriString(), HttpMethod.POST,
+	// entity, Void.class);
+	//
+	// }
 
 	protected HttpEntity<Object> createHeader(HttpServletRequest request,
 			Object object) {

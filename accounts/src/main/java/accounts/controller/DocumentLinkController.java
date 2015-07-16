@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
@@ -31,8 +30,10 @@ import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
 import user.common.social.SocialSessionEnum;
+import accounts.model.link.AbstractDocumentLink;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.model.link.EmailDocumentLink;
+import accounts.model.link.LinkPermissions;
 import accounts.model.link.LinkStats;
 import accounts.model.link.SimpleDocumentLinkRequest;
 import accounts.model.link.SocialDocumentLink;
@@ -70,11 +71,15 @@ public class DocumentLinkController {
 
 	@RequestMapping(value = "/e/{linkKey}", method = RequestMethod.GET)
 	public String sharedLinkLogin(HttpServletRequest request,
-			@PathVariable String linkKey) throws JsonParseException,
+			@PathVariable final String linkKey) throws JsonParseException,
 			JsonMappingException, IOException, UserNotFoundException {
 
 		EmailDocumentLink documentLink = documentLinkService
 				.getEmailDocumentLink(linkKey);
+
+		// saving the link key to use later for permission creation
+		request.getSession(true).setAttribute(
+				SocialSessionEnum.LINK_KEY.name(), linkKey);
 
 		documentLinkService.registerVisit(linkKey);
 
@@ -135,11 +140,15 @@ public class DocumentLinkController {
 
 	@RequestMapping(value = "/s/{linkKey}", method = RequestMethod.GET)
 	public String accessSharedDocument(HttpServletRequest request,
-			WebRequest webRequest, @PathVariable String linkKey)
+			WebRequest webRequest, @PathVariable final String linkKey)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		SocialDocumentLink documentLink = documentLinkService
 				.getSocialDocumentLink(linkKey);
+
+		// saving the link key to use later for permission creation
+		request.getSession(true).setAttribute(
+				SocialSessionEnum.LINK_KEY.name(), documentLink.getLinkKey());
 
 		documentLinkService.registerVisit(linkKey);
 
@@ -154,21 +163,9 @@ public class DocumentLinkController {
 		// not logged in on social provider? redirect them and keep data in
 		// session to redirect later
 		if (connection == null || connection.hasExpired()) {
-			// saving the link key to use later
-			request.getSession(true).setAttribute(
-					SocialSessionEnum.LINK_KEY.name(),
-					documentLink.getLinkKey());
 
 			return "social-login";
 		}
-
-		User user = (User) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-
-		// replacing userId that created the link with the userId of the
-		// user that will have his permissions created
-		documentLink.setUserId(user.getUserId());
-		documentService.createDocumentPermission(request, documentLink);
 
 		return "redirect:" + "/ " + documentLink.getDocumentType() + "/"
 				+ documentLink.getDocumentId();
@@ -217,6 +214,25 @@ public class DocumentLinkController {
 		model.addAttribute("stats", stats);
 
 		return "linkStats";
+	}
+
+	@RequestMapping(value = "permissions/{linkKey}", method = RequestMethod.GET)
+	public @ResponseBody LinkPermissions getLink(@PathVariable String linkKey) {
+		AbstractDocumentLink doclink = documentLinkService
+				.getEmailDocumentLink(linkKey);
+
+		if (doclink == null)
+			doclink = documentLinkService.getSocialDocumentLink(linkKey);
+
+		if (doclink == null)
+			return null;
+
+		LinkPermissions lp = new LinkPermissions();
+		lp.setAllowGuestComments(doclink.getAllowGuestComments());
+		lp.setDocumentId(doclink.getDocumentId());
+		lp.setUserId(doclink.getUserId());
+
+		return lp;
 	}
 
 }

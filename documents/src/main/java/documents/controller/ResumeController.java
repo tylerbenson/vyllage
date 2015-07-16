@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
+import user.common.social.SocialSessionEnum;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
@@ -45,7 +46,9 @@ import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
+import documents.model.LinkPermissions;
 import documents.model.UserNotification;
+import documents.model.constants.DocumentAccessEnum;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
@@ -137,11 +140,18 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET, produces = "text/html")
-	@CheckReadAccess
+	// @CheckReadAccess otherwise we cannot create permissions...
 	public String getResume(HttpServletRequest request,
 			@PathVariable final Long documentId,
 			@AuthenticationPrincipal User user, Model model)
 			throws ElementNotFoundException {
+
+		// if the user entered using a link get the key from the session
+		String documentLinkKey = (String) request.getSession().getAttribute(
+				SocialSessionEnum.LINK_KEY.name());
+
+		createUserPermissionsForLinks(request, documentId, user,
+				documentLinkKey);
 
 		// if document has no sections and I'm not the owner throw exception...
 		if (!documentService.existsForUser(user, documentId))
@@ -152,6 +162,29 @@ public class ResumeController {
 		model.addAttribute("userInfo", userInfo(request, user));
 
 		return "resume";
+	}
+
+	protected void createUserPermissionsForLinks(HttpServletRequest request,
+			final Long documentId, final User user, String documentLinkKey) {
+
+		if (documentLinkKey != null && !documentLinkKey.isEmpty()) {
+			// get the link permissions to create here
+			LinkPermissions linkPermissions = accountService
+					.getLinkInformation(request, documentLinkKey);
+
+			if (linkPermissions == null)
+				throw new AccessDeniedException(
+						"You are not authorized to access this document.");
+
+			DocumentAccess documentAccess = new DocumentAccess();
+			documentAccess.setDocumentId(documentId);
+			documentAccess.setUserId(user.getUserId());
+			documentAccess.setAllowGuestComments(linkPermissions
+					.getAllowGuestComments());
+
+			documentAccess.setAccess(DocumentAccessEnum.READ);
+			documentService.setUserDocumentsPermissions(documentAccess);
+		}
 	}
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")

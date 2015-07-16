@@ -21,9 +21,9 @@ import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
 import accounts.model.link.SocialDocumentLink;
 import accounts.repository.SharedDocumentRepository;
-import accounts.service.DocumentService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
+import accounts.service.utilities.RandomPasswordGenerator;
 
 @Controller
 public class SocialLoginController {
@@ -37,18 +37,19 @@ public class SocialLoginController {
 
 	private final UserService userService;
 
-	private final DocumentService documentService;
-
 	private final SharedDocumentRepository sharedDocumentRepository;
+
+	private final RandomPasswordGenerator randomPasswordGenerator;
 
 	@Inject
 	public SocialLoginController(final SignInUtil signInUtil,
-			final UserService userService, DocumentService documentService,
-			SharedDocumentRepository sharedDocumentRepository) {
+			final UserService userService,
+			final SharedDocumentRepository sharedDocumentRepository,
+			final RandomPasswordGenerator randomPasswordGenerator) {
 		this.signInUtil = signInUtil;
 		this.userService = userService;
-		this.documentService = documentService;
 		this.sharedDocumentRepository = sharedDocumentRepository;
+		this.randomPasswordGenerator = randomPasswordGenerator;
 	}
 
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)
@@ -95,19 +96,20 @@ public class SocialLoginController {
 			// create user
 			String userName = email != null && !email.isEmpty() ? email
 					: generateName(userProfile);
-			User newUser = userService.createUser(userName, firstName, null,
-					lastName, doclink.getUserId());
+			String password = randomPasswordGenerator.getRandomPassword();
+
+			User newUser = userService.createUser(userName, password,
+					firstName, null, lastName, doclink.getUserId());
 
 			// replacing userId that created the link with the userId of the
 			// user that will have his permissions created
 			doclink.setUserId(newUser.getUserId());
 
 			// login
-			signInUtil.signIn(newUser);
+			signInUtil.signIn(request, newUser, password);
+
 			// saves social account information
 			providerSignInUtils.doPostSignUp(userName, webRequest);
-
-			documentService.createDocumentPermission(request, doclink);
 
 			return "redirect:" + "/" + doclink.getDocumentType() + "/"
 					+ doclink.getDocumentId();

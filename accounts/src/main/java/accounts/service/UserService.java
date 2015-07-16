@@ -527,14 +527,13 @@ public class UserService {
 		this.emailBuilder = emailBuilder;
 	}
 
-	public User createUser(String email, String firstName, String middleName,
-			String lastName, Long auditUserId) {
+	public User createUser(String email, String password, String firstName,
+			String middleName, String lastName, Long auditUserId) {
 
 		if (auditUserId == null)
 			throw new AccessDeniedException(
 					"Account creation is not allowed without a referring user.");
 
-		String randomPassword = randomPasswordGenerator.getRandomPassword();
 		boolean enabled = true;
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
@@ -559,9 +558,8 @@ public class UserService {
 					auditUser.getUserId()));
 
 		User user = new User(null, firstName, middleName, lastName, email,
-				randomPassword, enabled, accountNonExpired,
-				credentialsNonExpired, accountNonLocked,
-				defaultAuthoritiesForNewUser, null, null);
+				password, enabled, accountNonExpired, credentialsNonExpired,
+				accountNonLocked, defaultAuthoritiesForNewUser, null, null);
 
 		userRepository.createUser(user);
 

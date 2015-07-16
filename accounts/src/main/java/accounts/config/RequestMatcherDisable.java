@@ -21,20 +21,12 @@ public class RequestMatcherDisable implements RequestMatcher {
 	private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher(
 			"/togglz/edit", null);
 
-	// unfortunately for social links the CSRF protection prevents the creation
-	// of document permissions
-	private RegexRequestMatcher unprotectedMatcherDoc = new RegexRequestMatcher(
-			"^/document/[0-9]+/permissions/user/[0-9]+$", null);
-
 	@Override
 	public boolean matches(HttpServletRequest request) {
 		if (allowedMethods.matcher(request.getMethod()).matches())
 			return false;
 
 		if (unprotectedMatcher.matches(request))
-			return false;
-
-		if (unprotectedMatcherDoc.matches(request))
 			return false;
 
 		return true;
