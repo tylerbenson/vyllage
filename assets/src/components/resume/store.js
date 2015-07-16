@@ -22,6 +22,7 @@ module.exports = Reflux.createStore({
     }
     this.documentId = window.location.pathname.split('/')[2];
     this.resume = {
+      ownDocumentId: this.documentId,
       documentId: this.documentId,
       header: {
         firstName: '',
@@ -54,6 +55,24 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         //console.log(err, res.body, order, url);
       }.bind(this))
+  },
+  onGetDocumentId: function() {
+    var promise = new Promise(function(resolve, reject) {
+      var url = urlTemplate
+                .parse(endpoints.documentId)
+                .expand({documentType: 'RESUME'});
+      request
+        .get(url)
+        .end(function (err, res) {
+          if(res.status == 200 && res.body.RESUME.length > 0) {
+            this.resume.ownDocumentId = res.body.RESUME[0];
+            this.trigger(this.resume);
+            resolve();
+          }
+        }.bind(this));
+    }.bind(this));
+
+    return promise;
   },
   onGetResume: function () {
     this.onGetHeader();
