@@ -18,6 +18,8 @@ public class DocumentHeader {
 
 	private boolean owner = false;
 
+	private String avatarUrl;
+
 	public DocumentHeader() {
 	}
 
@@ -99,6 +101,14 @@ public class DocumentHeader {
 
 	public void setOwner(boolean owner) {
 		this.owner = owner;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 
 }

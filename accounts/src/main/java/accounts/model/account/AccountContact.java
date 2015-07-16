@@ -18,6 +18,8 @@ public class AccountContact {
 	// for intercom...
 	private Long registeredOn;
 
+	private String avatarUrl;
+
 	public AccountContact(Long userId, String address, String email,
 			String phoneNumber, String twitter, String linkedIn) {
 		super();
@@ -110,6 +112,14 @@ public class AccountContact {
 
 	public void setRegisteredOn(Long registeredOn) {
 		this.registeredOn = registeredOn;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 
 }
