@@ -50,29 +50,32 @@ public class ResumeAspectAccess {
 		RestAssuredMockMvc.mockMvc = mockMvc;
 	}
 
-	@Test
-	public void testReadAccessResumeIdDenied() throws ElementNotFoundException {
-		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-
-		Long userId = 2L;
-
-		builder.scheme("http").port(8080).host("localhost").path("/resume/0");
-
-		URI url = builder.build().toUri();
-
-		List<UserOrganizationRole> userOrganizationRole = new ArrayList<>();
-		userOrganizationRole.add(new UserOrganizationRole(userId, 1L,
-				RolesEnum.STUDENT.name(), 0L));
-		User authentication = new User("a", "b", true, true, true, true,
-				userOrganizationRole);
-		authentication.setUserId(userId);
-
-		// the actual exception is wrapped in a
-		// org.springframework.web.util.NestedServletException here, bah
-		exception.expectMessage(YOU_ARE_NOT_AUTHORIZED_TO_ACCESS_THIS_DOCUMENT);
-		given().auth().principal(authentication).get(url);
-
-	}
+	// since we need the user to be able to access this endpoint to create
+	// access permissions it's no longer secured.
+	// @Test
+	// public void testReadAccessResumeIdDenied() throws
+	// ElementNotFoundException {
+	// UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+	//
+	// Long userId = 2L;
+	//
+	// builder.scheme("http").port(8080).host("localhost").path("/resume/0");
+	//
+	// URI url = builder.build().toUri();
+	//
+	// List<UserOrganizationRole> userOrganizationRole = new ArrayList<>();
+	// userOrganizationRole.add(new UserOrganizationRole(userId, 1L,
+	// RolesEnum.STUDENT.name(), 0L));
+	// User authentication = new User("a", "b", true, true, true, true,
+	// userOrganizationRole);
+	// authentication.setUserId(userId);
+	//
+	// // the actual exception is wrapped in a
+	// // org.springframework.web.util.NestedServletException here, bah
+	// exception.expectMessage(YOU_ARE_NOT_AUTHORIZED_TO_ACCESS_THIS_DOCUMENT);
+	// given().auth().principal(authentication).get(url);
+	//
+	// }
 
 	@Test
 	public void testReadAccessResumeSectionDenied()
