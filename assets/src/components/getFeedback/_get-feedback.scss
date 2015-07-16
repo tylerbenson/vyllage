@@ -88,6 +88,10 @@
       padding: 0;
       width: 100%;
     }
+    .footer {
+      @include cf();
+      padding: 1em;
+    }
   }
 
   .shareable {
