@@ -2,9 +2,12 @@ package documents.files.pdf;
 
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -36,10 +39,11 @@ public class ResumePdfService {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		format(resumeHeader);
-		format(sections);
 
 		ctx.setVariable("header", resumeHeader);
-		ctx.setVariable("sections", sections);
+
+		ctx.setVariable("sections", sections.stream().sorted(sortSections())
+				.map(formatSection()).collect(Collectors.toList()));
 
 		String htmlContent = templateEngine.process("pdf-resume", ctx);
 
@@ -55,7 +59,7 @@ public class ResumePdfService {
 	}
 
 	/**
-	 * Applies formatting to header fields.
+	 * Applies formatting to header phone number in Locale.US.
 	 * 
 	 * @param resumeHeader
 	 * @throws ParseException
@@ -68,18 +72,28 @@ public class ResumePdfService {
 	}
 
 	/**
-	 * Applies formatting to section fields.
+	 * Applies Locale.US formatting to section fields transforming the section
+	 * description's *s into a list.
 	 * 
-	 * @param sections
 	 */
-	protected void format(List<DocumentSection> sections) {
-		ListFormatter listFormatter = new ListFormatter();
-
-		sections.forEach(s -> {
+	protected Function<? super DocumentSection, ? extends DocumentSection> formatSection() {
+		return s -> {
+			ListFormatter listFormatter = new ListFormatter();
 			s.setDescription(listFormatter.print(s.getDescription(), Locale.US));
 			s.setRoleDescription(listFormatter.print(s.getRoleDescription(),
 					Locale.US));
-		});
+			return s;
+		};
+	}
+
+	/**
+	 * Sorts sections based on their sectionPosition value.
+	 * 
+	 * @return sorted sections
+	 */
+	protected Comparator<? super DocumentSection> sortSections() {
+		return (s1, s2) -> s1.getSectionPosition().compareTo(
+				s2.getSectionPosition());
 	}
 
 }

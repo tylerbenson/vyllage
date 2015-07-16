@@ -5,6 +5,13 @@ import java.util.Locale;
 
 import org.springframework.format.Formatter;
 
+/**
+ * Formats a phone number into US locale. <br>
+ * ex: (555) 555-9999
+ * 
+ * @author uh
+ *
+ */
 public class PhoneNumberFormatter implements Formatter<String> {
 
 	@Override
