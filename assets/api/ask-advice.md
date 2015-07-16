@@ -9,7 +9,6 @@
 # Endpoint for submitting the request advice form
 ## POST /resume/get-feedback
 + Parameters
-  + documentId (string, `1`) - The id of the document.
 + Request (application/json)
   ++ Body
 
