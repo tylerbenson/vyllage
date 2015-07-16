@@ -25,7 +25,8 @@ Admin users only.
 ```
 	{
   		"documentId":0,
-  		"documentType":"resume"
+  		"documentType":"resume",
+  		"allowGuestComments":false
 	}
 ```
 + Response 200

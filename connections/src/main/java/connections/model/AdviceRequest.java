@@ -15,6 +15,8 @@ public class AdviceRequest {
 
 	private String message;
 
+	private boolean allowGuestComments;
+
 	public List<AccountNames> getUsers() {
 		return users;
 	}
@@ -45,5 +47,13 @@ public class AdviceRequest {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public boolean getAllowGuestComments() {
+		return allowGuestComments;
+	}
+
+	public void setAllowGuestComments(boolean allowGuestComments) {
+		this.allowGuestComments = allowGuestComments;
 	}
 }

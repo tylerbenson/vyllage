@@ -18,7 +18,8 @@
  	  "users":[{"userId":4,"firstName":"aName","middleName":null,"lastName":"aLastName"}],
       "notRegisteredUsers":[{"firstName":"aName","lastName":"aLastName","email":"anemail@gmail.com"}],
       "subject": "subject text"
-      "message": "message of request"
+      "message": "message of request",
+      "allowGuestComments":false
     }
 ```
 

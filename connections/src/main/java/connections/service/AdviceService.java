@@ -253,6 +253,8 @@ public class AdviceService {
 							.plusDays(30L));
 
 			linkRequest.setEmail(accountContact.getEmail());
+			linkRequest.setAllowGuestComments(adviceRequest
+					.getAllowGuestComments());
 
 			requestBody.add(linkRequest);
 		}
@@ -294,6 +296,9 @@ public class AdviceService {
 			linkRequest.setFirstName(notRegisteredUser.getFirstName());
 			linkRequest.setLastName(notRegisteredUser.getLastName());
 			linkRequest.setEmail(notRegisteredUser.getEmail());
+
+			linkRequest.setAllowGuestComments(adviceRequest
+					.getAllowGuestComments());
 
 			requestBody.add(linkRequest);
 		}

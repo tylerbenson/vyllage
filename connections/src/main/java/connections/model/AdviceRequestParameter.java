@@ -24,6 +24,8 @@ public class AdviceRequestParameter {
 
 	private String message;
 
+	private boolean allowGuestComments;
+
 	public List<AccountContact> getRegisteredUsersContactData() {
 		return registeredUsersContactData;
 	}
@@ -87,6 +89,14 @@ public class AdviceRequestParameter {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public boolean getAllowGuestComments() {
+		return allowGuestComments;
+	}
+
+	public void setAllowGuestComments(boolean allowGuestComments) {
+		this.allowGuestComments = allowGuestComments;
 	}
 
 }

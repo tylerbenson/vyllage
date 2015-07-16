@@ -34,6 +34,8 @@ public class DocumentLinkRequest {
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime expirationDate;
 
+	private boolean allowGuestComments;
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -88,6 +90,14 @@ public class DocumentLinkRequest {
 
 	public void setSendRegistrationMail(boolean sendRegistrationMail) {
 		this.sendRegistrationMail = sendRegistrationMail;
+	}
+
+	public boolean setAllowGuestComments() {
+		return allowGuestComments;
+	}
+
+	public void setAllowGuestComments(boolean allowGuestComments) {
+		this.allowGuestComments = allowGuestComments;
 	}
 
 }
