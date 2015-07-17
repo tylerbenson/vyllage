@@ -56,15 +56,26 @@ This endpoint is intended for internal use.
 		{
 			"documentId":0,
 			"userId":3,
-			"dateCreated":[2015,7,9,0,56,59,451000000],
-			"lastModified":[2015,7,9,0,56,59,451000000],
-			"expirationDate":null
+			"dateCreated":"2015-07-15T21:18:38",
+			"lastModified":"2015-07-15T21:18:38",
+			"expirationDate":null,
+			"allowGuestComments":true
 		}
 	]
 ```
 
 # Creates new permission for the document and user
 ## POST document/{documentId}/permissions/user/{userId}
++ Body 
+```
+	{
+		"userId":36,
+		"documentId":903,
+		"allowGuestComments":true
+	}
+	
+```
+
 + Response 200
 
 

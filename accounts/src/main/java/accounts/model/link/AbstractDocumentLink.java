@@ -2,24 +2,25 @@ package accounts.model.link;
 
 import java.time.LocalDateTime;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 @ToString
 @EqualsAndHashCode
 public class AbstractDocumentLink {
 
-	protected Long userId;
-	protected Long documentId;
-	protected String documentType;
-	protected String linkKey;
-	protected LinkType linkType;
-	protected Long visits;
+	private Long userId;
+	private Long documentId;
+	private String documentType;
+	private String linkKey;
+	private LinkType linkType;
+	private Long visits;
+	private boolean allowGuestComments = false;
 
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -83,6 +84,14 @@ public class AbstractDocumentLink {
 
 	public void setExpirationDate(LocalDateTime expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+
+	public boolean getAllowGuestComments() {
+		return allowGuestComments;
+	}
+
+	public void setAllowGuestComments(boolean allowGuestComments) {
+		this.allowGuestComments = allowGuestComments;
 	}
 
 }

@@ -15,7 +15,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * @author uh
  *
  */
-public class TogglzConsoleRequestMatcher implements RequestMatcher {
+public class RequestMatcherDisable implements RequestMatcher {
 	private Pattern allowedMethods = Pattern
 			.compile("^(GET|HEAD|TRACE|OPTIONS)$");
 	private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher(
@@ -23,10 +23,12 @@ public class TogglzConsoleRequestMatcher implements RequestMatcher {
 
 	@Override
 	public boolean matches(HttpServletRequest request) {
-		if (allowedMethods.matcher(request.getMethod()).matches()) {
+		if (allowedMethods.matcher(request.getMethod()).matches())
 			return false;
-		}
 
-		return !unprotectedMatcher.matches(request);
+		if (unprotectedMatcher.matches(request))
+			return false;
+
+		return true;
 	}
 }

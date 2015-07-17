@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import documents.model.AccountContact;
 import documents.model.AccountNames;
+import documents.model.LinkPermissions;
 
 @Service
 public class AccountService {
@@ -102,6 +103,23 @@ public class AccountService {
 
 		boolean body = restTemplate.exchange(builder.build().toUriString(),
 				HttpMethod.GET, entity, Boolean.class).getBody();
+
+		return body;
+	}
+
+	public LinkPermissions getLinkInformation(HttpServletRequest request,
+			String documentLinkKey) {
+
+		HttpEntity<Object> entity = assembleHeader(request);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
+				.path("/link/permissions/" + documentLinkKey);
+
+		LinkPermissions body = restTemplate.exchange(
+				builder.build().toUriString(), HttpMethod.GET, entity,
+				LinkPermissions.class).getBody();
 
 		return body;
 	}

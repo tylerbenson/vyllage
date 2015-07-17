@@ -65,6 +65,7 @@ public class DocumentAccessRepository {
 		newRecord.setLastModified(Timestamp.valueOf(LocalDateTime.now(ZoneId
 				.of("UTC"))));
 		newRecord.setExpirationDate(getExpirationDateOrNull(documentAccess));
+		newRecord.setAllowGuestComments(documentAccess.getAllowGuestComments());
 
 		newRecord.insert();
 	}
@@ -84,7 +85,8 @@ public class DocumentAccessRepository {
 				.now(ZoneId.of("UTC"))));
 		documentAccessRecord
 				.setExpirationDate(getExpirationDateOrNull(documentAccess));
-
+		documentAccessRecord.setAllowGuestComments(documentAccess
+				.getAllowGuestComments());
 		documentAccessRecord.update();
 	}
 

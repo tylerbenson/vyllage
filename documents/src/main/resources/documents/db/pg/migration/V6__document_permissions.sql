@@ -1,0 +1,1 @@
+alter table documents.document_access add column allow_guest_comments boolean default true;

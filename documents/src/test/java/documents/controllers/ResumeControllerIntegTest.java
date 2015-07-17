@@ -35,6 +35,7 @@ import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
 import documents.model.constants.DocumentTypeEnum;
+import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -57,6 +58,9 @@ public class ResumeControllerIntegTest {
 
 	@Autowired
 	private ResumePdfService pdfTest;
+
+	@Autowired
+	private DocumentAccessRepository documentAccessRepository;
 
 	@Test
 	public void updateTagLineTest() throws ElementNotFoundException,
@@ -385,7 +389,8 @@ public class ResumeControllerIntegTest {
 		Mockito.when(user.getUserId()).thenReturn(userId);
 
 		ResumeController controller = new ResumeController(documentService,
-				accountService, notificationService, pdfTest);
+				accountService, notificationService, pdfTest,
+				documentAccessRepository);
 
 		DocumentHeader resumeHeader = controller.getResumeHeader(request,
 				documentId, user);

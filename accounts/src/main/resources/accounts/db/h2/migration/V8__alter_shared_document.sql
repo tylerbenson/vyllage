@@ -1,0 +1,1 @@
+alter table ACCOUNTS.shared_document add column allow_guest_comments boolean default true;

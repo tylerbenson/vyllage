@@ -1,9 +1,14 @@
 package accounts.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 
 import user.common.User;
@@ -14,6 +19,9 @@ public class SignInUtil {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
 	/**
 	 * Looks up the user and logs him in.
@@ -48,11 +56,18 @@ public class SignInUtil {
 	/**
 	 * Signs in the user.
 	 * 
+	 * @param request
+	 * 
 	 * @param user
+	 * @param password
 	 */
-	public void signIn(User user) {
+	public void signIn(HttpServletRequest request, User user, String password) {
 		Authentication auth = new UsernamePasswordAuthenticationToken(user,
-				user.getPassword(), user.getAuthorities());
+				password, user.getAuthorities());
+
+		((AbstractAuthenticationToken) auth)
+				.setDetails(new WebAuthenticationDetails(request));
+		auth = authenticationManager.authenticate(auth);
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
