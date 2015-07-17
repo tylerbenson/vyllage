@@ -299,6 +299,7 @@ public class ResumeController {
 			header.setPhoneNumber(accountContactData.get(0).getPhoneNumber());
 			header.setTwitter(accountContactData.get(0).getTwitter());
 			header.setLinkedIn(accountContactData.get(0).getLinkedIn());
+			header.setAvatarUrl(accountContactData.get(0).getAvatarUrl());
 		}
 
 		header.setTagline(document.getTagline());
