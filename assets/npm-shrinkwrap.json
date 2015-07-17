@@ -2,10 +2,6 @@
   "name": "project-assets",
   "version": "0.0.0",
   "dependencies": {
-    "bluebird": {
-      "version": "2.9.33",
-      "from": "bluebird@*"
-    },
     "classnames": {
       "version": "1.2.2",
       "from": "classnames@1.2.2"
