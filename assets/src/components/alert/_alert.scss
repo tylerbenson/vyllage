@@ -12,9 +12,10 @@
   font-size: 0.9em;
   z-index: 999;
   transition: top .6s ease;
+  z-index: 1;
 
   &.visible {
-  	top: 0;
+  	top: 3em;
     transition: top .4s ease;
   }
 
