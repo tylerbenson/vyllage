@@ -10,7 +10,8 @@ var Banner = React.createClass({
   getInitialState: function () {
     return {
       tagline: '',
-      editMode: {
+      editMode: false,
+      editable: {
         tagline: false,
         address: false,
         email: false,
@@ -27,17 +28,17 @@ var Banner = React.createClass({
   enableEditMode: function (field, e) {
     e.preventDefault();
     if (this.props.header.owner) {
-      var editMode = this.state.editMode;
-      editMode[field] = true;
-      this.setState({editMode: editMode});
+      var editable = this.state.editable;
+      editable[field] = true;
+      this.setState({editable: editable});
     }
   },
   disableEditMode: function (field, e) {
     e.preventDefault();
     var header = this.props.header || {};
-    var editMode = this.state.editMode;
-    editMode[field] = false;
-    this.setState({editMode: editMode});
+    var editable = this.state.editable;
+    editable[field] = false;
+    this.setState({editable: editable});
 
     switch(field) {
       case 'tagline':
@@ -74,10 +75,21 @@ var Banner = React.createClass({
       settingActions.changeSetting({name: field, value: value, privacy: "private"});
     }
   },
+  saveChanges: function(){
+    this.toggleEditable(false);
+  },
+  discardChanges: function(){
+    this.toggleEditable(false);
+  },
+  toggleEditable: function(flag){
+    var flag = flag || false;
+    this.setState({editMode: flag});
+  },
   render: function() {
     var header = this.props.header || {};
     var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {};
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {};
+    var isReadOnly = (!header.owner) || (header.owner && !this.state.editMode);
 
     return (
       <section className='banner'>
@@ -88,7 +100,7 @@ var Banner = React.createClass({
             </div>
             {(header.owner || header.tagline)? <Textarea
               key={header.tagline || undefined}
-              disabled={!header.owner}
+              disabled={isReadOnly}
               placeholder="What's your professional tagline?"
               className="transparent tagline"
               rows="1"
@@ -100,7 +112,7 @@ var Banner = React.createClass({
             ></Textarea>: null}
             {(header.owner || header.address)? <Textarea
               key={header.address || undefined}
-              disabled={!header.owner}
+              disabled={isReadOnly}
               placeholder="Where is your current location?"
               className="transparent address"
               rows="1"
@@ -119,6 +131,7 @@ var Banner = React.createClass({
                 type='text'
                 placeholder="E-mail Address"
                 readOnly={!header.owner}
+                disabled={isReadOnly}
                 key={header.email || undefined}
                 className="inline transparent"
                 autoComplete="off"
@@ -135,7 +148,7 @@ var Banner = React.createClass({
                 required
                 type='text'
                 placeholder="Contact Number"
-                disabled={!header.owner}
+                disabled={isReadOnly}
                 key={header.phoneNumber || undefined}
                 className="inline transparent"
                 autoComplete="off"
@@ -153,7 +166,7 @@ var Banner = React.createClass({
                 required
                 type='text'
                 placeholder="Twitter Username"
-                disabled={!header.owner}
+                disabled={isReadOnly}
                 key={header.twitter || undefined}
                 className="inline transparent twitter"
                 autoComplete="off"
@@ -164,6 +177,29 @@ var Banner = React.createClass({
               />
             </div>: null}
           </div>
+        </div>
+
+        <div className="actions">
+
+          {( this.state.editMode ?
+            <div className="content">
+              <button onClick={this.saveChanges}>
+                <i className="ion-checkmark"></i>
+                <span>Save Changes</span>
+              </button>
+              <button onClick={this.discardChanges} className="flat">
+                <span>Cancel</span>
+              </button>
+            </div>
+            :
+            <div className="content">
+              <button onClick={this.toggleEditable.bind(this, true)}>
+                <i className="ion-edit"></i>
+                <span>Edit Profile</span>
+              </button>
+            </div>
+          )}
+
         </div>
       </section>
     );
