@@ -54,6 +54,10 @@
       line-height: 1.4;
       margin-top: 1em;
       white-space: normal;
+
+      &[disabled] {
+        margin-top: 0;
+      }
     }
   }
 

@@ -5,80 +5,116 @@ var settingActions = require('../../settings/actions');
 var filter = require('lodash.filter');
 var phoneFormatter = require('phone-formatter');
 var validator = require('validator');
+var clone = require('clone-deep');
+var foreach = require('lodash.foreach');
 
 var Banner = React.createClass({
   getInitialState: function () {
     return {
-      tagline: '',
       editMode: false,
-      editable: {
-        tagline: false,
-        address: false,
-        email: false,
-        twitter: false,
-        phoneNumber: false
-      }
+      fields: clone(this.props.header)
     }
   },
   componentWillReceiveProps: function (nextProps) {
-    if (nextProps.header.tagline !== this.props.header.tagline) {
-      this.setState({tagline: nextProps.header.tagline});
+    //For delayed header response
+    //TODO: should be converted into a promise on the store side
+    if (nextProps.header !== this.props.header) {
+      this.setState({fields: nextProps.header});
     }
   },
-  enableEditMode: function (field, e) {
-    e.preventDefault();
-    if (this.props.header.owner) {
-      var editable = this.state.editable;
-      editable[field] = true;
-      this.setState({editable: editable});
-    }
-  },
-  disableEditMode: function (field, e) {
-    e.preventDefault();
-    var header = this.props.header || {};
-    var editable = this.state.editable;
-    editable[field] = false;
-    this.setState({editable: editable});
-
-    switch(field) {
-      case 'tagline':
-        actions.updateTagline(this.state.tagline);
-        break;
-      case 'email':
-        if(validator.isEmail(e.target.value)) {
-          settingActions.updateSettings();
-        }
-        else {
-          e.target.value = header.email;
-        }
-        break;
-      case 'phoneNumber':
-        var phoneNumberValue = phoneFormatter.normalize(e.target.value);
-        if(validator.isNumeric(phoneNumberValue) && phoneNumberValue.length === 10) {
-          e.target.value = phoneFormatter.format(phoneNumberValue, "(NNN) NNN-NNNN");
-          settingActions.changeSetting({name: field, value: phoneNumberValue, privacy: "private"});
-        }
-        else {
-          e.target.value = phoneFormatter.format(header.phoneNumber, "(NNN) NNN-NNNN");
-        }
-        break;
-      default:
-        settingActions.updateSettings();
-    }
-  },
-  handleChange: function (field, e) {
-    e.preventDefault();
-    if (field === 'tagline') {
-      this.setState({tagline: e.target.value});
-    } else {
-      var value = field === 'phoneNumber' ? phoneFormatter.normalize(e.target.value) : e.target.value;
-      settingActions.changeSetting({name: field, value: value, privacy: "private"});
-    }
+  getRefValue: function(ref) {
+    return this.refs[ref].getDOMNode().value;
   },
   saveChanges: function(){
-    this.toggleEditable(false);
+    var errors = [];
+    var banner = clone(this.state.fields);
+        banner.tagline =  this.getRefValue('tagline'),
+        banner.address =  this.getRefValue('address'),
+        banner.email =  this.getRefValue('email'),
+        banner.phoneNumber =  this.getRefValue('phoneNumber'),
+        banner.twitter =  this.getRefValue('twitter')
+
+    if(banner.tagline !== this.state.fields.tagline) {
+      var fields = clone(this.state.fields);
+      fields.tagline = banner.tagline;
+      this.setState({fields: fields});
+      this.props.header.tagline = banner.tagline;
+      actions.updateTagline(banner.tagline);
+    }
+
+    //Validation
+    if(!validator.isEmail(banner.email)) {
+      errors.push('email');
+    }
+    if(!(validator.isNumeric(banner.phoneNumber)
+      && banner.phoneNumber.length === 10)
+      && banner.phoneNumber.trim().length !== 0) {
+      errors.push('phoneNumber');
+    }
+
+    if(errors.length > 0) {
+      console.log(errors);
+    }
+    else {
+      settingActions.changeSetting({
+        name: 'address',
+        value: banner.address,
+        privacy: 'private'
+      });
+      settingActions.changeSetting({
+        name: 'email',
+        value: banner.email,
+        privacy: 'private'
+      });
+      settingActions.changeSetting({
+        name: 'phoneNumber',
+        value: banner.phoneNumber,
+        privacy: 'private'
+      });
+      settingActions.changeSetting({
+        name: 'twitter',
+        value: banner.twitter,
+        privacy: 'private'
+      });
+
+      settingActions.updateSettings();
+
+      // this.setState({fields: banner});
+      // this.props.header = banner;
+
+      this.toggleEditable(false);
+    }
+
+    // switch(field) {
+    //   case 'email':
+    //     if(validator.isEmail(e.target.value)) {
+    //       settingActions.updateSettings();
+    //     }
+    //     else {
+    //       e.target.value = header.email;
+    //     }
+    //     break;
+    //   case 'phoneNumber':
+    //     var phoneNumberValue = phoneFormatter.normalize(e.target.value);
+    //     if(validator.isNumeric(phoneNumberValue) && phoneNumberValue.length === 10) {
+    //       e.target.value = phoneFormatter.format(phoneNumberValue, "(NNN) NNN-NNNN");
+    //       settingActions.changeSetting({name: field, value: phoneNumberValue, privacy: "private"});
+    //     }
+    //     else {
+    //       e.target.value = phoneFormatter.format(header.phoneNumber, "(NNN) NNN-NNNN");
+    //     }
+    //     break;
+    //   default:
+    //     settingActions.updateSettings();
+    // }
   },
   discardChanges: function(){
+    foreach(this.refs, function(n, key){
+      var component = this.refs[key].getDOMNode();
+      //Revert to state value
+      component.value = this.state.fields[key];
+    }.bind(this));
+
     this.toggleEditable(false);
   },
   toggleEditable: function(flag){
@@ -87,6 +123,7 @@ var Banner = React.createClass({
   },
   render: function() {
     var header = this.props.header || {};
+    var fields = this.state.fields;
     var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {};
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {};
     var isReadOnly = (!header.owner) || (header.owner && !this.state.editMode);
@@ -98,33 +135,29 @@ var Banner = React.createClass({
             <div className="name">
               {(header.firstName || '') + " " + (header.middleName || '') + " " + (header.lastName || '')}
             </div>
-            {(header.owner || header.tagline)? <Textarea
-              key={header.tagline || undefined}
+            {(header.owner || fields.tagline)? <Textarea
+              key={fields.tagline || undefined}
               disabled={isReadOnly}
               placeholder="What's your professional tagline?"
               className="transparent tagline"
               rows="1"
               autoComplete="off"
-              defaultValue={header.tagline}
-              onChange={this.handleChange.bind(this, 'tagline')}
-              onClick={this.enableEditMode.bind(this, 'tagline')}
-              onBlur={this.disableEditMode.bind(this, 'tagline')}
+              ref="tagline"
+              defaultValue={fields.tagline}
             ></Textarea>: null}
-            {(header.owner || header.address)? <Textarea
-              key={header.address || undefined}
+            {(header.owner || fields.address)? <Textarea
+              key={fields.address || undefined}
               disabled={isReadOnly}
               placeholder="Where is your current location?"
               className="transparent address"
               rows="1"
               autoComplete="off"
-              defaultValue={header.address}
-              onChange={this.handleChange.bind(this, 'address')}
-              onClick={this.enableEditMode.bind(this, 'address')}
-              onBlur={this.disableEditMode.bind(this, 'address')}
+              ref="address"
+              defaultValue={fields.address}
             ></Textarea>: null}
           </div>
           <div className="contact">
-            {(header.owner || header.email)? <div className='detail'>
+            {(header.owner || fields.email)? <div className='detail'>
               <i className="ion-email"></i>
               <input
                 required
@@ -132,34 +165,30 @@ var Banner = React.createClass({
                 placeholder="E-mail Address"
                 readOnly={!header.owner}
                 disabled={isReadOnly}
-                key={header.email || undefined}
+                key={fields.email || undefined}
                 className="inline transparent"
                 autoComplete="off"
-                defaultValue={header.email}
-                onChange={this.handleChange.bind(this, 'email')}
-                onClick={this.enableEditMode.bind(this, 'email')}
-                onBlur={this.disableEditMode.bind(this, 'email')}
+                ref="email"
+                defaultValue={fields.email}
               />
               <p className='error'>{emailSetting.errorMessage}</p>
             </div>: null}
-            {(header.owner || header.phoneNumber)? <div className='detail'>
+            {(header.owner || fields.phoneNumber)? <div className='detail'>
               <i className="ion-ios-telephone"></i>
               <input
                 required
                 type='text'
                 placeholder="Contact Number"
                 disabled={isReadOnly}
-                key={header.phoneNumber || undefined}
+                key={fields.phoneNumber || undefined}
                 className="inline transparent"
                 autoComplete="off"
-                defaultValue={header.phoneNumber?phoneFormatter.format(header.phoneNumber,"(NNN) NNN-NNNN"):''}
-                onChange={this.handleChange.bind(this, 'phoneNumber')}
-                onClick={this.enableEditMode.bind(this, 'phoneNumber')}
-                onBlur={this.disableEditMode.bind(this, 'phoneNumber')}
+                ref="phoneNumber"
+                defaultValue={fields.phoneNumber?phoneFormatter.format(fields.phoneNumber,"(NNN) NNN-NNNN"):''}
               />
               <p className='error'>{phoneNumberSetting.errorMessage}</p>
             </div>: null}
-            {(header.owner || header.twitter)? <div className='detail'>
+            {(header.owner || fields.twitter)? <div className='detail'>
               <i className="ion-social-twitter"></i>
               <span className='tip'>@</span>
               <input
@@ -167,13 +196,11 @@ var Banner = React.createClass({
                 type='text'
                 placeholder="Twitter Username"
                 disabled={isReadOnly}
-                key={header.twitter || undefined}
+                key={fields.twitter || undefined}
                 className="inline transparent twitter"
                 autoComplete="off"
-                defaultValue={header.twitter}
-                onChange={this.handleChange.bind(this, 'twitter')}
-                onClick={this.enableEditMode.bind(this, 'twitter')}
-                onBlur={this.disableEditMode.bind(this, 'twitter')}
+                ref="twitter"
+                defaultValue={fields.twitter}
               />
             </div>: null}
           </div>
