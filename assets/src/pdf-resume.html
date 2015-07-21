@@ -22,13 +22,13 @@
   <hr />
   <!-- loop over the sections -->
   <th:block th:each="section : ${sections}">
-    <th:block th:switch="${section.type.name()}">
-      <th:block th:case="'FREEFORM'">
+    <th:block th:switch="${section.type}">
+      <th:block th:case="'SkillsSection'">
         <h3 th:text="${#strings.capitalizeWords(section.title)}">
         </h3>
         <p th:utext="${section.description}"></p>
       </th:block>
-      <th:block th:case="'ORGANIZATION'">
+      <th:block th:case="'EducationSection'">
         <h3 th:text="${#strings.capitalizeWords(section.title)}">
         </h3>
         <h4 th:text="${section.organizationName}">
@@ -38,8 +38,12 @@
         <p th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</p>
         <p class="location" th:text="${section.location}"></p>
         <p th:utext="${section.roleDescription}"></p>
+        <ul th:each="high : ${section.highlights}">
+          <li th:text="${high}">
+        	</li>
+        </ul>
       </th:block>
-      <th:block th:case="'EXPERIENCE'">
+      <th:block th:case="'JobExperienceSection'">
         <h3 th:text="${#strings.capitalizeWords(section.title)}">
         </h3>
         <h4 th:text="${section.organizationName}">
@@ -49,6 +53,10 @@
         <p th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</p>
         <p class="location" th:text="${section.location}"></p>
         <p th:utext="${section.roleDescription}"></p>
+        <ul th:each="high : ${section.highlights}">
+          <li th:text="${high}">
+        	</li>
+        </ul>
       </th:block>
     </th:block>
   </th:block>
