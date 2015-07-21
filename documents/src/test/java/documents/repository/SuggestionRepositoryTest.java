@@ -10,7 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import documents.Application;
 import documents.model.Suggestion;
-import documents.model.document.sections.OrganizationSection;
+import documents.model.document.sections.EducationSection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -69,7 +69,7 @@ public class SuggestionRepositoryTest {
 
 	private Suggestion generateSuggestion() {
 		Suggestion suggestion = new Suggestion();
-		suggestion.setDocumentSection(OrganizationSection
+		suggestion.setDocumentSection(EducationSection
 				.fromJSON(JSON));
 		suggestion.setSectionId(124L);
 		suggestion.setSectionVersion(1L);

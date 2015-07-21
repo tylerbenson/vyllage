@@ -18,8 +18,8 @@ import org.springframework.context.annotation.PropertySource;
 import documents.model.OldDocumentSection;
 import documents.model.constants.NewSectionType;
 import documents.model.constants.SectionType;
+import documents.model.document.sections.EducationSection;
 import documents.model.document.sections.JobExperienceSection;
-import documents.model.document.sections.OrganizationSection;
 import documents.model.document.sections.SkillsSection;
 import documents.model.document.sections.SummarySection;
 import documents.repository.DocumentSectionRepository;
@@ -39,10 +39,10 @@ public class Application implements CommandLineRunner {
 	private ApplicationContext context;
 
 	@Autowired
-	DocumentSectionRepository repo;
+	private DocumentSectionRepository repo;
 
 	@Autowired
-	DSLContext sql;
+	private DSLContext sql;
 
 	public static void main(String[] args) {
 		SpringApplication application = new SpringApplication(Application.class);
@@ -81,12 +81,12 @@ public class Application implements CommandLineRunner {
 					.toLocalDateTime());
 
 			if (old.getType().equals(SectionType.ORGANIZATION)) {
-				OrganizationSection newSection = new OrganizationSection();
+				EducationSection newSection = new EducationSection();
 				newSection.setCurrent(old.getIsCurrent());
 				newSection.setDescription(old.getDescription());
 				newSection.setDocumentId(old.getDocumentId());
 				newSection.setEndDate(old.getEndDate());
-				newSection.setHighlights(old.getHighlights());
+				newSection.getHighlights().add(old.getHighlights());
 				newSection.setLastModified(old.getLastModified());
 				newSection.setLocation(old.getLocation());
 				newSection.setNumberOfComments(old.getNumberOfComments());
@@ -101,7 +101,7 @@ public class Application implements CommandLineRunner {
 				newSection.setStartDate(old.getStartDate());
 				newSection.setState(old.getState());
 				newSection.setTitle(old.getTitle());
-				newSection.setType(NewSectionType.ORGANIZATION_SECTION);
+				newSection.setType(NewSectionType.EDUCATION_SECTION);
 
 				repo.save(newSection);
 				logger.info("Saved Organization Section: " + newSection);
@@ -113,7 +113,7 @@ public class Application implements CommandLineRunner {
 				newSection.setDescription(old.getDescription());
 				newSection.setDocumentId(old.getDocumentId());
 				newSection.setEndDate(old.getEndDate());
-				newSection.setHighlights(old.getHighlights());
+				newSection.getHighlights().add(old.getHighlights());
 				newSection.setLastModified(old.getLastModified());
 				newSection.setLocation(old.getLocation());
 				newSection.setNumberOfComments(old.getNumberOfComments());
@@ -170,8 +170,6 @@ public class Application implements CommandLineRunner {
 					logger.info("Saved Summary Section: " + newSection);
 				}
 			}
-
 		}
-
 	}
 }

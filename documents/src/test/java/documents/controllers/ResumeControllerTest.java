@@ -20,7 +20,7 @@ import documents.files.pdf.ResumePdfService;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.document.sections.DocumentSection;
-import documents.model.document.sections.OrganizationSection;
+import documents.model.document.sections.EducationSection;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
@@ -103,7 +103,7 @@ public class ResumeControllerTest {
 		Mockito.when(documentService.getDocumentSections(documentId))
 				.thenReturn(
 						Arrays.asList(DocumentSection.fromJSON(SECTION_123),
-								OrganizationSection
+								EducationSection
 										.fromJSON(SECTION_124)));
 
 		given().standaloneSetup(controller).when()
@@ -124,7 +124,7 @@ public class ResumeControllerTest {
 				document);
 
 		Mockito.when(documentService.getDocumentSection(124L)).thenReturn(
-				OrganizationSection.fromJSON(SECTION_124));
+				EducationSection.fromJSON(SECTION_124));
 
 		given().standaloneSetup(controller).when()
 				.post("/resume/" + documentId + "/section/").then()

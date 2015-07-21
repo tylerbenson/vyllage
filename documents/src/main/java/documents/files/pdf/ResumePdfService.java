@@ -20,7 +20,7 @@ import com.lowagie.text.DocumentException;
 
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
-import documents.model.document.sections.OrganizationSection;
+import documents.model.document.sections.EducationSection;
 
 @Service
 public class ResumePdfService {
@@ -46,7 +46,7 @@ public class ResumePdfService {
 		ctx.setVariable("header", resumeHeader);
 
 		ctx.setVariable("sections", sections.stream().sorted(sortSections())
-				.map(formatSection()).collect(Collectors.toList()));
+				.collect(Collectors.toList()));
 
 		String htmlContent = templateEngine.process("pdf-resume", ctx);
 
@@ -86,8 +86,8 @@ public class ResumePdfService {
 			s1.setDescription(listFormatter.print(s1.getDescription(),
 					Locale.US));
 
-			if (s1 instanceof OrganizationSection) {
-				OrganizationSection s2 = (OrganizationSection) s1;
+			if (s1 instanceof EducationSection) {
+				EducationSection s2 = (EducationSection) s1;
 
 				s2.setDescription(listFormatter.print(s2.getDescription(),
 						Locale.US));
