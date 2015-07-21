@@ -12,6 +12,8 @@ import util.dateSerialization.DocumentLocalDateTimeDeserializer;
 import util.dateSerialization.DocumentLocalDateTimeSerializer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,19 +22,27 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.newrelic.api.agent.NewRelic;
 
 import documents.model.constants.Visibility;
-import documents.utilities.SectionTypeDeserializer;
 
 @ToString
 @JsonIgnoreProperties(value = { "documentId", "sectionVersion" })
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
-public class DocumentSection {
-
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
+@JsonSubTypes({
+		@Type(value = AchievementsSection.class, name = "AchievementsSection"),
+		@Type(value = CareerInterestsSection.class, name = "CareerInterestsSection"),
+		@Type(value = JobExperienceSection.class, name = "JobExperienceSection"),
+		@Type(value = EducationSection.class, name = "EducationSection"),
+		@Type(value = PersonalReferencesSection.class, name = "PersonalReferencesSection"),
+		@Type(value = ProfessionalReferencesSection.class, name = "ProfessionalReferencesSection"),
+		@Type(value = ProjectsSection.class, name = "ProjectsSection"),
+		@Type(value = SkillsSection.class, name = "SkillsSection"),
+		@Type(value = SummarySection.class, name = "SummarySection"), })
+public abstract class DocumentSection {
 	private String title;
 	private Long sectionId;
 	private Long documentId;
 	private Long sectionVersion;
 
-	@JsonDeserialize(using = SectionTypeDeserializer.class)
+	// @JsonDeserialize(using = SectionTypeDeserializer.class)
 	private String type;
 	private Visibility state;
 	private Long sectionPosition;
@@ -125,15 +135,7 @@ public class DocumentSection {
 		final Logger logger = Logger.getLogger(DocumentSection.class.getName());
 
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerSubtypes(AchievementsSection.class);
-		mapper.registerSubtypes(CareerInterestsSection.class);
-		mapper.registerSubtypes(JobExperienceSection.class);
-		mapper.registerSubtypes(OrganizationSection.class);
-		mapper.registerSubtypes(PersonalReferencesSection.class);
-		mapper.registerSubtypes(ProfessionalReferencesSection.class);
-		mapper.registerSubtypes(ProjectSection.class);
-		mapper.registerSubtypes(SkillsSection.class);
-		mapper.registerSubtypes(SummarySection.class);
+
 		try {
 			return mapper.readValue(json, DocumentSection.class);
 		} catch (IOException e) {
@@ -146,15 +148,6 @@ public class DocumentSection {
 
 	public String asJSON() throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.registerSubtypes(AchievementsSection.class);
-		mapper.registerSubtypes(CareerInterestsSection.class);
-		mapper.registerSubtypes(JobExperienceSection.class);
-		mapper.registerSubtypes(OrganizationSection.class);
-		mapper.registerSubtypes(PersonalReferencesSection.class);
-		mapper.registerSubtypes(ProfessionalReferencesSection.class);
-		mapper.registerSubtypes(ProjectSection.class);
-		mapper.registerSubtypes(SkillsSection.class);
-		mapper.registerSubtypes(SummarySection.class);
 		return mapper.writeValueAsString(this);
 	}
 

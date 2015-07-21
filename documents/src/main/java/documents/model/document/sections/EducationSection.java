@@ -1,18 +1,18 @@
 package documents.model.document.sections;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 import lombok.ToString;
 import util.dateSerialization.LocalDateDeserializer;
 import util.dateSerialization.LocalDateSerializer;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @ToString(callSuper = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type")
-public class OrganizationSection extends DocumentSection {
+public class EducationSection extends DocumentSection {
 
 	private String organizationName;
 	private String organizationDescription;
@@ -32,7 +32,7 @@ public class OrganizationSection extends DocumentSection {
 
 	private boolean isCurrent;
 
-	private String highlights;
+	private List<String> highlights = new LinkedList<>();
 
 	public String getOrganizationName() {
 		return organizationName;
@@ -98,11 +98,11 @@ public class OrganizationSection extends DocumentSection {
 		this.isCurrent = isCurrent;
 	}
 
-	public String getHighlights() {
+	public List<String> getHighlights() {
 		return highlights;
 	}
 
-	public void setHighlights(String highlights) {
+	public void setHighlights(List<String> highlights) {
 		this.highlights = highlights;
 	}
 

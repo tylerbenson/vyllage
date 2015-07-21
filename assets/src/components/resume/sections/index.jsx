@@ -18,7 +18,17 @@ var Section = React.createClass({
   },
   render: function () {
     var section = this.props.section;
-    if (section.type === 'freeform') {
+    if (section.type === 'SkillsSection') {
+      return (
+        <Freeform 
+          index={this.props.index}
+          section={section} 
+          moveSection={this.props.moveSection}
+          owner={this.props.owner} />
+      );
+    }
+      
+    if (section.type === 'SummarySection') {
       return (
         <Freeform 
           index={this.props.index}
