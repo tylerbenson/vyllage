@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.newrelic.api.agent.NewRelic;
 
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
 
 @Component
 public class OrderSectionValidator {

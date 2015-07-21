@@ -29,7 +29,7 @@ import documents.Application;
 import documents.model.AccountContact;
 import documents.model.Document;
 import documents.model.DocumentHeader;
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
 import documents.repository.CommentRepository;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;

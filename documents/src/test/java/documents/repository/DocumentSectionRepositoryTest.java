@@ -13,7 +13,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.Application;
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
+import documents.model.document.sections.OrganizationSection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -65,9 +66,11 @@ public class DocumentSectionRepositoryTest {
 			ElementNotFoundException {
 		String highlights = "I was in charge of many people.";
 
-		DocumentSection documentSection = dsRepository.get(124L);
+		OrganizationSection documentSection = (OrganizationSection) dsRepository
+				.get(124L);
 		Long sectionVersion = documentSection.getSectionVersion() + 1;
-		// DocumentSection documentSection = DocumentSection.fromJSON(JSON);
+		// OldDocumentSection documentSection =
+		// OldDocumentSection.fromJSON(JSON);
 		documentSection.setSectionId(124L);
 
 		documentSection.setHighlights(highlights);
@@ -77,7 +80,9 @@ public class DocumentSectionRepositoryTest {
 				.save(documentSection);
 
 		Assert.assertNotNull(documentSection);
-		Assert.assertEquals(highlights, savedDocumentSection.getHighlights());
+		Assert.assertEquals(highlights,
+				((OrganizationSection) savedDocumentSection)
+						.getHighlights());
 		Assert.assertTrue("Expected version " + sectionVersion + " got "
 				+ savedDocumentSection.getSectionVersion(),
 				sectionVersion.equals(savedDocumentSection.getSectionVersion()));
@@ -85,7 +90,8 @@ public class DocumentSectionRepositoryTest {
 
 	@Test
 	public void deleteDocumentSectionTest() {
-		DocumentSection documentSection = DocumentSection.fromJSON(JSON);
+		OrganizationSection documentSection = (OrganizationSection) DocumentSection
+				.fromJSON(JSON);
 		documentSection.setDocumentId(0L);
 
 		DocumentSection savedDocumentSection = dsRepository
