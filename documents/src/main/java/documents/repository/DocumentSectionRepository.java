@@ -258,6 +258,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 
 		DocumentSection fromJSON = DocumentSection.fromJSON(existingRecord
 				.value1());
+
 		fromJSON.setDocumentId(existingRecord.value2());
 		fromJSON.setSectionVersion(existingRecord.value3());
 		fromJSON.setLastModified(existingRecord.value4().toLocalDateTime());

@@ -318,7 +318,11 @@ public class ResumeController {
 	public @ResponseBody DocumentSection createSection(
 			@PathVariable final Long documentId,
 			@RequestBody final DocumentSection documentSection)
-			throws JsonProcessingException, ElementNotFoundException {
+			throws ElementNotFoundException {
+
+		if (documentSection == null)
+			throw new IllegalArgumentException(
+					"The Document Section is required.");
 
 		if (!documentService.exists(documentId))
 			throw new ElementNotFoundException("Document '" + documentId
@@ -336,8 +340,11 @@ public class ResumeController {
 			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@RequestBody final DocumentSection documentSection)
-			throws JsonProcessingException, AccessDeniedException,
-			ElementNotFoundException {
+			throws ElementNotFoundException {
+
+		if (documentSection == null)
+			throw new IllegalArgumentException(
+					"The Document Section is required.");
 
 		documentSection.setDocumentId(documentId);
 

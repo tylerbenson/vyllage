@@ -3,7 +3,10 @@ package documents.services;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import documents.Application;
 import documents.model.document.sections.DocumentSection;
 import documents.repository.ElementNotFoundException;
+import documents.utilities.DocumentSectionDataMigration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -27,6 +31,14 @@ public class DocumentServiceIntegTest {
 
 	@Autowired
 	private DocumentService service;
+
+	@Inject
+	private DocumentSectionDataMigration migration;
+
+	@Before
+	public void setUp() throws Exception {
+		migration.migrate();
+	}
 
 	@Test
 	public void orderSectionsOK() throws JsonProcessingException,

@@ -36,16 +36,17 @@ import documents.repository.IRepository;
 @RunWith(MockitoJUnitRunner.class)
 public class DocumentServiceTest {
 
-	private static final String JSON = "{" + "\"type\": \"organization\","
+	private static final String JSON = "{"
+			+ "\"type\": \"JobExperienceSection\","
 			+ "\"title\": \"experience\"," + "\"sectionId\": 124,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
 			+ "\"role\": \"Manager, Local Accounts\","
 			+ "\"startDate\": \"Sep 2010\"," + "\"endDate\": \"\","
-			+ "\"isCurrent\": true," + "\"location\": \"Portland, Oregon\","
+			+ "\"current\": true," + "\"location\": \"Portland, Oregon\","
 			+ "\"roleDescription\": \"Blah Blah Blah\","
-			+ "\"highlights\": \"I was in charge of...\"" + "}";
+			+ "\"highlights\":[\"I was in charge of...\"" + "]}";
 
 	@InjectMocks
 	private DocumentService service;
@@ -79,8 +80,8 @@ public class DocumentServiceTest {
 
 		String json = JSON;
 
-		Mockito.doReturn(EducationSection.fromJSON(json))
-				.when(dsRepository).get(sectionId);
+		Mockito.doReturn(EducationSection.fromJSON(json)).when(dsRepository)
+				.get(sectionId);
 
 		DocumentSection documentSection = service.getDocumentSection(sectionId);
 
@@ -98,8 +99,8 @@ public class DocumentServiceTest {
 
 		Mockito.doReturn(
 				Arrays.asList(EducationSection.fromJSON(json1),
-						EducationSection.fromJSON(json2)))
-				.when(dsRepository).getDocumentSections(documentId);
+						EducationSection.fromJSON(json2))).when(dsRepository)
+				.getDocumentSections(documentId);
 
 		List<DocumentSection> documentSection = service
 				.getDocumentSections(documentId);
