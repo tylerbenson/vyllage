@@ -84,7 +84,7 @@ public class DocumentService {
 	}
 
 	/**
-	 * Saves the OldDocumentSection, if the record is already present it will
+	 * Saves the DocumentSection, if the record is already present it will
 	 * update instead.
 	 * 
 	 * @param body
@@ -148,11 +148,11 @@ public class DocumentService {
 	}
 
 	/**
-	 * Retrieves a single OldDocumentSection.
+	 * Retrieves a single DocumentSection.
 	 * 
 	 * @param id
 	 * @param sectionId
-	 * @return OldDocumentSection
+	 * @return DocumentSection
 	 * @throws ElementNotFoundException
 	 */
 	public DocumentSection getDocumentSection(Long sectionId)
