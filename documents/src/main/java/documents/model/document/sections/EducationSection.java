@@ -90,7 +90,7 @@ public class EducationSection extends DocumentSection {
 		this.location = location;
 	}
 
-	public boolean isCurrent() {
+	public boolean getIsCurrent() {
 		return isCurrent;
 	}
 
