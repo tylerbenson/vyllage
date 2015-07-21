@@ -22,9 +22,10 @@ import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;
-import documents.model.DocumentSection;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
+import documents.model.document.sections.DocumentSection;
+import documents.model.document.sections.OrganizationSection;
 import documents.repository.CommentRepository;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;
@@ -78,8 +79,8 @@ public class DocumentServiceTest {
 
 		String json = JSON;
 
-		Mockito.doReturn(DocumentSection.fromJSON(json)).when(dsRepository)
-				.get(sectionId);
+		Mockito.doReturn(OrganizationSection.fromJSON(json))
+				.when(dsRepository).get(sectionId);
 
 		DocumentSection documentSection = service.getDocumentSection(sectionId);
 
@@ -96,9 +97,9 @@ public class DocumentServiceTest {
 		String json2 = JSON;
 
 		Mockito.doReturn(
-				Arrays.asList(DocumentSection.fromJSON(json1),
-						DocumentSection.fromJSON(json2))).when(dsRepository)
-				.getDocumentSections(documentId);
+				Arrays.asList(OrganizationSection.fromJSON(json1),
+						OrganizationSection.fromJSON(json2)))
+				.when(dsRepository).getDocumentSections(documentId);
 
 		List<DocumentSection> documentSection = service
 				.getDocumentSections(documentId);

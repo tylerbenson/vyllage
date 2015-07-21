@@ -19,7 +19,8 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 import com.lowagie.text.DocumentException;
 
 import documents.model.DocumentHeader;
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
+import documents.model.document.sections.OrganizationSection;
 
 @Service
 public class ResumePdfService {
@@ -77,12 +78,19 @@ public class ResumePdfService {
 	 * 
 	 */
 	protected Function<? super DocumentSection, ? extends DocumentSection> formatSection() {
-		return s -> {
+		return s1 -> {
 			ListFormatter listFormatter = new ListFormatter();
-			s.setDescription(listFormatter.print(s.getDescription(), Locale.US));
-			s.setRoleDescription(listFormatter.print(s.getRoleDescription(),
+
+			s1.setDescription(listFormatter.print(s1.getDescription(),
 					Locale.US));
-			return s;
+
+			if (s1 instanceof OrganizationSection) {
+				OrganizationSection s2 = (OrganizationSection) s1;
+
+				s2.setDescription(listFormatter.print(s2.getDescription(),
+						Locale.US));
+			}
+			return s1;
 		};
 	}
 
