@@ -22,7 +22,7 @@ import com.newrelic.api.agent.NewRelic;
 import documents.domain.tables.DocumentSections;
 import documents.domain.tables.records.DocumentSectionsRecord;
 import documents.model.Document;
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
 
 @Repository
 public class DocumentSectionRepository implements IRepository<DocumentSection> {
@@ -57,8 +57,8 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		// order by id;
 
 		if (existingRecords == null || existingRecords.isEmpty())
-			throw new ElementNotFoundException("DocumentSection with id '" + id
-					+ "' not found.");
+			throw new ElementNotFoundException("OldDocumentSection with id '"
+					+ id + "' not found.");
 		return generateDocumentSection(existingRecords.get(0));
 	}
 
@@ -119,7 +119,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	 * Returns all the sections of the document
 	 *
 	 * @param document
-	 * @return DocumentSection
+	 * @return OldDocumentSection
 	 * @throws DocumentSectionNotFoundException
 	 */
 	public List<DocumentSection> getDocumentSections(Document document)
@@ -247,7 +247,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	}
 
 	/**
-	 * Generates a DocumentSection from the records containing the latest
+	 * Generates a OldDocumentSection from the records containing the latest
 	 * versions of the document sections.
 	 * 
 	 * @param existingRecord
@@ -255,6 +255,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	 */
 	private static DocumentSection generateDocumentSection(
 			Record4<String, Long, Long, Timestamp> existingRecord) {
+
 		DocumentSection fromJSON = DocumentSection.fromJSON(existingRecord
 				.value1());
 		fromJSON.setDocumentId(existingRecord.value2());

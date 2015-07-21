@@ -58,7 +58,7 @@ configure(javaProjects) {
 	}
 
 	def slf4j = '1.7.12'
-	def lombok = '1.14.8'
+	def lombok = '1.16.4'
 	def newrelic = '3.+'
 	def junit = '4.12'
 	def hamcrest = '1.3'

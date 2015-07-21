@@ -22,9 +22,9 @@ import documents.model.AccountContact;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;
-import documents.model.DocumentSection;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
+import documents.model.document.sections.DocumentSection;
 import documents.repository.CommentRepository;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;
@@ -84,7 +84,7 @@ public class DocumentService {
 	}
 
 	/**
-	 * Saves the DocumentSection, if the record is already present it will
+	 * Saves the OldDocumentSection, if the record is already present it will
 	 * update instead.
 	 * 
 	 * @param body
@@ -148,11 +148,11 @@ public class DocumentService {
 	}
 
 	/**
-	 * Retrieves a single DocumentSection.
+	 * Retrieves a single OldDocumentSection.
 	 * 
 	 * @param id
 	 * @param sectionId
-	 * @return DocumentSection
+	 * @return OldDocumentSection
 	 * @throws ElementNotFoundException
 	 */
 	public DocumentSection getDocumentSection(Long sectionId)

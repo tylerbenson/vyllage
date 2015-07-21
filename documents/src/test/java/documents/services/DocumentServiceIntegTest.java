@@ -16,7 +16,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.Application;
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
 import documents.repository.ElementNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)

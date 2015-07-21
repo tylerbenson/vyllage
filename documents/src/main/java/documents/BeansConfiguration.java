@@ -20,6 +20,21 @@ public class BeansConfiguration {
 	@Autowired
 	private Environment environment;
 
+	// @Bean(name = "documents.ObjectMapper")
+	// public ObjectMapper objectMapper() {
+	// ObjectMapper mapper = new ObjectMapper();
+	// mapper.registerSubtypes(AchievementsSection.class);
+	// mapper.registerSubtypes(CareerInterestsSection.class);
+	// mapper.registerSubtypes(JobExperienceSection.class);
+	// mapper.registerSubtypes(OrganizationSection.class);
+	// mapper.registerSubtypes(PersonalReferencesSection.class);
+	// mapper.registerSubtypes(ProfessionalReferencesSection.class);
+	// mapper.registerSubtypes(ProjectSection.class);
+	// mapper.registerSubtypes(SkillsSection.class);
+	// mapper.registerSubtypes(SummarySection.class);
+	// return mapper;
+	// }
+
 	@Bean
 	public RestTemplate restTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
