@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import lombok.ToString;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.util.Assert;
 
 import util.dateSerialization.DocumentLocalDateTimeDeserializer;
 import util.dateSerialization.DocumentLocalDateTimeSerializer;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.newrelic.api.agent.NewRelic;
 
+import documents.model.constants.NewSectionType;
 import documents.model.constants.Visibility;
 
 @ToString
@@ -42,7 +44,6 @@ public abstract class DocumentSection {
 	private Long documentId;
 	private Long sectionVersion;
 
-	// @JsonDeserialize(using = SectionTypeDeserializer.class)
 	private String type;
 	private Visibility state;
 	private Long sectionPosition;
@@ -66,11 +67,26 @@ public abstract class DocumentSection {
 		this.title = title;
 	}
 
+	/**
+	 * 
+	 * @param type
+	 *            any of the types in {@link NewSectionType}
+	 */
 	public String getType() {
+		Assert.notNull(type);
 		return type;
 	}
 
+	/**
+	 * 
+	 * @param type
+	 *            any of the types in {@link NewSectionType}
+	 */
 	public void setType(String type) {
+		Assert.notNull(type);
+		if (!NewSectionType.isValidType(type))
+			throw new IllegalArgumentException(type
+					+ " is not a valid section type.");
 		this.type = type;
 	}
 

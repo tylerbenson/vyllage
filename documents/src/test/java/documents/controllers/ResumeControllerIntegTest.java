@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -32,12 +33,16 @@ import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.constants.DocumentTypeEnum;
+import documents.model.constants.NewSectionType;
+import documents.model.document.sections.DocumentSection;
+import documents.model.document.sections.EducationSection;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
+import documents.utilities.DocumentSectionDataMigration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -50,6 +55,14 @@ public class ResumeControllerIntegTest {
 
 	@Inject
 	private DocumentService documentService;
+
+	@Inject
+	private DocumentSectionDataMigration migration;
+
+	@Before
+	public void setUp() throws Exception {
+		migration.migrate();
+	}
 
 	@Test
 	public void updateTagLineTest() throws ElementNotFoundException,
@@ -442,9 +455,10 @@ public class ResumeControllerIntegTest {
 		section.setLocation("Somewhere");
 		section.setSectionPosition(5L);
 		section.setTitle("title");
-		section.getHighlights().add("High");
+		section.getHighlights().add("High!");
 		section.setOrganizationDescription("description");
 		section.setOrganizationName("name");
+		section.setType(NewSectionType.EDUCATION_SECTION.type());
 		return section;
 	}
 

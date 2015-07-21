@@ -1,6 +1,9 @@
 package documents.repository;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import documents.Application;
 import documents.model.Suggestion;
 import documents.model.document.sections.EducationSection;
+import documents.utilities.DocumentSectionDataMigration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -20,7 +24,11 @@ public class SuggestionRepositoryTest {
 	@Autowired
 	private IRepository<Suggestion> repository;
 
-	private static final String JSON = "{" + "\"type\": \"organization\","
+	@Inject
+	private DocumentSectionDataMigration migration;
+
+	private static final String JSON = "{"
+			+ "\"type\": \"JobExperienceSection\","
 			+ "\"title\": \"experience\"," + "\"sectionId\": 124,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
@@ -29,7 +37,12 @@ public class SuggestionRepositoryTest {
 			+ "\"startDate\": \"Sep 2010\"," + "\"endDate\": \"\","
 			+ "\"isCurrent\": true," + "\"location\": \"Portland, Oregon\","
 			+ "\"roleDescription\": \"Blah Blah Blah\","
-			+ "\"highlights\": \"I was in charge of...\"" + "}";
+			+ "\"highlights\":[\"I was in charge of...\"" + "]}";
+
+	@Before
+	public void setUp() throws Exception {
+		migration.migrate();
+	}
 
 	@Test
 	public void testRetrieveExistingDocument() throws ElementNotFoundException {
@@ -69,8 +82,7 @@ public class SuggestionRepositoryTest {
 
 	private Suggestion generateSuggestion() {
 		Suggestion suggestion = new Suggestion();
-		suggestion.setDocumentSection(EducationSection
-				.fromJSON(JSON));
+		suggestion.setDocumentSection(EducationSection.fromJSON(JSON));
 		suggestion.setSectionId(124L);
 		suggestion.setSectionVersion(1L);
 		suggestion.setUserId(0L);
