@@ -77,13 +77,10 @@ public class DocumentSectionRepositoryTest {
 	public void updateDocumentSectionTest() throws JsonProcessingException,
 			ElementNotFoundException {
 		String highlights = "I was in charge of many people.";
-		// migration.migrate();
 
 		EducationSection documentSection = (EducationSection) dsRepository
 				.get(124L);
 		Long sectionVersion = documentSection.getSectionVersion() + 1;
-		// OldDocumentSection documentSection =
-		// OldDocumentSection.fromJSON(JSON);
 		documentSection.setSectionId(124L);
 
 		documentSection.getHighlights().add(highlights);

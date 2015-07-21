@@ -57,8 +57,8 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 		// order by id;
 
 		if (existingRecords == null || existingRecords.isEmpty())
-			throw new ElementNotFoundException("OldDocumentSection with id '"
-					+ id + "' not found.");
+			throw new ElementNotFoundException("DocumentSection with id '" + id
+					+ "' not found.");
 		return generateDocumentSection(existingRecords.get(0));
 	}
 
@@ -119,7 +119,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	 * Returns all the sections of the document
 	 *
 	 * @param document
-	 * @return OldDocumentSection
+	 * @return DocumentSection
 	 * @throws DocumentSectionNotFoundException
 	 */
 	public List<DocumentSection> getDocumentSections(Document document)
@@ -247,7 +247,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	}
 
 	/**
-	 * Generates a OldDocumentSection from the records containing the latest
+	 * Generates a DocumentSection from the records containing the latest
 	 * versions of the document sections.
 	 * 
 	 * @param existingRecord
