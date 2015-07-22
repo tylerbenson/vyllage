@@ -7,19 +7,30 @@ public class ContactReference {
 
 	private String pictureUrl;
 	private String name;
-	String description;
-	
+	private String description;
+
 	public String getPictureUrl() {
 		return pictureUrl;
 	}
+
 	public void setPictureUrl(String pictureUrl) {
 		this.pictureUrl = pictureUrl;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }
