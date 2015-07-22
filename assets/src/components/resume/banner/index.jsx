@@ -25,13 +25,46 @@ var Banner = React.createClass({
   getRefValue: function(ref) {
     return this.refs[ref].getDOMNode().value;
   },
+  triggerChanges: function(fields) {
+    var settings = [
+      {
+        errorMessage: null,
+        name: 'address',
+        value: fields.address,
+        privacy: 'private'
+      },
+      {
+        errorMessage: null,
+        name: 'email',
+        value: fields.email,
+        privacy: 'private'
+      },
+      {
+        errorMessage: null,
+        name: 'phoneNumber',
+        value: fields.phoneNumber,
+        privacy: 'private'
+      },
+      {
+        errorMessage: null,
+        name: 'twitter',
+        value: fields.twitter,
+        privacy: 'private'
+      }
+    ];
+
+    for (var i = 0; i < settings.length; i++) {
+      settingActions.changeSetting(settings[i]);
+    };
+
+    return settings;
+  },
   saveChanges: function(){
-    var errors = [];
     var banner = clone(this.state.fields);
         banner.tagline =  this.getRefValue('tagline'),
         banner.address =  this.getRefValue('address'),
         banner.email =  this.getRefValue('email'),
-        banner.phoneNumber =  this.getRefValue('phoneNumber'),
+        banner.phoneNumber =  phoneFormatter.normalize(this.getRefValue('phoneNumber')),
         banner.twitter =  this.getRefValue('twitter')
 
     if(banner.tagline !== this.state.fields.tagline) {
@@ -42,6 +75,9 @@ var Banner = React.createClass({
       actions.updateTagline(banner.tagline);
     }
 
+    var settings = this.triggerChanges(banner);
+    var errors = [];
+
     //Validation
     if(!validator.isEmail(banner.email)) {
       errors.push('email');
@@ -51,70 +87,28 @@ var Banner = React.createClass({
       && banner.phoneNumber.trim().length !== 0) {
       errors.push('phoneNumber');
     }
-
-    if(errors.length > 0) {
-      console.log(errors);
+    if(banner.twitter.length > 140) {
+      errors.push('twitter');
     }
-    else {
-      settingActions.changeSetting({
-        name: 'address',
-        value: banner.address,
-        privacy: 'private'
-      });
-      settingActions.changeSetting({
-        name: 'email',
-        value: banner.email,
-        privacy: 'private'
-      });
-      settingActions.changeSetting({
-        name: 'phoneNumber',
-        value: banner.phoneNumber,
-        privacy: 'private'
-      });
-      settingActions.changeSetting({
-        name: 'twitter',
-        value: banner.twitter,
-        privacy: 'private'
-      });
 
+    if(errors.length === 0) {
+      this.setState({fields: banner});
       settingActions.updateSettings();
-
-      // this.setState({fields: banner});
-      // this.props.header = banner;
-
       this.toggleEditable(false);
+      this.refs.phoneNumber.getDOMNode().value = banner.phoneNumber?phoneFormatter.format(banner.phoneNumber,"(NNN) NNN-NNNN"):'';
     }
-
-    // switch(field) {
-    //   case 'email':
-    //     if(validator.isEmail(e.target.value)) {
-    //       settingActions.updateSettings();
-    //     }
-    //     else {
-    //       e.target.value = header.email;
-    //     }
-    //     break;
-    //   case 'phoneNumber':
-    //     var phoneNumberValue = phoneFormatter.normalize(e.target.value);
-    //     if(validator.isNumeric(phoneNumberValue) && phoneNumberValue.length === 10) {
-    //       e.target.value = phoneFormatter.format(phoneNumberValue, "(NNN) NNN-NNNN");
-    //       settingActions.changeSetting({name: field, value: phoneNumberValue, privacy: "private"});
-    //     }
-    //     else {
-    //       e.target.value = phoneFormatter.format(header.phoneNumber, "(NNN) NNN-NNNN");
-    //     }
-    //     break;
-    //   default:
-    //     settingActions.updateSettings();
-    // }
   },
   discardChanges: function(){
     foreach(this.refs, function(n, key){
       var component = this.refs[key].getDOMNode();
       //Revert to state value
       component.value = this.state.fields[key];
+
+      var setting = filter(this.props.settings, {name: key})[0] || {};
+      setting.errorMessage = null;
     }.bind(this));
 
+    this.refs.phoneNumber.getDOMNode().value = this.state.fields.phoneNumber?phoneFormatter.format(this.state.fields.phoneNumber,"(NNN) NNN-NNNN"):'';
     this.toggleEditable(false);
   },
   toggleEditable: function(flag){
@@ -126,6 +120,7 @@ var Banner = React.createClass({
     var fields = this.state.fields;
     var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {};
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {};
+    var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {};
     var isReadOnly = (!header.owner) || (header.owner && !this.state.editMode);
 
     return (
@@ -202,6 +197,7 @@ var Banner = React.createClass({
                 ref="twitter"
                 defaultValue={fields.twitter}
               />
+              <p className='error'>{twitterSetting.errorMessage}</p>
             </div>: null}
           </div>
         </div>

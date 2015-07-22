@@ -53,6 +53,7 @@ module.exports = Reflux.createStore({
       this.settings.push(setting);
     }
     this.update();
+    return setting;
   },
   validateField: function (setting) {
     switch(setting.name) {
@@ -71,6 +72,8 @@ module.exports = Reflux.createStore({
       case 'twitter':
         setting.errorMessage = setting.value.length <= 140 ? null: "Invalid Twitter Username";
         break;
+      default:
+        setting.errorMessage = null;
     }
 
     return setting;
