@@ -398,8 +398,7 @@ public class DocumentService {
 		return documentRepository.getTaglines(userIds);
 	}
 
-	public void setUserDocumentsPermissions(User user,
-			DocumentAccess documentAccess) {
+	public void setUserDocumentsPermissions(DocumentAccess documentAccess) {
 		documentAccessRepository.create(documentAccess);
 	}
 

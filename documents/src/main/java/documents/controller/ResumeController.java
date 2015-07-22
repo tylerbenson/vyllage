@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
+import user.common.social.SocialSessionEnum;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
@@ -42,9 +43,13 @@ import documents.model.AccountContact;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
+import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
+import documents.model.LinkPermissions;
 import documents.model.UserNotification;
+import documents.model.constants.DocumentAccessEnum;
+import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -67,15 +72,19 @@ public class ResumeController {
 
 	private final ResumePdfService resumePdfService;
 
+	private final DocumentAccessRepository documentAccessRepository;
+
 	@Inject
 	public ResumeController(final DocumentService documentService,
 			final AccountService accountService,
 			final NotificationService notificationService,
-			final ResumePdfService resumePdfService) {
+			final ResumePdfService resumePdfService,
+			final DocumentAccessRepository documentAccessRepository) {
 		this.documentService = documentService;
 		this.accountService = accountService;
 		this.notificationService = notificationService;
 		this.resumePdfService = resumePdfService;
+		this.documentAccessRepository = documentAccessRepository;
 
 	}
 
@@ -131,11 +140,18 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET, produces = "text/html")
-	@CheckReadAccess
+	// @CheckReadAccess otherwise we cannot create permissions...
 	public String getResume(HttpServletRequest request,
 			@PathVariable final Long documentId,
 			@AuthenticationPrincipal User user, Model model)
 			throws ElementNotFoundException {
+
+		// if the user entered using a link get the key from the session
+		String documentLinkKey = (String) request.getSession().getAttribute(
+				SocialSessionEnum.LINK_KEY.name());
+
+		createUserPermissionsForLinks(request, documentId, user,
+				documentLinkKey);
 
 		// if document has no sections and I'm not the owner throw exception...
 		if (!documentService.existsForUser(user, documentId))
@@ -146,6 +162,29 @@ public class ResumeController {
 		model.addAttribute("userInfo", userInfo(request, user));
 
 		return "resume";
+	}
+
+	protected void createUserPermissionsForLinks(HttpServletRequest request,
+			final Long documentId, final User user, String documentLinkKey) {
+
+		if (documentLinkKey != null && !documentLinkKey.isEmpty()) {
+			// get the link permissions to create here
+			LinkPermissions linkPermissions = accountService
+					.getLinkInformation(request, documentLinkKey);
+
+			if (linkPermissions == null)
+				throw new AccessDeniedException(
+						"You are not authorized to access this document.");
+
+			DocumentAccess documentAccess = new DocumentAccess();
+			documentAccess.setDocumentId(documentId);
+			documentAccess.setUserId(user.getUserId());
+			documentAccess.setAllowGuestComments(linkPermissions
+					.getAllowGuestComments());
+
+			documentAccess.setAccess(DocumentAccessEnum.READ);
+			documentService.setUserDocumentsPermissions(documentAccess);
+		}
 	}
 
 	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
@@ -260,6 +299,7 @@ public class ResumeController {
 			header.setPhoneNumber(accountContactData.get(0).getPhoneNumber());
 			header.setTwitter(accountContactData.get(0).getTwitter());
 			header.setLinkedIn(accountContactData.get(0).getLinkedIn());
+			header.setAvatarUrl(accountContactData.get(0).getAvatarUrl());
 		}
 
 		header.setTagline(document.getTagline());
@@ -392,18 +432,27 @@ public class ResumeController {
 			@RequestBody final Comment comment,
 			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
-		setCommentData(sectionId, comment, user);
+		Optional<DocumentAccess> documentAccess = documentAccessRepository.get(
+				user.getUserId(), documentId);
+
+		if (documentAccess.isPresent()
+				&& !documentAccess.get().getAllowGuestComments())
+			throw new AccessDeniedException(
+					"You are not allowed to comment on this document.");
 
 		// notification
 		Document document = null;
 
 		try {
 			document = documentService.getDocument(documentId);
+
 		} catch (ElementNotFoundException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			throw e;
 		}
+
+		setCommentData(sectionId, comment, user);
 
 		// Check user ids before going to DB...
 		// don't notify if the user commenting is the owner of the document...
@@ -435,6 +484,14 @@ public class ResumeController {
 			@PathVariable final Long commentId,
 			@RequestBody final Comment comment,
 			@AuthenticationPrincipal User user) {
+
+		Optional<DocumentAccess> documentAccess = documentAccessRepository.get(
+				user.getUserId(), documentId);
+
+		if (documentAccess.isPresent()
+				&& !documentAccess.get().getAllowGuestComments())
+			throw new AccessDeniedException(
+					"You are not allowed to comment on this document.");
 
 		setCommentData(sectionId, comment, user);
 

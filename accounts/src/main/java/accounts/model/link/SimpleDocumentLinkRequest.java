@@ -9,6 +9,8 @@ public class SimpleDocumentLinkRequest {
 
 	private String documentType;
 
+	private boolean allowGuestComments = false;
+
 	public Long getDocumentId() {
 		return documentId;
 	}
@@ -23,5 +25,13 @@ public class SimpleDocumentLinkRequest {
 
 	public void setDocumentType(String documentType) {
 		this.documentType = documentType;
+	}
+
+	public boolean getAllowGuestComments() {
+		return allowGuestComments;
+	}
+
+	public void setAllowGuestComments(boolean allowGuestComments) {
+		this.allowGuestComments = allowGuestComments;
 	}
 }

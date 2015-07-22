@@ -18,6 +18,9 @@
   <link rel="stylesheet" href="css/login.css" />
   <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
 
+  <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
+
   <link href='http://fonts.googleapis.com/css?family=Lato:400,300,100' rel='stylesheet' type='text/css' />
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
@@ -44,7 +47,7 @@
             <div class="content">
               <h1 class="centered">Guest Log In</h1>
               <p class="centered">Give feedback on your friends resumé.</p>
-              <input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
+              <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}"></input>
               <input type="hidden" name="scope" value="email"></input>
               <!-- 				<input type="hidden" name="scope" value="publish_stream,user_photos,offline_access"></input> -->
             </div>

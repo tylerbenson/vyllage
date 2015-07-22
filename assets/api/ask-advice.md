@@ -9,7 +9,6 @@
 # Endpoint for submitting the request advice form
 ## POST /resume/get-feedback
 + Parameters
-  + documentId (string, `1`) - The id of the document.
 + Request (application/json)
   ++ Body
 
@@ -18,7 +17,8 @@
  	  "users":[{"userId":4,"firstName":"aName","middleName":null,"lastName":"aLastName"}],
       "notRegisteredUsers":[{"firstName":"aName","lastName":"aLastName","email":"anemail@gmail.com"}],
       "subject": "subject text"
-      "message": "message of request"
+      "message": "message of request",
+      "allowGuestComments":false
     }
 ```
 

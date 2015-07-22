@@ -1,5 +1,7 @@
 package accounts.service;
 
+import static accounts.domain.tables.Userconnection.USERCONNECTION;
+
 import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -18,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
+import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
@@ -86,6 +90,9 @@ public class UserService {
 	@Autowired
 	@Qualifier(value = "accounts.ExecutorService")
 	private ExecutorService executorService;
+
+	@Autowired
+	private DSLContext sql;
 
 	private BatchParser batchParser = new BatchParser();
 
@@ -407,22 +414,42 @@ public class UserService {
 						Collectors.mapping((AccountSetting as) -> as,
 								Collectors.toList())));
 
-		return map
-				.entrySet()
-				.stream()
-				.map(UserService::mapAccountContact)
-				.map(ac -> {
-					// hmmm, this should never happen...
-					try {
-						ac.setRegisteredOn(this.getUser(ac.getUserId())
-								.getDateCreated().toInstant(ZoneOffset.UTC)
-								.getEpochSecond());
-					} catch (UserNotFoundException e) {
-						logger.severe(ExceptionUtils.getStackTrace(e));
-						NewRelic.noticeError(e);
-					}
-					return ac;
-				}).collect(Collectors.toList());
+		return map.entrySet().stream().map(UserService::mapAccountContact)
+				.map(setUserRegisteredOn()).map(addAvatarUrl())
+				.collect(Collectors.toList());
+	}
+
+	private Function<? super AccountContact, ? extends AccountContact> addAvatarUrl() {
+		return ac -> {
+
+			// TODO: once we have twitter, linkedIn, etc change this to use a
+			// repository.
+			String userId = ac.getEmail();
+			List<String> urls = sql.select(USERCONNECTION.IMAGEURL)
+					.from(USERCONNECTION)
+					.where(USERCONNECTION.USERID.eq(userId))
+					.fetchInto(String.class);
+
+			if (urls != null && !urls.isEmpty())
+				ac.setAvatarUrl(urls.get(0));
+
+			return ac;
+		};
+	}
+
+	private Function<? super AccountContact, ? extends AccountContact> setUserRegisteredOn() {
+		return ac -> {
+			// hmmm, this should never happen...
+			try {
+				ac.setRegisteredOn(this.getUser(ac.getUserId())
+						.getDateCreated().toInstant(ZoneOffset.UTC)
+						.getEpochSecond());
+			} catch (UserNotFoundException e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
+			return ac;
+		};
 	}
 
 	/**
@@ -527,14 +554,13 @@ public class UserService {
 		this.emailBuilder = emailBuilder;
 	}
 
-	public User createUser(String email, String firstName, String middleName,
-			String lastName, Long auditUserId) {
+	public User createUser(String email, String password, String firstName,
+			String middleName, String lastName, Long auditUserId) {
 
 		if (auditUserId == null)
 			throw new AccessDeniedException(
 					"Account creation is not allowed without a referring user.");
 
-		String randomPassword = randomPasswordGenerator.getRandomPassword();
 		boolean enabled = true;
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
@@ -559,9 +585,8 @@ public class UserService {
 					auditUser.getUserId()));
 
 		User user = new User(null, firstName, middleName, lastName, email,
-				randomPassword, enabled, accountNonExpired,
-				credentialsNonExpired, accountNonLocked,
-				defaultAuthoritiesForNewUser, null, null);
+				password, enabled, accountNonExpired, credentialsNonExpired,
+				accountNonLocked, defaultAuthoritiesForNewUser, null, null);
 
 		userRepository.createUser(user);
 

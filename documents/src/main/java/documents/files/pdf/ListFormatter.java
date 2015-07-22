@@ -6,7 +6,8 @@ import java.util.Locale;
 import org.springframework.format.Formatter;
 
 /**
- * Searches for * in text and converts them to
+ * Searches for * in text and converts them to '-' adding breaks to generate
+ * lists.
  * 
  * @author uh
  *

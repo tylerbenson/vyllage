@@ -122,6 +122,8 @@ public class AdviceRequestController {
 		adviceRequestParameters.setSenderName(firstName);
 		adviceRequestParameters.setSubject(adviceRequest.getSubject());
 		adviceRequestParameters.setMessage(adviceRequest.getMessage());
+		adviceRequestParameters.setAllowGuestComments(adviceRequest
+				.getAllowGuestComments());
 
 		adviceService.sendRequestAdviceEmail(request, adviceRequestParameters,
 				user);

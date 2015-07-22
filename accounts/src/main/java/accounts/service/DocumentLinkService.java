@@ -50,21 +50,17 @@ public class DocumentLinkService {
 
 	private final SharedDocumentRepository sharedDocumentRepository;
 
-	private final DocumentService documentService;
-
 	@Inject
 	public DocumentLinkService(
 			final UserCredentialsRepository userCredentialsRepository,
 			final UserService userService,
 			final RandomPasswordGenerator randomPasswordGenerator,
-			final SharedDocumentRepository sharedDocumentRepository,
-			final DocumentService documentService) {
+			final SharedDocumentRepository sharedDocumentRepository) {
 		super();
 		this.userCredentialsRepository = userCredentialsRepository;
 		this.userService = userService;
 		this.randomPasswordGenerator = randomPasswordGenerator;
 		this.sharedDocumentRepository = sharedDocumentRepository;
-		this.documentService = documentService;
 	}
 
 	public EmailDocumentLink createEmailLink(HttpServletRequest request,
@@ -85,9 +81,9 @@ public class DocumentLinkService {
 				LINK_EXPIRATION_DAYS));
 		doclink.setLinkKey(randomPasswordGenerator
 				.getRandomString(DOCUMENT_SHORT_URL_LENGTH));
+		doclink.setAllowGuestComments(linkRequest.getAllowGuestComments());
 
 		sharedDocumentRepository.create(doclink);
-		documentService.createDocumentPermission(request, doclink);
 
 		return doclink;
 	}
@@ -108,6 +104,7 @@ public class DocumentLinkService {
 		doclink.setLinkKey(randomPasswordGenerator
 				.getRandomString(DOCUMENT_SHORT_URL_LENGTH));
 		doclink.setLinkType(LinkType.SOCIAL);
+		doclink.setAllowGuestComments(linkRequest.getAllowGuestComments());
 
 		sharedDocumentRepository.create(doclink);
 

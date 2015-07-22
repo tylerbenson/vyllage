@@ -25,13 +25,20 @@ Admin users only.
 ```
 	{
   		"documentId":0,
-  		"documentType":"resume"
+  		"documentType":"resume",
+  		"allowGuestComments":false
 	}
 ```
 + Response 200
 ++ String, encoded link to the document.
 
-## GET /link/access-shared-document/{encodedDocumentLink}
+# Email links
+## GET /link/e/{encodedDocumentLink}
++ Parameters
+++ encodedDocumentLink (string, `www.vyllage.com/link/access-shared-document/Ph5c-0vx3FlslrH...`) - The link to the document.
+
+# URL links with social account login
+## GET /link/s/{encodedDocumentLink}
 + Parameters
 ++ encodedDocumentLink (string, `www.vyllage.com/link/access-shared-document/Ph5c-0vx3FlslrH...`) - The link to the document.
 

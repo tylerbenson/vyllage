@@ -11,7 +11,7 @@ import lombok.ToString;
  * @author uh
  *
  */
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class EmailDocumentLink extends AbstractDocumentLink {
 

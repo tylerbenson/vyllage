@@ -30,17 +30,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/account/reset-password",
 						"/account/reset-password-change/**", "/signin/**",
-						"/signup/**", "/social-login/**", "/link/e/**",
-						"/link/s/**").permitAll();
+						"/signup/**", "/social-login/**", "/link/e/**",	"/link/s/**").permitAll();
 
 		// disabling CSRF for the togglz console.
 		http.csrf().requireCsrfProtectionMatcher(
-				new TogglzConsoleRequestMatcher());
+				new RequestMatcherDisable());
 
 		// Allow frames to enable the h2 console.
 		http.headers().addHeaderWriter(
 				new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
-
+		http.headers().disable() ;
 		http.authorizeRequests()
 				.antMatchers("/", "/status", "/status-*", "/css/**",
 						"/images/**", "/javascript/**").permitAll();
@@ -57,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll();
 
 	}
-
+    
 	@Bean
 	public AddUserAuthenticationSuccessHandler successHandler() {
 		AddUserAuthenticationSuccessHandler successHandler = new AddUserAuthenticationSuccessHandler();
@@ -65,4 +64,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		return successHandler;
 	}
+	
 }

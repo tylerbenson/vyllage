@@ -32,13 +32,13 @@
 + Response (application/json)
 
 ```
-	{
+	[{
 		"accountSettingId":1, 
 		"userId":0,
 		"name":"firstName",
 		"value":"Luke",
 		"privacy":"public"
-	}
+	}]
 ```
 
 # Save account setting 
