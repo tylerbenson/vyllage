@@ -26,6 +26,7 @@ public enum Features implements Feature {
 	@Label("New Relic")
 	NEW_RELIC,
 
+	@EnabledByDefault
 	@Label("Printing")
 	PRINTING,
 

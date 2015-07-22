@@ -27,6 +27,7 @@ public enum NewSectionType {
 
 	NewSectionType(String type) {
 		this.type = type;
+
 	}
 
 	public String type() {
