@@ -5,16 +5,16 @@ var filter = require('lodash.filter');
 var EmptySections = React.createClass({
   render: function () {
     var sectionOptions = [
-      { title: 'career goal', type: 'SummarySection' },
+      { title: 'summary', type: 'SummarySection' },
       { title: 'experience', type: 'JobExperienceSection' },
       { title: 'education', type: 'EducationSection' },
       { title: 'skills', type: 'SkillsSection' },
     ]
-    // { title: 'Career Interests', type: 'CareerInterestsSection' },
-     // { title: 'Achievements', type: 'AchievementsSection' },
-     // { title: 'Personal References', type: 'PersonalReferencesSection' },
-     // { title: 'Professional References', type: 'ProfessionalReferencesSection' },
-     // { title: 'Projects Section', type: 'ProjectsSection' },
+     // { title: 'career interests', type: 'CareerInterestsSection' },
+     // { title: 'achievements', type: 'AchievementsSection' },
+     // { title: 'personal references', type: 'PersonalReferencesSection' },
+     // { title: 'professional references', type: 'ProfessionalReferencesSection' },
+     // { title: 'projects', type: 'ProjectsSection' },
     
     var groupPosition = this.props.sections.length + 1|| 1;
     var emptyNodes = sectionOptions.map(function (options, index) {

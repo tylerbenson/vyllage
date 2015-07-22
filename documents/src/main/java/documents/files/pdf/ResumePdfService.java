@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,6 @@ import com.lowagie.text.DocumentException;
 
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
-import documents.model.document.sections.EducationSection;
 
 @Service
 public class ResumePdfService {
@@ -72,28 +70,6 @@ public class ResumePdfService {
 
 		resumeHeader.setPhoneNumber(formatter.print(
 				resumeHeader.getPhoneNumber(), Locale.US));
-	}
-
-	/**
-	 * Applies Locale.US formatting to section fields transforming the section
-	 * description's *s into a list.
-	 * 
-	 */
-	protected Function<? super DocumentSection, ? extends DocumentSection> formatSection() {
-		return s1 -> {
-			ListFormatter listFormatter = new ListFormatter();
-
-			s1.setDescription(listFormatter.print(s1.getDescription(),
-					Locale.US));
-
-			if (s1 instanceof EducationSection) {
-				EducationSection s2 = (EducationSection) s1;
-
-				s2.setDescription(listFormatter.print(s2.getDescription(),
-						Locale.US));
-			}
-			return s1;
-		};
 	}
 
 	/**

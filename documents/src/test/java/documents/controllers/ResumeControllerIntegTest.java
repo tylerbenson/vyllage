@@ -149,7 +149,6 @@ public class ResumeControllerIntegTest {
 		Assert.assertNotNull(createdSection.getDocumentId());
 		Assert.assertNotNull(createdSection.getSectionId());
 		Assert.assertNotNull(createdSection.getSectionPosition());
-		notNullNotEmpty(createdSection.getDescription());
 		notNullNotEmpty(createdSection.getTitle());
 		notNullNotEmpty(createdSection.getHighlights());
 		notNullNotEmpty(createdSection.getOrganizationDescription());
@@ -180,7 +179,7 @@ public class ResumeControllerIntegTest {
 				.createSection(documentId, documentSection);
 
 		String newDescription = "Updated!";
-		createdSection.setDescription(newDescription);
+		createdSection.setRoleDescription(newDescription);
 
 		EducationSection updatedSection = (EducationSection) controller
 				.saveSection(documentId, createdSection.getSectionId(),
@@ -191,8 +190,8 @@ public class ResumeControllerIntegTest {
 		Assert.assertNotNull(updatedSection.getSectionId());
 		Assert.assertNotNull(updatedSection.getSectionPosition());
 
-		notNullNotEmpty(updatedSection.getDescription());
-		Assert.assertEquals(newDescription, updatedSection.getDescription());
+		notNullNotEmpty(updatedSection.getRoleDescription());
+		Assert.assertEquals(newDescription, updatedSection.getRoleDescription());
 		notNullNotEmpty(updatedSection.getTitle());
 		notNullNotEmpty(updatedSection.getHighlights());
 		notNullNotEmpty(updatedSection.getOrganizationDescription());
@@ -419,7 +418,7 @@ public class ResumeControllerIntegTest {
 				.createSection(documentId, documentSection);
 
 		String newDescription = "Updated!";
-		createdSection.setDescription(newDescription);
+		createdSection.setRoleDescription(newDescription);
 
 		// different user
 		User o = Mockito.mock(User.class);
@@ -451,7 +450,7 @@ public class ResumeControllerIntegTest {
 
 	private EducationSection createSection() {
 		EducationSection section = new EducationSection();
-		section.setDescription("hello");
+		section.setRoleDescription("hello");
 		section.setLocation("Somewhere");
 		section.setSectionPosition(5L);
 		section.setTitle("title");
