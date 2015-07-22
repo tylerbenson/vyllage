@@ -36,4 +36,12 @@ public class ProjectsSection extends DocumentSection {
 		this.projectDate = projectDate;
 	}
 
+	public String getProjectImageUrl() {
+		return projectImageUrl;
+	}
+
+	public void setProjectImageUrl(String projectImageUrl) {
+		this.projectImageUrl = projectImageUrl;
+	}
+
 }
