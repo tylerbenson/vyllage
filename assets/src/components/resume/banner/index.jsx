@@ -125,8 +125,20 @@ var Banner = React.createClass({
     this.refs.phoneNumber.getDOMNode().value = this.state.fields.phoneNumber?phoneFormatter.format(this.state.fields.phoneNumber,"(NNN) NNN-NNNN"):'';
     this.toggleEditable(false);
   },
+  scrollToTop: function(scrollFactor){
+    if(document.body.scrollTop === 0) {
+      return;
+    }
+
+    var scrollFactor = scrollFactor || 1;
+    document.body.scrollTop -= (scrollFactor * 2);
+    setTimeout(this.scrollToTop.bind(this, scrollFactor+1), 10);
+  },
   toggleEditable: function(flag){
     var flag = flag || false;
+    if(flag) {
+      this.scrollToTop();
+    }
     this.setState({editMode: flag});
   },
   handleScroll: function(){
