@@ -45,8 +45,8 @@ public class DocumentServiceIntegTest {
 			ElementNotFoundException {
 
 		Long documentId = 0L;
-		service.orderDocumentSections(documentId,
-				Arrays.asList(123L, 125L, 126L, 124L));
+		service.orderDocumentSections(documentId, Arrays.asList(123L, 125L,
+				126L, 124L, 127L, 128L, 129L, 130L, 131L, 132L, 133L));
 
 		List<DocumentSection> resumeSections = service
 				.getDocumentSections(documentId);
