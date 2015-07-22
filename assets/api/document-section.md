@@ -10,8 +10,8 @@
 + Response 200 (application/json)
   + Body
 ```
-    [
-      {
+[
+   {
     "title": "education",
     "sectionId": 125,
     "type": "EducationSection",
