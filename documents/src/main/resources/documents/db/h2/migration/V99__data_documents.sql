@@ -51,7 +51,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"title": "skills",
 	"sectionId": 126,
 	"sectionPosition": 4,
-	"description": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
+	"description": "rendis doloribus asperiores repellat."
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(124, 1, 3, 'Its a me, Mario!', CURRENT_TIMESTAMP());

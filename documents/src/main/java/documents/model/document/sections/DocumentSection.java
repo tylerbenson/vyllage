@@ -53,8 +53,6 @@ public abstract class DocumentSection {
 	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
 	private LocalDateTime lastModified;
 
-	private String description;
-
 	public DocumentSection() {
 		super();
 	}
@@ -165,14 +163,6 @@ public abstract class DocumentSection {
 	public String asJSON() throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(this);
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 }

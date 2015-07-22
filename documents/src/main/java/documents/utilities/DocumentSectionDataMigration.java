@@ -61,7 +61,6 @@ public class DocumentSectionDataMigration {
 				if (old.getType().equals(SectionType.ORGANIZATION)) {
 					EducationSection newSection = new EducationSection();
 					newSection.setCurrent(old.getIsCurrent());
-					newSection.setDescription(old.getDescription());
 					newSection.setDocumentId(old.getDocumentId());
 					newSection.setEndDate(old.getEndDate());
 					newSection.getHighlights().add(old.getHighlights());
@@ -88,7 +87,6 @@ public class DocumentSectionDataMigration {
 				if (old.getType().equals(SectionType.EXPERIENCE)) {
 					JobExperienceSection newSection = new JobExperienceSection();
 					newSection.setCurrent(old.getIsCurrent());
-					newSection.setDescription(old.getDescription());
 					newSection.setDocumentId(old.getDocumentId());
 					newSection.setEndDate(old.getEndDate());
 					newSection.getHighlights().add(old.getHighlights());
@@ -116,7 +114,20 @@ public class DocumentSectionDataMigration {
 				if (old.getType().equals(SectionType.FREEFORM)) {
 					if (old.getTitle().equalsIgnoreCase("skills")) {
 						SkillsSection newSection = new SkillsSection();
-						newSection.setDescription(old.getDescription());
+
+						// for the skills tag, the user will have to fix
+						// these...
+						if (old.getDescription() != null
+								&& !old.getDescription().isEmpty()) {
+
+							if (old.getDescription().contains(" "))
+								for (String string : old.getDescription()
+										.split(" "))
+									newSection.getTags().add(string);
+							else
+								newSection.getTags().add(old.getDescription());
+						}
+
 						newSection.setDocumentId(old.getDocumentId());
 						newSection.setLastModified(old.getLastModified());
 						newSection.setNumberOfComments(old
@@ -145,7 +156,7 @@ public class DocumentSectionDataMigration {
 						newSection.setSectionPosition(old.getSectionPosition());
 						newSection.setSectionVersion(old.getSectionVersion());
 						newSection.setState(old.getState());
-						newSection.setTitle(old.getTitle());
+						newSection.setTitle("summary");
 						newSection.setType(NewSectionType.SUMMARY_SECTION
 								.type());
 

@@ -17,17 +17,19 @@
   <br/>
   <label th:text="${header.email}"> abcd@abcd.com</label>
   <br/>
-  <label th:text="${header.phoneNumber}">123456</label>
+  <label th:text="${header.phoneNumber}">(555)1234-56789</label>
   <br/>
   <hr />
   <!-- loop over the sections -->
   <th:block th:each="section : ${sections}">
     <th:block th:switch="${section.type}">
-      <th:block th:case="'SkillsSection'">
+
+      <th:block th:case="'SummarySection'">
         <h3 th:text="${#strings.capitalizeWords(section.title)}">
         </h3>
         <p th:text="${section.description}"></p>
       </th:block>
+
       <th:block th:case="'EducationSection'">
         <h3 th:text="${#strings.capitalizeWords(section.title)}">
         </h3>
@@ -43,6 +45,7 @@
         	</li>
         </ul>
       </th:block>
+
       <th:block th:case="'JobExperienceSection'">
         <h3 th:text="${#strings.capitalizeWords(section.title)}">
         </h3>
@@ -58,6 +61,13 @@
         	</li>
         </ul>
       </th:block>
+
+      <th:block th:case="'SkillsSection'">
+        <h3 th:text="${#strings.capitalizeWords(section.title)}">
+        </h3>
+        <p th:utext="${#strings.listJoin(section.tags,', ')} + ' .'"></p>
+      </th:block>
+
     </th:block>
   </th:block>
 </body>

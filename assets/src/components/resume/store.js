@@ -30,7 +30,7 @@ module.exports = Reflux.createStore({
         lastName: ''
       },
       sections: [],
-      sectionOrder: ['career goal', 'experience', 'education', 'skills'],
+      sectionOrder: ['summary', 'experience', 'education', 'skills'],
       isNavOpen: false
     };
   },
