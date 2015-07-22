@@ -19,6 +19,7 @@ var HeaderContainer = React.createClass({
     var showLink = owner || !this.isResumePage;
 
     return (
+      <div>
         <div className="content">
           <div className="logo">
             <img src="images/logo-orange.png" alt="Vyllage" />
@@ -49,6 +50,7 @@ var HeaderContainer = React.createClass({
             </ul>
           </nav>
         </div>
+      </div>
     );
   }
 });

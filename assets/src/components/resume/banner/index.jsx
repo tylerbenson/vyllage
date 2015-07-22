@@ -1,5 +1,7 @@
 var React = require('react');
-var Textarea = require('react-textarea-autosize')
+var ExecutionEnvironment = require('react/lib/ExecutionEnvironment');
+var Textarea = require('react-textarea-autosize');
+var Subheader = require('./Subheader');
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
 var filter = require('lodash.filter');
@@ -12,8 +14,12 @@ var Banner = React.createClass({
   getInitialState: function () {
     return {
       editMode: false,
+      lastScroll: new Date(),
       fields: clone(this.props.header)
     }
+  },
+  shouldComponentUpdate: function(nextProps, nextState){
+    return (nextState.editMode !== this.state.editMode || nextState.fields !== this.state.fields);
   },
   componentWillReceiveProps: function (nextProps) {
     //For delayed header response
@@ -21,6 +27,14 @@ var Banner = React.createClass({
     if (nextProps.header !== this.props.header) {
       this.setState({fields: nextProps.header});
     }
+  },
+  componentDidMount: function() {
+    if (ExecutionEnvironment.canUseDOM) {
+      window.addEventListener('scroll', this.handleScroll);
+    }
+  },
+  componentWillUnmount: function() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
   getRefValue: function(ref) {
     return this.refs[ref].getDOMNode().value;
@@ -115,6 +129,23 @@ var Banner = React.createClass({
     var flag = flag || false;
     this.setState({editMode: flag});
   },
+  handleScroll: function(){
+    var DEBOUNCE_INTERVAL = 50;
+    if(Math.abs(new Date() - this.state.lastScroll) > DEBOUNCE_INTERVAL) {
+      var height = this.refs.banner.getDOMNode().offsetHeight;
+      var subheader = this.refs.subheader.getDOMNode();
+      var scrollTop = document.body.scrollTop;
+
+      if(scrollTop > height) {
+        subheader.className += ' visible';
+      }
+      else {
+        subheader.className = subheader.className.replace(/ visible/g,'');
+      }
+
+      this.setState({lastScroll: new Date()});
+    }
+  },
   render: function() {
     var header = this.props.header || {};
     var fields = this.state.fields;
@@ -122,9 +153,10 @@ var Banner = React.createClass({
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {};
     var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {};
     var isReadOnly = (!header.owner) || (header.owner && !this.state.editMode);
+    var name = header.firstName + ' ' + header.lastName;
 
     return (
-      <section className='banner'>
+      <section className='banner' ref="banner">
         <div className ="content">
           <div className="info">
             <div className="name">
@@ -222,8 +254,8 @@ var Banner = React.createClass({
               </button>
             </div>
           )}
-
         </div>
+        <Subheader ref="subheader" name={name} onEditProfile={this.toggleEditable.bind(this, true)} />
       </section>
     );
     }
