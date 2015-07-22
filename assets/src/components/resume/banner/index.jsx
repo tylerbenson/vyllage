@@ -267,7 +267,7 @@ var Banner = React.createClass({
             </div>
           )}
         </div>
-        <Subheader ref="subheader" name={name} onEditProfile={this.toggleEditable.bind(this, true)} />
+        {(header.owner?<Subheader ref="subheader" name={name} onEditProfile={this.toggleEditable.bind(this, true)} />:null)}
       </section>
     );
     }
