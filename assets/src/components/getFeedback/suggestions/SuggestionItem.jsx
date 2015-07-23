@@ -2,6 +2,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var GetFeedbackStore = require('../store');
 var Actions = require('../actions');
+var Avatar = require('../../avatar');
 
 var SuggestionItem = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
@@ -13,7 +14,7 @@ var SuggestionItem = React.createClass({
 		var user = this.props.user;
 		return (
 			<div className={(user.is_sponsored ? 'sponsored ' : '') + 'suggestion'}>
-				<div className="avatar" style={user.avatar ? {"backgroundImage" : "url(" + user.avatar + ")"} : {}}></div>
+				<Avatar src={user.avatar} size={this.props.avatarSize} borderWidth="2" />
 				<div className="info">
 					<div className="name">
 						{user.firstName + ' ' + user.lastName}

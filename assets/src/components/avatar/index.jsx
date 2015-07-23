@@ -10,6 +10,11 @@ var Avatar = React.createClass({
 	},
 	render: function() {
 		var url = this.props.src + '?s=' + this.props.size * 2;
+
+		if(!this.props.src) {
+			url = '/images/user.png';
+		}
+
 		var styles = {
 			backgroundImage: 'url(' + url + ')',
 			height: this.props.size,
