@@ -271,7 +271,7 @@ var Banner = React.createClass({
             </div>
           )}
         </div>
-        {(header.owner?<Subheader ref="subheader" name={name} onEditProfile={this.toggleEditable.bind(this, true)} />:null)}
+        {(header.owner?<Subheader ref="subheader" avatar={header.avatarUrl} name={name} onEditProfile={this.toggleEditable.bind(this, true)} />:null)}
       </section>
     );
     }

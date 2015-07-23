@@ -4,7 +4,8 @@ var Avatar = React.createClass({
 	getDefaultProps: function(){
 		return {
 			src: '/images/user.png',
-			size: 80
+			size: 80,
+			borderWidth: 3
 		};
 	},
 	render: function() {
@@ -12,7 +13,8 @@ var Avatar = React.createClass({
 		var styles = {
 			backgroundImage: 'url(' + url + ')',
 			height: this.props.size,
-			width: this.props.size
+			width: this.props.size,
+			borderWidth: this.props.borderWidth
 		};
 
 		return (
