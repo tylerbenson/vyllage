@@ -18,7 +18,7 @@ import user.common.User;
 
 import com.newrelic.api.agent.NewRelic;
 
-import documents.model.AccountNames;
+import documents.model.AccountContact;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;
@@ -235,17 +235,21 @@ public class DocumentService {
 		if (comments == null || comments.isEmpty())
 			return Arrays.asList();
 
-		List<AccountNames> names = accountService.getNamesForUsers(comments
-				.stream().map(c -> c.getUserId()).collect(Collectors.toList()),
-				request);
+		List<AccountContact> names = accountService.getContactDataForUsers(
+				request,
+				comments.stream().map(c -> c.getUserId())
+						.collect(Collectors.toList()));
 
 		for (Comment comment : comments) {
-			Optional<AccountNames> accountNames = names.stream()
+			Optional<AccountContact> accountContact = names.stream()
 					.filter(an -> an.getUserId().equals(comment.getUserId()))
 					.findFirst();
 
-			accountNames.ifPresent(an -> comment.setUserName(an.getFirstName()
+			accountContact.ifPresent(an -> comment.setUserName(an.getFirstName()
 					+ " " + an.getLastName()));
+
+			accountContact
+					.ifPresent(an -> comment.setAvatarUrl(an.getAvatarUrl()));
 		}
 
 		return comments;

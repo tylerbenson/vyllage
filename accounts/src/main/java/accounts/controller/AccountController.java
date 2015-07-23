@@ -347,9 +347,12 @@ public class AccountController {
 	 * 
 	 * @param userId
 	 * @return
+	 * @throws UserNotFoundException
 	 */
-	@RequestMapping(value = "{userId}/avatar")
-	public @ResponseBody String getAvatar(@PathVariable Long userId) {
-		return null;
+	@RequestMapping(value = "{userId}/avatar", method = RequestMethod.GET)
+	public @ResponseBody String getAvatar(@PathVariable Long userId)
+			throws UserNotFoundException {
+
+		return userService.getAvatar(userId);
 	}
 }

@@ -1,7 +1,5 @@
 package accounts.service;
 
-import static accounts.domain.tables.Userconnection.USERCONNECTION;
-
 import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -19,6 +17,7 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.jooq.DSLContext;
@@ -41,6 +40,7 @@ import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AccountSettingRepository;
+import accounts.repository.AvatarRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
@@ -58,6 +58,8 @@ import email.EmailBuilder;
 @Service
 public class UserService {
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
+
+	private static final String GRAVATAR_URL = "http://www.gravatar.com/avatar/";
 
 	@Autowired
 	private DocumentService documentService;
@@ -90,6 +92,9 @@ public class UserService {
 	@Autowired
 	@Qualifier(value = "accounts.ExecutorService")
 	private ExecutorService executorService;
+
+	@Autowired
+	private AvatarRepository avatarRepository;
 
 	@Autowired
 	private DSLContext sql;
@@ -422,18 +427,15 @@ public class UserService {
 	private Function<? super AccountContact, ? extends AccountContact> addAvatarUrl() {
 		return ac -> {
 
-			// TODO: once we have twitter, linkedIn, etc change this to use a
-			// repository.
-			String userId = ac.getEmail();
-			List<String> urls = sql.select(USERCONNECTION.IMAGEURL)
-					.from(USERCONNECTION)
-					.where(USERCONNECTION.USERID.eq(userId))
-					.fetchInto(String.class);
-
-			if (urls != null && !urls.isEmpty())
-				ac.setAvatarUrl(urls.get(0));
-
+			try {
+				ac.setAvatarUrl(getAvatar(ac.getUserId()));
+			} catch (UserNotFoundException e) {
+				// this should never happen since we found them previously
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
 			return ac;
+
 		};
 	}
 
@@ -701,5 +703,25 @@ public class UserService {
 			});
 
 		}
+	}
+
+	/**
+	 * Returns the user's avatar based on the user's social networks profile, if
+	 * it can't find any return a gravatar url.
+	 * 
+	 * @param userId
+	 * @return avatar url
+	 * @throws UserNotFoundException
+	 */
+	public String getAvatar(Long userId) throws UserNotFoundException {
+		Optional<String> avatarUrl = avatarRepository.getAvatar(userId);
+
+		if (avatarUrl.isPresent())
+			return avatarUrl.get();
+
+		User user = this.getUser(userId);
+
+		return GRAVATAR_URL
+				+ new String(DigestUtils.md5Hex(user.getUsername()));
 	}
 }

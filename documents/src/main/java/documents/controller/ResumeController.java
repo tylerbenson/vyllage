@@ -98,7 +98,7 @@ public class ResumeController {
 		Long userId = user.getUserId();
 
 		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
-				Arrays.asList(userId), request);
+				request, Arrays.asList(userId));
 
 		if (namesForUsers.isEmpty()) {
 			AccountNames an = new AccountNames();
@@ -401,7 +401,7 @@ public class ResumeController {
 		if (recentUsersForDocument.size() == 0)
 			return Arrays.asList();
 
-		return accountService.getNamesForUsers(recentUsersForDocument, request);
+		return accountService.getNamesForUsers(request, recentUsersForDocument);
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.PUT, consumes = "application/json")
