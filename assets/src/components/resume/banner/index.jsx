@@ -2,6 +2,7 @@ var React = require('react');
 var ExecutionEnvironment = require('react/lib/ExecutionEnvironment');
 var Textarea = require('react-textarea-autosize');
 var Subheader = require('./Subheader');
+var Avatar = require('../../avatar');
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
 var filter = require('lodash.filter');
@@ -171,7 +172,7 @@ var Banner = React.createClass({
       <section className='banner' ref="banner">
         <div className ="content">
           <div className="avatar-container">
-            <div className="avatar" style={{backgroundImage: 'url(' + header.avatarUrl + ')'}}></div>
+            <Avatar src={header.avatarUrl} size="80" />
           </div>
           <div className="info">
             <div className="name">
