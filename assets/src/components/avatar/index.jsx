@@ -5,7 +5,7 @@ var Avatar = React.createClass({
 		return {
 			src: '/images/user.png',
 			size: 80,
-			borderWidth: 3
+			borderWidth: 2
 		};
 	},
 	render: function() {

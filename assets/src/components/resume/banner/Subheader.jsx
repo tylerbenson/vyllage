@@ -7,7 +7,7 @@ var Subheader = React.createClass({
       <section className="subheader">
         <div className="content">
           <div className="avatar-container">
-            <Avatar src={this.props.avatar} size="32" borderWidth="1" />
+            <Avatar src={this.props.avatar} size="32" />
           </div>
           <div className="info">
             <div className="name">{this.props.name}</div>

@@ -172,7 +172,7 @@ var Banner = React.createClass({
       <section className='banner' ref="banner">
         <div className ="content">
           <div className="avatar-container">
-            <Avatar src={header.avatarUrl} size="80" />
+            <Avatar src={header.avatarUrl} size="80" borderWidth="3" />
           </div>
           <div className="info">
             <div className="name">
