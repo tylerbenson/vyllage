@@ -341,4 +341,18 @@ public class AccountController {
 				.map(a -> a.getAuthority().toUpperCase())
 				.collect(Collectors.toList());
 	}
+
+	/**
+	 * Returns an url pointing to the user's avatar.
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws UserNotFoundException
+	 */
+	@RequestMapping(value = "{userId}/avatar", method = RequestMethod.GET)
+	public @ResponseBody String getAvatar(@PathVariable Long userId)
+			throws UserNotFoundException {
+
+		return userService.getAvatar(userId);
+	}
 }

@@ -23,6 +23,8 @@ public class Comment {
 	private LocalDateTime lastModified;
 	private String userName;
 
+	private String avatarUrl;
+
 	public Long getCommentId() {
 		return commentId;
 	}
@@ -92,6 +94,14 @@ public class Comment {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 
 }

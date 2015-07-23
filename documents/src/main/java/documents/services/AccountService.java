@@ -38,8 +38,8 @@ public class AccountService {
 	@Value("${accounts.port:8080}")
 	private final Integer ACCOUNTS_PORT = null;
 
-	public List<AccountNames> getNamesForUsers(List<Long> userIds,
-			HttpServletRequest request) {
+	public List<AccountNames> getNamesForUsers(HttpServletRequest request,
+			List<Long> userIds) {
 		Assert.notNull(userIds);
 		Assert.notEmpty(userIds);
 

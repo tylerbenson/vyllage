@@ -92,15 +92,19 @@
 + Response 200 (application/json)
   + Body
  ```
-	[{	
-		"commentId":0,
-		"otherCommentId":null,
-		"sectionId":124,
-		"sectionVersion":1,
-		"userId":3,
-		"commentText":"Its a me, Mario!",
-		"userName":"Mario Mario"
-	}]
+	[
+	  {
+	     "commentId":2,
+	     "otherCommentId":null,
+	     "sectionId":123,
+	     "sectionVersion":1,
+	     "userId":0,
+	     "commentText":"aaaa",
+	     "lastModified":"2015-07-23T02:28:33",
+	     "userName":"Luke Skywalker",
+	     "avatarUrl":"http://www.gravatar.com/avatar/631164c3aeb35618622fe67602ce5da8"
+	  }
+	]
 ```
 
 #Save Comment for a Section
