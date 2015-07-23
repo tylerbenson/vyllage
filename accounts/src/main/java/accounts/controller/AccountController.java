@@ -341,4 +341,15 @@ public class AccountController {
 				.map(a -> a.getAuthority().toUpperCase())
 				.collect(Collectors.toList());
 	}
+
+	/**
+	 * Returns an url pointing to the user's avatar.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value = "{userId}/avatar")
+	public @ResponseBody String getAvatar(@PathVariable Long userId) {
+		return null;
+	}
 }
