@@ -141,12 +141,14 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"references":
 		[{ 
 			"pictureUrl": "http://img",
-			"name": "Leia Organa",
+			"firstName": "Leia",
+			"lastName": "Organa",
 			"description": "Rebel Leader"							
 		},
 		{
 			"pictureUrl": "http://img",
-			"name": "Obi Wan Kenobi",
+			"firstName": "Obi Wan",
+   			"lastName": "Kenobi",
 			"description": "Jedi Master"
 		}]
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
@@ -160,12 +162,14 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"references":
 		[{ 
 			"pictureUrl": "http://img",
-			"name": "Leia Organa",
+			"firstName": "Leia",
+			"lastName": "Organa",
 			"description": "Rebel Leader"							
 		},
 		{
 			"pictureUrl": "http://img",
-			"name": "Obi Wan Kenobi",
+			"firstName": "Obi Wan",
+   			"lastName": "Kenobi",
 			"description": "Jedi Master"
 		}]
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
