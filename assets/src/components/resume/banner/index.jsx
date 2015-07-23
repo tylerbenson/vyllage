@@ -15,7 +15,10 @@ var Banner = React.createClass({
   getInitialState: function () {
     return {
       editMode: false,
-      lastScroll: new Date(),
+      lastScroll: {
+        timestamp: new Date(),
+        timeout: {}
+      },
       fields: clone(this.props.header)
     }
   },
@@ -139,21 +142,31 @@ var Banner = React.createClass({
     }
     this.setState({editMode: flag});
   },
+  toggleSubheader: function(){
+    var height = this.refs.banner.getDOMNode().offsetHeight;
+    var subheader = this.refs.subheader.getDOMNode();
+    var scrollTop = document.body.scrollTop;
+
+    if(scrollTop > height) {
+      //addClass
+      subheader.className += ' visible';
+    }
+    else {
+      //removeClass
+      subheader.className = subheader.className.replace(/ visible/g,'');
+    }
+  },
   handleScroll: function(){
     var DEBOUNCE_INTERVAL = 50;
-    if(Math.abs(new Date() - this.state.lastScroll) > DEBOUNCE_INTERVAL) {
-      var height = this.refs.banner.getDOMNode().offsetHeight;
-      var subheader = this.refs.subheader.getDOMNode();
-      var scrollTop = document.body.scrollTop;
+    if(Math.abs(new Date() - this.state.lastScroll.timestamp) > DEBOUNCE_INTERVAL) {
+      clearTimeout(this.state.lastScroll.timeout);
 
-      if(scrollTop > height) {
-        subheader.className += ' visible';
-      }
-      else {
-        subheader.className = subheader.className.replace(/ visible/g,'');
-      }
+      this.toggleSubheader();
 
-      this.setState({lastScroll: new Date()});
+      this.setState({lastScroll: {
+        timestamp: new Date()},
+        timeout: setTimeout(this.toggleSubheader, DEBOUNCE_INTERVAL*4)
+      });
     }
   },
   render: function() {

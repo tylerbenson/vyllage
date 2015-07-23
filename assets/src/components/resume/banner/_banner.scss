@@ -132,7 +132,7 @@
     left: 0;
     right: 0;
     z-index: 1;
-    transition: opacity 0.2s ease,
+    transition: opacity 0.2s ease 0.1s,
       top 0.4s ease;
 
     &.visible {
