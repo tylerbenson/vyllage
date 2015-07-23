@@ -2,10 +2,10 @@ var Banner = require('../banner');
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-describe('Banner', function() {
-
+describe('banner', function() {
   it('should render properly', function() {
-    var banner = TestUtils.renderIntoDocument(<Banner />)
+    var header = {"firstName":"Luke","middleName":"V","lastName":"Skywalker","tagline":"My tagline.","address":"Avenida Siempreviva 1234","email":"user@vyllage.com","phoneNumber":"1234567890","twitter":"on","linkedIn":null,"owner":true};
+    var banner = TestUtils.renderIntoDocument(<Banner header={header}/>)
     expect(TestUtils.isCompositeComponent(banner)).toBe(true);
   });
 
@@ -58,5 +58,5 @@ describe('Banner', function() {
   //   expect(banner.getDOMNode().value).toMatch(/johndoe/)
   // });
 
-  
+
 });

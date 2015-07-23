@@ -4,8 +4,35 @@
   background-image: url(../images/banner-bg.png);
   background-size: cover;
   background-position: center;
-  padding: 2em;
+  padding: 2em 2em 0 2em;
   font-weight: 300;
+
+  .actions {
+    margin-top: 1em;
+    text-align: center;
+
+    button {
+      font-size: 0.7em;
+      font-weight: 400;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      background-color: rgba(0,0,0,0.25);
+      padding: 0.35em 1.25em;
+      transition: background-color .2s ease;
+
+      &:hover {
+        background-color: rgba(0,0,0,0.4);
+      }
+
+      &.flat {
+        background: none;
+
+        span {
+          color: $inverted-text-color !important;
+        }
+      }
+    }
+  }
 
   .info {
     @include column(1/2);
@@ -18,13 +45,19 @@
     }
     .tagline {
       color: $tagline-color;
+      margin-top: 0.5em;
       width: 100%;
     }
     .address {
       color: lighten($secondary-color, 30%);
-      font-size: 0.85em;
+      // font-size: 0.85em;
       line-height: 1.4;
+      margin-top: 1em;
       white-space: normal;
+
+      &[disabled] {
+        margin-top: 0;
+      }
     }
   }
 
@@ -32,7 +65,7 @@
     @include column(1/2);
     .detail {
       display: block;
-      margin: 1em;
+      margin: 1.15em 1em;
       position: relative;
       white-space: nowrap;
 

@@ -5,7 +5,7 @@ header {
   left: 0;
   top: 0;
   right: 0;
-  z-index: 1;
+  z-index: 2;
 
   nav {
     .flat.button {
@@ -97,30 +97,37 @@ header {
 .subheader {
   background: #fff;
   box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-  padding: 0.2em 0.6em;
+  opacity: 0;
+  padding: 0.3em 0.6em;
+  position: fixed;
+  top: -2.7em;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  transition: opacity 0.2s ease,
+    top 0.4s ease;
 
-  .mode {
-    display: inline-block;
-    float: left;
-    font-size: 1.15em;
-    font-weight: 300;
-    margin-top: 0.05em;
-
-    i {
-      color: $mode-color;
-      font-size: 1.5em;
-      margin-right: 0.25em;
-    }
-
-    span {
-      color: $mode-color;
-      position: relative;
-      bottom: 0.15em;
-    }
+  &.visible {
+    opacity: 0.98;
+    top: 2.7em;
   }
 
-  .embossed {
-    margin-left: 0.75em;
+  .name {
+    color: $text-color;
+    font-weight: 400;
+    font-size: 0.9em;
+    margin-bottom: -0.25em;
+  }
+
+  button.flat.small {
+    margin: 0;
+    padding: 0;
+    font-size: 0.6em;
+
+    i, span {
+      color: $alternate-color-1;
+      font-weight: 400;
+    }
   }
 }
 
