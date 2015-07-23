@@ -170,6 +170,9 @@ var Banner = React.createClass({
     return (
       <section className='banner' ref="banner">
         <div className ="content">
+          <div className="avatar-container">
+            <div className="avatar" style={{backgroundImage: 'url(' + header.avatarUrl + ')'}}></div>
+          </div>
           <div className="info">
             <div className="name">
               {(header.firstName || '') + " " + (header.middleName || '') + " " + (header.lastName || '')}

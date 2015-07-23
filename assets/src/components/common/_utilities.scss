@@ -57,3 +57,16 @@
 .spaced {
   margin: 1em 0;
 }
+
+.avatar {
+  background-color: lighten($banner-background, 10%);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: inline-block;
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  border: $inverted-text-color solid 3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
