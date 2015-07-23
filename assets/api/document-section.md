@@ -295,16 +295,18 @@ General notes.
     "state": "shown",
     "sectionPosition": 10,
     "numberOfComments": 0,
-    "lastModified": "2015-07-22T19:35:52",
+    "lastModified": "2015-07-23T01:39:47",
     "references": [
       {
         "pictureUrl": "http://img",
-        "name": "Leia Organa",
+        "firstName": "Leia",
+        "lastName": "Organa",
         "description": "Rebel Leader"
       },
       {
         "pictureUrl": "http://img",
-        "name": "Obi Wan Kenobi",
+        "firstName": "Obi Wan",
+        "lastName": "Kenobi",
         "description": "Jedi Master"
       }
     ]
@@ -320,16 +322,18 @@ General notes.
     "state": "shown",
     "sectionPosition": 11,
     "numberOfComments": 0,
-    "lastModified": "2015-07-22T19:35:52",
+    "lastModified": "2015-07-23T01:39:47",
     "references": [
       {
         "pictureUrl": "http://img",
-        "name": "Leia Organa",
+        "firstName": "Leia",
+        "lastName": "Organa",
         "description": "Rebel Leader"
       },
       {
         "pictureUrl": "http://img",
-        "name": "Obi Wan Kenobi",
+        "firstName": "Obi Wan",
+        "lastName": "Kenobi",
         "description": "Jedi Master"
       }
     ]
