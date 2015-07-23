@@ -19,9 +19,6 @@ var Banner = React.createClass({
       fields: clone(this.props.header)
     }
   },
-  shouldComponentUpdate: function(nextProps, nextState){
-    return (nextState.editMode !== this.state.editMode || nextState.fields !== this.state.fields);
-  },
   componentWillReceiveProps: function (nextProps) {
     //For delayed header response
     //TODO: should be converted into a promise on the store side
