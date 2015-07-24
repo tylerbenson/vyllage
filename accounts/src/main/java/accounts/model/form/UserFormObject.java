@@ -2,11 +2,11 @@ package accounts.model.form;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import lombok.ToString;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import lombok.ToString;
 import user.common.User;
 import user.common.UserOrganizationRole;
 

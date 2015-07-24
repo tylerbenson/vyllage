@@ -108,6 +108,7 @@ public class UserDetailRepository implements UserDetailsManager,
 	}
 
 	protected User getUserData(UsersRecord record) {
+		Assert.notNull(record);
 
 		// TODO: eventually we'll need these fields in the database.
 		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
@@ -131,6 +132,8 @@ public class UserDetailRepository implements UserDetailsManager,
 	@Override
 	// @Transactional
 	public void createUser(UserDetails userDetails) {
+		Assert.notNull(userDetails);
+
 		User user = (User) userDetails;
 
 		TransactionStatus transaction = txManager
@@ -198,9 +201,11 @@ public class UserDetailRepository implements UserDetailsManager,
 	@Override
 	// @Transactional
 	public void updateUser(UserDetails userDetails) {
+		Assert.notNull(userDetails);
+
 		User user = (User) userDetails;
 		Assert.notNull(user.getAuthorities());
-		Assert.isTrue(!user.getAuthorities().isEmpty());
+		Assert.notEmpty(user.getAuthorities());
 
 		TransactionStatus transaction = txManager
 				.getTransaction(new DefaultTransactionDefinition());
