@@ -6,6 +6,7 @@ describe('header', function() {
 	beforeEach(function () {
     this.server = sinon.fakeServer.create();
     this.server.respondWith("GET", "/togglz-feature//PRINTING//is-active.json", [200, { "Content-Type": "application/json" }, 'true']);
+    this.server.respondWith("GET", "/document//user//document-type//RESUME.json", [200, { "Content-Type": "application/json" }, '{RESUME:[0]}']);
   });
 
   it('should have logo', function() {

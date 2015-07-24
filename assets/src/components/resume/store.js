@@ -33,7 +33,6 @@ module.exports = Reflux.createStore({
       sectionOrder: ['career goal', 'experience', 'education', 'skills'],
       isNavOpen: false
     };
-    this.onGetDocumentId();
   },
   getMaxSectionPostion: function () {
     var section = max(this.resume.sections, 'sectionPosition');
@@ -64,7 +63,7 @@ module.exports = Reflux.createStore({
     request
       .get(url)
       .end(function (err, res) {
-        if(res.status == 200 && res.body.RESUME.length > 0) {
+        if(res.ok && res.body.RESUME.length > 0) {
           this.resume.ownDocumentId = res.body.RESUME[0];
           this.resume.documentId = typeof this.resume.documentId === 'number' ? this.resume.documentId : this.resume.ownDocumentId;
           this.trigger(this.resume);
