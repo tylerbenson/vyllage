@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ import user.common.constants.RolesEnum;
 import accounts.model.BatchAccount;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
+import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AccountSettingRepository;
@@ -51,6 +53,8 @@ import accounts.service.utilities.BatchParser.ParsedAccount;
 import accounts.service.utilities.RandomPasswordGenerator;
 import accounts.validation.EmailValidator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newrelic.api.agent.NewRelic;
 
 import email.EmailBuilder;
@@ -98,6 +102,9 @@ public class UserService {
 
 	@Autowired
 	private DSLContext sql;
+
+	@Autowired
+	private ObjectMapper mapper;
 
 	private BatchParser batchParser = new BatchParser();
 
@@ -723,5 +730,52 @@ public class UserService {
 
 		return GRAVATAR_URL
 				+ new String(DigestUtils.md5Hex(user.getUsername()));
+	}
+
+	/**
+	 * Starts the email address (username) change process. <br>
+	 * Sends an email to confirm that the user wanted to change the email, until
+	 * the user clicks the confirmation link the email will remain the same.
+	 * 
+	 * 
+	 * @param user
+	 * @param email
+	 * @throws EmailException
+	 * @throws JsonProcessingException
+	 */
+	public void sendEmailChangeConfirmation(User user, String email)
+			throws EmailException, JsonProcessingException {
+		Assert.notNull(user);
+		Assert.isTrue(email != null && !email.isEmpty());
+
+		ChangeEmailLink link = new ChangeEmailLink(user.getUserId(), email);
+
+		String jsonLink = mapper.writeValueAsString(link);
+
+		String encodedString = Base64.getUrlEncoder().encodeToString(
+				jsonLink.getBytes());
+
+		String url = "http://"
+				+ environment.getProperty("vyllage.domain", "www.vyllage.com")
+				+ "/account/change-email/";
+
+		emailBuilder
+				.to(email)
+				.from(environment.getProperty("email.from",
+						"no-reply@vyllage.com"))
+				.fromUserName(
+						environment.getProperty("email.from.userName",
+								"Chief of Vyllage"))
+				.subject("Email Change Confirmation")
+				.setNoHtmlMessage(
+						"We received a request to change your email if you requested it please copy and paste the link to confirm. \\n"
+								+ url + jsonLink)
+				.templateName("email-change-email-confirmation")
+				.addTemplateVariable("url", url)
+				.addTemplateVariable("changeEmailLink", encodedString).send();
+	}
+
+	public void changeEmail(User user, String email) {
+
 	}
 }
