@@ -14,4 +14,12 @@ public class ChangeEmailLink {
 		this.newEmail = newEmail;
 	}
 
+	public Long getUserId() {
+		return userId;
+	}
+
+	public String getNewEmail() {
+		return newEmail;
+	}
+
 }

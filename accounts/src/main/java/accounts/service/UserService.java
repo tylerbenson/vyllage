@@ -772,7 +772,7 @@ public class UserService {
 								+ url + jsonLink)
 				.templateName("email-change-email-confirmation")
 				.addTemplateVariable("url", url)
-				.addTemplateVariable("changeEmailLink", encodedString).send();
+				.addTemplateVariable("changeEmail", encodedString).send();
 	}
 
 	public void changeEmail(User user, String email) {

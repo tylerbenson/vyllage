@@ -41,6 +41,7 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
+import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.ChangePasswordForm;
 import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
@@ -355,4 +356,29 @@ public class AccountController {
 
 		return userService.getAvatar(userId);
 	}
+
+	@RequestMapping(value = "change-email", method = RequestMethod.GET)
+	public String confirmCahgeEmailAddress(
+			@RequestParam(value = "changeEmail", required = true) String changeEmail)
+			throws JsonParseException, JsonMappingException, IOException,
+			UserNotFoundException {
+
+		String encodedString = new String(Base64.getUrlDecoder().decode(
+				changeEmail));
+
+		ChangeEmailLink changeEmailLink = mapper.readValue(encodedString,
+				ChangeEmailLink.class);
+
+		User user = userService.getUser(changeEmailLink.getUserId());
+
+		Authentication auth = new UsernamePasswordAuthenticationToken(
+				user.getUsername(), user.getPassword(), user.getAuthorities());
+
+		SecurityContextHolder.getContext().setAuthentication(auth);
+
+		userService.changeEmail(user, changeEmailLink.getNewEmail());
+
+		return "redirect:/resume";
+	}
+
 }

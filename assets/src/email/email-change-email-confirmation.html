@@ -346,7 +346,7 @@
                                         <tr>
 
                                           <td valign="top" class="vylTextContent" style="padding: 16px 0px 16px 18px;color: #888888;">
-                                            So you requested to reset your password, right?
+                                            So you requested to change your email, right?
                                           </td>
                                         </tr>
                                       </tbody>
@@ -358,7 +358,7 @@
 
                                           <td valign="top" class="vylTextContent" style="padding: 9px 18px 9px 0px; text-align: right;">
 
-                                            <a th:href="@{${url}(changeEmail=${changeEmailLink})}">Reset Password</a>
+                                            <a th:href="@{${url}(changeEmail=${changeEmail})}">Change Email</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -486,7 +486,7 @@
                                         <tr>
                                           <td align="center" valign="middle" class="vylButtonContent" style="font-family: Arial; font-size: 16px; padding: 16px 24px;">
                                             <a class="vylButton " target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;"
-                                            th:href="@{${url}(resetPassword=${encodedLink})}">Reset Password</a>
+                                            th:href="@{${url}(changeEmail=${changeEmail})}">Change Email</a>
                                           </td>
                                         </tr>
                                       </tbody>
