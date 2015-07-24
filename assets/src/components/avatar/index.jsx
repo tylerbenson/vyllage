@@ -9,7 +9,9 @@ var Avatar = React.createClass({
 		};
 	},
 	render: function() {
-		var url = this.props.src + '?s=' + this.props.size * 2;
+		var url = this.props.src
+			+ '?s=' + this.props.size * 2
+			+ '&d=' + encodeURIComponent('http://vyllage.com/images/user.png');
 
 		if(!this.props.src) {
 			url = '/images/user.png';
