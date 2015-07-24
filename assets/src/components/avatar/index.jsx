@@ -10,18 +10,20 @@ var Avatar = React.createClass({
 	},
 	getImageURL: function(){
 		var url = this.props.src;
+
+		if(typeof url !== 'string') {
+			return '/images/user.png';
+		}
+
 		if(url.indexOf('gravatar') >= 0) {
 			return url + '?s=' + this.props.size * 2
 					+ '&d=' + encodeURIComponent('http://vyllage.com/images/user.png');
 		}
+
 		return url;
 	},
 	render: function() {
 		var url = this.getImageURL();
-
-		if(!this.props.src) {
-			url = '/images/user.png';
-		}
 
 		var styles = {
 			backgroundImage: 'url(' + url + ')',
