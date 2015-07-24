@@ -145,7 +145,7 @@ var Banner = React.createClass({
   toggleSubheader: function(){
     var height = this.refs.banner.getDOMNode().offsetHeight;
     var subheader = this.refs.subheader.getDOMNode();
-    var scrollTop = document.body.scrollTop;
+    var scrollTop = window.scrollY;
 
     if(scrollTop > height) {
       //addClass
