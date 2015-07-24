@@ -69,16 +69,6 @@
 		border-color: lighten($warning-color, 39%);
 	}
 
-	.avatar {
-		background-image: url(../images/user.png);
-		background-position: center;
-		background-size: cover;
-		background-repeat: no-repeat;
-		border-radius: 50%;
-		display: inline-block;
-		height: 64px;
-		width: 64px;
-	}
 	.name {
 		font-size: 0.85em;
 		font-weight: bold;
@@ -163,8 +153,6 @@
 
 		.avatar {
 			@include column(0.2);
-			height: 48px;
-			width: 48px;
 		}
 		.info {
 			@include column(0.6);

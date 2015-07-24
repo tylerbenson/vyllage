@@ -2,6 +2,7 @@ var React = require('react');
 var ExecutionEnvironment = require('react/lib/ExecutionEnvironment');
 var Textarea = require('react-textarea-autosize');
 var Subheader = require('./Subheader');
+var Avatar = require('../../avatar');
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
 var filter = require('lodash.filter');
@@ -14,12 +15,12 @@ var Banner = React.createClass({
   getInitialState: function () {
     return {
       editMode: false,
-      lastScroll: new Date(),
+      lastScroll: {
+        timestamp: new Date(),
+        timeout: {}
+      },
       fields: clone(this.props.header)
     }
-  },
-  shouldComponentUpdate: function(nextProps, nextState){
-    return (nextState.editMode !== this.state.editMode || nextState.fields !== this.state.fields);
   },
   componentWillReceiveProps: function (nextProps) {
     //For delayed header response
@@ -141,21 +142,31 @@ var Banner = React.createClass({
     }
     this.setState({editMode: flag});
   },
+  toggleSubheader: function(){
+    var height = this.refs.banner.getDOMNode().offsetHeight;
+    var subheader = this.refs.subheader.getDOMNode();
+    var scrollTop = window.scrollY;
+
+    if(scrollTop > height) {
+      //addClass
+      subheader.className += ' visible';
+    }
+    else {
+      //removeClass
+      subheader.className = subheader.className.replace(/ visible/g,'');
+    }
+  },
   handleScroll: function(){
     var DEBOUNCE_INTERVAL = 50;
-    if(Math.abs(new Date() - this.state.lastScroll) > DEBOUNCE_INTERVAL) {
-      var height = this.refs.banner.getDOMNode().offsetHeight;
-      var subheader = this.refs.subheader.getDOMNode();
-      var scrollTop = document.body.scrollTop;
+    if(Math.abs(new Date() - this.state.lastScroll.timestamp) > DEBOUNCE_INTERVAL) {
+      clearTimeout(this.state.lastScroll.timeout);
 
-      if(scrollTop > height) {
-        subheader.className += ' visible';
-      }
-      else {
-        subheader.className = subheader.className.replace(/ visible/g,'');
-      }
+      this.toggleSubheader();
 
-      this.setState({lastScroll: new Date()});
+      this.setState({lastScroll: {
+        timestamp: new Date()},
+        timeout: setTimeout(this.toggleSubheader, DEBOUNCE_INTERVAL*4)
+      });
     }
   },
   render: function() {
@@ -168,8 +179,11 @@ var Banner = React.createClass({
     var name = header.firstName + ' ' + header.lastName;
 
     return (
-      <section className='banner' ref="banner">
+      <section className={(header.owner?'':'guest ') + 'banner'} ref="banner">
         <div className ="content">
+          <div className="avatar-container">
+            <Avatar src={header.avatarUrl} size="80" borderWidth="3" />
+          </div>
           <div className="info">
             <div className="name">
               {(header.firstName || '') + " " + (header.middleName || '') + " " + (header.lastName || '')}
@@ -195,8 +209,9 @@ var Banner = React.createClass({
               defaultValue={fields.address}
             ></Textarea>: null}
           </div>
+          {(header.owner?
           <div className="contact">
-            {(header.owner || fields.email)? <div className='detail'>
+            <div className='detail'>
               <i className="ion-email"></i>
               <input
                 required
@@ -211,8 +226,8 @@ var Banner = React.createClass({
                 defaultValue={fields.email}
               />
               <p className='error'>{emailSetting.errorMessage}</p>
-            </div>: null}
-            {(header.owner || fields.phoneNumber)? <div className='detail'>
+            </div>
+            <div className='detail'>
               <i className="ion-ios-telephone"></i>
               <input
                 required
@@ -226,8 +241,8 @@ var Banner = React.createClass({
                 defaultValue={fields.phoneNumber?phoneFormatter.format(fields.phoneNumber,"(NNN) NNN-NNNN"):''}
               />
               <p className='error'>{phoneNumberSetting.errorMessage}</p>
-            </div>: null}
-            {(header.owner || fields.twitter)? <div className='detail'>
+            </div>
+            <div className='detail'>
               <i className="ion-social-twitter"></i>
               <span className='tip'>@</span>
               <input
@@ -242,32 +257,36 @@ var Banner = React.createClass({
                 defaultValue={fields.twitter}
               />
               <p className='error'>{twitterSetting.errorMessage}</p>
-            </div>: null}
+            </div>
           </div>
+          :null)}
         </div>
 
-        <div className="actions">
-
-          {( this.state.editMode ?
-            <div className="content">
-              <button onClick={this.saveChanges}>
-                <i className="ion-checkmark"></i>
-                <span>Save Changes</span>
-              </button>
-              <button onClick={this.discardChanges} className="flat">
-                <span>Cancel</span>
-              </button>
-            </div>
-            :
-            <div className="content">
-              <button onClick={this.toggleEditable.bind(this, true)}>
-                <i className="ion-edit"></i>
-                <span>Edit Profile</span>
-              </button>
-            </div>
-          )}
-        </div>
-        {(header.owner?<Subheader ref="subheader" name={name} onEditProfile={this.toggleEditable.bind(this, true)} />:null)}
+        {(header.owner?
+          <div className="actions">
+            {( this.state.editMode ?
+              <div className="content">
+                <button onClick={this.saveChanges}>
+                  <i className="ion-checkmark"></i>
+                  <span>Save Changes</span>
+                </button>
+                <button onClick={this.discardChanges} className="flat">
+                  <span>Cancel</span>
+                </button>
+              </div>
+              :
+              <div className="content">
+                <button onClick={this.toggleEditable.bind(this, true)}>
+                  <i className="ion-edit"></i>
+                  <span>Edit Profile</span>
+                </button>
+              </div>
+            )}
+          </div>
+        :null)}
+        {(header.owner?
+          <Subheader ref="subheader" avatar={header.avatarUrl} name={name} onEditProfile={this.toggleEditable.bind(this, true)} />
+        :null)}
       </section>
     );
     }
