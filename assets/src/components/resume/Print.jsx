@@ -5,9 +5,6 @@ var resumeStore = require('./store');
 
 var Print = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
-  componentWillMount: function () {
-    actions.getResume();
-  },
 	render: function() {
 		return (
 			<a href={"/resume/"+this.state.resume.documentId+"/file/pdf"} className="flat print button">

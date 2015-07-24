@@ -4,6 +4,7 @@ module.exports = Reflux.createActions([
   //
   'getResume',
   'getHeader',
+  'getDocumentId',
   'updateTagline',
   // sections
   'getSections',

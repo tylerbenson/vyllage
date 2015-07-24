@@ -1,6 +1,7 @@
 // This module is to reuse url patterns instead of typing again and again.
 
 var endpoints = {
+  documentId: '/document/user/document-type/{documentType}',
   resume: '/resume/{documentId}',
   resumeHeader: '/resume/{documentId}/header',
   resumeSections: '/resume/{documentId}/section',
