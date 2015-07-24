@@ -75,27 +75,32 @@ public class SocialLoginController {
 		String firstName = userProfile.getFirstName();
 		String lastName = userProfile.getLastName();
 
-		// Note, if the social account information is present then we won't
-		// reach this place, thus that case isn't necessary.
-
 		// social account information is not present but user already exists
 		// TODO: generateName is only useful if either user name or email are
 		// present on the userProfile
-		if (userService.userExists(generateName(userProfile))) {
 
-			// TODO: add error message
-			// error: redirect to login, he must be logged in to connect the
-			// accounts
-			return "redirect:/login";
+		SocialDocumentLink doclink = sharedDocumentRepository
+				.getSocialDocumentLink((String) request.getSession(false)
+						.getAttribute(SocialSessionEnum.LINK_KEY.name()));
+
+		String generatedName = generateName(userProfile);
+
+		if (userService.userExists(generatedName)) {
+
+			// User user = userService.getUser(generatedName);
+
+			// login
+			signInUtil.signIn(generatedName);
+
+			// saves social account information
+			providerSignInUtils.doPostSignUp(generatedName, webRequest);
 
 		} else {
 			// user doesn't exist, social account information not present
-			SocialDocumentLink doclink = sharedDocumentRepository
-					.getSocialDocumentLink((String) request.getSession(false)
-							.getAttribute(SocialSessionEnum.LINK_KEY.name()));
+
 			// create user
 			String userName = email != null && !email.isEmpty() ? email
-					: generateName(userProfile);
+					: generatedName;
 			String password = randomPasswordGenerator.getRandomPassword();
 
 			User newUser = userService.createUser(userName, password,
@@ -111,9 +116,10 @@ public class SocialLoginController {
 			// saves social account information
 			providerSignInUtils.doPostSignUp(userName, webRequest);
 
-			return "redirect:" + "/" + doclink.getDocumentType() + "/"
-					+ doclink.getDocumentId();
 		}
+
+		return "redirect:" + "/" + doclink.getDocumentType() + "/"
+				+ doclink.getDocumentId();
 
 	}
 

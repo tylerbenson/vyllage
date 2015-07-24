@@ -1,6 +1,7 @@
 var React = require('react');
 var actions = require('../actions');
 var moment = require('moment');
+var Avatar = require('../../avatar');
 
 var CommentList = React.createClass({
   // componentWillMount: function () {
@@ -14,14 +15,19 @@ var CommentList = React.createClass({
       }
       return <div key={index} className='comment'>
               <div className='content'>
-                <div className='info'>
-                  <div className="author">{comment.userName?comment.userName:'Vyllage User'}</div>
-                  <div className="timestamp">
-                    {moment(comment.lastModified).isValid() ? moment.utc(comment.lastModified).fromNow(): ''}
-                  </div>
+                <div className='avatar-container'>
+                  <Avatar src={comment.avatarUrl} size="30" />
                 </div>
-                <div className="message">
-                  {comment.commentText}
+                <div className='wrapper'>
+                  <div className='info'>
+                    <div className="author">{comment.userName?comment.userName:'Vyllage User'}</div>
+                    <div className="timestamp">
+                      {moment(comment.lastModified).isValid() ? moment.utc(comment.lastModified).fromNow(): ''}
+                    </div>
+                  </div>
+                  <div className="message">
+                    {comment.commentText}
+                  </div>
                 </div>
               </div>
              </div>

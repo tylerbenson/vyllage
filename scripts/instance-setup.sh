@@ -27,6 +27,15 @@ nrsysmond-config --set license_key=8e5b87f1e9001ae664607d18625c81d5727eda0e
 /etc/init.d/newrelic-sysmond start
 
 
+apt-get install nginx
+rm /etc/nginx/sites-enabled/default
+echo "server {
+       listen         80 default_server;
+       return         301 https://www.vyllage.com$request_uri;
+}
+" > /etc/nginx/sites-enabled/vyllage
+service nginx restart
+
 
 apt-get update
 apt-get dist-upgrade

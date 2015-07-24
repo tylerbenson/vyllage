@@ -26,6 +26,7 @@ public enum Features implements Feature {
 	@Label("New Relic")
 	NEW_RELIC,
 
+	@EnabledByDefault
 	@Label("Printing")
 	PRINTING,
 
@@ -33,6 +34,7 @@ public enum Features implements Feature {
 	@Label("Share Resume")
 	SHARE_RESUME,
 
+	@EnabledByDefault
 	@Label("Suggestions")
 	SUGGESTIONS,
 

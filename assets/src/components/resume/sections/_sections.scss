@@ -59,6 +59,7 @@
   }
 
   textarea {
+    color: lighten($text-color, 10%);
     font-size: 0.9em;
     line-height: 1.5;
   }
@@ -113,29 +114,38 @@
 
       .content {
         margin: auto;
-        max-width: 480px;
+        max-width: 520px;
         padding: 1em 2em;
 
-        .info {
-          @include cf();
-
-          .author {
-            color: $primary-color;
-            display: inline-block;
-            float: left;
-            padding: 0.25em 0;
-          }
-
-          .timestamp {
-            display: inline-block;
-            float: right;
-            font-size: 0.9em;
-            padding: 0.35em 0 0.25em 0;
-          }
+        .avatar-container {
+          @include column(0.12);
+          margin-right: 0.35em;
+          padding-top: 0.35em;
         }
 
-        .message {
-          line-height: 1.4;
+        .wrapper {
+          @include column(0.88);
+          .info {
+            @include cf();
+            .author {
+              color: $primary-color;
+              display: inline-block;
+              float: left;
+              padding: 0.25em 0;
+            }
+
+            .timestamp {
+              display: inline-block;
+              float: right;
+              font-size: 0.9em;
+              padding: 0.35em 0 0.25em 0;
+            }
+          }
+
+          .message {
+            color: lighten($text-color, 10%);
+            line-height: 1.4;
+          }
         }
       }
 
@@ -143,7 +153,6 @@
         border-top: darken($section-footer-background,6%) solid 1px;
         .content {
           @include cf();
-          font-size: 1em;
           margin: auto;
           max-width: 480px;
           padding: 1.15em 1.65em;
@@ -153,7 +162,7 @@
             padding: 0.2em 0.8em;
             box-sizing: inherit;
             position: relative;
-            min-height: 1.9em !important;
+            min-height: 29px;
             top: 2px;
             width: 77%;
           }
