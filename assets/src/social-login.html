@@ -21,7 +21,7 @@
   <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
 
-  <link href='http://fonts.googleapis.com/css?family=Lato:400,300,100' rel='stylesheet' type='text/css' />
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300,100' rel='stylesheet' type='text/css' />
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
