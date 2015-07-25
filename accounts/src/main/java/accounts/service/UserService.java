@@ -758,7 +758,7 @@ public class UserService {
 		String encodedString = Base64.getUrlEncoder().encodeToString(
 				jsonLink.getBytes());
 
-		String url = "http://"
+		String url = "https://"
 				+ environment.getProperty("vyllage.domain", "www.vyllage.com")
 				+ "/account/change-email/";
 
