@@ -28,11 +28,13 @@
 
 
 # Get suggestions for adding suggestions
-## GET /resume/users?firstNameFilter={firstNameFilter}&lastNameFilter={lastNameFilter}&emailFilter={emailFilter}
+## GET /resume/users?firstNameFilter={firstNameFilter}&lastNameFilter={lastNameFilter}&emailFilter={emailFilter}&excludeIds=0,1
 + Parameters
   + firstNameFilter (string, `Ty`) - Filter to be applied to the first name column.
   + lastNameFilter (string, `Ben`) - Filter to be applied to the last name column.
   + emailFilter (string, `tyler@`) - Filter to be applied to the email column.
+  + excludeIds=0,3... comma separated list of user ids to exclude from the search
+
 + Response 200 (application/json)
 
 ```

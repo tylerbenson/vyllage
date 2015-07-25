@@ -197,11 +197,46 @@
   }
 }
 
+@media only screen and (max-width: $medium-landscape) {
+  .banner {
+    font-size: 0.8em;
+    & > .content {
+      .avatar {
+        height: 4.5em !important;
+        width: 4.5em !important;
+      }
+    }
+    .subheader {
+      &.visible {
+        top: 3.3em;
+      }
+      .avatar-container {
+        width: auto;
+      }
+      .info {
+        margin-top: 0.25em;
+        .name {
+          font-size: 1em;
+        }
+      }
+    }
+  }
+}
+
 @media only screen and (max-width: $medium-portrait) {
   .banner {
+    font-size: 1em;
+    padding: 1em 1em 0 1em;
     text-align: center;
-    .info {
+    .avatar-container {
       @include column(1);
+      padding: 0;
+      margin: 0;
+    }
+    & > .content > .info {
+      @include column(1);
+      margin: 0.15em 0 0.75em 0;
+
       .name,
       textarea {
         text-align: center;
@@ -232,6 +267,22 @@
         .error {
           font-size: 0.8em;
         }
+      }
+    }
+    .subheader {
+      &.visible {
+        top: 2.7em;
+      }
+      .avatar {
+        height: 1.75em !important;
+        width: 1.75em !important;
+      }
+      .avatar-container {
+        margin-top: 0;
+      }
+      .info {
+        margin-top: 0;
+        text-align: left;
       }
     }
   }

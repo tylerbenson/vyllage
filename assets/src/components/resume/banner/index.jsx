@@ -176,7 +176,8 @@ var Banner = React.createClass({
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {};
     var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {};
     var isReadOnly = (!header.owner) || (header.owner && !this.state.editMode);
-    var name = header.firstName + ' ' + header.lastName;
+    var name = (header.firstName ? header.firstName : '') + ' '
+             + (header.lastName ? header.lastName : '');
 
     return (
       <section className={(header.owner?'':'guest ') + 'banner'} ref="banner">

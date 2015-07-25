@@ -224,7 +224,7 @@
 
   & > .content {
     margin-top: -0.5em;
-    padding: 0.25em 4em 0.25em 4em;
+    padding: 0.25em 4em;
   }
 
   .title {
@@ -261,11 +261,45 @@
   }
 }
 
+@media (max-width: $medium-landscape) {
+  .section {
+    & > .container {
+      max-width: 768px;
+      padding-top: 1em;
+      width: 90%;
+    }
+    .header {
+      padding: 1em 2em;
+    }
+    .content {
+      padding: 0.25em 2em;
+
+      &.empty {
+        padding-bottom: 3.5em;
+      }
+    }
+  }
+  .subsection {
+    & > .header {
+      padding: 1.5em 2em 0 2em;
+    }
+  }
+  .subsubsection {
+    & > .header {
+      padding: 1.5em 0 0 0;
+    }
+    & > .content {
+      padding: 0;
+    }
+  }
+}
+
 @media (max-width: $medium-portrait) {
   .section {
     & > .container {
       margin: 0.5em auto;
       padding: 1em 0 0;
+      width: 96%;
     }
     .content {
       padding: 0.75em 2.5em;
@@ -277,10 +311,6 @@
           margin: 0.15em 0;
           width: 100%;
         }
-      }
-
-      &.empty {
-        padding-bottom: 2em;
       }
     }
 
@@ -294,6 +324,18 @@
 
     .footer {
       font-size: 0.9em;
+      .comments {
+        .content {
+          padding: 1em;
+          .avatar-container {
+            margin-right: 0.5em;
+            .avatar {
+              height: 1.75em !important;
+              width: 1.75em !important;
+            }
+          }
+        }
+      }
     }
 
     .subsection {
@@ -305,8 +347,11 @@
       }
     }
     .subsubsection {
-      .header {
-        margin-top: 0.5em;
+      & > .header {
+        padding: 1.5em 0 0 0;
+      }
+      & > .content {
+        padding: 0;
       }
     }
   }

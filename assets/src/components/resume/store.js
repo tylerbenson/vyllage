@@ -57,22 +57,18 @@ module.exports = Reflux.createStore({
       }.bind(this))
   },
   onGetDocumentId: function() {
-    var promise = new Promise(function(resolve, reject) {
-      var url = urlTemplate
-                .parse(endpoints.documentId)
-                .expand({documentType: 'RESUME'});
-      request
-        .get(url)
-        .end(function (err, res) {
-          if(res.status == 200 && res.body.RESUME.length > 0) {
-            this.resume.ownDocumentId = res.body.RESUME[0];
-            this.trigger(this.resume);
-            resolve();
-          }
-        }.bind(this));
-    }.bind(this));
-
-    return promise;
+    var url = urlTemplate
+              .parse(endpoints.documentId)
+              .expand({documentType: 'RESUME'});
+    request
+      .get(url)
+      .end(function (err, res) {
+        if(res.ok && res.body.RESUME.length > 0) {
+          this.resume.ownDocumentId = res.body.RESUME[0];
+          this.resume.documentId = typeof this.resume.documentId === 'number' ? this.resume.documentId : this.resume.ownDocumentId;
+          this.trigger(this.resume);
+        }
+      }.bind(this));
   },
   onGetResume: function () {
     this.onGetHeader();
