@@ -72,3 +72,7 @@ To simulate a production environment, install [foreman](https://github.com/ddoll
 foreman start -p 8080
 ```
 open [http://localhost:8080](http://localhost:8080)
+
+### Login
+User: user@vyllage.com | admin@vyllage.com
+Password: password
