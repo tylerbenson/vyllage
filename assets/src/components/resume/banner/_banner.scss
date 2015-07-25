@@ -199,9 +199,16 @@
 
 @media only screen and (max-width: $medium-portrait) {
   .banner {
+    padding: 1em 1em 0 1em;
     text-align: center;
+    .avatar-container {
+      @include column(1);
+      padding: 0;
+      margin: 0;
+    }
     .info {
       @include column(1);
+      margin: 0.15em 0 0.75em 0;
       .name,
       textarea {
         text-align: center;
