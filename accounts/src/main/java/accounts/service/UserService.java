@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.NonNull;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
@@ -28,6 +30,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -43,6 +46,7 @@ import accounts.model.account.settings.AccountSetting;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AccountSettingRepository;
 import accounts.repository.AvatarRepository;
+import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
@@ -108,6 +112,12 @@ public class UserService {
 
 	@Autowired
 	private ObjectMapper mapper;
+
+	@Autowired
+	private TextEncryptor encryptor;
+
+	@Autowired
+	private SignInUtil signInUtil;
 
 	private BatchParser batchParser = new BatchParser();
 
@@ -746,17 +756,19 @@ public class UserService {
 	 * @throws EmailException
 	 * @throws JsonProcessingException
 	 */
-	public void sendEmailChangeConfirmation(User user, String email)
-			throws EmailException, JsonProcessingException {
-		Assert.notNull(user);
-		Assert.isTrue(email != null && !email.isEmpty());
+	public void sendEmailChangeConfirmation(@NonNull User user,
+			@NonNull String email) throws EmailException,
+			JsonProcessingException {
+		Assert.isTrue(!email.isEmpty());
 
 		ChangeEmailLink link = new ChangeEmailLink(user.getUserId(), email);
 
-		String jsonLink = mapper.writeValueAsString(link);
+		String jsonChangeEmailLink = mapper.writeValueAsString(link);
+
+		String encryptedString = encryptor.encrypt(jsonChangeEmailLink);
 
 		String encodedString = Base64.getUrlEncoder().encodeToString(
-				jsonLink.getBytes());
+				encryptedString.getBytes());
 
 		String url = "https://"
 				+ environment.getProperty("vyllage.domain", "www.vyllage.com")
@@ -772,7 +784,7 @@ public class UserService {
 				.subject("Email Change Confirmation")
 				.setNoHtmlMessage(
 						"We received a request to change your email if you requested it please copy and paste the link to confirm. \\n"
-								+ url + jsonLink)
+								+ url + encodedString)
 				.templateName("email-change-email-confirmation")
 				.addTemplateVariable("userName", user.getFirstName())
 				.addTemplateVariable("newEmail", link.getNewEmail())
@@ -780,8 +792,24 @@ public class UserService {
 				.addTemplateVariable("changeEmail", encodedString).send();
 	}
 
-	public void changeEmail(User user, String email) {
+	public void changeEmail(@NonNull User user, @NonNull String email) {
+		Assert.isTrue(!email.isEmpty());
+
+		List<AccountSetting> accountSetting;
+
+		try {
+			accountSetting = accountSettingsService.getAccountSetting(user,
+					"newEmail");
+		} catch (ElementNotFoundException e) {
+			throw new AccessDeniedException("Invalid link provided.");
+		}
+
+		if (!email.equalsIgnoreCase(accountSetting.get(0).getValue()))
+			throw new AccessDeniedException("Invalid link provided.");
 
 		userRepository.changeEmail(user, email);
+
+		// to set the new name
+		signInUtil.signIn(email);
 	}
 }

@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/account/reset-password",
 						"/account/reset-password-change/**", "/signin/**",
 						"/signup/**", "/social-login/**", "/link/e/**",
-						"/link/s/**", "/account/change-email/").permitAll();
+						"/link/s/**").permitAll();
 
 		// disabling CSRF for the togglz console.
 		http.csrf().requireCsrfProtectionMatcher(new RequestMatcherDisable());

@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import lombok.NonNull;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
@@ -108,8 +110,7 @@ public class UserDetailRepository implements UserDetailsManager,
 		return user;
 	}
 
-	protected User getUserData(UsersRecord record) {
-		Assert.notNull(record);
+	protected User getUserData(@NonNull UsersRecord record) {
 
 		// TODO: eventually we'll need these fields in the database.
 		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
@@ -132,8 +133,7 @@ public class UserDetailRepository implements UserDetailsManager,
 
 	@Override
 	// @Transactional
-	public void createUser(UserDetails userDetails) {
-		Assert.notNull(userDetails);
+	public void createUser(@NonNull UserDetails userDetails) {
 
 		User user = (User) userDetails;
 
@@ -201,8 +201,7 @@ public class UserDetailRepository implements UserDetailsManager,
 	 */
 	@Override
 	// @Transactional
-	public void updateUser(UserDetails userDetails) {
-		Assert.notNull(userDetails);
+	public void updateUser(@NonNull UserDetails userDetails) {
 
 		User user = (User) userDetails;
 		Assert.notNull(user.getAuthorities());
@@ -549,7 +548,9 @@ public class UserDetailRepository implements UserDetailsManager,
 		return !enabled;
 	}
 
-	public void changeEmail(User user, String email) {
+	public void changeEmail(User user, @NonNull String email) {
+		Assert.isTrue(!email.isEmpty());
+
 		sql.update(USERS).set(USERS.USER_NAME, email)
 				.where(USERS.USER_ID.eq(user.getUserId())).execute();
 
