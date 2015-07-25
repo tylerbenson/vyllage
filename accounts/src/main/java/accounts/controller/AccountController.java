@@ -281,7 +281,7 @@ public class AccountController {
 	protected void sendResetPasswordEmail(String email, String encodedString,
 			String userName) throws EmailException {
 
-		String txt = "http://"
+		String txt = "https://"
 				+ environment.getProperty("vyllage.domain", "www.vyllage.com")
 				+ "/account/reset-password-change/";
 

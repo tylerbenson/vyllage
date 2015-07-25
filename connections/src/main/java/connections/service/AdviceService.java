@@ -334,7 +334,7 @@ public class AdviceService {
 			ctx.setVariable("message", adviceRequest.getMessage());
 			ctx.setVariable(
 					"link",
-					"http://"
+					"https://"
 							+ environment.getProperty("vyllage.domain",
 									"www.vyllage.com")
 							+ linksForRegisteredUsers.get(accountContact
@@ -375,7 +375,7 @@ public class AdviceService {
 			ctx.setVariable("message", adviceRequest.getMessage());
 			ctx.setVariable(
 					"link",
-					"http://"
+					"https://"
 							+ environment.getProperty("vyllage.domain",
 									"www.vyllage.com")
 							+ linksForNonRegisteredUsers.get(user.getEmail()));
