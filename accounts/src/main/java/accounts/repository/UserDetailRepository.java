@@ -553,6 +553,9 @@ public class UserDetailRepository implements UserDetailsManager,
 		sql.update(USERS).set(USERS.USER_NAME, email)
 				.where(USERS.USER_ID.eq(user.getUserId())).execute();
 
+		// delete this, we don't need it anymore
+		accountSettingRepository.deleteByName(user.getUserId(), "newEmail");
+
 		sql.update(ACCOUNT_SETTING)
 				.set(ACCOUNT_SETTING.VALUE, email)
 				.where(ACCOUNT_SETTING.USER_ID.eq(user.getUserId()).and(

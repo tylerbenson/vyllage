@@ -132,9 +132,17 @@ public class AccountSettingsService {
 				NewRelic.noticeError(e);
 			}
 
-			// don't change the setting value yet, the user needs to confirm the
-			// change.
+			// save the new email as a new setting to query from the frontend.
+			AccountSetting newEmailSetting = new AccountSetting(null,
+					setting.getUserId(), "newEmail", setting.getValue(),
+					setting.getPrivacy());
+
+			accountSettingRepository.set(user.getUserId(), newEmailSetting);
+
+			// but don't change the setting value yet, the user needs to confirm
+			// the change by mail.
 			setting.setValue(user.getUsername());
+
 			return setting;
 		default:
 			return accountSettingRepository.set(user.getUserId(), setting);
@@ -198,34 +206,4 @@ public class AccountSettingsService {
 		return setting;
 	}
 
-	// /**
-	// * Changes the username and email, they are the same thing.
-	// *
-	// * @param user
-	// * @param setting
-	// */
-	// protected void setEmail(User user, AccountSetting setting) {
-	// if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-	// // username is final...
-	// // password is erased after the user logins but we need something
-	// // here, even if we won't change it
-	//
-	// List<UserOrganizationRole> uor = new ArrayList<>();
-	//
-	// for (GrantedAuthority grantedAuthority : user.getAuthorities())
-	// uor.add((UserOrganizationRole) grantedAuthority);
-	//
-	// User newUser = new User(user.getUserId(), user.getFirstName(),
-	// user.getMiddleName(), user.getLastName(),
-	// setting.getValue(), "a password we don't care about",
-	// user.isEnabled(), user.isAccountNonExpired(),
-	// user.isCredentialsNonExpired(), user.isAccountNonLocked(),
-	// uor, user.getDateCreated(), user.getLastModified());
-	// userService.update(newUser);
-	//
-	// userService.changeEmail(user, setting.getValue());
-	//
-	// }
-	//
-	// }
 }
