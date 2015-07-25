@@ -45,7 +45,7 @@ public class AccountControllerTest {
 	@Test
 	public void getUserAvatarReturnGravatarTest() throws UserNotFoundException {
 		Long userId = 0L;
-		String gravatarUrl = "http://www.gravatar.com/avatar/"
+		String gravatarUrl = "https://secure.gravatar.com/avatar/"
 				+ new String(DigestUtils.md5Hex("user@vyllage.com"));
 
 		when(userService.getAvatar(userId)).thenReturn(gravatarUrl);

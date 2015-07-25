@@ -59,7 +59,7 @@ import email.EmailBuilder;
 public class UserService {
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
 
-	private static final String GRAVATAR_URL = "http://www.gravatar.com/avatar/";
+	private static final String GRAVATAR_URL = "https://secure.gravatar.com/avatar/";
 
 	@Autowired
 	private DocumentService documentService;
