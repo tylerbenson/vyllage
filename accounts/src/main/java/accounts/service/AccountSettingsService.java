@@ -135,7 +135,7 @@ public class AccountSettingsService {
 			// don't change the setting value yet, the user needs to confirm the
 			// change.
 			setting.setValue(user.getUsername());
-			return accountSettingRepository.set(user.getUserId(), setting);
+			return setting;
 		default:
 			return accountSettingRepository.set(user.getUserId(), setting);
 		}
