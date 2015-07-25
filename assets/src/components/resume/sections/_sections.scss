@@ -294,6 +294,18 @@
 
     .footer {
       font-size: 0.9em;
+      .comments {
+        .content {
+          padding: 1em;
+          .avatar-container {
+            margin-right: 0.5em;
+            .avatar {
+              height: 1.75em !important;
+              width: 1.75em !important;
+            }
+          }
+        }
+      }
     }
 
     .subsection {
