@@ -2,6 +2,7 @@ package accounts.repository;
 
 import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
+import static accounts.domain.tables.Userconnection.USERCONNECTION;
 import static accounts.domain.tables.Users.USERS;
 
 import java.sql.Timestamp;
@@ -546,6 +547,19 @@ public class UserDetailRepository implements UserDetailsManager,
 				.where(USERS.USER_ID.eq(userId)).execute();
 
 		return !enabled;
+	}
+
+	public void changeEmail(User user, String email) {
+		sql.update(USERS).set(USERS.USER_NAME, email)
+				.where(USERS.USER_ID.eq(user.getUserId())).execute();
+
+		sql.update(ACCOUNT_SETTING)
+				.set(ACCOUNT_SETTING.VALUE, email)
+				.where(ACCOUNT_SETTING.USER_ID.eq(user.getUserId()).and(
+						ACCOUNT_SETTING.NAME.eq("email"))).execute();
+
+		sql.update(USERCONNECTION).set(USERCONNECTION.USERID, email)
+				.where(USERCONNECTION.USERID.eq(user.getUsername())).execute();
 	}
 
 }

@@ -101,6 +101,9 @@ public class UserService {
 	private AvatarRepository avatarRepository;
 
 	@Autowired
+	private AccountSettingsService accountSettingsService;
+
+	@Autowired
 	private DSLContext sql;
 
 	@Autowired
@@ -771,11 +774,14 @@ public class UserService {
 						"We received a request to change your email if you requested it please copy and paste the link to confirm. \\n"
 								+ url + jsonLink)
 				.templateName("email-change-email-confirmation")
+				.addTemplateVariable("userName", user.getFirstName())
+				.addTemplateVariable("newEmail", link.getNewEmail())
 				.addTemplateVariable("url", url)
 				.addTemplateVariable("changeEmail", encodedString).send();
 	}
 
 	public void changeEmail(User user, String email) {
 
+		userRepository.changeEmail(user, email);
 	}
 }

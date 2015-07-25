@@ -358,7 +358,7 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "change-email", method = RequestMethod.GET)
-	public String confirmCahgeEmailAddress(
+	public String confirmChangeEmailAddress(
 			@RequestParam(value = "changeEmail", required = true) String changeEmail)
 			throws JsonParseException, JsonMappingException, IOException,
 			UserNotFoundException {
@@ -371,14 +371,9 @@ public class AccountController {
 
 		User user = userService.getUser(changeEmailLink.getUserId());
 
-		Authentication auth = new UsernamePasswordAuthenticationToken(
-				user.getUsername(), user.getPassword(), user.getAuthorities());
-
-		SecurityContextHolder.getContext().setAuthentication(auth);
-
 		userService.changeEmail(user, changeEmailLink.getNewEmail());
 
-		return "redirect:/resume";
+		return "email-change-success";
 	}
 
 }

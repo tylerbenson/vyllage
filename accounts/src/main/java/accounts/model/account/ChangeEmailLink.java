@@ -5,13 +5,17 @@ import lombok.ToString;
 @ToString
 public class ChangeEmailLink {
 
-	private final Long userId;
-	private final String newEmail;
+	private Long userId;
+	private String newEmail;
+
+	public ChangeEmailLink() {
+
+	}
 
 	public ChangeEmailLink(Long userId, String newEmail) {
 		super();
-		this.userId = userId;
-		this.newEmail = newEmail;
+		this.setUserId(userId);
+		this.setNewEmail(newEmail);
 	}
 
 	public Long getUserId() {
@@ -20,6 +24,14 @@ public class ChangeEmailLink {
 
 	public String getNewEmail() {
 		return newEmail;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public void setNewEmail(String newEmail) {
+		this.newEmail = newEmail;
 	}
 
 }

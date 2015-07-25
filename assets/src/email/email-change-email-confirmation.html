@@ -442,7 +442,7 @@
 
                                             <h2 class="null">
                                               <span style="font-size:16px">Dear
-                                                <span style="font-size: 16px" th:if="${userName} != null" th:text="${userName}">
+                                                <span style="font-size: 16px" th:text="${userName} != null ? ${userName}  : 'Vyllager'">
                                                   Vyllager</span>,</span>
                                             </h2>
 
@@ -466,7 +466,8 @@
 
                                           <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
 
-                                            So you requested to reset your password, right? Click the link below to do just that.
+                                            So you requested to change your email to <b th:text="${newEmail}"> </b>, right?
+                                            Click the link below to do just that.
 
                                           </td>
                                         </tr>
