@@ -2,6 +2,7 @@ package accounts.repository;
 
 import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
+import static accounts.domain.tables.Userconnection.USERCONNECTION;
 import static accounts.domain.tables.Users.USERS;
 
 import java.sql.Timestamp;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import lombok.NonNull;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
@@ -107,7 +110,7 @@ public class UserDetailRepository implements UserDetailsManager,
 		return user;
 	}
 
-	protected User getUserData(UsersRecord record) {
+	protected User getUserData(@NonNull UsersRecord record) {
 
 		// TODO: eventually we'll need these fields in the database.
 		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
@@ -130,7 +133,8 @@ public class UserDetailRepository implements UserDetailsManager,
 
 	@Override
 	// @Transactional
-	public void createUser(UserDetails userDetails) {
+	public void createUser(@NonNull UserDetails userDetails) {
+
 		User user = (User) userDetails;
 
 		TransactionStatus transaction = txManager
@@ -197,10 +201,11 @@ public class UserDetailRepository implements UserDetailsManager,
 	 */
 	@Override
 	// @Transactional
-	public void updateUser(UserDetails userDetails) {
+	public void updateUser(@NonNull UserDetails userDetails) {
+
 		User user = (User) userDetails;
 		Assert.notNull(user.getAuthorities());
-		Assert.isTrue(!user.getAuthorities().isEmpty());
+		Assert.notEmpty(user.getAuthorities());
 
 		TransactionStatus transaction = txManager
 				.getTransaction(new DefaultTransactionDefinition());
@@ -541,6 +546,24 @@ public class UserDetailRepository implements UserDetailsManager,
 				.where(USERS.USER_ID.eq(userId)).execute();
 
 		return !enabled;
+	}
+
+	public void changeEmail(User user, @NonNull String email) {
+		Assert.isTrue(!email.isEmpty());
+
+		sql.update(USERS).set(USERS.USER_NAME, email)
+				.where(USERS.USER_ID.eq(user.getUserId())).execute();
+
+		// delete this, we don't need it anymore
+		accountSettingRepository.deleteByName(user.getUserId(), "newEmail");
+
+		sql.update(ACCOUNT_SETTING)
+				.set(ACCOUNT_SETTING.VALUE, email)
+				.where(ACCOUNT_SETTING.USER_ID.eq(user.getUserId()).and(
+						ACCOUNT_SETTING.NAME.eq("email"))).execute();
+
+		sql.update(USERCONNECTION).set(USERCONNECTION.USERID, email)
+				.where(USERCONNECTION.USERID.eq(user.getUsername())).execute();
 	}
 
 }

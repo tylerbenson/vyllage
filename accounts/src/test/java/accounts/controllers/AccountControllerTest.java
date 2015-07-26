@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 import accounts.controller.AccountController;
 import accounts.repository.UserNotFoundException;
@@ -34,12 +35,14 @@ public class AccountControllerTest {
 
 	private ObjectMapper mapper = new ObjectMapper();
 
+	private TextEncryptor encryptor = mock(TextEncryptor.class);
+
 	@Before
 	public void setUp() {
 
 		contoller = new AccountController(environment, userService,
 				documentLinkService, accountSettingsService,
-				userContactSuggestionService, mapper);
+				userContactSuggestionService, encryptor, mapper);
 	}
 
 	@Test

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.NonNull;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
@@ -27,6 +30,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -37,10 +41,12 @@ import user.common.constants.RolesEnum;
 import accounts.model.BatchAccount;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
+import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AccountSettingRepository;
 import accounts.repository.AvatarRepository;
+import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
@@ -51,6 +57,8 @@ import accounts.service.utilities.BatchParser.ParsedAccount;
 import accounts.service.utilities.RandomPasswordGenerator;
 import accounts.validation.EmailValidator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newrelic.api.agent.NewRelic;
 
 import email.EmailBuilder;
@@ -97,7 +105,19 @@ public class UserService {
 	private AvatarRepository avatarRepository;
 
 	@Autowired
+	private AccountSettingsService accountSettingsService;
+
+	@Autowired
 	private DSLContext sql;
+
+	@Autowired
+	private ObjectMapper mapper;
+
+	@Autowired
+	private TextEncryptor encryptor;
+
+	@Autowired
+	private SignInUtil signInUtil;
 
 	private BatchParser batchParser = new BatchParser();
 
@@ -723,5 +743,73 @@ public class UserService {
 
 		return GRAVATAR_URL
 				+ new String(DigestUtils.md5Hex(user.getUsername()));
+	}
+
+	/**
+	 * Starts the email address (username) change process. <br>
+	 * Sends an email to confirm that the user wanted to change the email, until
+	 * the user clicks the confirmation link the email will remain the same.
+	 * 
+	 * 
+	 * @param user
+	 * @param email
+	 * @throws EmailException
+	 * @throws JsonProcessingException
+	 */
+	public void sendEmailChangeConfirmation(@NonNull User user,
+			@NonNull String email) throws EmailException,
+			JsonProcessingException {
+		Assert.isTrue(!email.isEmpty());
+
+		ChangeEmailLink link = new ChangeEmailLink(user.getUserId(), email);
+
+		String jsonChangeEmailLink = mapper.writeValueAsString(link);
+
+		String encryptedString = encryptor.encrypt(jsonChangeEmailLink);
+
+		String encodedString = Base64.getUrlEncoder().encodeToString(
+				encryptedString.getBytes());
+
+		String url = "https://"
+				+ environment.getProperty("vyllage.domain", "www.vyllage.com")
+				+ "/account/change-email/";
+
+		emailBuilder
+				.to(email)
+				.from(environment.getProperty("email.from",
+						"no-reply@vyllage.com"))
+				.fromUserName(
+						environment.getProperty("email.from.userName",
+								"Chief of Vyllage"))
+				.subject("Email Change Confirmation")
+				.setNoHtmlMessage(
+						"We received a request to change your email if you requested it please copy and paste the link to confirm. \\n"
+								+ url + encodedString)
+				.templateName("email-change-email-confirmation")
+				.addTemplateVariable("userName", user.getFirstName())
+				.addTemplateVariable("newEmail", link.getNewEmail())
+				.addTemplateVariable("url", url)
+				.addTemplateVariable("changeEmail", encodedString).send();
+	}
+
+	public void changeEmail(@NonNull User user, @NonNull String email) {
+		Assert.isTrue(!email.isEmpty());
+
+		List<AccountSetting> accountSetting;
+
+		try {
+			accountSetting = accountSettingsService.getAccountSetting(user,
+					"newEmail");
+		} catch (ElementNotFoundException e) {
+			throw new AccessDeniedException("Invalid link provided.");
+		}
+
+		if (!email.equalsIgnoreCase(accountSetting.get(0).getValue()))
+			throw new AccessDeniedException("Invalid link provided.");
+
+		userRepository.changeEmail(user, email);
+
+		// to set the new name
+		signInUtil.signIn(email);
 	}
 }

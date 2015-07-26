@@ -2,6 +2,7 @@ package accounts.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.AccessDeniedException;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Base64;
@@ -26,6 +27,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +43,7 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
+import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.ChangePasswordForm;
 import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
@@ -76,6 +79,8 @@ public class AccountController {
 
 	private final UserContactSuggestionService userContactSuggestionService;
 
+	private final TextEncryptor encryptor;
+
 	private final ObjectMapper mapper;
 
 	@Autowired
@@ -88,13 +93,14 @@ public class AccountController {
 			final DocumentLinkService documentLinkService,
 			final AccountSettingsService accountSettingsService,
 			final UserContactSuggestionService userContactSuggestionService,
-			final ObjectMapper mapper) {
+			final TextEncryptor encryptor, final ObjectMapper mapper) {
 		super();
 		this.environment = environment;
 		this.userService = userService;
 		this.documentLinkService = documentLinkService;
 		this.accountSettingsService = accountSettingsService;
 		this.userContactSuggestionService = userContactSuggestionService;
+		this.encryptor = encryptor;
 		this.mapper = mapper;
 	}
 
@@ -355,4 +361,27 @@ public class AccountController {
 
 		return userService.getAvatar(userId);
 	}
+
+	@RequestMapping(value = "change-email", method = RequestMethod.GET)
+	public String confirmChangeEmailAddress(
+			@RequestParam(value = "changeEmail", required = true) String encodedString,
+			@AuthenticationPrincipal User user) throws JsonParseException,
+			JsonMappingException, IOException, UserNotFoundException {
+
+		String decodedString = new String(Base64.getUrlDecoder().decode(
+				encodedString));
+
+		String changeEmail = encryptor.decrypt(decodedString);
+
+		ChangeEmailLink changeEmailLink = mapper.readValue(changeEmail,
+				ChangeEmailLink.class);
+
+		if (!user.getUserId().equals(changeEmailLink.getUserId()))
+			throw new AccessDeniedException("Invalid link provided.");
+
+		userService.changeEmail(user, changeEmailLink.getNewEmail());
+
+		return "email-change-success";
+	}
+
 }

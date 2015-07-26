@@ -3,16 +3,17 @@ package accounts.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.springframework.security.core.GrantedAuthority;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.mail.EmailException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import user.common.User;
-import user.common.UserOrganizationRole;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
@@ -20,8 +21,14 @@ import accounts.repository.AccountSettingRepository;
 import accounts.repository.ElementNotFoundException;
 import accounts.service.aspects.CheckPrivacy;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.newrelic.api.agent.NewRelic;
+
 @Service
 public class AccountSettingsService {
+
+	private final Logger logger = Logger.getLogger(AccountSettingsService.class
+			.getName());
 
 	private final UserService userService;
 
@@ -117,8 +124,26 @@ public class AccountSettingsService {
 			return setLastName(user, setting);
 
 		case "email":
-			setEmail(user, setting);
-			return accountSettingRepository.set(user.getUserId(), setting);
+			try {
+				userService.sendEmailChangeConfirmation(user,
+						setting.getValue());
+			} catch (EmailException | JsonProcessingException e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
+
+			// save the new email as a new setting to query from the frontend.
+			AccountSetting newEmailSetting = new AccountSetting(null,
+					setting.getUserId(), "newEmail", setting.getValue(),
+					setting.getPrivacy());
+
+			accountSettingRepository.set(user.getUserId(), newEmailSetting);
+
+			// but don't change the setting value yet, the user needs to confirm
+			// the change by mail.
+			setting.setValue(user.getUsername());
+
+			return setting;
 		default:
 			return accountSettingRepository.set(user.getUserId(), setting);
 		}
@@ -179,29 +204,6 @@ public class AccountSettingsService {
 		userService.update(user);
 
 		return setting;
-	}
-
-	// changes the username and email...
-	protected void setEmail(User user, AccountSetting setting) {
-		if (setting.getValue() != null && !setting.getValue().isEmpty()) {
-			// username is final...
-			// password is erased after the user logins but we need something
-			// here, even if we won't change it
-
-			List<UserOrganizationRole> uor = new ArrayList<>();
-
-			for (GrantedAuthority grantedAuthority : user.getAuthorities())
-				uor.add((UserOrganizationRole) grantedAuthority);
-
-			User newUser = new User(user.getUserId(), user.getFirstName(),
-					user.getMiddleName(), user.getLastName(),
-					setting.getValue(), "a password we don't care about",
-					user.isEnabled(), user.isAccountNonExpired(),
-					user.isCredentialsNonExpired(), user.isAccountNonLocked(),
-					uor, user.getDateCreated(), user.getLastModified());
-			userService.update(newUser);
-		}
-
 	}
 
 }
