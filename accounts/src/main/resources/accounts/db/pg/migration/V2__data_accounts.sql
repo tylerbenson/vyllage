@@ -5,6 +5,10 @@ insert into accounts.roles ( role ) values ( 'GUEST' );
 insert into accounts.roles ( role ) values ( 'STAFF' );
 insert into accounts.roles ( role ) values ( 'STUDENT' );
 
+insert into ACCOUNTS.roles ( role ) values ( 'LMS_ADMIN' );
+insert into ACCOUNTS.roles ( role ) values ( 'INSTRUCTOR' );
+insert into ACCOUNTS.roles ( role ) values ( 'TEACHING_ASSISTANT' );
+
 insert into accounts.users (user_id, user_name, first_name, middle_name, last_name, enabled, date_created, last_modified) values (0, 'nathan@vyllage.com', 'Nathan', 'M', 'Benson', true, current_date, current_date);
 insert into accounts.users (user_id, user_name, first_name, middle_name, last_name, enabled, date_created, last_modified) values (1, 'tyler@vyllage.com', 'Tyler', 'D', 'Benson', true, current_date, current_date);
 
@@ -16,3 +20,10 @@ insert into accounts.organizations ( organization_id, organization_name ) values
 
 insert into accounts.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 0, 0, 'ADMIN', current_date, 0 );
 insert into accounts.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 0, 1, 'ADMIN', current_date, 0 );
+
+insert into ACCOUNTS.lms_type ( type_id, lms_name , date_created ) values ( 0, 'BLACKBOARD', current_date);
+insert into ACCOUNTS.lms_type ( type_id, lms_name , date_created ) values ( 1, 'SAKAI' , current_date);
+insert into ACCOUNTS.lms_type ( type_id, lms_name , date_created ) values ( 2, 'DESIRE2LEARN', current_date );
+insert into ACCOUNTS.lms_type ( type_id, lms_name , date_created ) values ( 3, 'CANVAS', current_date );
+insert into ACCOUNTS.lms_type ( type_id, lms_name , date_created ) values ( 4, 'MOODLE', current_date );
+insert into ACCOUNTS.lms_type ( type_id, lms_name , date_created ) values ( 5, 'CUSTOM' , current_date );

@@ -35,13 +35,9 @@ public class LMSOAuthAuthenticationHandler implements OAuthAuthenticationHandler
         if (ltiRequest == null) {
             throw new IllegalStateException("Cannot create authentication for LTI because the LTIRequest is null");
         }
-        String username = ltiRequest.getLtiUserId();
+        String username = ltiRequest.getLmsUser().getUserId();
         if (StringUtils.isBlank(username)) {
             username = authentication.getName();
-        }
-
-        if (ltiRequest.getUser() != null) {
-            authorities.add(userGA);
         }
         if (ltiRequest.isRoleAdministrator()) {
             authorities.add(adminGA);
