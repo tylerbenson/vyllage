@@ -838,4 +838,9 @@ public class UserService {
 		// to set the new name
 		signInUtil.signIn(email);
 	}
+
+	public void createUser(RegisterForm registerForm) {
+		// TODO Auto-generated method stub
+
+	}
 }
