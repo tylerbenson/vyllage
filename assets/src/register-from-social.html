@@ -39,31 +39,23 @@
     <div class="sections">
       <section class="form section">
         <div class="container">
-          <form th:action="@{/register}" th:object="${registerForm}" th:method="POST">
+          <form th:action="@{/register-from-social}" th:object="${registerForm}" th:method="POST">
             <div class="content">
-
               <h1 class="centered">Complete Account Setup</h1>
               <p class="centered">You are almost there! Fill out the fields below to proceed. </p>
-
               <div th:if="${registerForm.errorMsg != null}">
                 <p class="centered error" th:text="*{errorMsg}">E-mail or Password invalid.</p>
               </div>
-
               <label>FIRST NAME</label>
               <input type="text" th:field="*{firstName}" class="padded" />
-
               <label>LAST NAME</label>
               <input type="text" th:field="*{lastName}" class="padded" />
-
               <label>E-MAIL</label>
               <input type="text" th:field="*{email}" class="padded" />
-
               <label>Password</label>
               <input type="password" th:field="*{password}" class="padded" />
-
               <label>Receive free professional career advice from Vyllage's partner schools.</label>
               <input type="checkbox" th:field="*{receiveAdvice}" />
-
               <div class="actions">
                 <button type="submit" class="padded">PROCEED</button>
               </div>

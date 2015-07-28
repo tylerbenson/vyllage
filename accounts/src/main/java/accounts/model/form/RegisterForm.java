@@ -17,21 +17,47 @@ public class RegisterForm {
 	private String email;
 	private String password;
 
-	boolean receiveAdvice;
+	private boolean receiveAdvice;
+
+	private String errorMsg;
 
 	public boolean isValid() {
-		return nameIsValid() && EmailValidator.isValid(getEmail())
-				&& passwordIsValid();
+		return nameIsValid() && emailIsValid() && passwordIsValid();
+	}
+
+	private boolean emailIsValid() {
+		boolean emailIsValid = EmailValidator.isValid(getEmail());
+
+		if (!emailIsValid)
+			setErrorMsg("Invalid email address.");
+
+		return emailIsValid;
 	}
 
 	protected boolean passwordIsValid() {
-		return getPassword() != null && !getPassword().isEmpty()
+
+		boolean isValid = getPassword() != null && !getPassword().isEmpty()
 				&& getPassword().length() >= 6;
+		if (!isValid)
+			setErrorMsg("Invalid password.");
+
+		return isValid;
 	}
 
 	protected boolean nameIsValid() {
-		return getFirstName() != null && !getFirstName().isEmpty() && getLastName() != null
+
+		boolean isFirstNameValid = getFirstName() != null
+				&& !getFirstName().isEmpty();
+		boolean isLastNameValid = getLastName() != null
 				&& !getLastName().isEmpty();
+
+		if (!isFirstNameValid)
+			setErrorMsg("First name can't be empty");
+
+		if (!isLastNameValid)
+			setErrorMsg("Last name can't be empty");
+
+		return isFirstNameValid && isLastNameValid;
 	}
 
 	public String getFirstName() {
@@ -64,6 +90,22 @@ public class RegisterForm {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
+
+	public boolean isReceiveAdvice() {
+		return receiveAdvice;
+	}
+
+	public void setReceiveAdvice(boolean receiveAdvice) {
+		this.receiveAdvice = receiveAdvice;
 	}
 
 }

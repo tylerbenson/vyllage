@@ -11,6 +11,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import org.springframework.web.context.request.WebRequest;
 import user.common.User;
 import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
+import accounts.model.form.RegisterForm;
 import accounts.model.link.SocialDocumentLink;
 import accounts.repository.SharedDocumentRepository;
 import accounts.service.SignInUtil;
@@ -58,7 +60,8 @@ public class SocialLoginController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public String signup(HttpServletRequest request, WebRequest webRequest) {
+	public String signup(HttpServletRequest request, WebRequest webRequest,
+			Model model) {
 
 		logger.info("Signup with social account");
 
@@ -87,8 +90,6 @@ public class SocialLoginController {
 
 		if (userService.userExists(generatedName)) {
 
-			// User user = userService.getUser(generatedName);
-
 			// login
 			signInUtil.signIn(generatedName);
 
@@ -96,31 +97,81 @@ public class SocialLoginController {
 			providerSignInUtils.doPostSignUp(generatedName, webRequest);
 
 		} else {
+
+			// check all values are present
+			if (email == null || email.isEmpty() || firstName == null
+					|| firstName.isEmpty() || lastName == null
+					|| lastName.isEmpty()) {
+
+				RegisterForm registerForm = new RegisterForm();
+				registerForm.setEmail(email);
+				registerForm.setFirstName(firstName);
+				registerForm.setLastName(lastName);
+
+				model.addAttribute("registerForm", registerForm);
+
+				return "register-from-social";
+			}
+
 			// user doesn't exist, social account information not present
-
-			// create user
-			String userName = email != null && !email.isEmpty() ? email
-					: generatedName;
 			String password = randomPasswordGenerator.getRandomPassword();
-
-			User newUser = userService.createUser(userName, password,
-					firstName, null, lastName, doclink.getUserId());
-
-			// replacing userId that created the link with the userId of the
-			// user that will have his permissions created
-			doclink.setUserId(newUser.getUserId());
-
-			// login
-			signInUtil.signIn(request, newUser, password);
-
-			// saves social account information
-			providerSignInUtils.doPostSignUp(userName, webRequest);
+			// create user
+			createUser(request, webRequest, email, password, firstName,
+					lastName, doclink);
 
 		}
 
 		return "redirect:" + "/" + doclink.getDocumentType() + "/"
 				+ doclink.getDocumentId();
+	}
 
+	@RequestMapping(value = "/register-from-social", method = RequestMethod.GET)
+	public String register(Model model) {
+
+		RegisterForm registerForm = new RegisterForm();
+
+		model.addAttribute("registerForm", registerForm);
+		return "register-from-social";
+	}
+
+	@RequestMapping(value = "/register-from-social", method = RequestMethod.POST)
+	public String register(HttpServletRequest request, WebRequest webRequest,
+			RegisterForm registerForm, Model model) {
+
+		if (registerForm.isValid()) {
+			SocialDocumentLink doclink = sharedDocumentRepository
+					.getSocialDocumentLink((String) request.getSession(false)
+							.getAttribute(SocialSessionEnum.LINK_KEY.name()));
+
+			createUser(request, webRequest, registerForm.getEmail(),
+					registerForm.getPassword(), registerForm.getFirstName(),
+					registerForm.getLastName(), doclink);
+
+			return "redirect:" + "/" + doclink.getDocumentType() + "/"
+					+ doclink.getDocumentId();
+		}
+
+		model.addAttribute("registerForm", registerForm);
+
+		return "register-from-social";
+	}
+
+	protected void createUser(HttpServletRequest request,
+			WebRequest webRequest, String email, String password,
+			String firstName, String lastName, SocialDocumentLink doclink) {
+
+		User newUser = userService.createUser(email, password, firstName, null,
+				lastName, doclink.getUserId());
+
+		// replacing userId that created the link with the userId of the
+		// user that will have his permissions created
+		doclink.setUserId(newUser.getUserId());
+
+		// login
+		signInUtil.signIn(request, newUser, password);
+
+		// saves social account information
+		providerSignInUtils.doPostSignUp(email, webRequest);
 	}
 
 	/**

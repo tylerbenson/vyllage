@@ -840,7 +840,21 @@ public class UserService {
 	}
 
 	public void createUser(RegisterForm registerForm) {
-		// TODO Auto-generated method stub
+
+		boolean isEnabled = true;
+		boolean isAccountNonExpired = true;
+		boolean isCredentialsNonExpired = true;
+		boolean isAccountNonLocked = true;
+
+		List<UserOrganizationRole> newRolesForOrganization = null;
+
+		User newUpdateUser = new User(null, registerForm.getFirstName(), null,
+				registerForm.getLastName(), registerForm.getEmail(),
+				registerForm.getPassword(), isEnabled, isAccountNonExpired,
+				isCredentialsNonExpired, isAccountNonLocked,
+				newRolesForOrganization, null, null);
+
+		logger.info(newUpdateUser.toString());
 
 	}
 }
