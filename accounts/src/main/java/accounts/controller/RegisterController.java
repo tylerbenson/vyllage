@@ -18,7 +18,6 @@ public class RegisterController {
 
 	private final SignInUtil signInUtil;
 
-	@Inject
 	private final UserService userService;
 
 	@Inject
