@@ -47,7 +47,7 @@ var Datepicker = React.createClass({
     }.bind(this));
   },
   setYear: function (e) {
-    var year = parseInt(e.target.value) || '';
+    var year = parseInt(e.target.value) || parseInt(moment().format('YYYY'));
     this.setState({
       year: year,
       date: this.state.month + ' ' + year
@@ -57,20 +57,28 @@ var Datepicker = React.createClass({
   },
   incrementYear: function (e) {
     e.preventDefault();
-    var year = this.state.year + 1;
+
+    var year = this.state.year || parseInt(moment().format('YYYY'));
+    var month = this.state.month !== "Invalid date" ? this.state.month : moment().format('MMM');
+    year += 1;
+
     this.setState({
       year: year,
-      date: this.state.month + ' ' + year
+      date: month + ' ' + year
     }, function () {
       this.setDate();
     }.bind(this));
   },
   decrementYear: function (e) {
     e.preventDefault();
-    var year = this.state.year - 1;
+
+    var year = this.state.year || parseInt(moment().format('YYYY'));
+    var month = this.state.month !== "Invalid date" ? this.state.month : moment().format('MMM');
+    year -= 1;
+
     this.setState({
       year: year,
-      date: this.state.month + ' ' + year
+      date: month + ' ' + year
     }, function () {
       this.setDate();
     }.bind(this));
@@ -134,8 +142,8 @@ var Datepicker = React.createClass({
   renderLayer: function () {
     if (this.state.isOpen) {
       var isCurrent = this.props.isCurrent;
-      var activeMonth = this.state.month !== 'Invalid date' ? this.state.month : moment(new Date()).format('MMM');
-      var activeYear = this.state.year ? this.state.year : parseInt(moment(new Date()).format('YYYY'));
+      var activeMonth = this.state.month !== 'Invalid date' ? this.state.month : moment().format('MMM');
+      var activeYear = this.state.year ? this.state.year : parseInt(moment().format('YYYY'));
       var monthNodes = months.map(function (month, index) {
         var className = classnames('month', {
           active: activeMonth === month
