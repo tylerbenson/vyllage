@@ -17,8 +17,8 @@ var Datepicker = React.createClass({
       left: '-9999em',
       isFocused: false,
       onDatepicker: false,
-      year: parseInt(moment(date).format('YYYY')),
-      month: moment(date).format('MMM'),
+      year: parseInt(moment(new Date(date)).format('YYYY')),
+      month: moment(new Date(date)).format('MMM'),
       date: date
     };
   },
@@ -26,8 +26,8 @@ var Datepicker = React.createClass({
     if (nextProps.date !== this.props.date) {
       this.setState({
         date: nextProps.date,
-        year: parseInt(moment(nextProps.date).format('YYYY')),
-        month: moment(nextProps.date).format('MMM')
+        year: parseInt(moment(new Date(nextProps.date)).format('YYYY')),
+        month: moment(new Date(nextProps.date)).format('MMM')
       });
     }
   },
@@ -47,20 +47,25 @@ var Datepicker = React.createClass({
     }.bind(this));
   },
   setYear: function (e) {
-    var year = parseInt(e.target.value) || parseInt(moment().format('YYYY'));
-    this.setState({
-      year: year,
-      date: this.state.month + ' ' + year
-    }, function () {
-      this.setDate();
-    }.bind(this));
+    var year = e.target.value;
+    var yearPattern = /^\d{4}$/;
+
+    if(year.match(yearPattern)) {
+      this.setState({
+        year: year,
+        date: this.state.month + ' ' + year
+      }, function () {
+        this.setDate();
+      }.bind(this));
+    }
   },
   incrementYear: function (e) {
     e.preventDefault();
 
-    var year = this.state.year || parseInt(moment().format('YYYY'));
-    var month = this.state.month !== "Invalid date" ? this.state.month : moment().format('MMM');
-    year += 1;
+    var year = this.state.date ? parseInt(this.state.year) : parseInt(moment(new Date()).format('YYYY'));
+    var month = this.state.month !== "Invalid date" ? this.state.month : moment(new Date()).format('MMM');
+    // year = year == NaN ? parseInt(moment(new Date()).format('YYYY')): year;
+    year = year + 1;
 
     this.setState({
       year: year,
@@ -72,9 +77,11 @@ var Datepicker = React.createClass({
   decrementYear: function (e) {
     e.preventDefault();
 
-    var year = this.state.year || parseInt(moment().format('YYYY'));
-    var month = this.state.month !== "Invalid date" ? this.state.month : moment().format('MMM');
+    var year = this.state.date ? parseInt(this.state.year) : parseInt(moment(new Date()).format('YYYY'));
+    var month = this.state.month !== "Invalid date" ? this.state.month : moment(new Date()).format('MMM');
+    // year = year == NaN ? parseInt(moment(new Date()).format('YYYY')): year;
     year -= 1;
+
 
     this.setState({
       year: year,
@@ -142,8 +149,9 @@ var Datepicker = React.createClass({
   renderLayer: function () {
     if (this.state.isOpen) {
       var isCurrent = this.props.isCurrent;
-      var activeMonth = this.state.month !== 'Invalid date' ? this.state.month : moment().format('MMM');
-      var activeYear = this.state.year ? this.state.year : parseInt(moment().format('YYYY'));
+      var activeMonth = this.state.month !== 'Invalid date' ? this.state.month : moment(new Date()).format('MMM');
+      var activeYear = this.state.date ? this.state.year : parseInt(moment(new Date()).format('YYYY'));
+
       var monthNodes = months.map(function (month, index) {
         var className = classnames('month', {
           active: activeMonth === month
@@ -170,7 +178,7 @@ var Datepicker = React.createClass({
               <i className="ion-arrow-left-c"></i>
             </button>
 
-            <input type="text" className="year" placeholder="Year" value={activeYear} onChange={this.setYear} />
+            <input type="text" className="year" placeholder="Year" defaultValue={activeYear} onChange={this.setYear} />
 
             <button className="small inverted primary icon" onClick={this.incrementYear}>
               <i className="ion-arrow-right-c"></i>
