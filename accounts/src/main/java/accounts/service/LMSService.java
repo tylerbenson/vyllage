@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,6 +18,7 @@ import accounts.repository.LMSUserCredentialsRepository;
 import accounts.repository.LMSUserRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.UserNotFoundException;
+import lombok.NonNull;
 import oauth.lti.LMSRequest;
 import user.common.LMSUserCredentials;
 import user.common.Organization;
@@ -31,8 +34,10 @@ public class LMSService {
 	private final LMSUserRepository lmsUserRepository;
 	private final LMSUserCredentialsRepository lmsUserCredentialsRepository;
 
+	@Inject
 	public LMSService(final OrganizationRepository organizationRepository, final LMSUserRepository lmsUserRepository,
 			final LMSUserCredentialsRepository lmsUserCredentialsRepository) {
+		super();
 		this.organizationRepository = organizationRepository;
 		this.lmsUserRepository = lmsUserRepository;
 		this.lmsUserCredentialsRepository = lmsUserCredentialsRepository;
@@ -50,37 +55,16 @@ public class LMSService {
 		return this.lmsUserCredentialsRepository.userExists(lmsUserId);
 	}
 
-	public LMSUserCredentials getLmsUser(String lmsUserId) {
-		try {
-			return this.lmsUserCredentialsRepository.get(lmsUserId);
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public LMSUserCredentials getLmsUser(String lmsUserId) throws UserNotFoundException {
+		return this.lmsUserCredentialsRepository.get(lmsUserId);
 	}
 
-	public Long getUserId(String lmsUserId) {
-		try {
-			return this.lmsUserCredentialsRepository.getUserId(lmsUserId);
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public Long getUserId(String lmsUserId) throws UserNotFoundException {
+		return this.lmsUserCredentialsRepository.getUserId(lmsUserId);
 	}
 
-	public User createUser(String email, String password, String firstName, String middleName, String lastName,
-			LMSRequest lmsRequest) {
-
-		/*
-		 * Organization organization =
-		 * lmsRequest.getLmsAccount().getOrganization(); Organization storedOrg
-		 * =
-		 * organizationRepository.getByName(organization.getOrganizationName());
-		 * if (storedOrg == null) { storedOrg =
-		 * organizationRepository.addOrganization(lmsRequest.getLmsAccount().
-		 * getOrganization()); }
-		 * lmsRequest.getLmsAccount().setOrganization(storedOrg);
-		 */
+	public User createUser(@NonNull String email, @NonNull String password, String firstName, String middleName,
+			String lastName, @NonNull LMSRequest lmsRequest) {
 
 		// TODO: get LMS Admin audit user id
 		Long auditUserId = Long.valueOf(0);
@@ -107,7 +91,7 @@ public class LMSService {
 		for (GrantedAuthority userOrganizationRole : auditUser.getAuthorities()) {
 			defaultAuthoritiesForNewUser.add(
 					new UserOrganizationRole(null, ((UserOrganizationRole) userOrganizationRole).getOrganizationId(),
-							RolesEnum.GUEST.name(), auditUser.getUserId()));
+							RolesEnum.STUDENT.name(), auditUser.getUserId()));
 			Organization organization = new Organization(
 					((UserOrganizationRole) userOrganizationRole).getOrganizationId(), null);
 			lmsRequest.getLmsAccount().setOrganization(organization);

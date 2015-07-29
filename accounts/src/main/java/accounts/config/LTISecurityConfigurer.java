@@ -3,6 +3,7 @@ package accounts.config;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -35,24 +36,16 @@ import oauth.model.service.LMSOAuthNonceServices;
 public class LTISecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	private LMSOAuthProviderProcessingFilter ltioAuthProviderProcessingFilter;
-	private final LMSConsumerDetailsService lmsConsumerDetailsService;
-	private final LMSOAuthNonceServices lmsOauthNonceServices;
-	private final LMSOAuthAuthenticationHandler lmsOauthAuthenticationHandler;
-	private final OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
-	private final OAuthProviderTokenServices oauthProviderTokenServices;
-
 	@Inject
-	public LTISecurityConfigurer(final LMSConsumerDetailsService lmsConsumerDetailsService,
-			final LMSOAuthNonceServices lmsOauthNonceServices,
-			final LMSOAuthAuthenticationHandler lmsOauthAuthenticationHandler,
-			final OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint,
-			final OAuthProviderTokenServices oauthProviderTokenServices) {
-		this.lmsConsumerDetailsService = lmsConsumerDetailsService;
-		this.lmsOauthNonceServices = lmsOauthNonceServices;
-		this.lmsOauthAuthenticationHandler = lmsOauthAuthenticationHandler;
-		this.oauthProcessingFilterEntryPoint = oauthProcessingFilterEntryPoint;
-		this.oauthProviderTokenServices = oauthProviderTokenServices;
-	}
+	LMSConsumerDetailsService lmsConsumerDetailsService;
+	@Inject
+	LMSOAuthNonceServices lmsOauthNonceServices;
+	@Inject
+	LMSOAuthAuthenticationHandler lmsOauthAuthenticationHandler;
+	@Inject
+	OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
+	@Inject
+	OAuthProviderTokenServices oauthProviderTokenServices;
 
 	@PostConstruct
 	public void init() {

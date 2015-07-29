@@ -19,7 +19,7 @@ import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 import oauth.lti.LMSRequest;
 import oauth.model.LMSAccount;
-import oauth.utilities.Utility;
+import oauth.utilities.CsrfTokenUtility;
 import user.common.Organization;
 import user.common.User;
 
@@ -31,11 +31,12 @@ public class LMSLoginController {
 	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private final SharedDocumentRepository sharedDocumentRepository;
-	private Utility utility;
+	private CsrfTokenUtility utility;
 
 	@Inject
 	public LMSLoginController(final SignInUtil signInUtil, final LMSService lmsService,
 			final SharedDocumentRepository sharedDocumentRepository) {
+		super();
 		this.signInUtil = signInUtil;
 		this.lmsService = lmsService;
 		this.sharedDocumentRepository = sharedDocumentRepository;
@@ -68,7 +69,7 @@ public class LMSLoginController {
 		logger.info("Signup with LMS account");
 		// TODO; LMS User Name were unique for a LMS instance but may not be for
 		// multiple instances. So will have to add some instanced specific key..
-		utility = new Utility();
+		utility = new CsrfTokenUtility();
 		String lmsUserName = lmsRequest.getLmsUser().getUserName();
 		String userName = email != null && !email.isEmpty() ? email : lmsUserName;
 		String password = utility.makeLTICompositePassword(request, "");

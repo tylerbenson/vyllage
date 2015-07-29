@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import accounts.domain.tables.records.LmsRecord;
+import lombok.NonNull;
+
 import static accounts.domain.tables.Lms.LMS;
 
 import com.newrelic.api.agent.NewRelic;
@@ -35,7 +37,7 @@ public class LMSRepository {
 		this.txManager = txManager;
 	}
 
-	public Long createLMSAccount(LMSAccount lmsAccount) {
+	public Long createLMSAccount(@NonNull LMSAccount lmsAccount) {
 		Long lmsId = null;
 		TransactionStatus transaction = txManager.getTransaction(new DefaultTransactionDefinition());
 		Object savepoint = transaction.createSavepoint();
@@ -65,7 +67,7 @@ public class LMSRepository {
 		return lmsId;
 	}
 
-	public Long get(String lmsGuid) throws LMSNotFoundException {
+	public Long get(@NonNull String lmsGuid) throws LMSNotFoundException {
 
 		LmsRecord lmsAccountRecords = sql.fetchOne(LMS, LMS.LMS_GUID.eq(lmsGuid));
 		if (lmsAccountRecords == null)
