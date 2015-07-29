@@ -45,6 +45,7 @@ import accounts.domain.tables.records.UsersRecord;
 import accounts.model.UserCredential;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.AvatarSourceEnum;
 import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
 
@@ -184,6 +185,14 @@ public class UserDetailRepository implements UserDetailsManager,
 					.toLowerCase());
 			accountSettingRepository.set(newRecord.getUserId(),
 					emailUpdatesSetting);
+
+			AccountSetting avatarSetting = new AccountSetting();
+			avatarSetting.setName("avatar");
+			avatarSetting.setUserId(newRecord.getUserId());
+			avatarSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+			avatarSetting.setValue(AvatarSourceEnum.GRAVATAR.name()
+					.toLowerCase());
+			accountSettingRepository.set(newRecord.getUserId(), avatarSetting);
 
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
@@ -488,6 +497,14 @@ public class UserDetailRepository implements UserDetailsManager,
 						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
 						user.getUserId(), "emailUpdates",
 						EmailFrequencyUpdates.NEVER.name().toLowerCase(),
+						Privacy.PRIVATE.name().toLowerCase()));
+
+				// default avatar settings
+				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
+						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
+						user.getUserId(), "avatar",
+						AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
 						Privacy.PRIVATE.name().toLowerCase()));
 
 			}

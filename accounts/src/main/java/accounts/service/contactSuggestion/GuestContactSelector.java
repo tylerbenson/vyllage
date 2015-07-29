@@ -12,6 +12,7 @@ import org.jooq.SelectConditionStep;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
+import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
 import accounts.domain.tables.UserOrganizationRoles;
 import accounts.domain.tables.Users;
@@ -30,6 +31,21 @@ public class GuestContactSelector extends AbstractContactSelector {
 		UserOrganizationRoles uor = USER_ORGANIZATION_ROLES.as("uor");
 
 		Users u = USERS.as("u");
+
+		boolean userHasGuestOrganizationOnly = user
+				.getAuthorities()
+				.stream()
+				.allMatch(
+						uo -> ((UserOrganizationRole) uo).getOrganizationId()
+								.equals(OrganizationEnum.GUESTS
+										.getOrganizationId()));
+
+		// return all advisors regardless of organization.
+		if (userHasGuestOrganizationOnly)
+			return sql().select(u.fields()).from(u).join(uor)
+					.on(u.USER_ID.eq(uor.USER_ID))
+					.where(uor.ROLE.eq(RolesEnum.ADVISOR.name()))
+					.or(guestCondition(uor));
 
 		return sql()
 				.select(u.fields())

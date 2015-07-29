@@ -1,0 +1,627 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to the Vyllage! See your credentials.</title>
+  <link rel="stylesheet" href="../../public/css/email.css" />
+  <style type="text/css">
+  @media only screen and (max-width: 656px) {
+    body,
+    table,
+    td,
+    p,
+    a,
+    li,
+    blockquote {
+      -webkit-text-size-adjust: none !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    body {
+      width: 100% !important;
+      min-width: 100% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    table[class=vylTextContentContainer] {
+      width: 100% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    table[class=vylBoxedTextContentContainer] {
+      width: 100% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    table[class=mcpreview-image-uploader] {
+      width: 100% !important;
+      display: none !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    img[class=vylImage] {
+      width: 100% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    table[class=vylImageGroupContentContainer] {
+      width: 100% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylImageGroupContent] {
+      padding: 9px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylImageGroupBlockInner] {
+      padding-bottom: 0 !important;
+      padding-top: 0 !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    tbody[class=vylImageGroupBlockOuter] {
+      padding-bottom: 9px !important;
+      padding-top: 9px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylImageContent] {
+      padding-bottom: 18px !important;
+      padding-top: 18px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    table[class=vylCaptionTopContent],
+    table[class=vylCaptionBottomContent] {
+      width: 100% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    table[class=vylCaptionLeftTextContentContainer],
+    table[class=vylCaptionRightTextContentContainer],
+    table[class=vylCaptionLeftImageContentContainer],
+    table[class=vylCaptionRightImageContentContainer],
+    table[class=vylImageCardLeftTextContentContainer],
+    table[class=vylImageCardRightTextContentContainer] {
+      width: 100% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylImageCardLeftImageContent],
+    td[class=vylImageCardRightImageContent] {
+      padding-right: 18px !important;
+      padding-left: 18px !important;
+      padding-bottom: 0 !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylImageCardBottomImageContent] {
+      padding-bottom: 9px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylImageCardTopImageContent] {
+      padding-top: 18px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylImageCardLeftImageContent],
+    td[class=vylImageCardRightImageContent] {
+      padding-right: 18px !important;
+      padding-left: 18px !important;
+      padding-bottom: 0 !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylImageCardBottomImageContent] {
+      padding-bottom: 9px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylImageCardTopImageContent] {
+      padding-top: 18px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    table[class=vylCaptionLeftContentOuter] td[class=vylTextContent],
+    table[class=vylCaptionRightContentOuter] td[class=vylTextContent] {
+      padding-top: 9px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylCaptionBlockInner] table[class=vylCaptionTopContent]:last-child td[class=vylTextContent] {
+      padding-top: 18px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylBoxedTextContentColumn] {
+      padding-left: 18px !important;
+      padding-right: 18px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=vylTextContent] {
+      padding-right: 18px !important;
+      padding-left: 18px !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section template width
+	@tip Make the template fluid for portrait or landscape view adaptability. If a fluid layout doesn't work for you, set the width to 300px instead.
+	*/
+    table[class=templateContainer] {
+      /*@tab Mobile Styles
+@section template width
+@tip Make the template fluid for portrait or landscape view adaptability. If a fluid layout doesn't work for you, set the width to 300px instead.*/
+      max-width: 640px !important;
+      width: 100% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section heading 1
+	@tip Make the first-level headings larger in size for better readability on small screens.
+	*/
+    h1 {
+      font-size: 24px !important;
+      line-height: 125% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section heading 2
+	@tip Make the second-level headings larger in size for better readability on small screens.
+	*/
+    h2 {
+      font-size: 22px !important;
+      line-height: 125% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section heading 3
+	@tip Make the third-level headings larger in size for better readability on small screens.
+	*/
+    h3 {
+      font-size: 18px !important;
+      line-height: 125% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section heading 4
+	@tip Make the fourth-level headings larger in size for better readability on small screens.
+	*/
+    h4 {
+      font-size: 16px !important;
+      line-height: 125% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section Boxed Text
+	@tip Make the boxed text larger in size for better readability on small screens. We recommend a font size of at least 16px.
+	*/
+    table[class=vylBoxedTextContentContainer] td[class=vylTextContent],
+    td[class=vylBoxedTextContentContainer] td[class=vylTextContent] p {
+      display: none;
+      font-size: 10px !important;
+      line-height: 125% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    #templateBody {
+      border-top-width: 10px;
+      border-bottom-width: 10px;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section Preheader Visibility
+	@tip Set the visibility of the email's preheader on small screens. You can hide it to save space.
+	*/
+    table[id=templatePreheader] {
+      display: none !important;
+    }
+    table[id=templatePreheader] td[class=vylTextContent] {
+      text-align: center !important;
+      padding: 9px !important;
+    }
+    table[id=templatePreheader] td[class=vylTextContent] a {
+      margin-top: -12px;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section Preheader Text
+	@tip Make the preheader text larger in size for better readability on small screens.
+	*/
+    td[class=preheaderContainer] td[class=vylTextContent],
+    td[class=preheaderContainer] td[class=vylTextContent] p {
+      font-size: 10px !important;
+      line-height: 115% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section Header Text
+	@tip Make the header text larger in size for better readability on small screens.
+	*/
+    td[class=headerContainer] td[class=vylTextContent],
+    td[class=headerContainer] td[class=vylTextContent] p {
+      font-size: 18px !important;
+      line-height: 125% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section Body Text
+	@tip Make the body text larger in size for better readability on small screens. We recommend a font size of at least 16px.
+	*/
+    td[class=bodyContainer] td[class=vylTextContent],
+    td[class=bodyContainer] td[class=vylTextContent] p {
+      font-size: 16px !important;
+      line-height: 150% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    /*
+	@tab Mobile Styles
+	@section footer text
+	@tip Make the body content text larger in size for better readability on small screens.
+	*/
+    td[class=footerContainer] td[class=vylTextContent],
+    td[class=footerContainer] td[class=vylTextContent] p {
+      font-size: 12px !important;
+      line-height: 115% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 656px) {
+    td[class=footerContainer] a[class=utilityLink] {
+      display: block !important;
+    }
+  }
+  </style>
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
+  <center>
+    <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+      <tr>
+        <td align="center" valign="top" id="bodyCell" style="padding-bottom:20px;">
+          <!-- BEGIN TEMPLATE // -->
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td align="center" valign="top" style="border-bottom: #E9E9E9 solid 2px;">
+                <!-- BEGIN PREHEADER // -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templatePreheader">
+                  <tr>
+                    <td align="center" valign="top">
+                      <table border="0" cellpadding="0" cellspacing="0" width="640" class="templateContainer">
+                        <tr>
+                          <td valign="top" class="preheaderContainer">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
+                              <tbody class="vylTextBlockOuter">
+                                <tr>
+                                  <td valign="top" class="vylTextBlockInner">
+
+                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="392" class="vylTextContentContainer">
+                                      <tbody>
+                                        <tr>
+
+                                          <td valign="top" class="vylTextContent" style="padding: 16px 0px 16px 18px;color: #888888;">
+                                            Welcome to the Vyllage! See your credentials.
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+
+                                    <table align="right" border="0" cellpadding="0" cellspacing="0" width="211" class="vylTextContentContainer">
+                                      <tbody>
+                                        <tr>
+
+                                          <td valign="top" class="vylTextContent" style="padding: 9px 18px 9px 0px; text-align: right;">
+
+                                            <a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}" target="_blank">Log In Now!</a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+                <!-- // END PREHEADER -->
+              </td>
+            </tr>
+            <tr>
+              <td align="center" valign="top">
+                <!-- BEGIN HEADER // -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateHeader">
+                  <tr>
+                    <td align="center" valign="top">
+                      <table border="0" cellpadding="0" cellspacing="0" width="640" class="templateContainer">
+                        <tr>
+                          <td valign="top" class="headerContainer">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylDividerBlock">
+                              <tbody class="vylDividerBlockOuter">
+                              </tbody>
+                            </table>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylImageBlock">
+                              <tbody class="vylImageBlockOuter">
+                                <tr>
+                                  <td valign="top" style="padding:9px" class="vylImageBlockInner">
+                                    <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="vylImageContentContainer">
+                                      <tbody>
+                                        <tr>
+                                          <td class="vylImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 15px; padding-bottom: 15px; text-align:center;">
+                                            <a href="https://www.vyllage.com">
+                                              <img align="center" alt="Vyllage" src="https://gallery.mailchimp.com/5cb918082a39aef5a646dcf3a/images/12aa02ee-a9e7-40df-a9db-15fa3db68cac.png"
+                                              width="134.5" style="max-width:160px; padding-bottom: 0; display: inline !important; vertical-align: bottom;"
+                                              class="vylImage">
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+                <!-- // END HEADER -->
+              </td>
+            </tr>
+            <tr>
+              <td align="center" valign="top" style="border-bottom: #F7F7F7 solid 2px;">
+                <!-- BEGIN BODY // -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody">
+                  <tr>
+                    <td align="center" valign="top">
+                      <table border="0" cellpadding="0" cellspacing="0" width="640" class="templateContainer">
+                        <tr>
+                          <td valign="top" class="bodyContainer" style="padding-top:9px; padding-bottom:9px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
+                              <tbody class="vylTextBlockOuter">
+                                <tr>
+                                  <td valign="top" class="vylTextBlockInner">
+
+                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylTextContentContainer">
+                                      <tbody>
+                                        <tr>
+
+                                          <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;font-size: 14px;">
+
+                                            <h2 class="null">
+                                              <span style="font-size:16px">Dear
+                                                <span style="font-size: 16px" th:if="${firstName} != null" th:text="${firstName}">
+                                                  Vyllager</span>,</span>
+                                            </h2>
+
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
+                              <tbody class="vylTextBlockOuter">
+                                <tr>
+                                  <td valign="top" class="vylTextBlockInner">
+
+                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylTextContentContainer">
+                                      <tbody>
+                                        <tr>
+
+                                          <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
+
+                                            Welcome to Vyllage! Thank you for registering with us.
+                                            <a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}">Log In</a>                                            with this e-mail and the following password:
+
+                                            <br />
+
+                                            <strong>Password:</strong>
+                                            <code th:text="${password}">Oops, there was an error. Please contact us at <a href="mailto:hello@vyllage.com">hello@vyllage.com</a>.</code>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylButtonBlock" style="margin: 10px auto;">
+                              <tbody class="vylButtonBlockOuter">
+                                <tr>
+                                  <td style="padding: 18px; background-color: #FDEFE4;" valign="top" align="center" class="vylButtonBlockInner">
+                                    <table border="0" cellpadding="0" cellspacing="0" class="vylButtonContentContainer" style="border-collapse: separate !important;border-bottom: 4px solid #B65B18;border-radius: 5px;background-color: #E2670D;  margin: 20px 10px;">
+                                      <tbody>
+                                        <tr>
+                                          <td align="center" valign="middle" class="vylButtonContent" style="font-family: Arial; font-size: 16px; padding: 16px 24px;">
+                                            <a class="vylButton " th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}" target="_blank"
+                                            style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">Log In Now!</a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
+                              <tbody class="vylTextBlockOuter">
+                                <tr>
+                                  <td valign="top" class="vylTextBlockInner">
+
+                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylTextContentContainer">
+                                      <tbody>
+                                        <tr>
+
+                                          <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
+
+                                            I got a lot of exciting things over there for your career and I can't wait to have you on board.
+
+                                            <br>
+                                            <br> See you there,
+                                            <br>
+                                            <img align="none" height="90" src="https://gallery.mailchimp.com/5cb918082a39aef5a646dcf3a/images/9d8f49b5-97eb-45f6-8828-72bf696e2b76.png"
+                                            style="width: 130px; margin: 5px 0px -30px -10px;" width="215">
+                                            <h2 class="null">
+                                              <span style="font-size:16px">Vyllage Chief</span>
+                                            </h2>
+
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+                <!-- // END BODY -->
+              </td>
+            </tr>
+            <tr>
+              <td align="center" valign="top">
+                <!-- BEGIN FOOTER // -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter">
+                  <tr>
+                    <td align="center" valign="top">
+                      <table border="0" cellpadding="0" cellspacing="0" width="640" class="templateContainer">
+                        <tr>
+                          <td valign="top" class="footerContainer" style="padding-top:9px; padding-bottom:9px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylDividerBlock">
+                              <tbody class="vylDividerBlockOuter">
+                                <tr>
+                                  <td class="vylDividerBlockInner" style="padding: 10px 18px;">
+                                    <table class="vylDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top-width: 1px;border-top-style: none;border-top-color: #999999;">
+                                      <tbody>
+                                        <tr>
+                                          <td>
+                                            <span></span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylTextBlock">
+                              <tbody class="vylTextBlockOuter">
+                                <tr>
+                                  <td valign="top" class="vylTextBlockInner">
+
+                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylTextContentContainer">
+                                      <tbody>
+                                        <tr>
+
+                                          <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #888888;">
+
+                                            <span style="font-size:12px">Copyright © 2015 Vyllage, All rights reserved.</span>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td valign="top" class="vylTextContent" style="padding: 4px 18px;color: #888888;">
+                                            <a href="mailto:hello@vyllage.com">hello@vyllage.com</a> &nbsp;&#8226;&nbsp;
+                                            <a href="tel:5037146238">(503) 714-6238</a> &nbsp;&#8226;&nbsp;
+                                            <span style="line-height: 150%;">︎Vancouver, Washington</span>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+                <!-- // END FOOTER -->
+              </td>
+            </tr>
+          </table>
+          <!-- // END TEMPLATE -->
+        </td>
+      </tr>
+    </table>
+  </center>
+</body>
+
+</html>

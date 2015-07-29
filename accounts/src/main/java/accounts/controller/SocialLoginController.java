@@ -11,6 +11,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import org.springframework.web.context.request.WebRequest;
 import user.common.User;
 import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
+import accounts.model.form.RegisterForm;
 import accounts.model.link.SocialDocumentLink;
 import accounts.repository.SharedDocumentRepository;
 import accounts.service.SignInUtil;
@@ -58,7 +60,8 @@ public class SocialLoginController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public String signup(HttpServletRequest request, WebRequest webRequest) {
+	public String signup(HttpServletRequest request, WebRequest webRequest,
+			Model model) {
 
 		logger.info("Signup with social account");
 
@@ -71,12 +74,13 @@ public class SocialLoginController {
 				|| (userProfile = connection.fetchUserProfile()) == null)
 			throw new IllegalArgumentException("Social account not connected.");
 
-		String email = userProfile.getEmail();
-		String firstName = userProfile.getFirstName();
-		String lastName = userProfile.getLastName();
+		RegisterForm registerForm = new RegisterForm();
+		registerForm.setEmail(userProfile.getEmail());
+		registerForm.setFirstName(userProfile.getFirstName());
+		registerForm.setLastName(userProfile.getLastName());
 
 		// social account information is not present but user already exists
-		// TODO: generateName is only useful if either user name or email are
+		// TODO: generateName is only useful if either user names or email are
 		// present on the userProfile
 
 		SocialDocumentLink doclink = sharedDocumentRepository
@@ -87,8 +91,6 @@ public class SocialLoginController {
 
 		if (userService.userExists(generatedName)) {
 
-			// User user = userService.getUser(generatedName);
-
 			// login
 			signInUtil.signIn(generatedName);
 
@@ -98,29 +100,71 @@ public class SocialLoginController {
 		} else {
 			// user doesn't exist, social account information not present
 
-			// create user
-			String userName = email != null && !email.isEmpty() ? email
-					: generatedName;
+			// check all values are present, minus password
+			if (!registerForm.emailIsValid() || !registerForm.nameIsValid()) {
+
+				model.addAttribute("registerForm", registerForm);
+
+				return "register-from-social";
+			}
+
 			String password = randomPasswordGenerator.getRandomPassword();
+			registerForm.setPassword(password);
 
-			User newUser = userService.createUser(userName, password,
-					firstName, null, lastName, doclink.getUserId());
-
-			// replacing userId that created the link with the userId of the
-			// user that will have his permissions created
-			doclink.setUserId(newUser.getUserId());
-
-			// login
-			signInUtil.signIn(request, newUser, password);
-
-			// saves social account information
-			providerSignInUtils.doPostSignUp(userName, webRequest);
+			// create user
+			createUser(request, webRequest, registerForm, doclink);
 
 		}
 
 		return "redirect:" + "/" + doclink.getDocumentType() + "/"
 				+ doclink.getDocumentId();
+	}
 
+	@RequestMapping(value = "/register-from-social", method = RequestMethod.GET)
+	public String register(Model model) {
+
+		RegisterForm registerForm = new RegisterForm();
+
+		model.addAttribute("registerForm", registerForm);
+		return "register-from-social";
+	}
+
+	@RequestMapping(value = "/register-from-social", method = RequestMethod.POST)
+	public String register(HttpServletRequest request, WebRequest webRequest,
+			RegisterForm registerForm, Model model) {
+
+		if (registerForm.isValid()) {
+			SocialDocumentLink doclink = sharedDocumentRepository
+					.getSocialDocumentLink((String) request.getSession(false)
+							.getAttribute(SocialSessionEnum.LINK_KEY.name()));
+
+			createUser(request, webRequest, registerForm, doclink);
+
+			return "redirect:" + "/" + doclink.getDocumentType() + "/"
+					+ doclink.getDocumentId();
+		}
+
+		model.addAttribute("registerForm", registerForm);
+
+		return "register-from-social";
+	}
+
+	protected void createUser(HttpServletRequest request,
+			WebRequest webRequest, RegisterForm registerForm,
+			SocialDocumentLink doclink) {
+
+		User newUser = userService.createUserFromReferral(registerForm,
+				doclink.getUserId());
+
+		// replacing userId that created the link with the userId of the
+		// user that will have his permissions created
+		doclink.setUserId(newUser.getUserId());
+
+		// login
+		signInUtil.signIn(request, newUser, registerForm.getPassword());
+
+		// saves social account information
+		providerSignInUtils.doPostSignUp(registerForm.getEmail(), webRequest);
 	}
 
 	/**
