@@ -41,6 +41,13 @@ public class RegisterController {
 	public String register(HttpServletRequest request,
 			RegisterForm registerForm, Model model) {
 
+		if (userService.userExists(registerForm.getEmail())) {
+			registerForm.setErrorMsg("User already registered.");
+			model.addAttribute("registerForm", registerForm);
+
+			return "register";
+		}
+
 		if (registerForm.isValid()) {
 
 			User user = userService.createUser(registerForm);
