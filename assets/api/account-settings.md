@@ -76,6 +76,11 @@ Privacy settings.
  ["private","public","organization"]
 ```
 
+Avatar settings.
+```
+["gravatar", "facebook"]
+```
+
 ### Other settings: 
 
 + emailUpdates (weekly|biweekly|monthly|never) 

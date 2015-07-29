@@ -19,13 +19,18 @@ public class AvatarRepository {
 	@Autowired
 	private DSLContext sql;
 
-	public Optional<String> getAvatar(Long userId) {
+	public Optional<String> getAvatar(Long userId, String source) {
 		Userconnection uc = USERCONNECTION.as("uc");
 		Users u = USERS.as("u");
 
 		// for now just return the first one found
-		List<String> avatarUrls = sql.select(uc.IMAGEURL).from(uc).join(u)
-				.on(uc.USERID.eq(u.USER_NAME)).where(u.USER_ID.eq(userId))
+		List<String> avatarUrls = sql
+				.select(uc.IMAGEURL)
+				.from(uc)
+				.join(u)
+				.on(uc.USERID.eq(u.USER_NAME))
+				.where(u.USER_ID.eq(userId).and(
+						uc.PROVIDERID.equalIgnoreCase(source)))
 				.fetchInto(String.class);
 
 		if (avatarUrls != null && !avatarUrls.isEmpty())

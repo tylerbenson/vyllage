@@ -32,6 +32,7 @@ import user.common.constants.RolesEnum;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.AvatarSourceEnum;
 import accounts.model.account.settings.DocumentAccess;
 import accounts.model.account.settings.DocumentPermission;
 import accounts.model.account.settings.EmailFrequencyUpdates;
@@ -68,6 +69,11 @@ public class AccountSettingsController {
 	private final DocumentService documentService;
 	private final OrganizationRepository organizationRepository;
 
+	private Map<String, SettingValidator> validators = new HashMap<>();
+	private List<SettingValidator> validatorsForAll = new LinkedList<>();
+
+	private Map<String, List<String>> settingValues = new HashMap<>();
+
 	@Inject
 	public AccountSettingsController(final UserService userService,
 			final AccountSettingsService accountSettingsService,
@@ -99,12 +105,13 @@ public class AccountSettingsController {
 						.map(e -> e.toString().toLowerCase())
 						.collect(Collectors.toList()));
 
+		settingValues.put(
+				"avatar",
+				Arrays.asList(AvatarSourceEnum.values()).stream()
+						.map(e -> e.toString().toLowerCase())
+						.collect(Collectors.toList()));
+
 	}
-
-	private Map<String, SettingValidator> validators = new HashMap<>();
-	private List<SettingValidator> validatorsForAll = new LinkedList<>();
-
-	private Map<String, List<String>> settingValues = new HashMap<>();
 
 	@ModelAttribute("userInfo")
 	public AccountContact userInfo(HttpServletRequest request,
