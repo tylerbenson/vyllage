@@ -39,7 +39,7 @@ public class RegisterForm {
 		boolean isValid = getPassword() != null && !getPassword().isEmpty()
 				&& getPassword().length() >= 6;
 		if (!isValid)
-			setErrorMsg("Invalid password.");
+			setErrorMsg("Invalid password. Cannot be empty and/or shorter than 6 characters.");
 
 		return isValid;
 	}
