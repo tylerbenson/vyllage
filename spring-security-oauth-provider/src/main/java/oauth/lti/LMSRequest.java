@@ -36,7 +36,6 @@ public class LMSRequest {
 	int userRoleNumber;
 	String rawUserRolesOverride;
 
-	// private LMSUserCredential lmsUserCredential;
 	private LMSAccount lmsAccount;
 	private LMSUser lmsUser;
 	Organization organization;
@@ -233,13 +232,6 @@ public class LMSRequest {
 		return httpServletRequest;
 	}
 
-	/*
-	 * public LMSKey getKey() { return key; }
-	 */
-
-	/*
-	 * public LMSUser getUser() { return user; }
-	 */
 	public String getRawUserRoles() {
 		return rawUserRoles;
 	}

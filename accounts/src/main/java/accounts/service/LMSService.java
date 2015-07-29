@@ -27,15 +27,16 @@ import user.common.constants.RolesEnum;
 public class LMSService {
 
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
+	private final OrganizationRepository organizationRepository;
+	private final LMSUserRepository lmsUserRepository;
+	private final LMSUserCredentialsRepository lmsUserCredentialsRepository;
 
-	@Autowired
-	OrganizationRepository organizationRepository;
-
-	@Autowired
-	private LMSUserRepository lmsUserRepository;
-
-	@Autowired
-	private LMSUserCredentialsRepository lmsUserCredentialsRepository;
+	public LMSService(final OrganizationRepository organizationRepository, final LMSUserRepository lmsUserRepository,
+			final LMSUserCredentialsRepository lmsUserCredentialsRepository) {
+		this.organizationRepository = organizationRepository;
+		this.lmsUserRepository = lmsUserRepository;
+		this.lmsUserCredentialsRepository = lmsUserCredentialsRepository;
+	}
 
 	public User getUser(Long userId) throws UserNotFoundException {
 		return lmsUserRepository.get(userId);
@@ -70,18 +71,22 @@ public class LMSService {
 	public User createUser(String email, String password, String firstName, String middleName, String lastName,
 			LMSRequest lmsRequest) {
 
-		Organization organization = lmsRequest.getLmsAccount().getOrganization();
-		Organization storedOrg = organizationRepository.getByName(organization.getOrganizationName());
-		if (storedOrg == null) {
-			storedOrg = organizationRepository.addOrganization(lmsRequest.getLmsAccount().getOrganization());
-		}
-		lmsRequest.getLmsAccount().setOrganization(storedOrg);
+		/*
+		 * Organization organization =
+		 * lmsRequest.getLmsAccount().getOrganization(); Organization storedOrg
+		 * =
+		 * organizationRepository.getByName(organization.getOrganizationName());
+		 * if (storedOrg == null) { storedOrg =
+		 * organizationRepository.addOrganization(lmsRequest.getLmsAccount().
+		 * getOrganization()); }
+		 * lmsRequest.getLmsAccount().setOrganization(storedOrg);
+		 */
 
-		// TODO to get LMS audit user id
+		// TODO: get LMS Admin audit user id
 		Long auditUserId = Long.valueOf(0);
 
 		if (auditUserId == null)
-			throw new AccessDeniedException("Account creation is not allowed without a referring user.");
+			throw new AccessDeniedException("Vyllage account creation is not allowed without a referring user.");
 
 		boolean enabled = true;
 		boolean accountNonExpired = true;
@@ -103,6 +108,9 @@ public class LMSService {
 			defaultAuthoritiesForNewUser.add(
 					new UserOrganizationRole(null, ((UserOrganizationRole) userOrganizationRole).getOrganizationId(),
 							RolesEnum.GUEST.name(), auditUser.getUserId()));
+			Organization organization = new Organization(
+					((UserOrganizationRole) userOrganizationRole).getOrganizationId(), null);
+			lmsRequest.getLmsAccount().setOrganization(organization);
 		}
 
 		/*

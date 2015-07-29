@@ -47,7 +47,7 @@ public class Utility implements CsrfTokenRepository {
 		return token;
 	}
 
-	public static Long stringToLong(String str) {
+	public Long stringToLong(String str) {
 
 		str = str.substring(0, 5);
 		StringBuffer strBuffer = new StringBuffer();
@@ -59,7 +59,7 @@ public class Utility implements CsrfTokenRepository {
 		return Long.valueOf(strBuffer.toString()).longValue();
 	}
 
-	public static String makeLTICompositePassword(HttpServletRequest request, String sessionSalt) {
+	public String makeLTICompositePassword(HttpServletRequest request, String sessionSalt) {
 
 		if (StringUtils.isBlank(sessionSalt)) {
 			sessionSalt = "A7k254A0itEuQ9ndKJuZ";

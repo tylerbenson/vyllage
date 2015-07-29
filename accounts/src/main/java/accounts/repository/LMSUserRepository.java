@@ -6,6 +6,8 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,35 +44,28 @@ import accounts.domain.tables.records.UsersRecord;
 public class LMSUserRepository implements LMSUserDetailsService {
 
 	private final Logger logger = Logger.getLogger(LMSUserRepository.class.getName());
+	private final DSLContext sql;
+	private final UserOrganizationRoleRepository userOrganizationRoleRepository;
+	private final OrganizationRepository organizationRepository;
+	private final UserCredentialsRepository credentialsRepository;
+	private final AccountSettingRepository accountSettingRepository;
+	private final DataSourceTransactionManager txManager;
+	private final LMSRepository lmsRepository;
+	private final LMSUserCredentialsRepository lmsUserCredentialsRepository;
 
-	// @Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private DSLContext sql;
-
-	@Autowired
-	private UserOrganizationRoleRepository userOrganizationRoleRepository;
-
-	@Autowired
-	private OrganizationRepository organizationRepository;
-
-	@Autowired
-	private UserCredentialsRepository credentialsRepository;
-
-	@Autowired
-	private AccountSettingRepository accountSettingRepository;
-
-	@Autowired
-	private DataSourceTransactionManager txManager;
-
-	@Autowired
-	private LMSRepository lmsRepository;
-
-	@Autowired
-	private LMSUserCredentialsRepository lmsUserCredentialsRepository;
-
-	public LMSUserRepository() {
+	@Inject
+	public LMSUserRepository(final DSLContext sql, final UserOrganizationRoleRepository userOrganizationRoleRepository,
+			final OrganizationRepository organizationRepository, final UserCredentialsRepository credentialsRepository,
+			final AccountSettingRepository accountSettingRepository, final DataSourceTransactionManager txManager,
+			final LMSRepository lmsRepository, final LMSUserCredentialsRepository lmsUserCredentialsRepository) {
+		this.sql = sql;
+		this.userOrganizationRoleRepository = userOrganizationRoleRepository;
+		this.organizationRepository = organizationRepository;
+		this.credentialsRepository = credentialsRepository;
+		this.accountSettingRepository = accountSettingRepository;
+		this.txManager = txManager;
+		this.lmsRepository = lmsRepository;
+		this.lmsUserCredentialsRepository = lmsUserCredentialsRepository;
 	}
 
 	public User get(Long userId) throws UserNotFoundException {
@@ -83,7 +78,6 @@ public class LMSUserRepository implements LMSUserDetailsService {
 	}
 
 	@Override
-	// @Transactional
 	public void createUser(UserDetails userDetails, LMSRequest lmsRequest) {
 		User user = (User) userDetails;
 

@@ -31,8 +31,7 @@ public class SignInUtil {
 	public User signIn(String username) {
 		User user = userService.getUser(username);
 
-		Authentication auth = new UsernamePasswordAuthenticationToken(user,
-				user.getPassword(), user.getAuthorities());
+		Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		return user;
@@ -46,8 +45,7 @@ public class SignInUtil {
 	public User signIn(Long userId) throws UserNotFoundException {
 		User user = userService.getUser(userId);
 
-		Authentication auth = new UsernamePasswordAuthenticationToken(user,
-				user.getPassword(), user.getAuthorities());
+		Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		return user;
@@ -62,11 +60,9 @@ public class SignInUtil {
 	 * @param password
 	 */
 	public void signIn(HttpServletRequest request, User user, String password) {
-		Authentication auth = new UsernamePasswordAuthenticationToken(user,
-				password, user.getAuthorities());
+		Authentication auth = new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
 
-		((AbstractAuthenticationToken) auth)
-				.setDetails(new WebAuthenticationDetails(request));
+		((AbstractAuthenticationToken) auth).setDetails(new WebAuthenticationDetails(request));
 		auth = authenticationManager.authenticate(auth);
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
