@@ -25,7 +25,7 @@ public class RegisterForm {
 		return nameIsValid() && emailIsValid() && passwordIsValid();
 	}
 
-	private boolean emailIsValid() {
+	public boolean emailIsValid() {
 		boolean emailIsValid = EmailValidator.isValid(getEmail());
 
 		if (!emailIsValid)
@@ -34,7 +34,7 @@ public class RegisterForm {
 		return emailIsValid;
 	}
 
-	protected boolean passwordIsValid() {
+	public boolean passwordIsValid() {
 
 		boolean isValid = getPassword() != null && !getPassword().isEmpty()
 				&& getPassword().length() >= 6;
@@ -44,7 +44,7 @@ public class RegisterForm {
 		return isValid;
 	}
 
-	protected boolean nameIsValid() {
+	public boolean nameIsValid() {
 
 		boolean isFirstNameValid = getFirstName() != null
 				&& !getFirstName().isEmpty();
@@ -100,7 +100,7 @@ public class RegisterForm {
 		this.errorMsg = errorMsg;
 	}
 
-	public boolean isReceiveAdvice() {
+	public boolean getReceiveAdvice() {
 		return receiveAdvice;
 	}
 

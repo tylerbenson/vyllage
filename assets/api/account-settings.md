@@ -81,6 +81,11 @@ Avatar settings.
 ["gravatar", "facebook"]
 ```
 
+Receive advice setting
+```
+ ["true","false"]
+```
+
 ### Other settings: 
 
 + emailUpdates (weekly|biweekly|monthly|never) 

@@ -74,12 +74,13 @@ public class SocialLoginController {
 				|| (userProfile = connection.fetchUserProfile()) == null)
 			throw new IllegalArgumentException("Social account not connected.");
 
-		String email = userProfile.getEmail();
-		String firstName = userProfile.getFirstName();
-		String lastName = userProfile.getLastName();
+		RegisterForm registerForm = new RegisterForm();
+		registerForm.setEmail(userProfile.getEmail());
+		registerForm.setFirstName(userProfile.getFirstName());
+		registerForm.setLastName(userProfile.getLastName());
 
 		// social account information is not present but user already exists
-		// TODO: generateName is only useful if either user name or email are
+		// TODO: generateName is only useful if either user names or email are
 		// present on the userProfile
 
 		SocialDocumentLink doclink = sharedDocumentRepository
@@ -97,27 +98,21 @@ public class SocialLoginController {
 			providerSignInUtils.doPostSignUp(generatedName, webRequest);
 
 		} else {
+			// user doesn't exist, social account information not present
 
-			// check all values are present
-			if (email == null || email.isEmpty() || firstName == null
-					|| firstName.isEmpty() || lastName == null
-					|| lastName.isEmpty()) {
-
-				RegisterForm registerForm = new RegisterForm();
-				registerForm.setEmail(email);
-				registerForm.setFirstName(firstName);
-				registerForm.setLastName(lastName);
+			// check all values are present, minus password
+			if (!registerForm.emailIsValid() || !registerForm.nameIsValid()) {
 
 				model.addAttribute("registerForm", registerForm);
 
 				return "register-from-social";
 			}
 
-			// user doesn't exist, social account information not present
 			String password = randomPasswordGenerator.getRandomPassword();
+			registerForm.setPassword(password);
+
 			// create user
-			createUser(request, webRequest, email, password, firstName,
-					lastName, doclink);
+			createUser(request, webRequest, registerForm, doclink);
 
 		}
 
@@ -143,9 +138,7 @@ public class SocialLoginController {
 					.getSocialDocumentLink((String) request.getSession(false)
 							.getAttribute(SocialSessionEnum.LINK_KEY.name()));
 
-			createUser(request, webRequest, registerForm.getEmail(),
-					registerForm.getPassword(), registerForm.getFirstName(),
-					registerForm.getLastName(), doclink);
+			createUser(request, webRequest, registerForm, doclink);
 
 			return "redirect:" + "/" + doclink.getDocumentType() + "/"
 					+ doclink.getDocumentId();
@@ -157,21 +150,21 @@ public class SocialLoginController {
 	}
 
 	protected void createUser(HttpServletRequest request,
-			WebRequest webRequest, String email, String password,
-			String firstName, String lastName, SocialDocumentLink doclink) {
+			WebRequest webRequest, RegisterForm registerForm,
+			SocialDocumentLink doclink) {
 
-		User newUser = userService.createUser(email, password, firstName, null,
-				lastName, doclink.getUserId());
+		User newUser = userService.createUserFromReferral(registerForm,
+				doclink.getUserId());
 
 		// replacing userId that created the link with the userId of the
 		// user that will have his permissions created
 		doclink.setUserId(newUser.getUserId());
 
 		// login
-		signInUtil.signIn(request, newUser, password);
+		signInUtil.signIn(request, newUser, registerForm.getPassword());
 
 		// saves social account information
-		providerSignInUtils.doPostSignUp(email, webRequest);
+		providerSignInUtils.doPostSignUp(registerForm.getEmail(), webRequest);
 	}
 
 	/**
