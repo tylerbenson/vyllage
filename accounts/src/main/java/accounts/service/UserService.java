@@ -45,8 +45,8 @@ import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.AvatarSourceEnum;
+import accounts.model.form.RegisterForm;
 import accounts.model.link.DocumentLinkRequest;
-import accounts.repository.AccountSettingRepository;
 import accounts.repository.AvatarRepository;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
@@ -85,9 +85,6 @@ public class UserService {
 
 	@Autowired
 	private UserDetailRepository userRepository;
-
-	@Autowired
-	private AccountSettingRepository settingRepository;
 
 	@Autowired
 	private RandomPasswordGenerator randomPasswordGenerator;
@@ -742,7 +739,8 @@ public class UserService {
 		Optional<AccountSetting> avatarSetting = Optional.empty();
 
 		try {
-			avatarSettings = settingRepository.get(userId, "avatar");
+			avatarSettings = accountSettingsService.getAccountSetting(user,
+					"avatar");
 
 			// there's only one
 			avatarSetting = Optional.ofNullable(avatarSettings.get(0));
