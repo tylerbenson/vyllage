@@ -31,6 +31,7 @@ import accounts.model.UserCredential;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
+import lombok.NonNull;
 import oauth.lti.LMSRequest;
 import oauth.model.LMSAccount;
 import user.common.LMSUserCredentials;
@@ -50,11 +51,13 @@ public class LMSUserCredentialsRepository {
 
 	@Inject
 	public LMSUserCredentialsRepository(final DSLContext sql, final DataSourceTransactionManager txManager) {
+		super();
 		this.sql = sql;
 		this.txManager = txManager;
 	}
 
 	public LMSUserCredentials get(String lmsUserId) throws UserNotFoundException {
+
 		LmsUserCredentialsRecord record = sql.fetchOne(LMS_USER_CREDENTIALS,
 				LMS_USER_CREDENTIALS.LMS_USER_ID.eq(lmsUserId));
 
@@ -76,10 +79,7 @@ public class LMSUserCredentialsRepository {
 		return record.getUserId();
 	}
 
-	public void createUser(String lmsUserId, Long userId, Long lmsId, String password) {
-		Assert.notNull(lmsUserId);
-		Assert.notNull(userId);
-		Assert.notNull(password);
+	public void createUser(@NonNull String lmsUserId, @NonNull Long userId, @NonNull Long lmsId, String password) {
 		LmsUserCredentialsRecord newRecord = sql.newRecord(LMS_USER_CREDENTIALS);
 		newRecord.setLmsUserId(lmsUserId);
 		newRecord.setUserId(userId);

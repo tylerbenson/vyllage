@@ -21,6 +21,7 @@ import org.springframework.security.oauth.provider.token.OAuthProviderTokenServi
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import oauth.lti.LMSConsumerDetailsService;
+import oauth.lti.LMSOAuthProviderProcessingFilter;
 import oauth.model.service.LMSAuthenticationHandler;
 import oauth.model.service.LMSOAuthNonceServices;
 import oauth.model.service.ZeroLeggedOAuthProviderProcessingFilter;
@@ -33,27 +34,17 @@ import oauth.model.service.ZeroLeggedOAuthProviderProcessingFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Order(11)
 public class OAuthSecurityConfigurer extends WebSecurityConfigurerAdapter {
-
 	private ZeroLeggedOAuthProviderProcessingFilter zeroLeggedOAuthProviderProcessingFilter;
-
-	private final LMSConsumerDetailsService oauthConsumerDetailsService;
-	private final LMSOAuthNonceServices oauthNonceServices;
-	private final LMSAuthenticationHandler authenticationHandler;
-	private final OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
-	private final OAuthProviderTokenServices oauthProviderTokenServices;
-
 	@Inject
-	public OAuthSecurityConfigurer(final LMSConsumerDetailsService oauthConsumerDetailsService,
-			final LMSOAuthNonceServices oauthNonceServices, final LMSAuthenticationHandler authenticationHandler,
-			final OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint,
-			final OAuthProviderTokenServices oauthProviderTokenServices) {
-
-		this.oauthConsumerDetailsService = oauthConsumerDetailsService;
-		this.oauthNonceServices = oauthNonceServices;
-		this.authenticationHandler = authenticationHandler;
-		this.oauthProcessingFilterEntryPoint = oauthProcessingFilterEntryPoint;
-		this.oauthProviderTokenServices = oauthProviderTokenServices;
-	}
+	LMSConsumerDetailsService oauthConsumerDetailsService;
+	@Inject
+	LMSOAuthNonceServices oauthNonceServices;
+	@Inject
+	LMSAuthenticationHandler authenticationHandler;
+	@Inject
+	OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
+	@Inject
+	OAuthProviderTokenServices oauthProviderTokenServices;
 
 	@PostConstruct
 	public void init() {

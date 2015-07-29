@@ -12,7 +12,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.DefaultCsrfToken;
 
-public class Utility implements CsrfTokenRepository {
+public class CsrfTokenUtility implements CsrfTokenRepository {
 
 	private static final String HEADER_NAME = "X-CSRF-TOKEN";
 	private static final String CSRF = "_csrf";

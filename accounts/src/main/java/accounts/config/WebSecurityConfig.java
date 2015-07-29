@@ -27,33 +27,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	// http://stackoverflow.com/questions/21231057/how-to-configure-spring-4-0-with-spring-boot-and-spring-security-openid?rq=1
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/account/reset-password",
-						"/account/reset-password-change/**", "/signin/**",
-						"/signup/**", "/social-login/**", "/link/e/**",
-						"/link/s/**").permitAll();
+		http.authorizeRequests().antMatchers("/account/reset-password", "/account/reset-password-change/**",
+				"/signin/**", "/signup/**", "/social-login/**", "/link/e/**", "/link/s/**", "/lti/login").permitAll();
 
 		// disabling CSRF for the togglz console.
 		http.csrf().requireCsrfProtectionMatcher(new RequestMatcherDisable());
 
 		// Allow frames to enable the h2 console.
-		http.headers().addHeaderWriter(
-				new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
+		http.headers().addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
 		http.headers().disable();
-		http.authorizeRequests()
-				.antMatchers("/", "/status", "/status-*", "/css/**",
-						"/images/**", "/javascript/**").permitAll();
+		http.authorizeRequests().antMatchers("/", "/status", "/status-*", "/css/**", "/images/**", "/javascript/**")
+				.permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
 
 		SimpleUrlAuthenticationSuccessHandler successHandler = successHandler();
 		successHandler.setAlwaysUseDefaultTargetUrl(true);
-		http.formLogin().loginPage("/login").usernameParameter("email")
-				.defaultSuccessUrl("/resume/").successHandler(successHandler)
-				.permitAll();
+		http.formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/resume/")
+				.successHandler(successHandler).permitAll();
 
-		http.logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.permitAll();
+		http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();
 
 	}
 
