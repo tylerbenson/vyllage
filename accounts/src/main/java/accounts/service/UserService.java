@@ -749,7 +749,6 @@ public class UserService {
 		} catch (ElementNotFoundException e) {
 			// not really important
 			logger.warning(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
 		}
 
 		if (avatarSetting.isPresent()
