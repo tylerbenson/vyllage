@@ -157,6 +157,7 @@ var Organization = React.createClass({
                 >
                   <input
                     disabled={!uiEditMode}
+                    readOnly="true"
                     style={uiEditMode || section.startDate ? {}: {display: 'none'}}
                     type="text"
                     className="inline flat date"
@@ -173,6 +174,7 @@ var Organization = React.createClass({
                 >
                   <input
                     disabled={!uiEditMode}
+                    readOnly="true"
                     style={uiEditMode || section.endDate || section.isCurrent ? {}: {display: 'none'}}
                     type="text"
                     className="inline flat date"
