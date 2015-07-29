@@ -37,6 +37,7 @@ import org.springframework.util.Assert;
 import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
+import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
 import accounts.model.BatchAccount;
 import accounts.model.account.AccountContact;
@@ -839,14 +840,28 @@ public class UserService {
 		signInUtil.signIn(email);
 	}
 
-	public void createUser(RegisterForm registerForm) {
+	/**
+	 * 
+	 * @param registerForm
+	 * @param request
+	 * @return
+	 */
+	public User createUser(RegisterForm registerForm) {
 
 		boolean isEnabled = true;
 		boolean isAccountNonExpired = true;
 		boolean isCredentialsNonExpired = true;
 		boolean isAccountNonLocked = true;
 
-		List<UserOrganizationRole> newRolesForOrganization = null;
+		// defaulting to Guest Role and Guest Organization
+
+		Long auditUserId = Long.valueOf(0L);// main admin.
+
+		UserOrganizationRole uor = new UserOrganizationRole(null,
+				OrganizationEnum.GUESTS.getOrganizationId(), RolesEnum.GUEST
+						.name().toUpperCase(), auditUserId);
+
+		List<UserOrganizationRole> newRolesForOrganization = Arrays.asList(uor);
 
 		User newUpdateUser = new User(null, registerForm.getFirstName(), null,
 				registerForm.getLastName(), registerForm.getEmail(),
@@ -856,5 +871,8 @@ public class UserService {
 
 		logger.info(newUpdateUser.toString());
 
+		this.userRepository.createUser(newUpdateUser);
+
+		return this.getUser(registerForm.getEmail());
 	}
 }

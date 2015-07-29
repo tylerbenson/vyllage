@@ -1,20 +1,32 @@
 package accounts.controller;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import user.common.User;
 import accounts.model.form.RegisterForm;
+import accounts.service.SignInUtil;
 import accounts.service.UserService;
 
 @Controller
 public class RegisterController {
 
+	private final SignInUtil signInUtil;
+
 	@Inject
-	private UserService userService;
+	private final UserService userService;
+
+	@Inject
+	public RegisterController(SignInUtil signInUtil, UserService userService) {
+		this.signInUtil = signInUtil;
+		this.userService = userService;
+
+	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String register(Model model) {
@@ -26,10 +38,14 @@ public class RegisterController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
-	public String register(RegisterForm registerForm, Model model) {
+	public String register(HttpServletRequest request,
+			RegisterForm registerForm, Model model) {
 
 		if (registerForm.isValid()) {
-			userService.createUser(registerForm);
+
+			User user = userService.createUser(registerForm);
+			signInUtil.signIn(request, user, registerForm.getPassword());
+
 			return "registration-completed";
 		}
 
