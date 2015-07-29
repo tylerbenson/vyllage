@@ -43,6 +43,7 @@ import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.AvatarSourceEnum;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AccountSettingRepository;
 import accounts.repository.AvatarRepository;
@@ -726,21 +727,47 @@ public class UserService {
 	}
 
 	/**
-	 * Returns the user's avatar based on the user's social networks profile, if
-	 * it can't find any return a gravatar url.
+	 * Returns the user's avatar based on the user's social networks profile or
+	 * avatar setting, if it can't find any returns a gravatar url.
 	 * 
 	 * @param userId
 	 * @return avatar url
 	 * @throws UserNotFoundException
 	 */
 	public String getAvatar(Long userId) throws UserNotFoundException {
-		Optional<String> avatarUrl = avatarRepository.getAvatar(userId);
-
-		if (avatarUrl.isPresent())
-			return avatarUrl.get();
 
 		User user = this.getUser(userId);
+		List<AccountSetting> avatarSettings = null;
+		Optional<AccountSetting> avatarSetting = Optional.empty();
 
+		try {
+			avatarSettings = settingRepository.get(userId, "avatar");
+
+			// there's only one
+			avatarSetting = Optional.ofNullable(avatarSettings.get(0));
+
+		} catch (ElementNotFoundException e) {
+			// not really important
+			logger.warning(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+
+		if (avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.GRAVATAR.name()))
+			return GRAVATAR_URL
+					+ new String(DigestUtils.md5Hex(user.getUsername()));
+
+		else if (avatarSetting.isPresent()) {
+
+			Optional<String> avatarUrl = avatarRepository.getAvatar(userId,
+					avatarSetting.get().getValue());
+
+			if (avatarUrl.isPresent())
+				return avatarUrl.get();
+		}
+
+		// nothing found, defaulting to gravatar
 		return GRAVATAR_URL
 				+ new String(DigestUtils.md5Hex(user.getUsername()));
 	}
