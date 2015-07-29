@@ -193,7 +193,7 @@ var Organization = React.createClass({
                 <Textarea
                   disabled={!uiEditMode}
                   className="flat"
-                  style={uiEditMode || section.highlights ? {}: {display: 'none'}}
+                  style={uiEditMode || (section.highlights && section.highlights.length > 0) ? {}: {display: 'none'}}
                   rows="1"
                   placeholder={placeholders.highlights || "Note at least three (3) notable accomplishments achieved during this position.."}
                   value={section.highlights}
