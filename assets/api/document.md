@@ -28,6 +28,13 @@ This endpoint is not intended for consumption from the UI. Only admins can use t
 + Response 200 (application/pdf)
 
 
+# Get pdf styles
+## GET /resume/file/pdf/styles
+Returns
+```
+{"default","narrow"}
+```
+
 # Returns an object mapping document ids by document type 
 ## GET /document/user/{userId}/document-type/{documentType}
 + Parameters
