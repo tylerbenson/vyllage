@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.core.env.Environment;
 
 import documents.controller.ResumeController;
 import documents.files.pdf.ResumePdfService;
@@ -69,10 +70,13 @@ public class ResumeControllerTest {
 	private DocumentAccessRepository documentAccessRepository = Mockito
 			.mock(DocumentAccessRepository.class);;
 
+	private Environment environment = Mockito.mock(Environment.class);
+
 	@Before
 	public void setUp() {
 		controller = new ResumeController(documentService, accountService,
-				notificationService, resumePdfService, documentAccessRepository);
+				notificationService, resumePdfService,
+				documentAccessRepository, environment);
 	}
 
 	// resume/0/section/124

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -74,18 +76,29 @@ public class ResumeController {
 
 	private final DocumentAccessRepository documentAccessRepository;
 
+	private final Environment environment;
+
+	private List<String> pdfStyles = new LinkedList<>();
+
 	@Inject
 	public ResumeController(final DocumentService documentService,
 			final AccountService accountService,
 			final NotificationService notificationService,
 			final ResumePdfService resumePdfService,
-			final DocumentAccessRepository documentAccessRepository) {
+			final DocumentAccessRepository documentAccessRepository,
+			final Environment environment) {
 		this.documentService = documentService;
 		this.accountService = accountService;
 		this.notificationService = notificationService;
 		this.resumePdfService = resumePdfService;
 		this.documentAccessRepository = documentAccessRepository;
+		this.environment = environment;
 
+		if (environment.containsProperty("pdf.styles"))
+			pdfStyles.addAll(Arrays.asList(this.environment.getProperty(
+					"pdf.styles").split(",")));
+		else
+			pdfStyles.add("default");
 	}
 
 	// ModelAttributes execute for every request, even REST ones, since they are
@@ -215,22 +228,35 @@ public class ResumeController {
 		return documentSections;
 	}
 
+	@RequestMapping(value = "/file/pdf/styles", method = RequestMethod.GET, produces = "application/json")
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody List<String> getPdfStyles() {
+		return this.pdfStyles;
+	}
+
 	@RequestMapping(value = "{documentId}/file/pdf", method = RequestMethod.GET, produces = "application/pdf")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
-	public void resumePdf(HttpServletRequest request,
-			HttpServletResponse response, @PathVariable final Long documentId,
+	public void resumePdf(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable final Long documentId,
+			@RequestParam(value = "styleName", required = false, defaultValue = "default") final String styleName,
 			@AuthenticationPrincipal User user)
 			throws ElementNotFoundException, DocumentException, IOException {
 
-		DocumentHeader resumeHeader = this.getResumeHeader(request, documentId,
-				user);
+		DocumentHeader resumeHeader = documentService.getDocumentHeader(
+				request, documentId, user);
 
 		List<DocumentSection> documentSections = documentService
 				.getDocumentSections(documentId);
 
+		String style = styleName != null && !styleName.isEmpty()
+				&& this.pdfStyles.contains(styleName) ? styleName
+				: this.pdfStyles.get(0);
+
 		copyPDF(response, resumePdfService.generatePdfDocument(resumeHeader,
-				documentSections));
+				documentSections, style));
 		response.setStatus(HttpStatus.OK.value());
 		response.flushBuffer();
 
@@ -277,33 +303,7 @@ public class ResumeController {
 			@AuthenticationPrincipal User user) throws JsonProcessingException,
 			IOException, ElementNotFoundException {
 
-		Document document = documentService.getDocument(documentId);
-
-		DocumentHeader header = new DocumentHeader();
-
-		if (document.getUserId().equals(user.getUserId())) {
-			header.setOwner(true);
-		}
-
-		List<AccountContact> accountContactData = accountService
-				.getContactDataForUsers(request,
-						Arrays.asList(document.getUserId()));
-
-		if (accountContactData != null && !accountContactData.isEmpty()) {
-			header.setFirstName(accountContactData.get(0).getFirstName());
-			header.setMiddleName(accountContactData.get(0).getMiddleName());
-			header.setLastName(accountContactData.get(0).getLastName());
-
-			header.setAddress(accountContactData.get(0).getAddress());
-			header.setEmail(accountContactData.get(0).getEmail());
-			header.setPhoneNumber(accountContactData.get(0).getPhoneNumber());
-			header.setTwitter(accountContactData.get(0).getTwitter());
-			header.setLinkedIn(accountContactData.get(0).getLinkedIn());
-			header.setAvatarUrl(accountContactData.get(0).getAvatarUrl());
-		}
-
-		header.setTagline(document.getTagline());
-		return header;
+		return documentService.getDocumentHeader(request, documentId, user);
 	}
 
 	@RequestMapping(value = "/header/taglines", method = RequestMethod.GET, produces = "application/json")

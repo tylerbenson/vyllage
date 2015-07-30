@@ -22,6 +22,7 @@ import documents.model.AccountContact;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;
+import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
@@ -245,11 +246,11 @@ public class DocumentService {
 					.filter(an -> an.getUserId().equals(comment.getUserId()))
 					.findFirst();
 
-			accountContact.ifPresent(an -> comment.setUserName(an.getFirstName()
-					+ " " + an.getLastName()));
+			accountContact.ifPresent(an -> comment.setUserName(an
+					.getFirstName() + " " + an.getLastName()));
 
-			accountContact
-					.ifPresent(an -> comment.setAvatarUrl(an.getAvatarUrl()));
+			accountContact.ifPresent(an -> comment.setAvatarUrl(an
+					.getAvatarUrl()));
 		}
 
 		return comments;
@@ -404,6 +405,37 @@ public class DocumentService {
 
 	public void setUserDocumentsPermissions(DocumentAccess documentAccess) {
 		documentAccessRepository.create(documentAccess);
+	}
+
+	public DocumentHeader getDocumentHeader(HttpServletRequest request,
+			final Long documentId, User user) throws ElementNotFoundException {
+		Document document = this.getDocument(documentId);
+
+		DocumentHeader header = new DocumentHeader();
+
+		if (document.getUserId().equals(user.getUserId())) {
+			header.setOwner(true);
+		}
+
+		List<AccountContact> accountContactData = accountService
+				.getContactDataForUsers(request,
+						Arrays.asList(document.getUserId()));
+
+		if (accountContactData != null && !accountContactData.isEmpty()) {
+			header.setFirstName(accountContactData.get(0).getFirstName());
+			header.setMiddleName(accountContactData.get(0).getMiddleName());
+			header.setLastName(accountContactData.get(0).getLastName());
+
+			header.setAddress(accountContactData.get(0).getAddress());
+			header.setEmail(accountContactData.get(0).getEmail());
+			header.setPhoneNumber(accountContactData.get(0).getPhoneNumber());
+			header.setTwitter(accountContactData.get(0).getTwitter());
+			header.setLinkedIn(accountContactData.get(0).getLinkedIn());
+			header.setAvatarUrl(accountContactData.get(0).getAvatarUrl());
+		}
+
+		header.setTagline(document.getTagline());
+		return header;
 	}
 
 }
