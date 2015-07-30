@@ -234,12 +234,14 @@ public class ResumeController {
 		return this.pdfStyles;
 	}
 
-	@RequestMapping(value = "{documentId}/file/pdf/{styleName}", method = RequestMethod.GET, produces = "application/pdf")
+	@RequestMapping(value = "{documentId}/file/pdf", method = RequestMethod.GET, produces = "application/pdf")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
-	public void resumePdf(HttpServletRequest request,
-			HttpServletResponse response, @PathVariable final Long documentId,
-			@PathVariable final String styleName,
+	public void resumePdf(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable final Long documentId,
+			@RequestParam(value = "styleName", required = false, defaultValue = "default") final String styleName,
 			@AuthenticationPrincipal User user)
 			throws ElementNotFoundException, DocumentException, IOException {
 

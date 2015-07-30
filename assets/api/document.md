@@ -22,9 +22,10 @@
 This endpoint is not intended for consumption from the UI. Only admins can use this endpoint.
 
 # Returns a PDF file conversion of the selected document
-## GET /resume/{documentId}/file/pdf
+## GET /resume/{documentId}/file/pdf?style=styleName
 + Parameters
 	++ documentId (string, `1`) - The id of the document.
+	++ styleName (string, `1`) - Style to use in the pdf. Optional parameter. 
 + Response 200 (application/pdf)
 
 
