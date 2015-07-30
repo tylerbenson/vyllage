@@ -32,13 +32,15 @@ public class ResumePdfService {
 	private TemplateEngine templateEngine;
 
 	public ByteArrayOutputStream generatePdfDocument(
-			DocumentHeader resumeHeader, List<DocumentSection> sections)
-			throws DocumentException {
+			DocumentHeader resumeHeader, List<DocumentSection> sections,
+			String styleName) throws DocumentException {
 		Context ctx = new Context();
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		format(resumeHeader);
+
+		ctx.setVariable("styleName", styleName);
 
 		ctx.setVariable("header", resumeHeader);
 

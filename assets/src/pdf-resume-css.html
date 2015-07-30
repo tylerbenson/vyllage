@@ -2,7 +2,76 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <style th:fragment="css" type="text/css" media="print" rel="stylesheet">
+  <style th:fragment="default" type="text/css" media="print" rel="stylesheet">
+  html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  body {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin: 0;
+  }
+  
+  h2 {
+    font-weight: normal;
+    font-style: italic;
+    text-align: center;
+    margin: 0 0 8pt 0;
+  }
+  
+  h3 {
+    font-size: 14pt;
+    text-align: left;
+    margin: 18pt 0 0 0;
+  }
+  
+  h4 {
+    margin: 12pt 0 0 0;
+  }
+  
+  label {
+    display: block;
+    text-align: center;
+    margin-bottom: -14pt;
+  }
+  
+  p {
+    margin: 2px;
+  }
+  
+  .role {
+    font-style: italic;
+    margin-top: 8pt;
+  }
+  
+  .location {
+    font-style: italic;
+    margin-bottom: 8pt;
+  }
+  
+  @page {
+    margin-top: 7.3em;
+    counter-reset: page 1;
+    margin-bottom: 4em;
+    margin-right: 4em;
+    margin-left: 4em;
+  }
+  </style>
+
+  <style th:fragment="narrow" type="text/css" media="print" rel="stylesheet">
   html {
     font-size: 100%;
     -webkit-text-size-adjust: 100%;

@@ -7,7 +7,7 @@
   <meta name="keywords" content="Keyword1, Keyword2, This is one phrase, This is another" />
   <meta name="subject" th:content="Resume" />
   <meta name="title" th:content="${header.firstName + ' resume'}" />
-  <style th:replace="pdf-resume-css :: css" />
+  <style th:replace="pdf-resume-css :: ${styleName}" />
 </head>
 
 <body>
