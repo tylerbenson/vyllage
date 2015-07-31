@@ -18,33 +18,28 @@ var Section = React.createClass({
   },
   render: function () {
     var section = this.props.section;
-    if (section.type === 'SkillsSection') {
-      return (
-        <Freeform 
-          index={this.props.index}
-          section={section} 
-          moveSection={this.props.moveSection}
-          owner={this.props.owner} />
-      );
-    }
-      
-    if (section.type === 'SummarySection') {
-      return (
-        <Freeform 
-          index={this.props.index}
-          section={section} 
-          moveSection={this.props.moveSection}
-          owner={this.props.owner} />
-      );
-    } else {
-      return (
-        <Organization 
-          index={this.props.index}
-          section={section}
-          moveSection={this.props.moveSection}
-          placeholders={this.getPlaceholders()}
-          owner={this.props.owner} />
-      );
+    switch(section.type) {
+      case 'SkillsSection':
+      case 'SummarySection':
+        return (
+          <Freeform
+            index={this.props.index}
+            section={section}
+            moveSection={this.props.moveSection}
+            owner={this.props.owner} />
+        );
+      case 'EducationSection':
+      case 'JobExperienceSection':
+        return (
+          <Organization
+            index={this.props.index}
+            section={section}
+            moveSection={this.props.moveSection}
+            placeholders={this.getPlaceholders()}
+            owner={this.props.owner} />
+        );
+      default:
+        return null; //does not render unsupported section
     }
   }
 });

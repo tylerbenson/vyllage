@@ -18,15 +18,29 @@ var ResumeEditor = React.createClass({
   moveSection: function (id, afterId) {
     actions.moveSection(id, afterId);
   },
+  isSupportedSection: function (type) {
+    //Can plugin Togglz request here
+    var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection'];
+    return supported.indexOf(type) > -1;
+  },
   renderGroup: function (sections, groupPosition) {
     var owner=this.state.resume.header.owner;
+    var containsUnsupportedSection = false;
     var subsectionNodes = sections.map(function(section) {
+      if(!this.isSupportedSection(section.type)) {
+        containsUnsupportedSection = true;
+      }
       return <Section
           key={section.sectionId}
           section={section}
           moveSection={this.moveSection}
           owner={owner} />
     }.bind(this));
+
+    if(containsUnsupportedSection) {
+      return null;
+    }
+
     return (
       <div key={Math.random()} className='section'>
         <div className='container'>
@@ -49,6 +63,7 @@ var ResumeEditor = React.createClass({
     var nextTitle = '';
     var groupSections = [];
     var groupPosition = 1;
+
     sections.forEach(function (section, index) {
       nextTitle = (sections.length-1 !== index) ? sections[index + 1].title : '';
       groupSections.push(section);
