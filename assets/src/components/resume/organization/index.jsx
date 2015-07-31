@@ -44,7 +44,7 @@ var Organization = React.createClass({
     // e.preventDefault();
     var section = this.state.section;
     if(key === 'highlights') {
-      section[key] = e.target.value.split('\n');
+      section[key] = e.target.value.trim().split('\n');
     }
     else {
       section[key] = e.target.value;
