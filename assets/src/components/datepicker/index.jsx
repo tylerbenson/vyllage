@@ -104,7 +104,28 @@ var Datepicker = React.createClass({
         isOpen: true
     });
   },
-  onBlur: function () {
+  onBlur: function (e) {
+    var input = e.target.value;
+    if(input.length > 0) {
+      var date = moment(new Date(input)).format('MMM YYYY');
+
+      if(date != 'Invalid date') {
+        this.setState({
+          date: date,
+          month: moment(new Date(input)).format('MMM'),
+          year: moment(new Date(input)).format('YYYY')
+        });
+        this.setDate();
+      }
+      else {
+        this.setState({
+          date: '',
+          month: '',
+          year: ''
+        });
+      }
+    }
+
     this.setState({
         isFocused: false,
         isOpen: this.state.onDatepicker
