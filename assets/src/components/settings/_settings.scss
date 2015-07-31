@@ -17,7 +17,7 @@
         cursor: pointer;
         display: block;
         font-size: 1.1em;
-        padding: 1.25em;
+        padding: 1em;
         position: relative;
         text-decoration: none;
         transition: all .2s ease;
@@ -164,6 +164,15 @@
         border-bottom: lighten($secondary-color, 40%) solid 1px;
         margin: 3em -1em 2em -1em;
       }
+      
+      .left-part {
+        
+      }
+      .right-part{
+        float:right;
+      }
+
+
     }
   }
 }
