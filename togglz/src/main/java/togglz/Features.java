@@ -34,6 +34,7 @@ public enum Features implements Feature {
 	@Label("Share Resume")
 	SHARE_RESUME,
 
+	@EnabledByDefault
 	@Label("Suggestions")
 	SUGGESTIONS,
 

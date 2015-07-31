@@ -37,6 +37,9 @@ public class AccountSettingsServiceTest {
 	@Inject
 	private UserService userService;
 
+	@Inject
+	private AccountSettingRepository accountSettingRepository;
+
 	@Test
 	public void saveAccountSetting() throws ElementNotFoundException {
 		Long userId = 1L;
@@ -428,22 +431,26 @@ public class AccountSettingsServiceTest {
 	}
 
 	@Test
-	public void setAccoutSettingEmailSuccessfull() {
+	public void setAccoutSettingEmailSuccessfull()
+			throws ElementNotFoundException {
 		String settingName = "email";
 		String settingValue = "some@email.com";
-		Long userId = 5L;
+		String previousEmail = "old@email.com";
+		Long userId = 3L;
 		AccountSetting setting = new AccountSetting(null, null, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
+		// AccountSettingRepository accountSettingRepository = Mockito
+		// .mock(AccountSettingRepository.class);
 		UserService userService = Mockito.mock(UserService.class);
 
 		User user = Mockito.mock(User.class);
 
+		Mockito.when(user.getUsername()).thenReturn(previousEmail);
 		Mockito.when(user.getUserId()).thenReturn(userId);
-		Mockito.when(accountSettingRepository.set(userId, setting)).thenReturn(
-				setting);
+		// Mockito.when(accountSettingRepository.set(userId,
+		// setting)).thenReturn(
+		// setting);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
 				userService, accountSettingRepository);
@@ -453,14 +460,21 @@ public class AccountSettingsServiceTest {
 
 		Assert.assertNotNull(savedAccountSetting);
 
-		Assert.assertEquals(settingValue, savedAccountSetting.getValue());
+		// email can only be changed after confirmation, we return the previous
+		// value until then
+		Assert.assertEquals(previousEmail, savedAccountSetting.getValue());
 		Assert.assertEquals(userId, savedAccountSetting.getUserId());
+
+		List<AccountSetting> newEmailSetting = accountSettingsService
+				.getAccountSetting(user, "newEmail");
+
+		Assert.assertEquals(settingValue, newEmailSetting.get(0).getValue());
 
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
 	public void setAccoutSettingNull() throws UserNotFoundException {
-		String settingName = "email";
+		String settingName = "someSetting";
 		String settingValue = null;
 		Long userId = 1L;
 		User user = userService.getUser(userId);
@@ -472,7 +486,7 @@ public class AccountSettingsServiceTest {
 
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void setAccoutSettingEmailEmptyDoesNotChangeEmail()
 			throws UserNotFoundException {
 		String settingName = "email";
@@ -483,17 +497,7 @@ public class AccountSettingsServiceTest {
 		AccountSetting setting = new AccountSetting(null, null, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
-		AccountSetting savedAccountSetting = accountSettingsService
-				.setAccountSetting(user, setting);
-
-		User reloadedUser = userService.getUser(userId);
-
-		Assert.assertNotNull(savedAccountSetting);
-
-		Assert.assertEquals(settingValue, savedAccountSetting.getValue());
-		Assert.assertEquals(userId, savedAccountSetting.getUserId());
-		Assert.assertFalse(reloadedUser.getUsername().equals(settingValue));
-
+		accountSettingsService.setAccountSetting(user, setting);
 	}
 
 	@Test

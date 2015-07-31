@@ -15,10 +15,11 @@ var HeaderContainer = React.createClass({
   render: function() {
     var name = this.props.name || 'user';
     var title = this.props.title;
-    var owner = this.state.resume.header.owner;
-    var showLink = owner || !this.isResumePage;
+    // var owner = this.state.resume.header.owner;
+    // var showLink = owner || !this.isResumePage;
 
     return (
+      <div>
         <div className="content">
           <div className="logo">
             <img src="images/logo-orange.png" alt="Vyllage" />
@@ -28,17 +29,17 @@ var HeaderContainer = React.createClass({
           <nav>
             <NavToggle />
             <ul className={this.state.resume.isNavOpen?'active':''}>
-              {showLink ? <li><a href='/resume' className='flat button'>
+              <li><a href='/resume' className='flat button'>
                 <i className="ion-document"></i>
                 <span>Resume</span>
-              </a></li>: null}
+              </a></li>
               <FeatureToggle name="PRINTING">
                 <li><Print /></li>
               </FeatureToggle>
-              {showLink ? <li><a href='/resume/get-feedback' className='embossed button'>
+              <li><a href='/resume/get-feedback' className='embossed button'>
                 <i className="ion-person-stalker"></i>
                 <span>Get Feedback</span>
-              </a></li>: null}
+              </a></li>
               <li><a href='/account/setting' className='flat settings button'>
                 <i className="ion-gear-a"></i>
                 <span>Settings</span>
@@ -49,6 +50,7 @@ var HeaderContainer = React.createClass({
             </ul>
           </nav>
         </div>
+      </div>
     );
   }
 });

@@ -5,8 +5,8 @@ var resumeStore = require('./store');
 
 var Print = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
-  componentWillMount: function () {
-    actions.getResume();
+  componentWillMount: function(){
+  	actions.getDocumentId();
   },
 	render: function() {
 		return (

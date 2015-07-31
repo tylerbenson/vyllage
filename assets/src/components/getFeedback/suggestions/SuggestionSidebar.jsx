@@ -19,7 +19,7 @@ var SuggestionSidebar = React.createClass({
 		var index = 0;
 		var suggestionItems = this.state.recommendations.map(function(user){
 			return (
-				<SuggestionItem key={user.userId} index={index++} user={user} />
+				<SuggestionItem key={user.userId} index={index++} user={user} avatarSize="48" />
 			);
 		});
 

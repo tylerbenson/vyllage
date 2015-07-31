@@ -5,7 +5,7 @@ header {
   left: 0;
   top: 0;
   right: 0;
-  z-index: 1;
+  z-index: 2;
 
   nav {
     .flat.button {
@@ -91,36 +91,6 @@ header {
       top: 0.1em;
       white-space: pre;
     }
-  }
-}
-
-.subheader {
-  background: #fff;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-  padding: 0.2em 0.6em;
-
-  .mode {
-    display: inline-block;
-    float: left;
-    font-size: 1.15em;
-    font-weight: 300;
-    margin-top: 0.05em;
-
-    i {
-      color: $mode-color;
-      font-size: 1.5em;
-      margin-right: 0.25em;
-    }
-
-    span {
-      color: $mode-color;
-      position: relative;
-      bottom: 0.15em;
-    }
-  }
-
-  .embossed {
-    margin-left: 0.75em;
   }
 }
 

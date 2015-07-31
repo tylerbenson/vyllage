@@ -53,6 +53,7 @@ module.exports = Reflux.createStore({
       this.settings.push(setting);
     }
     this.update();
+    return setting;
   },
   validateField: function (setting) {
     switch(setting.name) {
@@ -63,13 +64,16 @@ module.exports = Reflux.createStore({
         setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid E-mail";
         break;
       case 'phoneNumber':
-        setting.errorMessage = (validator.isNumeric(setting.value) &&
-                               (setting.value.length === 10)) ?
+        setting.errorMessage = ((validator.isNumeric(setting.value) &&
+                               (setting.value.length === 10))) ||
+                               setting.value.length === 0 ?
                                   null: "Invalid Phone Number";
         break;
       case 'twitter':
         setting.errorMessage = setting.value.length <= 140 ? null: "Invalid Twitter Username";
         break;
+      default:
+        setting.errorMessage = null;
     }
 
     return setting;

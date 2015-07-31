@@ -10,7 +10,7 @@ var isTouch = require('../isTouch');
 var Datepicker = React.createClass({
   mixins: [LayerMixin],
   getInitialState: function () {
-    var date = new Date();
+    var date = this.props.date;
     return {
       isOpen: false,
       top: '-9999em',
@@ -18,13 +18,17 @@ var Datepicker = React.createClass({
       isFocused: false,
       onDatepicker: false,
       year: parseInt(moment(date).format('YYYY')),
-      month:moment(date).format('MMM'),
-      date: this.props.date
-    }
+      month: moment(date).format('MMM'),
+      date: date
+    };
   },
   componentWillReceiveProps: function (nextProps) {
-    if (nextProps.data !== this.props.date) {
-      this.setState({date: nextProps.date});
+    if (nextProps.date !== this.props.date) {
+      this.setState({
+        date: nextProps.date,
+        year: parseInt(moment(nextProps.date).format('YYYY')),
+        month: moment(nextProps.date).format('MMM')
+      });
     }
   },
   setDate: function () {
@@ -34,10 +38,10 @@ var Datepicker = React.createClass({
       }
     });
   },
-  selectMonth: function (month) {
+  selectMonth: function (month, year) {
     this.setState({
       month: month,
-      date: month + ' ' + this.state.year
+      date: month + ' ' + year
     }, function () {
       this.setDate();
     }.bind(this));
@@ -130,16 +134,18 @@ var Datepicker = React.createClass({
   renderLayer: function () {
     if (this.state.isOpen) {
       var isCurrent = this.props.isCurrent;
+      var activeMonth = this.state.month !== 'Invalid date' ? this.state.month : moment(new Date()).format('MMM');
+      var activeYear = this.state.year ? this.state.year : parseInt(moment(new Date()).format('YYYY'));
       var monthNodes = months.map(function (month, index) {
         var className = classnames('month', {
-          active: this.state.month === month
+          active: activeMonth === month
         });
         return (
           <span
             key={index}
             className={className}
-            onClick={!isTouch ? this.selectMonth.bind(this, month): null}
-            onTouchStart={isTouch ? this.selectMonth.bind(this, month): null}
+            onClick={!isTouch ? this.selectMonth.bind(this, month, activeYear): null}
+            onTouchStart={isTouch ? this.selectMonth.bind(this, month, activeYear): null}
           >
             {month}
           </span>
@@ -156,7 +162,7 @@ var Datepicker = React.createClass({
               <i className="ion-arrow-left-c"></i>
             </button>
 
-            <input type="text" className="year" placeholder="Year" value={this.state.year} onChange={this.setYear} />
+            <input type="text" className="year" placeholder="Year" value={activeYear} onChange={this.setYear} />
 
             <button className="small inverted primary icon" onClick={this.incrementYear}>
               <i className="ion-arrow-right-c"></i>

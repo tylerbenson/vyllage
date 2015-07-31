@@ -4,10 +4,12 @@
   "description": "Static assets for project, bundled into a WebJar format.",
   "dependencies": {
     "classnames": "^1.2.0",
+    "clone-deep": "^0.2.0",
     "lodash.assign": "^3.0.0",
     "lodash.difference": "^3.1.0",
     "lodash.filter": "^3.0.0",
     "lodash.findindex": "^3.0.0",
+    "lodash.foreach": "^3.0.3",
     "lodash.max": "^3.2.0",
     "lodash.omit": "^3.0.0",
     "lodash.pick": "^3.0.0",

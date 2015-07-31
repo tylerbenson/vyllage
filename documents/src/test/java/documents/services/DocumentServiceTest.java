@@ -125,7 +125,7 @@ public class DocumentServiceTest {
 				.thenReturn(comments(sectionId));
 
 		Mockito.when(
-				accountService.getNamesForUsers(Arrays.asList(userId), request))
+				accountService.getNamesForUsers(request, Arrays.asList(userId)))
 				.thenReturn(accountNames(userId));
 
 		List<Comment> commentsForSection = service.getCommentsForSection(

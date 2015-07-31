@@ -1,4 +1,4 @@
-# Get all account setting
+# Get all account settings
 ## GET /account/setting
 + Response (application/json)	
 
@@ -76,6 +76,16 @@ Privacy settings.
  ["private","public","organization"]
 ```
 
+Avatar settings.
+```
+["gravatar", "facebook"]
+```
+
+Receive advice setting
+```
+ ["true","false"]
+```
+
 ### Other settings: 
 
 + emailUpdates (weekly|biweekly|monthly|never) 
@@ -95,4 +105,18 @@ Privacy settings.
 			"tagline":"Awesome adventurous plumber."
 		}
 	]
+```
+# Get new email after change.
+## GET /account/setting/newEmail
+
+After the user changes his email address the value is stored under the name **newEmail** so the frontend can query the new value to show in a banner or something.
+
+```
+	[{
+		"accountSettingId":1, 
+		"userId":0,
+		"name":"newEmail",
+		"value":"mynew@email.com",
+		"privacy":"private"
+	}]
 ```

@@ -1,16 +1,15 @@
 package accounts.controller;
 
 import java.security.Principal;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+
+import oauth.lti.LMSRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import oauth.lti.LMSRequest;
 
 @Controller
 public class LMSLoginController {

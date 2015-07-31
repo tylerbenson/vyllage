@@ -89,7 +89,7 @@ public class BeansConfiguration {
 	}
 
 	@Bean
-	public TextEncryptor TextEncryptor() {
+	public TextEncryptor textEncryptor() {
 		return Encryptors.queryableText(SOCIAL_PASSWORD, SOCIAL_SALT);
 	}
 

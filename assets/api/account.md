@@ -33,7 +33,19 @@
 + Response 200 (application/json)
 ```
 	[
-		{"userId":0,"address":"Avenida Siempreviva 123","email":null,"phoneNumber":null,"twitter":null,"linkedIn":null}
+		{
+			"userId":0,
+			"address":"Avenida Siempreviva 123",
+			"email":"user@vyllage.com",
+			"phoneNumber":null,
+			"twitter":null,
+			"linkedIn":null,
+			"firstName":"Luke",
+			"middleName":"V",
+			"lastName":"Skywalker",
+			"registeredOn":1437523200,
+			"avatarUrl":"http://www.gravatar.com/avatar/631164c3aeb35618622fe67602ce5da8"
+		}
 	]
 ```
 

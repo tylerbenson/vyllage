@@ -49,7 +49,7 @@
 ]
 ```
 
-# Retrieves the specified section. 
+# Retrieves the specified section.
 ## GET /resume/{documentId}/section/{sectionId}*
 + Parameters
   + documentId (string, `1`) - The id of the document.
@@ -107,7 +107,7 @@
   + documentId (string, `1`) - The id of the document.
 + Request
   + Body
-  
+
 ```
     {
     "title": "skills",
@@ -123,7 +123,7 @@
       "asperiores",
       "repellat."
     ]
-  }  
+  }
 ```
 + Response 200
 
@@ -139,29 +139,33 @@
 ## GET /resume/{documentId}/section/{sectionId}/comment
 + Parameters
   + documentId (string, `1`) - The id of the document.
-  + sectionId (string, `1`) - The id of the section. 
+  + sectionId (string, `1`) - The id of the section.
 + Response 200 (application/json)
   + Body
  ```
-	[{	
-		"commentId":0,
-		"otherCommentId":null,
-		"sectionId":124,
-		"sectionVersion":1,
-		"userId":3,
-		"commentText":"Its a me, Mario!",
-		"userName":"Mario Mario"
-	}]
+	[
+	  {
+	     "commentId":2,
+	     "otherCommentId":null,
+	     "sectionId":123,
+	     "sectionVersion":1,
+	     "userId":0,
+	     "commentText":"aaaa",
+	     "lastModified":"2015-07-23T02:28:33",
+	     "userName":"Luke Skywalker",
+	     "avatarUrl":"http://www.gravatar.com/avatar/631164c3aeb35618622fe67602ce5da8"
+	  }
+	]
 ```
 
 #Save Comment for a Section
 ## POST resume/{documentId}/section/{sectionId}/comment
 + Parameters
   + documentId (string, `1`) - The id of the document.
-  + sectionId (string, `1`) - The id of the section. 
-+Body  
+  + sectionId (string, `1`) - The id of the section.
++Body
 ```
-	{	
+	{
 		"commentId":null,
 		"otherCommentId":null,
 		"sectionId":124,
@@ -178,12 +182,12 @@
 ## POST resume/{documentId}/section/{sectionId}/comment/{commentId}
 + Parameters
   + documentId (string, `1`) - The id of the document.
-  + sectionId (string, `1`) - The id of the section. 
-  + commentId (string, `1`) - The id of the comment. 
-+Body  
+  + sectionId (string, `1`) - The id of the section.
+  + commentId (string, `1`) - The id of the comment.
++Body
 
 ```
-	{	
+	{
 		"commentId":null,
 		"otherCommentId":2,
 		"sectionId":124,
@@ -198,11 +202,11 @@
 
 # Change a document's sections positions
 ## PUT resume/{documentId}/section-order
-+ Parameters 
++ Parameters
   + documentId (string, `1`) - The id of the document.
-+Body, sectionIds in their intended order. The position will be derived from their position in the array.  
++Body, sectionIds in their intended order. The position will be derived from their position in the array.
 
-```	
+```
 		[126, 125, 124, 123]
 ```
 + Response 200 (application/json)
