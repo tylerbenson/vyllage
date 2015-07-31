@@ -23,28 +23,62 @@ var Permission = React.createClass({
 
     if (settings.length > 0) {
       return (
-        <div className="content">     
-          <div className="facebook-connect">
-            
+        <div className="holder">     
+          
+          <div className="content">            
               <div className="right-part">
-                 <button className='small inverted'>CONNECT</button>
+                 <button className='small inverted' onClick={this.connectWithFacebook}>CONNECT</button>
               </div>
-
               <div className="left-part">
                 Facebook
-              </div>
-
-              <br/>
-            
+              </div>    
               <input type="checkbox" />  Publish Vyllage updates on my timeline
+          </div>    
+                 
+          <div className="content">            
+              <div className="right-part">
+                 <button className='small inverted' onClick={this.connectWithTwitter}>CONNECT</button>
+              </div>
+              <div className="left-part">
+                Twitter
+              </div>
+                         
+              <input className="input-checkbox"  type="checkbox" /> Tweet Vyllage updates on my timeline
+          </div>    
+                
 
-          </div>               
+          <div className="content">            
+              <div className="right-part">
+                 <button className='small inverted' onClick={this.connectWithLinkedIn}>CONNECT</button>
+              </div>
+              <div className="left-part">
+                LinkedIn
+              </div>
+                         
+              <input className="input-checkbox" type="checkbox" /> Post Vyllage updates on my timeline
+          </div> 
+
+
         </div>
       );
     } else {
       return null;
     }
+  },
+
+  connectWithFacebook : function() {
+    console.log('connect with facebook');
+  },
+
+  connectWithTwitter: function(){
+    console.log('connect with twitter');    
+  },
+
+  connectWithLinkedIn: function(){
+    console.log('connect with linkedIn'); 
   }
+
+
 });
 
 module.exports = Permission;

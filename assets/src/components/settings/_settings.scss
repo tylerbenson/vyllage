@@ -72,7 +72,7 @@
       }
     }
 
-    .container > .content {
+    .container  .content {
       @include column(5/7);
       background: $inverted-text-color;
       border-bottom: darken($section-footer-background, 1%) solid 1px;
@@ -170,6 +170,11 @@
       }
       .right-part{
         float:right;
+      }
+
+      .input-checkbox{
+        margin-top:20px;
+        
       }
 
 
