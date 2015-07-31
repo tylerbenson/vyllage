@@ -79,7 +79,6 @@ public class ResumeControllerTest {
 		controller = new ResumeController(documentService, accountService,
 				notificationService, resumePdfService,
 				documentAccessRepository, environment);
-
 	}
 
 	// resume/0/section/124
@@ -105,8 +104,7 @@ public class ResumeControllerTest {
 		Mockito.when(documentService.getDocumentSections(documentId))
 				.thenReturn(
 						Arrays.asList(DocumentSection.fromJSON(SECTION_123),
-								EducationSection
-										.fromJSON(SECTION_124)));
+								EducationSection.fromJSON(SECTION_124)));
 
 		given().standaloneSetup(controller).when()
 				.get("/resume/" + documentId + "/section/").then()
