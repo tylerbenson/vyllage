@@ -121,6 +121,14 @@ public class AccountController {
 		return contactDataForUsers.get(0);
 	}
 
+	@RequestMapping(value = "roles", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<String> getUserRoles(
+			@AuthenticationPrincipal User user) {
+
+		return user.getAuthorities().stream().map(a -> a.getAuthority())
+				.collect(Collectors.toList());
+	}
+
 	/**
 	 * Returns a list containing the id, first, middle and last names for an
 	 * specific user.
