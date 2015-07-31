@@ -89,7 +89,7 @@ var Organization = React.createClass({
     var isDragging = this.getDragState('section').isDragging;
     var isHovering = this.getDropState('section').isHovering;
 
-    var highlights = section.highlights.join('\n');
+    var highlights = section.highlights instanceof Array ? section.highlights.join('\n') : '';
 
     var classes = cx({
       'dragged': isDragging,

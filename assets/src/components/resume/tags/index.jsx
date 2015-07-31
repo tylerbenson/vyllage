@@ -79,7 +79,7 @@ var Tags = React.createClass({
     var uiEditMode = this.state.uiEditMode;
     var isDragging = this.getDragState('section').isDragging;
     var isHovering = this.getDropState('section').isHovering;
-    var content = this.state.tags.join(', ');
+    var content = this.state.tags instanceof Array ? this.state.tags.join(', ') : '';
 
     var classes = cx({
       'dragged': isDragging,
