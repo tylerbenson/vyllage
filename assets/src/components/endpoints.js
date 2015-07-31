@@ -12,7 +12,8 @@ var endpoints = {
   getFeedback: '/resume/get-feedback',
   getFeedbackSuggestions: '/resume/users',
   getFeedbackGenerateLink: '/link/share-document',
-  togglz: '/togglz-feature/{feature}/is-active'
+  togglz: '/togglz-feature/{feature}/is-active',
+  getRoles: '/account/roles'
 };
 
 module.exports = endpoints;
