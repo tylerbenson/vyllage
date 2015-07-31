@@ -36,6 +36,7 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SuggestionRepository;
+import documents.utilities.DocumentSectionDataMigration;
 import documents.utilities.OrderSectionValidator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -66,17 +67,14 @@ public class DocumentServiceIntegTest {
 	private DocumentAccessRepository documentAccessRepository;
 
 	private DocumentService service;
-	
+
 	@Inject
 	private DocumentSectionDataMigration migration;
 
 	@Before
-	public void setUp() throws Exception {
-		migration.migrate();
-	}
-
-	@Before
 	public void setUp() {
+		migration.migrate();
+
 		service = new DocumentService(documentRepository,
 				documentSectionRepository, commentRepository,
 				suggestionRepository, accountService, orderSectionValidator,
