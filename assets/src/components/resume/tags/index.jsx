@@ -25,7 +25,7 @@ var Tags = React.createClass({
   getDefaultProps: function () {
     return {
       title: '',
-      placeholder: 'List skills separated by comma..',
+      placeholder: 'Input tags separated by comma..',
       section: {}
     }
   },
@@ -104,7 +104,7 @@ var Tags = React.createClass({
               className="flat"
               rows="1"
               autoComplete="off"
-              placeholder="Tell us more.."
+              placeholder="Input tags separated by comma."
               defaultValue={content}
               onChange={this.handleChange}
             ></Textarea>
