@@ -10,7 +10,12 @@
 * {
   color: $text-color;
   font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  //Typography Enhances
   font-kerning: initial;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
 }
 
 html,
