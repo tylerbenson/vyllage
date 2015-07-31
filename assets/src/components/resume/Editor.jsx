@@ -20,7 +20,7 @@ var ResumeEditor = React.createClass({
   },
   isSupportedSection: function (type) {
     //Can plugin Togglz request here
-    var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection'];
+    var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection','CareerInterestsSection'];
     return supported.indexOf(type) > -1;
   },
   renderGroup: function (sections, groupPosition) {

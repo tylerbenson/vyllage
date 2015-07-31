@@ -1,5 +1,6 @@
 var React = require('react');
 var Freeform = require('../freeform');
+var Tags = require('../tags');
 var Organization = require('../organization');
 
 var Section = React.createClass({
@@ -20,6 +21,14 @@ var Section = React.createClass({
     var section = this.props.section;
     switch(section.type) {
       case 'SkillsSection':
+      case 'CareerInterestsSection':
+        return (
+          <Tags
+            index={this.props.index}
+            section={section}
+            moveSection={this.props.moveSection}
+            owner={this.props.owner} />
+        );
       case 'SummarySection':
         return (
           <Freeform
