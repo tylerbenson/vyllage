@@ -85,7 +85,7 @@
       color: $section-footer-color;
       display: inline-block;
       float: left;
-      font-weight: 300;
+      font-weight: 400;
       padding: 0.65em 1em;
     }
 
@@ -169,7 +169,8 @@
 
           button {
             float: right;
-            padding: 0.2em;
+            line-height: 1;
+            padding: 0.3em;
             text-align: center;
             text-transform: inherit;
             width: 20%;
