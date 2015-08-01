@@ -15,236 +15,274 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import oauth.vo.LMSKey;
-import oauth.vo.LMSUser;
+import oauth.model.LMSAccount;
+import oauth.model.LMSType;
+import oauth.utilities.Contant;
+import oauth.utilities.LMSEnum;
+import user.common.Organization;
+import user.common.constants.RolesEnum;
+import user.common.lms.LMSUser;
 
 public class LMSRequest {
 
-    final static Logger log = LoggerFactory.getLogger(LMSRequest.class);
+	final static Logger log = LoggerFactory.getLogger(LMSRequest.class);
 
-    static final String LIS_PERSON_PREFIX = "lis_person_name_";
-    public static final String LTI_CONSUMER_KEY = "oauth_consumer_key";
-    public static final String LTI_CONTEXT_ID = "context_id";
-    public static final String LTI_LINK_ID = "resource_link_id";
-    
-    
-    public static final String LTI_USER_ID = "user_id";
-    public static final String LTI_USER_EMAIL = "lis_person_contact_email_primary";
-    public static final String LTI_USER_NAME_FULL = LIS_PERSON_PREFIX + "full";
-    public static final String LTI_USER_ROLES = "roles";
-    public static final String LTI_USER_ROLE = "user_role";
-    public static final String LTI_VERSION = "lti_version";
-    public static final String LTI_VERSION_1P0 = "LTI-1p0";
-    public static final String LTI_ROLE_GENERAL = "user";
-    public static final String LTI_ROLE_LEARNER = "learner";
-    public static final String LTI_ROLE_INSTRUCTOR = "instructor";
-    public static final String LTI_ROLE_ADMIN = "administrator";
+	HttpServletRequest httpServletRequest;
 
-    HttpServletRequest httpServletRequest;
+	boolean complete = false;
 
-    LMSKey key;
-    LMSUser user;
-    
-    boolean complete = false;
-    boolean updated = false;
+	String rawUserRoles;
+	Set<String> ltiUserRoles;
+	int userRoleNumber;
+	String rawUserRolesOverride;
 
-    String ltiContextId;
-    String ltiConsumerKey;
-    String ltiLinkId;
-    String ltiUserId;
-    String ltiUserEmail;
-    String ltiUserDisplayName;
-    String rawUserRoles;
-    Set<String> ltiUserRoles;
-    int userRoleNumber;
-    String rawUserRolesOverride;
-    String ltiVersion;
+	// private LMSUserCredential lmsUserCredential;
+	private LMSAccount lmsAccount;
+	private LMSUser lmsUser;
+	Organization organization;
 
+	public static synchronized LMSRequest getInstance() {
 
-    public static synchronized LMSRequest getInstance() {
-    	
-        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest req = sra.getRequest();
-        if (req == null) {
-            throw new IllegalStateException("HttpServletRequest can't be null");
-        }
-        LMSRequest ltiRequest = (LMSRequest) req.getAttribute(LMSRequest.class.getName());
-        if (ltiRequest == null) {
-            ltiRequest = new LMSRequest(req);
-        }
-        return ltiRequest;
-    }
-    
-    public LMSRequest(HttpServletRequest request) {
-    	
-        this.httpServletRequest = request;
-        if (!isLTIRequest(request)) {
-            throw new IllegalStateException("Not a LTI request");
-        }
-        processRequestParameters(request);
-        
-    }
-    public String getParam(String paramName) {
-        String value = null;
-        if (this.httpServletRequest != null && paramName != null) {
-            value = StringUtils.trimToNull(this.httpServletRequest.getParameter(paramName));
-        }
-        return value;
-    }
+		ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		HttpServletRequest req = sra.getRequest();
+		if (req == null) {
+			throw new IllegalStateException("HttpServletRequest can't be null");
+		}
+		LMSRequest ltiRequest = (LMSRequest) req.getAttribute(LMSRequest.class.getName());
+		if (ltiRequest == null) {
+			ltiRequest = new LMSRequest(req);
+		}
+		return ltiRequest;
+	}
 
-    public boolean processRequestParameters(HttpServletRequest request) {
-    	
-        if (request != null && this.httpServletRequest != request) {
-            this.httpServletRequest = request;
-        }
-        ltiVersion = getParam(LTI_VERSION);
-        ltiConsumerKey = getParam(LTI_CONSUMER_KEY);
-        ltiLinkId = getParam(LTI_LINK_ID);
-        ltiUserId = getParam(LTI_USER_ID);
-        complete = checkCompleteLTIRequest(true);
-        
-        ltiUserEmail = getParam(LTI_USER_EMAIL);
-        rawUserRoles = getParam(LTI_USER_ROLES);
-        userRoleNumber = makeUserRoleNum(rawUserRoles);
-        String[] splitRoles = StringUtils.split(StringUtils.trimToEmpty(rawUserRoles), ",");
-        ltiUserRoles = new HashSet<>(Arrays.asList(splitRoles));
+	public LMSRequest(HttpServletRequest request) {
 
-        if (getParam(LTI_USER_NAME_FULL) != null) {
-            ltiUserDisplayName = getParam(LTI_USER_NAME_FULL);
-        } else if (getParam(LIS_PERSON_PREFIX + "given") != null && getParam(LIS_PERSON_PREFIX + "family") != null) {
-            ltiUserDisplayName = getParam(LIS_PERSON_PREFIX + "given") + " " + getParam(LIS_PERSON_PREFIX + "family");
-        } else if (getParam(LIS_PERSON_PREFIX + "given") != null) {
-            ltiUserDisplayName = getParam(LIS_PERSON_PREFIX + "given");
-        } else if (getParam(LIS_PERSON_PREFIX + "family") != null) {
-            ltiUserDisplayName = getParam(LIS_PERSON_PREFIX + "family");
-        }
-       
-        HttpSession session = this.httpServletRequest.getSession();
-        session.setAttribute(LTI_USER_ID, ltiUserId);
-        session.setAttribute(LTI_CONTEXT_ID, ltiContextId);
-        String normalizedRoleName = LTI_ROLE_GENERAL;
-       
-        if (isRoleAdministrator()) {
-            normalizedRoleName = LTI_ROLE_ADMIN;
-        } else if (isRoleInstructor()) {
-            normalizedRoleName = LTI_ROLE_INSTRUCTOR;
-        } else if (isRoleLearner()) {
-            normalizedRoleName = LTI_ROLE_LEARNER;
-        }
-        session.setAttribute(LTI_USER_ROLE, normalizedRoleName);
-        return complete;
-    }
+		this.httpServletRequest = request;
+		if (!isLTIRequest(request)) {
+			throw new IllegalStateException("Not a LTI request");
+		}
+		processRequestParameters(request);
 
-    protected boolean checkCompleteLTIRequest(boolean objects) {
-        if (!objects && ltiConsumerKey != null && ltiContextId != null  && ltiUserId != null) {
-            complete = true;
-        } else {
-            complete = false;
-        }
-        return complete;
-    }
+	}
 
+	public String getParam(String paramName) {
+		String value = null;
+		if (this.httpServletRequest != null && paramName != null) {
+			value = StringUtils.trimToNull(this.httpServletRequest.getParameter(paramName));
+		}
+		return value;
+	}
 
-    public boolean isRoleAdministrator() {
-        return (rawUserRoles != null && userRoleNumber >= 2);
-    }
+	public boolean processRequestParameters(HttpServletRequest request) {
 
-    public boolean isRoleInstructor() {
-        return (rawUserRoles != null && userRoleNumber >= 1);
-    }
+		if (request != null && this.httpServletRequest != request) {
+			this.httpServletRequest = request;
+		}
+		organization = new Organization();
+		lmsAccount = new LMSAccount();
+		lmsUser = new LMSUser();
 
-    public boolean isRoleLearner() {
-        return (rawUserRoles != null && StringUtils.containsIgnoreCase(rawUserRoles, "learner"));
-    }
-    public static boolean isLTIRequest(ServletRequest request) {
-        boolean valid = false;
-        String ltiVersion = StringUtils.trimToNull(request.getParameter(LTI_VERSION));
-        
-        if (ltiVersion != null) {            
-            boolean goodLTIVersion = LTI_VERSION_1P0.equals(ltiVersion);
-            valid = goodLTIVersion;
-        }
-        return valid;
-    }
+		organization.setOrganizationName(getParam(Contant.LTI_INSTANCE_GUID));
 
-    public static String makeLTICompositeKey(HttpServletRequest request, String sessionSalt) {
-    	
-        if (StringUtils.isBlank(sessionSalt)) {
-            sessionSalt = "A7k254A0itEuQ9ndKJuZ";
-        }
-        String composite = sessionSalt + "::" + request.getParameter(LTI_CONSUMER_KEY) + "::" + request.getParameter(LTI_CONTEXT_ID) + "::" +
-        request.getParameter(LTI_LINK_ID) + "::" + request.getParameter(LTI_USER_ID) + "::" + (System.currentTimeMillis() / 1800) +
-        request.getHeader("User-Agent") + "::" + request.getContextPath();
-        return DigestUtils.md5Hex(composite);
-    }
+		lmsAccount.setLmsGuid(getParam(Contant.LTI_INSTANCE_GUID));
+		lmsAccount.setOrganization(organization);
+		lmsAccount.setLtiVersion(getParam(Contant.LTI_VERSION));
+		lmsAccount.setType(getLMSType(getParam(Contant.LTI_INSTANCE_TYPE)));
+		lmsAccount.setConsumerKey(getParam(Contant.LTI_CONSUMER_KEY));
 
-    public static int makeUserRoleNum(String rawUserRoles) {
-        int roleNum = 0;
-        if (rawUserRoles != null) {
-            String lcRUR = rawUserRoles.toLowerCase();
-            if (lcRUR.contains("administrator")) {
-                roleNum = 2;
-            } else if (lcRUR.contains("instructor")) {
-                roleNum = 1;
-            }
-        }
-        return roleNum;
-    }
+		lmsAccount.setOauthVersion(getParam(Contant.LTI_OAUTH_VERSION));
+		lmsAccount.setLmsVersion(getParam(Contant.LTI_LMS_VERSION));
 
-    public HttpServletRequest getHttpServletRequest() {
-        return httpServletRequest;
-    }
+		lmsUser.setUserId(getParam(Contant.LTI_USER_ID));
+		lmsUser.setUserName(getParam(Contant.LTI_USER_NAME));
+		lmsUser.setEmail(getParam(Contant.LTI_USER_EMAIL));
 
-    public String getLtiContextId() {
-        return ltiContextId;
-    }
+		if (getParam(Contant.LIS_PERSON_PREFIX + "given") != null) {
+			lmsUser.setFirstName(getParam(Contant.LIS_PERSON_PREFIX + "given"));
+		}
+		if (getParam(Contant.LIS_PERSON_PREFIX + "family") != null) {
+			lmsUser.setLastName(getParam(Contant.LIS_PERSON_PREFIX + "family"));
+		}
 
-    public String getLtiConsumerKey() {
-        return ltiConsumerKey;
-    }
-    
-    public String getLtiUserId() {
-        return ltiUserId;
-    }
+		rawUserRoles = getParam(Contant.LTI_USER_ROLES);
+		userRoleNumber = makeUserRoleNum(rawUserRoles);
+		String[] splitRoles = StringUtils.split(StringUtils.trimToEmpty(rawUserRoles), ",");
+		ltiUserRoles = new HashSet<>(Arrays.asList(splitRoles));
 
-    public String getLtiVersion() {
-        return ltiVersion;
-    }
+		if (isRoleAdministrator()) {
+			lmsUser.setRole(RolesEnum.ADMIN.name());
+		} else if (isRoleInstructor()) {
+			lmsUser.setRole(RolesEnum.INSTRUCTOR.name());
+		} else if (isRoleLearner()) {
+			lmsUser.setRole(RolesEnum.STUDENT.name());
+		} else {
+			lmsUser.setRole(RolesEnum.GUEST.name());
+		}
 
-    public LMSKey getKey() {
-        return key;
-    }
-    public LMSUser getUser() {
-        return user;
-    }
-    public String getLtiUserEmail() {
-        return ltiUserEmail;
-    }
+		complete = checkCompleteLTIRequest(true);
+		if (complete) {
 
-    public String getLtiUserDisplayName() {
-        return ltiUserDisplayName;
-    }
+		}
+		HttpSession session = this.httpServletRequest.getSession();
+		session.setAttribute(Contant.LTI_USER_ID, lmsUser.getUserId());
+		session.setAttribute(Contant.LTI_USER_ROLE, lmsUser.getRole());
+		return complete;
+	}
 
+	protected boolean checkCompleteLTIRequest(boolean objects) {
+		if (!objects && lmsAccount.getConsumerKey() != null && lmsUser.getUserId() != null) {
+			complete = true;
+		} else {
+			complete = false;
+		}
+		return complete;
+	}
 
-    public String getRawUserRoles() {
-        return rawUserRoles;
-    }
+	public boolean isRoleAdministrator() {
+		return (rawUserRoles != null && userRoleNumber >= 2);
+	}
 
-    public Set<String> getLtiUserRoles() {
-        return ltiUserRoles;
-    }
+	public boolean isRoleInstructor() {
+		return (rawUserRoles != null && userRoleNumber >= 1);
+	}
 
-    public int getUserRoleNumber() {
-        return userRoleNumber;
-    }
-    public boolean isComplete() {
-        return complete;
-    }
+	public boolean isRoleLearner() {
+		return (rawUserRoles != null && StringUtils.containsIgnoreCase(rawUserRoles, "learner"));
+	}
 
-    public boolean isUpdated() {
-        return updated;
-    }
-    public String getLtiLinkId() {
-        return ltiLinkId;
-    }
+	public static boolean isLTIRequest(ServletRequest request) {
+		boolean valid = false;
+		String ltiVersion = StringUtils.trimToNull(request.getParameter(Contant.LTI_VERSION));
+
+		if (ltiVersion != null) {
+			boolean goodLTIVersion = Contant.LTI_VERSION_1P0.equals(ltiVersion);
+			valid = goodLTIVersion;
+		}
+		return valid;
+	}
+
+	public static String makeLTICompositeKey(HttpServletRequest request, String sessionSalt) {
+
+		if (StringUtils.isBlank(sessionSalt)) {
+			sessionSalt = "A7k254A0itEuQ9ndKJuZ";
+		}
+		String composite = sessionSalt + "::" + request.getParameter(Contant.LTI_CONSUMER_KEY) + "::"
+				+ request.getParameter(Contant.LTI_USER_ID) + "::" + (System.currentTimeMillis() / 1800)
+				+ request.getHeader("User-Agent") + "::" + request.getContextPath();
+
+		String compositeKey = DigestUtils.md5Hex(composite);
+		return compositeKey;
+	}
+
+	public static int makeUserRoleNum(String rawUserRoles) {
+		int roleNum = 0;
+		if (rawUserRoles != null) {
+			String lcRUR = rawUserRoles.toLowerCase();
+			if (lcRUR.contains("administrator")) {
+				roleNum = 2;
+			} else if (lcRUR.contains("instructor")) {
+				roleNum = 1;
+			}
+		}
+		return roleNum;
+	}
+
+	private LMSType getLMSType(String lmsTypeString) {
+
+		LMSType lmsType = new LMSType();
+		if (lmsTypeString == null) {
+			lmsType.setTypeId((long) LMSEnum.CUSTOM.getValue());
+			lmsType.setLmsName(LMSEnum.CUSTOM.name());
+			return lmsType;
+		}
+
+		LMSEnum lmsEnum = LMSEnum.valueOf(lmsTypeString.toUpperCase());
+
+		switch (lmsEnum) {
+
+		case BLACKBOARD:
+			lmsType.setTypeId((long) LMSEnum.BLACKBOARD.getValue());
+			lmsType.setLmsName(LMSEnum.BLACKBOARD.name());
+			break;
+		case SAKAI:
+			lmsType.setTypeId((long) LMSEnum.SAKAI.getValue());
+			lmsType.setLmsName(LMSEnum.SAKAI.name());
+			break;
+		case DESIRE2LEARN:
+			lmsType.setTypeId((long) LMSEnum.DESIRE2LEARN.getValue());
+			lmsType.setLmsName(LMSEnum.DESIRE2LEARN.name());
+			break;
+		case CANVAS:
+			lmsType.setTypeId((long) LMSEnum.MOODLE.getValue());
+			lmsType.setLmsName(LMSEnum.MOODLE.name());
+			break;
+		case MOODLE:
+			lmsType.setTypeId((long) LMSEnum.MOODLE.getValue());
+			lmsType.setLmsName(LMSEnum.MOODLE.name());
+			break;
+		default:
+			lmsType.setTypeId((long) LMSEnum.CUSTOM.getValue());
+			lmsType.setLmsName(LMSEnum.CUSTOM.name());
+			break;
+		}
+		return lmsType;
+
+	}
+
+	public HttpServletRequest getHttpServletRequest() {
+		return httpServletRequest;
+	}
+
+	/*
+	 * public LMSKey getKey() { return key; }
+	 */
+
+	/*
+	 * public LMSUser getUser() { return user; }
+	 */
+	public String getRawUserRoles() {
+		return rawUserRoles;
+	}
+
+	public Set<String> getLtiUserRoles() {
+		return ltiUserRoles;
+	}
+
+	public int getUserRoleNumber() {
+		return userRoleNumber;
+	}
+
+	public boolean isComplete() {
+		return complete;
+	}
+
+	/**
+	 * @return the lmsAccount
+	 */
+	public LMSAccount getLmsAccount() {
+		return lmsAccount;
+	}
+
+	/**
+	 * @param lmsAccount
+	 *            the lmsAccount to set
+	 */
+	public void setLmsAccount(LMSAccount lmsAccount) {
+		this.lmsAccount = lmsAccount;
+	}
+
+	/**
+	 * @return the lmsUser
+	 */
+	public LMSUser getLmsUser() {
+		return lmsUser;
+	}
+
+	/**
+	 * @param lmsUser
+	 *            the lmsUser to set
+	 */
+	public void setLmsAccount(LMSUser lmsUser) {
+		this.lmsUser = lmsUser;
+	}
 }
