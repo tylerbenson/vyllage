@@ -7,7 +7,7 @@
   <meta name="keywords" content="Keyword1, Keyword2, This is one phrase, This is another" />
   <meta name="subject" th:content="Resume" />
   <meta name="title" th:content="${header.firstName + ' resume'}" />
-  <style th:replace="pdf-resume-css :: css" />
+  <style th:replace="pdf-resume-css :: ${styleName}" />
 </head>
 
 <body>
@@ -26,7 +26,7 @@
       <th:block th:case="'FREEFORM'">
         <h3 th:text="${#strings.capitalizeWords(section.title)}">
         </h3>
-        <p th:utext="${section.description}"></p>
+        <p th:text="${section.description}"></p>
       </th:block>
       <th:block th:case="'ORGANIZATION'">
         <h3 th:text="${#strings.capitalizeWords(section.title)}">
@@ -37,7 +37,7 @@
         <p class="role" th:text="${section.role}"></p>
         <p th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</p>
         <p class="location" th:text="${section.location}"></p>
-        <p th:utext="${section.roleDescription}"></p>
+        <p th:text="${section.roleDescription}"></p>
       </th:block>
       <th:block th:case="'EXPERIENCE'">
         <h3 th:text="${#strings.capitalizeWords(section.title)}">
@@ -48,7 +48,7 @@
         <p class="role" th:text="${section.role}"></p>
         <p th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</p>
         <p class="location" th:text="${section.location}"></p>
-        <p th:utext="${section.roleDescription}"></p>
+        <p th:text="${section.roleDescription}"></p>
       </th:block>
     </th:block>
   </th:block>

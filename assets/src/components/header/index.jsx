@@ -4,6 +4,7 @@ var Print = require('../resume/Print');
 var NavToggle = require('./NavToggle');
 var resumeStore = require('../resume/store');
 var FeatureToggle = require('../util/FeatureToggle');
+var AdminLink = require('../admin/AdminLink');
 
 var HeaderContainer = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
@@ -36,6 +37,9 @@ var HeaderContainer = React.createClass({
               <FeatureToggle name="PRINTING">
                 <li><Print /></li>
               </FeatureToggle>
+              <li>
+              	<AdminLink />
+              </li>
               <li><a href='/resume/get-feedback' className='embossed button'>
                 <i className="ion-person-stalker"></i>
                 <span>Get Feedback</span>

@@ -3,6 +3,8 @@ package accounts.controllers;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,7 +12,10 @@ import org.junit.Test;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 
+import user.common.User;
 import accounts.controller.AccountController;
+import accounts.model.account.settings.AccountSetting;
+import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
 import accounts.service.DocumentLinkService;
@@ -46,7 +51,7 @@ public class AccountControllerTest {
 	}
 
 	@Test
-	public void getUserAvatarReturnGravatarTest() throws UserNotFoundException {
+	public void getUserAvatarReturnsGravatarTest() throws UserNotFoundException {
 		Long userId = 0L;
 		String gravatarUrl = "https://secure.gravatar.com/avatar/"
 				+ new String(DigestUtils.md5Hex("user@vyllage.com"));
@@ -59,4 +64,47 @@ public class AccountControllerTest {
 		Assert.assertTrue(gravatarUrl.contains(avatarUrl));
 	}
 
+	@Test
+	public void getUserAvatarReturnsFacebookTest()
+			throws UserNotFoundException, ElementNotFoundException {
+
+		Long userId = 0L;
+		String facebookUrl = "https://graph.facebook.com/";
+
+		User user = mock(User.class);
+
+		AccountSetting ac = new AccountSetting(null, userId, "avatar",
+				"facebook", null);
+
+		when(userService.getAvatar(userId)).thenReturn(facebookUrl);
+		when(userService.getUser(userId)).thenReturn(user);
+		when(accountSettingsService.getAccountSetting(user, "avatar"))
+				.thenReturn(Arrays.asList(ac));
+
+		String avatarUrl = contoller.getAvatar(userId);
+
+		Assert.assertNotNull(avatarUrl);
+		Assert.assertTrue(facebookUrl.contains(avatarUrl));
+	}
+
+	@Test
+	public void getUserAvatarAccountSettingNotPresentReturnsGravatarTest()
+			throws UserNotFoundException, ElementNotFoundException {
+
+		Long userId = 0L;
+		String gravatarUrl = "https://secure.gravatar.com/avatar/"
+				+ new String(DigestUtils.md5Hex("user@vyllage.com"));
+
+		User user = mock(User.class);
+
+		when(userService.getAvatar(userId)).thenReturn(gravatarUrl);
+		when(userService.getUser(userId)).thenReturn(user);
+		when(accountSettingsService.getAccountSetting(user, "avatar"))
+				.thenReturn(null);
+
+		String avatarUrl = contoller.getAvatar(userId);
+
+		Assert.assertNotNull(avatarUrl);
+		Assert.assertTrue(gravatarUrl.contains(avatarUrl));
+	}
 }

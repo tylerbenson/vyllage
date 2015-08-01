@@ -5,13 +5,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -28,18 +28,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.Application;
 import documents.controller.ResumeController;
-import documents.files.pdf.ResumePdfService;
-import documents.model.AccountContact;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.DocumentSection;
 import documents.model.constants.DocumentTypeEnum;
-import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
-import documents.services.AccountService;
 import documents.services.DocumentService;
-import documents.services.NotificationService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -47,20 +42,11 @@ import documents.services.NotificationService;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ResumeControllerIntegTest {
 
-	@Autowired
+	@Inject
 	private ResumeController controller;
 
-	@Autowired
+	@Inject
 	private DocumentService documentService;
-
-	@Autowired
-	private NotificationService notificationService;
-
-	@Autowired
-	private ResumePdfService pdfTest;
-
-	@Autowired
-	private DocumentAccessRepository documentAccessRepository;
 
 	@Test
 	public void updateTagLineTest() throws ElementNotFoundException,
@@ -369,35 +355,6 @@ public class ResumeControllerIntegTest {
 				comment, user);
 	}
 
-	@Test
-	public void getResumeHeaderOk() throws ElementNotFoundException,
-			JsonProcessingException, IOException {
-		User user = generateAndLoginUser();
-
-		Long userId = 0L;
-		Long documentId = 0L;
-
-		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-		Document document = Mockito.mock(Document.class);
-		AccountService accountService = Mockito.mock(AccountService.class);
-
-		Mockito.when(document.getUserId()).thenReturn(userId);
-		Mockito.when(
-				accountService.getContactDataForUsers(request,
-						Arrays.asList(userId))).thenReturn(
-				accountContact(userId));
-		Mockito.when(user.getUserId()).thenReturn(userId);
-
-		ResumeController controller = new ResumeController(documentService,
-				accountService, notificationService, pdfTest,
-				documentAccessRepository);
-
-		DocumentHeader resumeHeader = controller.getResumeHeader(request,
-				documentId, user);
-
-		Assert.assertNotNull(resumeHeader);
-	}
-
 	@Test(expected = ElementNotFoundException.class)
 	public void getResumeHeaderDocumentNotFound()
 			throws ElementNotFoundException, JsonProcessingException,
@@ -507,16 +464,6 @@ public class ResumeControllerIntegTest {
 		comment.setCommentText("test");
 
 		return Arrays.asList(comment);
-	}
-
-	private List<AccountContact> accountContact(Long userId) {
-		AccountContact ac = new AccountContact();
-		ac.setFirstName("first");
-		ac.setEmail("email");
-		ac.setUserId(userId);
-		ac.setLastName("last");
-
-		return Arrays.asList(ac);
 	}
 
 }

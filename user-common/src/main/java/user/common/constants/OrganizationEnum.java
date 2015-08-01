@@ -1,7 +1,7 @@
 package user.common.constants;
 
 public enum OrganizationEnum {
-	VYLLAGE(0L);
+	VYLLAGE(0L), GUESTS(4L);
 
 	private final Long organizationId;
 

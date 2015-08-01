@@ -37,14 +37,17 @@ import org.springframework.util.Assert;
 import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
+import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
 import accounts.model.BatchAccount;
 import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.AvatarSourceEnum;
+import accounts.model.account.settings.Privacy;
+import accounts.model.form.RegisterForm;
 import accounts.model.link.DocumentLinkRequest;
-import accounts.repository.AccountSettingRepository;
 import accounts.repository.AvatarRepository;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
@@ -83,9 +86,6 @@ public class UserService {
 
 	@Autowired
 	private UserDetailRepository userRepository;
-
-	@Autowired
-	private AccountSettingRepository settingRepository;
 
 	@Autowired
 	private RandomPasswordGenerator randomPasswordGenerator;
@@ -280,13 +280,15 @@ public class UserService {
 
 		// send mails
 		for (User user : users) {
-			sendAccountCreationEmail(user);
+			sendAutomatedAccountCreationEmail(user.getUsername(),
+					user.getPassword(), user.getFirstName());
 		}
 	}
 
-	protected void sendAccountCreationEmail(User user) throws EmailException {
+	protected void sendAutomatedAccountCreationEmail(String email,
+			String password, String firstName) throws EmailException {
 		emailBuilder
-				.to(user.getUsername())
+				.to(email)
 				.from(environment.getProperty("email.from",
 						"no-reply@vyllage.com"))
 				.fromUserName(
@@ -295,74 +297,28 @@ public class UserService {
 				.subject("Account Creation - Vyllage.com")
 				.setNoHtmlMessage(
 						"Your account has been created successfuly. \\n Your password is: "
-								+ user.getPassword())
+								+ password)
 				.templateName("email-account-created")
-				.addTemplateVariable("password", user.getPassword())
-				.addTemplateVariable("firstName", user.getFirstName()).send();
+				.addTemplateVariable("password", password)
+				.addTemplateVariable("firstName", firstName).send();
 	}
 
-	/**
-	 * Process a link request, creates new user with a random password.
-	 * 
-	 * @param linkRequest
-	 * @return link response
-	 * @throws EmailException
-	 */
-	public User createUser(DocumentLinkRequest linkRequest, User loggedInUser)
-			throws EmailException {
-		boolean invalid = false;
-
-		if (EmailValidator.isValid(linkRequest.getEmail()) == invalid)
-			throw new IllegalArgumentException(
-					"Contains invalid email address.");
-
-		// assigns current user's Organizations
-		// assigns default Guest role.
-		String randomPassword = randomPasswordGenerator.getRandomPassword();
-
-		List<GrantedAuthority> loggedUseRoles = new ArrayList<>();
-		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
-
-		loggedUseRoles.addAll(((User) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal()).getAuthorities());
-
-		// setting up organizations and roles for the user account, we set the
-		// same organizations the logged in user belongs to and assign the Guest
-		// Role, user id is null until saved
-		for (GrantedAuthority userOrganizationRole : loggedUseRoles)
-			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
-					((UserOrganizationRole) userOrganizationRole)
-							.getOrganizationId(), RolesEnum.GUEST.name(),
-					loggedInUser.getUserId()));
-
-		User user = new User(null, linkRequest.getFirstName(), null,
-				linkRequest.getLastName(), linkRequest.getEmail(),
-				randomPassword, true, true, true, true,
-				defaultAuthoritiesForNewUser, null, null);
-		userRepository.createUser(user);
-
-		User loadUserByUsername = userRepository.loadUserByUsername(linkRequest
-				.getEmail());
-
-		if (linkRequest.sendRegistrationMail()) {
-			// send mail
-
-			emailBuilder
-					.to(linkRequest.getEmail())
-					.from(environment.getProperty("email.from",
-							"no-reply@vyllage.com"))
-					.fromUserName(
-							environment.getProperty("email.from.userName",
-									"Chief of Vyllage"))
-					.subject("Account Creation")
-					.setNoHtmlMessage(
-							"Your account has been created successfuly. \\n Your password is: "
-									+ randomPassword)
-					.templateName("email-account-created")
-					.addTemplateVariable("password", randomPassword).send();
-		}
-
-		return loadUserByUsername;
+	protected void sendUserRegisteredEmail(String email, String password,
+			String firstName) throws EmailException {
+		emailBuilder
+				.to(email)
+				.from(environment.getProperty("email.from",
+						"no-reply@vyllage.com"))
+				.fromUserName(
+						environment.getProperty("email.from.userName",
+								"Chief of Vyllage"))
+				.subject("Account Creation - Vyllage.com")
+				.setNoHtmlMessage(
+						"Your account has been created successfuly. \\n Your password is: "
+								+ password)
+				.templateName("email-user-registered")
+				.addTemplateVariable("password", password)
+				.addTemplateVariable("firstName", firstName).send();
 	}
 
 	protected void updateUserRolesByOrganization(
@@ -568,16 +524,115 @@ public class UserService {
 	}
 
 	public List<User> getUsers(List<Long> userIds) {
-
 		return userRepository.getAll(userIds);
 	}
 
-	public void setEmailBuilder(EmailBuilder emailBuilder) {
-		this.emailBuilder = emailBuilder;
+	/**
+	 * Process a link request, creates new user with a random password.
+	 * 
+	 * @param linkRequest
+	 * @return link response
+	 * @throws EmailException
+	 */
+	public User createUser(DocumentLinkRequest linkRequest, User loggedInUser)
+			throws EmailException {
+		boolean invalid = false;
+
+		if (EmailValidator.isValid(linkRequest.getEmail()) == invalid)
+			throw new IllegalArgumentException(
+					"Contains invalid email address.");
+
+		// assigns current user's Organizations
+		// assigns default Guest role.
+		String randomPassword = randomPasswordGenerator.getRandomPassword();
+
+		List<GrantedAuthority> loggedUseRoles = new ArrayList<>();
+		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
+
+		loggedUseRoles.addAll(((User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal()).getAuthorities());
+
+		// setting up organizations and roles for the user account, we set the
+		// same organizations the logged in user belongs to and assign the Guest
+		// Role, user id is null until saved
+		for (GrantedAuthority userOrganizationRole : loggedUseRoles)
+			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
+					((UserOrganizationRole) userOrganizationRole)
+							.getOrganizationId(), RolesEnum.GUEST.name(),
+					loggedInUser.getUserId()));
+
+		User user = new User(null, linkRequest.getFirstName(), null,
+				linkRequest.getLastName(), linkRequest.getEmail(),
+				randomPassword, true, true, true, true,
+				defaultAuthoritiesForNewUser, null, null);
+		userRepository.createUser(user);
+
+		User loadUserByUsername = userRepository.loadUserByUsername(linkRequest
+				.getEmail());
+
+		createReceiveAdviceSetting(false, loadUserByUsername);
+
+		return loadUserByUsername;
 	}
 
-	public User createUser(String email, String password, String firstName,
-			String middleName, String lastName, Long auditUserId) {
+	/**
+	 * Creates a user using a registration form.
+	 * 
+	 * @param registerForm
+	 * @return user
+	 * @throws EmailException
+	 */
+	public User createUser(RegisterForm registerForm) {
+
+		boolean isEnabled = true;
+		boolean isAccountNonExpired = true;
+		boolean isCredentialsNonExpired = true;
+		boolean isAccountNonLocked = true;
+
+		// defaulting to Guest Role and Guest Organization
+
+		Long auditUserId = Long.valueOf(0L);// main admin.
+
+		UserOrganizationRole uor = new UserOrganizationRole(null,
+				OrganizationEnum.GUESTS.getOrganizationId(), RolesEnum.GUEST
+						.name().toUpperCase(), auditUserId);
+
+		List<UserOrganizationRole> newRolesForOrganization = Arrays.asList(uor);
+
+		User newUser = new User(null, registerForm.getFirstName(), null,
+				registerForm.getLastName(), registerForm.getEmail(),
+				registerForm.getPassword(), isEnabled, isAccountNonExpired,
+				isCredentialsNonExpired, isAccountNonLocked,
+				newRolesForOrganization, null, null);
+
+		logger.info(newUser.toString());
+
+		this.userRepository.createUser(newUser);
+		// get id
+		newUser = this.getUser(registerForm.getEmail());
+
+		createReceiveAdviceSetting(registerForm.getReceiveAdvice(), newUser);
+
+		try {
+			sendUserRegisteredEmail(newUser.getUsername(),
+					registerForm.getPassword(), newUser.getFirstName());
+		} catch (EmailException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+
+		return newUser;
+	}
+
+	/**
+	 * Creates a user using a registration form with a referring user.
+	 * 
+	 * @param registerForm
+	 * @param auditUserId
+	 * @return User
+	 */
+	public User createUserFromReferral(RegisterForm registerForm,
+			Long auditUserId) {
 
 		if (auditUserId == null)
 			throw new AccessDeniedException(
@@ -606,13 +661,26 @@ public class UserService {
 							.getOrganizationId(), RolesEnum.GUEST.name(),
 					auditUser.getUserId()));
 
-		User user = new User(null, firstName, middleName, lastName, email,
-				password, enabled, accountNonExpired, credentialsNonExpired,
-				accountNonLocked, defaultAuthoritiesForNewUser, null, null);
+		User user = new User(null, registerForm.getFirstName(), null,
+				registerForm.getLastName(), registerForm.getEmail(),
+				registerForm.getPassword(), enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked,
+				defaultAuthoritiesForNewUser, null, null);
 
 		userRepository.createUser(user);
+		User newUser = this.getUser(user.getUsername());
 
-		return userRepository.loadUserByUsername(user.getUsername());
+		createReceiveAdviceSetting(registerForm.getReceiveAdvice(), newUser);
+
+		try {
+			sendUserRegisteredEmail(newUser.getUsername(),
+					registerForm.getPassword(), newUser.getFirstName());
+		} catch (EmailException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+
+		return newUser;
 	}
 
 	public List<User> getUsersFromOrganization(Long organizationId) {
@@ -726,21 +794,47 @@ public class UserService {
 	}
 
 	/**
-	 * Returns the user's avatar based on the user's social networks profile, if
-	 * it can't find any return a gravatar url.
+	 * Returns the user's avatar based on the user's social networks profile or
+	 * avatar setting, if it can't find any returns a gravatar url.
 	 * 
 	 * @param userId
 	 * @return avatar url
 	 * @throws UserNotFoundException
 	 */
 	public String getAvatar(Long userId) throws UserNotFoundException {
-		Optional<String> avatarUrl = avatarRepository.getAvatar(userId);
-
-		if (avatarUrl.isPresent())
-			return avatarUrl.get();
 
 		User user = this.getUser(userId);
+		List<AccountSetting> avatarSettings = null;
+		Optional<AccountSetting> avatarSetting = Optional.empty();
 
+		try {
+			avatarSettings = accountSettingsService.getAccountSetting(user,
+					"avatar");
+
+			// there's only one
+			avatarSetting = Optional.ofNullable(avatarSettings.get(0));
+
+		} catch (ElementNotFoundException e) {
+			// not really important
+			logger.warning(ExceptionUtils.getStackTrace(e));
+		}
+
+		if (avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.GRAVATAR.name()))
+			return GRAVATAR_URL
+					+ new String(DigestUtils.md5Hex(user.getUsername()));
+
+		else if (avatarSetting.isPresent()) {
+
+			Optional<String> avatarUrl = avatarRepository.getAvatar(userId,
+					avatarSetting.get().getValue());
+
+			if (avatarUrl.isPresent())
+				return avatarUrl.get();
+		}
+
+		// nothing found, defaulting to gravatar
 		return GRAVATAR_URL
 				+ new String(DigestUtils.md5Hex(user.getUsername()));
 	}
@@ -811,5 +905,18 @@ public class UserService {
 
 		// to set the new name
 		signInUtil.signIn(email);
+	}
+
+	public void setEmailBuilder(EmailBuilder emailBuilder) {
+		this.emailBuilder = emailBuilder;
+	}
+
+	private void createReceiveAdviceSetting(boolean receiveAdvice, User newUser) {
+
+		AccountSetting setting = new AccountSetting(null, newUser.getUserId(),
+				"receiveAdvice", String.valueOf(receiveAdvice), Privacy.PRIVATE
+						.name().toLowerCase());
+
+		this.accountSettingsService.setAccountSetting(newUser, setting);
 	}
 }

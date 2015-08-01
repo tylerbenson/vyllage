@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -43,8 +43,12 @@ public class DocumentController {
 	@Value("${accounts.host:127.0.0.1}")
 	private final String ACCOUNTS_HOST = null;
 
-	@Autowired
-	private DocumentService documentService;
+	private final DocumentService documentService;
+
+	@Inject
+	public DocumentController(DocumentService documentService) {
+		this.documentService = documentService;
+	}
 
 	@RequestMapping(value = "delete", method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
