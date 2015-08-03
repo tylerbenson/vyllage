@@ -47,7 +47,17 @@ var Tags = React.createClass({
   },
   handleChange: function(e) {
     e.preventDefault();
-    this.setState({tags: e.target.value.trim().split(', ')});
+    var input = e.target.value.trim().split(',');
+    var tags = [];
+
+    for(var i=0;i<input.length;i++) {
+      var tag = input[i].trim();
+      if(tag.length > 0) {
+        tags.push(tag);
+      }
+    }
+
+    this.setState({tags: tags});
   },
   saveHandler: function(e) {
     var section = this.props.section;
