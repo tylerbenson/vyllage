@@ -3,7 +3,6 @@ package documents.repository;
 import static documents.domain.tables.Comments.COMMENTS;
 import static documents.domain.tables.DocumentSections.DOCUMENT_SECTIONS;
 import static documents.domain.tables.Documents.DOCUMENTS;
-import static documents.domain.tables.Suggestions.SUGGESTIONS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -21,7 +20,7 @@ import javax.inject.Inject;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.Record2;
+import org.jooq.Record1;
 import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Repository;
 import user.common.User;
 import documents.domain.tables.Comments;
 import documents.domain.tables.DocumentSections;
-import documents.domain.tables.Suggestions;
 import documents.domain.tables.records.DocumentsRecord;
 import documents.model.Document;
 import documents.model.constants.DocumentTypeEnum;
@@ -159,24 +157,19 @@ public class DocumentRepository implements IRepository<Document> {
 		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
 		Comments c = COMMENTS.as("c");
-		Suggestions sg = SUGGESTIONS.as("sg");
 
-		Result<Record2<Long, Long>> result = sql.select(c.USER_ID, sg.USER_ID) //
+		Result<Record1<Long>> result = sql.select(c.USER_ID) //
 				.from(s1) //
 				.join(s2) //
 				.on(s1.ID.eq(s2.ID)) //
 				.and(s1.SECTIONVERSION.lessOrEqual(s2.SECTIONVERSION)) //
 				.join(c) //
 				.on(c.SECTION_ID.eq(s1.ID)) //
-				.join(sg) //
-				.on(sg.SECTION_ID.eq(s1.ID)) //
-				.where(s1.DOCUMENTID.eq(documentId)).fetch(); //
+				.where(s1.DOCUMENTID.eq(documentId)).groupBy(c.USER_ID).fetch(); //
 
-		return result
-				.stream()
-				.map(r -> Arrays.asList(r.getValue(c.USER_ID),
-						r.getValue(sg.USER_ID))).flatMap(l -> l.stream())
-				.distinct().collect(Collectors.toList());
+		return result.stream().map(r -> Arrays.asList(r.getValue(c.USER_ID)))
+				.flatMap(l -> l.stream()).distinct()
+				.collect(Collectors.toList());
 
 	}
 
