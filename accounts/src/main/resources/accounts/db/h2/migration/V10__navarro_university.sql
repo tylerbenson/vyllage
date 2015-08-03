@@ -1,0 +1,1 @@
+insert into accounts.organizations (  organization_name ) values ('Navarro University' );

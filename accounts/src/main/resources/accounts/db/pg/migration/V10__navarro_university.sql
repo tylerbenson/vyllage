@@ -1,0 +1,2 @@
+insert into accounts.organizations ( organization_id, organization_name ) values ( 5, 'Navarro University' );
+insert into accounts.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 0, 1, 'ADVISOR', current_date, 0 );
