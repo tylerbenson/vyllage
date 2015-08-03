@@ -16,10 +16,8 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  *
  */
 public class RequestMatcherDisable implements RequestMatcher {
-	private Pattern allowedMethods = Pattern
-			.compile("^(GET|HEAD|TRACE|OPTIONS)$");
-	private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher(
-			"/togglz/edit", null);
+	private Pattern allowedMethods = Pattern.compile("^(GET|POST|HEAD|TRACE|OPTIONS)$");
+	private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher("/togglz/edit", null);
 
 	@Override
 	public boolean matches(HttpServletRequest request) {
