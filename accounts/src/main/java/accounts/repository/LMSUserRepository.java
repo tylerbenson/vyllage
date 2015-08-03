@@ -6,6 +6,8 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import accounts.model.UserCredential;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
+import lombok.NonNull;
 import oauth.lti.LMSRequest;
 import oauth.model.LMSAccount;
 import oauth.model.service.LMSUserDetailsService;
@@ -42,35 +45,28 @@ import accounts.domain.tables.records.UsersRecord;
 public class LMSUserRepository implements LMSUserDetailsService {
 
 	private final Logger logger = Logger.getLogger(LMSUserRepository.class.getName());
+	private final DSLContext sql;
+	private final UserOrganizationRoleRepository userOrganizationRoleRepository;
+	private final OrganizationRepository organizationRepository;
+	private final UserCredentialsRepository credentialsRepository;
+	private final AccountSettingRepository accountSettingRepository;
+	private final DataSourceTransactionManager txManager;
+	private final LMSRepository lmsRepository;
+	private final LMSUserCredentialsRepository lmsUserCredentialsRepository;
 
-	// @Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private DSLContext sql;
-
-	@Autowired
-	private UserOrganizationRoleRepository userOrganizationRoleRepository;
-
-	@Autowired
-	private OrganizationRepository organizationRepository;
-
-	@Autowired
-	private UserCredentialsRepository credentialsRepository;
-
-	@Autowired
-	private AccountSettingRepository accountSettingRepository;
-
-	@Autowired
-	private DataSourceTransactionManager txManager;
-
-	@Autowired
-	private LMSRepository lmsRepository;
-
-	@Autowired
-	private LMSUserCredentialsRepository lmsUserCredentialsRepository;
-
-	public LMSUserRepository() {
+	@Inject
+	public LMSUserRepository(final DSLContext sql, final UserOrganizationRoleRepository userOrganizationRoleRepository,
+			final OrganizationRepository organizationRepository, final UserCredentialsRepository credentialsRepository,
+			final AccountSettingRepository accountSettingRepository, final DataSourceTransactionManager txManager,
+			final LMSRepository lmsRepository, final LMSUserCredentialsRepository lmsUserCredentialsRepository) {
+		this.sql = sql;
+		this.userOrganizationRoleRepository = userOrganizationRoleRepository;
+		this.organizationRepository = organizationRepository;
+		this.credentialsRepository = credentialsRepository;
+		this.accountSettingRepository = accountSettingRepository;
+		this.txManager = txManager;
+		this.lmsRepository = lmsRepository;
+		this.lmsUserCredentialsRepository = lmsUserCredentialsRepository;
 	}
 
 	public User get(Long userId) throws UserNotFoundException {
@@ -83,8 +79,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 	}
 
 	@Override
-	// @Transactional
-	public void createUser(UserDetails userDetails, LMSRequest lmsRequest) {
+	public void createUser(UserDetails userDetails, @NonNull LMSRequest lmsRequest) {
 		User user = (User) userDetails;
 
 		TransactionStatus transaction = txManager.getTransaction(new DefaultTransactionDefinition());
@@ -135,12 +130,14 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			}
 			Assert.notNull(lmsId);
 
-			// Add LMS user credentials if doesn't exist
+			// Check LMS user credentials exist
 			boolean isUserExist = lmsUserCredentialsRepository.userExists(lmsRequest.getLmsUser().getUserId(), lmsId);
-			lmsUserCredentialsRepository.createUser(lmsRequest.getLmsUser().getUserId(), newRecord.getUserId(), lmsId,
-					user.getPassword());
-			isUserExist = lmsUserCredentialsRepository.userExists(lmsRequest.getLmsUser().getUserId(), lmsId);
 
+			if (!isUserExist) {
+				// Create LMS user credentials
+				lmsUserCredentialsRepository.createUser(lmsRequest.getLmsUser().getUserId(), newRecord.getUserId(),
+						lmsId, user.getPassword());
+			}
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
@@ -153,12 +150,12 @@ public class LMSUserRepository implements LMSUserDetailsService {
 	}
 
 	@Override
-	public boolean userExists(String username) {
+	public boolean userExists(@NonNull String username) {
 		return sql.fetchExists(sql.select().from(USERS).where(USERS.USER_NAME.eq(username)));
 	}
 
 	@Override
-	public User loadUserByUsername(String username) throws UsernameNotFoundException {
+	public User loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
 
 		UsersRecord record = sql.fetchOne(USERS, USERS.USER_NAME.eq(username));
 
@@ -170,13 +167,10 @@ public class LMSUserRepository implements LMSUserDetailsService {
 		return user;
 	}
 
-	protected User getUserData(UsersRecord record) {
+	protected User getUserData(@NonNull UsersRecord record) {
 
-		// TODO: eventually we'll need these fields in the database.
 		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
-
 		List<UserOrganizationRole> roles = userOrganizationRoleRepository.getByUserId(record.getUserId());
-
 		UserCredential credential = credentialsRepository.get(record.getUserId());
 
 		User user = new User(record.getUserId(), record.getFirstName(), record.getMiddleName(), record.getLastName(),
@@ -187,26 +181,10 @@ public class LMSUserRepository implements LMSUserDetailsService {
 	}
 
 	@Override
-	public LMSUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException, DataAccessException {
-		// TODO Auto-generated method stub
+	@Deprecated
+	public LMSUserDetails loadUserByUserId(@NonNull String userId)
+			throws UsernameNotFoundException, DataAccessException {
 		return null;
 	}
 
-	@Override
-	public void updateUser(UserDetails user) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deleteUser(String username) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void changePassword(String oldPassword, String newPassword) {
-		// TODO Auto-generated method stub
-
-	}
 }

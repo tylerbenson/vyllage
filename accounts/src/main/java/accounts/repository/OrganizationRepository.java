@@ -22,19 +22,12 @@ public class OrganizationRepository {
 	@Autowired
 	private DSLContext sql;
 
-	@Autowired
-	private DataSourceTransactionManager txManager;
-
 	public Organization get(Long id) {
 		return sql.fetchOne(ORGANIZATIONS, ORGANIZATIONS.ORGANIZATION_ID.eq(id)).into(Organization.class);
 	}
 
 	public Organization getByName(String name) {
-		try {
-			return sql.fetchOne(ORGANIZATIONS, ORGANIZATIONS.ORGANIZATION_NAME.eq(name)).into(Organization.class);
-		} catch (NullPointerException ex) {
-		}
-		return null;
+		return sql.fetchOne(ORGANIZATIONS, ORGANIZATIONS.ORGANIZATION_NAME.eq(name)).into(Organization.class);
 	}
 
 	public List<Organization> getAll() {
@@ -46,23 +39,4 @@ public class OrganizationRepository {
 				.into(Organization.class);
 	}
 
-	public Organization addOrganization(Organization organization) {
-
-		TransactionStatus transaction = txManager.getTransaction(new DefaultTransactionDefinition());
-		Object savepoint = transaction.createSavepoint();
-		Organization organizationData = null;
-		try {
-			OrganizationsRecord newRecord = sql.newRecord(ORGANIZATIONS);
-			newRecord.setOrganizationName(organization.getOrganizationName());
-			newRecord.store();
-			Assert.notNull(newRecord.getOrganizationId());
-			organizationData = new Organization(newRecord.getOrganizationId(), newRecord.getOrganizationName());
-		} catch (Exception e) {
-			NewRelic.noticeError(e);
-			transaction.rollbackToSavepoint(savepoint);
-		} finally {
-			txManager.commit(transaction);
-		}
-		return organizationData;
-	}
 }

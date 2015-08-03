@@ -36,7 +36,6 @@ public class LMSRequest {
 	int userRoleNumber;
 	String rawUserRolesOverride;
 
-	// private LMSUserCredential lmsUserCredential;
 	private LMSAccount lmsAccount;
 	private LMSUser lmsUser;
 	Organization organization;
@@ -119,9 +118,9 @@ public class LMSRequest {
 			lmsUser.setRole(RolesEnum.GUEST.name());
 		}
 
-		complete = checkCompleteLTIRequest(true);
-		if (complete) {
-
+		complete = checkCompleteLTIRequest();
+		if (!complete) {
+			throw new IllegalStateException("LTI request doesn't have Consumer Key or/and LMS user id. ");
 		}
 		HttpSession session = this.httpServletRequest.getSession();
 		session.setAttribute(Contant.LTI_USER_ID, lmsUser.getUserId());
@@ -129,13 +128,8 @@ public class LMSRequest {
 		return complete;
 	}
 
-	protected boolean checkCompleteLTIRequest(boolean objects) {
-		if (!objects && lmsAccount.getConsumerKey() != null && lmsUser.getUserId() != null) {
-			complete = true;
-		} else {
-			complete = false;
-		}
-		return complete;
+	protected boolean checkCompleteLTIRequest() {
+		return (lmsAccount.getConsumerKey() != null && lmsUser.getUserId() != null);
 	}
 
 	public boolean isRoleAdministrator() {
@@ -233,13 +227,6 @@ public class LMSRequest {
 		return httpServletRequest;
 	}
 
-	/*
-	 * public LMSKey getKey() { return key; }
-	 */
-
-	/*
-	 * public LMSUser getUser() { return user; }
-	 */
 	public String getRawUserRoles() {
 		return rawUserRoles;
 	}

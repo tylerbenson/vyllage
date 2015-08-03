@@ -1,6 +1,7 @@
 package accounts.config;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -25,44 +26,49 @@ import oauth.lti.LMSOAuthAuthenticationHandler;
 import oauth.lti.LMSOAuthProviderProcessingFilter;
 import oauth.model.service.LMSOAuthNonceServices;
 
-@ComponentScan({"oauth.lti", "oauth.model.service"})
+@ComponentScan({ "oauth.lti", "oauth.model.service" })
 @Configuration
 @EnableAutoConfiguration
-@EnableCaching 
-@EnableWebMvcSecurity 
+@EnableCaching
+@EnableWebMvcSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Order(1) 
+@Order(1)
 public class LTISecurityConfigurer extends WebSecurityConfigurerAdapter {
-    private LMSOAuthProviderProcessingFilter ltioAuthProviderProcessingFilter;
-    @Autowired
-    LMSConsumerDetailsService lmsConsumerDetailsService;
-    @Autowired
-    LMSOAuthNonceServices lmsOauthNonceServices;
-    @Autowired
-    LMSOAuthAuthenticationHandler lmsOauthAuthenticationHandler;
-    @Autowired
-    OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
-    @Autowired
-    OAuthProviderTokenServices oauthProviderTokenServices;
-    
-    @PostConstruct
-    public void init() {
-        ltioAuthProviderProcessingFilter = new LMSOAuthProviderProcessingFilter( lmsConsumerDetailsService, lmsOauthNonceServices, oauthProcessingFilterEntryPoint, lmsOauthAuthenticationHandler, oauthProviderTokenServices);
-    }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-    	http.headers().disable() ;
-        http.requestMatchers().antMatchers("/lti/**").and().addFilterBefore(ltioAuthProviderProcessingFilter, UsernamePasswordAuthenticationFilter.class).authorizeRequests().anyRequest().hasRole("LTI").and().csrf().disable();
-    }
-    
-    @Bean(name = "oauthProviderTokenServices")
-    public OAuthProviderTokenServices oauthProviderTokenServices() {
-       return new InMemoryProviderTokenServices();
-    }
-	 
-	 @Bean
-    public CacheManager cacheManager() {
-       return new ConcurrentMapCacheManager(); 
-    }
+	private LMSOAuthProviderProcessingFilter ltioAuthProviderProcessingFilter;
+	@Inject
+	LMSConsumerDetailsService lmsConsumerDetailsService;
+	@Inject
+	LMSOAuthNonceServices lmsOauthNonceServices;
+	@Inject
+	LMSOAuthAuthenticationHandler lmsOauthAuthenticationHandler;
+	@Inject
+	OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
+	@Inject
+	OAuthProviderTokenServices oauthProviderTokenServices;
+
+	@PostConstruct
+	public void init() {
+		ltioAuthProviderProcessingFilter = new LMSOAuthProviderProcessingFilter(lmsConsumerDetailsService,
+				lmsOauthNonceServices, oauthProcessingFilterEntryPoint, lmsOauthAuthenticationHandler,
+				oauthProviderTokenServices);
+	}
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.headers().disable();
+		http.requestMatchers().antMatchers("/lti/**").and()
+				.addFilterBefore(ltioAuthProviderProcessingFilter, UsernamePasswordAuthenticationFilter.class)
+				.authorizeRequests().anyRequest().hasRole("LTI").and().csrf().disable();
+	}
+
+	@Bean(name = "oauthProviderTokenServices")
+	public OAuthProviderTokenServices oauthProviderTokenServices() {
+		return new InMemoryProviderTokenServices();
+	}
+
+	@Bean
+	public CacheManager cacheManager() {
+		return new ConcurrentMapCacheManager();
+	}
 }

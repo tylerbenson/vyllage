@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import accounts.domain.tables.records.LmsRecord;
+import lombok.NonNull;
+
 import static accounts.domain.tables.Lms.LMS;
 
 import com.newrelic.api.agent.NewRelic;
@@ -24,18 +28,16 @@ import user.common.LMS;
 public class LMSRepository {
 
 	private final Logger logger = Logger.getLogger(LMSRepository.class.getName());
+	private final DSLContext sql;
+	private final DataSourceTransactionManager txManager;
 
-	@Autowired
-	private DSLContext sql;
-
-	@Autowired
-	private DataSourceTransactionManager txManager;
-
-	public LMSRepository() {
+	@Inject
+	public LMSRepository(final DSLContext sql, final DataSourceTransactionManager txManager) {
+		this.sql = sql;
+		this.txManager = txManager;
 	}
 
-	// @Transactional
-	public Long createLMSAccount(LMSAccount lmsAccount) {
+	public Long createLMSAccount(@NonNull LMSAccount lmsAccount) {
 		Long lmsId = null;
 		TransactionStatus transaction = txManager.getTransaction(new DefaultTransactionDefinition());
 		Object savepoint = transaction.createSavepoint();
@@ -65,7 +67,7 @@ public class LMSRepository {
 		return lmsId;
 	}
 
-	public Long get(String lmsGuid) throws LMSNotFoundException {
+	public Long get(@NonNull String lmsGuid) throws LMSNotFoundException {
 
 		LmsRecord lmsAccountRecords = sql.fetchOne(LMS, LMS.LMS_GUID.eq(lmsGuid));
 		if (lmsAccountRecords == null)
