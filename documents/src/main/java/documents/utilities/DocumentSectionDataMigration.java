@@ -58,7 +58,7 @@ public class DocumentSectionDataMigration {
 				old.setLastModified(record.getValue(
 						DOCUMENT_SECTIONS.LASTMODIFIED).toLocalDateTime());
 
-				if (old.getType().equals(SectionType.ORGANIZATION)) {
+				if (SectionType.ORGANIZATION.equals(old.getType())) {
 					EducationSection newSection = new EducationSection();
 					newSection.setCurrent(old.getIsCurrent());
 					newSection.setDocumentId(old.getDocumentId());
@@ -84,7 +84,7 @@ public class DocumentSectionDataMigration {
 					logger.info("Saved Organization Section: " + newSection);
 				}
 
-				if (old.getType().equals(SectionType.EXPERIENCE)) {
+				if (SectionType.EXPERIENCE.equals(old.getType())) {
 					JobExperienceSection newSection = new JobExperienceSection();
 					newSection.setCurrent(old.getIsCurrent());
 					newSection.setDocumentId(old.getDocumentId());
@@ -111,8 +111,8 @@ public class DocumentSectionDataMigration {
 					logger.info("Saved Job Experience Section: " + newSection);
 				}
 
-				if (old.getType().equals(SectionType.FREEFORM)) {
-					if (old.getTitle().equalsIgnoreCase("skills")) {
+				if (SectionType.FREEFORM.equals(old.getType())) {
+					if ("skills".equalsIgnoreCase(old.getTitle())) {
 						SkillsSection newSection = new SkillsSection();
 
 						// for the skills tag, the user will have to fix
@@ -145,7 +145,7 @@ public class DocumentSectionDataMigration {
 
 					}
 
-					if (old.getTitle().equalsIgnoreCase("career goal")) {
+					if ("career goal".equalsIgnoreCase(old.getTitle())) {
 						SummarySection newSection = new SummarySection();
 						newSection.setDescription(old.getDescription());
 						newSection.setDocumentId(old.getDocumentId());
