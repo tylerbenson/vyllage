@@ -9,12 +9,11 @@ import lombok.ToString;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import util.dateSerialization.LocalDateDeserializer;
-import util.dateSerialization.LocalDateSerializer;
 import util.dateSerialization.DocumentLocalDateTimeDeserializer;
 import util.dateSerialization.DocumentLocalDateTimeSerializer;
+import util.dateSerialization.LocalDateDeserializer;
+import util.dateSerialization.LocalDateSerializer;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -24,18 +23,23 @@ import com.newrelic.api.agent.NewRelic;
 import documents.model.constants.SectionType;
 import documents.model.constants.Visibility;
 
-@JsonIgnoreProperties(value = { "documentId", "sectionVersion" })
 @ToString
-public class DocumentSection {
+public class OldDocumentSection {
 
 	private Long sectionId;
 	private Long documentId;
 	private Long sectionVersion;
 
 	private SectionType type;
-	private String title;
-	private Long sectionPosition;
 	private Visibility state;
+	private Long sectionPosition;
+	private int numberOfComments;
+
+	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
+	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
+	private LocalDateTime lastModified;
+
+	private String title;
 	private String organizationName;
 	private String organizationDescription;
 	private String role;
@@ -54,21 +58,8 @@ public class DocumentSection {
 	private String highlights;
 
 	private String description;
-	private int numberOfComments;
 
-	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
-	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
-	private LocalDateTime lastModified;
-
-	public DocumentSection() {
-	}
-
-	public SectionType getType() {
-		return type;
-	}
-
-	public void setType(SectionType type) {
-		this.type = type;
+	public OldDocumentSection() {
 	}
 
 	public String getTitle() {
@@ -77,30 +68,6 @@ public class DocumentSection {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public Long getSectionId() {
-		return sectionId;
-	}
-
-	public void setSectionId(Long sectionId) {
-		this.sectionId = sectionId;
-	}
-
-	public Long getSectionPosition() {
-		return sectionPosition;
-	}
-
-	public void setSectionPosition(Long sectionPosition) {
-		this.sectionPosition = sectionPosition;
-	}
-
-	public Visibility getState() {
-		return state;
-	}
-
-	public void setState(Visibility state) {
-		this.state = state;
 	}
 
 	public String getOrganizationName() {
@@ -183,36 +150,20 @@ public class DocumentSection {
 		this.description = description;
 	}
 
-	// TODO: the following methods are here for convenience, will move them
-	// later.
-
-	public String asJSON() throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.writeValueAsString(this);
+	public Long getSectionId() {
+		return sectionId;
 	}
 
-	public static DocumentSection fromJSON(String json) {
+	public void setSectionId(Long sectionId) {
+		this.sectionId = sectionId;
+	}
 
-		final Logger logger = Logger.getLogger(DocumentSection.class.getName());
-
-		ObjectMapper mapper = new ObjectMapper();
-
-		try {
-			return mapper.readValue(json, DocumentSection.class);
-		} catch (IOException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
-
-		return null;
+	public Long getDocumentId() {
+		return documentId;
 	}
 
 	public void setDocumentId(Long documentId) {
 		this.documentId = documentId;
-	}
-
-	public Long getDocumentId() {
-		return this.documentId;
 	}
 
 	public Long getSectionVersion() {
@@ -223,12 +174,28 @@ public class DocumentSection {
 		this.sectionVersion = sectionVersion;
 	}
 
-	public void setNumberOfComments(int numberOfComments) {
-		this.numberOfComments = numberOfComments;
+	public SectionType getType() {
+		return type;
+	}
+
+	public void setType(SectionType type) {
+		this.type = type;
+	}
+
+	public Long getSectionPosition() {
+		return sectionPosition;
+	}
+
+	public void setSectionPosition(Long sectionPosition) {
+		this.sectionPosition = sectionPosition;
 	}
 
 	public int getNumberOfComments() {
 		return numberOfComments;
+	}
+
+	public void setNumberOfComments(int numberOfComments) {
+		this.numberOfComments = numberOfComments;
 	}
 
 	public LocalDateTime getLastModified() {
@@ -237,6 +204,36 @@ public class DocumentSection {
 
 	public void setLastModified(LocalDateTime lastModified) {
 		this.lastModified = lastModified;
+	}
+
+	public Visibility getState() {
+		return state;
+	}
+
+	public void setState(Visibility state) {
+		this.state = state;
+	}
+
+	public static OldDocumentSection fromJSON(String json) {
+
+		final Logger logger = Logger.getLogger(OldDocumentSection.class
+				.getName());
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		try {
+			return mapper.readValue(json, OldDocumentSection.class);
+		} catch (IOException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+
+		return null;
+	}
+
+	public String asJSON() throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(this);
 	}
 
 }

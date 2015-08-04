@@ -22,7 +22,7 @@ import com.newrelic.api.agent.NewRelic;
 import documents.domain.tables.DocumentSections;
 import documents.domain.tables.records.DocumentSectionsRecord;
 import documents.model.Document;
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
 
 @Repository
 public class DocumentSectionRepository implements IRepository<DocumentSection> {
@@ -255,8 +255,10 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	 */
 	private static DocumentSection generateDocumentSection(
 			Record4<String, Long, Long, Timestamp> existingRecord) {
+
 		DocumentSection fromJSON = DocumentSection.fromJSON(existingRecord
 				.value1());
+
 		fromJSON.setDocumentId(existingRecord.value2());
 		fromJSON.setSectionVersion(existingRecord.value3());
 		fromJSON.setLastModified(existingRecord.value4().toLocalDateTime());

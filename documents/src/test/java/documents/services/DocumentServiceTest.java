@@ -22,9 +22,9 @@ import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;
-import documents.model.DocumentSection;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
+import documents.model.document.sections.DocumentSection;
 import documents.repository.CommentRepository;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;
@@ -35,7 +35,8 @@ import documents.repository.IRepository;
 @RunWith(MockitoJUnitRunner.class)
 public class DocumentServiceTest {
 
-	private static final String JSON = "{" + "\"type\": \"organization\","
+	private static final String JSON = "{"
+			+ "\"type\": \"JobExperienceSection\","
 			+ "\"title\": \"experience\"," + "\"sectionId\": 124,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
@@ -44,7 +45,7 @@ public class DocumentServiceTest {
 			+ "\"startDate\": \"Sep 2010\"," + "\"endDate\": \"\","
 			+ "\"isCurrent\": true," + "\"location\": \"Portland, Oregon\","
 			+ "\"roleDescription\": \"Blah Blah Blah\","
-			+ "\"highlights\": \"I was in charge of...\"" + "}";
+			+ "\"highlights\":[\"I was in charge of...\"" + "]}";
 
 	@InjectMocks
 	private DocumentService service;
@@ -76,10 +77,15 @@ public class DocumentServiceTest {
 	public void loadSingleDocumentSectionTest() throws ElementNotFoundException {
 		long sectionId = 1;
 
-		String json = JSON;
+		// for some reason this test fails when executed from eclipse but works
+		// fine with "gradle documents:test" might be related to this
+		// https://github.com/FasterXML/jackson-databind/issues/528
 
-		Mockito.doReturn(DocumentSection.fromJSON(json)).when(dsRepository)
-				.get(sectionId);
+		// java.lang.IllegalStateException: Do not know how to construct
+		// standard type serializer for inclusion type: EXISTING_PROPERTY
+
+		DocumentSection fromJSON = DocumentSection.fromJSON(JSON);
+		Mockito.doReturn(fromJSON).when(dsRepository).get(sectionId);
 
 		DocumentSection documentSection = service.getDocumentSection(sectionId);
 
@@ -91,13 +97,16 @@ public class DocumentServiceTest {
 			throws ElementNotFoundException {
 		long documentId = 1;
 
-		String json1 = JSON;
+		// for some reason this test fails when executed from eclipse but works
+		// fine with "gradle documents:test" might be related to this
+		// https://github.com/FasterXML/jackson-databind/issues/528
 
-		String json2 = JSON;
+		// java.lang.IllegalStateException: Do not know how to construct
+		// standard type serializer for inclusion type: EXISTING_PROPERTY
 
 		Mockito.doReturn(
-				Arrays.asList(DocumentSection.fromJSON(json1),
-						DocumentSection.fromJSON(json2))).when(dsRepository)
+				Arrays.asList(DocumentSection.fromJSON(JSON),
+						DocumentSection.fromJSON(JSON))).when(dsRepository)
 				.getDocumentSections(documentId);
 
 		List<DocumentSection> documentSection = service

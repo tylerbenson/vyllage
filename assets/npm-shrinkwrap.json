@@ -12,7 +12,7 @@
       "dependencies": {
         "for-own": {
           "version": "0.1.3",
-          "from": "for-own@>=0.1.3 <0.2.0",
+          "from": "for-own@0.1.3",
           "dependencies": {
             "for-in": {
               "version": "0.1.4",
@@ -22,21 +22,21 @@
         },
         "is-plain-object": {
           "version": "2.0.1",
-          "from": "is-plain-object@>=2.0.1 <3.0.0",
+          "from": "is-plain-object@2.0.1",
           "dependencies": {
             "isobject": {
               "version": "1.0.2",
-              "from": "isobject@>=1.0.0 <2.0.0"
+              "from": "isobject@1.0.2"
             }
           }
         },
         "kind-of": {
           "version": "2.0.0",
-          "from": "kind-of@>=2.0.0 <3.0.0"
+          "from": "kind-of@2.0.0"
         },
         "mixin-object": {
           "version": "1.0.0",
-          "from": "mixin-object@>=1.0.0 <2.0.0",
+          "from": "mixin-object@1.0.0",
           "dependencies": {
             "for-in": {
               "version": "0.1.4",
@@ -44,11 +44,11 @@
             },
             "is-plain-object": {
               "version": "1.0.0",
-              "from": "is-plain-object@>=1.0.0 <2.0.0",
+              "from": "is-plain-object@1.0.0",
               "dependencies": {
                 "isobject": {
                   "version": "0.2.0",
-                  "from": "isobject@>=0.2.0 <0.3.0"
+                  "from": "isobject@0.2.0"
                 }
               }
             }
@@ -292,23 +292,23 @@
       "dependencies": {
         "lodash._arrayeach": {
           "version": "3.0.0",
-          "from": "lodash._arrayeach@>=3.0.0 <4.0.0"
+          "from": "lodash._arrayeach@3.0.0"
         },
         "lodash._baseeach": {
           "version": "3.0.4",
-          "from": "lodash._baseeach@>=3.0.0 <4.0.0",
+          "from": "lodash._baseeach@3.0.4",
           "dependencies": {
             "lodash.keys": {
               "version": "3.1.2",
-              "from": "lodash.keys@>=3.0.0 <4.0.0",
+              "from": "lodash.keys@3.1.2",
               "dependencies": {
                 "lodash._getnative": {
                   "version": "3.9.1",
-                  "from": "lodash._getnative@>=3.0.0 <4.0.0"
+                  "from": "lodash._getnative@3.9.1"
                 },
                 "lodash.isarguments": {
                   "version": "3.0.4",
-                  "from": "lodash.isarguments@>=3.0.0 <4.0.0"
+                  "from": "lodash.isarguments@3.0.4"
                 }
               }
             }
@@ -316,11 +316,11 @@
         },
         "lodash._bindcallback": {
           "version": "3.0.1",
-          "from": "lodash._bindcallback@>=3.0.0 <4.0.0"
+          "from": "lodash._bindcallback@3.0.1"
         },
         "lodash.isarray": {
           "version": "3.0.4",
-          "from": "lodash.isarray@>=3.0.0 <4.0.0"
+          "from": "lodash.isarray@3.0.4"
         }
       }
     },
@@ -620,7 +620,7 @@
         },
         "lodash._reinterpolate": {
           "version": "3.0.0",
-          "from": "lodash._reinterpolate@>=3.0.0 <4.0.0"
+          "from": "lodash._reinterpolate@3.0.0"
         },
         "lodash.escape": {
           "version": "3.0.0",
