@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
 import user.common.constants.RolesEnum;
@@ -316,9 +315,8 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "social/{network}/is-connected", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody boolean isSocialConnected(WebRequest webRequest,
+	public @ResponseBody boolean isSocialConnected(
 			@PathVariable String network, @AuthenticationPrincipal User user) {
-
 		return socialRepository.isConnected(user, network);
 	}
 
