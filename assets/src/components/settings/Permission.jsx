@@ -20,19 +20,24 @@ var Permission = React.createClass({
     var facebookSetting = filter(this.props.settings, {name: 'facebook'})[0] || {value: ''};
     var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {value: ''};
     var linkedInSetting = filter(this.props.settings, {name: 'linkedIn'})[0] || {value: ''};
+    var metatoken = document.getElementById('meta_token').content;
 
     if (settings.length > 0) {
       return (
         <div className="holder">     
           
-          <div className="content">            
+          <div className="content">       
+            <form action="/connect/facebook" method="POST">     
               <div className="right-part">
-                 <button className='small inverted' onClick={this.connectWithFacebook}>CONNECT</button>
+                 <button type="submit" className='small inverted'>CONNECT</button>
               </div>
               <div className="left-part">
                 Facebook
               </div>    
-              <input type="checkbox" />  Publish Vyllage updates on my timeline
+               <input type="hidden" name="_csrf" value={metatoken} />
+               <input type="hidden" name="scope" value="email,publish_actions" />
+               <input type="checkbox" />  Publish Vyllage updates on my timeline
+            </form>
           </div>    
                  
           <div className="content">            
