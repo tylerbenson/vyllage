@@ -41,6 +41,7 @@ import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
+import accounts.repository.SocialRepository;
 import accounts.service.AccountSettingsService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
@@ -70,6 +71,7 @@ public class AccountSettingsController {
 	private final AccountSettingsService accountSettingsService;
 	private final DocumentService documentService;
 	private final OrganizationRepository organizationRepository;
+	private final SocialRepository socialRepository;
 
 	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
 
@@ -82,12 +84,14 @@ public class AccountSettingsController {
 	public AccountSettingsController(final UserService userService,
 			final AccountSettingsService accountSettingsService,
 			final DocumentService documentService,
-			final OrganizationRepository organizationRepository) {
+			final OrganizationRepository organizationRepository,
+			final SocialRepository socialRepository) {
 		super();
 		this.userService = userService;
 		this.accountSettingsService = accountSettingsService;
 		this.documentService = documentService;
 		this.organizationRepository = organizationRepository;
+		this.socialRepository = socialRepository;
 
 		validators.put("phoneNumber", new PhoneNumberValidator());
 		validators.put("firstName", new NotNullValidator());
@@ -318,9 +322,7 @@ public class AccountSettingsController {
 	public @ResponseBody boolean isSocialConnected(WebRequest webRequest,
 			@PathVariable String network, @AuthenticationPrincipal User user) {
 
-		// expireTime != null && System.currentTimeMillis() >= expireTime;
-
-		return false;
+		return socialRepository.isConnected(user, network);
 	}
 
 	@ExceptionHandler(value = { IllegalArgumentException.class })
