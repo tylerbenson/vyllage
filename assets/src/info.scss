@@ -1,0 +1,93 @@
+@import "./components/common/variables";
+
+@import "jeet/scss/jeet/index";
+@import "./components/common/utilities";
+@import "./components/common/defaults";
+@import "./components/common/typography";
+
+.error {
+  #container {
+    padding: 0;
+  }
+
+  header {
+    background: none;
+    padding: 1.5em 1em;
+    position: static;
+    text-align: center;
+
+    .logo {
+      float: none;
+      font-size: 1.5em;
+
+      span {
+        color: $text-color;
+      }
+
+      &:hover {
+        border: none;
+      }
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: $secondary-color;
+    font-weight: bold;
+    line-height: 1.4;
+  }
+
+  h1 {
+    font-size: 2.25em;
+  }
+
+  h2 {
+    font-size: 1.93em;
+  }
+
+  h3 {
+    font-size: 1.49em;
+  }
+
+  p {
+    font-size: 1.15em;
+    margin: 0.35em 0;
+  }
+
+  a {
+    text-decoration: none;
+    transition: none;
+
+    &:hover {
+      border-bottom: $primary-color dashed 1px;
+    }
+  }
+
+  ul {
+    line-height: 1.4;
+    list-style-position: inside;
+  }
+
+  footer {
+    background: none;
+    margin-top: 3em;
+
+    .logo {
+      float: left;
+
+      span {
+        display: none;
+      }
+    }
+
+    nav ul li a {
+      color: lighten($secondary-color, 20%);
+
+      &:hover {
+        text-decoration: none;
+        color: lighten($secondary-color, 10%);
+      }
+    }
+  }
+}
