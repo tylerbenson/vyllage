@@ -32,11 +32,12 @@ var Permission = React.createClass({
                  <button type="submit" className='small inverted'>CONNECT</button>
               </div>
               <div className="left-part">
+               <i className="ion-social-facebook icon-facebook"></i>
                 Facebook
               </div>    
                <input type="hidden" name="_csrf" value={metatoken} />
                <input type="hidden" name="scope" value="email,publish_actions" />
-               <input type="checkbox" />  Publish Vyllage updates on my timeline
+               <input type="checkbox" className="social-checkbox" /> <span className="small-text"> Publish Vyllage updates on my timeline </span>
             </form>
           </div>    
                  
@@ -45,10 +46,11 @@ var Permission = React.createClass({
                  <button className='small inverted' onClick={this.connectWithTwitter}>CONNECT</button>
               </div>
               <div className="left-part">
+                <i className="ion-social-twitter icon-twitter"></i>
                 Twitter
               </div>
                          
-              <input className="input-checkbox"  type="checkbox" /> Tweet Vyllage updates on my timeline
+              <input className="social-checkbox"   type="checkbox" /> <span className="small-text">Tweet Vyllage updates on my timeline</span>
           </div>    
                 
 
@@ -57,10 +59,11 @@ var Permission = React.createClass({
                  <button className='small inverted' onClick={this.connectWithLinkedIn}>CONNECT</button>
               </div>
               <div className="left-part">
+                <i className="ion-social-linkedin icon-linkedIn"></i>
                 LinkedIn
               </div>
                          
-              <input className="input-checkbox" type="checkbox" /> Post Vyllage updates on my timeline
+              <input className="social-checkbox"  type="checkbox" />  <span className="small-text">Post Vyllage updates on my timeline</span>
           </div> 
 
 
