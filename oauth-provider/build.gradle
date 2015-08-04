@@ -1,9 +1,9 @@
 springBoot {
-	mainClass = 'oauth.Application'
+	mainClass = 'oauth-provider.Application'
 }
 
 jar {
-	baseName = 'spring-security-oauth-provider'
+	baseName = 'oauth-provider'
 }
 
 dependencies {

@@ -59,11 +59,9 @@ public class LTISecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 		http.requestMatchers().antMatchers("/lti/account").and()
 				.addFilterBefore(ltioAuthProviderProcessingFilter, UsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests().anyRequest().hasRole("LTI").and().csrf()
-				.requireCsrfProtectionMatcher(new RequestMatcherDisable());
+				.authorizeRequests().anyRequest().hasRole("LTI").and().csrf().disable();
 
-		http.authorizeRequests().antMatchers("/lti/login").permitAll().and().csrf()
-				.requireCsrfProtectionMatcher(new RequestMatcherDisable());
+		http.authorizeRequests().antMatchers("/lti/login").permitAll();
 
 		http.headers().disable();
 		http.authorizeRequests().anyRequest().authenticated();

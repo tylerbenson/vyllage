@@ -93,11 +93,11 @@ public class LMSAccountController {
 			// Set user name in Session
 			session.setAttribute("user_name", newUser.getUsername());
 		}
-		getCSRFToken(request).getToken();
+		setCSRFTokenInSession(request);
 		return "redirect:" + "/lti/login";
 	}
 
-	private CsrfToken getCSRFToken(HttpServletRequest request) {
+	private CsrfToken setCSRFTokenInSession(HttpServletRequest request) {
 		CsrfToken token = csrfTokenUtility.generateToken(request);
 		HttpSession session = request.getSession();
 		session.setAttribute("_csrf", token);

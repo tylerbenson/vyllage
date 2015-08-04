@@ -1,8 +1,11 @@
 package oauth.lti;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth.common.OAuthException;
 import org.springframework.security.oauth.common.signature.SharedConsumerSecretImpl;
@@ -17,19 +20,21 @@ import oauth.utilities.Contant;
 public class LMSConsumerDetailsService implements ConsumerDetailsService {
 
 	final static Logger log = LoggerFactory.getLogger(LMSConsumerDetailsService.class);
+	private final Environment environment;
+
+	@Inject
+	public LMSConsumerDetailsService(final Environment environment) {
+		super();
+		this.environment = environment;
+	}
 
 	@Override
 	public ConsumerDetails loadConsumerByConsumerKey(String consumerKey) throws OAuthException {
 
 		consumerKey = StringUtils.trimToNull(consumerKey);
 		BaseConsumerDetails cd;
-
-		// TODO: Read the key and secret value from properties file
-		// LMSKey ltiKey = new
-		// LMSKey(environment.getProperty(Contant.OAUTH_KEY),
-		// environment.getProperty(Contant.OAUTH_SECRET)) ;
-
-		LMSKey ltiKey = new LMSKey(Contant.OAUTH_KEY, Contant.OAUTH_SECRET);
+		LMSKey ltiKey = new LMSKey(environment.getProperty(Contant.OAUTH_KEY),
+				environment.getProperty(Contant.OAUTH_SECRET));
 
 		cd = new BaseConsumerDetails();
 		cd.setConsumerKey(consumerKey);
