@@ -43,7 +43,24 @@ var Organization = React.createClass({
   handleChange: function(key, e) {
     // e.preventDefault();
     var section = this.state.section;
-    section[key] = e.target.value;
+    if(key === 'highlights') {
+      var input = e.target.value.trim().split('\n');
+      var highlights = [];
+
+      for(var i=0;i<input.length;i++) {
+        var highlight = input[i].trim();
+        if(highlight.length > 0) {
+          highlights.push(highlight);
+        }
+      }
+
+      section[key] = highlights;
+      console.log(section[key]);
+    }
+    else {
+      section[key] = e.target.value;
+    }
+
     this.setState({section: section});
   },
   toggleCurrent: function () {
@@ -82,6 +99,8 @@ var Organization = React.createClass({
     var placeholders = this.props.placeholders || {};
     var isDragging = this.getDragState('section').isDragging;
     var isHovering = this.getDropState('section').isHovering;
+
+    var highlights = section.highlights instanceof Array ? section.highlights.join('\n') : '';
 
     var classes = cx({
       'dragged': isDragging,
@@ -194,7 +213,7 @@ var Organization = React.createClass({
                   style={uiEditMode || (section.highlights && section.highlights.length > 0) ? {}: {display: 'none'}}
                   rows="1"
                   placeholder={placeholders.highlights || "Note at least three (3) notable accomplishments achieved during this position.."}
-                  value={section.highlights}
+                  defaultValue={highlights}
                   onChange={this.handleChange.bind(this, 'highlights')}
                 ></Textarea>
               </div>

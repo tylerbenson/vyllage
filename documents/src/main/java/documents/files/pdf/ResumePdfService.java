@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 import com.lowagie.text.DocumentException;
 
 import documents.model.DocumentHeader;
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
 
 @Service
 public class ResumePdfService {
@@ -45,7 +44,7 @@ public class ResumePdfService {
 		ctx.setVariable("header", resumeHeader);
 
 		ctx.setVariable("sections", sections.stream().sorted(sortSections())
-				.map(formatSection()).collect(Collectors.toList()));
+				.collect(Collectors.toList()));
 
 		String htmlContent = templateEngine.process("pdf-resume", ctx);
 
@@ -71,21 +70,6 @@ public class ResumePdfService {
 
 		resumeHeader.setPhoneNumber(formatter.print(
 				resumeHeader.getPhoneNumber(), Locale.US));
-	}
-
-	/**
-	 * Applies Locale.US formatting to section fields transforming the section
-	 * description's *s into a list.
-	 * 
-	 */
-	protected Function<? super DocumentSection, ? extends DocumentSection> formatSection() {
-		return s -> {
-			ListFormatter listFormatter = new ListFormatter();
-			s.setDescription(listFormatter.print(s.getDescription(), Locale.US));
-			s.setRoleDescription(listFormatter.print(s.getRoleDescription(),
-					Locale.US));
-			return s;
-		};
 	}
 
 	/**

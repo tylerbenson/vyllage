@@ -1,6 +1,7 @@
 package documents.repository;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.Application;
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
+import documents.model.document.sections.EducationSection;
+import documents.utilities.DocumentSectionDataMigration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -21,19 +24,29 @@ import documents.model.DocumentSection;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class DocumentSectionRepositoryTest {
 
-	private static final String JSON = "{" + "\"type\": \"organization\","
+	@Autowired
+	private DocumentSectionRepository dsRepository;
+
+	@Autowired
+	private DocumentSectionDataMigration migration;
+
+	private static final String JSON = "{"
+			+ "\"type\": \"JobExperienceSection\","
 			+ "\"title\": \"experience\"," + "\"sectionId\": null,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
 			+ "\"role\": \"Manager, Local Accounts\","
 			+ "\"startDate\": \"Sep 2010\"," + "\"endDate\": \"\","
-			+ "\"isCurrent\": true," + "\"location\": \"Portland, Oregon\","
+			+ "\"isCurrent\":true," + "\"location\": \"Portland, Oregon\","
 			+ "\"roleDescription\": \"Blah Blah Blah\","
-			+ "\"highlights\": \"I was in charge of...\"" + "}";
+			+ "\"highlights\":[\"I was in charge of...\"" + "]}";
 
-	@Autowired
-	private DocumentSectionRepository dsRepository;
+	@Before
+	public void setUp() throws Exception {
+		assert migration != null;
+		migration.migrate();
+	}
 
 	@Test
 	public void retrieveDocumentSectionTest() throws ElementNotFoundException {
@@ -65,19 +78,20 @@ public class DocumentSectionRepositoryTest {
 			ElementNotFoundException {
 		String highlights = "I was in charge of many people.";
 
-		DocumentSection documentSection = dsRepository.get(124L);
+		EducationSection documentSection = (EducationSection) dsRepository
+				.get(124L);
 		Long sectionVersion = documentSection.getSectionVersion() + 1;
-		// DocumentSection documentSection = DocumentSection.fromJSON(JSON);
 		documentSection.setSectionId(124L);
 
-		documentSection.setHighlights(highlights);
+		documentSection.getHighlights().add(highlights);
 		documentSection.setDocumentId(0L);
 
 		DocumentSection savedDocumentSection = dsRepository
 				.save(documentSection);
 
 		Assert.assertNotNull(documentSection);
-		Assert.assertEquals(highlights, savedDocumentSection.getHighlights());
+		Assert.assertTrue(((EducationSection) savedDocumentSection)
+				.getHighlights().contains(highlights));
 		Assert.assertTrue("Expected version " + sectionVersion + " got "
 				+ savedDocumentSection.getSectionVersion(),
 				sectionVersion.equals(savedDocumentSection.getSectionVersion()));
@@ -85,7 +99,8 @@ public class DocumentSectionRepositoryTest {
 
 	@Test
 	public void deleteDocumentSectionTest() {
-		DocumentSection documentSection = DocumentSection.fromJSON(JSON);
+		EducationSection documentSection = (EducationSection) DocumentSection
+				.fromJSON(JSON);
 		documentSection.setDocumentId(0L);
 
 		DocumentSection savedDocumentSection = dsRepository

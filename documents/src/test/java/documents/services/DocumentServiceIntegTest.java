@@ -29,13 +29,14 @@ import documents.Application;
 import documents.model.AccountContact;
 import documents.model.Document;
 import documents.model.DocumentHeader;
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
 import documents.repository.CommentRepository;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SuggestionRepository;
+import documents.utilities.DocumentSectionDataMigration;
 import documents.utilities.OrderSectionValidator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -67,8 +68,13 @@ public class DocumentServiceIntegTest {
 
 	private DocumentService service;
 
+	@Inject
+	private DocumentSectionDataMigration migration;
+
 	@Before
 	public void setUp() {
+		migration.migrate();
+
 		service = new DocumentService(documentRepository,
 				documentSectionRepository, commentRepository,
 				suggestionRepository, accountService, orderSectionValidator,
@@ -80,8 +86,8 @@ public class DocumentServiceIntegTest {
 			ElementNotFoundException {
 
 		Long documentId = 0L;
-		service.orderDocumentSections(documentId,
-				Arrays.asList(123L, 125L, 126L, 124L));
+		service.orderDocumentSections(documentId, Arrays.asList(123L, 125L,
+				126L, 124L, 127L, 128L, 129L, 130L, 131L, 132L, 133L));
 
 		List<DocumentSection> resumeSections = service
 				.getDocumentSections(documentId);

@@ -12,9 +12,8 @@ var SectionHeader = React.createClass({
     });
   },
   render: function () {
-    // var add = (this.props.type !== 'freeform');
-    var sections = filter(this.props.sections, {title: 'career goal'});
-    var showAdd = !((this.props.title === 'career goal') && (sections.length > 0));
+    var sections = filter(this.props.sections, {title: 'summary'});
+    var showAdd = !((this.props.title === 'summary') && (sections.length > 0));
     return  (
       <div className='header'>
         <div className='title'>

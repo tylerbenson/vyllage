@@ -262,7 +262,7 @@ var GetFeedbackStore = Reflux.createStore({
             .set('Accept', 'application/json')
             .end(function (err, res) {
               if(res.ok) {
-                this.recommendations = res.body.recommended;
+                this.recommendations = arrayDistinct(res.body.recommended.concat(res.body.recent));
               }
               else {
                 this.recommendations = [];
@@ -338,5 +338,18 @@ var GetFeedbackStore = Reflux.createStore({
     }
   }
 });
+
+//there might be a better way to do this...
+function arrayDistinct(array) {
+    var a = array.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+};
 
 module.exports = GetFeedbackStore;

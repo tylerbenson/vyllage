@@ -19,7 +19,8 @@ import documents.controller.ResumeController;
 import documents.files.pdf.ResumePdfService;
 import documents.model.Comment;
 import documents.model.Document;
-import documents.model.DocumentSection;
+import documents.model.document.sections.DocumentSection;
+import documents.model.document.sections.EducationSection;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
@@ -30,20 +31,21 @@ import documents.services.NotificationService;
 public class ResumeControllerTest {
 
 	private static final String SECTION_124 = "{"
-			+ "\"type\": \"organization\"," + "\"title\": \"experience\","
-			+ "\"sectionId\": 124," + "\"sectionPosition\": 2,"
-			+ "\"state\": \"shown\","
+			+ "\"type\": \"JobExperienceSection\","
+			+ "\"title\": \"experience\"," + "\"sectionId\": 124,"
+			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
 			+ "\"role\": \"Manager, Local Accounts\","
 			+ "\"startDate\": \"Sep 2010\"," + "\"endDate\": \"\","
 			+ "\"isCurrent\": true," + "\"location\": \"Portland, Oregon\","
 			+ "\"roleDescription\": \"Blah Blah Blah\","
-			+ "\"highlights\": \"I was in charge of...\"" + "}";
+			+ "\"highlights\":[\"I was in charge of...\"" + "]}";
 
-	private static final String SECTION_123 = "{" + "\"type\": \"freeform\","
-			+ "\"title\": \"career goal\"," + "\"sectionId\": 123,"
-			+ "\"sectionPosition\": 1," + "\"state\": \"shown\","
+	private static final String SECTION_123 = "{"
+			+ "\"type\": \"SummarySection\"," + "\"title\": \"career goal\","
+			+ "\"sectionId\": 123," + "\"sectionPosition\": 1,"
+			+ "\"state\": \"shown\","
 			+ "\"description\": \"this is my goal statement.\"" + "}";
 
 	@SuppressWarnings("unused")
@@ -102,7 +104,7 @@ public class ResumeControllerTest {
 		Mockito.when(documentService.getDocumentSections(documentId))
 				.thenReturn(
 						Arrays.asList(DocumentSection.fromJSON(SECTION_123),
-								DocumentSection.fromJSON(SECTION_124)));
+								EducationSection.fromJSON(SECTION_124)));
 
 		given().standaloneSetup(controller).when()
 				.get("/resume/" + documentId + "/section/").then()
@@ -122,7 +124,7 @@ public class ResumeControllerTest {
 				document);
 
 		Mockito.when(documentService.getDocumentSection(124L)).thenReturn(
-				DocumentSection.fromJSON(SECTION_124));
+				EducationSection.fromJSON(SECTION_124));
 
 		given().standaloneSetup(controller).when()
 				.post("/resume/" + documentId + "/section/").then()
