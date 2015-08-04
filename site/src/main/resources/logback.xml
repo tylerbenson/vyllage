@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+		<syslogHost>logs3.papertrailapp.com</syslogHost>
+		<port>42490</port>
+		<facility>USER</facility>
+		<suffixPattern>Vyllage %highlight([%.-1level]) %35.35logger{35}:\t%m\t%cyan%ex{5}</suffixPattern>
+		<throwableExcluded>true</throwableExcluded>
+	</appender>
+
+	<root level="INFO">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="SYSLOG" />
+	</root>
+
+</configuration>
