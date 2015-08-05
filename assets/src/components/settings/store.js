@@ -109,7 +109,7 @@ module.exports = Reflux.createStore({
 
     
 
-    // this.facebook = true;
+    // this.facebook = false;
     // this.update();
 
     // console.log('working');
