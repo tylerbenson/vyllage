@@ -18,7 +18,7 @@ module.exports = Reflux.createStore({
     }
     this.settings = [];
     this.activeSettingsType = 'profile';
-    this.facebook = true;
+    this.facebook;
   },
   onGetSettings: function () {
     request
@@ -98,21 +98,14 @@ module.exports = Reflux.createStore({
 
   onMakeFacebookDisconnect : function(){
     
+    request
+    .del('/disconnect/facebook')
+    .set(this.tokenHeader, this.tokenValue) 
+    .end(function (err, res) {
+      this.facebook = res.body;
+      this.update();
+    }.bind(this));
 
-    // request
-    // .del('/connect/facebook')
-    // .set('Accept', 'application/json')
-    // .end(function (err, res) {
-    //   this.facebook = res.body;
-    //   this.update();
-    // }.bind(this));
-
-    
-
-    // this.facebook = false;
-    // this.update();
-
-    // console.log('working');
 
   },
   update: function () {
