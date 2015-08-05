@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.constants.RolesEnum;
-import accounts.model.account.AccountContact;
+import user.common.web.UserInfo;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.AvatarSourceEnum;
@@ -118,20 +118,12 @@ public class AccountSettingsController {
 	}
 
 	@ModelAttribute("userInfo")
-	public AccountContact userInfo(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
+	public UserInfo userInfo(@AuthenticationPrincipal User user) {
 		if (user == null) {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(accountSettingsService
-						.getAccountSettings(Arrays.asList(user.getUserId())));
-
-		if (contactDataForUsers.isEmpty()) {
-			return null;
-		}
-		return contactDataForUsers.get(0);
+		return new UserInfo(user);
 	}
 
 	// for header
