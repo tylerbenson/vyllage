@@ -18,6 +18,8 @@ public class AccountContact {
 
 	private String avatarUrl;
 
+	private String tagline;
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -117,6 +119,14 @@ public class AccountContact {
 
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
+	}
+
+	public String getTagline() {
+		return tagline;
+	}
+
+	public void setTagline(String tagline) {
+		this.tagline = tagline;
 	}
 
 }

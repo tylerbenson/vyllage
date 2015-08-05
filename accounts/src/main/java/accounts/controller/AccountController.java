@@ -141,6 +141,7 @@ public class AccountController {
 	 */
 	@RequestMapping(value = "{userId}/advisors", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountContact> getAdvisorsForUser(
+			HttpServletRequest request,
 			@PathVariable final Long userId,
 			@RequestParam(value = "excludeIds", required = false) final List<Long> excludeIds,
 			@RequestParam(value = "firstNameFilter", required = false) String firstNameFilter,
@@ -162,12 +163,13 @@ public class AccountController {
 		if (emailFilter != null)
 			filters.put("email", emailFilter);
 
-		return userContactSuggestionService
+		List<User> users = userContactSuggestionService
 				.getSuggestions(user, filters, limitForEmptyFilter).stream()
 				.filter(u -> !excludeIds.contains(u.getUserId()))
-				.map(u -> userService.getAccountContact(u))
 				.collect(Collectors.toList());
 
+		return userService.getAccountContacts(request, users.stream()
+				.map(u -> u.getUserId()).collect(Collectors.toList()));
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,
@@ -301,9 +303,10 @@ public class AccountController {
 
 	@RequestMapping(value = "contact", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountContact> getContactInformation(
+			HttpServletRequest request,
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {
 
-		return userService.getAccountContactForUsers(userIds);
+		return userService.getAccountContacts(request, userIds);
 	}
 
 	@RequestMapping(value = "ping", method = RequestMethod.GET)

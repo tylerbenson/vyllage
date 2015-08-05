@@ -31,7 +31,7 @@ public class AccountSettingRepository {
 	}
 
 	/**
-	 * Retrieves account settings based on user user ids.
+	 * Retrieves account settings based on user ids.
 	 * 
 	 * @param User
 	 *            ids
@@ -85,6 +85,11 @@ public class AccountSettingRepository {
 		return setting;
 	}
 
+	/**
+	 * Deletes all account settings that belong to the user id.
+	 * 
+	 * @param userId
+	 */
 	public void deleteByUserId(Long userId) {
 		sql.delete(ACCOUNT_SETTING).where(ACCOUNT_SETTING.USER_ID.eq(userId))
 				.execute();

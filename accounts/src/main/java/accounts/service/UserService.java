@@ -384,10 +384,11 @@ public class UserService {
 	/**
 	 * Returns account contact information.
 	 */
-	public AccountContact getAccountContact(User user) {
+	public AccountContact getAccountContact(HttpServletRequest request,
+			User user) {
 
-		List<AccountContact> accountContacts = this
-				.getAccountContactForUsers(Arrays.asList(user.getUserId()));
+		List<AccountContact> accountContacts = this.getAccountContacts(request,
+				Arrays.asList(user.getUserId()));
 
 		if (accountContacts != null && !accountContacts.isEmpty())
 			return accountContacts.get(0); // only one
@@ -397,22 +398,41 @@ public class UserService {
 
 	/**
 	 * Returns account contact information for several users.
+	 * 
+	 * @param request
 	 */
-	public List<AccountContact> getAccountContactForUsers(List<Long> userIds) {
+	public List<AccountContact> getAccountContacts(HttpServletRequest request,
+			List<Long> userIds) {
 
 		if (userIds == null || userIds.isEmpty())
 			return Collections.emptyList();
 
+		// getting settings
 		List<AccountSetting> accountSettings = accountSettingsService
 				.getAccountSettings(userIds);
 
+		// mapping settings by user
 		Map<Long, List<AccountSetting>> map = accountSettings.stream().collect(
 				Collectors.groupingBy((AccountSetting as) -> as.getUserId(),
 						Collectors.mapping((AccountSetting as) -> as,
 								Collectors.toList())));
 
-		return map.entrySet().stream().map(e -> this.mapAccountContact(e))
-				.map(addAvatarUrl()).collect(Collectors.toList());
+		// generating account contact
+		List<AccountContact> accountContacts = map.entrySet().stream()
+				.map(e -> this.mapAccountContact(e)).map(addAvatarUrl())
+				.collect(Collectors.toList());
+
+		// getting taglines
+		Map<String, String> taglines = documentService
+				.getDocumentHeaderTagline(request, accountContacts.stream()
+						.map(ac -> ac.getUserId()).collect(Collectors.toList()));
+
+		// adding taglines to each user
+		if (taglines != null && !taglines.isEmpty())
+			accountContacts.forEach(ac -> ac.setTagline(taglines.getOrDefault(
+					ac.getUserId().toString(), "")));
+
+		return accountContacts;
 	}
 
 	private Function<? super AccountContact, ? extends AccountContact> addAvatarUrl() {
