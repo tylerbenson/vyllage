@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -381,20 +382,36 @@ public class UserService {
 	}
 
 	/**
-	 * Returns account contact information
+	 * Returns account contact information.
 	 */
-	public List<AccountContact> getAccountContactForUsers(
-			List<AccountSetting> accountSettings) {
+	public AccountContact getAccountContact(User user) {
 
-		if (accountSettings == null || accountSettings.isEmpty())
-			return Arrays.asList();
+		List<AccountContact> accountContacts = this
+				.getAccountContactForUsers(Arrays.asList(user.getUserId()));
+
+		if (accountContacts != null && !accountContacts.isEmpty())
+			return accountContacts.get(0); // only one
+
+		return addAvatarUrl().apply(new AccountContact(user));
+	}
+
+	/**
+	 * Returns account contact information for several users.
+	 */
+	public List<AccountContact> getAccountContactForUsers(List<Long> userIds) {
+
+		if (userIds == null || userIds.isEmpty())
+			return Collections.emptyList();
+
+		List<AccountSetting> accountSettings = accountSettingsService
+				.getAccountSettings(userIds);
 
 		Map<Long, List<AccountSetting>> map = accountSettings.stream().collect(
 				Collectors.groupingBy((AccountSetting as) -> as.getUserId(),
 						Collectors.mapping((AccountSetting as) -> as,
 								Collectors.toList())));
 
-		return map.entrySet().stream().map(UserService::mapAccountContact)
+		return map.entrySet().stream().map(e -> this.mapAccountContact(e))
 				.map(addAvatarUrl()).collect(Collectors.toList());
 	}
 
@@ -419,7 +436,7 @@ public class UserService {
 	 * @param entry
 	 * @return
 	 */
-	protected static AccountContact mapAccountContact(
+	protected AccountContact mapAccountContact(
 			Entry<Long, List<AccountSetting>> entry) {
 		AccountContact ac = new AccountContact();
 
@@ -902,4 +919,5 @@ public class UserService {
 
 		this.accountSettingsService.setAccountSetting(newUser, setting);
 	}
+
 }
