@@ -385,7 +385,7 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/recent-users", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
-	public @ResponseBody List<AccountNames> getRecentUsers(
+	public @ResponseBody List<AccountContact> getRecentUsers(
 			HttpServletRequest request,
 			@PathVariable final Long documentId,
 			@RequestParam(value = "excludeIds", required = false) final List<Long> excludeIds)
@@ -401,7 +401,8 @@ public class ResumeController {
 		if (recentUsersForDocument.size() == 0)
 			return Arrays.asList();
 
-		return accountService.getNamesForUsers(request, recentUsersForDocument);
+		return accountService.getContactDataForUsers(request,
+				recentUsersForDocument);
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.PUT, consumes = "application/json")

@@ -3,8 +3,6 @@ package accounts.controllers;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,10 +12,8 @@ import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 import user.common.User;
 import accounts.controller.AccountController;
-import accounts.model.account.settings.AccountSetting;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
-import accounts.service.AccountSettingsService;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
 import accounts.service.contactSuggestion.UserContactSuggestionService;
@@ -34,8 +30,6 @@ public class AccountControllerTest {
 
 	private DocumentLinkService documentLinkService = mock(DocumentLinkService.class);
 
-	private AccountSettingsService accountSettingsService = mock(AccountSettingsService.class);
-
 	private UserContactSuggestionService userContactSuggestionService = mock(UserContactSuggestionService.class);
 
 	private ObjectMapper mapper = new ObjectMapper();
@@ -46,8 +40,8 @@ public class AccountControllerTest {
 	public void setUp() {
 
 		contoller = new AccountController(environment, userService,
-				documentLinkService, accountSettingsService,
-				userContactSuggestionService, encryptor, mapper);
+				documentLinkService, userContactSuggestionService, encryptor,
+				mapper);
 	}
 
 	@Test
@@ -73,13 +67,8 @@ public class AccountControllerTest {
 
 		User user = mock(User.class);
 
-		AccountSetting ac = new AccountSetting(null, userId, "avatar",
-				"facebook", null);
-
 		when(userService.getAvatar(userId)).thenReturn(facebookUrl);
 		when(userService.getUser(userId)).thenReturn(user);
-		when(accountSettingsService.getAccountSetting(user, "avatar"))
-				.thenReturn(Arrays.asList(ac));
 
 		String avatarUrl = contoller.getAvatar(userId);
 
@@ -99,8 +88,6 @@ public class AccountControllerTest {
 
 		when(userService.getAvatar(userId)).thenReturn(gravatarUrl);
 		when(userService.getUser(userId)).thenReturn(user);
-		when(accountSettingsService.getAccountSetting(user, "avatar"))
-				.thenReturn(null);
 
 		String avatarUrl = contoller.getAvatar(userId);
 

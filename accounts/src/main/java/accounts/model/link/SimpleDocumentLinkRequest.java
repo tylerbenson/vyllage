@@ -9,7 +9,7 @@ public class SimpleDocumentLinkRequest {
 
 	private String documentType;
 
-	private boolean allowGuestComments = false;
+	private boolean allowGuestComments = true;
 
 	public Long getDocumentId() {
 		return documentId;

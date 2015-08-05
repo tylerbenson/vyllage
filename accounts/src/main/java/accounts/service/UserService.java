@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -381,21 +382,57 @@ public class UserService {
 	}
 
 	/**
-	 * Returns account contact information
+	 * Returns account contact information.
 	 */
-	public List<AccountContact> getAccountContactForUsers(
-			List<AccountSetting> accountSettings) {
+	public AccountContact getAccountContact(HttpServletRequest request,
+			User user) {
 
-		if (accountSettings == null || accountSettings.isEmpty())
-			return Arrays.asList();
+		List<AccountContact> accountContacts = this.getAccountContacts(request,
+				Arrays.asList(user.getUserId()));
 
+		if (accountContacts != null && !accountContacts.isEmpty())
+			return accountContacts.get(0); // only one
+
+		return addAvatarUrl().apply(new AccountContact(user));
+	}
+
+	/**
+	 * Returns account contact information for several users.
+	 * 
+	 * @param request
+	 */
+	public List<AccountContact> getAccountContacts(HttpServletRequest request,
+			List<Long> userIds) {
+
+		if (userIds == null || userIds.isEmpty())
+			return Collections.emptyList();
+
+		// getting settings
+		List<AccountSetting> accountSettings = accountSettingsService
+				.getAccountSettings(userIds);
+
+		// mapping settings by user
 		Map<Long, List<AccountSetting>> map = accountSettings.stream().collect(
 				Collectors.groupingBy((AccountSetting as) -> as.getUserId(),
 						Collectors.mapping((AccountSetting as) -> as,
 								Collectors.toList())));
 
-		return map.entrySet().stream().map(UserService::mapAccountContact)
-				.map(addAvatarUrl()).collect(Collectors.toList());
+		// generating account contact
+		List<AccountContact> accountContacts = map.entrySet().stream()
+				.map(e -> this.mapAccountContact(e)).map(addAvatarUrl())
+				.collect(Collectors.toList());
+
+		// getting taglines
+		Map<String, String> taglines = documentService
+				.getDocumentHeaderTagline(request, accountContacts.stream()
+						.map(ac -> ac.getUserId()).collect(Collectors.toList()));
+
+		// adding taglines to each user
+		if (taglines != null && !taglines.isEmpty())
+			accountContacts.forEach(ac -> ac.setTagline(taglines.getOrDefault(
+					ac.getUserId().toString(), "")));
+
+		return accountContacts;
 	}
 
 	private Function<? super AccountContact, ? extends AccountContact> addAvatarUrl() {
@@ -419,7 +456,7 @@ public class UserService {
 	 * @param entry
 	 * @return
 	 */
-	protected static AccountContact mapAccountContact(
+	protected AccountContact mapAccountContact(
 			Entry<Long, List<AccountSetting>> entry) {
 		AccountContact ac = new AccountContact();
 
@@ -798,8 +835,12 @@ public class UserService {
 			avatarSetting = Optional.ofNullable(avatarSettings.get(0));
 
 		} catch (ElementNotFoundException e) {
-			// not really important
-			logger.warning(ExceptionUtils.getStackTrace(e));
+			// create default
+			AccountSetting ac = new AccountSetting(null, userId, "avatar",
+					AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
+					Privacy.PUBLIC.name().toLowerCase());
+
+			accountSettingsService.setAccountSetting(user, ac);
 		}
 
 		if (avatarSetting.isPresent()
@@ -902,4 +943,5 @@ public class UserService {
 
 		this.accountSettingsService.setAccountSetting(newUser, setting);
 	}
+
 }
