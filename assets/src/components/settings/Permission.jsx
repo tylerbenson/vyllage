@@ -5,22 +5,25 @@ var SettingsMixin = require('./mixin');
 
 var Permission = React.createClass({
   mixins: [SettingsMixin],
-  linkedInHandler: function (e) {
-    var re = new RegExp(/^https?:\/\//);
-    var url = re.test(e.target.value) ? e.target.value: 'http://' + e.target.value
-    this.changeHandler('linkedIn', {
-      target: {
-        value: url
-      }
-    })
+
+  componentWillMount: function(){
+
+
+
   },
+
   render: function () {
+    
     var settings = this.props.settings || [];
-    // var urlSetting = filter(this.props.settings, {name: 'url'})[0] || {value: ''};
-    var facebookSetting = filter(this.props.settings, {name: 'facebook'})[0] || {value: ''};
-    var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {value: ''};
-    var linkedInSetting = filter(this.props.settings, {name: 'linkedIn'})[0] || {value: ''};
     var metatoken = document.getElementById('meta_token').content;
+
+    if( this.props.facebook == false){
+        var fbConnectButton = <button name="facebook-connect" type="submit" className='small inverted' value="connect">Connect</button>;
+    }else{
+        var fbConnectButton = <button name="facebook-disconnect" type="submit" className='small' value="disconnect">Connected</button>;
+    }
+
+
 
     if (settings.length > 0) {
       return (
@@ -29,7 +32,7 @@ var Permission = React.createClass({
           <div className="content">       
             <form action="/connect/facebook" method="POST">     
               <div className="right-part">
-                 <button type="submit" className='small inverted'>CONNECT</button>
+                  {fbConnectButton}                 
               </div>
               <div className="left-part">
                <i className="ion-social-facebook icon-facebook"></i>

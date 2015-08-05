@@ -18,6 +18,7 @@ module.exports = Reflux.createStore({
     }
     this.settings = [];
     this.activeSettingsType = 'profile';
+    this.facebook = true;
   },
   onGetSettings: function () {
     request
@@ -27,6 +28,16 @@ module.exports = Reflux.createStore({
       this.settings = res.body;
       this.update();
     }.bind(this));
+
+    request
+    .get('/account/social/fasebook/is-connected')
+    .set('Accept', 'application/json')
+    .end(function (err, res) {
+      this.facebook = false;
+      this.update();
+    }.bind(this));
+
+
   },
   onUpdateSettings: function (options) {
     options = options || {};
@@ -87,13 +98,15 @@ module.exports = Reflux.createStore({
   update: function () {
     this.trigger({
       settings: this.settings,
-      activeSettingsType: this.activeSettingsType
+      activeSettingsType: this.activeSettingsType,
+      facebook : this.facebook
     });
   },
   getInitialState: function () {
     return {
       settings: this.settings,
-      activeSettingsType: this.activeSettingsType
+      activeSettingsType: this.activeSettingsType ,
+      facebook : this.facebook
     } ;
   }
 })
