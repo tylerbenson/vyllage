@@ -30,10 +30,10 @@ module.exports = Reflux.createStore({
     }.bind(this));
 
     request
-    .get('/account/social/fasebook/is-connected')
+    .get('/account/social/facebook/is-connected')
     .set('Accept', 'application/json')
     .end(function (err, res) {
-      this.facebook = false;
+      this.facebook = res.body;
       this.update();
     }.bind(this));
 

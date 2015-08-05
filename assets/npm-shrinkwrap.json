@@ -730,7 +730,7 @@
       "dependencies": {
         "object-assign": {
           "version": "2.1.1",
-          "from": "object-assign@2.1.1"
+          "from": "object-assign@>=2.0.0 <3.0.0"
         }
       }
     },
