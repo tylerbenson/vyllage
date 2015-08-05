@@ -120,3 +120,11 @@ After the user changes his email address the value is stored under the name **ne
 		"privacy":"private"
 	}]
 ```
+
+# Check if a user is connected to a certain social network
+## GET /account/social/{network}/is-connected
++ network: (String, `facebook`), valid networks: facebook.
++ Response: true | false.
+ 
+
+

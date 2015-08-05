@@ -15,10 +15,10 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import user.common.User;
+import user.common.web.AccountContact;
 
 import com.newrelic.api.agent.NewRelic;
 
-import documents.model.AccountContact;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;

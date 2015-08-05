@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
 import java.sql.Date;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,7 +40,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
-import accounts.model.account.AccountContact;
+import user.common.web.AccountContact;
+import user.common.web.UserInfo;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.ChangePasswordForm;
@@ -105,20 +105,12 @@ public class AccountController {
 	}
 
 	@ModelAttribute("userInfo")
-	public AccountContact userInfo(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
+	public UserInfo userInfo(@AuthenticationPrincipal User user) {
 		if (user == null) {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(accountSettingsService
-						.getAccountSettings(Arrays.asList(user.getUserId())));
-
-		if (contactDataForUsers.isEmpty()) {
-			return null;
-		}
-		return contactDataForUsers.get(0);
+		return new UserInfo(user);
 	}
 
 	@RequestMapping(value = "roles", method = RequestMethod.GET, produces = "application/json")

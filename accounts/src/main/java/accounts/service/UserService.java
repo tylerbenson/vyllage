@@ -1,7 +1,6 @@
 package accounts.service;
 
 import java.io.IOException;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -39,8 +38,8 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
+import user.common.web.AccountContact;
 import accounts.model.BatchAccount;
-import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.settings.AccountSetting;
@@ -396,8 +395,7 @@ public class UserService {
 								Collectors.toList())));
 
 		return map.entrySet().stream().map(UserService::mapAccountContact)
-				.map(setUserRegisteredOn()).map(addAvatarUrl())
-				.collect(Collectors.toList());
+				.map(addAvatarUrl()).collect(Collectors.toList());
 	}
 
 	private Function<? super AccountContact, ? extends AccountContact> addAvatarUrl() {
@@ -412,21 +410,6 @@ public class UserService {
 			}
 			return ac;
 
-		};
-	}
-
-	private Function<? super AccountContact, ? extends AccountContact> setUserRegisteredOn() {
-		return ac -> {
-			// hmmm, this should never happen...
-			try {
-				ac.setRegisteredOn(this.getUser(ac.getUserId())
-						.getDateCreated().toInstant(ZoneOffset.UTC)
-						.getEpochSecond());
-			} catch (UserNotFoundException e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
-			}
-			return ac;
 		};
 	}
 

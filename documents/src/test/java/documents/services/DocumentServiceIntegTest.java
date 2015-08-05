@@ -22,11 +22,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import user.common.User;
+import user.common.web.AccountContact;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.Application;
-import documents.model.AccountContact;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
@@ -36,7 +36,6 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SuggestionRepository;
-import documents.utilities.DocumentSectionDataMigration;
 import documents.utilities.OrderSectionValidator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -68,12 +67,8 @@ public class DocumentServiceIntegTest {
 
 	private DocumentService service;
 
-	@Inject
-	private DocumentSectionDataMigration migration;
-
 	@Before
 	public void setUp() {
-		migration.migrate();
 
 		service = new DocumentService(documentRepository,
 				documentSectionRepository, commentRepository,
@@ -86,24 +81,24 @@ public class DocumentServiceIntegTest {
 			ElementNotFoundException {
 
 		Long documentId = 0L;
-		service.orderDocumentSections(documentId, Arrays.asList(123L, 125L,
-				126L, 124L, 127L, 128L, 129L, 130L, 131L, 132L, 133L));
+		service.orderDocumentSections(documentId,
+				Arrays.asList(126L, 131L, 128L, 129L, 130L, 127L, 132L, 133L));
 
 		List<DocumentSection> resumeSections = service
 				.getDocumentSections(documentId);
 
 		Assert.assertNotNull(resumeSections);
 		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(123L)
+				rs -> rs.getSectionId().equals(126L)
 						&& rs.getSectionPosition().equals(1L)));
 		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(125L)
+				rs -> rs.getSectionId().equals(131L)
 						&& rs.getSectionPosition().equals(2L)));
 		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(126L)
+				rs -> rs.getSectionId().equals(128L)
 						&& rs.getSectionPosition().equals(3L)));
 		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(124L)
+				rs -> rs.getSectionId().equals(129L)
 						&& rs.getSectionPosition().equals(4L)));
 
 	}
@@ -123,7 +118,7 @@ public class DocumentServiceIntegTest {
 
 		Long documentId = 0L;
 		service.orderDocumentSections(documentId,
-				Arrays.asList(123L, 200L, 201L, 245L));
+				Arrays.asList(126L, 200L, 201L, 245L));
 
 	}
 
@@ -151,7 +146,7 @@ public class DocumentServiceIntegTest {
 			throws JsonProcessingException, ElementNotFoundException {
 
 		Long documentId = 0L;
-		service.orderDocumentSections(documentId, Arrays.asList(123L, 123L));
+		service.orderDocumentSections(documentId, Arrays.asList(126L, 126L));
 
 	}
 
@@ -161,7 +156,7 @@ public class DocumentServiceIntegTest {
 
 		Long documentId = 9999999999L;
 		service.orderDocumentSections(documentId,
-				Arrays.asList(123L, 124L, 125L, 126L));
+				Arrays.asList(126L, 127L, 128L, 129L));
 
 	}
 
