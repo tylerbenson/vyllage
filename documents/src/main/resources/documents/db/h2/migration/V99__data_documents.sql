@@ -9,6 +9,15 @@ values(0, 3, 'READ', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), null);
 
 -- new sections
 
+insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(129, 1, 0, 3, '{
+	"type": "SummarySection",
+	"title": "summary",
+	"sectionId": 129,
+	"sectionPosition": 3,
+	"state": "shown",
+	"description": "Rebellion fighter."
+}',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(126, 1, 0, 4, '{
 	"type": "EducationSection",
 	"title": "education",
@@ -50,17 +59,6 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"sectionPosition": 6,
 	"state": "shown",
 	"tags": ["X-Wing Pilot", "Force User"]
-}',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-
-
-
-insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(129, 1, 0, 7, '{
-	"type": "SummarySection",
-	"title": "summary",
-	"sectionId": 129,
-	"sectionPosition": 7,
-	"state": "shown",
-	"description": "Rebellion fighter."
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(130, 1, 0, 8, '{
