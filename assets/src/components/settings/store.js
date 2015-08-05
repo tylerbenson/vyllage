@@ -95,6 +95,26 @@ module.exports = Reflux.createStore({
     this.activeSettingsType = type;
     this.update();
   },
+
+  onMakeFacebookDisconnect : function(){
+    
+
+    // request
+    // .del('/connect/facebook')
+    // .set('Accept', 'application/json')
+    // .end(function (err, res) {
+    //   this.facebook = res.body;
+    //   this.update();
+    // }.bind(this));
+
+    
+
+    // this.facebook = true;
+    // this.update();
+
+    // console.log('working');
+
+  },
   update: function () {
     this.trigger({
       settings: this.settings,

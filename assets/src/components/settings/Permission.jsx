@@ -1,10 +1,13 @@
 var React = require('react');
+var Reflux = require('reflux');
 var filter = require('lodash.filter');
 var Buttons = require('./Buttons');
 var SettingsMixin = require('./mixin');
+var Actions = require('./actions');
+var SettingsStore = require('./store');
 
 var Permission = React.createClass({
-  mixins: [SettingsMixin],
+  mixins: [SettingsMixin , Reflux.connect(SettingsStore)],
 
   componentWillMount: function(){
 
@@ -17,10 +20,10 @@ var Permission = React.createClass({
     var settings = this.props.settings || [];
     var metatoken = document.getElementById('meta_token').content;
 
-    if( this.props.facebook == false){
+    if( this.props.facebook == true){
         var fbConnectButton = <button name="facebook-connect" type="submit" className='small inverted' value="connect">Connect</button>;
     }else{
-        var fbConnectButton = <button name="facebook-disconnect" type="submit" className='small' value="disconnect">Connected</button>;
+        var fbConnectButton = <button name="facebook-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectFacebook}>Connected</button>;
     }
 
 
@@ -87,7 +90,13 @@ var Permission = React.createClass({
 
   connectWithLinkedIn: function(){
     console.log('connect with linkedIn'); 
+  },
+
+  disconnectFacebook : function(){
+      Actions.makeFacebookDisconnect();
   }
+
+
 
 
 });
