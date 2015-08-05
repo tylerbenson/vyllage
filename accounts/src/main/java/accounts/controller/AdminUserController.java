@@ -2,7 +2,6 @@ package accounts.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +29,8 @@ import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.OrganizationEnum;
+import user.common.web.UserInfo;
 import accounts.model.BatchAccount;
-import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.form.AccountsRoleManagementForm;
 import accounts.model.form.AdminUsersForm;
@@ -42,7 +41,6 @@ import accounts.model.form.UserRoleManagementForm;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserNotFoundException;
-import accounts.service.AccountSettingsService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
 
@@ -60,20 +58,17 @@ public class AdminUserController {
 
 	private final OrganizationRepository organizationRepository;
 
-	private final AccountSettingsService accountSettingsService;
-
 	private final DocumentService documentService;
 
 	@Inject
 	public AdminUserController(final UserService userService,
 			final RoleRepository roleRepository,
 			final OrganizationRepository organizationRepository,
-			final AccountSettingsService accountSettingsService,
+
 			final DocumentService documentService) {
 		this.userService = userService;
 		this.roleRepository = roleRepository;
 		this.organizationRepository = organizationRepository;
-		this.accountSettingsService = accountSettingsService;
 		this.documentService = documentService;
 	}
 
@@ -85,20 +80,12 @@ public class AdminUserController {
 	}
 
 	@ModelAttribute("userInfo")
-	public AccountContact userInfo(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
+	public UserInfo userInfo(@AuthenticationPrincipal User user) {
 		if (user == null) {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(accountSettingsService
-						.getAccountSettings(Arrays.asList(user.getUserId())));
-
-		if (contactDataForUsers.isEmpty()) {
-			return null;
-		}
-		return contactDataForUsers.get(0);
+		return new UserInfo(user);
 	}
 
 	@RequestMapping(value = "/user/roles", method = RequestMethod.GET)

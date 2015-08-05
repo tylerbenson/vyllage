@@ -1,4 +1,4 @@
-package documents.model;
+package user.common.web;
 
 import lombok.ToString;
 
@@ -15,21 +15,7 @@ public class AccountContact {
 	private String middleName;
 	private String lastName;
 
-	// for intercom...
-	private Long registeredOn;
-
 	private String avatarUrl;
-
-	public AccountContact(Long userId, String address, String email,
-			String phoneNumber, String twitter, String linkedIn) {
-		super();
-		this.userId = userId;
-		this.address = address;
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-		this.twitter = twitter;
-		this.linkedIn = linkedIn;
-	}
 
 	public Long getUserId() {
 		return userId;
@@ -104,14 +90,6 @@ public class AccountContact {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public Long getRegisteredOn() {
-		return registeredOn;
-	}
-
-	public void setRegisteredOn(Long registeredOn) {
-		this.registeredOn = registeredOn;
 	}
 
 	public String getAvatarUrl() {

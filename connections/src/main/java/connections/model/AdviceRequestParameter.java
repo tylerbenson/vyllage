@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.ToString;
+import user.common.web.AccountContact;
 
 @ToString
 public class AdviceRequestParameter {

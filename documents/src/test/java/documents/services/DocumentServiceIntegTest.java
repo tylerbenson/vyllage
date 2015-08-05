@@ -22,11 +22,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import user.common.User;
+import user.common.web.AccountContact;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import documents.Application;
-import documents.model.AccountContact;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
