@@ -798,8 +798,12 @@ public class UserService {
 			avatarSetting = Optional.ofNullable(avatarSettings.get(0));
 
 		} catch (ElementNotFoundException e) {
-			// not really important
-			logger.warning(ExceptionUtils.getStackTrace(e));
+			// create default
+			AccountSetting ac = new AccountSetting(null, userId, "avatar",
+					AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
+					Privacy.PUBLIC.name().toLowerCase());
+
+			accountSettingsService.setAccountSetting(user, ac);
 		}
 
 		if (avatarSetting.isPresent()
