@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.newrelic.api.agent.NewRelic;
 
-import documents.model.constants.NewSectionType;
+import documents.model.constants.SectionType;
 import documents.model.constants.Visibility;
 
 @ToString
@@ -68,7 +68,7 @@ public abstract class DocumentSection {
 	/**
 	 * 
 	 * @param type
-	 *            any of the types in {@link NewSectionType}
+	 *            any of the types in {@link SectionType}
 	 */
 	public String getType() {
 		Assert.notNull(type);
@@ -78,11 +78,11 @@ public abstract class DocumentSection {
 	/**
 	 * 
 	 * @param type
-	 *            any of the types in {@link NewSectionType}
+	 *            any of the types in {@link SectionType}
 	 */
 	public void setType(String type) {
 		Assert.notNull(type);
-		if (!NewSectionType.isValidType(type))
+		if (!SectionType.isValidType(type))
 			throw new IllegalArgumentException(type
 					+ " is not a valid section type.");
 		this.type = type;

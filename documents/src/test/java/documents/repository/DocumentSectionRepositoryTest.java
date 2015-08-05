@@ -16,7 +16,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import documents.Application;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
-import documents.utilities.DocumentSectionDataMigration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -26,9 +25,6 @@ public class DocumentSectionRepositoryTest {
 
 	@Autowired
 	private DocumentSectionRepository dsRepository;
-
-	@Autowired
-	private DocumentSectionDataMigration migration;
 
 	private static final String JSON = "{"
 			+ "\"type\": \"JobExperienceSection\","
@@ -44,13 +40,11 @@ public class DocumentSectionRepositoryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		assert migration != null;
-		migration.migrate();
 	}
 
 	@Test
 	public void retrieveDocumentSectionTest() throws ElementNotFoundException {
-		DocumentSection documentSection = dsRepository.get(125L);
+		DocumentSection documentSection = dsRepository.get(132L);
 
 		Assert.assertNotNull(documentSection);
 	}
@@ -79,9 +73,9 @@ public class DocumentSectionRepositoryTest {
 		String highlights = "I was in charge of many people.";
 
 		EducationSection documentSection = (EducationSection) dsRepository
-				.get(124L);
+				.get(126L);
 		Long sectionVersion = documentSection.getSectionVersion() + 1;
-		documentSection.setSectionId(124L);
+		documentSection.setSectionId(128L);
 
 		documentSection.getHighlights().add(highlights);
 		documentSection.setDocumentId(0L);
