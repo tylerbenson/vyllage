@@ -35,7 +35,6 @@ import user.common.web.AccountContact;
 
 import com.newrelic.api.agent.NewRelic;
 
-import connections.model.AccountNames;
 import connections.model.AdviceRequestParameter;
 import connections.model.DocumentLinkRequest;
 import connections.model.NotRegisteredUser;
@@ -89,7 +88,7 @@ public class AdviceService {
 
 		// Returns a list of names and ids of users that have the role 'Advisor'
 		// within my organization.
-		List<AccountNames> advisors = getAdvisors(userId, entity, excludeIds,
+		List<AccountContact> advisors = getAdvisors(userId, entity, excludeIds,
 				firstNameFilter, lastNameFilter, emailFilter);
 
 		Assert.notNull(advisors);
@@ -97,7 +96,7 @@ public class AdviceService {
 		response.setRecommended(advisors);
 
 		// Returns a list of names and ids of users that commented on my resume.
-		List<AccountNames> recentUsers = getRecentUsers(documentId, entity,
+		List<AccountContact> recentUsers = getRecentUsers(documentId, entity,
 				excludeIds);
 
 		Assert.notNull(recentUsers);
@@ -107,7 +106,7 @@ public class AdviceService {
 		return response;
 	}
 
-	protected List<AccountNames> getRecentUsers(Long documentId,
+	protected List<AccountContact> getRecentUsers(Long documentId,
 			HttpEntity<Object> entity, List<Long> excludeIds) {
 
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
@@ -120,9 +119,9 @@ public class AdviceService {
 					excludeIds.stream().map(Object::toString)
 							.collect(Collectors.joining(",")));
 
-		AccountNames[] body = restTemplate.exchange(
+		AccountContact[] body = restTemplate.exchange(
 				builder.build().toUriString(), HttpMethod.GET, entity,
-				AccountNames[].class).getBody();
+				AccountContact[].class).getBody();
 
 		if (body != null)
 			return Arrays.asList(body);
@@ -130,7 +129,7 @@ public class AdviceService {
 		return Arrays.asList();
 	}
 
-	protected List<AccountNames> getAdvisors(Long userId,
+	protected List<AccountContact> getAdvisors(Long userId,
 			HttpEntity<Object> entity, List<Long> excludeIds,
 			String firstNameFilter, String lastNameFilter, String emailFilter) {
 
@@ -153,9 +152,9 @@ public class AdviceService {
 		if (emailFilter != null && !emailFilter.isEmpty())
 			builder.queryParam("emailFilter", emailFilter);
 
-		AccountNames[] body = restTemplate.exchange(
+		AccountContact[] body = restTemplate.exchange(
 				builder.build().toUriString(), HttpMethod.GET, entity,
-				AccountNames[].class).getBody();
+				AccountContact[].class).getBody();
 
 		if (body != null)
 			return Arrays.asList(body);

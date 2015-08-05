@@ -1,6 +1,7 @@
 package user.common.web;
 
 import lombok.ToString;
+import user.common.User;
 
 @ToString
 public class AccountContact {
@@ -17,6 +18,8 @@ public class AccountContact {
 
 	private String avatarUrl;
 
+	private String tagline;
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -26,6 +29,24 @@ public class AccountContact {
 	}
 
 	public AccountContact() {
+	}
+
+	/**
+	 * AccountContact with basic user info. <br>
+	 * userId <br>
+	 * email <br>
+	 * firstName <br>
+	 * middleName <br>
+	 * lastName <br>
+	 * 
+	 * @param user
+	 */
+	public AccountContact(User user) {
+		this.userId = user.getUserId();
+		this.email = user.getUsername();
+		this.firstName = user.getFirstName();
+		this.middleName = user.getMiddleName();
+		this.lastName = user.getLastName();
 	}
 
 	public String getAddress() {
@@ -98,6 +119,14 @@ public class AccountContact {
 
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
+	}
+
+	public String getTagline() {
+		return tagline;
+	}
+
+	public void setTagline(String tagline) {
+		this.tagline = tagline;
 	}
 
 }
