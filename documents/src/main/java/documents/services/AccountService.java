@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import documents.model.AccountContact;
+import user.common.web.AccountContact;
 import documents.model.AccountNames;
 import documents.model.LinkPermissions;
 

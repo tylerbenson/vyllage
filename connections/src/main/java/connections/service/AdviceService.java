@@ -31,10 +31,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import user.common.User;
+import user.common.web.AccountContact;
 
 import com.newrelic.api.agent.NewRelic;
 
-import connections.model.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequestParameter;
 import connections.model.DocumentLinkRequest;

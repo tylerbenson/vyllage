@@ -11,10 +11,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import user.common.User;
+import user.common.web.AccountContact;
 
 import com.newrelic.api.agent.NewRelic;
 
-import documents.model.AccountContact;
 import documents.model.Comment;
 import documents.model.UserNotification;
 import documents.repository.UserNotificationRepository;

@@ -44,8 +44,7 @@ public class CommentRepositoryTest {
 	}
 
 	@Test(expected = ElementNotFoundException.class)
-	public void testDeleteDocument() throws ElementNotFoundException {
-		// TODO: this is retrieving the comment inserted in V2__init.sql...
+	public void testDeleteComment() throws ElementNotFoundException {
 		Comment comment = generateComment();
 
 		comment = repository.save(comment);
@@ -61,7 +60,7 @@ public class CommentRepositoryTest {
 	private Comment generateComment() {
 		Comment comment = new Comment();
 		comment.setCommentText("Testing!");
-		comment.setSectionId(124L);
+		comment.setSectionId(130L);
 		comment.setSectionVersion(1L);
 		comment.setUserId(0L);
 		return comment;
