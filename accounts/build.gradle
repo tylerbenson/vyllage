@@ -13,7 +13,7 @@ dependencies {
 	compile project(':user-common')
 	compile project(':togglz')
 	compile project(':util')
-	compile project(':spring-security-oauth-provider')
+	compile project(':oauth-provider')
 	
 	compile 'org.apache.commons:commons-lang3:3.3.2'
 	compile 'org.apache.commons:commons-csv:1.1'

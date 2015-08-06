@@ -1,46 +1,37 @@
 package accounts.controller;
 
-import java.security.Principal;
+import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-
-import oauth.lti.LMSRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import accounts.repository.UserNotFoundException;
+import accounts.service.SignInUtil;
 
 @Controller
 public class LMSLoginController {
 
-	@RequestMapping(value = "/lti", method = RequestMethod.POST)
-    public String lti(HttpServletRequest req, Principal principal, Model model) {
-    	
-    	
-        //req.getSession().setAttribute("login", "oauth");
-        
-        LMSRequest ltiRequest = LMSRequest.getInstance();
-        if (ltiRequest != null) {
-            
-        	System.out.println("lti:             --> "+ true);
-            System.out.println("ltiVersion:      --> "+ ltiRequest.getLtiVersion());
-            System.out.println("UserDisplayName: --> "+ ltiRequest.getLtiContextId());
-            System.out.println("ltiUser:         --> "+ ltiRequest.getLtiUserDisplayName());
-            System.out.println("ltiLinkId:       --> "+ ltiRequest.getLtiLinkId());
-            System.out.println("key:             --> "+ ltiRequest.getKey());
-            System.out.println("consumerKey:     --> "+ ltiRequest.getLtiConsumerKey());
-            System.out.println("ltiLinkId:       --> "+ ltiRequest.getLtiLinkId());
-            
-            System.out.println("userDisplayName: --> "+ ltiRequest.getLtiUserDisplayName());
-            System.out.println("userEmail:       --> "+ ltiRequest.getLtiUserEmail());
-            System.out.println("ltiUserId:       --> "+ ltiRequest.getLtiUserId());
-            System.out.println("userRoles:       --> "+ ltiRequest.getLtiUserRoles());
-            System.out.println("rawUserRoles:    --> "+ ltiRequest.getRawUserRoles());
-            System.out.println("user:            --> "+ ltiRequest.getUser());
-            System.out.println("userRoleNumber:  --> "+ ltiRequest.getUserRoleNumber());
-            
-        }
-        return "login";
-    }
+	private final Logger logger = Logger.getLogger(LMSLoginController.class.getName());
+	private final SignInUtil signInUtil;
+
+	@Inject
+	public LMSLoginController(final SignInUtil signInUtil) {
+		super();
+		this.signInUtil = signInUtil;
+	}
+
+	@RequestMapping(value = "/lti/login", method = { RequestMethod.GET, RequestMethod.POST })
+	public String lti(HttpServletRequest request) throws UserNotFoundException {
+		HttpSession session = request.getSession();
+		// String userId = (String) session.getAttribute("user_id");
+		String userName = (String) session.getAttribute("user_name");
+		// Login via LMS userName.
+		signInUtil.signIn(userName);
+		return "redirect:" + "/resume/";
+	}
 }

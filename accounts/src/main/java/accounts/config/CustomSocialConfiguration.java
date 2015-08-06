@@ -13,10 +13,8 @@ import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.ConnectionFactoryLocator;
-import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
-import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.connect.web.ReconnectFilter;
 import org.springframework.social.facebook.web.DisconnectController;
 
@@ -42,19 +40,21 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		return jdbcUsersConnectionRepository;
 	}
 
-	@Bean
-	public ConnectController connectController(
-			ConnectionFactoryLocator connectionFactoryLocator,
-			ConnectionRepository connectionRepository) {
-
-		ConnectController connectController = new ConnectController(
-				connectionFactoryLocator, connectionRepository);
-		connectController.setViewPath("/");
-		// connectController.addInterceptor(new
-		// PostToWallAfterConnectInterceptor());
-		// connectController.addInterceptor(new TweetAfterConnectInterceptor());
-		return connectController;
-	}
+	// @Bean
+	// public ConnectController connectController(
+	// ConnectionFactoryLocator connectionFactoryLocator,
+	// ConnectionRepository connectionRepository) {
+	//
+	// ConnectController connectController = new ConnectController(
+	// connectionFactoryLocator, connectionRepository);
+	// connectController.setViewPath("/");
+	//
+	//
+	// // connectController.addInterceptor(new
+	// // PostToWallAfterConnectInterceptor());
+	// // connectController.addInterceptor(new TweetAfterConnectInterceptor());
+	// return connectController;
+	// }
 
 	@Override
 	@Bean
