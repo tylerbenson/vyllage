@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -135,16 +136,25 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "text/html")
-	public String accountSettings() {
+	public String accountSettings(HttpServletResponse response) {
 		return "settings";
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountSetting> getAccountSettings(
-			@AuthenticationPrincipal User user) {
+			HttpServletResponse response, @AuthenticationPrincipal User user) {
 
 		List<AccountSetting> settings = accountSettingsService
 				.getAccountSettings(user);
+
+		response.setHeader("Cache-Control", "no-cache,no-store");
+
+		// seems like these are not required
+
+		// response.setHeader("Pragma", "No-cache");
+		// response.setHeader("Cache-Control",
+		// "no-cache,no-store,must-revalidate");
+		// response.setDateHeader("Expires", 0);
 
 		return settings;
 	}
