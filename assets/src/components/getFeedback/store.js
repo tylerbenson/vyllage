@@ -280,11 +280,11 @@ var GetFeedbackStore = Reflux.createStore({
       .post(endpoints.getFeedback)
       .set(this.tokenHeader, this.tokenValue)
       .send({
-        csrftoken: this.tokenValue,
         users: [invited_user],
         notRegisteredUsers: [],
         subject: this.subject,
-        message: this.message
+        message: this.message,
+        "allowGuestComments": true
       })
       .end(function (err, res) {
         if (res.status === 200) {
