@@ -273,7 +273,13 @@ var GetFeedbackStore = Reflux.createStore({
       }.bind(this));
   },
   onRequestForFeedback: function(index){
-    var invited_user = this.recommendations[index];
+    var recommendation = this.recommendations[index];
+    var invited_user = {
+      userId: recommendation.userId,
+      firstName: recommendation.firstName,
+      middleName: recommendation.middleName,
+      lastName: recommendation.lastName,
+    };
 
     if(!this.useDummyData){
     request
