@@ -11,6 +11,7 @@ var Datepicker = React.createClass({
   mixins: [LayerMixin],
   getInitialState: function () {
     var date = this.props.date;
+
     return {
       isOpen: false,
       top: '-9999em',
@@ -67,6 +68,8 @@ var Datepicker = React.createClass({
     // year = year == NaN ? parseInt(moment(new Date()).format('YYYY')): year;
     year = year + 1;
 
+    
+
     this.setState({
       year: year,
       date: month + ' ' + year
@@ -79,7 +82,7 @@ var Datepicker = React.createClass({
 
     var year = this.state.date ? parseInt(this.state.year) : parseInt(moment(new Date()).format('YYYY'));
     var month = this.state.month !== "Invalid date" ? this.state.month : moment(new Date()).format('MMM');
-    // year = year == NaN ? parseInt(moment(new Date()).format('YYYY')): year;
+    year = year == NaN ? parseInt(moment(new Date()).format('YYYY')): year;
     year -= 1;
 
 
@@ -104,25 +107,32 @@ var Datepicker = React.createClass({
         isOpen: true
     });
   },
+
+  isValidDate : function(d){
+      if ( Object.prototype.toString.call(d) !== "[object Date]" )
+        return false;
+      return !isNaN(d.getTime());
+  },
+
   onBlur: function (e) {
     var input = e.target.value;
     if(input.length > 0) {
       var date = moment(new Date(input)).format('MMM YYYY');
-
-      if(date != 'Invalid date') {
+      if(date != 'Invalid date') {    
         this.setState({
           date: date,
           month: moment(new Date(input)).format('MMM'),
           year: moment(new Date(input)).format('YYYY')
         });
         this.setDate();
-      }
-      else {
-        this.setState({
-          date: '',
-          month: '',
-          year: ''
-        });
+      } else {
+        if( input != this.state.date ){
+          this.setState({
+            date: '',
+            month: '',
+            year: ''
+          });
+        }
       }
     }
 
@@ -170,8 +180,11 @@ var Datepicker = React.createClass({
   renderLayer: function () {
     if (this.state.isOpen) {
       var isCurrent = this.props.isCurrent;
-      var activeMonth = this.state.month !== 'Invalid date' ? this.state.month : moment(new Date()).format('MMM');
-      var activeYear = this.state.date ? this.state.year : parseInt(moment(new Date()).format('YYYY'));
+   //   var activeMonth = this.state.month !== 'Invalid date' ? this.state.month : moment(new Date()).format('MMM');
+      var activeMonth = this.state.month ? this.state.month : moment(new Date()).format('MMM');
+      //var activeYear = this.state.date ? this.state.year : parseInt(moment(new Date()).format('YYYY'));
+      var activeYear = this.state.year ? this.state.year : parseInt(moment(new Date()).format('YYYY'));
+
 
       var monthNodes = months.map(function (month, index) {
         var className = classnames('month', {
