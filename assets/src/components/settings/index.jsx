@@ -7,6 +7,7 @@ var Alert = require('../alert');
 var Profile = require('./Profile');
 var Account = require('./Account');
 var Social = require('./Social');
+var Permission = require('./Permission');
 
 var Settings = React.createClass({
   mixins: [Reflux.connect(SettingsStore)],
@@ -19,8 +20,10 @@ var Settings = React.createClass({
       SettingsNode = <Profile {...this.props} {...this.state} />;
     } else if (this.state.activeSettingsType === 'account') {
       SettingsNode = <Account {...this.props} {...this.state} />;
-    } else {
+    } else if (this.state.activeSettingsType == 'social') {
       SettingsNode = <Social {...this.props} {...this.state} />;
+    }else{
+      SettingsNode = <Permission {...this.props} {...this.state} />;
     }
     return (
       <div className='sections'>
