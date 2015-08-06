@@ -1,10 +1,7 @@
 package accounts.controller;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import user.common.User;
-import accounts.model.account.AccountContact;
-import accounts.service.AccountSettingsService;
-import accounts.service.UserService;
+import user.common.web.UserInfo;
 
 @Controller
 public class IndexController {
@@ -27,33 +22,18 @@ public class IndexController {
 	private final Logger logger = Logger.getLogger(IndexController.class
 			.getName());
 
-	private final UserService userService;
-
-	private final AccountSettingsService accountSettingsService;
-
-	@Inject
-	public IndexController(final UserService userService,
-			final AccountSettingsService accountSettingsService) {
+	public IndexController() {
 		super();
-		this.userService = userService;
-		this.accountSettingsService = accountSettingsService;
 	}
 
 	@ModelAttribute("userInfo")
-	public AccountContact userInfo(HttpServletRequest request,
+	public UserInfo userInfo(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
 		if (user == null) {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(accountSettingsService
-						.getAccountSettings(Arrays.asList(user.getUserId())));
-
-		if (contactDataForUsers.isEmpty()) {
-			return null;
-		}
-		return contactDataForUsers.get(0);
+		return new UserInfo(user);
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)

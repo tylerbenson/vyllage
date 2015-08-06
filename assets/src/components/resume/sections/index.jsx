@@ -1,5 +1,6 @@
 var React = require('react');
 var Freeform = require('../freeform');
+var Tags = require('../tags');
 var Organization = require('../organization');
 
 var Section = React.createClass({
@@ -18,23 +19,36 @@ var Section = React.createClass({
   },
   render: function () {
     var section = this.props.section;
-    if (section.type === 'freeform') {
-      return (
-        <Freeform 
-          index={this.props.index}
-          section={section} 
-          moveSection={this.props.moveSection}
-          owner={this.props.owner} />
-      );
-    } else {
-      return (
-        <Organization 
-          index={this.props.index}
-          section={section}
-          moveSection={this.props.moveSection}
-          placeholders={this.getPlaceholders()}
-          owner={this.props.owner} />
-      );
+    switch(section.type) {
+      case 'SkillsSection':
+      case 'CareerInterestsSection':
+        return (
+          <Tags
+            index={this.props.index}
+            section={section}
+            moveSection={this.props.moveSection}
+            owner={this.props.owner} />
+        );
+      case 'SummarySection':
+        return (
+          <Freeform
+            index={this.props.index}
+            section={section}
+            moveSection={this.props.moveSection}
+            owner={this.props.owner} />
+        );
+      case 'EducationSection':
+      case 'JobExperienceSection':
+        return (
+          <Organization
+            index={this.props.index}
+            section={section}
+            moveSection={this.props.moveSection}
+            placeholders={this.getPlaceholders()}
+            owner={this.props.owner} />
+        );
+      default:
+        return null; //does not render unsupported section
     }
   }
 });

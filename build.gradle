@@ -5,8 +5,8 @@ import java.nio.file.Paths;
 def vJavaLang = '1.8'
 def gradleDir = "${rootProject.rootDir}/gradle"
 ext.javascriptProjects = [ project(':assets') ]
-ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections'), project(':email'), project(':user-common'), project(':togglz'), project(':util') , project(':spring-security-oauth-provider') ]
-ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') , project(':spring-security-oauth-provider')  ]
+ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections'), project(':email'), project(':user-common'), project(':togglz'), project(':util') , project(':oauth-provider') ]
+ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') , project(':oauth-provider')  ]
 ext.dbProjects = [ project(':accounts'), project(':documents'), project(':togglz') ]
 
 wrapper.gradleVersion = '2.1'
@@ -58,7 +58,7 @@ configure(javaProjects) {
 	}
 
 	def slf4j = '1.7.12'
-	def lombok = '1.14.8'
+	def lombok = '1.16.4'
 	def newrelic = '3.+'
 	def junit = '4.12'
 	def hamcrest = '1.3'

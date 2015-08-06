@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -31,8 +32,10 @@ import documents.controller.ResumeController;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
-import documents.model.DocumentSection;
 import documents.model.constants.DocumentTypeEnum;
+import documents.model.constants.SectionType;
+import documents.model.document.sections.DocumentSection;
+import documents.model.document.sections.EducationSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 
@@ -47,6 +50,10 @@ public class ResumeControllerIntegTest {
 
 	@Inject
 	private DocumentService documentService;
+
+	@Before
+	public void setUp() throws Exception {
+	}
 
 	@Test
 	public void updateTagLineTest() throws ElementNotFoundException,
@@ -98,7 +105,7 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 0L;
-		Long sectionId = 123L;
+		Long sectionId = 127L;
 		DocumentSection resumeSection = controller.getResumeSection(documentId,
 				sectionId);
 
@@ -124,16 +131,15 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 0L;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 
-		DocumentSection createdSection = controller.createSection(documentId,
-				documentSection);
+		EducationSection createdSection = (EducationSection) controller
+				.createSection(documentId, documentSection);
 
 		Assert.assertNotNull(createdSection);
 		Assert.assertNotNull(createdSection.getDocumentId());
 		Assert.assertNotNull(createdSection.getSectionId());
 		Assert.assertNotNull(createdSection.getSectionPosition());
-		notNullNotEmpty(createdSection.getDescription());
 		notNullNotEmpty(createdSection.getTitle());
 		notNullNotEmpty(createdSection.getHighlights());
 		notNullNotEmpty(createdSection.getOrganizationDescription());
@@ -158,24 +164,25 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 0L;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 
-		DocumentSection createdSection = controller.createSection(documentId,
-				documentSection);
+		EducationSection createdSection = (EducationSection) controller
+				.createSection(documentId, documentSection);
 
 		String newDescription = "Updated!";
-		createdSection.setDescription(newDescription);
+		createdSection.setRoleDescription(newDescription);
 
-		DocumentSection updatedSection = controller.saveSection(documentId,
-				createdSection.getSectionId(), createdSection);
+		EducationSection updatedSection = (EducationSection) controller
+				.saveSection(documentId, createdSection.getSectionId(),
+						createdSection);
 
 		Assert.assertNotNull(updatedSection);
 		Assert.assertNotNull(updatedSection.getDocumentId());
 		Assert.assertNotNull(updatedSection.getSectionId());
 		Assert.assertNotNull(updatedSection.getSectionPosition());
 
-		notNullNotEmpty(updatedSection.getDescription());
-		Assert.assertEquals(newDescription, updatedSection.getDescription());
+		notNullNotEmpty(updatedSection.getRoleDescription());
+		Assert.assertEquals(newDescription, updatedSection.getRoleDescription());
 		notNullNotEmpty(updatedSection.getTitle());
 		notNullNotEmpty(updatedSection.getHighlights());
 		notNullNotEmpty(updatedSection.getOrganizationDescription());
@@ -188,7 +195,7 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 999999L;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 		documentSection.setDocumentId(documentId);
 		documentSection.setSectionId(123L);
 
@@ -202,7 +209,7 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 0L;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 		documentSection.setDocumentId(documentId);
 		documentSection.setSectionId(null);
 
@@ -216,7 +223,7 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = null;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 		documentSection.setDocumentId(documentId);
 		documentSection.setSectionId(null);
 
@@ -230,7 +237,7 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 0L;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 		documentSection.setDocumentId(documentId);
 		documentSection.setSectionId(null);
 
@@ -244,7 +251,7 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 0L;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 		documentSection.setDocumentId(documentId);
 		documentSection.setSectionId(9999999L);
 
@@ -258,7 +265,7 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 9999999999L;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 		documentSection.setDocumentId(documentId);
 		documentSection.setSectionId(9999999L);
 
@@ -272,7 +279,7 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 0L;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 		documentSection.setDocumentId(documentId);
 		documentSection.setSectionId(1L);
 
@@ -284,7 +291,7 @@ public class ResumeControllerIntegTest {
 			ElementNotFoundException {
 		Long documentId = 0L;
 
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 
 		DocumentSection createdSection = controller.createSection(documentId,
 				documentSection);
@@ -318,7 +325,7 @@ public class ResumeControllerIntegTest {
 			IOException, ElementNotFoundException {
 		User user = generateAndLoginUser();
 		Long userId = 0L;
-		Long sectionId = 123L;
+		Long sectionId = 127L;
 		Long documentId = 0L;
 
 		Comment comment = comments(sectionId).get(0);
@@ -384,7 +391,7 @@ public class ResumeControllerIntegTest {
 		SecurityContextHolder.setContext(securityContext);
 
 		Long documentId = 0L;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 
 		controller.createSection(documentId, documentSection);
 
@@ -396,13 +403,13 @@ public class ResumeControllerIntegTest {
 		generateAndLoginUser();
 
 		Long documentId = 0L;
-		DocumentSection documentSection = createSection();
+		EducationSection documentSection = createSection();
 
-		DocumentSection createdSection = controller.createSection(documentId,
-				documentSection);
+		EducationSection createdSection = (EducationSection) controller
+				.createSection(documentId, documentSection);
 
 		String newDescription = "Updated!";
-		createdSection.setDescription(newDescription);
+		createdSection.setRoleDescription(newDescription);
 
 		// different user
 		User o = Mockito.mock(User.class);
@@ -432,15 +439,16 @@ public class ResumeControllerIntegTest {
 		return o;
 	}
 
-	private DocumentSection createSection() {
-		DocumentSection section = new DocumentSection();
-		section.setDescription("hello");
+	private EducationSection createSection() {
+		EducationSection section = new EducationSection();
+		section.setRoleDescription("hello");
 		section.setLocation("Somewhere");
 		section.setSectionPosition(5L);
 		section.setTitle("title");
-		section.setHighlights("High");
+		section.getHighlights().add("High!");
 		section.setOrganizationDescription("description");
 		section.setOrganizationName("name");
+		section.setType(SectionType.EDUCATION_SECTION.type());
 		return section;
 	}
 
@@ -454,6 +462,10 @@ public class ResumeControllerIntegTest {
 	}
 
 	private void notNullNotEmpty(String value) {
+		Assert.assertTrue(value != null && !value.isEmpty());
+	}
+
+	private void notNullNotEmpty(List<String> value) {
 		Assert.assertTrue(value != null && !value.isEmpty());
 	}
 

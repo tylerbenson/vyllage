@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.constants.RolesEnum;
-import accounts.model.account.AccountContact;
+import user.common.web.UserInfo;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.AvatarSourceEnum;
@@ -39,6 +40,7 @@ import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
+import accounts.repository.SocialRepository;
 import accounts.service.AccountSettingsService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
@@ -68,6 +70,7 @@ public class AccountSettingsController {
 	private final AccountSettingsService accountSettingsService;
 	private final DocumentService documentService;
 	private final OrganizationRepository organizationRepository;
+	private final SocialRepository socialRepository;
 
 	private Map<String, SettingValidator> validators = new HashMap<>();
 	private List<SettingValidator> validatorsForAll = new LinkedList<>();
@@ -78,12 +81,14 @@ public class AccountSettingsController {
 	public AccountSettingsController(final UserService userService,
 			final AccountSettingsService accountSettingsService,
 			final DocumentService documentService,
-			final OrganizationRepository organizationRepository) {
+			final OrganizationRepository organizationRepository,
+			final SocialRepository socialRepository) {
 		super();
 		this.userService = userService;
 		this.accountSettingsService = accountSettingsService;
 		this.documentService = documentService;
 		this.organizationRepository = organizationRepository;
+		this.socialRepository = socialRepository;
 
 		validators.put("phoneNumber", new PhoneNumberValidator());
 		validators.put("firstName", new NotNullValidator());
@@ -114,20 +119,12 @@ public class AccountSettingsController {
 	}
 
 	@ModelAttribute("userInfo")
-	public AccountContact userInfo(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
+	public UserInfo userInfo(@AuthenticationPrincipal User user) {
 		if (user == null) {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(accountSettingsService
-						.getAccountSettings(Arrays.asList(user.getUserId())));
-
-		if (contactDataForUsers.isEmpty()) {
-			return null;
-		}
-		return contactDataForUsers.get(0);
+		return new UserInfo(user);
 	}
 
 	// for header
@@ -139,16 +136,25 @@ public class AccountSettingsController {
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "text/html")
-	public String accountSettings() {
+	public String accountSettings(HttpServletResponse response) {
 		return "settings";
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountSetting> getAccountSettings(
-			@AuthenticationPrincipal User user) {
+			HttpServletResponse response, @AuthenticationPrincipal User user) {
 
 		List<AccountSetting> settings = accountSettingsService
 				.getAccountSettings(user);
+
+		response.setHeader("Cache-Control", "no-cache,no-store");
+
+		// seems like these are not required
+
+		// response.setHeader("Pragma", "No-cache");
+		// response.setHeader("Cache-Control",
+		// "no-cache,no-store,must-revalidate");
+		// response.setDateHeader("Expires", 0);
 
 		return settings;
 	}
@@ -308,6 +314,12 @@ public class AccountSettingsController {
 					.getUserId().toString(), "")));
 
 		return permissions;
+	}
+
+	@RequestMapping(value = "social/{network}/is-connected", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody boolean isSocialConnected(
+			@PathVariable String network, @AuthenticationPrincipal User user) {
+		return socialRepository.isConnected(user, network);
 	}
 
 	@ExceptionHandler(value = { IllegalArgumentException.class })

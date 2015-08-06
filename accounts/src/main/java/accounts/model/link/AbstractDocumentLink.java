@@ -20,7 +20,7 @@ public class AbstractDocumentLink {
 	private String linkKey;
 	private LinkType linkType;
 	private Long visits;
-	private boolean allowGuestComments = false;
+	private boolean allowGuestComments = true;
 
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)

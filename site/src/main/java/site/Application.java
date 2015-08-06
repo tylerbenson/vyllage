@@ -1,7 +1,9 @@
 package site;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,7 +16,9 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:/connections/application.properties")
 @PropertySource("classpath:/documents/application.properties")
 @PropertySource("classpath:/accounts/application.properties")
-public class Application {
+public class Application implements CommandLineRunner {
+	private static final Logger logger = Logger.getLogger(Application.class
+			.getName());
 
 	public static void main(String[] args) {
 		SpringApplication application = new SpringApplication(Application.class);
@@ -22,11 +26,11 @@ public class Application {
 		if (Application.class.getResource("Application.class").getProtocol()
 				.equals("file")) {
 			if (System.getProperty("PROJECT_HOME") == null) {
-				System.out.println("PROJECT_HOME sys prop not set");
+				logger.info("PROJECT_HOME sys prop not set");
 				System.exit(1);
 			}
 			application.setAdditionalProfiles(Profiles.DEV);
-			System.out.println("\n** Setting thymeleaf prefix to: "
+			logger.info("\n** Setting thymeleaf prefix to: "
 					+ System.getProperty("PROJECT_HOME") + "/assets/public/\n");
 			System.setProperty("spring.thymeleaf.prefix",
 					"file:///" + System.getProperty("PROJECT_HOME")
@@ -34,6 +38,11 @@ public class Application {
 		}
 		String[] profiles = application.run(args).getEnvironment()
 				.getActiveProfiles();
-		System.out.println("Using profiles: " + Arrays.toString(profiles));
+		logger.info("Using profiles: " + Arrays.toString(profiles));
+
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
 	}
 }

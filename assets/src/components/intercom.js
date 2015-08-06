@@ -32,8 +32,10 @@
 })()
 
 window.intercomSettings = {
-  name: document.getElementById('header-container') === null ? null : document.getElementById('header-container').getAttribute('content'),
+  name: document.getElementById('header-container') === null ? null : document.getElementById('header-container').getAttribute('name'),
   email: document.getElementById('meta_userInfo_email') === null ? null : document.getElementById('meta_userInfo_email').getAttribute('content'),
   created_at: document.getElementById('meta_userInfo_created_at') === null ? null : document.getElementById('meta_userInfo_created_at').getAttribute('content'),
-  app_id: "dtqkoq5u"
+  app_id: "dtqkoq5u",
+  user_id : document.getElementById('meta_userInfo_user') === null ? null : document.getElementById('meta_userInfo_user').content,
+  organizationIds : document.getElementById('meta_userInfo_organizationIds') === null ? null : document.getElementById('meta_userInfo_organizationIds').content
 };

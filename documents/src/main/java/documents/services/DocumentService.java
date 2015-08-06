@@ -15,17 +15,17 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import user.common.User;
+import user.common.web.AccountContact;
 
 import com.newrelic.api.agent.NewRelic;
 
-import documents.model.AccountContact;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
-import documents.model.DocumentSection;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
+import documents.model.document.sections.DocumentSection;
 import documents.repository.CommentRepository;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;

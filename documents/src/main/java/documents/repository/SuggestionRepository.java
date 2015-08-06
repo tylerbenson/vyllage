@@ -19,8 +19,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.newrelic.api.agent.NewRelic;
 
 import documents.domain.tables.records.SuggestionsRecord;
-import documents.model.DocumentSection;
 import documents.model.Suggestion;
+import documents.model.document.sections.DocumentSection;
 
 @Repository
 public class SuggestionRepository implements IRepository<Suggestion> {

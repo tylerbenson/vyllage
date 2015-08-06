@@ -25,7 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
-import connections.model.AccountContact;
+import user.common.web.AccountContact;
+import user.common.web.UserInfo;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
 import connections.model.AdviceRequestParameter;
@@ -69,20 +70,12 @@ public class AdviceRequestController {
 	}
 
 	@ModelAttribute("userInfo")
-	public AccountContact userInfo(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
+	public UserInfo userInfo(@AuthenticationPrincipal User user) {
 		if (user == null) {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = accountService
-				.getContactDataForUsers(request,
-						Arrays.asList(user.getUserId()));
-
-		if (contactDataForUsers.isEmpty()) {
-			return null;
-		}
-		return contactDataForUsers.get(0);
+		return new UserInfo(user);
 	}
 
 	@RequestMapping(value = "get-feedback", method = RequestMethod.GET)

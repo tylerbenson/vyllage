@@ -1,6 +1,7 @@
 package documents.repository;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import documents.Application;
-import documents.model.DocumentSection;
 import documents.model.Suggestion;
+import documents.model.document.sections.EducationSection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -20,8 +21,9 @@ public class SuggestionRepositoryTest {
 	@Autowired
 	private IRepository<Suggestion> repository;
 
-	private static final String JSON = "{" + "\"type\": \"organization\","
-			+ "\"title\": \"experience\"," + "\"sectionId\": 124,"
+	private static final String JSON = "{"
+			+ "\"type\": \"JobExperienceSection\","
+			+ "\"title\": \"experience\"," + "\"sectionId\": 127,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
@@ -29,11 +31,17 @@ public class SuggestionRepositoryTest {
 			+ "\"startDate\": \"Sep 2010\"," + "\"endDate\": \"\","
 			+ "\"isCurrent\": true," + "\"location\": \"Portland, Oregon\","
 			+ "\"roleDescription\": \"Blah Blah Blah\","
-			+ "\"highlights\": \"I was in charge of...\"" + "}";
+			+ "\"highlights\":[\"I was in charge of...\"" + "]}";
+
+	@Before
+	public void setUp() throws Exception {
+	}
 
 	@Test
-	public void testRetrieveExistingDocument() throws ElementNotFoundException {
-		// TODO: this is retrieving the stuff inserted in V2__init.sql...
+	public void testRetrieveExistingSuggestion()
+			throws ElementNotFoundException {
+		// TODO: this is retrieving the stuff inserted in
+		// V99__data_documents.sql...
 		Suggestion suggestion = repository.get(0L);
 
 		Assert.assertNotNull("Suggestion is null.", suggestion);
@@ -53,7 +61,7 @@ public class SuggestionRepositoryTest {
 	}
 
 	@Test(expected = ElementNotFoundException.class)
-	public void testDeleteDocument() throws ElementNotFoundException {
+	public void testDeleteSuggestion() throws ElementNotFoundException {
 		// TODO: this is retrieving the suggestion inserted in V2__init.sql...
 		Suggestion suggestion = generateSuggestion();
 
@@ -69,8 +77,8 @@ public class SuggestionRepositoryTest {
 
 	private Suggestion generateSuggestion() {
 		Suggestion suggestion = new Suggestion();
-		suggestion.setDocumentSection(DocumentSection.fromJSON(JSON));
-		suggestion.setSectionId(124L);
+		suggestion.setDocumentSection(EducationSection.fromJSON(JSON));
+		suggestion.setSectionId(127L);
 		suggestion.setSectionVersion(1L);
 		suggestion.setUserId(0L);
 		return suggestion;

@@ -14,7 +14,7 @@ var SuggestionItem = React.createClass({
 		var user = this.props.user;
 		return (
 			<div className={(user.is_sponsored ? 'sponsored ' : '') + 'suggestion'}>
-				<Avatar src={user.avatar} size={this.props.avatarSize} />
+				<Avatar src={user.avatarUrl} size={this.props.avatarSize} />
 				<div className="info">
 					<div className="name">
 						{user.firstName + ' ' + user.lastName}

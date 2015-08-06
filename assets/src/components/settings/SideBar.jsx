@@ -26,6 +26,13 @@ var SideBar = React.createClass({
         >
           <i className='ion-social-buffer'></i> Social
         </a>
+        <a onClick={this.select.bind(this, 'permission')}
+          className={this.state.activeSettingsType === 'permission' ? 'active' : ''}
+        >
+          <i className='ion-locked'></i> Permissions
+        </a>
+
+
       </div>
     );
   }
