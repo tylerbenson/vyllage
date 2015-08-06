@@ -83,7 +83,7 @@ var ResumeEditor = React.createClass({
         <Banner header={this.state.resume.header} settings={this.state.settings} />
         <div className="sections">
           {this.renderSections()}
-          {owner ? <EmptySections sections={this.state.resume.sections} owner={owner} />: null}
+          {/* owner ? <EmptySections sections={this.state.resume.sections} owner={owner} />: null */}
         </div>
       </div>
     );

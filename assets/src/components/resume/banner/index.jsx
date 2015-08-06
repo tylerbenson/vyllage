@@ -2,6 +2,7 @@ var React = require('react');
 var ExecutionEnvironment = require('react/lib/ExecutionEnvironment');
 var Textarea = require('react-textarea-autosize');
 var Subheader = require('./Subheader');
+var AddSection = require('../AddSection');
 var Avatar = require('../../avatar');
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
@@ -277,10 +278,12 @@ var Banner = React.createClass({
               </div>
               :
               <div className="content">
-                <button onClick={this.toggleEditable.bind(this, true)}>
+                <button className="edit" onClick={this.toggleEditable.bind(this, true)}>
                   <i className="ion-edit"></i>
                   <span>Edit Profile</span>
                 </button>
+
+                <AddSection />
               </div>
             )}
           </div>
