@@ -1,4 +1,4 @@
-var Modal = require('../src/components/modal');
+var Modal = require('./../src/components/modal');
 var React = require('react/addons');
 
 describe('modal', function() {

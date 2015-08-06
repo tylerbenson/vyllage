@@ -18,6 +18,7 @@ module.exports = Reflux.createStore({
     }
     this.settings = [];
     this.activeSettingsType = 'profile';
+    this.facebook;
   },
   onGetSettings: function () {
     request
@@ -27,6 +28,16 @@ module.exports = Reflux.createStore({
       this.settings = res.body;
       this.update();
     }.bind(this));
+
+    request
+    .get('/account/social/facebook/is-connected')
+    .set('Accept', 'application/json')
+    .end(function (err, res) {
+      this.facebook = res.body;
+      this.update();
+    }.bind(this));
+
+
   },
   onUpdateSettings: function (options) {
     options = options || {};
@@ -84,16 +95,31 @@ module.exports = Reflux.createStore({
     this.activeSettingsType = type;
     this.update();
   },
+
+  onMakeFacebookDisconnect : function(){
+    
+    request
+    .del('/disconnect/facebook')
+    .set(this.tokenHeader, this.tokenValue) 
+    .end(function (err, res) {
+      this.facebook = res.body;
+      this.update();
+    }.bind(this));
+
+
+  },
   update: function () {
     this.trigger({
       settings: this.settings,
-      activeSettingsType: this.activeSettingsType
+      activeSettingsType: this.activeSettingsType,
+      facebook : this.facebook
     });
   },
   getInitialState: function () {
     return {
       settings: this.settings,
-      activeSettingsType: this.activeSettingsType
+      activeSettingsType: this.activeSettingsType ,
+      facebook : this.facebook
     } ;
   }
 })

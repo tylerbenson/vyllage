@@ -1035,8 +1035,8 @@
       "from": "react-textarea-autosize@1.1.0",
       "dependencies": {
         "object-assign": {
-          "version": "2.0.0",
-          "from": "object-assign@2.0.0"
+          "version": "2.1.1",
+          "from": "object-assign@>=2.0.0 <3.0.0"
         }
       }
     },
