@@ -37,7 +37,10 @@ var AddSection = React.createClass({
 
 		return (
 			<span>
-			<button onClick={this.openModal} className="floating add alternate"><span>+</span></button>
+			<button onClick={this.openModal} className="floating add alternate">
+        <i className="ion-android-add"></i>
+        <span>Add Item</span>
+      </button>
 			<Modal isOpen={this.state.isOpen} close={this.closeModal} className="large add-modal">
 				<div className="header">
           <div className="title">

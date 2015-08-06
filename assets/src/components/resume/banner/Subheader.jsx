@@ -1,5 +1,6 @@
 var React = require('react');
 var Avatar = require('../../avatar');
+var AddSection = require('../AddSection');
 
 var Subheader = React.createClass({
   render: function () {
@@ -18,6 +19,7 @@ var Subheader = React.createClass({
             	<span>Edit Profile</span>
             </button>
           </div>
+          <AddSection />
         </div>
       </section>
     );
