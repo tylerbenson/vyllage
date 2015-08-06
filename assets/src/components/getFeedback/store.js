@@ -1,5 +1,6 @@
 var Reflux = require('reflux');
 var assign = require('lodash.assign');
+var uniq = require('lodash.uniq');
 var request = require('superagent');
 var urlTemplate = require('url-template');
 var endpoints = require('../endpoints');
@@ -262,7 +263,7 @@ var GetFeedbackStore = Reflux.createStore({
             .set('Accept', 'application/json')
             .end(function (err, res) {
               if(res.ok) {
-                this.recommendations = arrayDistinct(res.body.recommended.concat(res.body.recent));
+                this.recommendations = uniq(res.body.recommended.concat(res.body.recent), 'userId');
               }
               else {
                 this.recommendations = [];
@@ -273,18 +274,24 @@ var GetFeedbackStore = Reflux.createStore({
       }.bind(this));
   },
   onRequestForFeedback: function(index){
-    var invited_user = this.recommendations[index];
+    var recommendation = this.recommendations[index];
+    var invited_user = {
+      userId: recommendation.userId,
+      firstName: recommendation.firstName,
+      middleName: recommendation.middleName,
+      lastName: recommendation.lastName,
+    };
 
     if(!this.useDummyData){
     request
       .post(endpoints.getFeedback)
       .set(this.tokenHeader, this.tokenValue)
       .send({
-        csrftoken: this.tokenValue,
         users: [invited_user],
         notRegisteredUsers: [],
         subject: this.subject,
-        message: this.message
+        message: this.message,
+        "allowGuestComments": true
       })
       .end(function (err, res) {
         if (res.status === 200) {
@@ -338,18 +345,5 @@ var GetFeedbackStore = Reflux.createStore({
     }
   }
 });
-
-//there might be a better way to do this...
-function arrayDistinct(array) {
-    var a = array.concat();
-    for(var i=0; i<a.length; ++i) {
-        for(var j=i+1; j<a.length; ++j) {
-            if(a[i] === a[j])
-                a.splice(j--, 1);
-        }
-    }
-
-    return a;
-};
 
 module.exports = GetFeedbackStore;
