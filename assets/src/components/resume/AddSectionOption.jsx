@@ -6,7 +6,7 @@ var AddSectionOption = React.createClass({
 		return (
 			<div className="option" onClick={this.props.onClick}>
 				<i className={option.icon}></i>
-				<h2 className="name">{option.name}</h2>
+				<h2 className="title">{option.title}</h2>
 				<p className="description">{option.description}</p>
 			</div>
 		);

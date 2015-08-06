@@ -91,6 +91,7 @@
       margin: 1% 2% 1% 0;
       padding: 2em 1em;
       text-align: center;
+      transition: border-color .2s ease;
 
       &:hover {
         border-color: lighten($secondary-color, 35%);
@@ -103,7 +104,7 @@
         margin-bottom: 0.5em;
       }
 
-      .name {
+      .title {
         color: $text-color;
       }
 

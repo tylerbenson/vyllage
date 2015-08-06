@@ -1,6 +1,6 @@
 var sections = [
 	{
-		name: 'Summary',
+		title: 'Summary',
 		type: 'SummarySection',
 		component: 'Freeform',
 		icon: 'ion-android-list',
@@ -8,7 +8,7 @@ var sections = [
 		isMultiple: false
 	},
 	{
-		name: 'Job Experience',
+		title: 'Job Experience',
 		type: 'JobExperienceSection',
 		component: 'Organization',
 		icon: 'ion-briefcase',
@@ -16,7 +16,7 @@ var sections = [
 		isMultiple: true
 	},
 	{
-		name: 'Education',
+		title: 'Education',
 		type: 'EducationSection',
 		component: 'Organization',
 		icon: 'ion-university',
@@ -24,7 +24,7 @@ var sections = [
 		isMultiple: true
 	},
 	{
-		name: 'Skills',
+		title: 'Skills',
 		type: 'SkillsSection',
 		component: 'Tags',
 		icon: 'ion-hammer',
@@ -32,7 +32,7 @@ var sections = [
 		isMultiple: false
 	},
 	// {
-	// 	name: 'Projects',
+	// 	title: 'Projects',
 	// 	type: 'ProjectsSection',
 	// 	component: 'Gallery',
 	// 	icon: 'ion-folder',
@@ -40,7 +40,7 @@ var sections = [
 	// 	isMultiple: false
 	// },
 	// {
-	// 	name: 'Achievements',
+	// 	title: 'Achievements',
 	// 	type: 'AchievementsSection',
 	// 	component: 'Gallery',
 	// 	icon: 'ion-folder',
@@ -48,7 +48,7 @@ var sections = [
 	// 	isMultiple: false
 	// },
 	{
-		name: 'Career Interests',
+		title: 'Career Interests',
 		type: 'CareerInterestsSection',
 		component: 'Tags',
 		icon: 'ion-android-star',
@@ -56,7 +56,7 @@ var sections = [
 		isMultiple: false
 	}
 	// {
-	// 	name: 'Personal References',
+	// 	title: 'Personal References',
 	// 	type: 'PersonalReferencesSection',
 	// 	component: 'References',
 	// 	icon: 'ion-ios-people',
@@ -64,7 +64,7 @@ var sections = [
 	// 	isMultiple: false
 	// },
 	// {
-	// 	name: 'Professional References',
+	// 	title: 'Professional References',
 	// 	type: 'ProfessionalReferencesSection',
 	// 	component: 'References',
 	// 	icon: 'ion-coffee',
