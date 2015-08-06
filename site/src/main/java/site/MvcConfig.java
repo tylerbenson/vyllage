@@ -1,5 +1,6 @@
 package site;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,14 @@ class MvcConfig extends WebMvcConfigurerAdapter {
 	@Autowired
 	private UserAgentRequestInterceptor userAgentWebRequestInterceptor;
 
+	@Inject
+	private NoCacheInterceptor noCacheInterceptor;
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(principalDetailsInterceptor);
 		registry.addInterceptor(userAgentWebRequestInterceptor);
+		registry.addInterceptor(noCacheInterceptor);
 	}
 
 	@Bean
