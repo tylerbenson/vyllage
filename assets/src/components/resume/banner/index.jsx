@@ -17,6 +17,7 @@ var Banner = React.createClass({
     return {
       editMode: false,
       lastScroll: {
+        scrollY: window.scrollY,
         timestamp: new Date(),
         timeout: {}
       },
@@ -143,30 +144,34 @@ var Banner = React.createClass({
     }
     this.setState({editMode: flag});
   },
-  toggleSubheader: function(){
-    var height = this.refs.banner.getDOMNode().offsetHeight;
-    var subheader = this.refs.subheader.getDOMNode();
+  toggleSubheader: function(lastScrollTop){
     var scrollTop = window.scrollY;
+    var scrollDirection = scrollTop - lastScrollTop;
 
-    if(scrollTop > height) {
-      //addClass
-      subheader.className += ' visible';
-    }
-    else {
-      //removeClass
-      subheader.className = subheader.className.replace(/ visible/g,'');
+    if(scrollDirection != 0) {
+      var height = this.refs.banner.getDOMNode().offsetHeight;
+      var subheader = this.refs.subheader.getDOMNode();
+
+      if(scrollTop > height && scrollDirection < 0) {
+        //addClass
+        subheader.className += ' visible';
+      }
+      else {
+        //removeClass
+        subheader.className = subheader.className.replace(/ visible/g,'');
+      }
     }
   },
   handleScroll: function(){
     var DEBOUNCE_INTERVAL = 50;
     if(Math.abs(new Date() - this.state.lastScroll.timestamp) > DEBOUNCE_INTERVAL) {
+      var scrollTop = window.scrollY;
       clearTimeout(this.state.lastScroll.timeout);
 
-      this.toggleSubheader();
-
       this.setState({lastScroll: {
+        scrollTop: scrollTop,
         timestamp: new Date()},
-        timeout: setTimeout(this.toggleSubheader, DEBOUNCE_INTERVAL*4)
+        timeout: setTimeout(function(){this.toggleSubheader(scrollTop);}.bind(this), DEBOUNCE_INTERVAL*4)
       });
     }
   },
