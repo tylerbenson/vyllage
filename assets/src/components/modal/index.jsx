@@ -16,6 +16,9 @@ var Modal = React.createClass({
       modal.style.display = 'inline-block';
       modal.style.height = modal.offsetHeight + 'px';
       modal.style.position = 'absolute';
+
+      //modal is larger than viewport
+      modal.style.margin = (modal.offsetTop < 0 ? '2em ' : '' ) + 'auto';
     }
     else {
       body.className = body.className.replace(/ modal-open/g,'');
