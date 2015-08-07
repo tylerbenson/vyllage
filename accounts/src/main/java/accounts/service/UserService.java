@@ -49,7 +49,6 @@ import accounts.model.account.settings.Privacy;
 import accounts.model.form.RegisterForm;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AvatarRepository;
-import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
@@ -824,17 +823,10 @@ public class UserService {
 	public String getAvatar(Long userId) throws UserNotFoundException {
 
 		User user = this.getUser(userId);
-		List<AccountSetting> avatarSettings = null;
-		Optional<AccountSetting> avatarSetting = Optional.empty();
+		Optional<AccountSetting> avatarSetting = accountSettingsService
+				.getAccountSetting(user, "avatar");
 
-		try {
-			avatarSettings = accountSettingsService.getAccountSetting(user,
-					"avatar");
-
-			// there's only one
-			avatarSetting = Optional.ofNullable(avatarSettings.get(0));
-
-		} catch (ElementNotFoundException e) {
+		if (!avatarSetting.isPresent()) {
 			// create default
 			AccountSetting ac = new AccountSetting(null, userId, "avatar",
 					AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
@@ -913,16 +905,13 @@ public class UserService {
 	public void changeEmail(@NonNull User user, @NonNull String email) {
 		Assert.isTrue(!email.isEmpty());
 
-		List<AccountSetting> accountSetting;
+		Optional<AccountSetting> accountSetting = accountSettingsService
+				.getAccountSetting(user, "newEmail");
 
-		try {
-			accountSetting = accountSettingsService.getAccountSetting(user,
-					"newEmail");
-		} catch (ElementNotFoundException e) {
+		if (!accountSetting.isPresent())
 			throw new AccessDeniedException("Invalid link provided.");
-		}
 
-		if (!email.equalsIgnoreCase(accountSetting.get(0).getValue()))
+		if (!email.equalsIgnoreCase(accountSetting.get().getValue()))
 			throw new AccessDeniedException("Invalid link provided.");
 
 		userRepository.changeEmail(user, email);

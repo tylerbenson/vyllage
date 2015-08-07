@@ -1,8 +1,8 @@
 package accounts.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -18,7 +18,6 @@ import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.AccountSettingRepository;
-import accounts.repository.ElementNotFoundException;
 import accounts.service.aspects.CheckPrivacy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -55,21 +54,21 @@ public class AccountSettingsService {
 	}
 
 	@CheckPrivacy
-	public List<AccountSetting> getAccountSetting(final User user,
-			final String settingName) throws ElementNotFoundException {
+	public Optional<AccountSetting> getAccountSetting(final User user,
+			final String settingName) {
 		Assert.notNull(settingName);
 
 		switch (settingName) {
 		case "firstName":
-			return Arrays.asList(new AccountSetting(null, user.getUserId(),
+			return Optional.of(new AccountSetting(null, user.getUserId(),
 					"firstName", user.getFirstName(), Privacy.PUBLIC.name()));
 
 		case "middleName":
-			return Arrays.asList(new AccountSetting(null, user.getUserId(),
+			return Optional.of(new AccountSetting(null, user.getUserId(),
 					"middleName", user.getMiddleName(), Privacy.PUBLIC.name()));
 
 		case "lastName":
-			return Arrays.asList(new AccountSetting(null, user.getUserId(),
+			return Optional.of(new AccountSetting(null, user.getUserId(),
 					"lastName", user.getLastName(), Privacy.PUBLIC.name()));
 
 		default:

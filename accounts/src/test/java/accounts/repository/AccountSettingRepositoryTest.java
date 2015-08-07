@@ -2,8 +2,9 @@ package accounts.repository;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Optional;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -27,7 +28,7 @@ public class AccountSettingRepositoryTest {
 	private AccountSettingRepository accountSettingRepository;
 
 	@Test
-	public void saveTest() throws ElementNotFoundException {
+	public void saveTest() {
 		Long userId = 0L;
 		AccountSetting setting = new AccountSetting();
 		String test = "test";
@@ -40,19 +41,19 @@ public class AccountSettingRepositoryTest {
 
 		accountSettingRepository.set(userId, setting);
 
-		List<AccountSetting> list = accountSettingRepository.get(userId, test);
+		Optional<AccountSetting> savedSetting = accountSettingRepository.get(
+				userId, test);
 
-		assertTrue(list != null && !list.isEmpty());
-		assertTrue(list.stream().anyMatch(
-				s -> s.getAccountSettingId() != null
-						&& s.getName().equalsIgnoreCase(test)
-						&& s.getErrorMessage() == null
-						&& s.getPrivacy() != null
-						&& s.getValue().equalsIgnoreCase(aValue)));
+		assertTrue(savedSetting.isPresent());
+		assertTrue(savedSetting.get().getAccountSettingId() != null
+				&& savedSetting.get().getName().equalsIgnoreCase(test)
+				&& savedSetting.get().getErrorMessage() == null
+				&& savedSetting.get().getPrivacy() != null
+				&& savedSetting.get().getValue().equalsIgnoreCase(aValue));
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void saveTestWrongUserId() throws ElementNotFoundException {
+	public void saveTestWrongUserId() {
 		Long userId = -2L;
 		AccountSetting setting = new AccountSetting();
 		String test = "test";
@@ -67,7 +68,7 @@ public class AccountSettingRepositoryTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void saveNullValue() throws ElementNotFoundException {
+	public void saveNullValue() {
 		Long userId = 0L;
 		AccountSetting setting = new AccountSetting();
 		String test = "test";
@@ -81,7 +82,7 @@ public class AccountSettingRepositoryTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void saveNullPrivacy() throws ElementNotFoundException {
+	public void saveNullPrivacy() {
 		Long userId = 0L;
 		AccountSetting setting = new AccountSetting();
 		String test = "test";
@@ -96,7 +97,7 @@ public class AccountSettingRepositoryTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void saveNullUserId() throws ElementNotFoundException {
+	public void saveNullUserId() {
 		Long userId = null;
 		AccountSetting setting = new AccountSetting();
 		String test = "test";
@@ -110,8 +111,8 @@ public class AccountSettingRepositoryTest {
 		accountSettingRepository.set(userId, setting);
 	}
 
-	@Test(expected = ElementNotFoundException.class)
-	public void testDeleteByName() throws ElementNotFoundException {
+	@Test()
+	public void testDeleteByName() {
 		Long userId = 0L;
 		AccountSetting setting = new AccountSetting();
 		String test = "delete";
@@ -125,7 +126,8 @@ public class AccountSettingRepositoryTest {
 		accountSettingRepository.set(userId, setting);
 		accountSettingRepository.deleteByName(userId, test);
 
-		accountSettingRepository.get(userId, test);
+		Assert.assertFalse(accountSettingRepository.get(userId, test)
+				.isPresent());
 	}
 
 	public void testDeleteByUserId() {

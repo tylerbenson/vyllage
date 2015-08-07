@@ -4,7 +4,7 @@ import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROL
 import static accounts.domain.tables.Users.USERS;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jooq.Condition;
@@ -18,7 +18,6 @@ import user.common.constants.RolesEnum;
 import accounts.domain.tables.UserOrganizationRoles;
 import accounts.domain.tables.Users;
 import accounts.model.account.settings.AccountSetting;
-import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserOrganizationRoleRepository;
 import accounts.service.AccountSettingsService;
 
@@ -88,16 +87,15 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 	public boolean isNearGraduationDate(User user) {
 
 		boolean isWithinGraduationDateRange = false;
-		try {
-			List<AccountSetting> settings = accountSettingsService
-					.getAccountSetting(user, "graduationDate");
-			LocalDateTime graduationDate = LocalDateTime.parse(settings.get(0)
-					.getValue());
+		Optional<AccountSetting> accountSetting = accountSettingsService
+				.getAccountSetting(user, "graduationDate");
+
+		if (accountSetting.isPresent()) {
+
+			LocalDateTime graduationDate = LocalDateTime.parse(accountSetting
+					.get().getValue());
 			isWithinGraduationDateRange = LocalDateTime.now().isAfter(
 					graduationDate.minusDays(DAYS_NEAR_GRADUATION_DATE));
-
-		} catch (ElementNotFoundException e) {
-			// nothing to do
 		}
 
 		return isWithinGraduationDateRange;

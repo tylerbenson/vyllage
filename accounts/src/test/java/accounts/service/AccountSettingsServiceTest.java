@@ -2,6 +2,7 @@ package accounts.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -41,7 +42,7 @@ public class AccountSettingsServiceTest {
 	private AccountSettingRepository accountSettingRepository;
 
 	@Test
-	public void saveAccountSetting() throws ElementNotFoundException {
+	public void saveAccountSetting() {
 		Long userId = 1L;
 		String emailUpdates = "emailUpdates";
 		String value = "NEVER";
@@ -57,10 +58,11 @@ public class AccountSettingsServiceTest {
 
 		accountSettingsService.setAccountSetting(u, as);
 
-		List<AccountSetting> settings = accountSettingsService
+		Optional<AccountSetting> setting = accountSettingsService
 				.getAccountSetting(u, emailUpdates);
-		Assert.assertEquals(emailUpdates, settings.get(0).getName());
-		Assert.assertEquals(value, settings.get(0).getValue());
+		Assert.assertTrue(setting.isPresent());
+		Assert.assertEquals(emailUpdates, setting.get().getName());
+		Assert.assertEquals(value, setting.get().getValue());
 	}
 
 	@Test
@@ -79,10 +81,11 @@ public class AccountSettingsServiceTest {
 
 		accountSettingsService.setAccountSetting(u, as);
 
-		List<AccountSetting> settings = accountSettingsService
+		Optional<AccountSetting> savedSetting = accountSettingsService
 				.getAccountSetting(u, fieldName);
-		Assert.assertEquals(fieldName, settings.get(0).getName());
-		Assert.assertEquals(value, settings.get(0).getValue());
+		Assert.assertTrue(savedSetting.isPresent());
+		Assert.assertEquals(fieldName, savedSetting.get().getName());
+		Assert.assertEquals(value, savedSetting.get().getValue());
 
 		User u2 = userService.getUser(userId);
 		Assert.assertEquals(value, u2.getFirstName());
@@ -181,8 +184,7 @@ public class AccountSettingsServiceTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void getAccoutSettingSettingNameIsNull()
-			throws ElementNotFoundException {
+	public void getAccoutSettingSettingNameIsNull() {
 
 		AccountSettingRepository accountSettingRepository = Mockito
 				.mock(AccountSettingRepository.class);
@@ -199,8 +201,7 @@ public class AccountSettingsServiceTest {
 	}
 
 	@Test
-	public void getAccoutSettingFirstNameSuccessfull()
-			throws ElementNotFoundException {
+	public void getAccoutSettingFirstNameSuccessfull() {
 		String settingName = "firstName";
 		String firstName = "Zelda";
 
@@ -215,20 +216,19 @@ public class AccountSettingsServiceTest {
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
 				userService, accountSettingRepository);
 
-		List<AccountSetting> accountSetting = accountSettingsService
+		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
 
 		Assert.assertNotNull(accountSetting);
 
-		Assert.assertFalse(accountSetting.isEmpty());
+		Assert.assertTrue(accountSetting.isPresent());
 
-		Assert.assertEquals(firstName, accountSetting.get(0).getValue());
+		Assert.assertEquals(firstName, accountSetting.get().getValue());
 
 	}
 
 	@Test
-	public void getAccoutSettingMiddleNameSuccessfull()
-			throws ElementNotFoundException {
+	public void getAccoutSettingMiddleNameSuccessfull() {
 		String settingName = "middleName";
 		String middleName = "Zelda";
 
@@ -243,20 +243,19 @@ public class AccountSettingsServiceTest {
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
 				userService, accountSettingRepository);
 
-		List<AccountSetting> accountSetting = accountSettingsService
+		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
 
 		Assert.assertNotNull(accountSetting);
 
-		Assert.assertFalse(accountSetting.isEmpty());
+		Assert.assertTrue(accountSetting.isPresent());
 
-		Assert.assertEquals(middleName, accountSetting.get(0).getValue());
+		Assert.assertEquals(middleName, accountSetting.get().getValue());
 
 	}
 
 	@Test
-	public void getAccoutSettingLastNameSuccessfull()
-			throws ElementNotFoundException {
+	public void getAccoutSettingLastNameSuccessfull() {
 		String settingName = "lastName";
 		String lastName = "Zelda";
 
@@ -271,40 +270,38 @@ public class AccountSettingsServiceTest {
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
 				userService, accountSettingRepository);
 
-		List<AccountSetting> accountSetting = accountSettingsService
+		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
 
 		Assert.assertNotNull(accountSetting);
 
-		Assert.assertFalse(accountSetting.isEmpty());
+		Assert.assertTrue(accountSetting.isPresent());
 
-		Assert.assertEquals(lastName, accountSetting.get(0).getValue());
+		Assert.assertEquals(lastName, accountSetting.get().getValue());
 
 	}
 
 	@Test
-	public void getAccoutSettingEmailSuccessfull()
-			throws ElementNotFoundException, UserNotFoundException {
+	public void getAccoutSettingEmailSuccessfull() throws UserNotFoundException {
 		String settingName = "email";
 
 		Long userId = 0L;
 		User user = userService.getUser(userId);
 
-		List<AccountSetting> accountSetting = accountSettingsService
+		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
 
 		Assert.assertNotNull(accountSetting);
 
-		Assert.assertFalse(accountSetting.isEmpty());
+		Assert.assertTrue(accountSetting.isPresent());
 
-		Assert.assertEquals(user.getUsername(), accountSetting.get(0)
-				.getValue());
+		Assert.assertEquals(user.getUsername(), accountSetting.get().getValue());
 
 	}
 
 	@Test
 	public void getAllAccoutSettingsByUserIdSuccessfull()
-			throws ElementNotFoundException, UserNotFoundException {
+			throws UserNotFoundException {
 		Long userId = 0L;
 
 		List<Long> userIds = Arrays.asList(userId);
@@ -316,8 +313,7 @@ public class AccountSettingsServiceTest {
 	}
 
 	@Test
-	public void getAllAccoutSettingsSuccessfull()
-			throws ElementNotFoundException, UserNotFoundException {
+	public void getAllAccoutSettingsSuccessfull() throws UserNotFoundException {
 		Long userId = 0L;
 		User user = userService.getUser(userId);
 
@@ -328,15 +324,16 @@ public class AccountSettingsServiceTest {
 		Assert.assertFalse(accountSetting.isEmpty());
 	}
 
-	@Test(expected = ElementNotFoundException.class)
-	public void getAccoutSettingNotFound() throws ElementNotFoundException {
+	@Test
+	public void getAccoutSettingNotFound() {
 		String settingName = "email";
 
 		User user = Mockito.mock(User.class);
 
 		Mockito.when(user.getUserId()).thenReturn(999999999999L);
 
-		accountSettingsService.getAccountSetting(user, settingName);
+		Assert.assertFalse(accountSettingsService.getAccountSetting(user,
+				settingName).isPresent());
 
 	}
 
@@ -431,8 +428,7 @@ public class AccountSettingsServiceTest {
 	}
 
 	@Test
-	public void setAccoutSettingEmailSuccessfull()
-			throws ElementNotFoundException {
+	public void setAccoutSettingEmailSuccessfull() {
 		String settingName = "email";
 		String settingValue = "some@email.com";
 		String previousEmail = "old@email.com";
@@ -465,10 +461,12 @@ public class AccountSettingsServiceTest {
 		Assert.assertEquals(previousEmail, savedAccountSetting.getValue());
 		Assert.assertEquals(userId, savedAccountSetting.getUserId());
 
-		List<AccountSetting> newEmailSetting = accountSettingsService
+		Optional<AccountSetting> newEmailSetting = accountSettingsService
 				.getAccountSetting(user, "newEmail");
 
-		Assert.assertEquals(settingValue, newEmailSetting.get(0).getValue());
+		Assert.assertTrue(newEmailSetting.isPresent());
+
+		Assert.assertEquals(settingValue, newEmailSetting.get().getValue());
 
 	}
 
