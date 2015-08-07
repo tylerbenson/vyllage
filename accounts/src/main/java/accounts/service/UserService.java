@@ -381,21 +381,6 @@ public class UserService {
 	}
 
 	/**
-	 * Returns account contact information.
-	 */
-	public AccountContact getAccountContact(HttpServletRequest request,
-			User user) {
-
-		List<AccountContact> accountContacts = this.getAccountContacts(request,
-				Arrays.asList(user.getUserId()));
-
-		if (accountContacts != null && !accountContacts.isEmpty())
-			return accountContacts.get(0); // only one
-
-		return addAvatarUrl().apply(new AccountContact(user));
-	}
-
-	/**
 	 * Returns account contact information for several users.
 	 * 
 	 * @param request
