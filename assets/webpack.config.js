@@ -6,7 +6,8 @@ module.exports = {
   entry: {
     'resume.js': './src/resume.jsx',
     'getFeedback.js': './src/getFeedback.jsx',
-    'settings.js': './src/settings.jsx'
+    'settings.js': './src/settings.jsx',
+    'intercom.js': './src/components/intercom.js'
   },
   output: {
     publicPath: '/javascript',

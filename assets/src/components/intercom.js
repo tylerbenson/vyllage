@@ -37,5 +37,5 @@ window.intercomSettings = {
   created_at: document.getElementById('meta_userInfo_created_at') === null ? null : document.getElementById('meta_userInfo_created_at').getAttribute('content'),
   app_id: "dtqkoq5u",
   user_id : document.getElementById('meta_userInfo_user') === null ? null : document.getElementById('meta_userInfo_user').content,
-  organizationIds : document.getElementById('meta_userInfo_organizationIds') === null ? null : document.getElementById('meta_userInfo_organizationIds').content
+  organizationIds : document.getElementById('meta_userInfo_organizationIds') === null ? null : document.getElementById('meta_userInfo_organizationIds').contdent
 };
