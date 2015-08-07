@@ -2,15 +2,15 @@ hooks:
   pre_setup: npm install
 
 nodejs:
-  version: '0.12.4'
+  version: '0.12.7'
 
 java:
   java_version: java-8-oracle
 
-postgresql:                              
-  version: '9.4'                  
-  adapter: postgresql                    
-  config:                        
+postgresql:
+  version: '9.4'
+  adapter: postgresql
+  config:
     pool: 5
     config:
      postgis_extension: false

@@ -91,6 +91,6 @@
   "private": true,
   "engines": {
     "node": "0.12.x",
-    "npm": "2.6.x"
+    "npm": "2.12.x"
   }
 }
