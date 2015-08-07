@@ -5,7 +5,7 @@
 @import "./components/common/defaults";
 @import "./components/common/typography";
 
-.error {
+.info {
   #container {
     padding: 0;
   }
@@ -51,7 +51,7 @@
   }
 
   p {
-    font-size: 1.15em;
+    font-size: 1em;
     margin: 0.35em 0;
   }
 
