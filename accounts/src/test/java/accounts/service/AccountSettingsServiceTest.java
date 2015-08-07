@@ -303,7 +303,7 @@ public class AccountSettingsServiceTest {
 	public void setAccoutSettingEmailShouldNotChange()
 			throws UserNotFoundException {
 		String settingName = "email";
-		String settingValue = "new@gmail.com";
+		String settingValue = "user@vyllage.com";
 
 		Long userId = 0L;
 		User user = userService.getUser(userId);

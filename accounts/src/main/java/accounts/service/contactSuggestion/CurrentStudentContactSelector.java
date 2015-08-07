@@ -3,7 +3,8 @@ package accounts.service.contactSuggestion;
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 import static accounts.domain.tables.Users.USERS;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,8 @@ import accounts.service.AccountSettingsService;
 public class CurrentStudentContactSelector extends AbstractContactSelector {
 
 	public static final int DAYS_NEAR_GRADUATION_DATE = 35;
+
+	private static final String MMM_YYYY_DD = "MMM yyyy dd";
 
 	private AccountSettingsService accountSettingsService;
 
@@ -91,10 +94,21 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 				.getAccountSetting(user, "graduationDate");
 
 		if (accountSetting.isPresent()) {
+			LocalDate graduationDate = null;
 
-			LocalDateTime graduationDate = LocalDateTime.parse(accountSetting
-					.get().getValue() + " 01");
-			isWithinGraduationDateRange = LocalDateTime.now().isAfter(
+			try {
+
+				graduationDate = LocalDate.parse(accountSetting.get()
+						.getValue() + " 01",
+						DateTimeFormatter.ofPattern(MMM_YYYY_DD));
+
+			} catch (java.time.format.DateTimeParseException e) {
+
+				graduationDate = LocalDate.parse(accountSetting.get()
+						.getValue());
+			}
+
+			isWithinGraduationDateRange = LocalDate.now().isAfter(
 					graduationDate.minusDays(DAYS_NEAR_GRADUATION_DATE));
 		}
 

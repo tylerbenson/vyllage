@@ -1,6 +1,6 @@
 package accounts.service.contactSuggestion;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -135,8 +135,34 @@ public class UserContactSuggestionServiceTest {
 		createTestUser("career-test", RolesEnum.CAREER_ADVISOR);
 
 		AccountSetting setting = new AccountSetting(null, student.getUserId(),
-				"graduationDate", LocalDateTime.now().plusDays(10).toString(),
+				"graduationDate", LocalDate.now().plusDays(10).toString(),
 				Privacy.PUBLIC.name());
+		accountSettingRepository.set(student.getUserId(), setting);
+
+		List<User> suggestions = userContactSuggestionService.getSuggestions(
+				student, null, 5);
+
+		Assert.assertNotNull("No users found.", suggestions);
+		Assert.assertFalse("No users found.", suggestions.isEmpty());
+		Assert.assertTrue(
+				"No Academic Advisor found.",
+				suggestions
+						.get(0)
+						.getAuthorities()
+						.stream()
+						.anyMatch(
+								a -> a.getAuthority().contains(
+										RolesEnum.CAREER_ADVISOR.name())));
+
+	}
+
+	@Test
+	public void studentNextToGraduationDateWithDateStringTest() {
+		User student = createTestUser("student-test", RolesEnum.STUDENT);
+		createTestUser("career-test", RolesEnum.CAREER_ADVISOR);
+
+		AccountSetting setting = new AccountSetting(null, student.getUserId(),
+				"graduationDate", "Aug 2015", Privacy.PUBLIC.name());
 		accountSettingRepository.set(student.getUserId(), setting);
 
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
