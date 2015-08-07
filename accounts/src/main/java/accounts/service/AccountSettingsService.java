@@ -124,24 +124,30 @@ public class AccountSettingsService {
 			return setLastName(user, setting);
 
 		case "email":
-			try {
-				userService.sendEmailChangeConfirmation(user,
-						setting.getValue());
-			} catch (EmailException | JsonProcessingException e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
+			// don't change email if they are the same!
+			if (!user.getUsername().equalsIgnoreCase(setting.getValue())) {
+				try {
+
+					userService.sendEmailChangeConfirmation(user,
+							setting.getValue());
+				} catch (EmailException | JsonProcessingException e) {
+					logger.severe(ExceptionUtils.getStackTrace(e));
+					NewRelic.noticeError(e);
+				}
+
+				// save the new email as a new setting to query from the
+				// frontend.
+				AccountSetting newEmailSetting = new AccountSetting(null,
+						setting.getUserId(), "newEmail", setting.getValue(),
+						setting.getPrivacy());
+
+				accountSettingRepository.set(user.getUserId(), newEmailSetting);
+
+				// but don't change the setting value yet, the user needs to
+				// confirm
+				// the change by mail.
+				setting.setValue(user.getUsername());
 			}
-
-			// save the new email as a new setting to query from the frontend.
-			AccountSetting newEmailSetting = new AccountSetting(null,
-					setting.getUserId(), "newEmail", setting.getValue(),
-					setting.getPrivacy());
-
-			accountSettingRepository.set(user.getUserId(), newEmailSetting);
-
-			// but don't change the setting value yet, the user needs to confirm
-			// the change by mail.
-			setting.setValue(user.getUsername());
 
 			return setting;
 		default:
