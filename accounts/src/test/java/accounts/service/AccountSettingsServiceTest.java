@@ -300,6 +300,32 @@ public class AccountSettingsServiceTest {
 	}
 
 	@Test
+	public void setAccoutSettingEmailShouldNotChange()
+			throws UserNotFoundException {
+		String settingName = "email";
+		String settingValue = "new@gmail.com";
+
+		Long userId = 0L;
+		User user = userService.getUser(userId);
+
+		AccountSetting accountSetting = new AccountSetting(null, userId,
+				"email", settingValue, Privacy.PUBLIC.name().toLowerCase());
+
+		accountSettingsService.setAccountSetting(user, accountSetting);
+
+		Optional<AccountSetting> accountSetting2 = accountSettingsService
+				.getAccountSetting(user, settingName);
+
+		Assert.assertNotNull(accountSetting2);
+
+		Assert.assertTrue(accountSetting2.isPresent());
+
+		Assert.assertEquals(user.getUsername(), accountSetting2.get()
+				.getValue());
+
+	}
+
+	@Test
 	public void getAllAccoutSettingsByUserIdSuccessfull()
 			throws UserNotFoundException {
 		Long userId = 0L;
