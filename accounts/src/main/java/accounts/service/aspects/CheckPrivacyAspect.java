@@ -3,6 +3,7 @@ package accounts.service.aspects;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -41,42 +42,74 @@ public class CheckPrivacyAspect {
 
 		// setting name is present
 		if (args != null) {
-			List<AccountSetting> settings = (List<AccountSetting>) joinPoint
-					.proceed();
-
-			// user retrieving his own settings
-			if (settings.stream().anyMatch(
-					setting -> setting.getUserId()
-							.equals(getUser().getUserId())))
-				return settings;
 
 			List<Organization> organizationsForUser = userService
 					.getOrganizationsForUser(getUser());
 
-			// get organization and public shared settings, private are ignored
-			filteredSettings = settings
-					.stream()
-					.filter(setting -> setting.getPrivacy().equalsIgnoreCase(
-							Privacy.ORGANIZATION.name())
-							|| setting.getPrivacy().equalsIgnoreCase(
-									Privacy.PUBLIC.name()))
-					.collect(Collectors.toList());
+			Object object = joinPoint.proceed();
+			if (object instanceof List<?>) {
 
-			// filter by organization
-			if (!filteredSettings.isEmpty()) {
+				List<AccountSetting> settings = (List<AccountSetting>) object;
 
-				for (Iterator<AccountSetting> iterator = settings.iterator(); iterator
-						.hasNext();) {
-					AccountSetting accountSetting = iterator.next();
-					if (accountSetting.getPrivacy().equalsIgnoreCase(
-							Privacy.ORGANIZATION.name())
-							&& organizationsForUser.stream().noneMatch(
-									setting -> setting.getOrganizationName()
-											.equalsIgnoreCase(
-													accountSetting.getValue()))) {
-						iterator.remove();
+				// user retrieving his own settings
+				if (settings.stream().anyMatch(
+						setting -> setting.getUserId().equals(
+								getUser().getUserId())))
+					return settings;
+
+				// get organization and public shared settings, private are
+				// ignored
+				filteredSettings = settings
+						.stream()
+						.filter(setting -> Privacy.ORGANIZATION.name()
+								.equalsIgnoreCase(setting.getPrivacy())
+								|| Privacy.PUBLIC.name().equalsIgnoreCase(
+										setting.getPrivacy()))
+						.collect(Collectors.toList());
+
+				// filter by organization
+				if (!filteredSettings.isEmpty()) {
+
+					for (Iterator<AccountSetting> iterator = settings
+							.iterator(); iterator.hasNext();) {
+						AccountSetting accountSetting = iterator.next();
+						if (Privacy.ORGANIZATION.name().equalsIgnoreCase(
+								accountSetting.getPrivacy())
+								&& organizationsForUser.stream().noneMatch(
+										setting -> setting
+												.getOrganizationName()
+												.equalsIgnoreCase(
+														accountSetting
+																.getValue()))) {
+							iterator.remove();
+						}
 					}
 				}
+
+			} else {
+				Optional<AccountSetting> accountSetting = (Optional<AccountSetting>) object;
+
+				if (!accountSetting.isPresent())
+					return accountSetting;
+
+				if (Privacy.PUBLIC.name().equalsIgnoreCase(
+						accountSetting.get().getPrivacy()))
+					return accountSetting;
+
+				if (Privacy.ORGANIZATION.name().equalsIgnoreCase(
+						accountSetting.get().getPrivacy())
+						&& organizationsForUser.stream()
+								.noneMatch(
+										setting -> setting
+												.getOrganizationName()
+												.equalsIgnoreCase(
+														accountSetting.get()
+																.getValue())))
+
+					return Optional.empty();
+
+				else
+					return accountSetting;
 			}
 		}
 

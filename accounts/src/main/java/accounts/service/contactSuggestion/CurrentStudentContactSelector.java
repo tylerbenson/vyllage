@@ -3,8 +3,9 @@ package accounts.service.contactSuggestion;
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 import static accounts.domain.tables.Users.USERS;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jooq.Condition;
@@ -18,13 +19,14 @@ import user.common.constants.RolesEnum;
 import accounts.domain.tables.UserOrganizationRoles;
 import accounts.domain.tables.Users;
 import accounts.model.account.settings.AccountSetting;
-import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserOrganizationRoleRepository;
 import accounts.service.AccountSettingsService;
 
 public class CurrentStudentContactSelector extends AbstractContactSelector {
 
 	public static final int DAYS_NEAR_GRADUATION_DATE = 35;
+
+	private static final String MMM_YYYY_DD = "MMM yyyy dd";
 
 	private AccountSettingsService accountSettingsService;
 
@@ -88,16 +90,26 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 	public boolean isNearGraduationDate(User user) {
 
 		boolean isWithinGraduationDateRange = false;
-		try {
-			List<AccountSetting> settings = accountSettingsService
-					.getAccountSetting(user, "graduationDate");
-			LocalDateTime graduationDate = LocalDateTime.parse(settings.get(0)
-					.getValue());
-			isWithinGraduationDateRange = LocalDateTime.now().isAfter(
-					graduationDate.minusDays(DAYS_NEAR_GRADUATION_DATE));
+		Optional<AccountSetting> accountSetting = accountSettingsService
+				.getAccountSetting(user, "graduationDate");
 
-		} catch (ElementNotFoundException e) {
-			// nothing to do
+		if (accountSetting.isPresent()) {
+			LocalDate graduationDate = null;
+
+			try {
+
+				graduationDate = LocalDate.parse(accountSetting.get()
+						.getValue() + " 01",
+						DateTimeFormatter.ofPattern(MMM_YYYY_DD));
+
+			} catch (java.time.format.DateTimeParseException e) {
+
+				graduationDate = LocalDate.parse(accountSetting.get()
+						.getValue());
+			}
+
+			isWithinGraduationDateRange = LocalDate.now().isAfter(
+					graduationDate.minusDays(DAYS_NEAR_GRADUATION_DATE));
 		}
 
 		return isWithinGraduationDateRange;
