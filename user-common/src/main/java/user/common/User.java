@@ -16,6 +16,7 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
+import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
 
 public class User implements UserDetails, CredentialsContainer {
@@ -136,6 +137,18 @@ public class User implements UserDetails, CredentialsContainer {
 				.allMatch(
 						a -> RolesEnum.GUEST.name().equalsIgnoreCase(
 								a.getAuthority()));
+	}
+
+	public boolean isVyllageAdmin() {
+		return this
+				.getAuthorities()
+				.stream()
+				.anyMatch(
+						a -> RolesEnum.ADMIN.name().equalsIgnoreCase(
+								a.getAuthority())
+								&& OrganizationEnum.VYLLAGE.getOrganizationId()
+										.equals(((UserOrganizationRole) a)
+												.getOrganizationId()));
 	}
 
 	@Override
