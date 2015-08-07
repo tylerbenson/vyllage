@@ -93,7 +93,7 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 		if (accountSetting.isPresent()) {
 
 			LocalDateTime graduationDate = LocalDateTime.parse(accountSetting
-					.get().getValue());
+					.get().getValue() + " 01");
 			isWithinGraduationDateRange = LocalDateTime.now().isAfter(
 					graduationDate.minusDays(DAYS_NEAR_GRADUATION_DATE));
 		}
