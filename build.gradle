@@ -9,11 +9,11 @@ ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site
 ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') , project(':oauth-provider')  ]
 ext.dbProjects = [ project(':accounts'), project(':documents'), project(':togglz') ]
 
-wrapper.gradleVersion = '2.1'
+wrapper.gradleVersion = '2.5'
 
 buildscript {
     ext {
-        springBootVersion = '1.2.3.RELEASE'
+        springBootVersion = '1.2.5.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -47,7 +47,7 @@ configure(javaProjects) {
 
     jacoco {
         toolVersion = "0.7.4.201502262128"
-        reportsDir = file("$buildDir/reports/Jacoco")
+        reportsDir = file("$buildDir/reports/jacoco")
     }
 
     findbugs {
