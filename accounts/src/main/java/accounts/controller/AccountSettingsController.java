@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -194,9 +195,15 @@ public class AccountSettingsController {
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountSetting> getAccountSetting(
-			@PathVariable String parameter, @AuthenticationPrincipal User user)
-			throws ElementNotFoundException {
-		return accountSettingsService.getAccountSetting(user, parameter);
+			@PathVariable String parameter, @AuthenticationPrincipal User user) {
+		Optional<AccountSetting> accountSetting = accountSettingsService
+				.getAccountSetting(user, parameter);
+
+		// to avoid changing the frontend for now
+		if (accountSetting.isPresent())
+			return Arrays.asList(accountSetting.get());
+		else
+			return Collections.emptyList();
 	}
 
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.PUT, consumes = "application/json")
