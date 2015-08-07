@@ -12,15 +12,12 @@ var Datepicker = React.createClass({
   getInitialState: function () {
     var date = this.props.date;
 
-
-
     var active_year;
-    if( date =='NaN' || date == 'Present' ){
+    if( date == undefined || date =='NaN' || date == 'Present' ){
       active_year = parseInt(moment(new Date()).format('YYYY'))
     }else{
       active_year = parseInt( date.split(' ')[1] );
     }
-
 
     return {
       isOpen: false,
@@ -31,7 +28,7 @@ var Datepicker = React.createClass({
       year: parseInt(moment(new Date(date)).format('YYYY')),
       month: moment(new Date(date)).format('MMM'),
       date: date ,
-      active_year :  active_year
+      active_year:active_year
     };
   },
   componentWillReceiveProps: function (nextProps) {
@@ -73,7 +70,6 @@ var Datepicker = React.createClass({
   },
   incrementYear: function (e) {
     e.preventDefault();
-
 
     if( this.state.date ){
       var tmp_date = this.state.date.split(' '),
