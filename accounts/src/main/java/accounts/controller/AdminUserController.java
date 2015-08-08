@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
-import user.common.constants.OrganizationEnum;
+import user.common.constants.RolesEnum;
 import user.common.web.UserInfo;
 import accounts.model.BatchAccount;
 import accounts.model.account.AccountNames;
@@ -139,6 +139,37 @@ public class AdminUserController {
 		for (GrantedAuthority grantedAuthority : selectedUser.getAuthorities())
 			existingUserOrganizations
 					.add((UserOrganizationRole) grantedAuthority);
+
+		// validate new roles vs old roles by organization
+		// if a user is admin he can set himself whatever role he wants on a
+		// particular organization
+
+		// si no es admin vyllage y quiere setear a un usuario como admin en sus
+		// organization
+		// chequear si es admin
+
+		// if he is not vyllage admin
+		if (!user.isVyllageAdmin()) {
+
+			// and wants to add to someone the admin role
+			if (newRoles.stream().anyMatch(
+					uor -> RolesEnum.ADMIN.name().equalsIgnoreCase(
+							uor.getAuthority()))
+					&& existingUserOrganizations.stream().noneMatch(
+							uor -> RolesEnum.ADMIN.name().equalsIgnoreCase(
+									uor.getAuthority()))) {
+				// check if I'm admin there
+				List<Long> organizationsWithAdminRole = newRoles
+						.stream()
+						.filter(uor -> RolesEnum.ADMIN.name().equalsIgnoreCase(
+								uor.getAuthority()))
+						.map(uor -> uor.getOrganizationId())
+						.collect(Collectors.toList());
+
+				// boolean amIAdmin = user.getAuthorities().stream().
+			}
+
+		}
 
 		// remove roles that were removed in the frontend
 		existingUserOrganizations.removeIf(org -> org.getOrganizationId()
@@ -502,12 +533,7 @@ public class AdminUserController {
 	private List<Organization> getUserOrganizations(User user) {
 		List<Organization> allOrganizations;
 
-		if (user.getAuthorities()
-				.stream()
-				.anyMatch(
-						uor -> OrganizationEnum.VYLLAGE.getOrganizationId()
-								.equals(((UserOrganizationRole) uor)
-										.getOrganizationId())))
+		if (user.isVyllageAdmin())
 			allOrganizations = organizationRepository.getAll();
 		else
 			allOrganizations = organizationRepository.getAll(user
