@@ -211,8 +211,6 @@ var Datepicker = React.createClass({
         activeMonth = moment(new Date()).format('MMM');
       }
 
-      console.log( activeMonth );
-
       var monthNodes = months.map(function (month, index) {
         var className = classnames('month', {
           active: activeMonth === month
