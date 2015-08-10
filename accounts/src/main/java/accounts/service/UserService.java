@@ -544,7 +544,10 @@ public class UserService {
 
 		if (EmailValidator.isValid(linkRequest.getEmail()) == invalid)
 			throw new IllegalArgumentException(
-					"Contains invalid email address.");
+					"User: "
+							+ loggedInUser.getUsername()
+							+ " Link creation error: contains invalid email address, address: "
+							+ linkRequest.getEmail());
 
 		// assigns current user's Organizations
 		// assigns default Guest role.
