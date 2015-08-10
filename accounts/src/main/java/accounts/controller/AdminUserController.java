@@ -92,7 +92,7 @@ public class AdminUserController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String showUserRoles(@AuthenticationPrincipal User user, Model model) {
 
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("users", userService
 				.getUsersFromOrganization(allOrganizations.get(0)
@@ -111,7 +111,7 @@ public class AdminUserController {
 			throws UserNotFoundException {
 
 		if (form.isInvalid()) {
-			List<Organization> allOrganizations = getUserOrganizations(user);
+			List<Organization> allOrganizations = getAdminOrganizations(user);
 			model.addAttribute("organizations", allOrganizations);
 			model.addAttribute("users", userService
 					.getUsersFromOrganization(form.getOrganizationId()));
@@ -156,7 +156,7 @@ public class AdminUserController {
 	public String showUsers(final HttpServletRequest request,
 			@AuthenticationPrincipal User user, Model model) {
 
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 
 		List<UserFormObject> usersFromOrganization = userService
 				.getUsersFromOrganization(
@@ -201,7 +201,7 @@ public class AdminUserController {
 			@AuthenticationPrincipal User user, final AdminUsersForm form,
 			Model model) {
 
-		List<OrganizationOptionForm> organizationOptions = getUserOrganizations(
+		List<OrganizationOptionForm> organizationOptions = getAdminOrganizations(
 				user)
 				.stream()
 				.map(org1 -> new OrganizationOptionForm(org1, org1
@@ -241,7 +241,7 @@ public class AdminUserController {
 	public String adminUserRoleManagement(@AuthenticationPrincipal User user,
 			Model model) {
 
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("users", userService
 				.getUsersFromOrganization(allOrganizations.get(0)
@@ -259,7 +259,7 @@ public class AdminUserController {
 			AccountsRoleManagementForm form, Model model) {
 
 		if (form.isInvalid()) {
-			List<Organization> allOrganizations = getUserOrganizations(user);
+			List<Organization> allOrganizations = getAdminOrganizations(user);
 			model.addAttribute("organizations", allOrganizations);
 			model.addAttribute("users", userService
 					.getUsersFromOrganization(allOrganizations.get(0)
@@ -297,7 +297,7 @@ public class AdminUserController {
 
 		User selectedUser = userService.getUser(userId);
 
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 		List<Organization> userOrganizations = organizationRepository
 				.getAll(selectedUser
 						.getAuthorities()
@@ -328,7 +328,7 @@ public class AdminUserController {
 
 		if (form.isInvalid()) {
 
-			List<Organization> allOrganizations = getUserOrganizations(user);
+			List<Organization> allOrganizations = getAdminOrganizations(user);
 
 			List<Organization> userOrganizations = organizationRepository
 					.getAll(selectedUser
@@ -483,7 +483,7 @@ public class AdminUserController {
 
 	private void prepareBatchError(BatchAccount batch, Model model, String msg,
 			User user) {
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("roles", roleRepository.getAll());
@@ -492,7 +492,7 @@ public class AdminUserController {
 	}
 
 	private void prepareBatch(Model model, User user) {
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("roles", roleRepository.getAll());
@@ -506,7 +506,7 @@ public class AdminUserController {
 	 * @param user
 	 * @return
 	 */
-	private List<Organization> getUserOrganizations(User user) {
+	private List<Organization> getAdminOrganizations(User user) {
 		List<Organization> allOrganizations;
 
 		if (user.isVyllageAdmin())
