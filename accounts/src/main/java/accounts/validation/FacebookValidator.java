@@ -20,7 +20,7 @@ public class FacebookValidator extends SettingValidator {
 	@Override
 	public AccountSetting validate(AccountSetting setting) {
 
-		if (setting.getValue() == null)
+		if (setting.getValue() == null || setting.getValue().isEmpty())
 			return setting;
 
 		matcher = pattern.matcher(setting.getValue());
