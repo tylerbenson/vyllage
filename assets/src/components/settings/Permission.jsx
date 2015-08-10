@@ -32,7 +32,7 @@ var Permission = React.createClass({
       return (
         <div className="holder">     
           
-          <div className="content">       
+          <div className="content height-solver">       
             <form action="/connect/facebook" method="POST">     
               <div className="right-part">
                   {fbConnectButton}                 
@@ -46,7 +46,7 @@ var Permission = React.createClass({
                <input type="checkbox" className="social-checkbox" /> <span className="small-text"> Publish Vyllage updates on my timeline </span>
             </form>
           </div>    
-                 
+          { /*
           <div className="content">            
               <div className="right-part">
                  <button className='small inverted' onClick={this.connectWithTwitter}>CONNECT</button>
@@ -71,6 +71,7 @@ var Permission = React.createClass({
                          
               <input className="social-checkbox"  type="checkbox" />  <span className="small-text">Post Vyllage updates on my timeline</span>
           </div> 
+         */ }
 
 
         </div>

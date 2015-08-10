@@ -72,6 +72,10 @@
       }
     }
 
+    .container .height-solver{
+      height:278px;
+    }
+
     .container  .content {
       @include column(5/7);
       background: $inverted-text-color;
