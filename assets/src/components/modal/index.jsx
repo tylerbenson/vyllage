@@ -2,28 +2,51 @@ var React = require('react');
 var classnames = require('classnames');
 
 var Modal = React.createClass({
+  componentDidMount: function() {
+    if(window.attachEvent) {
+      window.attachEvent('onresize', function(){
+        this.center();
+      }.bind(this));
+    }
+    else if(window.addEventListener) {
+      window.addEventListener('resize', function(){
+        this.center();
+      }.bind(this), true);
+    }
+  },
   getDefaultProps: function () {
     return {
       isOpen: false,
     }
   },
+  center: function(){
+    var modal = this.refs.modal;
+
+    if(modal) {
+      modal = modal.getDOMNode();
+      var body = document.querySelector('body');
+
+      if(body && this.props.isOpen) {
+        body.className += ' modal-open';
+
+        modal.removeAttribute('style');
+
+        modal.style.display = 'inline-block';
+        modal.style.height = modal.offsetHeight + 'px';
+        modal.style.position = 'absolute';
+
+        //modal is larger than viewport
+        modal.style.margin = (modal.offsetTop < 0 ? '0 ' : '' ) + 'auto';
+        modal.style.borderRadius = (modal.offsetTop < 0 ? '0 ' : '5px' ) + 'auto';
+      }
+      else {
+        body.className = body.className.replace(/ modal-open/g,'');
+        modal.style.display = 'none';
+      }
+    }
+  },
   componentDidUpdate: function(){
-    var body = document.querySelector('body');
-    var modal = this.refs.modal.getDOMNode();
-
-    if(body && this.props.isOpen) {
-      body.className += ' modal-open';
-      modal.style.display = 'inline-block';
-      modal.style.height = modal.offsetHeight + 'px';
-      modal.style.position = 'absolute';
-
-      //modal is larger than viewport
-      modal.style.margin = (modal.offsetTop < 0 ? '2em ' : '' ) + 'auto';
-    }
-    else {
-      body.className = body.className.replace(/ modal-open/g,'');
-      modal.style.display = 'none';
-    }
+    this.center();
   },
   stopPropagation: function (e) {
     e.stopPropagation();

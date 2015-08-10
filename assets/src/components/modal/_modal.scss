@@ -117,6 +117,18 @@
   }
 }
 
+@media (max-width: $medium-landscape) {
+  .section .modal,
+  .modal {
+    &.large {
+      border-radius: 0;
+      height: 100% !important;
+      margin: 0 !important;
+      width: 100%;
+    }
+  }
+}
+
 @media (max-width: $medium-portrait) {
   .section .modal,
   .modal {
@@ -132,6 +144,48 @@
 
     .content {
       padding: 0 0.5em !important;
+    }
+
+    &.add-modal {
+      .option {
+        @include column(1);
+        padding: 1em 1.5em;
+
+        i {
+          float: left;
+          line-height: 0;
+          margin: 0 0.25em 0 0;
+        }
+
+        .title {
+          float: left;
+          width: 50%;
+        }
+
+        .description {
+          float: left;
+          font-size: 1em;
+          height: auto;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $small-landscape) {
+  .section .modal,
+  .modal {
+    &.add-modal {
+      .option {
+        i {
+          font-size: 1.25em;
+          margin-right: 0.35em;
+        }
+
+        .description {
+          clear: left;
+        }
+      }
     }
   }
 }
