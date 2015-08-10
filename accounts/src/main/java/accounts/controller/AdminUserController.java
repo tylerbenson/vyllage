@@ -140,37 +140,6 @@ public class AdminUserController {
 			existingUserOrganizations
 					.add((UserOrganizationRole) grantedAuthority);
 
-		// validate new roles vs old roles by organization
-		// if a user is admin he can set himself whatever role he wants on a
-		// particular organization
-
-		// si no es admin vyllage y quiere setear a un usuario como admin en sus
-		// organization
-		// chequear si es admin
-
-		// if he is not vyllage admin
-		if (!user.isVyllageAdmin()) {
-
-			// and wants to add to someone the admin role
-			if (newRoles.stream().anyMatch(
-					uor -> RolesEnum.ADMIN.name().equalsIgnoreCase(
-							uor.getAuthority()))
-					&& existingUserOrganizations.stream().noneMatch(
-							uor -> RolesEnum.ADMIN.name().equalsIgnoreCase(
-									uor.getAuthority()))) {
-				// check if I'm admin there
-				List<Long> organizationsWithAdminRole = newRoles
-						.stream()
-						.filter(uor -> RolesEnum.ADMIN.name().equalsIgnoreCase(
-								uor.getAuthority()))
-						.map(uor -> uor.getOrganizationId())
-						.collect(Collectors.toList());
-
-				// boolean amIAdmin = user.getAuthorities().stream().
-			}
-
-		}
-
 		// remove roles that were removed in the frontend
 		existingUserOrganizations.removeIf(org -> org.getOrganizationId()
 				.equals(form.getOrganizationId()) && !newRoles.contains(org));
@@ -530,6 +499,13 @@ public class AdminUserController {
 		model.addAttribute("batchAccount", new BatchAccount());
 	}
 
+	/**
+	 * Returns the user's organizations where the user is admin. If the user is
+	 * Vyllage admin then he sees all organizations.
+	 * 
+	 * @param user
+	 * @return
+	 */
 	private List<Organization> getUserOrganizations(User user) {
 		List<Organization> allOrganizations;
 
@@ -539,6 +515,8 @@ public class AdminUserController {
 			allOrganizations = organizationRepository.getAll(user
 					.getAuthorities()
 					.stream()
+					.filter(uor -> RolesEnum.ADMIN.name().equalsIgnoreCase(
+							((UserOrganizationRole) uor).getAuthority()))
 					.map(uor -> ((UserOrganizationRole) uor)
 							.getOrganizationId()).collect(Collectors.toList()));
 		return allOrganizations;
