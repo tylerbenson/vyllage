@@ -125,11 +125,16 @@ public class AdviceRequestController {
 	}
 
 	protected void validateAdviceRequest(AdviceRequest adviceRequest) {
+
+		boolean usersIsNullOrEmpty = adviceRequest.getUsers() == null
+				|| adviceRequest.getUsers().isEmpty();
+
+		boolean notRegisteredUsersIsNullOrEmpty = adviceRequest
+				.getNotRegisteredUsers() == null
+				|| adviceRequest.getNotRegisteredUsers().isEmpty();
+
 		if (adviceRequest == null
-				|| ((adviceRequest.getUsers() == null || adviceRequest
-						.getUsers().isEmpty()) && (adviceRequest
-						.getNotRegisteredUsers() == null || adviceRequest
-						.getNotRegisteredUsers().isEmpty())))
+				|| (usersIsNullOrEmpty && notRegisteredUsersIsNullOrEmpty))
 			throw new IllegalArgumentException("No user or email provided.");
 	}
 
