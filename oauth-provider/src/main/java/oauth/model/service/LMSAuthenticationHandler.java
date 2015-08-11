@@ -13,7 +13,7 @@ import org.springframework.security.oauth.provider.OAuthAuthenticationHandler;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.stereotype.Component;
 
-import oauth.utilities.Contant;
+import oauth.utilities.LMSConstants;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -25,19 +25,19 @@ public class LMSAuthenticationHandler implements OAuthAuthenticationHandler {
 
 	final static Logger log = LoggerFactory.getLogger(LMSAuthenticationHandler.class);
 
-	public static SimpleGrantedAuthority userGA = new SimpleGrantedAuthority(Contant.ROLE_USER);
-	public static SimpleGrantedAuthority adminGA = new SimpleGrantedAuthority(Contant.ROLE_ADMIN);
+	public static SimpleGrantedAuthority userGA = new SimpleGrantedAuthority(LMSConstants.ROLE_USER);
+	public static SimpleGrantedAuthority adminGA = new SimpleGrantedAuthority(LMSConstants.ROLE_ADMIN);
 
 	@Override
 	public Authentication createAuthentication(HttpServletRequest request, ConsumerAuthentication authentication,
 			OAuthAccessProviderToken authToken) {
 
 		Collection<GrantedAuthority> authorities = new HashSet<>(authentication.getAuthorities());
-		String username = request.getParameter(Contant.USER_NAME);
+		String username = request.getParameter(LMSConstants.USER_NAME);
 		if (StringUtils.isBlank(username)) {
 			username = authentication.getName();
 		}
-		if (username.equals(Contant.ADMIN_USER)) {
+		if (username.equals(LMSConstants.ADMIN_USER)) {
 			authorities.add(userGA);
 			authorities.add(adminGA);
 		} else {

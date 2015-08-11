@@ -14,7 +14,7 @@ import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 import org.springframework.stereotype.Component;
 
-import oauth.utilities.Contant;
+import oauth.utilities.LMSConstants;
 
 @Component
 public class LMSConsumerDetailsService implements ConsumerDetailsService {
@@ -33,16 +33,16 @@ public class LMSConsumerDetailsService implements ConsumerDetailsService {
 
 		consumerKey = StringUtils.trimToNull(consumerKey);
 		BaseConsumerDetails cd;
-		LMSKey ltiKey = new LMSKey(environment.getProperty(Contant.OAUTH_KEY),
-				environment.getProperty(Contant.OAUTH_SECRET));
+		LMSKey ltiKey = new LMSKey(environment.getProperty(LMSConstants.OAUTH_KEY),
+				environment.getProperty(LMSConstants.OAUTH_SECRET));
 
 		cd = new BaseConsumerDetails();
 		cd.setConsumerKey(consumerKey);
 		cd.setSignatureSecret(new SharedConsumerSecretImpl(ltiKey.getSecret()));
 		cd.setConsumerName(String.valueOf(ltiKey.getKeyId()));
 		cd.setRequiredToObtainAuthenticatedToken(false);
-		cd.getAuthorities().add(new SimpleGrantedAuthority(Contant.ROLE_OAUTH));
-		cd.getAuthorities().add(new SimpleGrantedAuthority(Contant.ROLE_LTI));
+		cd.getAuthorities().add(new SimpleGrantedAuthority(LMSConstants.ROLE_OAUTH));
+		cd.getAuthorities().add(new SimpleGrantedAuthority(LMSConstants.ROLE_LTI));
 		return cd;
 	}
 }
