@@ -1,5 +1,7 @@
 package accounts.service;
 
+import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -386,7 +388,7 @@ public class UserService {
 	 * @param request
 	 */
 	public List<AccountContact> getAccountContacts(HttpServletRequest request,
-			List<Long> userIds) {
+			@NonNull List<Long> userIds) {
 
 		if (userIds == null || userIds.isEmpty())
 			return Collections.emptyList();
@@ -404,7 +406,7 @@ public class UserService {
 		// generating account contact
 		List<AccountContact> accountContacts = map.entrySet().stream()
 				.map(e -> this.mapAccountContact(e)).map(addAvatarUrl())
-				.collect(Collectors.toList());
+				.map(addIsSponsored()).collect(Collectors.toList());
 
 		// getting taglines
 		Map<String, String> taglines = documentService
@@ -417,6 +419,22 @@ public class UserService {
 					ac.getUserId().toString(), "")));
 
 		return accountContacts;
+	}
+
+	private Function<? super AccountContact, ? extends AccountContact> addIsSponsored() {
+		return ac -> {
+
+			boolean isSponsored = sql.fetchExists(sql
+					.select()
+					.from(USER_ORGANIZATION_ROLES)
+					.where(USER_ORGANIZATION_ROLES.USER_ID.eq(ac.getUserId())
+							.and(USER_ORGANIZATION_ROLES.ROLE
+									.contains(RolesEnum.ADVISOR.name()))));
+
+			ac.setSponsored(isSponsored);
+
+			return ac;
+		};
 	}
 
 	private Function<? super AccountContact, ? extends AccountContact> addAvatarUrl() {

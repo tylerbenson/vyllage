@@ -20,6 +20,8 @@ public class AccountContact {
 
 	private String tagline;
 
+	private boolean isSponsored;
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -127,6 +129,14 @@ public class AccountContact {
 
 	public void setTagline(String tagline) {
 		this.tagline = tagline;
+	}
+
+	public boolean isSponsored() {
+		return isSponsored;
+	}
+
+	public void setSponsored(boolean isSponsored) {
+		this.isSponsored = isSponsored;
 	}
 
 }
