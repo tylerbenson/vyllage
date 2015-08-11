@@ -16,7 +16,7 @@ var Permission = React.createClass({
   },
 
   render: function () {
-    
+
     var settings = this.props.settings || [];
     var metatoken = document.getElementById('meta_token').content;
 
@@ -30,24 +30,23 @@ var Permission = React.createClass({
 
     if (settings.length > 0) {
       return (
-        <div className="holder">     
-          
-          <div className="content height-solver">       
-            <form action="/connect/facebook" method="POST">     
+        <div className="wrapper">
+          <div className="content">
+            <form action="/connect/facebook" method="POST">
               <div className="right-part">
-                  {fbConnectButton}                 
+                  {fbConnectButton}
               </div>
               <div className="left-part">
                <i className="ion-social-facebook icon-facebook"></i>
                 Facebook
-              </div>    
+              </div>
                <input type="hidden" name="_csrf" value={metatoken} />
                <input type="hidden" name="scope" value="email,publish_actions" />
-               <input type="checkbox" className="social-checkbox" /> <span className="small-text"> Publish Vyllage updates on my timeline </span>
+               {/*<input type="checkbox" className="social-checkbox" /> <span className="small-text"> Publish Vyllage updates on my timeline </span>*/}
             </form>
-          </div>    
+          </div>
           { /*
-          <div className="content">            
+          <div className="content">
               <div className="right-part">
                  <button className='small inverted' onClick={this.connectWithTwitter}>CONNECT</button>
               </div>
@@ -55,12 +54,12 @@ var Permission = React.createClass({
                 <i className="ion-social-twitter icon-twitter"></i>
                 Twitter
               </div>
-                         
-              <input className="social-checkbox"   type="checkbox" /> <span className="small-text">Tweet Vyllage updates on my timeline</span>
-          </div>    
-                
 
-          <div className="content">            
+              <input className="social-checkbox"   type="checkbox" /> <span className="small-text">Tweet Vyllage updates on my timeline</span>
+          </div>
+
+
+          <div className="content">
               <div className="right-part">
                  <button className='small inverted' onClick={this.connectWithLinkedIn}>CONNECT</button>
               </div>
@@ -68,9 +67,9 @@ var Permission = React.createClass({
                 <i className="ion-social-linkedin icon-linkedIn"></i>
                 LinkedIn
               </div>
-                         
+
               <input className="social-checkbox"  type="checkbox" />  <span className="small-text">Post Vyllage updates on my timeline</span>
-          </div> 
+          </div>
          */ }
 
 
@@ -86,11 +85,11 @@ var Permission = React.createClass({
   },
 
   connectWithTwitter: function(){
-    console.log('connect with twitter');    
+    console.log('connect with twitter');
   },
 
   connectWithLinkedIn: function(){
-    console.log('connect with linkedIn'); 
+    console.log('connect with linkedIn');
   },
 
   disconnectFacebook : function(){
