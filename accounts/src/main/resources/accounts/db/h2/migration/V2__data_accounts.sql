@@ -8,7 +8,7 @@ insert into ACCOUNTS.users ( user_name, enabled, date_created, last_modified ) v
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'deana1@vyllage.com', 'Deana1', 'Troi', true, CURRENT_DATE(), CURRENT_DATE() );
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'mario@toadstool.com', 'Mario', 'Mario', true, CURRENT_DATE(), CURRENT_DATE() );
 
-insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'machiavelo@vyllage.com', 'Mac', '', true, CURRENT_DATE(), CURRENT_DATE() );
+insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'maquiavelo@vyllage.com', 'Mac', '', true, CURRENT_DATE(), CURRENT_DATE() );
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'deana2@vyllage.com', 'Deana2', 'Troi', true, CURRENT_DATE(), CURRENT_DATE() );
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'deana3@vyllage.com', 'Deana3', 'Troi', true, CURRENT_DATE(), CURRENT_DATE() );
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'deana4@vyllage.com', 'Deana4', 'Troi', true, CURRENT_DATE(), CURRENT_DATE() );
