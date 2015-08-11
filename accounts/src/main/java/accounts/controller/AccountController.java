@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
 import java.sql.Date;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,14 +40,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
-import accounts.model.account.AccountContact;
+import user.common.web.AccountContact;
+import user.common.web.UserInfo;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.ChangePasswordForm;
 import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
 import accounts.repository.UserNotFoundException;
-import accounts.service.AccountSettingsService;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
 import accounts.service.contactSuggestion.UserContactSuggestionService;
@@ -75,8 +74,6 @@ public class AccountController {
 
 	private final DocumentLinkService documentLinkService;
 
-	private final AccountSettingsService accountSettingsService;
-
 	private final UserContactSuggestionService userContactSuggestionService;
 
 	private final TextEncryptor encryptor;
@@ -91,34 +88,24 @@ public class AccountController {
 	public AccountController(final Environment environment,
 			final UserService userService,
 			final DocumentLinkService documentLinkService,
-			final AccountSettingsService accountSettingsService,
 			final UserContactSuggestionService userContactSuggestionService,
 			final TextEncryptor encryptor, final ObjectMapper mapper) {
 		super();
 		this.environment = environment;
 		this.userService = userService;
 		this.documentLinkService = documentLinkService;
-		this.accountSettingsService = accountSettingsService;
 		this.userContactSuggestionService = userContactSuggestionService;
 		this.encryptor = encryptor;
 		this.mapper = mapper;
 	}
 
 	@ModelAttribute("userInfo")
-	public AccountContact userInfo(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
+	public UserInfo userInfo(@AuthenticationPrincipal User user) {
 		if (user == null) {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(accountSettingsService
-						.getAccountSettings(Arrays.asList(user.getUserId())));
-
-		if (contactDataForUsers.isEmpty()) {
-			return null;
-		}
-		return contactDataForUsers.get(0);
+		return new UserInfo(user);
 	}
 
 	@RequestMapping(value = "roles", method = RequestMethod.GET, produces = "application/json")
@@ -153,7 +140,8 @@ public class AccountController {
 	 * @throws UserNotFoundException
 	 */
 	@RequestMapping(value = "{userId}/advisors", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<AccountNames> getAdvisorsForUser(
+	public @ResponseBody List<AccountContact> getAdvisorsForUser(
+			HttpServletRequest request,
 			@PathVariable final Long userId,
 			@RequestParam(value = "excludeIds", required = false) final List<Long> excludeIds,
 			@RequestParam(value = "firstNameFilter", required = false) String firstNameFilter,
@@ -161,6 +149,8 @@ public class AccountController {
 			@RequestParam(value = "emailFilter", required = false) String emailFilter)
 			throws UserNotFoundException {
 		User user = userService.getUser(userId);
+
+		excludeIds.add(user.getUserId());
 
 		Map<String, String> filters = new HashMap<>();
 
@@ -173,21 +163,13 @@ public class AccountController {
 		if (emailFilter != null)
 			filters.put("email", emailFilter);
 
-		if (excludeIds != null && !excludeIds.isEmpty())
-			return userContactSuggestionService
-					.getSuggestions(user, filters, limitForEmptyFilter)
-					.stream()
-					.filter(u -> !excludeIds.contains(u.getUserId()))
-					.map(u -> new AccountNames(u.getUserId(), u.getFirstName(),
-							u.getMiddleName(), u.getLastName()))
-					.collect(Collectors.toList());
-		else
-			return userContactSuggestionService
-					.getSuggestions(user, filters, limitForEmptyFilter)
-					.stream()
-					.map(u -> new AccountNames(u.getUserId(), u.getFirstName(),
-							u.getMiddleName(), u.getLastName()))
-					.collect(Collectors.toList());
+		List<User> users = userContactSuggestionService
+				.getSuggestions(user, filters, limitForEmptyFilter).stream()
+				.filter(u -> !excludeIds.contains(u.getUserId()))
+				.collect(Collectors.toList());
+
+		return userService.getAccountContacts(request, users.stream()
+				.map(u -> u.getUserId()).collect(Collectors.toList()));
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,
@@ -321,10 +303,10 @@ public class AccountController {
 
 	@RequestMapping(value = "contact", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountContact> getContactInformation(
+			HttpServletRequest request,
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {
 
-		return userService.getAccountContactForUsers(accountSettingsService
-				.getAccountSettings(userIds));
+		return userService.getAccountContacts(request, userIds);
 	}
 
 	@RequestMapping(value = "ping", method = RequestMethod.GET)

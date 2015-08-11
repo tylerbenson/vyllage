@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" moznomarginboxes="" mozdisallowselectionprint="">
+
+<head>
+  <th:block th:fragment="userInfo">
+    <meta th:if="${userInfo} != null" name="email" th:content="${userInfo.email}" id="meta_userInfo_email" />
+    <meta th:if="${userInfo} != null" name="userId" th:content="${userInfo.userId}" id="meta_userInfo_user" />
+    <meta th:if="${userInfo} != null" name="registeredOn" th:content="${userInfo.registeredOn}" id="meta_userInfo_created_at"
+    />
+    <meta th:if="${userInfo} != null" name="organizationIds" th:content="${#strings.listJoin(userInfo.organizationIds,', ')}"
+    id="meta_userInfo_organizationIds" />
+  </th:block>
+
+</head>
+
+<body>
+</body>
+
+</html>

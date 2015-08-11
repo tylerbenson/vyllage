@@ -2,7 +2,6 @@ package accounts.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +28,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
-import user.common.constants.OrganizationEnum;
+import user.common.constants.RolesEnum;
+import user.common.web.UserInfo;
 import accounts.model.BatchAccount;
-import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.form.AccountsRoleManagementForm;
 import accounts.model.form.AdminUsersForm;
@@ -42,7 +41,6 @@ import accounts.model.form.UserRoleManagementForm;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserNotFoundException;
-import accounts.service.AccountSettingsService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
 
@@ -60,20 +58,17 @@ public class AdminUserController {
 
 	private final OrganizationRepository organizationRepository;
 
-	private final AccountSettingsService accountSettingsService;
-
 	private final DocumentService documentService;
 
 	@Inject
 	public AdminUserController(final UserService userService,
 			final RoleRepository roleRepository,
 			final OrganizationRepository organizationRepository,
-			final AccountSettingsService accountSettingsService,
+
 			final DocumentService documentService) {
 		this.userService = userService;
 		this.roleRepository = roleRepository;
 		this.organizationRepository = organizationRepository;
-		this.accountSettingsService = accountSettingsService;
 		this.documentService = documentService;
 	}
 
@@ -85,27 +80,19 @@ public class AdminUserController {
 	}
 
 	@ModelAttribute("userInfo")
-	public AccountContact userInfo(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
+	public UserInfo userInfo(@AuthenticationPrincipal User user) {
 		if (user == null) {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = userService
-				.getAccountContactForUsers(accountSettingsService
-						.getAccountSettings(Arrays.asList(user.getUserId())));
-
-		if (contactDataForUsers.isEmpty()) {
-			return null;
-		}
-		return contactDataForUsers.get(0);
+		return new UserInfo(user);
 	}
 
 	@RequestMapping(value = "/user/roles", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String showUserRoles(@AuthenticationPrincipal User user, Model model) {
 
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("users", userService
 				.getUsersFromOrganization(allOrganizations.get(0)
@@ -124,7 +111,7 @@ public class AdminUserController {
 			throws UserNotFoundException {
 
 		if (form.isInvalid()) {
-			List<Organization> allOrganizations = getUserOrganizations(user);
+			List<Organization> allOrganizations = getAdminOrganizations(user);
 			model.addAttribute("organizations", allOrganizations);
 			model.addAttribute("users", userService
 					.getUsersFromOrganization(form.getOrganizationId()));
@@ -169,7 +156,7 @@ public class AdminUserController {
 	public String showUsers(final HttpServletRequest request,
 			@AuthenticationPrincipal User user, Model model) {
 
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 
 		List<UserFormObject> usersFromOrganization = userService
 				.getUsersFromOrganization(
@@ -214,7 +201,7 @@ public class AdminUserController {
 			@AuthenticationPrincipal User user, final AdminUsersForm form,
 			Model model) {
 
-		List<OrganizationOptionForm> organizationOptions = getUserOrganizations(
+		List<OrganizationOptionForm> organizationOptions = getAdminOrganizations(
 				user)
 				.stream()
 				.map(org1 -> new OrganizationOptionForm(org1, org1
@@ -254,7 +241,7 @@ public class AdminUserController {
 	public String adminUserRoleManagement(@AuthenticationPrincipal User user,
 			Model model) {
 
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("users", userService
 				.getUsersFromOrganization(allOrganizations.get(0)
@@ -272,7 +259,7 @@ public class AdminUserController {
 			AccountsRoleManagementForm form, Model model) {
 
 		if (form.isInvalid()) {
-			List<Organization> allOrganizations = getUserOrganizations(user);
+			List<Organization> allOrganizations = getAdminOrganizations(user);
 			model.addAttribute("organizations", allOrganizations);
 			model.addAttribute("users", userService
 					.getUsersFromOrganization(allOrganizations.get(0)
@@ -310,7 +297,7 @@ public class AdminUserController {
 
 		User selectedUser = userService.getUser(userId);
 
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 		List<Organization> userOrganizations = organizationRepository
 				.getAll(selectedUser
 						.getAuthorities()
@@ -341,7 +328,7 @@ public class AdminUserController {
 
 		if (form.isInvalid()) {
 
-			List<Organization> allOrganizations = getUserOrganizations(user);
+			List<Organization> allOrganizations = getAdminOrganizations(user);
 
 			List<Organization> userOrganizations = organizationRepository
 					.getAll(selectedUser
@@ -496,7 +483,7 @@ public class AdminUserController {
 
 	private void prepareBatchError(BatchAccount batch, Model model, String msg,
 			User user) {
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("roles", roleRepository.getAll());
@@ -505,27 +492,31 @@ public class AdminUserController {
 	}
 
 	private void prepareBatch(Model model, User user) {
-		List<Organization> allOrganizations = getUserOrganizations(user);
+		List<Organization> allOrganizations = getAdminOrganizations(user);
 
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("roles", roleRepository.getAll());
 		model.addAttribute("batchAccount", new BatchAccount());
 	}
 
-	private List<Organization> getUserOrganizations(User user) {
+	/**
+	 * Returns the user's organizations where the user is admin. If the user is
+	 * Vyllage admin then he sees all organizations.
+	 * 
+	 * @param user
+	 * @return
+	 */
+	private List<Organization> getAdminOrganizations(User user) {
 		List<Organization> allOrganizations;
 
-		if (user.getAuthorities()
-				.stream()
-				.anyMatch(
-						uor -> OrganizationEnum.VYLLAGE.getOrganizationId()
-								.equals(((UserOrganizationRole) uor)
-										.getOrganizationId())))
+		if (user.isVyllageAdmin())
 			allOrganizations = organizationRepository.getAll();
 		else
 			allOrganizations = organizationRepository.getAll(user
 					.getAuthorities()
 					.stream()
+					.filter(uor -> RolesEnum.ADMIN.name().equalsIgnoreCase(
+							((UserOrganizationRole) uor).getAuthority()))
 					.map(uor -> ((UserOrganizationRole) uor)
 							.getOrganizationId()).collect(Collectors.toList()));
 		return allOrganizations;

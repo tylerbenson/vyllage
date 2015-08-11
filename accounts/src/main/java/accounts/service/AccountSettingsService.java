@@ -1,8 +1,8 @@
 package accounts.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -18,7 +18,6 @@ import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.AccountSettingRepository;
-import accounts.repository.ElementNotFoundException;
 import accounts.service.aspects.CheckPrivacy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -55,21 +54,21 @@ public class AccountSettingsService {
 	}
 
 	@CheckPrivacy
-	public List<AccountSetting> getAccountSetting(final User user,
-			final String settingName) throws ElementNotFoundException {
+	public Optional<AccountSetting> getAccountSetting(final User user,
+			final String settingName) {
 		Assert.notNull(settingName);
 
 		switch (settingName) {
 		case "firstName":
-			return Arrays.asList(new AccountSetting(null, user.getUserId(),
+			return Optional.of(new AccountSetting(null, user.getUserId(),
 					"firstName", user.getFirstName(), Privacy.PUBLIC.name()));
 
 		case "middleName":
-			return Arrays.asList(new AccountSetting(null, user.getUserId(),
+			return Optional.of(new AccountSetting(null, user.getUserId(),
 					"middleName", user.getMiddleName(), Privacy.PUBLIC.name()));
 
 		case "lastName":
-			return Arrays.asList(new AccountSetting(null, user.getUserId(),
+			return Optional.of(new AccountSetting(null, user.getUserId(),
 					"lastName", user.getLastName(), Privacy.PUBLIC.name()));
 
 		default:
@@ -124,24 +123,30 @@ public class AccountSettingsService {
 			return setLastName(user, setting);
 
 		case "email":
-			try {
-				userService.sendEmailChangeConfirmation(user,
-						setting.getValue());
-			} catch (EmailException | JsonProcessingException e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
+			// don't change email if they are the same!
+			if (!user.getUsername().equalsIgnoreCase(setting.getValue())) {
+				try {
+
+					userService.sendEmailChangeConfirmation(user,
+							setting.getValue());
+				} catch (EmailException | JsonProcessingException e) {
+					logger.severe(ExceptionUtils.getStackTrace(e));
+					NewRelic.noticeError(e);
+				}
+
+				// save the new email as a new setting to query from the
+				// frontend.
+				AccountSetting newEmailSetting = new AccountSetting(null,
+						setting.getUserId(), "newEmail", setting.getValue(),
+						setting.getPrivacy());
+
+				accountSettingRepository.set(user.getUserId(), newEmailSetting);
+
+				// but don't change the setting value yet, the user needs to
+				// confirm
+				// the change by mail.
+				setting.setValue(user.getUsername());
 			}
-
-			// save the new email as a new setting to query from the frontend.
-			AccountSetting newEmailSetting = new AccountSetting(null,
-					setting.getUserId(), "newEmail", setting.getValue(),
-					setting.getPrivacy());
-
-			accountSettingRepository.set(user.getUserId(), newEmailSetting);
-
-			// but don't change the setting value yet, the user needs to confirm
-			// the change by mail.
-			setting.setValue(user.getUsername());
 
 			return setting;
 		default:

@@ -15,27 +15,14 @@
 
   <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
-  <meta th:if="${userInfo} != null" name="email" th:content="${userInfo.email}" id="meta_userInfo_email" />
-  <meta th:if="${userInfo} != null" name="userId" th:content="${userInfo.userId}" id="meta_userInfo_user" />
-  <meta th:if="${userInfo} != null" name="registeredOn" th:content="${userInfo.registeredOn}" id="meta_userInfo_created_at"
-  />
+  <th:block th:replace="fragment-userInfo :: userInfo">
+  </th:block>
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body class="admin">
   <div id="container">
-    <header>
-      <div class="content">
-        <div class="logo">
-          <img src="images/logo-white.png" alt="Vyllage" />
-          <span>Vyllage</span>
-        </div>
-        <span class="page-title">Account Organization Management</span>
-        <a th:href="@{/admin/users}"> Users </a> |
-        <a th:href="@{/admin/user/roles}"> Single User Role Editor </a> |
-        <a th:href="@{/admin/users/roles}"> Users Role Editor </a> |
-        <a th:href="@{/admin/user/batch}"> Batch Account </a>
-      </div>
+    <header th:replace="adminHeader :: header">
     </header>
     <div class="section content">
       <label>Assigns a user to one or more organizations with the selected roles, keeping the existing ones unchanged. Deselected

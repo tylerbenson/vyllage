@@ -8,14 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import user.common.User;
 import user.common.social.FaceBookErrorsEnum;
@@ -43,15 +47,19 @@ public class SocialLoginController {
 
 	private final RandomPasswordGenerator randomPasswordGenerator;
 
+	private final ConnectionRepository connectionRepository;
+
 	@Inject
 	public SocialLoginController(final SignInUtil signInUtil,
 			final UserService userService,
 			final SharedDocumentRepository sharedDocumentRepository,
-			final RandomPasswordGenerator randomPasswordGenerator) {
+			final RandomPasswordGenerator randomPasswordGenerator,
+			final ConnectionRepository connectionRepository) {
 		this.signInUtil = signInUtil;
 		this.userService = userService;
 		this.sharedDocumentRepository = sharedDocumentRepository;
 		this.randomPasswordGenerator = randomPasswordGenerator;
+		this.connectionRepository = connectionRepository;
 	}
 
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)
@@ -200,4 +208,19 @@ public class SocialLoginController {
 					"You are not authorized to access this resource.");
 
 	}
+
+	/**
+	 * Remove all provider connections for a user account. The user has decided
+	 * they no longer wish to use the service provider from this application.
+	 * Note: requires {@link HiddenHttpMethodFilter} to be registered with the
+	 * '_method' request parameter set to 'DELETE' to convert web browser POSTs
+	 * to DELETE requests.
+	 */
+	@RequestMapping(value = "disconnect/{providerId}", method = RequestMethod.DELETE)
+	public @ResponseBody boolean removeConnections(
+			@PathVariable String providerId) {
+		connectionRepository.removeConnections(providerId);
+		return false;
+	}
+
 }

@@ -13,11 +13,11 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -35,13 +35,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.social.SocialSessionEnum;
+import user.common.web.AccountContact;
+import user.common.web.UserInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
 
 import documents.files.pdf.ResumePdfService;
-import documents.model.AccountContact;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
@@ -80,7 +81,7 @@ public class ResumeController {
 
 	private List<String> pdfStyles = new LinkedList<>();
 
-	@Inject
+	@Autowired
 	public ResumeController(final DocumentService documentService,
 			final AccountService accountService,
 			final NotificationService notificationService,
@@ -126,20 +127,12 @@ public class ResumeController {
 	}
 
 	// @ModelAttribute("userInfo")
-	public AccountContact userInfo(HttpServletRequest request, User user) {
+	public UserInfo userInfo(User user) {
 		if (user == null) {
 			return null;
 		}
 
-		List<AccountContact> contactDataForUsers = accountService
-				.getContactDataForUsers(request,
-						Arrays.asList(user.getUserId()));
-
-		if (contactDataForUsers.isEmpty()) {
-			return null;
-		}
-
-		return contactDataForUsers.get(0);
+		return new UserInfo(user);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -172,7 +165,7 @@ public class ResumeController {
 					+ documentId + "' could not be found.");
 
 		model.addAttribute("accountName", accountName(request, user));
-		model.addAttribute("userInfo", userInfo(request, user));
+		model.addAttribute("userInfo", userInfo(user));
 
 		return "resume";
 	}
@@ -392,7 +385,7 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/recent-users", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
-	public @ResponseBody List<AccountNames> getRecentUsers(
+	public @ResponseBody List<AccountContact> getRecentUsers(
 			HttpServletRequest request,
 			@PathVariable final Long documentId,
 			@RequestParam(value = "excludeIds", required = false) final List<Long> excludeIds)
@@ -408,7 +401,8 @@ public class ResumeController {
 		if (recentUsersForDocument.size() == 0)
 			return Arrays.asList();
 
-		return accountService.getNamesForUsers(request, recentUsersForDocument);
+		return accountService.getContactDataForUsers(request,
+				recentUsersForDocument);
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.PUT, consumes = "application/json")

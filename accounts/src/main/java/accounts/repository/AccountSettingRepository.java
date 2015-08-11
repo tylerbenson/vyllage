@@ -3,12 +3,12 @@ package accounts.repository;
 import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +31,7 @@ public class AccountSettingRepository {
 	}
 
 	/**
-	 * Retrieves account settings based on user user ids.
+	 * Retrieves account settings based on user ids.
 	 * 
 	 * @param User
 	 *            ids
@@ -45,21 +45,17 @@ public class AccountSettingRepository {
 				.collect(Collectors.toList());
 	}
 
-	public List<AccountSetting> get(Long userId, String settingName)
-			throws ElementNotFoundException {
+	public Optional<AccountSetting> get(Long userId, String settingName) {
 
-		Result<AccountSettingRecord> settingRecords = sql.fetch(
+		AccountSettingRecord settingRecord = sql.fetchOne(
 				ACCOUNT_SETTING,
 				ACCOUNT_SETTING.USER_ID.eq(userId).and(
 						ACCOUNT_SETTING.NAME.eq(settingName)));
 
-		if (settingRecords == null || settingRecords.isEmpty())
-			throw new ElementNotFoundException("The setting with name '"
-					+ settingName + "' for User with id '" + userId
-					+ "' could not be found.");
+		if (settingRecord == null)
+			return Optional.empty();
 
-		return settingRecords.stream().map(createAccountSetting())
-				.collect(Collectors.toList());
+		return Optional.ofNullable(createAccountSetting().apply(settingRecord));
 	}
 
 	public AccountSetting set(Long userId, AccountSetting setting) {
@@ -85,6 +81,11 @@ public class AccountSettingRepository {
 		return setting;
 	}
 
+	/**
+	 * Deletes all account settings that belong to the user id.
+	 * 
+	 * @param userId
+	 */
 	public void deleteByUserId(Long userId) {
 		sql.delete(ACCOUNT_SETTING).where(ACCOUNT_SETTING.USER_ID.eq(userId))
 				.execute();

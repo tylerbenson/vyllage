@@ -34,7 +34,7 @@ public class DocumentLinkRequest {
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime expirationDate;
 
-	private boolean allowGuestComments = false;
+	private boolean allowGuestComments = true;
 
 	public String getFirstName() {
 		return firstName;

@@ -1,10 +1,10 @@
 package accounts.service;
 
 import java.io.IOException;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +39,8 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
+import user.common.web.AccountContact;
 import accounts.model.BatchAccount;
-import accounts.model.account.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.settings.AccountSetting;
@@ -49,7 +49,6 @@ import accounts.model.account.settings.Privacy;
 import accounts.model.form.RegisterForm;
 import accounts.model.link.DocumentLinkRequest;
 import accounts.repository.AvatarRepository;
-import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
@@ -382,22 +381,42 @@ public class UserService {
 	}
 
 	/**
-	 * Returns account contact information
+	 * Returns account contact information for several users.
+	 * 
+	 * @param request
 	 */
-	public List<AccountContact> getAccountContactForUsers(
-			List<AccountSetting> accountSettings) {
+	public List<AccountContact> getAccountContacts(HttpServletRequest request,
+			List<Long> userIds) {
 
-		if (accountSettings == null || accountSettings.isEmpty())
-			return Arrays.asList();
+		if (userIds == null || userIds.isEmpty())
+			return Collections.emptyList();
 
+		// getting settings
+		List<AccountSetting> accountSettings = accountSettingsService
+				.getAccountSettings(userIds);
+
+		// mapping settings by user
 		Map<Long, List<AccountSetting>> map = accountSettings.stream().collect(
 				Collectors.groupingBy((AccountSetting as) -> as.getUserId(),
 						Collectors.mapping((AccountSetting as) -> as,
 								Collectors.toList())));
 
-		return map.entrySet().stream().map(UserService::mapAccountContact)
-				.map(setUserRegisteredOn()).map(addAvatarUrl())
+		// generating account contact
+		List<AccountContact> accountContacts = map.entrySet().stream()
+				.map(e -> this.mapAccountContact(e)).map(addAvatarUrl())
 				.collect(Collectors.toList());
+
+		// getting taglines
+		Map<String, String> taglines = documentService
+				.getDocumentHeaderTagline(request, accountContacts.stream()
+						.map(ac -> ac.getUserId()).collect(Collectors.toList()));
+
+		// adding taglines to each user
+		if (taglines != null && !taglines.isEmpty())
+			accountContacts.forEach(ac -> ac.setTagline(taglines.getOrDefault(
+					ac.getUserId().toString(), "")));
+
+		return accountContacts;
 	}
 
 	private Function<? super AccountContact, ? extends AccountContact> addAvatarUrl() {
@@ -415,28 +434,13 @@ public class UserService {
 		};
 	}
 
-	private Function<? super AccountContact, ? extends AccountContact> setUserRegisteredOn() {
-		return ac -> {
-			// hmmm, this should never happen...
-			try {
-				ac.setRegisteredOn(this.getUser(ac.getUserId())
-						.getDateCreated().toInstant(ZoneOffset.UTC)
-						.getEpochSecond());
-			} catch (UserNotFoundException e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
-			}
-			return ac;
-		};
-	}
-
 	/**
 	 * Maps a list of contact related account settings into a contact object.
 	 * 
 	 * @param entry
 	 * @return
 	 */
-	protected static AccountContact mapAccountContact(
+	protected AccountContact mapAccountContact(
 			Entry<Long, List<AccountSetting>> entry) {
 		AccountContact ac = new AccountContact();
 
@@ -540,7 +544,10 @@ public class UserService {
 
 		if (EmailValidator.isValid(linkRequest.getEmail()) == invalid)
 			throw new IllegalArgumentException(
-					"Contains invalid email address.");
+					"User: "
+							+ loggedInUser.getUsername()
+							+ " Link creation error: contains invalid email address, address: "
+							+ linkRequest.getEmail());
 
 		// assigns current user's Organizations
 		// assigns default Guest role.
@@ -804,19 +811,16 @@ public class UserService {
 	public String getAvatar(Long userId) throws UserNotFoundException {
 
 		User user = this.getUser(userId);
-		List<AccountSetting> avatarSettings = null;
-		Optional<AccountSetting> avatarSetting = Optional.empty();
+		Optional<AccountSetting> avatarSetting = accountSettingsService
+				.getAccountSetting(user, "avatar");
 
-		try {
-			avatarSettings = accountSettingsService.getAccountSetting(user,
-					"avatar");
+		if (!avatarSetting.isPresent()) {
+			// create default
+			AccountSetting ac = new AccountSetting(null, userId, "avatar",
+					AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
+					Privacy.PUBLIC.name().toLowerCase());
 
-			// there's only one
-			avatarSetting = Optional.ofNullable(avatarSettings.get(0));
-
-		} catch (ElementNotFoundException e) {
-			// not really important
-			logger.warning(ExceptionUtils.getStackTrace(e));
+			accountSettingsService.setAccountSetting(user, ac);
 		}
 
 		if (avatarSetting.isPresent()
@@ -889,16 +893,13 @@ public class UserService {
 	public void changeEmail(@NonNull User user, @NonNull String email) {
 		Assert.isTrue(!email.isEmpty());
 
-		List<AccountSetting> accountSetting;
+		Optional<AccountSetting> accountSetting = accountSettingsService
+				.getAccountSetting(user, "newEmail");
 
-		try {
-			accountSetting = accountSettingsService.getAccountSetting(user,
-					"newEmail");
-		} catch (ElementNotFoundException e) {
+		if (!accountSetting.isPresent())
 			throw new AccessDeniedException("Invalid link provided.");
-		}
 
-		if (!email.equalsIgnoreCase(accountSetting.get(0).getValue()))
+		if (!email.equalsIgnoreCase(accountSetting.get().getValue()))
 			throw new AccessDeniedException("Invalid link provided.");
 
 		userRepository.changeEmail(user, email);
@@ -919,4 +920,5 @@ public class UserService {
 
 		this.accountSettingsService.setAccountSetting(newUser, setting);
 	}
+
 }
