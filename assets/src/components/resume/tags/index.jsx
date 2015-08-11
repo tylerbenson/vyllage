@@ -12,6 +12,7 @@ var { DragDropMixin } = require('react-dnd');
 var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
 var SectionFooter = require('../sections/Footer');
 var DeleteSection = require('../Delete');
+var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 
 var Tags = React.createClass({
@@ -121,6 +122,7 @@ var Tags = React.createClass({
           </div>
           <SectionFooter section={this.props.section} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
+          {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>
     );
   }

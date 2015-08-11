@@ -11,8 +11,10 @@ var phoneFormatter = require('phone-formatter');
 var validator = require('validator');
 var clone = require('clone-deep');
 var foreach = require('lodash.foreach');
+var OnScroll = require('react-window-mixins').OnScroll;
 
 var Banner = React.createClass({
+  mixins: [OnScroll],
   getInitialState: function () {
     return {
       editMode: false,
@@ -31,13 +33,8 @@ var Banner = React.createClass({
       this.setState({fields: nextProps.header});
     }
   },
-  componentDidMount: function() {
-    if (ExecutionEnvironment.canUseDOM) {
-      window.addEventListener('scroll', this.handleScroll);
-    }
-  },
-  componentWillUnmount: function() {
-    window.removeEventListener('scroll', this.handleScroll);
+  onScroll: function(){
+    this.handleScroll();
   },
   getRefValue: function(ref) {
     return this.refs[ref].getDOMNode().value;

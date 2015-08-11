@@ -1,23 +1,11 @@
 var React = require('react');
 var classnames = require('classnames');
+var OnResize = require('react-window-mixins').OnResize;
 
 var Modal = React.createClass({
-  componentDidMount: function() {
-    if(window.attachEvent) {
-      window.attachEvent('onresize', function(){
-        this.center();
-      }.bind(this));
-    }
-    else if(window.addEventListener) {
-      window.addEventListener('resize', function(){
-        this.center();
-      }.bind(this), true);
-    }
-  },
-  getDefaultProps: function () {
-    return {
-      isOpen: false,
-    }
+  mixins: [OnResize],
+  onResize: function() {
+    this.center();
   },
   center: function(){
     var modal = this.refs.modal;
