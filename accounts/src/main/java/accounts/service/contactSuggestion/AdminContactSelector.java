@@ -19,9 +19,9 @@ import accounts.domain.tables.UserOrganizationRoles;
 import accounts.domain.tables.Users;
 import accounts.repository.UserOrganizationRoleRepository;
 
-public class AlumniContactSelector extends AbstractContactSelector {
+public class AdminContactSelector extends AbstractContactSelector {
 
-	public AlumniContactSelector(DSLContext sql,
+	public AdminContactSelector(DSLContext sql,
 			UserOrganizationRoleRepository userOrganizationRoleRepository) {
 		super(sql, userOrganizationRoleRepository);
 	}
@@ -38,18 +38,18 @@ public class AlumniContactSelector extends AbstractContactSelector {
 		return sql().select(u.fields()).from(u).join(uor)
 				.on(u.USER_ID.eq(uor.USER_ID))
 				.where(uor.ORGANIZATION_ID.in(organizationIds))
-				.and(alumniSearchCondition(uor));
+				.and(adminSearchCondition(uor));
 	}
 
-	private Condition alumniSearchCondition(UserOrganizationRoles uor) {
-		return uor.ROLE.contains(RolesEnum.CAREER_ADVISOR.name()).or(
-				uor.ROLE.contains(RolesEnum.TRANSFER_ADVISOR.name()));
+	private Condition adminSearchCondition(UserOrganizationRoles uor) {
+		return uor.ROLE.contains(RolesEnum.ADMIN.name()).or(
+				uor.ROLE.contains(RolesEnum.STAFF.name()));
 	}
 
 	@Override
 	public List<User> backfill(User user, int limit) {
-		Users u = USERS.as("u");
 		UserOrganizationRoles uor = USER_ORGANIZATION_ROLES.as("uor");
+		Users u = USERS.as("u");
 
 		List<User> recordsToUser = new ArrayList<>();
 
@@ -67,24 +67,7 @@ public class AlumniContactSelector extends AbstractContactSelector {
 				.and(uor.ROLE.contains(RolesEnum.ADVISOR.name())).limit(limit)
 				.fetch()));
 
-		// still not enough, we add students
-		if (recordsToUser == null || recordsToUser.isEmpty()
-				|| recordsToUser.size() < limit)
-			recordsToUser.addAll(recordsToUser(sql()
-					.select(u.fields())
-					.from(u)
-					.join(uor)
-					.on(u.USER_ID.eq(uor.USER_ID))
-					.where(uor.ORGANIZATION_ID.in(user
-							.getAuthorities()
-							.stream()
-							.map(a -> ((UserOrganizationRole) a)
-									.getOrganizationId())
-							.collect(Collectors.toList())))
-					.and(uor.ROLE.contains(RolesEnum.STUDENT.name()).or(
-							uor.ROLE.contains(RolesEnum.ALUMNI.name())))
-					.limit(limit).fetch()));
-
 		return recordsToUser;
 	}
+
 }
