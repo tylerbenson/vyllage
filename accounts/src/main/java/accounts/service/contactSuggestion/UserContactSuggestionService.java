@@ -41,12 +41,34 @@ public class UserContactSuggestionService {
 		roleToSelector.put(RolesEnum.ADMIN, new AdminContactSelector(sql,
 				userOrganizationRoleRepository));
 
-		roleToSelector.put(RolesEnum.ADVISOR, new AdvisorContactSelector(sql,
-				userOrganizationRoleRepository));
+		// same
+		roleToSelector.put(RolesEnum.LMS_ADMIN,
+				roleToSelector.get(RolesEnum.ADMIN));
 
 		roleToSelector.put(RolesEnum.STAFF, new StaffContactSelector(sql,
 				userOrganizationRoleRepository));
 
+		roleToSelector.put(RolesEnum.ADVISOR, new AdvisorContactSelector(sql,
+				userOrganizationRoleRepository));
+
+		// same for all
+		roleToSelector.put(RolesEnum.ACADEMIC_ADVISOR,
+				roleToSelector.get(RolesEnum.ADVISOR));
+
+		roleToSelector.put(RolesEnum.ADMISSIONS_ADVISOR,
+				roleToSelector.get(RolesEnum.ADVISOR));
+
+		roleToSelector.put(RolesEnum.CAREER_ADVISOR,
+				roleToSelector.get(RolesEnum.ADVISOR));
+
+		roleToSelector.put(RolesEnum.INSTRUCTOR,
+				roleToSelector.get(RolesEnum.ADVISOR));
+
+		roleToSelector.put(RolesEnum.TEACHING_ASSISTANT,
+				roleToSelector.get(RolesEnum.ADVISOR));
+
+		roleToSelector.put(RolesEnum.TRANSFER_ADVISOR,
+				roleToSelector.get(RolesEnum.ADVISOR));
 	}
 
 	public List<User> getSuggestions(@NonNull final User user,
