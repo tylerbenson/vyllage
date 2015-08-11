@@ -28,7 +28,7 @@
   width: 480px;
 
   &.large {
-    width: 720px;
+    width: $medium-landscape;
   }
 
   .header {
@@ -94,7 +94,7 @@
       transition: border-color .2s ease;
 
       &:hover {
-        border-color: lighten($secondary-color, 35%);
+        border-color: lighten($alternate-color-1, 15%);
       }
 
       i {
@@ -122,7 +122,6 @@
   .modal {
     &.large {
       border-radius: 0;
-      height: 100% !important;
       margin: 0 !important;
       width: 100%;
     }
@@ -164,7 +163,7 @@
 
         .description {
           float: left;
-          font-size: 1em;
+          font-size: 0.9em;
           height: auto;
         }
       }
@@ -176,6 +175,7 @@
   .section .modal,
   .modal {
     &.add-modal {
+      font-size: 1.1em;
       .option {
         i {
           font-size: 1.25em;
