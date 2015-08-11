@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
-import user.common.web.AccountContact;
 import user.common.web.UserInfo;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
@@ -98,18 +96,10 @@ public class AdviceRequestController {
 
 		Long documentId = adviceService.getUserDocumentId(request, userId);
 
-		// get emails for registered users
-		List<AccountContact> emailsFromRegisteredUsers = new ArrayList<>();
-		if (!adviceRequest.getUsers().isEmpty())
-			emailsFromRegisteredUsers = accountService.getContactDataForUsers(
-					request,
-					adviceRequest.getUsers().stream().map(u -> u.getUserId())
-							.collect(Collectors.toList()));
-
 		AdviceRequestParameter adviceRequestParameters = new AdviceRequestParameter();
 		adviceRequestParameters.setDocumentId(documentId);
-		adviceRequestParameters
-				.setRegisteredUsersContactData(emailsFromRegisteredUsers);
+		adviceRequestParameters.setRegisteredUsersContactData(adviceRequest
+				.getUsers());
 		adviceRequestParameters.setNotRegisteredUsers(adviceRequest
 				.getNotRegisteredUsers());
 		adviceRequestParameters.setSenderName(firstName);
