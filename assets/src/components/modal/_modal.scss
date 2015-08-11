@@ -65,6 +65,10 @@
     font-weight: 400;
     padding: 0.5em 0;
 
+    * {
+      color: $text-color;
+    }
+
     .subheading {
       margin-bottom: 1em;
       margin-top: -0.25em;
