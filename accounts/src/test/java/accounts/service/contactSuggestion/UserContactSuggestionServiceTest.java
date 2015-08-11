@@ -113,7 +113,7 @@ public class UserContactSuggestionServiceTest {
 		User student = createTestUser("student-test", RolesEnum.STUDENT);
 		String userName = "academic-test";
 
-		createTestUser(userName, RolesEnum.ADVISOR);
+		createTestUser(userName, RolesEnum.ACADEMIC_ADVISOR);
 
 		Map<String, String> filters = new HashMap<>();
 		filters.put("email", userName);
@@ -124,8 +124,12 @@ public class UserContactSuggestionServiceTest {
 		Assert.assertNotNull("No users found.", suggestions);
 		Assert.assertFalse("No users found.", suggestions.isEmpty());
 
-		Assert.assertTrue("No Advisor found.", suggestions.get(0).getUsername()
-				.equals(userName));
+		Assert.assertTrue("Less than 5 suggestions found.",
+				suggestions.size() <= 5);
+		Assert.assertTrue(
+				"No Advisor found.",
+				suggestions.stream().anyMatch(
+						u -> u.getUsername().equals(userName)));
 
 	}
 
@@ -195,8 +199,6 @@ public class UserContactSuggestionServiceTest {
 
 		Assert.assertNotNull("No users found.", suggestions);
 		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		Assert.assertTrue("Should have been 2, Career and Transfer",
-				suggestions.size() == 2);
 
 		Assert.assertTrue(
 				"No Career Advisor found.",
@@ -222,6 +224,74 @@ public class UserContactSuggestionServiceTest {
 										uor -> uor.getAuthority().contains(
 												RolesEnum.TRANSFER_ADVISOR
 														.name()))));
+
+	}
+
+	@Test
+	public void staffTest() {
+		User staff = createTestUser("staff-test1", RolesEnum.STAFF);
+		createTestUser("saff-test2", RolesEnum.STAFF);
+
+		List<User> suggestions = userContactSuggestionService.getSuggestions(
+				staff, null, 5);
+
+		Assert.assertNotNull("No users found.", suggestions);
+		Assert.assertFalse("No users found.", suggestions.isEmpty());
+		Assert.assertTrue(
+				"No staff member found.",
+				suggestions
+						.get(0)
+						.getAuthorities()
+						.stream()
+						.anyMatch(
+								a -> a.getAuthority().contains(
+										RolesEnum.STAFF.name())));
+
+	}
+
+	@Test
+	public void adminTest() {
+		User staff = createTestUser("admin-test1", RolesEnum.ADMIN);
+		createTestUser("admin-test2", RolesEnum.ADMIN);
+
+		List<User> suggestions = userContactSuggestionService.getSuggestions(
+				staff, null, 5);
+
+		Assert.assertNotNull("No users found.", suggestions);
+		Assert.assertFalse("No users found.", suggestions.isEmpty());
+		Assert.assertTrue(
+				"No staff member found.",
+				suggestions
+						.get(0)
+						.getAuthorities()
+						.stream()
+						.anyMatch(
+								a -> a.getAuthority().contains(
+										RolesEnum.ADMIN.name())
+										|| a.getAuthority().contains(
+												RolesEnum.STAFF.name())));
+
+	}
+
+	@Test
+	public void advisorTest() {
+		User staff = createTestUser("advisor-test1", RolesEnum.ACADEMIC_ADVISOR);
+		createTestUser("advisor-test2", RolesEnum.CAREER_ADVISOR);
+
+		List<User> suggestions = userContactSuggestionService.getSuggestions(
+				staff, null, 5);
+
+		Assert.assertNotNull("No users found.", suggestions);
+		Assert.assertFalse("No users found.", suggestions.isEmpty());
+		Assert.assertTrue(
+				"No staff member found.",
+				suggestions
+						.get(0)
+						.getAuthorities()
+						.stream()
+						.anyMatch(
+								a -> a.getAuthority().contains(
+										RolesEnum.ADVISOR.name())));
 
 	}
 
