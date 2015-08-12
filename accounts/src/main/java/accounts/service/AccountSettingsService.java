@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import user.common.User;
-import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.AccountSettingRepository;
@@ -71,6 +70,10 @@ public class AccountSettingsService {
 			return Optional.of(new AccountSetting(null, user.getUserId(),
 					"lastName", user.getLastName(), Privacy.PUBLIC.name()));
 
+		case "email":
+			return Optional.of(new AccountSetting(null, user.getUserId(),
+					"email", user.getUsername(), Privacy.PUBLIC.name()));
+
 		default:
 			return accountSettingRepository.get(user.getUserId(), settingName);
 		}
@@ -79,16 +82,16 @@ public class AccountSettingsService {
 	protected List<AccountSetting> appendUserNames(
 			List<AccountSetting> accountSettings) {
 
-		accountSettings.addAll(getUserNames(accountSettings.stream()
+		accountSettings.addAll(getUserNamesAndEmail(accountSettings.stream()
 				.map(as -> as.getUserId()).collect(Collectors.toList())));
 
 		return accountSettings;
 	}
 
-	protected List<AccountSetting> getUserNames(List<Long> userIds) {
+	protected List<AccountSetting> getUserNamesAndEmail(List<Long> userIds) {
 		List<AccountSetting> settings = new ArrayList<>();
 
-		for (AccountNames accountNames : userService.getNames(userIds)) {
+		for (User accountNames : userService.getUsers(userIds)) {
 			settings.add(new AccountSetting(null, accountNames.getUserId(),
 					"firstName", accountNames.getFirstName(), Privacy.PUBLIC
 							.name()));
@@ -100,6 +103,9 @@ public class AccountSettingsService {
 			settings.add(new AccountSetting(null, accountNames.getUserId(),
 					"lastName", accountNames.getLastName(), Privacy.PUBLIC
 							.name()));
+
+			settings.add(new AccountSetting(null, accountNames.getUserId(),
+					"email", accountNames.getUsername(), Privacy.PUBLIC.name()));
 		}
 
 		return settings;
@@ -143,8 +149,7 @@ public class AccountSettingsService {
 				accountSettingRepository.set(user.getUserId(), newEmailSetting);
 
 				// but don't change the setting value yet, the user needs to
-				// confirm
-				// the change by mail.
+				// confirm the change by mail.
 				setting.setValue(user.getUsername());
 			}
 

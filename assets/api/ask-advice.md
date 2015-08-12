@@ -13,13 +13,33 @@
   ++ Body
 
 ```
+{
+  "users": [
     {
- 	  "users":[{"userId":4,"firstName":"aName","middleName":null,"lastName":"aLastName"}],
-      "notRegisteredUsers":[{"firstName":"aName","lastName":"aLastName","email":"anemail@gmail.com"}],
-      "subject": "subject text"
-      "message": "message of request",
-      "allowGuestComments":false
+      "userId": 2,
+      "address": null,
+      "email": "deana1@vyllage.com",
+      "phoneNumber": null,
+      "twitter": null,
+      "linkedIn": null,
+      "firstName": "Deana1",
+      "middleName": null,
+      "lastName": "Troi",
+      "avatarUrl": "https://secure.gravatar.com/avatar/1ea123da4938b9a7cb5553eee600c337",
+      "tagline": ""
     }
+  ],
+  "notRegisteredUsers": [
+    {
+      "firstName": "aName",
+      "lastName": "aLastName",
+      "email": "anemail@gmail.com"
+    }
+  ],
+  "subject": "subject text",
+  "message": "message of request",
+  "allowGuestComments": false
+}
 ```
 
 + Response 200 - if the document belongs to the current user

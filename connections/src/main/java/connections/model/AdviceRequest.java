@@ -3,11 +3,12 @@ package connections.model;
 import java.util.List;
 
 import lombok.ToString;
+import user.common.web.AccountContact;
 
 @ToString
 public class AdviceRequest {
 
-	private List<AccountNames> users;
+	private List<AccountContact> users;
 
 	private List<NotRegisteredUser> notRegisteredUsers;
 
@@ -17,11 +18,11 @@ public class AdviceRequest {
 
 	private boolean allowGuestComments;
 
-	public List<AccountNames> getUsers() {
+	public List<AccountContact> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<AccountNames> users) {
+	public void setUsers(List<AccountContact> users) {
 		this.users = users;
 	}
 

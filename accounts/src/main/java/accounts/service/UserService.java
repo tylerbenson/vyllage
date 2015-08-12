@@ -406,7 +406,7 @@ public class UserService {
 		// generating account contact
 		List<AccountContact> accountContacts = map.entrySet().stream()
 				.map(e -> this.mapAccountContact(e)).map(addAvatarUrl())
-				.map(addIsSponsored()).collect(Collectors.toList());
+				.map(addIsAdvisor()).collect(Collectors.toList());
 
 		// getting taglines
 		Map<String, String> taglines = documentService
@@ -421,17 +421,17 @@ public class UserService {
 		return accountContacts;
 	}
 
-	private Function<? super AccountContact, ? extends AccountContact> addIsSponsored() {
+	private Function<? super AccountContact, ? extends AccountContact> addIsAdvisor() {
 		return ac -> {
 
-			boolean isSponsored = sql.fetchExists(sql
+			boolean isAdvisor = sql.fetchExists(sql
 					.select()
 					.from(USER_ORGANIZATION_ROLES)
 					.where(USER_ORGANIZATION_ROLES.USER_ID.eq(ac.getUserId())
 							.and(USER_ORGANIZATION_ROLES.ROLE
 									.contains(RolesEnum.ADVISOR.name()))));
 
-			ac.setAdvisor(isSponsored);
+			ac.setAdvisor(isAdvisor);
 
 			return ac;
 		};
@@ -457,6 +457,7 @@ public class UserService {
 	 * 
 	 * @param entry
 	 * @return
+	 * @throws UserNotFoundException
 	 */
 	protected AccountContact mapAccountContact(
 			Entry<Long, List<AccountSetting>> entry) {
@@ -498,6 +499,13 @@ public class UserService {
 
 		if (email.isPresent())
 			ac.setEmail(email.get().getValue());
+		else
+			try {
+				ac.setEmail(this.getUser(userId).getUsername());
+			} catch (UserNotFoundException e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
 
 		if (phoneNumber.isPresent())
 			ac.setPhoneNumber(phoneNumber.get().getValue());
