@@ -72,7 +72,7 @@
       "lastName": "Troi",
       "avatarUrl": "https://secure.gravatar.com/avatar/1ea123da4938b9a7cb5553eee600c337",
       "tagline": "",
-      "sponsored": true
+      "advisor": true
     },
     {
       "userId": 3,
@@ -86,7 +86,7 @@
       "lastName": "Mario",
       "avatarUrl": "https://secure.gravatar.com/avatar/bfbc7470bc5302be09837669de926d09",
       "tagline": "Awesome adventurous plumber.",
-      "sponsored": false
+      "advisor": false
     }
   ],
   "recommended": [
@@ -102,7 +102,7 @@
       "lastName": "",
       "avatarUrl": "https://secure.gravatar.com/avatar/a87f0c0d9172324b263bc6ca09419358",
       "tagline": null,
-      "sponsored": true
+      "advisor": true
     }
   ]
 }

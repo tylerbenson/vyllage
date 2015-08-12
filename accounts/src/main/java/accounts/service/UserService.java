@@ -406,7 +406,7 @@ public class UserService {
 		// generating account contact
 		List<AccountContact> accountContacts = map.entrySet().stream()
 				.map(e -> this.mapAccountContact(e)).map(addAvatarUrl())
-				.map(addIsSponsored()).collect(Collectors.toList());
+				.map(addIsAdvisor()).collect(Collectors.toList());
 
 		// getting taglines
 		Map<String, String> taglines = documentService
@@ -421,17 +421,17 @@ public class UserService {
 		return accountContacts;
 	}
 
-	private Function<? super AccountContact, ? extends AccountContact> addIsSponsored() {
+	private Function<? super AccountContact, ? extends AccountContact> addIsAdvisor() {
 		return ac -> {
 
-			boolean isSponsored = sql.fetchExists(sql
+			boolean isAdvisor = sql.fetchExists(sql
 					.select()
 					.from(USER_ORGANIZATION_ROLES)
 					.where(USER_ORGANIZATION_ROLES.USER_ID.eq(ac.getUserId())
 							.and(USER_ORGANIZATION_ROLES.ROLE
 									.contains(RolesEnum.ADVISOR.name()))));
 
-			ac.setSponsored(isSponsored);
+			ac.setAdvisor(isAdvisor);
 
 			return ac;
 		};

@@ -20,7 +20,7 @@ public class AccountContact {
 
 	private String tagline;
 
-	private boolean isSponsored;
+	private boolean isAdvisor;
 
 	public Long getUserId() {
 		return userId;
@@ -131,12 +131,12 @@ public class AccountContact {
 		this.tagline = tagline;
 	}
 
-	public boolean isSponsored() {
-		return isSponsored;
+	public boolean isAdvisor() {
+		return isAdvisor;
 	}
 
-	public void setSponsored(boolean isSponsored) {
-		this.isSponsored = isSponsored;
+	public void setAdvisor(boolean isAdvisor) {
+		this.isAdvisor = isAdvisor;
 	}
 
 }
