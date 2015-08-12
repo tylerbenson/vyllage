@@ -109,20 +109,22 @@ public class AccountSettingsServiceTest {
 	@Test
 	public void getUserNamesSuccessfull() {
 		List<Long> userIds = Arrays.asList(1L);
-		AccountNames names = new AccountNames(1L, "Mario", null, "Mario");
-		List<AccountNames> accountNames = Arrays.asList(names);
+		User names = Mockito.mock(User.class);
+		List<User> accountNames = Arrays.asList(names);
 
 		AccountSettingRepository accountSettingRepository = Mockito
 				.mock(AccountSettingRepository.class);
 		UserService userService = Mockito.mock(UserService.class);
 
-		Mockito.when(userService.getNames(userIds)).thenReturn(accountNames);
+		Mockito.when(userService.getUsers(userIds)).thenReturn(accountNames);
+		Mockito.when(names.getFirstName()).thenReturn("Mario");
+		Mockito.when(names.getLastName()).thenReturn("Luigi");
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
 				userService, accountSettingRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
-				.getUserNames(userIds);
+				.getUserNamesAndEmail(userIds);
 
 		Assert.assertNotNull(userNamesSettings);
 
@@ -139,20 +141,20 @@ public class AccountSettingsServiceTest {
 	@Test
 	public void getUserNamesAllNull() {
 		List<Long> userIds = Arrays.asList(1L);
-		AccountNames names = new AccountNames(1L, null, null, null);
-		List<AccountNames> accountNames = Arrays.asList(names);
+		User names = Mockito.mock(User.class);
+		List<User> accountNames = Arrays.asList(names);
 
 		AccountSettingRepository accountSettingRepository = Mockito
 				.mock(AccountSettingRepository.class);
 		UserService userService = Mockito.mock(UserService.class);
 
-		Mockito.when(userService.getNames(userIds)).thenReturn(accountNames);
+		Mockito.when(userService.getUsers(userIds)).thenReturn(accountNames);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
 				userService, accountSettingRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
-				.getUserNames(userIds);
+				.getUserNamesAndEmail(userIds);
 
 		Assert.assertNotNull(userNamesSettings);
 
@@ -178,7 +180,7 @@ public class AccountSettingsServiceTest {
 				userService, accountSettingRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
-				.getUserNames(userIds);
+				.getUserNamesAndEmail(userIds);
 
 		Assert.assertTrue(userNamesSettings.isEmpty());
 	}
@@ -352,7 +354,7 @@ public class AccountSettingsServiceTest {
 
 	@Test
 	public void getAccoutSettingNotFound() {
-		String settingName = "email";
+		String settingName = "a";
 
 		User user = Mockito.mock(User.class);
 

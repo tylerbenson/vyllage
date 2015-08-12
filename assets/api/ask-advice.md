@@ -13,13 +13,33 @@
   ++ Body
 
 ```
+{
+  "users": [
     {
- 	  "users":[{"userId":4,"firstName":"aName","middleName":null,"lastName":"aLastName"}],
-      "notRegisteredUsers":[{"firstName":"aName","lastName":"aLastName","email":"anemail@gmail.com"}],
-      "subject": "subject text"
-      "message": "message of request",
-      "allowGuestComments":false
+      "userId": 2,
+      "address": null,
+      "email": "deana1@vyllage.com",
+      "phoneNumber": null,
+      "twitter": null,
+      "linkedIn": null,
+      "firstName": "Deana1",
+      "middleName": null,
+      "lastName": "Troi",
+      "avatarUrl": "https://secure.gravatar.com/avatar/1ea123da4938b9a7cb5553eee600c337",
+      "tagline": ""
     }
+  ],
+  "notRegisteredUsers": [
+    {
+      "firstName": "aName",
+      "lastName": "aLastName",
+      "email": "anemail@gmail.com"
+    }
+  ],
+  "subject": "subject text",
+  "message": "message of request",
+  "allowGuestComments": false
+}
 ```
 
 + Response 200 - if the document belongs to the current user
@@ -38,20 +58,52 @@
 + Response 200 (application/json)
 
 ```
+{
+  "recent": [
     {
-      "recent" : [
-        {"firstName": "Tyler", "middleName":"Middle", "lastName": "Benson", "userId": 1},
-        {"firstName": "Nathan", "middleName":"Middle", "lastName": "Benson", "userId": 2},
-        {"firstName": "Nick", "middleName":"Middle", "lastName": "Disney", "userId": 3},
-        {"firstName": "Keith", "middleName":"Middle", "lastName": "Biggs", "userId": 4},
-        {"firstName": "Devin", "middleName":"Middle", "lastName": "Moncor", "userId": 5}
-      ],
-      "recommended": [
-        {"firstName": "Ashley", "middleName":"Middle", "lastName": "Benson", "userId": 6},
-        {"firstName": "Doug", "middleName":"Middle", "lastName": "Benson", "userId": 7},
-        {"firstName": "Duane", "middleName":"Middle", "lastName": "Disney", "userId": 8},
-        {"firstName": "Rick", "middleName":"Middle", "lastName": "Biggs", "userId": 9},
-        {"firstName": "Matt", "middleName":"Middle", "lastName": "Moncor", "userId": 10}
-      ]
+      "userId": 2,
+      "address": null,
+      "email": "deana1@vyllage.com",
+      "phoneNumber": null,
+      "twitter": null,
+      "linkedIn": null,
+      "firstName": "Deana1",
+      "middleName": null,
+      "lastName": "Troi",
+      "avatarUrl": "https://secure.gravatar.com/avatar/1ea123da4938b9a7cb5553eee600c337",
+      "tagline": "",
+      "advisor": true
+    },
+    {
+      "userId": 3,
+      "address": null,
+      "email": "mario@toadstool.com",
+      "phoneNumber": null,
+      "twitter": null,
+      "linkedIn": null,
+      "firstName": "Mario",
+      "middleName": null,
+      "lastName": "Mario",
+      "avatarUrl": "https://secure.gravatar.com/avatar/bfbc7470bc5302be09837669de926d09",
+      "tagline": "Awesome adventurous plumber.",
+      "advisor": false
     }
+  ],
+  "recommended": [
+    {
+      "userId": 4,
+      "address": null,
+      "email": "maquiavelo@vyllage.com",
+      "phoneNumber": null,
+      "twitter": null,
+      "linkedIn": null,
+      "firstName": "Mac",
+      "middleName": null,
+      "lastName": "",
+      "avatarUrl": "https://secure.gravatar.com/avatar/a87f0c0d9172324b263bc6ca09419358",
+      "tagline": null,
+      "advisor": true
+    }
+  ]
+}
 ```

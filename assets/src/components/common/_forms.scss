@@ -1,5 +1,6 @@
 ::-webkit-input-placeholder {
  color: lighten($banner-background, 50%);
+ -webkit-text-fill-color: lighten($banner-background, 50%);
 }
 
 :-moz-placeholder { /* Firefox 18- */
@@ -58,6 +59,7 @@ textarea {
 
     &[disabled] {
       background: none;
+      -webkit-text-fill-color: lighten($text-color, 10%);
     }
   }
 

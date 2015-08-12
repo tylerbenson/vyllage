@@ -151,6 +151,15 @@ public class User implements UserDetails, CredentialsContainer {
 												.getOrganizationId()));
 	}
 
+	public boolean isAdvisor() {
+		return this
+				.getAuthorities()
+				.stream()
+				.anyMatch(
+						a -> RolesEnum.ADVISOR.name()
+								.contains(a.getAuthority()));
+	}
+
 	@Override
 	public void eraseCredentials() {
 		this.password = null;

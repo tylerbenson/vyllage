@@ -6,7 +6,7 @@ var filter = require('lodash.filter');
 var SectionHeader = React.createClass({
   addSection: function (e) {
     actions.postSection({
-      title: this.props.title.toLowerCase(),
+      title: this.props.title,
       type: this.props.type,
       sectionPosition: this.props.groupPosition
     });
@@ -20,7 +20,7 @@ var SectionHeader = React.createClass({
           <h1>{this.props.title}</h1>
         </div>
         {this.props.owner && showAdd ? <div className="actions">
-          <AddBtn onClick={this.addSection} /> 
+          <AddBtn onClick={this.addSection} />
         </div>: null}
       </div>
     );

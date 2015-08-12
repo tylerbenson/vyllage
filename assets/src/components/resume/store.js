@@ -31,7 +31,8 @@ module.exports = Reflux.createStore({
       },
       sections: [],
       sectionOrder: ['summary', 'experience', 'education', 'skills'],
-      isNavOpen: false
+      isNavOpen: false,
+      isPrintModalOpen: false
     };
   },
   getMaxSectionPostion: function () {
@@ -43,7 +44,7 @@ module.exports = Reflux.createStore({
     var order = this.resume.sections.map(function (section) {
       return section.sectionId;
     });
-    console.log(order);
+    // console.log(order);
 
     var url = urlTemplate
                 .parse(endpoints.resumeSectionOrder)
@@ -53,7 +54,7 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue)
       .send(order)
       .end(function (err, res) {
-        //console.log(err, res.body, order, url);
+        // console.log(err, res.body, order, url);
       }.bind(this))
   },
   onGetDocumentId: function() {
@@ -101,6 +102,10 @@ module.exports = Reflux.createStore({
         this.trigger(this.resume);
       }.bind(this))
   },
+  isSupportedSection: function (type) {
+    var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection','CareerInterestsSection'];
+    return supported.indexOf(type) > -1;
+  },
   onGetSections: function () {
     var url = urlTemplate
                 .parse(endpoints.resumeSections)
@@ -114,13 +119,14 @@ module.exports = Reflux.createStore({
           this.resume.sections = sortby(this.resume.sections, 'sectionPosition');
           // Fetching comments here instead of comments component to avoid infinite loop of api calls to comments
           this.resume.sections.forEach(function (section) {
+            section.isSupported = this.isSupportedSection(section.type);
             if (section.numberOfComments > 0) {
               this.onGetComments(section.sectionId);
             }
           }.bind(this))
           this.trigger(this.resume);
         }
-      }.bind(this))
+      }.bind(this));
   },
   onPostSection: function (data) {
     var url = urlTemplate
@@ -135,13 +141,15 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var section = assign({}, res.body);
         section.newSection = true;  // To indicate a section is newly created
-        var newSectionPosition = section.sectionPosition
-        console.log('new', newSectionPosition, data);
+        section.isSupported = this.isSupportedSection(section.type);
+        var newSectionPosition = section.sectionPosition;
         this.resume.sections.forEach(function (section) {
+          section.isSupported = this.isSupportedSection(section.type);
+          // console.log(section);
           if (section.sectionPosition >= newSectionPosition) {
             section.sectionPosition += 1;
           }
-        });
+        }.bind(this));
         this.resume.sections.splice(newSectionPosition - 1, 0, section);
         this.postSectionOrder();
         this.trigger(this.resume);
@@ -157,10 +165,11 @@ module.exports = Reflux.createStore({
     request
       .put(url)
       .set(this.tokenHeader, this.tokenValue)
-      .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection']))
+      .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported']))
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
         this.resume.sections[index] = res.body;
+        this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
         this.trigger(this.resume);
       }.bind(this));
   },
@@ -269,11 +278,15 @@ module.exports = Reflux.createStore({
   onToggleComments: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showComments = !this.resume.sections[index].showComments;
-    console.log(sectionId, index, this.resume.sections[index]);
+    // console.log(sectionId, index, this.resume.sections[index]);
     this.trigger(this.resume);
   },
   onToggleNav: function() {
     this.resume.isNavOpen = !this.resume.isNavOpen;
+    this.trigger(this.resume);
+  },
+  onTogglePrintModal: function(flag) {
+    this.resume.isPrintModalOpen = flag;
     this.trigger(this.resume);
   },
   getInitialState: function () {

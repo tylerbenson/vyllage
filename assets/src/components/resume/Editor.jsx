@@ -12,24 +12,17 @@ var EmptySections = require('./sections/Empty');
 var Reorderable = require('./../reorderable');
 
   
-
   
-  var ListItem =  React.createClass({   
-      render: function () {
-      
-        return (
-          <div> 
-            <span className="moveme">MOVE</span>
-              {this.props.item.title}
-
-          </div>
-        )
-
-      }
-  });
-  
-
-
+var ListItem =  React.createClass({   
+    render: function () {      
+      return (
+        <div> 
+          <span className="moveme">MOVE</span>
+            {this.props.item.title}
+        </div>
+      )
+    }
+});
 
 
 var ResumeEditor = React.createClass({
@@ -40,18 +33,9 @@ var ResumeEditor = React.createClass({
   moveSection: function (id, afterId) {
     actions.moveSection(id, afterId);
   },
-  isSupportedSection: function (type) {
-    //Can plugin Togglz request here
-    var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection','CareerInterestsSection'];
-    return supported.indexOf(type) > -1;
-  },
   renderGroup: function (sections, groupPosition) {
     var owner=this.state.resume.header.owner;
-    var containsUnsupportedSection = false;
     var subsectionNodes = sections.map(function(section) {
-      if(!this.isSupportedSection(section.type)) {
-        containsUnsupportedSection = true;
-      }
       return <Section
           key={section.sectionId}
           section={section}
@@ -59,12 +43,8 @@ var ResumeEditor = React.createClass({
           owner={owner} />
     }.bind(this));
 
-    if(containsUnsupportedSection) {
-      return null;
-    }
-
     return (
-      <div key={Math.random()} className='section'>
+      <div className='section'>
         <div className='container'>
           <Header
             title={sections[0].title}
@@ -80,7 +60,7 @@ var ResumeEditor = React.createClass({
   renderSections: function () {
     var owner=this.state.resume.header.owner;
     var sectionGroupNodes = []
-    var sections = this.state.resume.sections || [];
+    var sections = filter(this.state.resume.sections, {isSupported: true}) || [];
     var previousTitle = '';
     var nextTitle = '';
     var groupSections = [];
@@ -99,13 +79,13 @@ var ResumeEditor = React.createClass({
     return sectionGroupNodes;
   },
 
-
-
-
   render: function () {
     var owner=this.state.resume.header.owner;
-  
-   
+
+    var sections = filter(this.renderSections(), function(n) {
+      return n;
+    });
+
 
     return (
       <div>
@@ -140,8 +120,7 @@ var ResumeEditor = React.createClass({
               
 
         <div className="sections">
-          {this.renderSections()}
-          {owner ? <EmptySections sections={this.state.resume.sections} owner={owner} />: null}
+          { sections.length > 0 ? sections : <Empty /> }
         </div>
       </div>
     );

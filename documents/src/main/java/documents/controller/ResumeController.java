@@ -24,6 +24,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -138,6 +139,9 @@ public class ResumeController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String resume(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
+
+		Assert.notNull(user);
+		Assert.notNull(user.getUserId(), "User with null userId : " + user);
 
 		Document documentByUser = documentService.getDocumentByUser(user
 				.getUserId());

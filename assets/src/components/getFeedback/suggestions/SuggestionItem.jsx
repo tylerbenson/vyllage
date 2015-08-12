@@ -18,7 +18,7 @@ var SuggestionItem = React.createClass({
 				<div className="info">
 					<div className="name">
 						{user.firstName + ' ' + user.lastName}
-						{user.is_sponsored ? badge : null}
+						{user.advisor ? badge : null}
 					</div>
 					<div className="tagline">{user.tagline ? user.tagline : 'Vyllage User'}</div>
 				</div>

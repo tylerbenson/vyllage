@@ -3,6 +3,8 @@ package accounts.service.contactSuggestion;
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 import static accounts.domain.tables.Users.USERS;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.jooq.Condition;
@@ -64,6 +66,30 @@ public class GuestContactSelector extends AbstractContactSelector {
 
 	private Condition guestCondition(UserOrganizationRoles uor) {
 		return uor.ROLE.contains(RolesEnum.ADMISSIONS_ADVISOR.name());
+	}
+
+	@Override
+	public List<User> backfill(User user, int limit) {
+		Users u = USERS.as("u");
+		UserOrganizationRoles uor = USER_ORGANIZATION_ROLES.as("uor");
+
+		List<User> recordsToUser = new ArrayList<>();
+
+		recordsToUser.addAll(recordsToUser(sql()
+				.select(u.fields())
+				.from(u)
+				.join(uor)
+				.on(u.USER_ID.eq(uor.USER_ID))
+				.where(uor.ORGANIZATION_ID.in(user
+						.getAuthorities()
+						.stream()
+						.map(a -> ((UserOrganizationRole) a)
+								.getOrganizationId())
+						.collect(Collectors.toList())))
+				.and(uor.ROLE.contains(RolesEnum.ADVISOR.name())).limit(limit)
+				.fetch()));
+
+		return recordsToUser;
 	}
 
 }
