@@ -47,6 +47,9 @@
       h2, h3 {
         input {
           font-weight: 400;
+          &[disabled] {
+            -webkit-text-fill-color: $text-color;
+          }
         }
       }
     }
@@ -62,6 +65,10 @@
     color: lighten($text-color, 10%);
     font-size: 0.9em;
     line-height: 1.5;
+
+    &[disabled] {
+      -webkit-text-fill-color: lighten($text-color, 10%);
+    }
   }
 
   .footer {
@@ -233,7 +240,6 @@
     font-weight: 400;
 
     input {
-      // color: $text-color;
       margin: 2px 0;
     }
   }
