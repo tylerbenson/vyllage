@@ -2,6 +2,7 @@ var Reflux = require('reflux');
 var request = require('superagent');
 var endpoints = require('../endpoints');
 var urlTemplate = require('url-template');
+var where = require('lodash.where');
 var findindex = require('lodash.findindex');
 var omit = require('lodash.omit');
 var assign = require('lodash.assign');
@@ -123,11 +124,53 @@ module.exports = Reflux.createStore({
             if (section.numberOfComments > 0) {
               this.onGetComments(section.sectionId);
             }
+
           }.bind(this))
+
+          this.resume.all_section = this.doProcessSection(this.resume.sections);
           this.trigger(this.resume);
         }
+  
       }.bind(this));
   },
+
+  doProcessSection : function( sections ){
+    var tmp_section = [];
+    
+    if( sections.length){
+
+      sections.forEach(function(section){
+          section.isSupported = this.isSupportedSection(section.type);
+          if( section.isSupported){
+
+              if( tmp_section.length){
+
+                var findIt = findindex(tmp_section, {'type': section.type});
+                if( findIt == -1)
+                tmp_section.push({
+                  type: section.type,
+                  title : section.title, 
+                  child : where( sections, { 'type': section.type })
+                });
+
+              }else{
+
+                tmp_section.push({
+                  type: section.type, 
+                  title : section.title,
+                  child : where( sections, { 'type': section.type })
+                });   
+
+              }
+
+          }
+      }.bind(this));
+
+
+      return tmp_section;
+    }
+  },
+
   onPostSection: function (data) {
     var url = urlTemplate
                 .parse(endpoints.resumeSections)

@@ -8,7 +8,7 @@ var Header = require('./sections/Header');
 var Section = require('./sections');
 var Banner = require('./banner');
 var sortby = require('lodash.sortby');
-var EmptySections = require('./sections/Empty');
+var Empty = require('./sections/Empty');
 var Reorderable = require('./../reorderable');
 
   
@@ -17,8 +17,8 @@ var ListItem =  React.createClass({
     render: function () {      
       return (
         <div> 
-          <span className="moveme">MOVE</span>
-            {this.props.item.title}
+          <span className="move-section">MOVE</span> 
+            <strong>{this.props.item.title}</strong>
         </div>
       )
     }
@@ -26,7 +26,9 @@ var ListItem =  React.createClass({
 
 
 var ResumeEditor = React.createClass({
+  
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
+  
   componentWillMount: function () {
     actions.getResume();
   },
@@ -87,34 +89,25 @@ var ResumeEditor = React.createClass({
     });
 
 
+
+    window.someting = this.state;
+
     return (
       <div>
         <Banner header={this.state.resume.header} settings={this.state.settings} />
 
-        <Reorderable
-         
-          itemKey='sectionId'
-         
-          lock='horizontal'
-         
+        <Reorderable         
+          itemKey='type'         
+          lock='horizontal'         
           holdTime='0'
-
-          handle="moveme"
-         
-          list={this.state.resume.sections}
-         
-          template={ListItem}
-         
-          callback={this.callback}
-        
-          listClass='my-list'
-        
-          itemClass='list-item'
-         
-          selected={this.state.selected}
-        
-          selectedKey='sectionId'
-       
+          handle="move-section"         
+          list={this.state.resume.all_section}         
+          template={ListItem}         
+          callback={this.callback}        
+          listClass='my-list'        
+          itemClass='list-item'         
+          selected={this.state.selected}        
+          selectedKey='type'       
           disableReorder={false}/>
 
               
