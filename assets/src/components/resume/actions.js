@@ -22,5 +22,6 @@ module.exports = Reflux.createActions([
   'showComments',
   'hideComments',
   'toggleComments',
-  'toggleNav'
+  'toggleNav',
+  'togglePrintModal'
 ]);

@@ -2,6 +2,7 @@ var React = require('react');
 var ExecutionEnvironment = require('react/lib/ExecutionEnvironment');
 var Textarea = require('react-textarea-autosize');
 var Subheader = require('./Subheader');
+var AddSection = require('../AddSection');
 var Avatar = require('../../avatar');
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
@@ -10,12 +11,15 @@ var phoneFormatter = require('phone-formatter');
 var validator = require('validator');
 var clone = require('clone-deep');
 var foreach = require('lodash.foreach');
+var OnScroll = require('react-window-mixins').OnScroll;
 
 var Banner = React.createClass({
+  mixins: [OnScroll],
   getInitialState: function () {
     return {
       editMode: false,
       lastScroll: {
+        scrollY: window.scrollY,
         timestamp: new Date(),
         timeout: {}
       },
@@ -29,13 +33,8 @@ var Banner = React.createClass({
       this.setState({fields: nextProps.header});
     }
   },
-  componentDidMount: function() {
-    if (ExecutionEnvironment.canUseDOM) {
-      window.addEventListener('scroll', this.handleScroll);
-    }
-  },
-  componentWillUnmount: function() {
-    window.removeEventListener('scroll', this.handleScroll);
+  onScroll: function(){
+    this.handleScroll();
   },
   getRefValue: function(ref) {
     return this.refs[ref].getDOMNode().value;
@@ -142,30 +141,34 @@ var Banner = React.createClass({
     }
     this.setState({editMode: flag});
   },
-  toggleSubheader: function(){
-    var height = this.refs.banner.getDOMNode().offsetHeight;
-    var subheader = this.refs.subheader.getDOMNode();
+  toggleSubheader: function(lastScrollTop){
     var scrollTop = window.scrollY;
+    var scrollDirection = scrollTop - lastScrollTop;
 
-    if(scrollTop > height) {
-      //addClass
-      subheader.className += ' visible';
-    }
-    else {
-      //removeClass
-      subheader.className = subheader.className.replace(/ visible/g,'');
+    if(scrollDirection != 0) {
+      var height = this.refs.banner.getDOMNode().offsetHeight;
+      var subheader = this.refs.subheader.getDOMNode();
+
+      if(scrollTop > height && scrollDirection < 0) {
+        //addClass
+        subheader.className += ' visible';
+      }
+      else {
+        //removeClass
+        subheader.className = subheader.className.replace(/ visible/g,'');
+      }
     }
   },
   handleScroll: function(){
     var DEBOUNCE_INTERVAL = 50;
     if(Math.abs(new Date() - this.state.lastScroll.timestamp) > DEBOUNCE_INTERVAL) {
+      var scrollTop = window.scrollY;
       clearTimeout(this.state.lastScroll.timeout);
 
-      this.toggleSubheader();
-
       this.setState({lastScroll: {
+        scrollTop: scrollTop,
         timestamp: new Date()},
-        timeout: setTimeout(this.toggleSubheader, DEBOUNCE_INTERVAL*4)
+        timeout: setTimeout(function(){this.toggleSubheader(scrollTop);}.bind(this), DEBOUNCE_INTERVAL*4)
       });
     }
   },
@@ -277,10 +280,12 @@ var Banner = React.createClass({
               </div>
               :
               <div className="content">
-                <button onClick={this.toggleEditable.bind(this, true)}>
+                <button className="edit" onClick={this.toggleEditable.bind(this, true)}>
                   <i className="ion-edit"></i>
                   <span>Edit Profile</span>
                 </button>
+
+                <AddSection />
               </div>
             )}
           </div>

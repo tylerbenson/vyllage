@@ -357,3 +357,33 @@
     }
   }
 }
+
+$muted-text: lighten($secondary-color, 25%);
+
+.empty-sections {
+  font-size: 1.25em;
+  margin: 4em auto;
+  height: 2.5em;
+  text-align: center;
+
+  * {
+    color: $muted-text;
+    text-shadow: 0 1px 0 $inverted-text-color;
+  }
+
+  i {
+    display: inline-block;
+    font-size: 2.5em;
+    margin-right: 0.25em;
+  }
+
+  div {
+    display: inline-block;
+    text-align: left;
+
+    strong {
+      display: block;
+      font-size: 1.125em;
+    }
+  }
+}
