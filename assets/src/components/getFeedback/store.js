@@ -221,7 +221,7 @@ var GetFeedbackStore = Reflux.createStore({
             lastName: 'Greene',
             tagline: 'Helping People Achieve Greater Careers',
             avatar: '/images/avatars/1.jpg',
-            is_sponsored: true
+            advisor: true
           },
           {
             userId: 2,
@@ -229,7 +229,7 @@ var GetFeedbackStore = Reflux.createStore({
             lastName: 'Reyes',
             tagline: 'Making Change through Strong Leadership',
             avatar: '/images/avatars/2.jpg',
-            is_sponsored: false
+            advisor: false
           },
           {
             userId: 3,
@@ -237,7 +237,7 @@ var GetFeedbackStore = Reflux.createStore({
             lastName: 'Lee',
             tagline: 'Aspiring Project Management Technologist',
             avatar: '/images/avatars/3.jpg',
-            is_sponsored: false
+            advisor: false
           },
           {
             userId: 4,
@@ -245,7 +245,7 @@ var GetFeedbackStore = Reflux.createStore({
             lastName: 'Knight',
             tagline: 'Executive Team Lead',
             avatar: '/images/avatars/4.jpg',
-            is_sponsored: false
+            advisor: false
           },
           {
             userId: 5,
@@ -253,7 +253,7 @@ var GetFeedbackStore = Reflux.createStore({
             lastName: 'Jensen',
             tagline: 'Success through Sales',
             avatar: '/images/avatars/5.jpg',
-            is_sponsored: true
+            advisor: true
           }];
           this.update();
         }

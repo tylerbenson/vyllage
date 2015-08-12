@@ -431,7 +431,7 @@ public class UserService {
 							.and(USER_ORGANIZATION_ROLES.ROLE
 									.contains(RolesEnum.ADVISOR.name()))));
 
-			ac.setSponsored(isSponsored);
+			ac.setAdvisor(isSponsored);
 
 			return ac;
 		};
