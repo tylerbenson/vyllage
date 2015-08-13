@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import lombok.NonNull;
 import oauth.repository.LMSKey;
 import oauth.repository.LMSKeyRepository;
 import oauth.utilities.LMSConstants;
@@ -38,16 +39,16 @@ public class LMSConsumerDetailsService implements ConsumerDetailsService {
 	}
 
 	@Override
-	public ConsumerDetails loadConsumerByConsumerKey(String consumerKey)
-			throws OAuthException {
+	public ConsumerDetails loadConsumerByConsumerKey(
+			@NonNull final String consumerKey) throws OAuthException {
 
-		consumerKey = StringUtils.trimToNull(consumerKey);
+		final String trimConsumerKey = StringUtils.trimToNull(consumerKey);
 
-		Assert.notNull(consumerKey);
+		Assert.notNull(trimConsumerKey);
 
-		Optional<LMSKey> optional = lMSKeyRepository.get(consumerKey);
+		final Optional<LMSKey> optional = lMSKeyRepository.get(trimConsumerKey);
 
-		LMSKey ltiKey = null;
+		final LMSKey ltiKey;
 
 		if (optional.isPresent())
 			ltiKey = optional.get();
