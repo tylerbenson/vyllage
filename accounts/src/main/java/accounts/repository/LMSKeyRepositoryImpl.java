@@ -15,6 +15,7 @@ import oauth.repository.LMSKey;
 import oauth.repository.LMSKeyRepository;
 
 import org.jooq.DSLContext;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Repository;
 
 import user.common.Organization;
@@ -29,6 +30,9 @@ public class LMSKeyRepositoryImpl implements LMSKeyRepository {
 
 	@Inject
 	private DSLContext sql;
+
+	@Inject
+	private TextEncryptor textEncryptor;
 
 	@Override
 	public Optional<LMSKey> get(@NonNull final String consumerKey) {
@@ -104,8 +108,12 @@ public class LMSKeyRepositoryImpl implements LMSKeyRepository {
 	}
 
 	protected LMSKey getKey(@NonNull final LmsKeyRecord keyRecord) {
+
+		final String encryptedSecret = textEncryptor.encrypt(keyRecord
+				.getSecret());
+
 		final LMSKey lmsKey = new LMSKey(keyRecord.getConsumerKey(),
-				keyRecord.getSecret());
+				encryptedSecret);
 
 		lmsKey.setKeyId(keyRecord.getKeyId());
 		lmsKey.setCreatorUserId(keyRecord.getCreatorUserId());

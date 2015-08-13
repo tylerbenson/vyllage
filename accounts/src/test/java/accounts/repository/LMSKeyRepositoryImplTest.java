@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -36,6 +37,9 @@ public class LMSKeyRepositoryImplTest {
 	@Inject
 	private OrganizationRepository organizationRepository;
 
+	@Inject
+	private TextEncryptor textEncryptor;
+
 	@Test
 	public void testGet() throws UserNotFoundException {
 		final User user = service.getUser(1L);
@@ -44,7 +48,8 @@ public class LMSKeyRepositoryImplTest {
 		final String consumerKey = "aeiou";
 		final String secret = "12345678911234567890";
 
-		LMSKey savedKey = repository.save(user, organization, consumerKey, secret);
+		LMSKey savedKey = repository.save(user, organization, consumerKey,
+				secret);
 
 		Optional<LMSKey> getKey = repository.get(consumerKey);
 
@@ -61,11 +66,12 @@ public class LMSKeyRepositoryImplTest {
 		final String consumerKey = "aeiou";
 		final String secret = "12345678911234567890";
 
-		LMSKey savedKey = repository.save(user, organization, consumerKey, secret);
+		LMSKey savedKey = repository.save(user, organization, consumerKey,
+				secret);
 
 		Assert.assertNotNull(savedKey);
 		Assert.assertEquals(consumerKey, savedKey.getKeyKey());
-		Assert.assertEquals(secret, savedKey.getSecret());
+		Assert.assertEquals(textEncryptor.encrypt(secret), savedKey.getSecret());
 	}
 
 }

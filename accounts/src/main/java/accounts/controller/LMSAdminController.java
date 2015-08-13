@@ -10,6 +10,7 @@ import oauth.repository.LMSKey;
 import oauth.repository.LMSKeyRepository;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,14 +38,18 @@ public class LMSAdminController {
 	private final LMSKeyRepository lMSKeyRepository;
 	private final RandomPasswordGenerator passwordGenerator;
 
+	private TextEncryptor textEncryptor;
+
 	@Inject
 	public LMSAdminController(
 			final OrganizationRepository organizationRepository,
-			LMSKeyRepository lMSKeyRepository,
-			final RandomPasswordGenerator passwordGenerator) {
+			final LMSKeyRepository lMSKeyRepository,
+			final RandomPasswordGenerator passwordGenerator,
+			final TextEncryptor textEncryptor) {
 		this.organizationRepository = organizationRepository;
 		this.lMSKeyRepository = lMSKeyRepository;
 		this.passwordGenerator = passwordGenerator;
+		this.textEncryptor = textEncryptor;
 	}
 
 	@RequestMapping(value = "/admin/lms/keys", method = RequestMethod.GET)
@@ -102,11 +107,13 @@ public class LMSAdminController {
 
 		model.addAttribute("organization", organization.getOrganizationName());
 		model.addAttribute("consumerKey", consumerKey);
-		model.addAttribute("secret", lmsKeyForm.getSecret());
+		model.addAttribute("secret",
+				textEncryptor.encrypt(lmsKeyForm.getSecret()));
 
 		logger.info(organization.getOrganizationName());
 		logger.info(key.getKeyKey());
-		logger.info(lmsKeyForm.getSecret());
+		logger.info(lmsKeyForm.getSecret() + " encrypted: "
+				+ textEncryptor.encrypt(lmsKeyForm.getSecret()));
 
 		return "adminLMSKeyDone";
 	}
