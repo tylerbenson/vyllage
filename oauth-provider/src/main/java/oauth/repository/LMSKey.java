@@ -2,8 +2,11 @@ package oauth.repository;
 
 import java.time.LocalDateTime;
 
+import lombok.ToString;
+
 import org.apache.commons.lang3.StringUtils;
 
+@ToString
 public class LMSKey {
 	private long keyId;
 
@@ -16,8 +19,6 @@ public class LMSKey {
 	private Long creatorUserId;
 
 	private Long modifiedByUserId;
-
-	private Long organizationId;
 
 	private LocalDateTime lastModified;
 
@@ -97,14 +98,6 @@ public class LMSKey {
 
 	public void setModifiedByUserId(Long modifiedByUserId) {
 		this.modifiedByUserId = modifiedByUserId;
-	}
-
-	public Long getOrganizationId() {
-		return organizationId;
-	}
-
-	public void setOrganizationId(Long organizationId) {
-		this.organizationId = organizationId;
 	}
 
 	public LocalDateTime getLastModified() {

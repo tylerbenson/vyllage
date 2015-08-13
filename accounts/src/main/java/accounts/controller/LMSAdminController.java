@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import oauth.repository.LMSKey;
+import oauth.repository.LMSKeyRepository;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -28,15 +31,19 @@ public class LMSAdminController {
 	private final Logger logger = Logger.getLogger(AdminUserController.class
 			.getName());
 
-	private static final String NON_ALPHANUMERIC = "^[^a-zA-Z0-9\\s]+|[^a-zA-Z0-9]+$";
+	private static final String NON_ALPHANUMERIC = "^[^a-zA-Z0-9]+|[^a-zA-Z0-9\\s]+$";
+
 	private final OrganizationRepository organizationRepository;
+	private final LMSKeyRepository lMSKeyRepository;
 	private final RandomPasswordGenerator passwordGenerator;
 
 	@Inject
 	public LMSAdminController(
 			final OrganizationRepository organizationRepository,
+			LMSKeyRepository lMSKeyRepository,
 			final RandomPasswordGenerator passwordGenerator) {
 		this.organizationRepository = organizationRepository;
+		this.lMSKeyRepository = lMSKeyRepository;
 		this.passwordGenerator = passwordGenerator;
 	}
 
@@ -50,12 +57,8 @@ public class LMSAdminController {
 		Assert.notNull(allOrganizations);
 		Assert.notEmpty(allOrganizations);
 
-		String consumerKeyPart = allOrganizations.get(0).getOrganizationName()
-				.replaceAll(NON_ALPHANUMERIC, "-");
-
 		lmsKeyForm.setSecret(passwordGenerator.getRandomPassword());
 
-		model.addAttribute("consumerKeyPart", consumerKeyPart + "-");
 		model.addAttribute("organizations", allOrganizations);
 		model.addAttribute("lmsKeyForm", lmsKeyForm);
 
@@ -82,24 +85,26 @@ public class LMSAdminController {
 			return "adminLMSKey";
 		}
 
-		// to show result
-		Organization organization = organizationRepository.get(lmsKeyForm
+		// to show the result
+		final Organization organization = organizationRepository.get(lmsKeyForm
 				.getOrganizationId());
 
-		String consumerKeyPart = organization.getOrganizationName().replaceAll(
-				NON_ALPHANUMERIC, "-");
+		final String consumerKey = organization.getOrganizationName()
+				.replaceAll(NON_ALPHANUMERIC, "")
+				+ lmsKeyForm.getConsumerKey().replaceAll(NON_ALPHANUMERIC, "");
 
-		String consumerKey = consumerKeyPart + "-"
-				+ lmsKeyForm.getConsumerKey();
+		// save
+
+		LMSKey key = lMSKeyRepository.save(user, organization, consumerKey,
+				lmsKeyForm.getSecret());
 
 		model.addAttribute("organization", organization.getOrganizationName());
 		model.addAttribute("consumerKey", consumerKey);
 		model.addAttribute("secret", lmsKeyForm.getSecret());
 
-		// save
 		logger.info(organization.getOrganizationName());
-		logger.info(consumerKey);
-		logger.info(lmsKeyForm.getSecret());
+		logger.info(key.getKeyKey());
+		logger.info(lmsKeyForm.getSecret() + " hash: " + key.getSecret());
 
 		return "adminLMSKeyDone";
 	}

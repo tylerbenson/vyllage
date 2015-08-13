@@ -1,5 +1,7 @@
 package oauth.lti;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import oauth.repository.LMSKey;
@@ -7,6 +9,7 @@ import oauth.repository.LMSKeyRepository;
 import oauth.utilities.LMSConstants;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +20,8 @@ import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
+import com.newrelic.api.agent.NewRelic;
 
 @Component
 public class LMSConsumerDetailsService implements ConsumerDetailsService {
@@ -40,7 +45,21 @@ public class LMSConsumerDetailsService implements ConsumerDetailsService {
 
 		Assert.notNull(consumerKey);
 
-		LMSKey ltiKey = lMSKeyRepository.get(consumerKey);
+		Optional<LMSKey> optional = lMSKeyRepository.get(consumerKey);
+
+		LMSKey ltiKey = null;
+
+		if (optional.isPresent())
+			ltiKey = optional.get();
+		else {
+
+			OAuthException e = new OAuthException("Invalid key provided, key: "
+					+ consumerKey);
+			log.error(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+
+			throw e;
+		}
 
 		BaseConsumerDetails cd = new BaseConsumerDetails();
 		cd.setConsumerKey(consumerKey);
