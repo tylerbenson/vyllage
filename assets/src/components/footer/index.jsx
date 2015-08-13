@@ -12,7 +12,7 @@ var Footer = React.createClass({
           </div>
           <nav>
             <ul>
-              <li><a href="/terms.html">Terms</a></li>
+              <li><a href="/careers.html">Careers</a></li>
               <li><a href="/privacy.html">Privacy</a></li>
               <li><a href="/contact.html">Contact Us</a></li>
             </ul>

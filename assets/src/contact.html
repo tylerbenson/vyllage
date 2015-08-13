@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Vyllage | Sample Page</title>
+  <title>Vyllage | Contact Us</title>
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -18,7 +18,7 @@
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
-<body class="info">
+<body class="contact info">
   <div id="container">
     <header>
       <div class="content">
@@ -29,22 +29,21 @@
       </div>
     </header>
     <div class="content">
-      <h1>Contact us</h1>
-
-
-      <p>Lorem ipsum dolor <a>sit amet, consectetur adipisicing elit</a>. Aspernatur dignissimos est mollitia recusandae ut
-        ipsa obcaecati iure velit pariatur assumenda eos ipsum nostrum id hic amet quo, nesciunt rem aliquam!</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur dignissimos est mollitia recusandae ut ipsa obcaecati
-        iure velit pariatur assumenda eos ipsum nostrum id hic amet quo, nesciunt rem aliquam!</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur dignissimos est mollitia recusandae ut ipsa obcaecati
-        iure velit pariatur assumenda eos ipsum nostrum id hic amet quo, nesciunt rem aliquam!</p>
-
-      <ul>
-        <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam, facere.</li>
-        <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam, facere.</li>
-        <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam, facere.</li>
-      </ul>
-
+      <div class="centered">
+        <label>Partners, press &amp; general inquiries</label>
+        <h3><a href="mailto:info@vyllage.com">info@vyllage.com</a></h3>
+        <br><br>
+        <label>Need help?</label>
+        <h3><a href="mailto:support@vyllage.com">support@vyllage.com</a></h3>
+        <br><br>
+        <label>Connect with us on</label>
+        <h3>
+          <a href="//www.facebook.com/vyllage" class="flat icon button"><i class="ion-social-facebook"></i></a>
+          <a href="//www.twitter.com/vyllage" class="flat icon button"><i class="ion-social-twitter"></i></a>
+          <a href="//www.linkedin.com/company/vyllage" class="flat icon button"><i class="ion-social-linkedin"></i></a>
+        </h3>
+        <br><br>
+      </div>
     </div>
   </div>
   <footer>
@@ -54,7 +53,7 @@
       </div>
       <nav>
         <ul>
-          <li><a href="/terms.html">Terms</a></li>
+          <li><a href="/careers.html">Careers</a></li>
           <li><a href="/privacy.html">Privacy</a></li>
           <li><a href="/contact.html">Contact Us</a></li>
         </ul>
