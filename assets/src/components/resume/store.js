@@ -31,6 +31,7 @@ module.exports = Reflux.createStore({
         lastName: ''
       },
       sections: [],
+      all_section:[],
       sectionOrder: ['summary', 'experience', 'education', 'skills'],
       isNavOpen: false,
       isPrintModalOpen: false
@@ -75,6 +76,7 @@ module.exports = Reflux.createStore({
   onGetResume: function () {
     this.onGetHeader();
     this.onGetSections();
+
   },
   onGetHeader: function () {
     var url = urlTemplate
@@ -86,6 +88,7 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         if (res.ok) {
           this.resume.header = res.body;
+
           this.trigger(this.resume);
         }
       }.bind(this))
@@ -124,22 +127,29 @@ module.exports = Reflux.createStore({
             if (section.numberOfComments > 0) {
               this.onGetComments(section.sectionId);
             }
-
-          }.bind(this))
-
-
-          this.resume.all_section = this.doProcessSection(res.body);
+          }.bind(this));       
           this.trigger(this.resume);
         }
   
       }.bind(this));
   },
 
-  doProcessSection : function( sections , owner ){
+
+  onPublishSections : function( sections , header ){
+
+     this.resume.header = header; 
+     this.resume.all_section = this.doProcessSection(sections, header.owner);
+
+     if( this.resume.all_section.length )
+         this.trigger(this.resume);
+
+  },
+
+
+  doProcessSection : function(sections , owner ){
     var tmp_section = [];
-    
-    
-    if( sections.length){
+   
+    if( sections.length > 0 ){
 
       sections.forEach(function(section){
           section.isSupported = this.isSupportedSection(section.type);
@@ -148,24 +158,26 @@ module.exports = Reflux.createStore({
               if( tmp_section.length){
 
                 var findIt = findindex(tmp_section, {'type': section.type});
-                if( findIt == -1)
-                tmp_section.push({
-                  type: section.type,
-                  title : section.title, 
-                  id : section.sectionId,
-                  owner : this.resume.header.owner,
-                  child : where( sections, { 'type': section.type })
-                });
+
+                   if( findIt == -1){
+                      tmp_section.push({
+                        type: section.type,
+                        title : section.title, 
+                        id : section.sectionId,
+                        owner : owner,                   
+                        child : where( sections, { 'type': section.type })
+                      });
+                   }
 
               }else{
 
                 tmp_section.push({
                   type: section.type, 
                   title : section.title,
-                  id : section.sectionId,
-                  owner : this.resume.header.owner,
+                  id : section.sectionId, 
+                  owner : owner,                  
                   child : where( sections, { 'type': section.type })
-                });   
+                });  
 
               }
 

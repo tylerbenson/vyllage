@@ -18,7 +18,7 @@ var SectionItem = React.createClass({
       return (
         <div>
          
-         { /* <span className="move-section-sub">move sub</span> */ }
+         <span className="move-section-sub">move sub</span> 
 
 
         <Section
@@ -58,8 +58,8 @@ var SubSection = React.createClass({
             list={this.state.element }         
             template={SectionItem}         
             callback={this.callback}        
-            listClass='my-list-sub'        
-            itemClass='list-item-sub'         
+            listClass='subsections'        
+            itemClass='subsection-holder'         
             selected={this.state.selected}        
             selectedKey='sectionId'       
             disableReorder={false}/>
@@ -72,10 +72,13 @@ var SubSection = React.createClass({
   
 var SectionGroup =  React.createClass({   
     render: function () {   
+
+     
+
       return (
         <div className="container"> 
 
-         { /* <span className="move-section">MOVE</span> */  }
+         <span className="move-section">MOVE</span> 
           <Header
             title={this.props.item.title}
             type={this.props.item.type}
@@ -95,6 +98,7 @@ var ResumeEditor = React.createClass({
   
   componentWillMount: function () {
     actions.getResume();
+    actions.getAllsections(); // used preEmit for this 
   },
   moveSection: function (id, afterId) {
     actions.moveSection(id, afterId);
@@ -147,7 +151,7 @@ var ResumeEditor = React.createClass({
 
 
   callback : function( event, itemThatHasBeenMoved, itemsPreviousIndex, itemsNewIndex, reorderedArray ){
-      console.log(reorderedArray);
+      
   },
 
 
@@ -160,59 +164,43 @@ var ResumeEditor = React.createClass({
     });
 
     var allSection;
-    if( this.state.resume.sections.length > 0 ){
-      allSection = <Reorderable         
-            itemKey='id'         
-            lock='horizontal'         
-            holdTime='0'
-            handle="move-section"         
-            list={this.state.resume.all_section}         
-            template={SectionGroup}         
-            callback={this.callback}        
-            listClass='section-holder'        
-            itemClass='section'         
-            selected={this.state.selected}        
-            selectedKey='id'       
-            disableReorder={false}/>
+
+    if( this.state.resume.all_section != undefined ){
 
 
-    }else{
-      allSection = <Empty />
+     
+      if( this.state.resume.all_section.length > 0 ){
+        allSection = <Reorderable         
+              itemKey='id'         
+              lock='horizontal'         
+              holdTime='3'
+              handle="move-section"         
+              list={this.state.resume.all_section}         
+              template={SectionGroup}         
+              callback={this.callback}        
+              listClass='section-holder'        
+              itemClass='section'         
+              selected={this.state.selected}        
+              selectedKey='id'       
+              disableReorder={false}/>
+
+
+      }else{
+        allSection = <Empty />
+      }
+
     }
+    
+
+
+
+
 
 
     return (
       <div>
         <Banner header={this.state.resume.header} settings={this.state.settings} /> 
-
-
-        {allSection}           
-
-{ /*
-        <div className="sections">
-          { sections.length > 0 ? sections : <Empty /> }
-        </div>
-
-        <div>
-          <Reorderable         
-            itemKey='id'         
-            lock='horizontal'         
-            holdTime='0'
-            handle="move-section"         
-            list={this.state.resume.all_section}         
-            template={SectionGroup}         
-            callback={this.callback}        
-            listClass='my-list'        
-            itemClass='list-item'         
-            selected={this.state.selected}        
-            selectedKey='id'       
-            disableReorder={false}/>
-        </div>
-*/
-
-}
-
-
+        {allSection}  
       </div>
     );
   }

@@ -98,9 +98,12 @@ var Tags = React.createClass({
       'subsection': true
     });
 
+    console.log( this.props.owner);
+
     return (
       <div className={classes} {...this.dropTargetFor('section')}>
-        { this.props.owner ? <MoveButton {...this.dragSourceFor('section')} />: null }
+        {/* this.props.owner ? <MoveButton {...this.dragSourceFor('section')} />: null  */}
+        { this.props.owner ? <MoveButton />: null }
         <div className='header'>
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
