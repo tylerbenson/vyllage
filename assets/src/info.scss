@@ -16,6 +16,12 @@
     position: static;
     text-align: center;
 
+    .content {
+      &:hover {
+        border: none;
+      }
+    }
+
     .logo {
       float: none;
       font-size: 1.5em;
@@ -84,6 +90,10 @@
 
     .logo {
       float: left;
+
+      &:hover {
+        border: none;
+      }
 
       span {
         display: none;
