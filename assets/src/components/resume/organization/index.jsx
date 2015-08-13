@@ -11,6 +11,7 @@ var MoveButton = require('../../buttons/move');
 var { DragDropMixin } = require('react-dnd');
 var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
 var SectionFooter = require('../sections/Footer');
+var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 
 var Organization = React.createClass({
@@ -221,6 +222,7 @@ var Organization = React.createClass({
           </div>
           <SectionFooter section={section} />
         </div>
+        {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>
     );
   }

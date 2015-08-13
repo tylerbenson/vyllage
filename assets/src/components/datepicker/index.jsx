@@ -11,6 +11,14 @@ var Datepicker = React.createClass({
   mixins: [LayerMixin],
   getInitialState: function () {
     var date = this.props.date;
+
+    var active_year;
+    if( date == undefined || date =='NaN' || date == 'Present' ){
+      active_year = parseInt(moment(new Date()).format('YYYY'))
+    }else{
+      active_year = parseInt( date.split(' ')[1] );
+    }
+
     return {
       isOpen: false,
       top: '-9999em',
@@ -19,7 +27,8 @@ var Datepicker = React.createClass({
       onDatepicker: false,
       year: parseInt(moment(new Date(date)).format('YYYY')),
       month: moment(new Date(date)).format('MMM'),
-      date: date
+      date: date ,
+      active_year:active_year
     };
   },
   componentWillReceiveProps: function (nextProps) {
@@ -62,33 +71,50 @@ var Datepicker = React.createClass({
   incrementYear: function (e) {
     e.preventDefault();
 
-    var year = this.state.date ? parseInt(this.state.year) : parseInt(moment(new Date()).format('YYYY'));
-    var month = this.state.month !== "Invalid date" ? this.state.month : moment(new Date()).format('MMM');
-    // year = year == NaN ? parseInt(moment(new Date()).format('YYYY')): year;
+    if( this.state.date ){
+      var tmp_date = this.state.date.split(' '),
+          tmp_month = tmp_date[0],
+          tmp_year = parseInt( tmp_date[1] );    
+    }
+
+    var year = this.state.date ? tmp_year : parseInt(moment(new Date()).format('YYYY'));
+    var month = this.state.date ? tmp_month : moment(new Date()).format('MMM');
     year = year + 1;
+ 
 
     this.setState({
       year: year,
-      date: month + ' ' + year
+      date: month + ' ' + year,
+      active_year: year
     }, function () {
       this.setDate();
     }.bind(this));
+
+
   },
   decrementYear: function (e) {
     e.preventDefault();
 
-    var year = this.state.date ? parseInt(this.state.year) : parseInt(moment(new Date()).format('YYYY'));
-    var month = this.state.month !== "Invalid date" ? this.state.month : moment(new Date()).format('MMM');
-    // year = year == NaN ? parseInt(moment(new Date()).format('YYYY')): year;
-    year -= 1;
+    if( this.state.date ){
+      var tmp_date = this.state.date.split(' '),
+          tmp_month = tmp_date[0],
+          tmp_year = parseInt( tmp_date[1] );    
+    }
 
+    var year = this.state.date ? tmp_year : parseInt(moment(new Date()).format('YYYY'));
+    var month = this.state.date ? tmp_month : moment(new Date()).format('MMM');
+    year = year - 1;
 
     this.setState({
       year: year,
-      date: month + ' ' + year
+      date: month + ' ' + year,
+      active_year: year
     }, function () {
       this.setDate();
     }.bind(this));
+
+
+
   },
   changeHandler: function (e) {
     this.setState({
@@ -104,25 +130,32 @@ var Datepicker = React.createClass({
         isOpen: true
     });
   },
+
+  isValidDate : function(d){
+      if ( Object.prototype.toString.call(d) !== "[object Date]" )
+        return false;
+      return !isNaN(d.getTime());
+  },
+
   onBlur: function (e) {
     var input = e.target.value;
     if(input.length > 0) {
       var date = moment(new Date(input)).format('MMM YYYY');
-
-      if(date != 'Invalid date') {
+      if(date != 'Invalid date') {    
         this.setState({
           date: date,
           month: moment(new Date(input)).format('MMM'),
           year: moment(new Date(input)).format('YYYY')
         });
         this.setDate();
-      }
-      else {
-        this.setState({
-          date: '',
-          month: '',
-          year: ''
-        });
+      } else {
+        if( input != this.state.date ){
+          this.setState({
+            date: '',
+            month: '',
+            year: ''
+          });
+        }
       }
     }
 
@@ -170,8 +203,13 @@ var Datepicker = React.createClass({
   renderLayer: function () {
     if (this.state.isOpen) {
       var isCurrent = this.props.isCurrent;
-      var activeMonth = this.state.month !== 'Invalid date' ? this.state.month : moment(new Date()).format('MMM');
-      var activeYear = this.state.date ? this.state.year : parseInt(moment(new Date()).format('YYYY'));
+
+      var activeMonth;
+      if( this.state.date ){
+        activeMonth = this.state.date.split(' ')[0];
+      }else{
+        activeMonth = moment(new Date()).format('MMM');
+      }
 
       var monthNodes = months.map(function (month, index) {
         var className = classnames('month', {
@@ -181,8 +219,8 @@ var Datepicker = React.createClass({
           <span
             key={index}
             className={className}
-            onClick={!isTouch ? this.selectMonth.bind(this, month, activeYear): null}
-            onTouchStart={isTouch ? this.selectMonth.bind(this, month, activeYear): null}
+            onClick={!isTouch ? this.selectMonth.bind(this, month, this.state.active_year): null}
+            onTouchStart={isTouch ? this.selectMonth.bind(this, month, this.state.active_year): null}
           >
             {month}
           </span>
@@ -199,7 +237,7 @@ var Datepicker = React.createClass({
               <i className="ion-arrow-left-c"></i>
             </button>
 
-            <input type="text" className="year" placeholder="Year" defaultValue={activeYear} onChange={this.setYear} />
+           <input type="text" className="year" placeholder="Year" value={this.state.active_year} onChange={this.setYear} />
 
             <button className="small inverted primary icon" onClick={this.incrementYear}>
               <i className="ion-arrow-right-c"></i>

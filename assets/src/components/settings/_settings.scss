@@ -16,8 +16,8 @@
         color: $secondary-color;
         cursor: pointer;
         display: block;
-        font-size: 1.1em;
-        padding: 1em;
+        font-size: 1em;
+        padding: 1.5em 0 1.5em 1em;
         position: relative;
         text-decoration: none;
         transition: all .2s ease;
@@ -82,6 +82,7 @@
 
       &:last-child {
         border: none;
+        min-height: 18.25em;
       }
 
       & > h1 {
@@ -172,7 +173,7 @@
       .social-checkbox{
         margin-top: 17px;
         margin-left: 35px;
-        
+
       }
 
       .small-text{
@@ -196,7 +197,7 @@
           margin-right:10px;
           font-size: 20px;
           color:#2472B4;
-      } 
+      }
 
 
 
@@ -222,8 +223,12 @@
         }
       }
       .container {
-        & > .content {
+        .content {
           padding: 1em 2em;
+
+          &:last-child {
+            min-height: 22.75em;
+          }
         }
       }
     }

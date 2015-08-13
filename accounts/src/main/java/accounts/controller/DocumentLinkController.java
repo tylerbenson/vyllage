@@ -21,6 +21,7 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,6 +103,10 @@ public class DocumentLinkController {
 			EmailException {
 
 		linkRequest.setSendRegistrationMail(true);
+
+		Assert.notNull(linkRequest.getEmail());
+		Assert.isTrue(!linkRequest.getEmail().isEmpty());
+		Assert.notNull(linkRequest.getDocumentId());
 
 		EmailDocumentLink documentLink = documentLinkService.createEmailLink(
 				request, linkRequest, user);

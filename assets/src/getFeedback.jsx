@@ -8,7 +8,7 @@ var Suggestions = require('./components/getFeedback/suggestions/Suggestions');
 var InviteForm = require('./components/getFeedback');
 var GetFeedbackStore = require('./components/getFeedback/store');
 var actions = require('./components/getFeedback/actions');
-require('./components/intercom');
+
 
 React.initializeTouchEvents(true);
 var GetFeedback = React.createClass({
