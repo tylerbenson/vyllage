@@ -98,7 +98,6 @@ var Tags = React.createClass({
       'subsection': true
     });
 
-    console.log( this.props.owner);
 
     return (
       <div className={classes} {...this.dropTargetFor('section')}>

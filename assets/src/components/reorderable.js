@@ -32,10 +32,11 @@
         }
       },
       itemDown: function (item, index, event) {
-
+         event.preventDefault();
+         console.log('clicked');
          if( event.target.className.split(" ")[0] == this.props.handle ){
 
-              event.preventDefault();
+             
               this.handleTouchEvents(event);
               var self = this;
               var target = event.currentTarget;
@@ -79,6 +80,8 @@
               }
 
           }
+
+
 
       },
       listDown: function (event) {
@@ -262,9 +265,8 @@
         }
       },
       onMouseMove: function (event) {
-
-        
      
+    
           
         this.handleTouchEvents(event);
         var pointer = {
