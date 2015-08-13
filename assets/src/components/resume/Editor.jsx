@@ -12,13 +12,77 @@ var Empty = require('./sections/Empty');
 var Reorderable = require('./../reorderable');
 
   
-  
-var ListItem =  React.createClass({   
-    render: function () {      
+
+var SectionItem = React.createClass({
+    render: function(){
       return (
-        <div> 
-          <span className="move-section">MOVE</span> 
-            <strong>{this.props.item.title}</strong>
+        <div>
+         
+         { /* <span className="move-section-sub">move sub</span> */ }
+
+
+        <Section
+          key={this.props.item.sectionId}
+          section={this.props.item}
+          owner={this.props.item.owner} />
+
+
+           
+        </div>
+      )
+    }
+});
+
+
+
+var SubSection = React.createClass({
+    
+    getInitialState : function(){
+      return {
+        element: this.props.data
+      }
+    },
+
+    callback:function( event, itemThatHasBeenMoved, itemsPreviousIndex, itemsNewIndex, reorderedArray){
+        console.log(reorderedArray);
+    },
+
+    render: function(){
+      
+      return (
+          <Reorderable         
+            itemKey='sectionId'         
+            lock='horizontal'         
+            holdTime='0'
+            handle="move-section-sub"         
+            list={this.state.element }         
+            template={SectionItem}         
+            callback={this.callback}        
+            listClass='my-list-sub'        
+            itemClass='list-item-sub'         
+            selected={this.state.selected}        
+            selectedKey='sectionId'       
+            disableReorder={false}/>
+      )
+    }
+});
+
+
+
+  
+var SectionGroup =  React.createClass({   
+    render: function () {   
+      return (
+        <div className="container"> 
+
+         { /* <span className="move-section">MOVE</span> */  }
+          <Header
+            title={this.props.item.title}
+            type={this.props.item.type}
+            owner={this.props.item.owner}
+          />      
+          <SubSection data={this.props.item.child} />
+
         </div>
       )
     }
@@ -81,6 +145,13 @@ var ResumeEditor = React.createClass({
     return sectionGroupNodes;
   },
 
+
+  callback : function( event, itemThatHasBeenMoved, itemsPreviousIndex, itemsNewIndex, reorderedArray ){
+      console.log(reorderedArray);
+  },
+
+
+
   render: function () {
     var owner=this.state.resume.header.owner;
 
@@ -88,33 +159,60 @@ var ResumeEditor = React.createClass({
       return n;
     });
 
+    var allSection;
+    if( this.state.resume.sections.length > 0 ){
+      allSection = <Reorderable         
+            itemKey='id'         
+            lock='horizontal'         
+            holdTime='0'
+            handle="move-section"         
+            list={this.state.resume.all_section}         
+            template={SectionGroup}         
+            callback={this.callback}        
+            listClass='section-holder'        
+            itemClass='section'         
+            selected={this.state.selected}        
+            selectedKey='id'       
+            disableReorder={false}/>
 
 
-    window.someting = this.state;
+    }else{
+      allSection = <Empty />
+    }
+
 
     return (
       <div>
-        <Banner header={this.state.resume.header} settings={this.state.settings} />
+        <Banner header={this.state.resume.header} settings={this.state.settings} /> 
 
-        <Reorderable         
-          itemKey='type'         
-          lock='horizontal'         
-          holdTime='0'
-          handle="move-section"         
-          list={this.state.resume.all_section}         
-          template={ListItem}         
-          callback={this.callback}        
-          listClass='my-list'        
-          itemClass='list-item'         
-          selected={this.state.selected}        
-          selectedKey='type'       
-          disableReorder={false}/>
 
-              
+        {allSection}           
 
+{ /*
         <div className="sections">
           { sections.length > 0 ? sections : <Empty /> }
         </div>
+
+        <div>
+          <Reorderable         
+            itemKey='id'         
+            lock='horizontal'         
+            holdTime='0'
+            handle="move-section"         
+            list={this.state.resume.all_section}         
+            template={SectionGroup}         
+            callback={this.callback}        
+            listClass='my-list'        
+            itemClass='list-item'         
+            selected={this.state.selected}        
+            selectedKey='id'       
+            disableReorder={false}/>
+        </div>
+*/
+
+}
+
+
       </div>
     );
   }

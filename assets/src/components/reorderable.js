@@ -32,48 +32,54 @@
         }
       },
       itemDown: function (item, index, event) {
-        event.preventDefault();
-        this.handleTouchEvents(event);
-        var self = this;
-        var target = event.currentTarget;
-        var rect = target.getBoundingClientRect();
 
-        this.setState({
-          held: false,
-          moved: false
-        });
+         if( event.target.className.split(" ")[0] == this.props.handle ){
 
-        var dragOffset = {
-          top: event.clientY - rect.top,
-          left: event.clientX - rect.left
-        };
+              event.preventDefault();
+              this.handleTouchEvents(event);
+              var self = this;
+              var target = event.currentTarget;
+              var rect = target.getBoundingClientRect();
 
-        this.setState({
-          dragged: {
-            target: target,
-            item: item,
-            index: index
+              this.setState({
+                held: false,
+                moved: false
+              });
+
+              var dragOffset = {
+                top: event.clientY - rect.top,
+                left: event.clientX - rect.left
+              };
+
+              this.setState({
+                dragged: {
+                  target: target,
+                  item: item,
+                  index: index
+                }
+              });
+
+              var draggedStyle = {
+                position: 'fixed',
+                top: rect.top,
+                left: rect.left,
+                width: rect.width,
+                height: rect.height
+              };
+
+              // Timeout if holdTime is defined
+              var holdTime = Math.abs(parseInt(this.props.holdTime));
+
+              if (holdTime) {
+                this.holdTimeout = setTimeout(function () {
+                  self.startDrag(dragOffset, draggedStyle);
+                }, holdTime);
+              } else {
+                self.startDrag(dragOffset, draggedStyle);
+              }
+
           }
-        });
 
-        var draggedStyle = {
-          position: 'fixed',
-          top: rect.top,
-          left: rect.left,
-          width: rect.width,
-          height: rect.height
-        };
-
-        // Timeout if holdTime is defined
-        var holdTime = Math.abs(parseInt(this.props.holdTime));
-
-        if (holdTime) {
-          this.holdTimeout = setTimeout(function () {
-            self.startDrag(dragOffset, draggedStyle);
-          }, holdTime);
-        } else {
-          self.startDrag(dragOffset, draggedStyle);
-        }
       },
       listDown: function (event) {
         event.preventDefault();
@@ -141,53 +147,56 @@
       },
       onMouseUp: function (event) {
 
+      //   if( event.target.className.split(" ")[0] == this.props.handle ){
 
-        // Item clicked
-        if (typeof this.props.itemClicked === 'function' && !this.state.held && !this.state.moved && this.state.dragged) {
-          this.props.itemClicked(event, this.state.dragged.item, this.state.dragged.index);
-        }
+            // Item clicked
+            if (typeof this.props.itemClicked === 'function' && !this.state.held && !this.state.moved && this.state.dragged) {
+              this.props.itemClicked(event, this.state.dragged.item, this.state.dragged.index);
+            }
 
-        // Reorder callback
-        if (this.state.held && this.state.dragged && typeof this.props.callback === 'function') {
-          var listElements = this.nodesToArray(this.getDOMNode().childNodes);
-          var newIndex = listElements.indexOf(this.state.dragged.target);
+            // Reorder callback
+            if (this.state.held && this.state.dragged && typeof this.props.callback === 'function') {
+              var listElements = this.nodesToArray(this.getDOMNode().childNodes);
+              var newIndex = listElements.indexOf(this.state.dragged.target);
 
-          this.props.callback(event, this.state.dragged.item, this.state.dragged.index, newIndex, this.state.list);
-        }
+              this.props.callback(event, this.state.dragged.item, this.state.dragged.index, newIndex, this.state.list);
+            }
 
-        // Handle after-scroll
-        if ((event.touches || DEVELOPMENT) && !this.state.held) {
-          if (this.state.velocity.y !== 0 && this.props.lock !== 'vertical') {
-            this.afterScrollYInterval = setInterval(this.afterScrollY, this.constants.SCROLL_RATE);
-          }
+            // Handle after-scroll
+            if ((event.touches || DEVELOPMENT) && !this.state.held) {
+              if (this.state.velocity.y !== 0 && this.props.lock !== 'vertical') {
+                this.afterScrollYInterval = setInterval(this.afterScrollY, this.constants.SCROLL_RATE);
+              }
 
-          if (this.state.velocity.x !== 0 && this.props.lock !== 'horizontal') {
-            this.afterScrollXInterval = setInterval(this.afterScrollX, this.constants.SCROLL_RATE);
-          }
-        }
+              if (this.state.velocity.x !== 0 && this.props.lock !== 'horizontal') {
+                this.afterScrollXInterval = setInterval(this.afterScrollX, this.constants.SCROLL_RATE);
+              }
+            }
 
-        this.setState({
-          dragged: undefined,
-          draggedStyle: undefined,
-          dragOffset: undefined,
-          originalPosition: undefined,
-          downPos: undefined,
-          held: false,
-          moved: false
-        });
+            this.setState({
+              dragged: undefined,
+              draggedStyle: undefined,
+              dragOffset: undefined,
+              originalPosition: undefined,
+              downPos: undefined,
+              held: false,
+              moved: false
+            });
 
-        clearTimeout(this.holdTimeout);
-        clearInterval(this.scrollIntervalY);
-        this.scrollIntervalY = undefined;
-        clearInterval(this.scrollIntervalX);
-        this.scrollIntervalX = undefined;
+            clearTimeout(this.holdTimeout);
+            clearInterval(this.scrollIntervalY);
+            this.scrollIntervalY = undefined;
+            clearInterval(this.scrollIntervalX);
+            this.scrollIntervalX = undefined;
 
-        // Mouse events
-        window.removeEventListener('mouseup', this.onMouseUp); // Mouse up
-        window.removeEventListener('mousemove', this.onMouseMove); // Mouse move
-        // Touch events
-        window.removeEventListener('touchend', this.onMouseUp); // Touch up
-        window.removeEventListener('touchmove', this.onMouseMove); // Touch move
+            // Mouse events
+            window.removeEventListener('mouseup', this.onMouseUp); // Mouse up
+            window.removeEventListener('mousemove', this.onMouseMove); // Mouse move
+            // Touch events
+            window.removeEventListener('touchend', this.onMouseUp); // Touch up
+            window.removeEventListener('touchmove', this.onMouseMove); // Touch move
+
+       // }
       },
       getScrollArea: function (value) {
         return Math.max(Math.min(value / 4, this.constants.SCROLL_AREA), this.constants.SCROLL_AREA / 5);
@@ -255,7 +264,7 @@
       onMouseMove: function (event) {
 
         
-      if( event.target.className.split(" ")[0] == this.props.handle ){
+     
           
         this.handleTouchEvents(event);
         var pointer = {
@@ -302,7 +311,7 @@
           }
         }
 
-      }//milse
+     
 
       },
       xHasMoved: function (event) {

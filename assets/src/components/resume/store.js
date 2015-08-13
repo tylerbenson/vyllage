@@ -127,15 +127,17 @@ module.exports = Reflux.createStore({
 
           }.bind(this))
 
-          this.resume.all_section = this.doProcessSection(this.resume.sections);
+
+          this.resume.all_section = this.doProcessSection(res.body);
           this.trigger(this.resume);
         }
   
       }.bind(this));
   },
 
-  doProcessSection : function( sections ){
+  doProcessSection : function( sections , owner ){
     var tmp_section = [];
+    
     
     if( sections.length){
 
@@ -150,6 +152,8 @@ module.exports = Reflux.createStore({
                 tmp_section.push({
                   type: section.type,
                   title : section.title, 
+                  id : section.sectionId,
+                  owner : this.resume.header.owner,
                   child : where( sections, { 'type': section.type })
                 });
 
@@ -158,6 +162,8 @@ module.exports = Reflux.createStore({
                 tmp_section.push({
                   type: section.type, 
                   title : section.title,
+                  id : section.sectionId,
+                  owner : this.resume.header.owner,
                   child : where( sections, { 'type': section.type })
                 });   
 
