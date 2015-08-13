@@ -1,6 +1,6 @@
 var React = require('react');
 
-var Footer = React.createClass({  
+var Footer = React.createClass({
 
   render: function() {
     return (
@@ -12,8 +12,6 @@ var Footer = React.createClass({
           </div>
           <nav>
             <ul>
-              <li><a href="/help.html">Help</a></li>
-              <li><a href="/careers.html">Careers</a></li>
               <li><a href="/terms.html">Terms</a></li>
               <li><a href="/privacy.html">Privacy</a></li>
               <li><a href="/contact.html">Contact Us</a></li>
