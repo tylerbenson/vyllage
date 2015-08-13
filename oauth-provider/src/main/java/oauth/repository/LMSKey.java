@@ -1,5 +1,7 @@
 package oauth.repository;
 
+import java.time.LocalDateTime;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class LMSKey {
@@ -10,6 +12,16 @@ public class LMSKey {
 	private String keyKey;
 
 	private String secret;
+
+	private Long creatorUserId;
+
+	private Long modifiedByUserId;
+
+	private Long organizationId;
+
+	private LocalDateTime lastModified;
+
+	private LocalDateTime dateCreated;
 
 	protected LMSKey() {
 	}
@@ -70,4 +82,45 @@ public class LMSKey {
 		}
 		return encode;
 	}
+
+	public Long getCreatorUserId() {
+		return creatorUserId;
+	}
+
+	public void setCreatorUserId(Long creatorUserId) {
+		this.creatorUserId = creatorUserId;
+	}
+
+	public Long getModifiedByUserId() {
+		return modifiedByUserId;
+	}
+
+	public void setModifiedByUserId(Long modifiedByUserId) {
+		this.modifiedByUserId = modifiedByUserId;
+	}
+
+	public Long getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
+	}
+
+	public LocalDateTime getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(LocalDateTime lastModified) {
+		this.lastModified = lastModified;
+	}
+
+	public LocalDateTime getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(LocalDateTime dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
 }

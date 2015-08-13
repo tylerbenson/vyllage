@@ -40,11 +40,9 @@ public class LMSConsumerDetailsService implements ConsumerDetailsService {
 
 		Assert.notNull(consumerKey);
 
-		BaseConsumerDetails cd;
-
 		LMSKey ltiKey = lMSKeyRepository.get(consumerKey);
 
-		cd = new BaseConsumerDetails();
+		BaseConsumerDetails cd = new BaseConsumerDetails();
 		cd.setConsumerKey(consumerKey);
 		cd.setSignatureSecret(new SharedConsumerSecretImpl(ltiKey.getSecret()));
 		cd.setConsumerName(String.valueOf(ltiKey.getKeyId()));
