@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import oauth.repository.LMSKey;
-import oauth.repository.LMSKeyRepository;
+import oauth.repository.LTIKey;
+import oauth.repository.LTIKeyRepository;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -27,7 +27,7 @@ import accounts.repository.OrganizationRepository;
 import accounts.service.utilities.RandomPasswordGenerator;
 
 @Controller
-public class LMSAdminController {
+public class LTIAdminController {
 
 	private final Logger logger = Logger.getLogger(AdminUserController.class
 			.getName());
@@ -35,15 +35,15 @@ public class LMSAdminController {
 	private static final String NON_ALPHANUMERIC = "[^A-Za-z0-9]";
 
 	private final OrganizationRepository organizationRepository;
-	private final LMSKeyRepository lMSKeyRepository;
+	private final LTIKeyRepository lMSKeyRepository;
 	private final RandomPasswordGenerator passwordGenerator;
 
 	private TextEncryptor textEncryptor;
 
 	@Inject
-	public LMSAdminController(
+	public LTIAdminController(
 			final OrganizationRepository organizationRepository,
-			final LMSKeyRepository lMSKeyRepository,
+			final LTIKeyRepository lMSKeyRepository,
 			final RandomPasswordGenerator passwordGenerator,
 			final TextEncryptor textEncryptor) {
 		this.organizationRepository = organizationRepository;
@@ -102,7 +102,7 @@ public class LMSAdminController {
 
 		// save
 
-		LMSKey key = lMSKeyRepository.save(user, organization, consumerKey,
+		LTIKey key = lMSKeyRepository.save(user, organization, consumerKey,
 				lmsKeyForm.getSecret());
 
 		model.addAttribute("organization", organization.getOrganizationName());

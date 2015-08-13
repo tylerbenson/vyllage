@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import oauth.repository.LMSKey;
-import oauth.repository.LMSKeyRepository;
+import oauth.repository.LTIKey;
+import oauth.repository.LTIKeyRepository;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,7 +29,7 @@ import accounts.service.UserService;
 public class LMSKeyRepositoryImplTest {
 
 	@Inject
-	private LMSKeyRepository repository;
+	private LTIKeyRepository repository;
 
 	@Inject
 	private UserService service;
@@ -48,10 +48,10 @@ public class LMSKeyRepositoryImplTest {
 		final String consumerKey = "aeiou";
 		final String secret = "12345678911234567890";
 
-		LMSKey savedKey = repository.save(user, organization, consumerKey,
+		LTIKey savedKey = repository.save(user, organization, consumerKey,
 				secret);
 
-		Optional<LMSKey> getKey = repository.get(consumerKey);
+		Optional<LTIKey> getKey = repository.get(consumerKey);
 
 		Assert.assertNotNull(savedKey);
 		Assert.assertTrue(getKey.isPresent());
@@ -66,7 +66,7 @@ public class LMSKeyRepositoryImplTest {
 		final String consumerKey = "aeiou";
 		final String secret = "12345678911234567890";
 
-		LMSKey savedKey = repository.save(user, organization, consumerKey,
+		LTIKey savedKey = repository.save(user, organization, consumerKey,
 				secret);
 
 		Assert.assertNotNull(savedKey);

@@ -5,8 +5,8 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import lombok.NonNull;
-import oauth.repository.LMSKey;
-import oauth.repository.LMSKeyRepository;
+import oauth.repository.LTIKey;
+import oauth.repository.LTIKeyRepository;
 import oauth.utilities.LMSConstants;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,10 +30,10 @@ public class LMSConsumerDetailsService implements ConsumerDetailsService {
 	final static Logger log = LoggerFactory
 			.getLogger(LMSConsumerDetailsService.class);
 
-	private final LMSKeyRepository lMSKeyRepository;
+	private final LTIKeyRepository lMSKeyRepository;
 
 	@Inject
-	public LMSConsumerDetailsService(LMSKeyRepository lMSKeyRepository) {
+	public LMSConsumerDetailsService(LTIKeyRepository lMSKeyRepository) {
 		super();
 		this.lMSKeyRepository = lMSKeyRepository;
 	}
@@ -46,9 +46,9 @@ public class LMSConsumerDetailsService implements ConsumerDetailsService {
 
 		Assert.notNull(trimConsumerKey);
 
-		final Optional<LMSKey> optional = lMSKeyRepository.get(trimConsumerKey);
+		final Optional<LTIKey> optional = lMSKeyRepository.get(trimConsumerKey);
 
-		final LMSKey ltiKey;
+		final LTIKey ltiKey;
 
 		if (optional.isPresent())
 			ltiKey = optional.get();

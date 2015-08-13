@@ -7,7 +7,7 @@ import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 @ToString
-public class LMSKey {
+public class LTIKey {
 	private long keyId;
 
 	private String keySha256;
@@ -24,10 +24,10 @@ public class LMSKey {
 
 	private LocalDateTime dateCreated;
 
-	protected LMSKey() {
+	protected LTIKey() {
 	}
 
-	public LMSKey(String key, String secret) {
+	public LTIKey(String key, String secret) {
 		this.keyKey = key;
 		this.keySha256 = makeSHA256(key);
 		if (StringUtils.isNotBlank(secret)) {
@@ -80,10 +80,10 @@ public class LMSKey {
 		if (this == object)
 			return true;
 
-		if (!(object instanceof LMSKey))
+		if (!(object instanceof LTIKey))
 			return false;
 
-		LMSKey other = (LMSKey) object;
+		LTIKey other = (LTIKey) object;
 
 		if (this.getCreatorUserId() == null ? other.getCreatorUserId() != null
 				: !this.getCreatorUserId().equals(other.getCreatorUserId()))

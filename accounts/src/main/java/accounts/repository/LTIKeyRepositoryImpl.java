@@ -1,6 +1,6 @@
 package accounts.repository;
 
-import static accounts.domain.tables.LmsKey.LMS_KEY;
+import static accounts.domain.tables.LtiCredentials.LTI_CREDENTIALS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -11,8 +11,8 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import lombok.NonNull;
-import oauth.repository.LMSKey;
-import oauth.repository.LMSKeyRepository;
+import oauth.repository.LTIKey;
+import oauth.repository.LTIKeyRepository;
 
 import org.jooq.DSLContext;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -20,12 +20,12 @@ import org.springframework.stereotype.Repository;
 
 import user.common.Organization;
 import user.common.User;
-import accounts.domain.tables.records.LmsKeyRecord;
+import accounts.domain.tables.records.LtiCredentialsRecord;
 
 @Repository
-public class LMSKeyRepositoryImpl implements LMSKeyRepository {
+public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 
-	private final Logger logger = Logger.getLogger(LMSKeyRepositoryImpl.class
+	private final Logger logger = Logger.getLogger(LTIKeyRepositoryImpl.class
 			.getName());
 
 	@Inject
@@ -35,10 +35,10 @@ public class LMSKeyRepositoryImpl implements LMSKeyRepository {
 	private TextEncryptor textEncryptor;
 
 	@Override
-	public Optional<LMSKey> get(@NonNull final String consumerKey) {
+	public Optional<LTIKey> get(@NonNull final String consumerKey) {
 
-		final LmsKeyRecord keyRecord = sql.fetchOne(LMS_KEY,
-				LMS_KEY.CONSUMER_KEY.eq(consumerKey));
+		final LtiCredentialsRecord keyRecord = sql.fetchOne(LTI_CREDENTIALS,
+				LTI_CREDENTIALS.CONSUMER_KEY.eq(consumerKey));
 
 		if (keyRecord == null) {
 			logger.warning("LMS Key with consumer key: " + consumerKey
@@ -47,7 +47,7 @@ public class LMSKeyRepositoryImpl implements LMSKeyRepository {
 			return Optional.empty();
 		}
 
-		final LMSKey lmsKey = getKey(keyRecord);
+		final LTIKey lmsKey = getKey(keyRecord);
 
 		logger.info(lmsKey.toString());
 
@@ -58,18 +58,19 @@ public class LMSKeyRepositoryImpl implements LMSKeyRepository {
 	 * Creates or saves a key searching by it's primary key (organization id).
 	 */
 	@Override
-	public LMSKey save(@NonNull final User user,
+	public LTIKey save(@NonNull final User user,
 			@NonNull final Organization organization,
 			@NonNull final String consumerKey, @NonNull final String secret) {
 
-		final LmsKeyRecord existingRecord = sql.fetchOne(LMS_KEY,
-				LMS_KEY.KEY_ID.eq(organization.getOrganizationId()));
+		final LtiCredentialsRecord existingRecord = sql.fetchOne(
+				LTI_CREDENTIALS,
+				LTI_CREDENTIALS.KEY_ID.eq(organization.getOrganizationId()));
 
-		final LMSKey lmsKey;
+		final LTIKey lmsKey;
 
 		if (existingRecord == null) {
 			// create
-			LmsKeyRecord newRecord = sql.newRecord(LMS_KEY);
+			LtiCredentialsRecord newRecord = sql.newRecord(LTI_CREDENTIALS);
 
 			newRecord.setConsumerKey(consumerKey);
 			newRecord.setSecret(secret);
@@ -107,12 +108,12 @@ public class LMSKeyRepositoryImpl implements LMSKeyRepository {
 		return lmsKey;
 	}
 
-	protected LMSKey getKey(@NonNull final LmsKeyRecord keyRecord) {
+	protected LTIKey getKey(@NonNull final LtiCredentialsRecord keyRecord) {
 
 		final String encryptedSecret = textEncryptor.encrypt(keyRecord
 				.getSecret());
 
-		final LMSKey lmsKey = new LMSKey(keyRecord.getConsumerKey(),
+		final LTIKey lmsKey = new LTIKey(keyRecord.getConsumerKey(),
 				encryptedSecret);
 
 		lmsKey.setKeyId(keyRecord.getKeyId());
