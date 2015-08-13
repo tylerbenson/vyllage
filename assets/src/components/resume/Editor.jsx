@@ -14,6 +14,8 @@ var Reorderable = require('./../reorderable');
   
 
 var SectionItem = React.createClass({
+    mixins: [ Reflux.connect(resumeStore, 'resume')],
+
     render: function(){
       return (
         <div>
@@ -24,7 +26,8 @@ var SectionItem = React.createClass({
         <Section
           key={this.props.item.sectionId}
           section={this.props.item}
-          owner={this.props.item.owner} />
+          owner={this.props.sharedProps}
+         />
 
 
            
@@ -39,13 +42,15 @@ var SubSection = React.createClass({
     
     getInitialState : function(){
       return {
-        element: this.props.data
+        elements: this.props.data
       }
     },
 
     callback:function( event, itemThatHasBeenMoved, itemsPreviousIndex, itemsNewIndex, reorderedArray){
         console.log(reorderedArray);
     },
+
+
 
     render: function(){
       
@@ -55,14 +60,15 @@ var SubSection = React.createClass({
             lock='horizontal'         
             holdTime='0'
             handle="move-section-sub"         
-            list={this.state.element }         
+            list={this.state.elements }         
             template={SectionItem}         
             callback={this.callback}        
             listClass='subsections'        
             itemClass='subsection-holder'         
             selected={this.state.selected}        
             selectedKey='sectionId'       
-            disableReorder={false}/>
+            disableReorder={false}
+            sharedProps={this.props.owner} />
       )
     }
 });
@@ -78,13 +84,14 @@ var SectionGroup =  React.createClass({
       return (
         <div className="container"> 
 
-         <span className="move-section">MOVE</span> 
+        <span className="move-section">MOVE</span> 
+  
           <Header
             title={this.props.item.title}
             type={this.props.item.type}
             owner={this.props.item.owner}
           />      
-          <SubSection data={this.props.item.child} />
+          <SubSection owner={this.props.item.owner} data={this.props.item.child} />
 
         </div>
       )
@@ -173,7 +180,7 @@ var ResumeEditor = React.createClass({
         allSection = <Reorderable         
               itemKey='id'         
               lock='horizontal'         
-              holdTime='3'
+              holdTime='0'
               handle="move-section"         
               list={this.state.resume.all_section}         
               template={SectionGroup}         
