@@ -1,5 +1,5 @@
 hooks:
-  pre_setup: npm install
+  pre_setup: "npm install && sudo cp .jdk-overlay/jre/lib/security/*.jar $JAVA_HOME/jre/lib/security"
 
 nodejs:
   version: '0.12.7'
@@ -23,7 +23,7 @@ tests:
     report_files:
     - "assets/build/test-results/*.xml"
   - type: junit
-    command: sudo cp .jdk-overlay/jre/lib/security/*.jar $JAVA_HOME/jre/lib/security ./gradlew check test solanoPgtest 
+    command: ./gradlew check test solanoPgtest 
     report_files:
     - "accounts/build/test-results/*.xml"
 
