@@ -46,27 +46,27 @@ public class LMSKeyForm {
 	}
 
 	public boolean isInvalid() {
-		return consumerKeyNotValid() || secretNotValid();
+		return (consumerKeyNotValid() || secretNotValid());
 	}
 
-	private boolean secretNotValid() {
+	protected boolean secretNotValid() {
 		if (this.secret == null || this.secret.isEmpty()) {
 			setError(getError() == null ? "Secret cannot be empty."
 					: getError() + " Secret cannot be empty.");
 			return true;
 		}
 
-		if (this.secret.length() < 10) {
-			setError(getError() == null ? "Secret must be at least 10 characters long."
+		if (this.secret.length() < 16) {
+			setError(getError() == null ? "Secret must be at least 16 characters long."
 					: getError()
-							+ " Secret must be at least 10 characters long.");
+							+ " Secret must be at least 16 characters long.");
 			return true;
 		}
 
 		return false;
 	}
 
-	private boolean consumerKeyNotValid() {
+	protected boolean consumerKeyNotValid() {
 		if (this.consumerKey == null || this.consumerKey.isEmpty()) {
 			setError(getError() == null ? "Consumer key cannot be empty."
 					: getError() + " Consumer key cannot be empty.");

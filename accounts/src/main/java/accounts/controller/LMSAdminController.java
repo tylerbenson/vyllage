@@ -77,7 +77,9 @@ public class LMSAdminController {
 			Assert.notNull(allOrganizations);
 			Assert.notEmpty(allOrganizations);
 
-			lmsKeyForm.setSecret(passwordGenerator.getRandomPassword());
+			if (lmsKeyForm.getSecret() == null
+					|| lmsKeyForm.getSecret().isEmpty())
+				lmsKeyForm.setSecret(passwordGenerator.getRandomPassword());
 
 			model.addAttribute("organizations", allOrganizations);
 			model.addAttribute("lmsKeyForm", lmsKeyForm);
@@ -104,7 +106,7 @@ public class LMSAdminController {
 
 		logger.info(organization.getOrganizationName());
 		logger.info(key.getKeyKey());
-		logger.info(lmsKeyForm.getSecret() + " hash: " + key.getSecret());
+		logger.info(lmsKeyForm.getSecret());
 
 		return "adminLMSKeyDone";
 	}

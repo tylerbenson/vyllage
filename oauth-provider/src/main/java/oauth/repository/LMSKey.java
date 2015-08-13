@@ -75,6 +75,51 @@ public class LMSKey {
 		return result;
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (this == object)
+			return true;
+
+		if (!(object instanceof LMSKey))
+			return false;
+
+		LMSKey other = (LMSKey) object;
+
+		if (this.getCreatorUserId() == null ? other.getCreatorUserId() != null
+				: !this.getCreatorUserId().equals(other.getCreatorUserId()))
+			return false;
+
+		if (this.getDateCreated() == null ? other.getDateCreated() != null
+				: !this.getDateCreated().equals(other.getDateCreated()))
+			return false;
+
+		if (this.getKeyId() != other.getKeyId())
+			return false;
+
+		if (this.getKeyKey() == null ? other.getKeyKey() != null : !this
+				.getKeyKey().equals(other.getKeyKey()))
+			return false;
+
+		if (this.getKeySha256() == null ? other.getKeySha256() != null : !this
+				.getKeySha256().equals(other.getKeySha256()))
+			return false;
+
+		if (this.getModifiedByUserId() == null ? other.getLastModified() != null
+				: !this.getLastModified().equals(other.getLastModified()))
+			return false;
+
+		if (this.getLastModified() == null ? other.getModifiedByUserId() != null
+				: !this.getModifiedByUserId().equals(
+						other.getModifiedByUserId()))
+			return false;
+
+		if (this.getSecret() == null ? other.getSecret() != null : !this
+				.getSecret().equals(other.getSecret()))
+			return false;
+
+		return true;
+	}
+
 	public static String makeSHA256(String text) {
 		String encode = null;
 		if (StringUtils.isNotBlank(text)) {

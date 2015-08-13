@@ -15,7 +15,6 @@ import oauth.repository.LMSKey;
 import oauth.repository.LMSKeyRepository;
 
 import org.jooq.DSLContext;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import user.common.Organization;
@@ -59,8 +58,6 @@ public class LMSKeyRepositoryImpl implements LMSKeyRepository {
 			@NonNull final Organization organization,
 			@NonNull final String consumerKey, @NonNull final String secret) {
 
-		final String password = getEncodedPassword(consumerKey);
-
 		final LmsKeyRecord existingRecord = sql.fetchOne(LMS_KEY,
 				LMS_KEY.KEY_ID.eq(organization.getOrganizationId()));
 
@@ -71,7 +68,7 @@ public class LMSKeyRepositoryImpl implements LMSKeyRepository {
 			LmsKeyRecord newRecord = sql.newRecord(LMS_KEY);
 
 			newRecord.setConsumerKey(consumerKey);
-			newRecord.setSecret(password);
+			newRecord.setSecret(secret);
 			newRecord.setCreatorUserId(user.getUserId());
 			newRecord.setModifiedByUserId(user.getUserId());
 
@@ -91,7 +88,7 @@ public class LMSKeyRepositoryImpl implements LMSKeyRepository {
 			existingRecord.setModifiedByUserId(user.getUserId());
 			existingRecord.setLastModified(Timestamp.valueOf(LocalDateTime
 					.now(ZoneId.of("UTC"))));
-			existingRecord.setSecret(getEncodedPassword(consumerKey));
+			existingRecord.setSecret(secret);
 			existingRecord.setKeyId(organization.getOrganizationId());
 			existingRecord.setConsumerKey(consumerKey);
 
@@ -104,10 +101,6 @@ public class LMSKeyRepositoryImpl implements LMSKeyRepository {
 				+ lmsKey.toString());
 
 		return lmsKey;
-	}
-
-	protected String getEncodedPassword(@NonNull final String password) {
-		return new BCryptPasswordEncoder().encode(password);
 	}
 
 	protected LMSKey getKey(@NonNull final LmsKeyRecord keyRecord) {
