@@ -1,5 +1,11 @@
 @import './components/common/variables';
-@import url(https://fonts.googleapis.com/css?family=Raleway:400&text=Vyllage);
+
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Raleway'), url(https://fonts.gstatic.com/l/font?kit=9yYzm4UPP8xiXHat8lRCccKzp4uT38tv5Z6KpasNDU8&skey=30a27f2564731c64) format('woff2');
+}
 
 .clearfix:after {
   font-size: 0;
