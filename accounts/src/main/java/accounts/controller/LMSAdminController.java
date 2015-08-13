@@ -31,7 +31,7 @@ public class LMSAdminController {
 	private final Logger logger = Logger.getLogger(AdminUserController.class
 			.getName());
 
-	private static final String NON_ALPHANUMERIC = "^[^a-zA-Z0-9]+|[^a-zA-Z0-9\\s]+$";
+	private static final String NON_ALPHANUMERIC = "[^A-Za-z0-9]";
 
 	private final OrganizationRepository organizationRepository;
 	private final LMSKeyRepository lMSKeyRepository;
