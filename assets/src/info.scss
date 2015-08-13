@@ -55,14 +55,21 @@
   p {
     font-size: 1em;
     margin: 0.4em 0;
+  }
 
-    a {
-      text-decoration: none;
-      transition: none;
+  a {
+    text-decoration: none;
+    transition: none;
 
-      &:hover {
-        border-bottom: $primary-color dashed 1px;
-      }
+    &:hover {
+      border-bottom: $primary-color dashed 1px;
+    }
+  }
+
+  button,
+  .button {
+    &:hover {
+      border-color: transparent;
     }
   }
 
@@ -87,9 +94,20 @@
       color: lighten($secondary-color, 20%);
 
       &:hover {
+        border: none;
         text-decoration: none;
         color: lighten($secondary-color, 10%);
       }
+    }
+  }
+
+  &.contact {
+    label {
+      margin-bottom: -1em;
+    }
+
+    h2 {
+      margin-top: 0.5em;
     }
   }
 }
