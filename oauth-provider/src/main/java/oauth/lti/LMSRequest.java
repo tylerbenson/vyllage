@@ -17,7 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import oauth.model.LMSAccount;
 import oauth.model.LMSType;
-import oauth.utilities.Contant;
+import oauth.utilities.LMSConstants;
 import oauth.utilities.LMSEnum;
 import user.common.Organization;
 import user.common.constants.RolesEnum;
@@ -81,29 +81,29 @@ public class LMSRequest {
 		lmsAccount = new LMSAccount();
 		lmsUser = new LMSUser();
 
-		organization.setOrganizationName(getParam(Contant.LTI_INSTANCE_GUID));
+		organization.setOrganizationName(getParam(LMSConstants.LTI_INSTANCE_GUID));
 
-		lmsAccount.setLmsGuid(getParam(Contant.LTI_INSTANCE_GUID));
+		lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_GUID));
 		lmsAccount.setOrganization(organization);
-		lmsAccount.setLtiVersion(getParam(Contant.LTI_VERSION));
-		lmsAccount.setType(getLMSType(getParam(Contant.LTI_INSTANCE_TYPE)));
-		lmsAccount.setConsumerKey(getParam(Contant.LTI_CONSUMER_KEY));
+		lmsAccount.setLtiVersion(getParam(LMSConstants.LTI_VERSION));
+		lmsAccount.setType(getLMSType(getParam(LMSConstants.LTI_INSTANCE_TYPE)));
+		lmsAccount.setConsumerKey(getParam(LMSConstants.LTI_CONSUMER_KEY));
 
-		lmsAccount.setOauthVersion(getParam(Contant.LTI_OAUTH_VERSION));
-		lmsAccount.setLmsVersion(getParam(Contant.LTI_LMS_VERSION));
+		lmsAccount.setOauthVersion(getParam(LMSConstants.LTI_OAUTH_VERSION));
+		lmsAccount.setLmsVersion(getParam(LMSConstants.LTI_LMS_VERSION));
 
-		lmsUser.setUserId(getParam(Contant.LTI_USER_ID));
-		lmsUser.setUserName(getParam(Contant.LTI_USER_NAME));
-		lmsUser.setEmail(getParam(Contant.LTI_USER_EMAIL));
+		lmsUser.setUserId(getParam(LMSConstants.LTI_USER_ID));
+		lmsUser.setUserName(getParam(LMSConstants.LTI_USER_NAME));
+		lmsUser.setEmail(getParam(LMSConstants.LTI_USER_EMAIL));
 
-		if (getParam(Contant.LIS_PERSON_PREFIX + "given") != null) {
-			lmsUser.setFirstName(getParam(Contant.LIS_PERSON_PREFIX + "given"));
+		if (getParam(LMSConstants.LIS_PERSON_PREFIX + "given") != null) {
+			lmsUser.setFirstName(getParam(LMSConstants.LIS_PERSON_PREFIX + "given"));
 		}
-		if (getParam(Contant.LIS_PERSON_PREFIX + "family") != null) {
-			lmsUser.setLastName(getParam(Contant.LIS_PERSON_PREFIX + "family"));
+		if (getParam(LMSConstants.LIS_PERSON_PREFIX + "family") != null) {
+			lmsUser.setLastName(getParam(LMSConstants.LIS_PERSON_PREFIX + "family"));
 		}
 
-		rawUserRoles = getParam(Contant.LTI_USER_ROLES);
+		rawUserRoles = getParam(LMSConstants.LTI_USER_ROLES);
 		userRoleNumber = makeUserRoleNum(rawUserRoles);
 		String[] splitRoles = StringUtils.split(StringUtils.trimToEmpty(rawUserRoles), ",");
 		ltiUserRoles = new HashSet<>(Arrays.asList(splitRoles));
@@ -123,8 +123,8 @@ public class LMSRequest {
 			throw new IllegalStateException("LTI request doesn't have Consumer Key or/and LMS user id. ");
 		}
 		HttpSession session = this.httpServletRequest.getSession();
-		session.setAttribute(Contant.LTI_USER_ID, lmsUser.getUserId());
-		session.setAttribute(Contant.LTI_USER_ROLE, lmsUser.getRole());
+		session.setAttribute(LMSConstants.LTI_USER_ID, lmsUser.getUserId());
+		session.setAttribute(LMSConstants.LTI_USER_ROLE, lmsUser.getRole());
 		return complete;
 	}
 
@@ -146,10 +146,10 @@ public class LMSRequest {
 
 	public static boolean isLTIRequest(ServletRequest request) {
 		boolean valid = false;
-		String ltiVersion = StringUtils.trimToNull(request.getParameter(Contant.LTI_VERSION));
+		String ltiVersion = StringUtils.trimToNull(request.getParameter(LMSConstants.LTI_VERSION));
 
 		if (ltiVersion != null) {
-			boolean goodLTIVersion = Contant.LTI_VERSION_1P0.equals(ltiVersion);
+			boolean goodLTIVersion = LMSConstants.LTI_VERSION_1P0.equals(ltiVersion);
 			valid = goodLTIVersion;
 		}
 		return valid;
@@ -160,8 +160,8 @@ public class LMSRequest {
 		if (StringUtils.isBlank(sessionSalt)) {
 			sessionSalt = "A7k254A0itEuQ9ndKJuZ";
 		}
-		String composite = sessionSalt + "::" + request.getParameter(Contant.LTI_CONSUMER_KEY) + "::"
-				+ request.getParameter(Contant.LTI_USER_ID) + "::" + (System.currentTimeMillis() / 1800)
+		String composite = sessionSalt + "::" + request.getParameter(LMSConstants.LTI_CONSUMER_KEY) + "::"
+				+ request.getParameter(LMSConstants.LTI_USER_ID) + "::" + (System.currentTimeMillis() / 1800)
 				+ request.getHeader("User-Agent") + "::" + request.getContextPath();
 
 		String compositeKey = DigestUtils.md5Hex(composite);
