@@ -28,27 +28,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/lti/login", "/account/reset-password", "/account/reset-password-change/**", "/signin/**",
-						"/signup/**", "/social-login/**", "/link/e/**", "/link/s/**", "/register",
-						"/register-from-social")
-				.permitAll();
+				.antMatchers("/lti/login", "/account/reset-password",
+						"/account/reset-password-change/**", "/signin/**",
+						"/signup/**", "/social-login/**", "/link/e/**",
+						"/link/s/**", "/register", "/register-from-social",
+						"/contact", "/privacy", "/careers").permitAll();
 
 		// disabling CSRF for the togglz console.
 		http.csrf().requireCsrfProtectionMatcher(new RequestMatcherDisable());
 
 		// Allow frames to enable the h2 console.
-		http.headers().addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
+		http.headers().addHeaderWriter(
+				new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
 		http.headers().disable();
-		http.authorizeRequests().antMatchers("/", "/status", "/status-*", "/css/**", "/images/**", "/javascript/**")
-				.permitAll();
+		http.authorizeRequests()
+				.antMatchers("/", "/status", "/status-*", "/css/**",
+						"/images/**", "/javascript/**").permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
 
 		SimpleUrlAuthenticationSuccessHandler successHandler = successHandler();
 		successHandler.setAlwaysUseDefaultTargetUrl(true);
-		http.formLogin().loginPage("/login").usernameParameter("email").defaultSuccessUrl("/resume/")
-				.successHandler(successHandler).permitAll();
+		http.formLogin().loginPage("/login").usernameParameter("email")
+				.defaultSuccessUrl("/resume/").successHandler(successHandler)
+				.permitAll();
 
-		http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll();
+		http.logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.permitAll();
 
 	}
 
