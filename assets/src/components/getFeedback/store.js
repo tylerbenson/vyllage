@@ -275,7 +275,7 @@ var GetFeedbackStore = Reflux.createStore({
   },
   onRequestForFeedback: function(index){
     var recommendation = this.recommendations[index];
-    console.log(recommendation);
+
     var invited_user = {
       userId: recommendation.userId,
       email: recommendation.email,
