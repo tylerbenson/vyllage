@@ -11,7 +11,7 @@ import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 import org.springframework.stereotype.Component;
 
-import oauth.utilities.Contant;
+import oauth.utilities.LMSConstants;
 
 @Component
 public class LMSConsumerDetails implements ConsumerDetailsService {
@@ -22,13 +22,13 @@ public class LMSConsumerDetails implements ConsumerDetailsService {
     public ConsumerDetails loadConsumerByConsumerKey(String consumerKey) throws OAuthException {
     	
         BaseConsumerDetails cd;
-        if (Contant.OAUTH_KEY.equals(consumerKey)) {
+        if (LMSConstants.OAUTH_KEY.equals(consumerKey)) {
             cd = new BaseConsumerDetails();
             cd.setConsumerKey(consumerKey);
-            cd.setSignatureSecret(new SharedConsumerSecretImpl(Contant.OAUTH_SECRET));
-            cd.setConsumerName(Contant.SAMPLE_NAME);
+            cd.setSignatureSecret(new SharedConsumerSecretImpl(LMSConstants.OAUTH_SECRET));
+            cd.setConsumerName(LMSConstants.SAMPLE_NAME);
             cd.setRequiredToObtainAuthenticatedToken(false); 
-            cd.getAuthorities().add(new SimpleGrantedAuthority(Contant.ROLE_OAUTH)); 
+            cd.getAuthorities().add(new SimpleGrantedAuthority(LMSConstants.ROLE_OAUTH)); 
         } else {
             throw new OAuthException("For this example, key must be 'key'");
         }

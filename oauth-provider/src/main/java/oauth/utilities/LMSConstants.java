@@ -1,6 +1,6 @@
 package oauth.utilities;
 
-public class Contant {
+public class LMSConstants {
 
 	public static String OAUTH_KEY = "spring.oauth.consumerKey";
 	public static String OAUTH_SECRET = "spring.oauth.consumerSecret";

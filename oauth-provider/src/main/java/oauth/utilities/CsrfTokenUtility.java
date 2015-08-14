@@ -64,8 +64,8 @@ public class CsrfTokenUtility implements CsrfTokenRepository {
 		if (StringUtils.isBlank(sessionSalt)) {
 			sessionSalt = "A7k254A0itEuQ9ndKJuZ";
 		}
-		String composite = sessionSalt + "::" + request.getParameter(Contant.LTI_INSTANCE_GUID) + "::"
-				+ request.getParameter(Contant.LTI_USER_ID);
+		String composite = sessionSalt + "::" + request.getParameter(LMSConstants.LTI_INSTANCE_GUID) + "::"
+				+ request.getParameter(LMSConstants.LTI_USER_ID);
 		String compositeKey = DigestUtils.md5Hex(composite);
 		return compositeKey;
 	}
