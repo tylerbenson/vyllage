@@ -11,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,7 +25,7 @@ import accounts.service.UserService;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class LMSKeyRepositoryImplTest {
+public class LTIKeyRepositoryImplTest {
 
 	@Inject
 	private LTIKeyRepository repository;
@@ -36,9 +35,6 @@ public class LMSKeyRepositoryImplTest {
 
 	@Inject
 	private OrganizationRepository organizationRepository;
-
-	@Inject
-	private TextEncryptor textEncryptor;
 
 	@Test
 	public void testGet() throws UserNotFoundException {
@@ -71,7 +67,7 @@ public class LMSKeyRepositoryImplTest {
 
 		Assert.assertNotNull(savedKey);
 		Assert.assertEquals(consumerKey, savedKey.getKeyKey());
-		Assert.assertEquals(textEncryptor.encrypt(secret), savedKey.getSecret());
+		Assert.assertEquals(secret, savedKey.getSecret());
 	}
 
 }

@@ -15,7 +15,6 @@ import oauth.repository.LTIKey;
 import oauth.repository.LTIKeyRepository;
 
 import org.jooq.DSLContext;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Repository;
 
 import user.common.Organization;
@@ -30,9 +29,6 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 
 	@Inject
 	private DSLContext sql;
-
-	@Inject
-	private TextEncryptor textEncryptor;
 
 	@Override
 	public Optional<LTIKey> get(@NonNull final String consumerKey) {
@@ -110,11 +106,8 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 
 	protected LTIKey getKey(@NonNull final LtiCredentialsRecord keyRecord) {
 
-		final String encryptedSecret = textEncryptor.encrypt(keyRecord
-				.getSecret());
-
 		final LTIKey lmsKey = new LTIKey(keyRecord.getConsumerKey(),
-				encryptedSecret);
+				keyRecord.getSecret());
 
 		lmsKey.setKeyId(keyRecord.getKeyId());
 		lmsKey.setCreatorUserId(keyRecord.getCreatorUserId());

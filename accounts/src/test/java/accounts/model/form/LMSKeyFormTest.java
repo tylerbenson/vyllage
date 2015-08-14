@@ -8,7 +8,7 @@ public class LMSKeyFormTest {
 	@Test
 	public void testSecretNullIsInvalid() {
 
-		LMSKeyForm form = new LMSKeyForm();
+		LTIKeyForm form = new LTIKeyForm();
 
 		form.setConsumerKey("aaaa");
 
@@ -22,7 +22,7 @@ public class LMSKeyFormTest {
 	@Test
 	public void testSecretEmptyIsInvalid() {
 
-		LMSKeyForm form = new LMSKeyForm();
+		LTIKeyForm form = new LTIKeyForm();
 
 		form.setConsumerKey("aaaa");
 
@@ -36,7 +36,7 @@ public class LMSKeyFormTest {
 	@Test
 	public void testSecretLessThan16IsInvalid() {
 
-		LMSKeyForm form = new LMSKeyForm();
+		LTIKeyForm form = new LTIKeyForm();
 
 		form.setConsumerKey("aaaa");
 
@@ -50,7 +50,7 @@ public class LMSKeyFormTest {
 	@Test
 	public void testConsumerKeyEmptyIsInvalid() {
 
-		LMSKeyForm form = new LMSKeyForm();
+		LTIKeyForm form = new LTIKeyForm();
 
 		form.setConsumerKey("");
 
@@ -64,7 +64,7 @@ public class LMSKeyFormTest {
 	@Test
 	public void testConsumerKeyNullIsInvalid() {
 
-		LMSKeyForm form = new LMSKeyForm();
+		LTIKeyForm form = new LTIKeyForm();
 
 		form.setConsumerKey(null);
 
@@ -78,7 +78,7 @@ public class LMSKeyFormTest {
 	@Test
 	public void testIsValid() {
 
-		LMSKeyForm form = new LMSKeyForm();
+		LTIKeyForm form = new LTIKeyForm();
 
 		form.setConsumerKey("Hello");
 

@@ -10,7 +10,6 @@ import oauth.repository.LTIKey;
 import oauth.repository.LTIKeyRepository;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +21,7 @@ import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
-import accounts.model.form.LMSKeyForm;
+import accounts.model.form.LTIKeyForm;
 import accounts.repository.OrganizationRepository;
 import accounts.service.utilities.RandomPasswordGenerator;
 
@@ -35,87 +34,81 @@ public class LTIAdminController {
 	private static final String NON_ALPHANUMERIC = "[^A-Za-z0-9]";
 
 	private final OrganizationRepository organizationRepository;
-	private final LTIKeyRepository lMSKeyRepository;
+	private final LTIKeyRepository LTIKeyRepository;
 	private final RandomPasswordGenerator passwordGenerator;
-
-	private TextEncryptor textEncryptor;
 
 	@Inject
 	public LTIAdminController(
 			final OrganizationRepository organizationRepository,
-			final LTIKeyRepository lMSKeyRepository,
-			final RandomPasswordGenerator passwordGenerator,
-			final TextEncryptor textEncryptor) {
+			final LTIKeyRepository LTIKeyRepository,
+			final RandomPasswordGenerator passwordGenerator) {
 		this.organizationRepository = organizationRepository;
-		this.lMSKeyRepository = lMSKeyRepository;
+		this.LTIKeyRepository = LTIKeyRepository;
 		this.passwordGenerator = passwordGenerator;
-		this.textEncryptor = textEncryptor;
 	}
 
-	@RequestMapping(value = "/admin/lms/keys", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/lti/keys", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String lmsKeys(@AuthenticationPrincipal User user, Model model) {
+	public String LTIKeys(@AuthenticationPrincipal User user, Model model) {
 
 		List<Organization> allOrganizations = getAdminOrganizations(user);
-		LMSKeyForm lmsKeyForm = new LMSKeyForm();
+		LTIKeyForm LTIKeyForm = new LTIKeyForm();
 
 		Assert.notNull(allOrganizations);
 		Assert.notEmpty(allOrganizations);
 
-		lmsKeyForm.setSecret(passwordGenerator.getRandomPassword());
+		LTIKeyForm.setSecret(passwordGenerator.getRandomPassword());
 
 		model.addAttribute("organizations", allOrganizations);
-		model.addAttribute("lmsKeyForm", lmsKeyForm);
+		model.addAttribute("ltiKeyForm", LTIKeyForm);
 
-		return "adminLMSKey";
+		return "adminLTIKey";
 	}
 
-	@RequestMapping(value = "/admin/lms/keys", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/lti/keys", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String lmsKeysPost(@AuthenticationPrincipal User user,
-			LMSKeyForm lmsKeyForm, Model model) {
+	public String LTIKeysPost(@AuthenticationPrincipal User user,
+			LTIKeyForm LTIKeyForm, Model model) {
 
 		// validate
-		if (lmsKeyForm.isInvalid()) {
+		if (LTIKeyForm.isInvalid()) {
 
 			List<Organization> allOrganizations = getAdminOrganizations(user);
 			Assert.notNull(allOrganizations);
 			Assert.notEmpty(allOrganizations);
 
-			if (lmsKeyForm.getSecret() == null
-					|| lmsKeyForm.getSecret().isEmpty())
-				lmsKeyForm.setSecret(passwordGenerator.getRandomPassword());
+			if (LTIKeyForm.getSecret() == null
+					|| LTIKeyForm.getSecret().isEmpty())
+				LTIKeyForm.setSecret(passwordGenerator.getRandomPassword());
 
 			model.addAttribute("organizations", allOrganizations);
-			model.addAttribute("lmsKeyForm", lmsKeyForm);
+			model.addAttribute("ltiKeyForm", LTIKeyForm);
 
-			return "adminLMSKey";
+			return "adminLTIKey";
 		}
 
 		// to show the result
-		final Organization organization = organizationRepository.get(lmsKeyForm
+		final Organization organization = organizationRepository.get(LTIKeyForm
 				.getOrganizationId());
 
 		final String consumerKey = organization.getOrganizationName()
 				.replaceAll(NON_ALPHANUMERIC, "")
-				+ lmsKeyForm.getConsumerKey().replaceAll(NON_ALPHANUMERIC, "");
+				+ LTIKeyForm.getConsumerKey().replaceAll(NON_ALPHANUMERIC, "");
 
 		// save
 
-		LTIKey key = lMSKeyRepository.save(user, organization, consumerKey,
-				lmsKeyForm.getSecret());
+		LTIKey key = LTIKeyRepository.save(user, organization, consumerKey,
+				LTIKeyForm.getSecret());
 
 		model.addAttribute("organization", organization.getOrganizationName());
 		model.addAttribute("consumerKey", consumerKey);
-		model.addAttribute("secret",
-				textEncryptor.encrypt(lmsKeyForm.getSecret()));
+		model.addAttribute("secret", LTIKeyForm.getSecret());
 
 		logger.info(organization.getOrganizationName());
 		logger.info(key.getKeyKey());
-		logger.info(lmsKeyForm.getSecret() + " encrypted: "
-				+ textEncryptor.encrypt(lmsKeyForm.getSecret()));
+		logger.info(LTIKeyForm.getSecret());
 
-		return "adminLMSKeyDone";
+		return "adminLTIKeyDone";
 	}
 
 	/**

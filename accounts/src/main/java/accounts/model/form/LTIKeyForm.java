@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-public class LMSKeyForm {
+public class LTIKeyForm {
 
 	private Long organizationId;
 	private String consumerKey;

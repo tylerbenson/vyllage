@@ -25,22 +25,16 @@
     <header th:replace="adminHeader :: header">
     </header>
     <div class="section content">
-      <label> Create a key and secret for your LMS.
+      <label> Your key and secret.
       </label>
-      <form name="adminForm" class="container" action="#" th:action="@{/admin/lms/keys}" th:object="${lmsKeyForm}"
-      method="post" onsubmit="adminFormSubmit()">
-        <select id='organizationId' name='organizationId' onchange="adminFormOrganizationChange()">
-          <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}">Some organization</option>
-        </select>
-
-		<label> Consumer Key, the selected organization will be automatically prepended.</label>
-		<input th:field="*{consumerKey}"></input>	
+      <form name="" class="container" action="#"  method="" >
 		
-		<label> Secret </label>	
-		<input th:field="*{secret}"></input>	
+		<label th:text="'Organization: ' + ${organization}"></label>
 		
-        <button name="save" type="submit" class="pull right padded send-btn">Submit</button>
-        <label th:if="*{error != null}" th:text="*{error}" style="color: red;"></label>
+		<label th:text="'Consumer Key: ' + ${consumerKey}"></label>
+		
+		<label th:text="'Secret: ' +${secret}"></label>
+		
       </form>
     </div>
   </div>
@@ -61,19 +55,6 @@
       </nav>
     </div>
   </footer>
-  <script type="text/javascript">
-  // <![CDATA[
-  var el = document.getElementById('organizationId');
-
-  if (el.childNodes.length === 1) {
-    document.adminForm.organizationId.disabled = true;
-  }
-
-  adminFormSubmit = function() {
-    document.adminForm.organizationId.disabled = false;
-  }
-    // ]]>
-  </script>
   <script togglz:active="GOOGLE_ANALYTICS">
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
