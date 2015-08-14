@@ -90,6 +90,12 @@ public class UserDetailRepository implements UserDetailsManager,
 			throw new UserNotFoundException("User with id '" + userId
 					+ "' not found.");
 
+		if (record.getFirstLogin())
+			throw new FirstLoginException(
+					"User logged  in for the first time: "
+							+ record.getUserName(), record.getUserId(),
+					record.getUserName());
+
 		User user = getUserData(record);
 
 		return user;
@@ -108,13 +114,19 @@ public class UserDetailRepository implements UserDetailsManager,
 
 		User user = getUserData(record);
 
+		if (record.getFirstLogin())
+			throw new FirstLoginException(
+					"User logged  in for the first time: "
+							+ record.getUserName(), record.getUserId(),
+					record.getUserName());
+
 		return user;
 	}
 
 	protected User getUserData(@NonNull UsersRecord record) {
 
 		// TODO: eventually we'll need these fields in the database.
-		boolean accountNonExpired = true, accountNonLocked = true;
+		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
 
 		List<UserOrganizationRole> roles = userOrganizationRoleRepository
 				.getByUserId(record.getUserId());
@@ -125,11 +137,17 @@ public class UserDetailRepository implements UserDetailsManager,
 		User user = new User(record.getUserId(), record.getFirstName(),
 				record.getMiddleName(), record.getLastName(),
 				record.getUserName(), credential.getPassword(),
-				record.getEnabled(), accountNonExpired,
-				record.getCredentialsNonExpired(), accountNonLocked, roles,
-				record.getDateCreated().toLocalDateTime(), record
-						.getLastModified().toLocalDateTime());
+				record.getEnabled(), accountNonExpired, credentialsNonExpired,
+				accountNonLocked, roles, record.getDateCreated()
+						.toLocalDateTime(), record.getLastModified()
+						.toLocalDateTime());
 		return user;
+	}
+
+	public void createUser(@NonNull UserDetails userDetails,
+			boolean forcePasswordChange) {
+		this.createUser(userDetails);
+		this.setFirstLogin(userDetails.getUsername(), forcePasswordChange);
 	}
 
 	@Override
@@ -151,7 +169,7 @@ public class UserDetailRepository implements UserDetailsManager,
 			newRecord.setMiddleName(user.getMiddleName());
 			newRecord.setLastName(user.getLastName());
 			newRecord.setEnabled(user.isEnabled());
-			newRecord.setCredentialsNonExpired(false);
+			newRecord.setFirstLogin(true);
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
 			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
@@ -349,6 +367,33 @@ public class UserDetailRepository implements UserDetailsManager,
 				createNewAuthentication(currentUser, newPassword));
 	}
 
+	/**
+	 * Changes password upon first login
+	 * 
+	 * @param newPassword
+	 */
+	public void changePasswordFirstLogin(final Long userId,
+			final String userName, final String newPassword) {
+		Authentication currentUser = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		if (currentUser == null) {
+			// This would indicate bad coding somewhere
+			throw new AccessDeniedException(
+					"Can't change password as no Authentication object found in context "
+							+ "for current user.");
+		}
+
+		logger.info("Changing password for first login user '" + userName + "'");
+
+		this.setFirstLogin(userName, false);
+
+		this.updateCredential(newPassword, userId);
+
+		SecurityContextHolder.getContext().setAuthentication(
+				createNewAuthentication(currentUser, newPassword));
+	}
+
 	public void updateCredential(String newPassword, Long userId) {
 		UserCredential userCredential = credentialsRepository.get(userId);
 		userCredential.setEnabled(true);
@@ -408,7 +453,8 @@ public class UserDetailRepository implements UserDetailsManager,
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	// @Transactional
-	public void addUsers(List<User> users, User loggedInUser) {
+	public void addUsers(List<User> users, User loggedInUser,
+			boolean forcePasswordChange) {
 		final boolean enabled = true;
 
 		TransactionStatus transaction = txManager
@@ -421,12 +467,11 @@ public class UserDetailRepository implements UserDetailsManager,
 				.map((User u) -> sql.insertInto(USERS, USERS.USER_NAME,
 						USERS.ENABLED, USERS.DATE_CREATED, USERS.LAST_MODIFIED,
 						USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME,
-						USERS.CREDENTIALS_NON_EXPIRED).values(u.getUsername(),
-						enabled,
+						USERS.FIRST_LOGIN).values(u.getUsername(), enabled,
 						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))),
 						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))),
 						u.getFirstName(), u.getMiddleName(), u.getLastName(),
-						false)
+						forcePasswordChange)
 
 				).collect(Collectors.toList());
 
@@ -581,6 +626,11 @@ public class UserDetailRepository implements UserDetailsManager,
 
 		sql.update(USERCONNECTION).set(USERCONNECTION.USERID, email)
 				.where(USERCONNECTION.USERID.eq(user.getUsername())).execute();
+	}
+
+	protected void setFirstLogin(String userName, boolean value) {
+		sql.update(USERS).set(USERS.FIRST_LOGIN, value)
+				.where(USERS.USER_NAME.eq(userName)).execute();
 	}
 
 }

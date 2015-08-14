@@ -168,8 +168,10 @@ public class AccountController {
 				.filter(u -> !excludeIds.contains(u.getUserId()))
 				.collect(Collectors.toList());
 
-		return userService.getAccountContacts(request, users.stream()
-				.map(u -> u.getUserId()).collect(Collectors.toList()));
+		return userService.getAccountContacts(
+				request,
+				users.stream().map(u -> u.getUserId())
+						.collect(Collectors.toList()));
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,
@@ -252,7 +254,8 @@ public class AccountController {
 
 	@RequestMapping(value = "/reset-password-change", method = RequestMethod.POST)
 	@PreAuthorize("isAuthenticated()")
-	public String postChangePassword(ChangePasswordForm form, Model model) {
+	public String postChangePassword(HttpServletRequest request,
+			ChangePasswordForm form, Model model) throws ServletException {
 
 		if (!form.isValid()) {
 			form.setError(true);
@@ -262,14 +265,37 @@ public class AccountController {
 
 		userService.changePassword(form.getNewPassword());
 
-		Authentication authentication = SecurityContextHolder.getContext()
-				.getAuthentication();
+		request.logout();
 
-		Authentication auth = new UsernamePasswordAuthenticationToken(
-				authentication.getName(), form.getNewPassword(),
-				authentication.getAuthorities());
+		return "password-change-success";
+	}
 
-		SecurityContextHolder.getContext().setAuthentication(auth);
+	@RequestMapping(value = "/reset-password-first-login", method = RequestMethod.GET)
+	@PreAuthorize("isAuthenticated()")
+	public String changePasswordFirstLogin(Model model)
+			throws UserNotFoundException {
+
+		model.addAttribute("changePasswordForm", new ChangePasswordForm());
+
+		return "reset-password-first-login";
+	}
+
+	@RequestMapping(value = "/reset-password-first-login", method = RequestMethod.POST)
+	@PreAuthorize("isAuthenticated()")
+	public String postChangePasswordFirstLogin(HttpServletRequest request,
+			@AuthenticationPrincipal User user, ChangePasswordForm form,
+			Model model) throws ServletException {
+
+		if (!form.isValid()) {
+			form.setError(true);
+			model.addAttribute("changePasswordForm", form);
+			return "reset-password-first-login";
+		}
+
+		userService.changePasswordOnFirstLogin(user.getUserId(),
+				user.getUsername(), form.getNewPassword());
+
+		request.logout();
 
 		return "password-change-success";
 	}

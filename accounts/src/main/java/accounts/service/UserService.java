@@ -138,8 +138,9 @@ public class UserService {
 		return this.userRepository.userExists(userName);
 	}
 
-	public void batchCreateUsers(BatchAccount batchAccount, User loggedInUser)
-			throws IllegalArgumentException, EmailException, IOException {
+	public void batchCreateUsers(BatchAccount batchAccount, User loggedInUser,
+			boolean forcePasswordChange) throws IllegalArgumentException,
+			EmailException, IOException {
 
 		final boolean enabled = true;
 		final boolean accountNonExpired = true;
@@ -277,7 +278,7 @@ public class UserService {
 			}
 		}
 
-		userRepository.addUsers(users, loggedInUser);
+		userRepository.addUsers(users, loggedInUser, forcePasswordChange);
 
 		// send mails
 		for (User user : users) {
@@ -374,12 +375,17 @@ public class UserService {
 				.collect(Collectors.toList());
 	}
 
-	public void changePassword(Long userId, String newPassword) {
+	protected void changePassword(Long userId, String newPassword) {
 		userRepository.updateCredential(newPassword, userId);
 	}
 
 	public void changePassword(String newPassword) {
 		userRepository.changePassword(newPassword);
+	}
+
+	public void changePasswordOnFirstLogin(Long userId, String userName,
+			String newPassword) {
+		userRepository.changePasswordFirstLogin(userId, userName, newPassword);
 	}
 
 	/**
@@ -594,11 +600,18 @@ public class UserService {
 							.getOrganizationId(), RolesEnum.GUEST.name(),
 					loggedInUser.getUserId()));
 
+		boolean accountEnabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
 		User user = new User(null, linkRequest.getFirstName(), null,
 				linkRequest.getLastName(), linkRequest.getEmail(),
-				randomPassword, true, true, true, true,
+				randomPassword, accountEnabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked,
 				defaultAuthoritiesForNewUser, null, null);
-		userRepository.createUser(user);
+
+		boolean forcePasswordChange = true;
+		userRepository.createUser(user, forcePasswordChange);
 
 		User loadUserByUsername = userRepository.loadUserByUsername(linkRequest
 				.getEmail());
@@ -640,7 +653,9 @@ public class UserService {
 
 		logger.info(newUser.toString());
 
-		this.userRepository.createUser(newUser);
+		boolean forcePasswordChange = false;
+		this.userRepository.createUser(newUser, forcePasswordChange);
+
 		// get id
 		newUser = this.getUser(registerForm.getEmail());
 
@@ -700,7 +715,9 @@ public class UserService {
 				credentialsNonExpired, accountNonLocked,
 				defaultAuthoritiesForNewUser, null, null);
 
-		userRepository.createUser(user);
+		boolean forcePasswordChange = true;
+		userRepository.createUser(user, forcePasswordChange);
+
 		User newUser = this.getUser(user.getUsername());
 
 		createReceiveAdviceSetting(registerForm.getReceiveAdvice(), newUser);
