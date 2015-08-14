@@ -114,7 +114,7 @@ public class UserDetailRepository implements UserDetailsManager,
 	protected User getUserData(@NonNull UsersRecord record) {
 
 		// TODO: eventually we'll need these fields in the database.
-		boolean accountNonExpired = true, credentialsNonExpired = true, accountNonLocked = true;
+		boolean accountNonExpired = true, accountNonLocked = true;
 
 		List<UserOrganizationRole> roles = userOrganizationRoleRepository
 				.getByUserId(record.getUserId());
@@ -125,10 +125,10 @@ public class UserDetailRepository implements UserDetailsManager,
 		User user = new User(record.getUserId(), record.getFirstName(),
 				record.getMiddleName(), record.getLastName(),
 				record.getUserName(), credential.getPassword(),
-				record.getEnabled(), accountNonExpired, credentialsNonExpired,
-				accountNonLocked, roles, record.getDateCreated()
-						.toLocalDateTime(), record.getLastModified()
-						.toLocalDateTime());
+				record.getEnabled(), accountNonExpired,
+				record.getCredentialsNonExpired(), accountNonLocked, roles,
+				record.getDateCreated().toLocalDateTime(), record
+						.getLastModified().toLocalDateTime());
 		return user;
 	}
 
@@ -151,6 +151,7 @@ public class UserDetailRepository implements UserDetailsManager,
 			newRecord.setMiddleName(user.getMiddleName());
 			newRecord.setLastName(user.getLastName());
 			newRecord.setEnabled(user.isEnabled());
+			newRecord.setCredentialsNonExpired(false);
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
 			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
@@ -419,14 +420,13 @@ public class UserDetailRepository implements UserDetailsManager,
 				.stream()
 				.map((User u) -> sql.insertInto(USERS, USERS.USER_NAME,
 						USERS.ENABLED, USERS.DATE_CREATED, USERS.LAST_MODIFIED,
-						USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME)
-						.values(u.getUsername(),
-								enabled,
-								Timestamp.valueOf(LocalDateTime.now(ZoneId
-										.of("UTC"))),
-								Timestamp.valueOf(LocalDateTime.now(ZoneId
-										.of("UTC"))), u.getFirstName(),
-								u.getMiddleName(), u.getLastName())
+						USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME,
+						USERS.CREDENTIALS_NON_EXPIRED).values(u.getUsername(),
+						enabled,
+						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))),
+						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))),
+						u.getFirstName(), u.getMiddleName(), u.getLastName(),
+						false)
 
 				).collect(Collectors.toList());
 

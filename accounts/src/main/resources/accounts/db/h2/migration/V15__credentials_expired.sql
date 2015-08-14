@@ -1,0 +1,1 @@
+alter table ACCOUNTS.users add column credentials_non_expired boolean not null default false;
