@@ -229,7 +229,7 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/reset-password-change", method = RequestMethod.GET)
-	public String changePassword(
+	public String resetPassword(
 			@RequestParam(value = "resetPassword", required = true) String resetPassword,
 			Model model) throws JsonParseException, JsonMappingException,
 			IOException, UserNotFoundException {
@@ -254,7 +254,7 @@ public class AccountController {
 
 	@RequestMapping(value = "/reset-password-change", method = RequestMethod.POST)
 	@PreAuthorize("isAuthenticated()")
-	public String postChangePassword(HttpServletRequest request,
+	public String postResetPassword(HttpServletRequest request,
 			ChangePasswordForm form, Model model) throws ServletException {
 
 		if (!form.isValid()) {
@@ -270,9 +270,9 @@ public class AccountController {
 		return "password-change-success";
 	}
 
-	@RequestMapping(value = "/reset-password-first-login", method = RequestMethod.GET)
+	@RequestMapping(value = "/reset-password-forced", method = RequestMethod.GET)
 	@PreAuthorize("isAuthenticated()")
-	public String changePasswordFirstLogin(Model model)
+	public String resetPasswordForced(Model model)
 			throws UserNotFoundException {
 
 		model.addAttribute("changePasswordForm", new ChangePasswordForm());
@@ -280,20 +280,20 @@ public class AccountController {
 		return "reset-password-first-login";
 	}
 
-	@RequestMapping(value = "/reset-password-first-login", method = RequestMethod.POST)
+	@RequestMapping(value = "/reset-password-forced", method = RequestMethod.POST)
 	@PreAuthorize("isAuthenticated()")
-	public String postChangePasswordFirstLogin(HttpServletRequest request,
+	public String postResetPasswordForced(HttpServletRequest request,
 			@AuthenticationPrincipal User user, ChangePasswordForm form,
 			Model model) throws ServletException {
 
 		if (!form.isValid()) {
 			form.setError(true);
 			model.addAttribute("changePasswordForm", form);
-			return "reset-password-first-login";
+			return "reset-password-forced";
 		}
 
-		userService.changePasswordOnFirstLogin(user.getUserId(),
-				user.getUsername(), form.getNewPassword());
+		userService.forcedPasswordChange(user.getUserId(), user.getUsername(),
+				form.getNewPassword());
 
 		request.logout();
 

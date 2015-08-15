@@ -372,7 +372,7 @@ public class UserDetailRepository implements UserDetailsManager,
 	 * 
 	 * @param newPassword
 	 */
-	public void changePasswordFirstLogin(final Long userId,
+	public void forcedPasswordChange(final Long userId,
 			final String userName, final String newPassword) {
 		Authentication currentUser = SecurityContextHolder.getContext()
 				.getAuthentication();

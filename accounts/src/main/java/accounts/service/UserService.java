@@ -383,9 +383,9 @@ public class UserService {
 		userRepository.changePassword(newPassword);
 	}
 
-	public void changePasswordOnFirstLogin(Long userId, String userName,
+	public void forcedPasswordChange(Long userId, String userName,
 			String newPassword) {
-		userRepository.changePasswordFirstLogin(userId, userName, newPassword);
+		userRepository.forcedPasswordChange(userId, userName, newPassword);
 	}
 
 	/**
