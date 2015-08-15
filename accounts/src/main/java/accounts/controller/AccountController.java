@@ -270,20 +270,22 @@ public class AccountController {
 		return "password-change-success";
 	}
 
-	@RequestMapping(value = "/reset-password-forced", method = RequestMethod.GET)
+	@RequestMapping(value = "reset-password-forced", method = RequestMethod.GET)
 	@PreAuthorize("isAuthenticated()")
-	public String resetPasswordForced(Model model) throws UserNotFoundException {
-
+	public String resetPasswordForced(Model model) {
+		logger.info("Reset password was forced.");
 		model.addAttribute("changePasswordForm", new ChangePasswordForm());
 
 		return "reset-password-forced";
 	}
 
-	@RequestMapping(value = "/reset-password-forced", method = RequestMethod.POST)
+	@RequestMapping(value = "reset-password-forced", method = RequestMethod.POST)
 	@PreAuthorize("isAuthenticated()")
 	public String postResetPasswordForced(HttpServletRequest request,
 			@AuthenticationPrincipal User user, ChangePasswordForm form,
 			Model model) throws ServletException {
+
+		logger.info("Reset password was forced.");
 
 		if (!form.isValid()) {
 			form.setError(true);

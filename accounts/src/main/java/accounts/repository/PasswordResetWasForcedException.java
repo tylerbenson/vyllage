@@ -4,6 +4,8 @@ import lombok.ToString;
 
 import org.springframework.security.authentication.AccountStatusException;
 
+import user.common.User;
+
 @ToString
 public class PasswordResetWasForcedException extends AccountStatusException {
 
@@ -11,29 +13,23 @@ public class PasswordResetWasForcedException extends AccountStatusException {
 	 * 
 	 */
 	private static final long serialVersionUID = -3022902039825417428L;
-	private Long userId;
-	private String userName;
+	private final User user;
 
-	public PasswordResetWasForcedException(String msg, Long userId, String userName) {
+	public PasswordResetWasForcedException(String msg, User user) {
 		super(msg);
-		this.userId = userId;
-		this.userName = userName;
+		this.user = user;
 	}
 
 	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
+		return getUser().getUserId();
 	}
 
 	public String getUserName() {
-		return userName;
+		return getUser().getUsername();
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public User getUser() {
+		return user;
 	}
 
 }

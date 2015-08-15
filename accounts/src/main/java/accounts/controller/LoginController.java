@@ -42,13 +42,16 @@ public class LoginController {
 			Throwable cause = exception.getCause();
 			if (exception != null
 					&& exception instanceof InternalAuthenticationServiceException
-					&& cause != null && cause instanceof PasswordResetWasForcedException) {
+					&& cause != null
+					&& cause instanceof PasswordResetWasForcedException) {
 
-				logger.info(cause.getMessage());
+				PasswordResetWasForcedException ex = (PasswordResetWasForcedException) cause;
 
-				signInUtil.signIn(((PasswordResetWasForcedException) cause).getUserId());
+				logger.info(ex.getMessage());
 
-				return "redirect:account/reset-password-forced";
+				signInUtil.signIn(ex.getUser());
+
+				return "redirect:/account/reset-password-forced";
 			}
 
 		}

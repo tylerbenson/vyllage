@@ -89,14 +89,12 @@ public class UserDetailRepository implements UserDetailsManager,
 		if (record == null)
 			throw new UserNotFoundException("User with id '" + userId
 					+ "' not found.");
+		User user = getUserData(record);
 
 		if (record.getResetPasswordOnNextLogin())
 			throw new PasswordResetWasForcedException(
 					"User logged  in for the first time: "
-							+ record.getUserName(), record.getUserId(),
-					record.getUserName());
-
-		User user = getUserData(record);
+							+ record.getUserName(), user);
 
 		return user;
 
@@ -117,8 +115,7 @@ public class UserDetailRepository implements UserDetailsManager,
 		if (record.getResetPasswordOnNextLogin())
 			throw new PasswordResetWasForcedException(
 					"User logged  in for the first time: "
-							+ record.getUserName(), record.getUserId(),
-					record.getUserName());
+							+ record.getUserName(), user);
 
 		return user;
 	}
@@ -147,7 +144,8 @@ public class UserDetailRepository implements UserDetailsManager,
 	public void createUser(@NonNull UserDetails userDetails,
 			boolean forcePasswordChange) {
 		this.createUser(userDetails);
-		this.setForcePasswordReset(userDetails.getUsername(), forcePasswordChange);
+		this.setForcePasswordReset(userDetails.getUsername(),
+				forcePasswordChange);
 	}
 
 	@Override
@@ -372,8 +370,8 @@ public class UserDetailRepository implements UserDetailsManager,
 	 * 
 	 * @param newPassword
 	 */
-	public void forcedPasswordChange(final Long userId,
-			final String userName, final String newPassword) {
+	public void forcedPasswordChange(final Long userId, final String userName,
+			final String newPassword) {
 		Authentication currentUser = SecurityContextHolder.getContext()
 				.getAuthentication();
 
