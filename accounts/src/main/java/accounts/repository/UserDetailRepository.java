@@ -91,7 +91,7 @@ public class UserDetailRepository implements UserDetailsManager,
 					+ "' not found.");
 
 		if (record.getResetPasswordOnNextLogin())
-			throw new FirstLoginException(
+			throw new PasswordResetWasForcedException(
 					"User logged  in for the first time: "
 							+ record.getUserName(), record.getUserId(),
 					record.getUserName());
@@ -115,7 +115,7 @@ public class UserDetailRepository implements UserDetailsManager,
 		User user = getUserData(record);
 
 		if (record.getResetPasswordOnNextLogin())
-			throw new FirstLoginException(
+			throw new PasswordResetWasForcedException(
 					"User logged  in for the first time: "
 							+ record.getUserName(), record.getUserId(),
 					record.getUserName());

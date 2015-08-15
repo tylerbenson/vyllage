@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import accounts.repository.FirstLoginException;
+import accounts.repository.PasswordResetWasForcedException;
 import accounts.repository.UserNotFoundException;
 import accounts.service.SignInUtil;
 
@@ -42,11 +42,11 @@ public class LoginController {
 			Throwable cause = exception.getCause();
 			if (exception != null
 					&& exception instanceof InternalAuthenticationServiceException
-					&& cause != null && cause instanceof FirstLoginException) {
+					&& cause != null && cause instanceof PasswordResetWasForcedException) {
 
 				logger.info(cause.getMessage());
 
-				signInUtil.signIn(((FirstLoginException) cause).getUserId());
+				signInUtil.signIn(((PasswordResetWasForcedException) cause).getUserId());
 
 				return "redirect:account/reset-password-forced";
 			}

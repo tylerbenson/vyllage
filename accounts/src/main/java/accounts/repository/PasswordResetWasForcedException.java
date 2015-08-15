@@ -5,7 +5,7 @@ import lombok.ToString;
 import org.springframework.security.authentication.AccountStatusException;
 
 @ToString
-public class FirstLoginException extends AccountStatusException {
+public class PasswordResetWasForcedException extends AccountStatusException {
 
 	/**
 	 * 
@@ -14,7 +14,7 @@ public class FirstLoginException extends AccountStatusException {
 	private Long userId;
 	private String userName;
 
-	public FirstLoginException(String msg, Long userId, String userName) {
+	public PasswordResetWasForcedException(String msg, Long userId, String userName) {
 		super(msg);
 		this.userId = userId;
 		this.userName = userName;

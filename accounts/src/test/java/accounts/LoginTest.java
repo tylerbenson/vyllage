@@ -27,7 +27,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
-import accounts.repository.FirstLoginException;
+import accounts.repository.PasswordResetWasForcedException;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserOrganizationRoleRepository;
 
@@ -61,7 +61,7 @@ public class LoginTest {
 		repository.loadUserByUsername("invalidUser");
 	}
 
-	@Test(expected = FirstLoginException.class)
+	@Test(expected = PasswordResetWasForcedException.class)
 	public void testFirstLogin() {
 		String userName = "firstLogin";
 		String password = "password";
