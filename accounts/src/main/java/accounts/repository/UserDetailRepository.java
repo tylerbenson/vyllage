@@ -90,7 +90,7 @@ public class UserDetailRepository implements UserDetailsManager,
 			throw new UserNotFoundException("User with id '" + userId
 					+ "' not found.");
 
-		if (record.getFirstLogin())
+		if (record.getResetPasswordOnNextLogin())
 			throw new FirstLoginException(
 					"User logged  in for the first time: "
 							+ record.getUserName(), record.getUserId(),
@@ -114,7 +114,7 @@ public class UserDetailRepository implements UserDetailsManager,
 
 		User user = getUserData(record);
 
-		if (record.getFirstLogin())
+		if (record.getResetPasswordOnNextLogin())
 			throw new FirstLoginException(
 					"User logged  in for the first time: "
 							+ record.getUserName(), record.getUserId(),
@@ -169,7 +169,7 @@ public class UserDetailRepository implements UserDetailsManager,
 			newRecord.setMiddleName(user.getMiddleName());
 			newRecord.setLastName(user.getLastName());
 			newRecord.setEnabled(user.isEnabled());
-			newRecord.setFirstLogin(true);
+			newRecord.setResetPasswordOnNextLogin(true);
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
 			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
@@ -467,7 +467,8 @@ public class UserDetailRepository implements UserDetailsManager,
 				.map((User u) -> sql.insertInto(USERS, USERS.USER_NAME,
 						USERS.ENABLED, USERS.DATE_CREATED, USERS.LAST_MODIFIED,
 						USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME,
-						USERS.FIRST_LOGIN).values(u.getUsername(), enabled,
+						USERS.RESET_PASSWORD_ON_NEXT_LOGIN).values(
+						u.getUsername(), enabled,
 						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))),
 						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))),
 						u.getFirstName(), u.getMiddleName(), u.getLastName(),
@@ -629,7 +630,7 @@ public class UserDetailRepository implements UserDetailsManager,
 	}
 
 	protected void setFirstLogin(String userName, boolean value) {
-		sql.update(USERS).set(USERS.FIRST_LOGIN, value)
+		sql.update(USERS).set(USERS.RESET_PASSWORD_ON_NEXT_LOGIN, value)
 				.where(USERS.USER_NAME.eq(userName)).execute();
 	}
 

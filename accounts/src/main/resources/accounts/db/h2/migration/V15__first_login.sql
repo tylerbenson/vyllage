@@ -1,1 +1,0 @@
-alter table ACCOUNTS.users add column first_login boolean not null default false;
