@@ -272,12 +272,11 @@ public class AccountController {
 
 	@RequestMapping(value = "/reset-password-forced", method = RequestMethod.GET)
 	@PreAuthorize("isAuthenticated()")
-	public String resetPasswordForced(Model model)
-			throws UserNotFoundException {
+	public String resetPasswordForced(Model model) throws UserNotFoundException {
 
 		model.addAttribute("changePasswordForm", new ChangePasswordForm());
 
-		return "reset-password-first-login";
+		return "reset-password-forced";
 	}
 
 	@RequestMapping(value = "/reset-password-forced", method = RequestMethod.POST)
