@@ -48,7 +48,7 @@ public class LoginController {
 
 				signInUtil.signIn(((FirstLoginException) cause).getUserId());
 
-				return "redirect:account/reset-password-first-login";
+				return "redirect:account/reset-password-forced";
 			}
 
 		}
