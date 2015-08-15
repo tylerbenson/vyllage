@@ -147,7 +147,7 @@ public class UserDetailRepository implements UserDetailsManager,
 	public void createUser(@NonNull UserDetails userDetails,
 			boolean forcePasswordChange) {
 		this.createUser(userDetails);
-		this.setFirstLogin(userDetails.getUsername(), forcePasswordChange);
+		this.setForcePasswordReset(userDetails.getUsername(), forcePasswordChange);
 	}
 
 	@Override
@@ -386,7 +386,7 @@ public class UserDetailRepository implements UserDetailsManager,
 
 		logger.info("Changing password for first login user '" + userName + "'");
 
-		this.setFirstLogin(userName, false);
+		this.setForcePasswordReset(userName, false);
 
 		this.updateCredential(newPassword, userId);
 
@@ -629,7 +629,7 @@ public class UserDetailRepository implements UserDetailsManager,
 				.where(USERCONNECTION.USERID.eq(user.getUsername())).execute();
 	}
 
-	protected void setFirstLogin(String userName, boolean value) {
+	protected void setForcePasswordReset(String userName, boolean value) {
 		sql.update(USERS).set(USERS.RESET_PASSWORD_ON_NEXT_LOGIN, value)
 				.where(USERS.USER_NAME.eq(userName)).execute();
 	}
