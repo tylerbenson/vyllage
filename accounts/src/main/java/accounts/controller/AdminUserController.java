@@ -406,7 +406,7 @@ public class AdminUserController {
 			return "adminBatchAccountCreation";
 		}
 
-		userService.batchCreateUsers(batch, user);
+		userService.batchCreateUsers(batch, user, true);
 
 		prepareBatch(model, user);
 		return "adminBatchAccountCreation";

@@ -72,4 +72,17 @@ public class SignInUtil {
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
 	}
+
+	/**
+	 * Signs in the user.
+	 * 
+	 * @param user
+	 */
+	public void signIn(User user) {
+		Authentication auth = new UsernamePasswordAuthenticationToken(user,
+				user.getPassword(), user.getAuthorities());
+
+		SecurityContextHolder.getContext().setAuthentication(auth);
+
+	}
 }
