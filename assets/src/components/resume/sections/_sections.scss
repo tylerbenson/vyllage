@@ -23,6 +23,9 @@
     padding: 0.5em 4em;
   }
 
+
+
+
   .empty {
     color: lighten($banner-background, 50%);
     font-size: 1.15em;
@@ -405,3 +408,6 @@ $muted-text: lighten($secondary-color, 25%);
 }
 
 
+ .ui-sortable-helper{
+    left:25%;
+  }

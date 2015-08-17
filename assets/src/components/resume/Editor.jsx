@@ -9,92 +9,80 @@ var Section = require('./sections');
 var Banner = require('./banner');
 var sortby = require('lodash.sortby');
 var Empty = require('./sections/Empty');
-var Reorderable = require('./../reorderable');
+var jQuery = require('jquery');
 
-  
+require('jquery-ui/sortable');
+require('../jquery.ui.touch-punch.js');
 
-var SectionItem = React.createClass({
-    mixins: [ Reflux.connect(resumeStore, 'resume')],
-
-    render: function(){
-      return (
-        <div>
-         
-         <span className="move-section-sub">move sub</span> 
-
-
-        <Section
-          key={this.props.item.sectionId}
-          section={this.props.item}
-          owner={this.props.sharedProps}
-         />
-
-
-           
-        </div>
-      )
-    }
-});
 
 
 
 var SubSection = React.createClass({
-    
-    getInitialState : function(){
-      return {
-        elements: this.props.data
-      }
+
+    componentDidMount: function () {
+        jQuery('.subsection-holder').sortable({
+            axis : 'y',
+            cursor: "move",
+            items: "div.sub-section",
+            handle:'.move-sub'
+        });
     },
-
-    callback:function( event, itemThatHasBeenMoved, itemsPreviousIndex, itemsNewIndex, reorderedArray){
-        console.log(reorderedArray);
-    },
-
-
 
     render: function(){
-      
+      return(
+        <div className="sub-section">
+          <span className="move-sub">MOVE-Sub</span>
+          <Section
+            key={this.props.data.sectionId}
+            section={this.props.data}
+            owner={this.props.owner}
+           />
+         </div>
+      );
+    }
+});
+
+var SectionGroup = React.createClass({  
+    componentDidMount: function () {
+        jQuery('.section-holder').sortable({
+            axis : 'y',
+            cursor: "move",
+            items: "div.section",
+            handle: '.move-section'
+        });
+    },
+    render: function(){
+
+      var self = this;
+      var subsection = function( sub_section , index ){
+          return <SubSection data={sub_section} owner={self.props.section.owner} />
+      }
       return (
-          <Reorderable         
-            itemKey='sectionId'         
-            lock='horizontal'         
-            holdTime='0'
-            handle="move-section-sub"         
-            list={this.state.elements }         
-            template={SectionItem}         
-            callback={this.callback}        
-            listClass='subsections'        
-            itemClass='subsection-holder'         
-            selected={this.state.selected}        
-            selectedKey='sectionId'       
-            disableReorder={false}
-            sharedProps={this.props.owner} />
+        <div className="section">  
+            <div className="container">
+              <Header
+                title={this.props.section.title}
+                type={this.props.section.type}
+                owner={this.props.section.owner}
+              />  
+
+              <div className="subsection-holder">
+                { this.props.section.child.map(subsection) }           
+              </div>
+
+            </div>
+        </div>
       )
     }
 });
 
 
-
-  
-var SectionGroup =  React.createClass({   
+var SectionRender =  React.createClass({   
     render: function () {   
-
-     
-
-      return (
-        <div className="container"> 
-
-        <span className="move-section">MOVE</span> 
-  
-          <Header
-            title={this.props.item.title}
-            type={this.props.item.type}
-            owner={this.props.item.owner}
-          />      
-          <SubSection owner={this.props.item.owner} data={this.props.item.child} />
-
-        </div>
-      )
+      var render_section = function(section , index ){
+         return <SectionGroup section={section} />
+      }
+      return (<div className="section-holder">{this.props.sections.map(render_section)}</div>);
     }
 });
 
@@ -172,30 +160,12 @@ var ResumeEditor = React.createClass({
 
     var allSection;
 
-    if( this.state.resume.all_section != undefined ){
-
-
-     
+    if( this.state.resume.all_section != undefined ){    
       if( this.state.resume.all_section.length > 0 ){
-        allSection = <Reorderable         
-              itemKey='id'         
-              lock='horizontal'         
-              holdTime='0'
-              handle="move-section"         
-              list={this.state.resume.all_section}         
-              template={SectionGroup}         
-              callback={this.callback}        
-              listClass='section-holder'        
-              itemClass='section'         
-              selected={this.state.selected}        
-              selectedKey='id'       
-              disableReorder={false}/>
-
-
+        allSection = <SectionRender sections={this.state.resume.all_section} />
       }else{
         allSection = <Empty />
       }
-
     }
     
     return (
@@ -206,5 +176,10 @@ var ResumeEditor = React.createClass({
     );
   }
 });
+
+
+
+
+
 
 module.exports = ResumeEditor;

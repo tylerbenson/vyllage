@@ -60,6 +60,14 @@
         }
       }
     },
+    "jquery": {
+      "version": "2.1.4",
+      "from": "jquery@*"
+    },
+    "jquery-ui": {
+      "version": "1.10.5",
+      "from": "jquery-ui@*"
+    },
     "lodash.assign": {
       "version": "3.2.0",
       "from": "lodash.assign@3.2.0",

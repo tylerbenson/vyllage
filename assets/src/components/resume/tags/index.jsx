@@ -101,7 +101,7 @@ var Tags = React.createClass({
 
     return (
       <div className={classes}>
-        {/* this.props.owner ? <MoveButton {...this.dragSourceFor('section')} />: null  */}
+        { this.props.owner ? <MoveButton {...this.dragSourceFor('section')} />: null }
         
         <div className='header'>
           {this.props.owner ? <div className="actions">
