@@ -198,12 +198,6 @@ var ResumeEditor = React.createClass({
 
     }
     
-
-
-
-
-
-
     return (
       <div>
         <Banner header={this.state.resume.header} settings={this.state.settings} /> 

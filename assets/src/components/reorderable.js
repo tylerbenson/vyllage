@@ -33,7 +33,7 @@
       },
       itemDown: function (item, index, event) {
          event.preventDefault();
-         console.log('clicked');
+        
          if( event.target.className.split(" ")[0] == this.props.handle ){
 
              
@@ -86,6 +86,10 @@
       },
       listDown: function (event) {
         event.preventDefault();
+
+         if( event.target.className.split(" ")[0] == this.props.handle ){
+
+
         this.handleTouchEvents(event);
 
         clearInterval(this.afterScrollYInterval);
@@ -119,6 +123,8 @@
         // Touch events
         window.addEventListener('touchend', this.onMouseUp); // Touch up
         window.addEventListener('touchmove', this.onMouseMove); // Touch move
+
+        }
       },
       afterScrollY: function () {
         if (this.state.velocity && Math.abs(this.state.velocity.y) > 0.5) {
@@ -151,6 +157,9 @@
       onMouseUp: function (event) {
 
       //   if( event.target.className.split(" ")[0] == this.props.handle ){
+
+
+          console.log('on mouse up ');
 
             // Item clicked
             if (typeof this.props.itemClicked === 'function' && !this.state.held && !this.state.moved && this.state.dragged) {
@@ -206,17 +215,32 @@
       },
       dragScrollY: function () {
         var element = this.getDOMNode();
+
         var rect = element.getBoundingClientRect();
         var scrollArea = this.getScrollArea(rect.height);
 
+        console.log( this.move_part );
+
         var distanceInArea;
         if (this.state.pointer.clientY < rect.top + scrollArea) {
+
           distanceInArea = Math.min((rect.top + scrollArea) - this.state.pointer.clientY, scrollArea * 2);
+
           element.scrollTop -= distanceInArea / this.constants.SCROLL_MULTIPLIER;
-        } else if (this.state.pointer.clientY > rect.bottom - scrollArea) {
+
+
+
+        }else{
+
+          
+
           distanceInArea = Math.min(this.state.pointer.clientY - (rect.bottom - scrollArea), scrollArea * 2);
+
+          console.log( distanceInArea );
           element.scrollTop += distanceInArea / this.constants.SCROLL_MULTIPLIER;
         }
+
+
       },
       dragScrollX: function () {
         var element = this.getDOMNode();
@@ -235,18 +259,34 @@
       handleDragScrollY: function (event) {
         var rect = this.getDOMNode().getBoundingClientRect();
 
+        this.move_part = event.target;
+
+
         if (!this.scrollIntervalY && this.props.lock !== 'vertical') {
-          if (event.clientY < rect.top + this.constants.SCROLL_AREA) {
+
+          if ( event.clientY > rect.top  ) { 
+            
             this.scrollIntervalY = setInterval(this.dragScrollY, this.constants.SCROLL_RATE);
-          } else if (event.clientY > rect.bottom - this.constants.SCROLL_AREA) {
+          
+          } else if (event.clientY > rect.bottom  ) {
+      
             this.scrollIntervalY = setInterval(this.dragScrollY, this.constants.SCROLL_RATE);
           }
-        } else {
-          if (event.clientY <= rect.bottom - this.constants.SCROLL_AREA && event.clientY >= rect.top + this.constants.SCROLL_AREA) {
-            clearInterval(this.scrollIntervalY);
-            this.scrollIntervalY = undefined;
-          }
-        }
+
+        } 
+
+
+
+        // else {
+        //   if (event.clientY <= rect.bottom - this.constants.SCROLL_AREA && event.clientY >= rect.top + this.constants.SCROLL_AREA) {
+        //     clearInterval(this.scrollIntervalY);
+        //     this.scrollIntervalY = undefined;
+        //   }
+        // }
+
+
+
+
       },
       handleDragScrollX: function (event) {
         var rect = this.getDOMNode().getBoundingClientRect();
@@ -295,6 +335,8 @@
             this.state.list.splice(newIndex, 0, this.state.list.splice(previousIndex, 1)[0]);
             this.setState({list: this.state.list});
           }
+
+       
 
           this.handleDragScrollY(event);
           this.handleDragScrollX(event);
@@ -420,6 +462,34 @@
         return undefined;
       },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       // ---- View methods
 
       getDraggedStyle: function (item) {
@@ -494,11 +564,12 @@
           var itemKey = item[self.props.itemKey] || item;
           var itemClass = [self.props.itemClass, self.getPlaceholderClass(item), self.getSelectedClass(item)].join(' ');
           return React.createElement('div', {
-            key: itemKey,
-            className: itemClass,
-            onMouseDown: self.itemDown.bind(self, item, index),
-            onTouchStart: self.itemDown.bind(self, item, index),
-          }, getPropsTemplate(item));
+                  key: itemKey,
+                  className: itemClass,
+                  onMouseDown: self.itemDown.bind(self, item, index),
+                  onTouchStart: self.itemDown.bind(self, item, index),
+                }, getPropsTemplate(item));
+
         });
 
         var targetClone = function () {

@@ -100,7 +100,7 @@ var Tags = React.createClass({
 
 
     return (
-      <div className={classes} {...this.dropTargetFor('section')}>
+      <div className={classes}>
         {/* this.props.owner ? <MoveButton {...this.dragSourceFor('section')} />: null  */}
         
         <div className='header'>

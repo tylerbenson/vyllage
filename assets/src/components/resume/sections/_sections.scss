@@ -13,6 +13,8 @@
     width: 80%;
   }
 
+
+
   &.mini {
     max-width: 720px;
   }
@@ -155,6 +157,14 @@
           }
         }
       }
+
+
+
+
+
+
+
+
 
       & > .comment-box {
         border-top: darken($section-footer-background,6%) solid 1px;
@@ -393,3 +403,5 @@ $muted-text: lighten($secondary-color, 25%);
     }
   }
 }
+
+
