@@ -89,8 +89,12 @@ public class UserDetailRepository implements UserDetailsManager,
 		if (record == null)
 			throw new UserNotFoundException("User with id '" + userId
 					+ "' not found.");
-
 		User user = getUserData(record);
+
+		if (record.getResetPasswordOnNextLogin())
+			throw new PasswordResetWasForcedException(
+					"User logged  in for the first time: "
+							+ record.getUserName(), user);
 
 		return user;
 
@@ -107,6 +111,11 @@ public class UserDetailRepository implements UserDetailsManager,
 					+ username + "' not found.");
 
 		User user = getUserData(record);
+
+		if (record.getResetPasswordOnNextLogin())
+			throw new PasswordResetWasForcedException(
+					"User logged  in for the first time: "
+							+ record.getUserName(), user);
 
 		return user;
 	}
@@ -132,6 +141,13 @@ public class UserDetailRepository implements UserDetailsManager,
 		return user;
 	}
 
+	public void createUser(@NonNull UserDetails userDetails,
+			boolean forcePasswordChange) {
+		this.createUser(userDetails);
+		this.setForcePasswordReset(userDetails.getUsername(),
+				forcePasswordChange);
+	}
+
 	@Override
 	// @Transactional
 	public void createUser(@NonNull UserDetails userDetails) {
@@ -151,6 +167,7 @@ public class UserDetailRepository implements UserDetailsManager,
 			newRecord.setMiddleName(user.getMiddleName());
 			newRecord.setLastName(user.getLastName());
 			newRecord.setEnabled(user.isEnabled());
+			newRecord.setResetPasswordOnNextLogin(true);
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
 			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
@@ -348,6 +365,33 @@ public class UserDetailRepository implements UserDetailsManager,
 				createNewAuthentication(currentUser, newPassword));
 	}
 
+	/**
+	 * Changes password upon first login
+	 * 
+	 * @param newPassword
+	 */
+	public void forcedPasswordChange(final Long userId, final String userName,
+			final String newPassword) {
+		Authentication currentUser = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		if (currentUser == null) {
+			// This would indicate bad coding somewhere
+			throw new AccessDeniedException(
+					"Can't change password as no Authentication object found in context "
+							+ "for current user.");
+		}
+
+		logger.info("Changing password for first login user '" + userName + "'");
+
+		this.setForcePasswordReset(userName, false);
+
+		this.updateCredential(newPassword, userId);
+
+		SecurityContextHolder.getContext().setAuthentication(
+				createNewAuthentication(currentUser, newPassword));
+	}
+
 	public void updateCredential(String newPassword, Long userId) {
 		UserCredential userCredential = credentialsRepository.get(userId);
 		userCredential.setEnabled(true);
@@ -407,7 +451,8 @@ public class UserDetailRepository implements UserDetailsManager,
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	// @Transactional
-	public void addUsers(List<User> users, User loggedInUser) {
+	public void addUsers(List<User> users, User loggedInUser,
+			boolean forcePasswordChange) {
 		final boolean enabled = true;
 
 		TransactionStatus transaction = txManager
@@ -419,14 +464,13 @@ public class UserDetailRepository implements UserDetailsManager,
 				.stream()
 				.map((User u) -> sql.insertInto(USERS, USERS.USER_NAME,
 						USERS.ENABLED, USERS.DATE_CREATED, USERS.LAST_MODIFIED,
-						USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME)
-						.values(u.getUsername(),
-								enabled,
-								Timestamp.valueOf(LocalDateTime.now(ZoneId
-										.of("UTC"))),
-								Timestamp.valueOf(LocalDateTime.now(ZoneId
-										.of("UTC"))), u.getFirstName(),
-								u.getMiddleName(), u.getLastName())
+						USERS.FIRST_NAME, USERS.MIDDLE_NAME, USERS.LAST_NAME,
+						USERS.RESET_PASSWORD_ON_NEXT_LOGIN).values(
+						u.getUsername(), enabled,
+						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))),
+						Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC"))),
+						u.getFirstName(), u.getMiddleName(), u.getLastName(),
+						forcePasswordChange)
 
 				).collect(Collectors.toList());
 
@@ -581,6 +625,11 @@ public class UserDetailRepository implements UserDetailsManager,
 
 		sql.update(USERCONNECTION).set(USERCONNECTION.USERID, email)
 				.where(USERCONNECTION.USERID.eq(user.getUsername())).execute();
+	}
+
+	protected void setForcePasswordReset(String userName, boolean value) {
+		sql.update(USERS).set(USERS.RESET_PASSWORD_ON_NEXT_LOGIN, value)
+				.where(USERS.USER_NAME.eq(userName)).execute();
 	}
 
 }

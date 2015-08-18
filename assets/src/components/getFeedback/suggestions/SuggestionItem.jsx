@@ -13,7 +13,7 @@ var SuggestionItem = React.createClass({
 		var badge = <i className="sponsored badge ion-arrow-graph-up-right"></i>;
 		var user = this.props.user;
 		return (
-			<div className={(user.is_sponsored ? 'sponsored ' : '') + 'suggestion'}>
+			<div className={(user.advisor ? 'sponsored ' : '') + 'suggestion'}>
 				<Avatar src={user.avatarUrl} size={this.props.avatarSize} />
 				<div className="info">
 					<div className="name">

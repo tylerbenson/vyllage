@@ -31,6 +31,8 @@ import accounts.repository.UserDetailRepository;
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserContactSuggestionServiceTest {
 
+	private static final boolean FORCE_PASSWORD_CHANGE = false;
+
 	@Autowired
 	private UserContactSuggestionService userContactSuggestionService;
 
@@ -310,7 +312,7 @@ public class UserContactSuggestionServiceTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		userRepository.createUser(user);
+		userRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
 		User loadedUser = userRepository.loadUserByUsername(userName);
 		return loadedUser;
@@ -330,9 +332,10 @@ public class UserContactSuggestionServiceTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		userRepository.createUser(user);
+		userRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
 		User loadedUser = userRepository.loadUserByUsername(userName);
+
 		return loadedUser;
 	}
 

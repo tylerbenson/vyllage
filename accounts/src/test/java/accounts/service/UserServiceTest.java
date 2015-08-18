@@ -27,6 +27,8 @@ import accounts.repository.UserNotFoundException;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class UserServiceTest {
 
+	private static final boolean FORCE_PASSWORD_CHANGE = false;
+
 	@Autowired
 	private UserService service;
 
@@ -47,7 +49,7 @@ public class UserServiceTest {
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest(null, null));
-		service.batchCreateUsers(batchAccount, user);
+		service.batchCreateUsers(batchAccount, user, false);
 
 		Assert.assertTrue(service.userExists("uno@gmail.com"));
 		Assert.assertFalse(service.getUser("uno@gmail.com").getPassword() == null);
@@ -69,7 +71,7 @@ public class UserServiceTest {
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest(null, null));
-		service.batchCreateUsers(batchAccount, user);
+		service.batchCreateUsers(batchAccount, user, false);
 
 		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
 		Assert.assertFalse(service.getUser("cuatro@gmail.com").getPassword() == null);
@@ -87,7 +89,7 @@ public class UserServiceTest {
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest(null, null));
-		service.batchCreateUsers(batchAccount, user);
+		service.batchCreateUsers(batchAccount, user, FORCE_PASSWORD_CHANGE);
 
 		Assert.assertFalse(service.userExists("siet@gmail.com"));
 		Assert.assertFalse(service.userExists(" "));
@@ -104,7 +106,7 @@ public class UserServiceTest {
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
 		service.setEmailBuilder(new EmailBuilderTest(null, null));
-		service.batchCreateUsers(batchAccount, user);
+		service.batchCreateUsers(batchAccount, user, FORCE_PASSWORD_CHANGE);
 
 		Assert.assertFalse(service.userExists("diez@gmail.com"));
 		Assert.assertFalse(service.userExists("once.@"));
