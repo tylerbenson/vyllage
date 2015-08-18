@@ -39,10 +39,19 @@ var Tags = React.createClass({
       });
     }
   },
+  componentDidMount: function() {
+    this.focusInput();
+  },
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       tags: nextProps.section.tags,
     });
+  },
+  focusInput: function() {
+    var ref =  this.refs.tagInput;
+    if(ref) {
+      ref.getDOMNode().focus();
+    }
   },
   handleChange: function(e) {
     e.preventDefault();
@@ -80,9 +89,7 @@ var Tags = React.createClass({
   editHandler: function (e) {
     this.setState({
       uiEditMode: true
-    }, function () {
-      this.refs.tagInput.getDOMNode().focus();
-    });
+    }, this.focusInput);
   },
   onTagDelete: function (i) {
     var temp = this.state.tags.slice();
