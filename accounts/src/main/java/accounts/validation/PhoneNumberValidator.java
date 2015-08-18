@@ -1,5 +1,7 @@
 package accounts.validation;
 
+import org.apache.commons.lang3.StringUtils;
+
 import accounts.model.account.settings.AccountSetting;
 
 /**
@@ -18,7 +20,8 @@ public class PhoneNumberValidator extends SettingValidator {
 	public AccountSetting validate(AccountSetting setting) {
 
 		// blank values are allowed.
-		if (setting.getValue() != null && setting.getValue().isEmpty())
+		if (setting.getValue() == null || setting.getValue() != null
+				&& StringUtils.isBlank(setting.getValue()))
 			return setting;
 		else if (setting.getValue().length() < 10
 				|| setting.getValue().length() >= 11) {
