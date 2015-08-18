@@ -111,8 +111,13 @@ configure(javaProjects) {
         reportLevel = "medium"
 		//https://code.google.com/p/findbugs/source/browse/findbugs/src/java/edu/umd/cs/findbugs/detect
 		visitors = ["FindSqlInjection", "SwitchFallthrough",  "FindUselessObjects", "BadSyntaxForRegularExpression", "BadUseOfReturnValue"
+<<<<<<< Upstream, based on master
 		, "BooleanReturnNull", "FindLocalSelfAssignment2", "FindNullDeref",  "FindRefComparison", "FindReturnRef", "FindUselessControlFlow"
 		, "HugeSharedStringConstants", "DuplicateBranches", "DroppedException", "DumbMethodInvocations"]
+=======
+		, "BooleanReturnNull", "FindLocalSelfAssignment2", "FindNullDeref", "FindNullDeref", "FindRefComparison", "FindReturnRef", "FindUselessControlFlow"
+		, "HugeSharedStringConstants", "DuplicateBranches"]
+>>>>>>> f107c4e Tests and fixes.
     }
 
     tasks.withType(FindBugs) {
