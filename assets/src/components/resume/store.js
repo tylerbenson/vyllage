@@ -47,7 +47,6 @@ module.exports = Reflux.createStore({
     var order = sections.map(function (section) {
       return section.sectionId;
     });
-    console.log(order);
 
     var url = urlTemplate
                 .parse(endpoints.resumeSectionOrder)
@@ -237,7 +236,7 @@ module.exports = Reflux.createStore({
             });
           }
       });
-    
+
       this.resume.sections.map(function(section,index){
           var exist = filter( linear_section ,{ 'sectionId': section.sectionId });
           if( !exist.length ){
@@ -266,7 +265,8 @@ module.exports = Reflux.createStore({
         section.isSupported = this.isSupportedSection(section.type);
         
         // section order should reflect into whole thing . 
-        //section.sectionPosition = this.resume.sections.length + 1;
+        section.sectionPosition = this.resume.sections.length + 1;
+        // get section position . 
         this.resume.sections.push(section);
         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
 
