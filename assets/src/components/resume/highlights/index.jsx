@@ -5,7 +5,7 @@ var HighlightInput = require('../highlights/Input');
 var Highlights = React.createClass({
 	getInitialState: function() {
 		return {
-			highlights: this.props.highlights
+			highlights: this.props.highlights ? this.props.highlights : []
 		};
 	},
 	componentWillReceiveProps(nextProps) {
