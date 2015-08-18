@@ -56,18 +56,50 @@ configure(javaProjects) {
     }
 
 	jacocoCoverage {
-		// Enforce minimum code coverage of 50% for every Java file.
-		fileThreshold 0.5
-        fileThreshold 0.001, BRANCH
-        fileThreshold 0.001, CLASS
-        fileThreshold 0.001, COMPLEXITY
-        fileThreshold 0.001, INSTRUCTION
-        fileThreshold 0.001, LINE
-        fileThreshold 0.001, METHOD
-        fileThreshold 0.0 // Override all above to pass check for now.
+		// Enforce minimum code coverage.
+        // https://github.com/palantir/gradle-jacoco-coverage
+        reportThreshold 0.25, BRANCH, "accounts"
+        reportThreshold 0.6, CLASS, "accounts"
+        reportThreshold 0.29, COMPLEXITY, "accounts"
+        reportThreshold 0.4, INSTRUCTION, "accounts"
+        reportThreshold 0.4, LINE, "accounts"
+        reportThreshold 0.32, METHOD, "accounts"
 
-		// Whitelist files named MyClass.java from coverage requirements.
-		//fileThreshold 0.0, "MyClass.java"
+        reportThreshold 0.0, BRANCH, "connections"
+        reportThreshold 0.3, CLASS, "connections"
+        reportThreshold 0.05, COMPLEXITY, "connections"
+        reportThreshold 0.037, INSTRUCTION, "connections"
+        reportThreshold 0.06, LINE, "connections"
+        reportThreshold 0.07, METHOD, "connections"
+
+        reportThreshold 0.42, BRANCH, "documents"
+        reportThreshold 0.85, CLASS, "documents"
+        reportThreshold 0.48, COMPLEXITY, "documents"
+        reportThreshold 0.57, INSTRUCTION, "documents"
+        reportThreshold 0.56, LINE, "documents"
+        reportThreshold 0.519, METHOD, "documents"
+
+        packageThreshold 0.20, ~"accounts/.*"
+        packageThreshold 0.0, ~"connections/.*" // :-(
+        packageThreshold 0.20, ~"documents/.*"
+
+		// Whitelist files that currently have 0 coverage.
+		packageThreshold 0.0, ~"accounts/controller.*"
+        packageThreshold 0.0, "accounts/model"
+        packageThreshold 0.0, ~"accounts/model/account.*"
+        packageThreshold 0.0, ~"accounts/model/link.*"
+        packageThreshold 0.0, ~"accounts/domain/tables/records.*"
+
+        packageThreshold 0.0, "documents/database"
+        packageThreshold 0.0, "documents/files/pdf"
+
+        // Sadly, these don't even have any tests.
+        packageThreshold 0.20, ~"email/.*"
+        packageThreshold 0.20, ~"oauth-provider/.*"
+        packageThreshold 0.20, ~"site/.*"
+        packageThreshold 0.20, ~"togglz/.*"
+        packageThreshold 0.20, ~"user-common/.*"
+        packageThreshold 0.20, ~"util/.*"
 	}
 
     findbugs {
