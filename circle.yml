@@ -12,7 +12,7 @@ dependencies:
 
 test:
   override:
-    - ./gradlew check test circlePgTest
+    - ./gradlew check circlePgTest
     - npm test
 
 deployment:
