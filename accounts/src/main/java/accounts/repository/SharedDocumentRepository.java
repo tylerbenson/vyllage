@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
@@ -63,18 +64,24 @@ public class SharedDocumentRepository {
 
 	}
 
-	public EmailDocumentLink getEmailDocumentLink(String linkKey) {
+	public Optional<EmailDocumentLink> getEmailDocumentLink(String linkKey) {
 		SharedDocumentRecord sharedDocumentRecord = sql.fetchOne(
 				SHARED_DOCUMENT, SHARED_DOCUMENT.LINK_KEY.eq(linkKey));
 
-		return buildEmailDocumentLink(sharedDocumentRecord);
+		if (sharedDocumentRecord == null)
+			return Optional.empty();
+
+		return Optional.of(buildEmailDocumentLink(sharedDocumentRecord));
 	}
 
-	public SocialDocumentLink getSocialDocumentLink(String linkKey) {
+	public Optional<SocialDocumentLink> getSocialDocumentLink(String linkKey) {
 		SharedDocumentRecord sharedDocumentRecord = sql.fetchOne(
 				SHARED_DOCUMENT, SHARED_DOCUMENT.LINK_KEY.eq(linkKey));
 
-		return buildSocialDocumentLink(sharedDocumentRecord);
+		if (sharedDocumentRecord == null)
+			return null;
+
+		return Optional.of(buildSocialDocumentLink(sharedDocumentRecord));
 
 	}
 

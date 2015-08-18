@@ -58,7 +58,6 @@ public class ErrorHandlerController implements ErrorController {
 		if (currentUser != null) {
 
 			if (displayWebError
-					&& currentUser != null
 					&& currentUser.getAuthorities() != null
 					&& currentUser
 							.getAuthorities()

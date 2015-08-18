@@ -104,9 +104,12 @@ configure(javaProjects) {
 
     findbugs {
         ignoreFailures = false
-        //effort = "max"
+        effort = "max"
         reportLevel = "medium"
-        visitors = ["FindSqlInjection", "SwitchFallthrough"]
+        //CbeckMustOverrideSuperAnnotation is not a typo, that's the name of the class...
+		//https://code.google.com/p/findbugs/source/browse/findbugs/src/java/edu/umd/cs/findbugs/detect
+		visitors = ["FindSqlInjection", "SwitchFallthrough",  "FindUselessObjects", "BadSyntaxForRegularExpression", "BadUseOfReturnValue"
+		, "BooleanReturnNull"]
     }
 
     tasks.withType(FindBugs) {
