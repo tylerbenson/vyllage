@@ -7,6 +7,7 @@ var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
 var SectionFooter = require('../sections/Footer');
 var Textarea = require('react-textarea-autosize');
+var Tag = require('./tag');
 var MoveButton = require('../../buttons/move');
 var { DragDropMixin } = require('react-dnd');
 var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
@@ -42,9 +43,6 @@ var Tags = React.createClass({
     this.setState({
       tags: nextProps.section.tags,
     });
-  },
-  componentDidMount: function() {
-    this.refs.tags.getDOMNode().focus();
   },
   handleChange: function(e) {
     e.preventDefault();
@@ -83,14 +81,28 @@ var Tags = React.createClass({
     this.setState({
       uiEditMode: true
     }, function () {
-      this.refs.tags.getDOMNode().focus();
+      this.refs.tagInput.getDOMNode().focus();
     });
+  },
+  onTagDelete: function (i) {
+    var temp = this.state.tags.slice();
+    temp.splice(i,1);
+
+    this.setState({
+      tags: temp
+    })
   },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
     var isDragging = this.getDragState('section').isDragging;
     var isHovering = this.getDropState('section').isHovering;
     var content = this.state.tags instanceof Array ? this.state.tags.join(', ') : '';
+
+    var tags = this.state.tags.map(function(tag, index){
+      return (
+        <Tag key={index} text={tag} onDelete={this.onTagDelete.bind(this, index)} uiEditMode={uiEditMode} />
+      );
+    }.bind(this));
 
     var classes = cx({
       'dragged': isDragging,
@@ -108,17 +120,9 @@ var Tags = React.createClass({
           </div>: null}
         </div>
         {this.props.section.sectionId ? <div>
-          <div className="content">
-            <Textarea
-              ref='tags'
-              disabled={!uiEditMode}
-              className="flat"
-              rows="1"
-              autoComplete="off"
-              placeholder="Input tags separated by comma."
-              defaultValue={content}
-              onChange={this.handleChange}
-            ></Textarea>
+          <div className="tags content">
+            {tags}
+            {this.state.uiEditMode ? <input className="inline flat" ref="tagInput" placeholder="Type to add.." type="text" /> : null}
           </div>
           <SectionFooter section={this.props.section} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
