@@ -7,7 +7,8 @@ var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
 var SectionFooter = require('../sections/Footer');
 var Textarea = require('react-textarea-autosize');
-var Tag = require('./tag');
+var Tag = require('./Tag');
+var TagInput = require('./Input');
 var MoveButton = require('../../buttons/move');
 var { DragDropMixin } = require('react-dnd');
 var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
@@ -39,19 +40,10 @@ var Tags = React.createClass({
       });
     }
   },
-  componentDidMount: function() {
-    this.focusInput();
-  },
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       tags: nextProps.section.tags,
     });
-  },
-  focusInput: function() {
-    var ref =  this.refs.tagInput;
-    if(ref) {
-      ref.getDOMNode().focus();
-    }
   },
   handleChange: function(e) {
     e.preventDefault();
@@ -89,7 +81,7 @@ var Tags = React.createClass({
   editHandler: function (e) {
     this.setState({
       uiEditMode: true
-    }, this.focusInput);
+    });
   },
   onTagDelete: function (i) {
     var temp = this.state.tags.slice();
@@ -97,7 +89,19 @@ var Tags = React.createClass({
 
     this.setState({
       tags: temp
-    })
+    });
+  },
+  onTagAdd: function(e) {
+    if(e.which === 13) {
+      var temp = this.state.tags.slice();
+      temp.push(e.target.value);
+
+      this.setState({
+        tags: temp
+      });
+
+      e.target.value = "";
+    }
   },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
@@ -129,7 +133,7 @@ var Tags = React.createClass({
         {this.props.section.sectionId ? <div>
           <div className="tags content">
             {tags}
-            {this.state.uiEditMode ? <input className="inline flat" ref="tagInput" placeholder="Type to add.." type="text" /> : null}
+            {this.state.uiEditMode ? <TagInput onKeyPress={this.onTagAdd} /> : null}
           </div>
           <SectionFooter section={this.props.section} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
