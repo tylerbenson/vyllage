@@ -116,12 +116,13 @@ public class AdviceRequestController {
 
 	protected void validateAdviceRequest(AdviceRequest adviceRequest) {
 
-		boolean usersIsNullOrEmpty = adviceRequest.getUsers() == null
-				|| adviceRequest.getUsers().isEmpty();
+		boolean usersIsNullOrEmpty = adviceRequest != null
+				&& (adviceRequest.getUsers() == null || adviceRequest
+						.getUsers().isEmpty());
 
-		boolean notRegisteredUsersIsNullOrEmpty = adviceRequest
-				.getNotRegisteredUsers() == null
-				|| adviceRequest.getNotRegisteredUsers().isEmpty();
+		boolean notRegisteredUsersIsNullOrEmpty = adviceRequest != null
+				&& (adviceRequest.getNotRegisteredUsers() == null || adviceRequest
+						.getNotRegisteredUsers().isEmpty());
 
 		if (adviceRequest == null
 				|| (usersIsNullOrEmpty && notRegisteredUsersIsNullOrEmpty))

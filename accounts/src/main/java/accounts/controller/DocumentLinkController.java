@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -75,8 +76,10 @@ public class DocumentLinkController {
 			@PathVariable final String linkKey) throws JsonParseException,
 			JsonMappingException, IOException, UserNotFoundException {
 
-		EmailDocumentLink documentLink = documentLinkService
+		Optional<EmailDocumentLink> documentLink = documentLinkService
 				.getEmailDocumentLink(linkKey);
+
+		EmailDocumentLink emailDocumentLink = documentLink.get();
 
 		// saving the link key to use later for permission creation
 		request.getSession(true).setAttribute(
@@ -84,15 +87,15 @@ public class DocumentLinkController {
 
 		documentLinkService.registerVisit(linkKey);
 
-		if (LocalDateTime.now().isAfter(documentLink.getExpirationDate()))
+		if (LocalDateTime.now().isAfter(emailDocumentLink.getExpirationDate()))
 			throw new AccessDeniedException(
 					"You are not authorized to access this resource. The link has expired.");
 
 		// login
-		signInUtil.signIn(documentLink.getUserId());
+		signInUtil.signIn(emailDocumentLink.getUserId());
 
-		return "redirect:/" + documentLink.getDocumentType() + "/"
-				+ documentLink.getDocumentId();
+		return "redirect:/" + emailDocumentLink.getDocumentType() + "/"
+				+ emailDocumentLink.getDocumentId();
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -148,16 +151,19 @@ public class DocumentLinkController {
 			WebRequest webRequest, @PathVariable final String linkKey)
 			throws JsonParseException, JsonMappingException, IOException {
 
-		SocialDocumentLink documentLink = documentLinkService
+		Optional<SocialDocumentLink> optionalDocumentLink = documentLinkService
 				.getSocialDocumentLink(linkKey);
+
+		SocialDocumentLink socialDocumentLink = optionalDocumentLink.get();
 
 		// saving the link key to use later for permission creation
 		request.getSession(true).setAttribute(
-				SocialSessionEnum.LINK_KEY.name(), documentLink.getLinkKey());
+				SocialSessionEnum.LINK_KEY.name(),
+				socialDocumentLink.getLinkKey());
 
 		documentLinkService.registerVisit(linkKey);
 
-		if (LocalDateTime.now().isAfter(documentLink.getExpirationDate()))
+		if (LocalDateTime.now().isAfter(socialDocumentLink.getExpirationDate()))
 			throw new AccessDeniedException(
 					"You are not authorized to access this resource. The link has expired.");
 
@@ -172,8 +178,8 @@ public class DocumentLinkController {
 			return "social-login";
 		}
 
-		return "redirect:" + "/ " + documentLink.getDocumentType() + "/"
-				+ documentLink.getDocumentId();
+		return "redirect:" + "/ " + socialDocumentLink.getDocumentType() + "/"
+				+ socialDocumentLink.getDocumentId();
 
 	}
 
@@ -223,13 +229,21 @@ public class DocumentLinkController {
 
 	@RequestMapping(value = "permissions/{linkKey}", method = RequestMethod.GET)
 	public @ResponseBody LinkPermissions getLink(@PathVariable String linkKey) {
-		AbstractDocumentLink doclink = documentLinkService
+
+		Optional<EmailDocumentLink> emailDocumentLink = documentLinkService
 				.getEmailDocumentLink(linkKey);
 
-		if (doclink == null)
-			doclink = documentLinkService.getSocialDocumentLink(linkKey);
+		Optional<SocialDocumentLink> socialDocumentLink = documentLinkService
+				.getSocialDocumentLink(linkKey);
 
-		if (doclink == null)
+		AbstractDocumentLink doclink = null;
+
+		if (emailDocumentLink.isPresent())
+			doclink = emailDocumentLink.get();
+
+		else if (socialDocumentLink.isPresent())
+			doclink = socialDocumentLink.get();
+		else
 			return null;
 
 		LinkPermissions lp = new LinkPermissions();
@@ -239,5 +253,4 @@ public class DocumentLinkController {
 
 		return lp;
 	}
-
 }
