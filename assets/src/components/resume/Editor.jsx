@@ -20,17 +20,36 @@ require('../jquery.ui.touch-punch.js');
 var SubSection = React.createClass({
 
     componentDidMount: function () {
+
+        var self = this;
+
         jQuery('.subsection-holder').sortable({
             axis : 'y',
             cursor: "move",
             items: "div.sub-section",
-            handle:'.move-sub'
+            handle:'.move-sub',
+            stop : function( event, ui ){
+
+              var subsection_order = [];
+              var type;
+              jQuery(this).children().each(function(index) {
+                  subsection_order.push({
+                    sectionId : jQuery(this).data('id'), 
+                    index : index
+                  });
+
+                  type = jQuery(this).attr('rel');
+              });              
+              actions.moveSectionOrder(subsection_order , type );
+
+
+            }
         });
     },
 
     render: function(){
       return(
-        <div className="sub-section">
+        <div className="sub-section" rel={this.props.data.type} data-id={this.props.data.sectionId} >
           <span className="move-sub">MOVE-Sub</span>
           <Section
             key={this.props.data.sectionId}
@@ -44,11 +63,25 @@ var SubSection = React.createClass({
 
 var SectionGroup = React.createClass({  
     componentDidMount: function () {
+
+        var self = this;
+
         jQuery('.section-holder').sortable({
             axis : 'y',
             cursor: "move",
             items: "div.section",
-            handle: '.move-section'
+            handle: '.move-section',
+            stop: function( event, ui ) {
+              var order = [];
+              jQuery('.section-holder').children().each(function(index) {
+                  order.push({
+                    type : jQuery(this).attr('rel'), 
+                    index : index
+                  });
+              });              
+              actions.moveGroupOrder(order);
+
+            }
         });
     },
     render: function(){
@@ -58,7 +91,7 @@ var SectionGroup = React.createClass({
           return <SubSection key={index} data={sub_section} owner={self.props.section.owner} />
       }
       return (
-        <div className="section">  
+        <div className="section" rel={this.props.section.type}>  
             <div className="container">
               <Header
                 title={this.props.section.title}
@@ -142,11 +175,6 @@ var ResumeEditor = React.createClass({
     }.bind(this));
 
     return sectionGroupNodes;
-  },
-
-
-  callback : function( event, itemThatHasBeenMoved, itemsPreviousIndex, itemsNewIndex, reorderedArray ){
-      
   },
 
 

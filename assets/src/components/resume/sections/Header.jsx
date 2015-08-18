@@ -9,7 +9,7 @@ var SectionHeader = React.createClass({
     actions.postSection({
       title: this.props.title,
       type: this.props.type,
-      sectionPosition: this.props.groupPosition
+    //  sectionPosition: this.props.groupPosition
     });
   },
   render: function () {
