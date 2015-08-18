@@ -138,10 +138,17 @@ module.exports = Reflux.createStore({
   onPublishSections : function( sections , header ){
 
      this.resume.header = header; 
-     this.resume.all_section = this.doProcessSection(sections, header.owner);
 
-     if( this.resume.all_section.length )
-         this.trigger(this.resume);
+     if( sections.length ){
+        sections.forEach(function(section){
+          if (section.numberOfComments > 0) {
+            this.onGetComments(section.sectionId);
+          }
+        }.bind(this));
+     }
+
+     this.resume.all_section = this.doProcessSection(sections, header.owner);
+     this.trigger(this.resume);
 
   },
 

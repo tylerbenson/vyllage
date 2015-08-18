@@ -55,7 +55,7 @@ var SectionGroup = React.createClass({
 
       var self = this;
       var subsection = function( sub_section , index ){
-          return <SubSection data={sub_section} owner={self.props.section.owner} />
+          return <SubSection key={index} data={sub_section} owner={self.props.section.owner} />
       }
       return (
         <div className="section">  
@@ -80,7 +80,7 @@ var SectionGroup = React.createClass({
 var SectionRender =  React.createClass({   
     render: function () {   
       var render_section = function(section , index ){
-         return <SectionGroup section={section} />
+         return <SectionGroup key={index} section={section} />
       }
       return (<div className="section-holder">{this.props.sections.map(render_section)}</div>);
     }
