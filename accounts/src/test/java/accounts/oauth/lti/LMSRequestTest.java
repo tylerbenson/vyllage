@@ -1,7 +1,7 @@
 /**
  * 
  */
-package site;
+package accounts.oauth.lti;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -82,7 +82,6 @@ public class LMSRequestTest {
 
 	@BeforeClass
 	public static void init() {
-		System.setProperty("PROJECT_HOME", "D:/Company/vyllage/Workspace/vyllage");
 		System.setProperty("spring.thymeleaf.prefix", "file:///" + System.getProperty("PROJECT_HOME") + "/assets/src/");
 	}
 

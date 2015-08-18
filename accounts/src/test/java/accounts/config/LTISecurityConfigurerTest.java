@@ -1,4 +1,7 @@
-package site;
+/**
+ * 
+ */
+package accounts.config;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -75,7 +78,6 @@ public class LTISecurityConfigurerTest {
 
 	@BeforeClass
 	public static void init() {
-		System.setProperty("PROJECT_HOME", "D:/Company/vyllage/Workspace/vyllage");
 		System.setProperty("spring.thymeleaf.prefix", "file:///" + System.getProperty("PROJECT_HOME") + "/assets/src/");
 	}
 

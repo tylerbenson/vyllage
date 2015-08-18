@@ -1,7 +1,7 @@
 /**
  * 
  */
-package site;
+package accounts.controllers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,7 +16,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth.provider.filter.OAuthProviderProcessingFilter;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
@@ -66,7 +65,6 @@ public class LMSAccountControllerTest {
 
 	@BeforeClass
 	public static void init() {
-		System.setProperty("PROJECT_HOME", "D:/Company/vyllage/Workspace/vyllage");
 		System.setProperty("spring.thymeleaf.prefix", "file:///" + System.getProperty("PROJECT_HOME") + "/assets/src/");
 	}
 
