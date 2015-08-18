@@ -34,11 +34,11 @@
         </select>
 
 		<label> Consumer Key, the selected organization will be automatically prepended.</label>
-		<input th:field="*{consumerKey}"></input>	
-		
-		<label> Secret </label>	
-		<input th:field="*{secret}"></input>	
-		
+		<input th:field="*{consumerKey}"></input>
+
+		<label> Secret </label>
+		<input th:field="*{secret}"></input>
+
         <button name="save" type="submit" class="pull right padded send-btn">Submit</button>
         <label th:if="*{error != null}" th:text="*{error}" style="color: red;"></label>
       </form>
@@ -46,17 +46,14 @@
   </div>
   <footer>
     <div class="content">
-      <div class="logo">
-        <img src="images/logo-orange.png" alt="Vyllage" />
-        <span>Vyllage</span>
-      </div>
+      <a href="/" class="logo">
+        <img src="/images/logo-orange.png" alt="Vyllage" />
+      </a>
       <nav>
         <ul>
-          <li><a href="">Help</a></li>
-          <li><a href="">Careers</a></li>
-          <li><a href="">Terms</a></li>
-          <li><a href="">Privacy</a></li>
-          <li><a href="">Contact Us</a></li>
+          <li><a href="/careers">Careers</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/contact">Contact Us</a></li>
         </ul>
       </nav>
     </div>

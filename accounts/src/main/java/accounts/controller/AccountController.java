@@ -168,8 +168,10 @@ public class AccountController {
 				.filter(u -> !excludeIds.contains(u.getUserId()))
 				.collect(Collectors.toList());
 
-		return userService.getAccountContacts(request, users.stream()
-				.map(u -> u.getUserId()).collect(Collectors.toList()));
+		return userService.getAccountContacts(
+				request,
+				users.stream().map(u -> u.getUserId())
+						.collect(Collectors.toList()));
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,
@@ -227,7 +229,7 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/reset-password-change", method = RequestMethod.GET)
-	public String changePassword(
+	public String resetPassword(
 			@RequestParam(value = "resetPassword", required = true) String resetPassword,
 			Model model) throws JsonParseException, JsonMappingException,
 			IOException, UserNotFoundException {
@@ -252,7 +254,8 @@ public class AccountController {
 
 	@RequestMapping(value = "/reset-password-change", method = RequestMethod.POST)
 	@PreAuthorize("isAuthenticated()")
-	public String postChangePassword(ChangePasswordForm form, Model model) {
+	public String postResetPassword(HttpServletRequest request,
+			ChangePasswordForm form, Model model) throws ServletException {
 
 		if (!form.isValid()) {
 			form.setError(true);
@@ -262,14 +265,38 @@ public class AccountController {
 
 		userService.changePassword(form.getNewPassword());
 
-		Authentication authentication = SecurityContextHolder.getContext()
-				.getAuthentication();
+		request.logout();
 
-		Authentication auth = new UsernamePasswordAuthenticationToken(
-				authentication.getName(), form.getNewPassword(),
-				authentication.getAuthorities());
+		return "password-change-success";
+	}
 
-		SecurityContextHolder.getContext().setAuthentication(auth);
+	@RequestMapping(value = "reset-password-forced", method = RequestMethod.GET)
+	@PreAuthorize("isAuthenticated()")
+	public String resetPasswordForced(Model model) {
+		logger.info("Reset password was forced.");
+		model.addAttribute("changePasswordForm", new ChangePasswordForm());
+
+		return "reset-password-forced";
+	}
+
+	@RequestMapping(value = "reset-password-forced", method = RequestMethod.POST)
+	@PreAuthorize("isAuthenticated()")
+	public String postResetPasswordForced(HttpServletRequest request,
+			@AuthenticationPrincipal User user, ChangePasswordForm form,
+			Model model) throws ServletException {
+
+		logger.info("Reset password was forced.");
+
+		if (!form.isValid()) {
+			form.setError(true);
+			model.addAttribute("changePasswordForm", form);
+			return "reset-password-forced";
+		}
+
+		userService.forcedPasswordChange(user.getUserId(), user.getUsername(),
+				form.getNewPassword());
+
+		request.logout();
 
 		return "password-change-success";
 	}

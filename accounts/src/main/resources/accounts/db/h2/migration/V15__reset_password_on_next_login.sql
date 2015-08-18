@@ -1,0 +1,1 @@
+alter table ACCOUNTS.users add column reset_password_on_next_login boolean not null default false;

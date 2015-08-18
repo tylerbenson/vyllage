@@ -1,0 +1,127 @@
+@import "./components/common/variables";
+
+@import "jeet/scss/jeet/index";
+@import "./components/common/utilities";
+@import "./components/common/defaults";
+@import "./components/common/typography";
+
+.info {
+  #container {
+    padding: 0;
+  }
+
+  header {
+    background: none;
+    padding: 1.5em 1em;
+    position: static;
+    text-align: center;
+
+    .content {
+      &:hover {
+        border: none;
+      }
+    }
+
+    .logo {
+      float: none;
+      font-size: 1.5em;
+
+      span {
+        color: $text-color;
+      }
+
+      &:hover {
+        border: none;
+      }
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: $banner-background;
+    font-weight: 400;
+    line-height: 1.4;
+    margin-top: 1em;
+  }
+
+  h1 {
+    font-size: 2.25em;
+    margin-top: 0;
+  }
+
+  h2 {
+    font-size: 1.93em;
+  }
+
+  h3 {
+    font-size: 1.49em;
+  }
+
+  p {
+    font-size: 1em;
+    margin: 0.4em 0;
+  }
+
+  a {
+    text-decoration: none;
+    transition: none;
+
+    &:hover {
+      border-bottom: $primary-color dashed 1px;
+    }
+  }
+
+  button,
+  .button {
+    &:hover {
+      border-color: transparent;
+    }
+  }
+
+  ul {
+    line-height: 1.4;
+    list-style-position: inside;
+  }
+
+  footer {
+    background: none;
+    margin-top: 3em;
+
+    .logo {
+      float: left;
+
+      &:hover {
+        border: none;
+      }
+
+      span {
+        display: none;
+      }
+    }
+
+    nav ul li a {
+      color: lighten($secondary-color, 20%);
+
+      &:hover {
+        border: none;
+        text-decoration: none;
+        color: lighten($secondary-color, 10%);
+      }
+    }
+  }
+
+  &.contact {
+    label {
+      margin-bottom: -1em;
+    }
+
+    h2 {
+      margin-top: 0.5em;
+    }
+
+    footer {
+      margin-top: 0;
+    }
+  }
+}

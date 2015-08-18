@@ -22,8 +22,13 @@ public class UserDetailRepositoryTest {
 	UserDetailRepository userDetailRepository;
 
 	@Test(expected = NullPointerException.class)
-	public void test() {
+	public void testNullUser() {
 		userDetailRepository.createUser(null);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testWithForcePasswordChange() {
+		userDetailRepository.createUser(null, false);
 	}
 
 }
