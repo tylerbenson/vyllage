@@ -3,7 +3,6 @@
  */
 package user.common;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import lombok.EqualsAndHashCode;
@@ -20,7 +19,7 @@ public class LMSUserCredentials {
 	private String lmsUserId;
 	private String password;
 	private boolean enabled;
-	private Timestamp expires;
+	private LocalDateTime expires;
 	private Long lmsId;
 	private Long userId;
 
@@ -72,14 +71,15 @@ public class LMSUserCredentials {
 	/**
 	 * @return the expires
 	 */
-	public Timestamp getExpires() {
+	public LocalDateTime getExpires() {
 		return expires;
 	}
 
 	/**
-	 * @param expires the expires to set
+	 * @param expires
+	 *            the expires to set
 	 */
-	public void setExpires(Timestamp expires) {
+	public void setExpires(LocalDateTime expires) {
 		this.expires = expires;
 	}
 
@@ -91,7 +91,8 @@ public class LMSUserCredentials {
 	}
 
 	/**
-	 * @param lmsId the lmsId to set
+	 * @param lmsId
+	 *            the lmsId to set
 	 */
 	public void setLmsId(Long lmsId) {
 		this.lmsId = lmsId;
@@ -105,7 +106,8 @@ public class LMSUserCredentials {
 	}
 
 	/**
-	 * @param userId the userId to set
+	 * @param userId
+	 *            the userId to set
 	 */
 	public void setUserId(Long userId) {
 		this.userId = userId;
