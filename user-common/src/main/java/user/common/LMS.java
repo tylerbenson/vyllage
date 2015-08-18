@@ -3,7 +3,7 @@
  */
 package user.common;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -25,8 +25,8 @@ public class LMS {
 	private String oAuthVersion;
 	private String consumerKey;
 	private Long organizationId;
-	private Timestamp dateCreated;
-	private Timestamp lastModified;
+	private LocalDateTime dateCreated;
+	private LocalDateTime lastModified;
 
 	/**
 	 * @return the lmsId
@@ -166,28 +166,30 @@ public class LMS {
 	/**
 	 * @return the dateCreated
 	 */
-	public Timestamp getDateCreated() {
+	public LocalDateTime getDateCreated() {
 		return dateCreated;
 	}
 
 	/**
-	 * @param dateCreated the dateCreated to set
+	 * @param dateCreated
+	 *            the dateCreated to set
 	 */
-	public void setDateCreated(Timestamp dateCreated) {
+	public void setDateCreated(LocalDateTime dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
 	/**
 	 * @return the lastModified
 	 */
-	public Timestamp getLastModified() {
+	public LocalDateTime getLastModified() {
 		return lastModified;
 	}
 
 	/**
-	 * @param lastModified the lastModified to set
+	 * @param lastModified
+	 *            the lastModified to set
 	 */
-	public void setLastModified(Timestamp lastModified) {
+	public void setLastModified(LocalDateTime lastModified) {
 		this.lastModified = lastModified;
 	}
 
