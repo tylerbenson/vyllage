@@ -25,7 +25,7 @@ buildscript {
         classpath 'com.h2database:h2:1.4.185'
         classpath 'org.jooq:jooq-codegen:3.5.0'
         classpath 'nu.studer:gradle-jooq-plugin:1.0.5'
-		classpath 'com.palantir:jacoco-coverage:0.3.0'
+        classpath 'com.palantir:jacoco-coverage:0.3.0'
         classpath 'com.google.guava:guava:18.0' // Used by palantir jacoco-coverage but not properly declared.
     }
 }
@@ -45,7 +45,7 @@ configure(rootProject) {
 
 configure(javaProjects) {
     apply plugin: 'java'
-	apply plugin: 'com.palantir.jacoco-coverage'
+    apply plugin: 'com.palantir.jacoco-coverage'
     apply plugin: 'jacoco'
     apply plugin: 'findbugs'
 
@@ -55,8 +55,8 @@ configure(javaProjects) {
         reportsDir = file("$buildDir/reports/jacoco")
     }
 
-	jacocoCoverage {
-		// Enforce minimum code coverage.
+    jacocoCoverage {
+        // Enforce minimum code coverage.
         // https://github.com/palantir/gradle-jacoco-coverage
         reportThreshold 0.25, BRANCH, "accounts"
         reportThreshold 0.6, CLASS, "accounts"
@@ -83,8 +83,8 @@ configure(javaProjects) {
         packageThreshold 0.0, ~"connections/.*" // :-(
         packageThreshold 0.20, ~"documents/.*"
 
-		// Whitelist files that currently have 0 coverage.
-		packageThreshold 0.0, ~"accounts/controller.*"
+        // Whitelist files that currently have 0 coverage.
+        packageThreshold 0.0, ~"accounts/controller.*"
         packageThreshold 0.0, "accounts/model"
         packageThreshold 0.0, ~"accounts/model/account.*"
         packageThreshold 0.0, ~"accounts/model/link.*"
@@ -100,7 +100,7 @@ configure(javaProjects) {
         packageThreshold 0.20, ~"togglz/.*"
         packageThreshold 0.20, ~"user-common/.*"
         packageThreshold 0.20, ~"util/.*"
-	}
+    }
 
     findbugs {
         ignoreFailures = false
