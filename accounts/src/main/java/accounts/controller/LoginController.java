@@ -39,13 +39,13 @@ public class LoginController {
 			Exception exception = (Exception) request.getSession()
 					.getAttribute("SPRING_SECURITY_LAST_EXCEPTION");
 
-			Throwable cause = exception.getCause();
 			if (exception != null
 					&& exception instanceof InternalAuthenticationServiceException
-					&& cause != null
-					&& cause instanceof PasswordResetWasForcedException) {
+					&& exception.getCause() != null
+					&& exception.getCause() instanceof PasswordResetWasForcedException) {
 
-				PasswordResetWasForcedException ex = (PasswordResetWasForcedException) cause;
+				PasswordResetWasForcedException ex = (PasswordResetWasForcedException) exception
+						.getCause();
 
 				logger.info(ex.getMessage());
 
