@@ -43,11 +43,11 @@ module.exports = Reflux.createStore({
     // Return 0 if sections is empty
     return (section !== -Infinity) ? section.sectionPosition: 0;
   },
-  postSectionOrder: function () {
-    var order = this.resume.sections.map(function (section) {
+  postSectionOrder: function( sections ) {
+    var order = sections.map(function (section) {
       return section.sectionId;
     });
-    // console.log(order);
+    console.log(order);
 
     var url = urlTemplate
                 .parse(endpoints.resumeSectionOrder)
@@ -139,9 +139,7 @@ module.exports = Reflux.createStore({
   onPublishSections : function( sections , header ){
 
       this.resume.header = header; 
-
       this.resume.sections = sections;
-
       this.resume.sections.forEach(function (section) {
         section.isSupported = this.isSupportedSection(section.type);
         if (section.numberOfComments > 0) {
@@ -157,6 +155,8 @@ module.exports = Reflux.createStore({
 
   doProcessSection : function(sections , owner ){
     var tmp_section = [];
+   
+    sections = sortby(sections ,'sectionPosition');
    
     if( sections.length > 0 ){
 
@@ -188,12 +188,9 @@ module.exports = Reflux.createStore({
                   owner : owner,                  
                   child : where( sections, { 'type': section.type }) 
                 });  
-
               }
-
           }
       }.bind(this));
-
 
       return tmp_section;
     }
@@ -205,8 +202,9 @@ module.exports = Reflux.createStore({
     order.map(function( section , index ){
         all_section.push( filter(this.resume.all_section,{'type':section.type } )[0] );
     }.bind(this));
+    
     this.resume.all_section = all_section;
-    this.makeItLinear( this.resume.all_section );
+    this.makeItLinear( all_section );
   },
 
   onMoveSectionOrder:function( order , type ){
@@ -222,18 +220,16 @@ module.exports = Reflux.createStore({
         }
 
      });
-
-     
      this.makeItLinear( this.resume.all_section ); 
 
   },
 
 
-  makeItLinear: function(){
+  makeItLinear: function(all_section){
 
     var linear_section = [];
 
-      this.resume.all_section.map(function(group , index ){
+    all_section.map(function(group , index ){
           if( group.child.length ){
             group.child.map(function(section , section_index){
                section.sectionPosition = linear_section.length;
@@ -241,31 +237,16 @@ module.exports = Reflux.createStore({
             });
           }
       });
-
-
-      var resume_sections = [];
-      this.resume.sections.map(function(section , index ){
-
-          if(linear_section[index] != undefined ){
-
-            var tmp_section = filter( this.resume.sections ,{ 'sectionId': linear_section[index].sectionId});
-
-            if( tmp_section.length ){
-                resume_sections.push(tmp_section[0]);
-            }
-
-          }else{
-
-            section.sectionPosition = resume_sections.length;
-            resume_sections.push(section);
-          }         
-      }.bind(this));
-
-
-      this.resume.sections = resume_sections;     
-      this.trigger(this.resume);
-      this.postSectionOrder();
-      
+    
+      this.resume.sections.map(function(section,index){
+          var exist = filter( linear_section ,{ 'sectionId': section.sectionId });
+          if( !exist.length ){
+            section.sectionPosition = linear_section.length;
+            linear_section.push(section);
+          }
+        
+      });
+     this.postSectionOrder( linear_section );     
 
   },
 
