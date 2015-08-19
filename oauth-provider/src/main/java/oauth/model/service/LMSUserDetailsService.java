@@ -17,7 +17,7 @@ public interface LMSUserDetailsService {
 			throws UsernameNotFoundException, DataAccessException;
 
 	/**
-	 * 
+	 *
 	 * @param username
 	 * @return
 	 * @throws UsernameNotFoundException

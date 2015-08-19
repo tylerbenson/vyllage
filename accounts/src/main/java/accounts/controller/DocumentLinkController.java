@@ -118,7 +118,7 @@ public class DocumentLinkController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param linkRequest
 	 * @return map containing the user's email as key and the generated link as
 	 *         value.
@@ -185,7 +185,7 @@ public class DocumentLinkController {
 
 	/**
 	 * Creates a link to share a document.
-	 * 
+	 *
 	 * @param linkRequest
 	 * @param loggedInUser
 	 * @return

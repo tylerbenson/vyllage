@@ -135,7 +135,7 @@ configure(javaProjects) {
             //    funcThatTakesLambdas(x -> {}, y -> {})    // what I wish Eclipse did
             //custom 'Lambda fix', { it.replace('} )', '})').replace('} ,', '},') }
 
-            //trimTrailingWhitespace()
+            trimTrailingWhitespace()
             //indentWithTabs()
             endWithNewline()
         }

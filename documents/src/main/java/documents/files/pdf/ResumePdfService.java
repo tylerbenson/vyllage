@@ -61,7 +61,7 @@ public class ResumePdfService {
 
 	/**
 	 * Applies formatting to header phone number in Locale.US.
-	 * 
+	 *
 	 * @param resumeHeader
 	 * @throws ParseException
 	 */
@@ -74,7 +74,7 @@ public class ResumePdfService {
 
 	/**
 	 * Sorts sections based on their sectionPosition value.
-	 * 
+	 *
 	 * @return sorted sections
 	 */
 	protected Comparator<? super DocumentSection> sortSections() {

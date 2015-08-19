@@ -11,7 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 /**
  * Request object to generate a link for a particular document for another user.
- * 
+ *
  * @author uh
  *
  */

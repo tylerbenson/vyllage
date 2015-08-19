@@ -10,7 +10,7 @@ public abstract class SettingValidator {
 
 	/**
 	 * Sets the error message or appends if the setting already has one.
-	 * 
+	 *
 	 * @param setting
 	 * @param message
 	 */

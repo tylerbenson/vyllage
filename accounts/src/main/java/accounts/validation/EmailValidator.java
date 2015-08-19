@@ -12,7 +12,7 @@ public class EmailValidator {
 
 	/**
 	 * Validate email address with regular expression
-	 * 
+	 *
 	 * @param email
 	 *            email for validation
 	 * @return true valid email, false invalid email

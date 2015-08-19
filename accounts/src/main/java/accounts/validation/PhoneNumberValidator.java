@@ -4,7 +4,7 @@ import accounts.model.account.settings.AccountSetting;
 
 /**
  * Validates a phone number, must be 10 digits long or blank.
- * 
+ *
  * @author uh
  *
  */

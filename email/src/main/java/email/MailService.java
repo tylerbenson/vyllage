@@ -30,7 +30,7 @@ public class MailService {
 
 	/**
 	 * Sends a simple text mail.
-	 * 
+	 *
 	 * @param parameters
 	 * @param emailBody
 	 * @throws EmailException
@@ -52,7 +52,7 @@ public class MailService {
 
 	/**
 	 * Sends a html message.
-	 * 
+	 *
 	 * @param parameters
 	 * @param emailBody
 	 * @throws EmailException

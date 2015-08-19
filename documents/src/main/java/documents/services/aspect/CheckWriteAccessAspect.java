@@ -69,7 +69,7 @@ public class CheckWriteAccessAspect {
 
 	/**
 	 * Extracts the parameters from the method call.
-	 * 
+	 *
 	 * @param joinPoint
 	 * @return
 	 */

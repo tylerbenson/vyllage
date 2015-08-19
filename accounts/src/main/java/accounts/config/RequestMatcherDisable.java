@@ -11,7 +11,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * Disables CSRF for the specified pages.
  * http://blogs.sourceallies.com/2014/04/customizing
  * -csrf-protection-in-spring-security/
- * 
+ *
  * @author uh
  *
  */

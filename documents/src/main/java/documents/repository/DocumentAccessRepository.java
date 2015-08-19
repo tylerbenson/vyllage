@@ -103,7 +103,7 @@ public class DocumentAccessRepository {
 
 	/**
 	 * Returns all permissions for a given document.
-	 * 
+	 *
 	 * @param documentId
 	 * @return
 	 */
@@ -119,7 +119,7 @@ public class DocumentAccessRepository {
 
 	/**
 	 * Returns all the user's document access permissions he granted.
-	 * 
+	 *
 	 * @param user
 	 * @return
 	 */

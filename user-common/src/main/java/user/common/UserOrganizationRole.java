@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 @EqualsAndHashCode
 public class UserOrganizationRole implements GrantedAuthority {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 6420872157496814372L;
 	private final String role;

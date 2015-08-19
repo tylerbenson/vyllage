@@ -6,10 +6,10 @@ import java.util.List;
 /**
  * Enum with the valid section types. Provides static methods to get all the
  * values and validation.
- * 
+ *
  * <br>
  * The String must correspond to any of the DocumentSection subclasses.
- * 
+ *
  * @author uh
  *
  */

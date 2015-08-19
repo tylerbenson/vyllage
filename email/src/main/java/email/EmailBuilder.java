@@ -43,7 +43,7 @@ public class EmailBuilder {
 
 	/**
 	 * Optional, the user name to display.
-	 * 
+	 *
 	 * @param fromUserName
 	 * @return
 	 */

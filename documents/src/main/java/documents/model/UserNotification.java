@@ -5,7 +5,7 @@ import java.time.ZoneId;
 
 /**
  * Used to determine if a user has received a notification.
- * 
+ *
  * @author uh
  *
  */
