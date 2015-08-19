@@ -76,6 +76,7 @@ var SectionGroup = React.createClass({
             forcePlaceholderSize: true,
             cursor: "move",
             items: "div.section",
+            handle: ".move-section",
             start: function(event, ui) {
               jQuery('.banner .subheader').hide();
             },
