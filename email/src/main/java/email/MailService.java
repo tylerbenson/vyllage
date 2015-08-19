@@ -9,17 +9,17 @@ import org.springframework.util.Assert;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 public class MailService {
-	
-	//@Value("${email.host}")
+
+	// @Value("${email.host}")
 	private String hostName = "smtp.zoho.com";
 
-	//@Value("${email.port}")
+	// @Value("${email.port}")
 	private int port = 465;
 
-	//@Value("${email.userName}")
+	// @Value("${email.userName}")
 	private String userName = "no-reply@vyllage.com";
 
-	//@Value("${email.password}")
+	// @Value("${email.password}")
 	private String password = "vyllage15";
 
 	private SpringTemplateEngine templateEngine;

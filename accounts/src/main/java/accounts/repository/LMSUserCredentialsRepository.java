@@ -50,19 +50,22 @@ public class LMSUserCredentialsRepository {
 	private final DataSourceTransactionManager txManager;
 
 	@Inject
-	public LMSUserCredentialsRepository(final DSLContext sql, final DataSourceTransactionManager txManager) {
+	public LMSUserCredentialsRepository(final DSLContext sql,
+			final DataSourceTransactionManager txManager) {
 		super();
 		this.sql = sql;
 		this.txManager = txManager;
 	}
 
-	public LMSUserCredentials get(String lmsUserId) throws UserNotFoundException {
+	public LMSUserCredentials get(String lmsUserId)
+			throws UserNotFoundException {
 
 		LmsUserCredentialsRecord record = sql.fetchOne(LMS_USER_CREDENTIALS,
 				LMS_USER_CREDENTIALS.LMS_USER_ID.eq(lmsUserId));
 
 		if (record == null)
-			throw new UserNotFoundException("User with id '" + lmsUserId + "'not found.");
+			throw new UserNotFoundException("User with id '" + lmsUserId
+					+ "'not found.");
 
 		LMSUserCredentials lmsUserCredentials = new LMSUserCredentials();
 		lmsUserCredentials.setLmsId(lmsUserCredentials.getLmsId());
@@ -75,12 +78,15 @@ public class LMSUserCredentialsRepository {
 		LmsUserCredentialsRecord record = sql.fetchOne(LMS_USER_CREDENTIALS,
 				LMS_USER_CREDENTIALS.LMS_USER_ID.eq(lmsUserId));
 		if (record == null)
-			throw new UserNotFoundException("User with id '" + lmsUserId + "'not found.");
+			throw new UserNotFoundException("User with id '" + lmsUserId
+					+ "'not found.");
 		return record.getUserId();
 	}
 
-	public void createUser(@NonNull String lmsUserId, @NonNull Long userId, @NonNull Long lmsId, String password) {
-		LmsUserCredentialsRecord newRecord = sql.newRecord(LMS_USER_CREDENTIALS);
+	public void createUser(@NonNull String lmsUserId, @NonNull Long userId,
+			@NonNull Long lmsId, String password) {
+		LmsUserCredentialsRecord newRecord = sql
+				.newRecord(LMS_USER_CREDENTIALS);
 		newRecord.setLmsUserId(lmsUserId);
 		newRecord.setUserId(userId);
 		newRecord.setLmsId(lmsId);
@@ -90,13 +96,16 @@ public class LMSUserCredentialsRepository {
 	}
 
 	public boolean userExists(String lmsUserId) {
-		return sql.fetchExists(
-				sql.select().from(LMS_USER_CREDENTIALS).where(LMS_USER_CREDENTIALS.LMS_USER_ID.eq(lmsUserId)));
+		return sql.fetchExists(sql.select().from(LMS_USER_CREDENTIALS)
+				.where(LMS_USER_CREDENTIALS.LMS_USER_ID.eq(lmsUserId)));
 	}
 
 	public boolean userExists(String lmsUserId, Long lmsId) {
-		return sql.fetchExists(sql.select().from(LMS_USER_CREDENTIALS)
-				.where(LMS_USER_CREDENTIALS.LMS_USER_ID.eq(lmsUserId).and(LMS_USER_CREDENTIALS.LMS_ID.eq(lmsId))));
+		return sql.fetchExists(sql
+				.select()
+				.from(LMS_USER_CREDENTIALS)
+				.where(LMS_USER_CREDENTIALS.LMS_USER_ID.eq(lmsUserId).and(
+						LMS_USER_CREDENTIALS.LMS_ID.eq(lmsId))));
 	}
 
 }

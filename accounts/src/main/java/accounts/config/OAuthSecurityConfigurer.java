@@ -49,7 +49,8 @@ public class OAuthSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@PostConstruct
 	public void init() {
 		zeroLeggedOAuthProviderProcessingFilter = new ZeroLeggedOAuthProviderProcessingFilter(
-				oauthConsumerDetailsService, oauthNonceServices, oauthProcessingFilterEntryPoint, authenticationHandler,
+				oauthConsumerDetailsService, oauthNonceServices,
+				oauthProcessingFilterEntryPoint, authenticationHandler,
 				oauthProviderTokenServices);
 	}
 
@@ -57,8 +58,10 @@ public class OAuthSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.headers().disable();
 		http.antMatcher("/oauth/**")
-				.addFilterBefore(zeroLeggedOAuthProviderProcessingFilter, UsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests().anyRequest().hasRole("OAUTH").and().csrf().disable();
+				.addFilterBefore(zeroLeggedOAuthProviderProcessingFilter,
+						UsernamePasswordAuthenticationFilter.class)
+				.authorizeRequests().anyRequest().hasRole("OAUTH").and().csrf()
+				.disable();
 	}
 
 	@Bean(name = "oauthProviderTokenService")

@@ -23,16 +23,21 @@ import java.util.HashSet;
 @Component
 public class LMSAuthenticationHandler implements OAuthAuthenticationHandler {
 
-	final static Logger log = LoggerFactory.getLogger(LMSAuthenticationHandler.class);
+	final static Logger log = LoggerFactory
+			.getLogger(LMSAuthenticationHandler.class);
 
-	public static SimpleGrantedAuthority userGA = new SimpleGrantedAuthority(LMSConstants.ROLE_USER);
-	public static SimpleGrantedAuthority adminGA = new SimpleGrantedAuthority(LMSConstants.ROLE_ADMIN);
+	public static SimpleGrantedAuthority userGA = new SimpleGrantedAuthority(
+			LMSConstants.ROLE_USER);
+	public static SimpleGrantedAuthority adminGA = new SimpleGrantedAuthority(
+			LMSConstants.ROLE_ADMIN);
 
 	@Override
-	public Authentication createAuthentication(HttpServletRequest request, ConsumerAuthentication authentication,
+	public Authentication createAuthentication(HttpServletRequest request,
+			ConsumerAuthentication authentication,
 			OAuthAccessProviderToken authToken) {
 
-		Collection<GrantedAuthority> authorities = new HashSet<>(authentication.getAuthorities());
+		Collection<GrantedAuthority> authorities = new HashSet<>(
+				authentication.getAuthorities());
 		String username = request.getParameter(LMSConstants.USER_NAME);
 		if (StringUtils.isBlank(username)) {
 			username = authentication.getName();
@@ -48,20 +53,26 @@ public class LMSAuthenticationHandler implements OAuthAuthenticationHandler {
 				authentication.getConsumerCredentials().getConsumerKey(),
 				authentication.getConsumerCredentials().getSignature(),
 				authentication.getConsumerCredentials().getSignatureMethod(),
-				authentication.getConsumerCredentials().getSignatureBaseString(),
-				authentication.getConsumerCredentials().getToken());
-		Authentication auth = new UsernamePasswordAuthenticationToken(principal, null, authorities);
+				authentication.getConsumerCredentials()
+						.getSignatureBaseString(), authentication
+						.getConsumerCredentials().getToken());
+		Authentication auth = new UsernamePasswordAuthenticationToken(
+				principal, null, authorities);
 		return auth;
 	}
 
-	public static class NamedOAuthPrincipal extends ConsumerCredentials implements Principal {
+	public static class NamedOAuthPrincipal extends ConsumerCredentials
+			implements Principal {
 		private static final long serialVersionUID = 8914298987238202094L;
 		public String name;
 		public Collection<GrantedAuthority> authorities;
 
-		public NamedOAuthPrincipal(String name, Collection<GrantedAuthority> authorities, String consumerKey,
-				String signature, String signatureMethod, String signatureBaseString, String token) {
-			super(consumerKey, signature, signatureMethod, signatureBaseString, token);
+		public NamedOAuthPrincipal(String name,
+				Collection<GrantedAuthority> authorities, String consumerKey,
+				String signature, String signatureMethod,
+				String signatureBaseString, String token) {
+			super(consumerKey, signature, signatureMethod, signatureBaseString,
+					token);
 			this.name = name;
 			this.authorities = authorities;
 		}
@@ -77,7 +88,8 @@ public class LMSAuthenticationHandler implements OAuthAuthenticationHandler {
 
 		@Override
 		public String toString() {
-			return "NamedOAuthPrincipal{" + "name='" + name + '\'' + ", key='" + getConsumerKey() + '\'' + ", base='"
+			return "NamedOAuthPrincipal{" + "name='" + name + '\'' + ", key='"
+					+ getConsumerKey() + '\'' + ", base='"
 					+ getSignatureBaseString() + '\'' + "}";
 		}
 	}

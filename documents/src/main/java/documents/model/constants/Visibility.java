@@ -3,16 +3,15 @@ package documents.model.constants;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Visibility {
-	SHOWN("shown"),
-	HIDDEN("hidden");
-	
+	SHOWN("shown"), HIDDEN("hidden");
+
 	private final String visibility;
 
 	private Visibility(String visibility) {
-		this.visibility =visibility;
+		this.visibility = visibility;
 	}
-	
-	@JsonValue 
+
+	@JsonValue
 	public String visibility() {
 		return visibility;
 	}

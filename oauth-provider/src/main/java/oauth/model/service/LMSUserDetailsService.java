@@ -13,7 +13,8 @@ public interface LMSUserDetailsService {
 	/**
 	 * @see UserDetailsService#loadUserByUsername(String)
 	 */
-	LMSUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException, DataAccessException;
+	LMSUserDetails loadUserByUserId(String userId)
+			throws UsernameNotFoundException, DataAccessException;
 
 	/**
 	 * 
@@ -21,7 +22,8 @@ public interface LMSUserDetailsService {
 	 * @return
 	 * @throws UsernameNotFoundException
 	 */
-	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+	UserDetails loadUserByUsername(String username)
+			throws UsernameNotFoundException;
 
 	/**
 	 * Create a new user with the supplied details.

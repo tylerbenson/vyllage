@@ -49,17 +49,22 @@ public class LTISecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@PostConstruct
 	public void init() {
-		ltioAuthProviderProcessingFilter = new LMSOAuthProviderProcessingFilter(lmsConsumerDetailsService,
-				lmsOauthNonceServices, oauthProcessingFilterEntryPoint, lmsOauthAuthenticationHandler,
+		ltioAuthProviderProcessingFilter = new LMSOAuthProviderProcessingFilter(
+				lmsConsumerDetailsService, lmsOauthNonceServices,
+				oauthProcessingFilterEntryPoint, lmsOauthAuthenticationHandler,
 				oauthProviderTokenServices);
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.requestMatchers().antMatchers("/lti/account").and()
-				.addFilterBefore(ltioAuthProviderProcessingFilter, UsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests().anyRequest().hasRole("LTI").and().csrf().disable();
+		http.requestMatchers()
+				.antMatchers("/lti/account")
+				.and()
+				.addFilterBefore(ltioAuthProviderProcessingFilter,
+						UsernamePasswordAuthenticationFilter.class)
+				.authorizeRequests().anyRequest().hasRole("LTI").and().csrf()
+				.disable();
 
 		http.authorizeRequests().antMatchers("/lti/login").permitAll();
 

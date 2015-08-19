@@ -23,8 +23,8 @@ public class LMSAccount {
 
 	}
 
-	public LMSAccount(String lmsGuid, String lmsName, String lmsVersion, LMSType type, String ltiVersion,
-			String oauthVersion) {
+	public LMSAccount(String lmsGuid, String lmsName, String lmsVersion,
+			LMSType type, String ltiVersion, String oauthVersion) {
 		super();
 		this.setLmsGuid(lmsGuid);
 		this.setLmsName(lmsName);

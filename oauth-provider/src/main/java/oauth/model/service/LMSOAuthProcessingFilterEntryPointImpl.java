@@ -1,6 +1,5 @@
 package oauth.model.service;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
@@ -13,13 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class LMSOAuthProcessingFilterEntryPointImpl extends OAuthProcessingFilterEntryPoint {
+public class LMSOAuthProcessingFilterEntryPointImpl extends
+		OAuthProcessingFilterEntryPoint {
 
-    final static Logger log = LoggerFactory.getLogger(LMSOAuthProcessingFilterEntryPointImpl.class);
+	final static Logger log = LoggerFactory
+			.getLogger(LMSOAuthProcessingFilterEntryPointImpl.class);
 
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        super.commence(request, response, authException);
-        
-    }
+	@Override
+	public void commence(HttpServletRequest request,
+			HttpServletResponse response, AuthenticationException authException)
+			throws IOException, ServletException {
+		super.commence(request, response, authException);
+
+	}
 }

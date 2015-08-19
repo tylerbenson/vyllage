@@ -16,7 +16,8 @@ import accounts.service.SignInUtil;
 @Controller
 public class LMSLoginController {
 
-	private final Logger logger = Logger.getLogger(LMSLoginController.class.getName());
+	private final Logger logger = Logger.getLogger(LMSLoginController.class
+			.getName());
 	private final SignInUtil signInUtil;
 
 	@Inject
@@ -25,7 +26,8 @@ public class LMSLoginController {
 		this.signInUtil = signInUtil;
 	}
 
-	@RequestMapping(value = "/lti/login", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/lti/login", method = { RequestMethod.GET,
+			RequestMethod.POST })
 	public String lti(HttpServletRequest request) throws UserNotFoundException {
 		HttpSession session = request.getSession();
 		// String userId = (String) session.getAttribute("user_id");

@@ -24,7 +24,7 @@ public class BatchAccount {
 	public void setOrganization(Long group) {
 		this.organization = group;
 	}
-	
+
 	public String getRole() {
 		return role;
 	}
@@ -34,8 +34,8 @@ public class BatchAccount {
 	}
 
 	public boolean hasErrors() {
-		return txt == null || txt.isEmpty() || organization == null || role == null;
+		return txt == null || txt.isEmpty() || organization == null
+				|| role == null;
 	}
-
 
 }
