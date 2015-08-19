@@ -1,6 +1,7 @@
 package accounts.service.contactSuggestion;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,49 @@ public class UserContactSuggestionServiceTest {
 
 	@Autowired
 	private AccountSettingRepository accountSettingRepository;
+
+	@Test(expected = NullPointerException.class)
+	public void nullUserGetSuggestionsTest() {
+		userContactSuggestionService.getSuggestions(null, null, 5);
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void nullUserBackfillTest() {
+		userContactSuggestionService.backfill(null, Arrays.asList(), 5);
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void nullUserListBackfillTest() {
+		User guest = createTestUser("guest-test", RolesEnum.GUEST);
+		createTestUser("admissions-test", RolesEnum.ADMISSIONS_ADVISOR);
+
+		userContactSuggestionService.backfill(guest, null, 5);
+
+	}
+
+	@Test()
+	public void userListIsEmptyBackfillTest() {
+		User guest = createTestUser("guest-test", RolesEnum.GUEST);
+		createTestUser("admissions-test", RolesEnum.ADMISSIONS_ADVISOR);
+
+		List<User> suggestions = userContactSuggestionService.backfill(guest,
+				new ArrayList<>(), 5);
+
+		Assert.assertNotNull("No users found.", suggestions);
+		Assert.assertFalse("No users found.", suggestions.isEmpty());
+		Assert.assertTrue(
+				"No Admissions Advisor found.",
+				suggestions
+						.get(0)
+						.getAuthorities()
+						.stream()
+						.anyMatch(
+								a -> a.getAuthority().contains(
+										RolesEnum.ADVISOR.name())));
+
+	}
 
 	@Test
 	public void guestTest() {

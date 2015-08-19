@@ -89,6 +89,7 @@ configure(javaProjects) {
         packageThreshold 0.0, ~"accounts/model/account.*"
         packageThreshold 0.0, ~"accounts/model/link.*"
         packageThreshold 0.0, ~"accounts/domain/tables/records.*"
+		packageThreshold 0.0, ~"accounts/config.*"
 
         packageThreshold 0.0, "documents/database"
         packageThreshold 0.0, "documents/files/pdf"
