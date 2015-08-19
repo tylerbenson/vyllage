@@ -5,6 +5,7 @@ package accounts.config;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -23,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +44,7 @@ import accounts.Application;
 import accounts.controller.LMSAccountController;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
+import oauth.lti.LMSRequest;
 import oauth.utilities.LMSConstants;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -88,8 +91,7 @@ public class LTISecurityConfigurerTest {
 	}
 
 	@Test
-	public void testLTIAuthentication() throws Exception {
-
+	public void testObject() throws Exception {
 		assertNotNull(signInUtil);
 		assertNotNull(lmsService);
 		assertNotNull(wContext);
@@ -97,7 +99,22 @@ public class LTISecurityConfigurerTest {
 		assertNotNull(request);
 		assertNotNull(springMvc);
 		assertNotNull(lmsAccountcontoller);
+	}
 
+	@Test
+	public void testInvalidLTIUrl() throws Exception {
+
+		String invalidRequestUrl = "/lti/testaccount";
+
+		ResultActions result = springMvc.perform(post(invalidRequestUrl));
+
+		// Expecting Method Not Allowed message - Status Code - 405
+		assertEquals((result.andExpect(status().isMethodNotAllowed()).andReturn().getResponse().getStatus()),
+				HttpStatus.valueOf(HttpStatus.METHOD_NOT_ALLOWED.name()).value());
+	}
+
+	@Test
+	public void testLTIAuthentication() throws Exception {
 		ResultActions result = springMvc
 				.perform(post("/lti/account").requestAttr(OAuthProviderProcessingFilter.OAUTH_PROCESSING_HANDLED, true)
 						.param(LMSConstants.LTI_VERSION, LMSConstants.LTI_VERSION_1P0)

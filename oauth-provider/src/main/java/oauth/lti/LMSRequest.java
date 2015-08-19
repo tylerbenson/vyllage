@@ -81,9 +81,21 @@ public class LMSRequest {
 		lmsAccount = new LMSAccount();
 		lmsUser = new LMSUser();
 
-		organization.setOrganizationName(getParam(LMSConstants.LTI_INSTANCE_GUID));
+		if (getParam(LMSConstants.LTI_INSTANCE_GUID) != null) {
+			organization.setOrganizationName(getParam(LMSConstants.LTI_INSTANCE_GUID));
+		} else if (getParam(LMSConstants.LTI_INSTANCE_SERVER_ID) != null) {
+			organization.setOrganizationName(getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
+		} else {
+			throw new IllegalStateException(LMSConstants.LTI_INVALID_SERVER_ID);
+		}
 
-		lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_GUID));
+		if (getParam(LMSConstants.LTI_INSTANCE_GUID) != null) {
+			lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_GUID));
+		} else if (getParam(LMSConstants.LTI_INSTANCE_SERVER_ID) != null) {
+			lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
+		} else {
+			throw new IllegalStateException(LMSConstants.LTI_INVALID_SERVER_ID);
+		}
 		lmsAccount.setOrganization(organization);
 		lmsAccount.setLtiVersion(getParam(LMSConstants.LTI_VERSION));
 		lmsAccount.setType(getLMSType(getParam(LMSConstants.LTI_INSTANCE_TYPE)));

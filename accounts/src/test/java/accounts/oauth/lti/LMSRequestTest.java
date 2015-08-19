@@ -5,6 +5,10 @@ package accounts.oauth.lti;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.inject.Inject;
 
@@ -14,11 +18,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -74,7 +80,6 @@ public class LMSRequestTest {
 	private static final String LTI_OAUTH_VERSION = "1.1";
 	private static final String LTI_LMS_VERSION = "9.1.201410.160373";
 	private static final String LTI_USER_ID = "c79b96989d2d465b997038f37e25db43";
-	private static final String LTI_USER_NAME = "KunalShankar";
 	private static final String LTI_USER_EMAIL = "kunalshankar1@gmail.com";
 	private static final String LIS_PERSON_PREFIX_GIVEN = "Kunal";
 	private static final String LIS_PERSON_PREFIX_FAMILY = "Shankar";
@@ -101,6 +106,7 @@ public class LMSRequestTest {
 		assertNotNull(springMvc);
 		assertNotNull(lmsAccountcontoller);
 		assertNotNull(ltiKeyRepository);
+
 		LMSRequest lmsRequest;
 		request = new MockHttpServletRequest();
 		try {
@@ -109,7 +115,7 @@ public class LMSRequestTest {
 			assertNotNull(e.getMessage());
 		}
 
-		request = new MockHttpServletRequest(); // LTI request (minimal)
+		request = new MockHttpServletRequest();
 		request.setParameter(LMSConstants.LTI_VERSION, LMSConstants.LTI_VERSION_1P0);
 		request.setParameter(LMSConstants.LTI_CONSUMER_KEY, LTI_CONSUMER_KEY);
 		request.setParameter(LMSConstants.LTI_INSTANCE_GUID, LTI_INSTANCE_GUID);
@@ -165,6 +171,7 @@ public class LMSRequestTest {
 		}
 		request.setParameter(LMSConstants.LTI_VERSION, LMSConstants.LTI_VERSION_1P0);
 		request.setParameter(LMSConstants.LTI_CONSUMER_KEY, LTI_CONSUMER_KEY);
+		request.setParameter(LMSConstants.LTI_INSTANCE_GUID, LTI_INSTANCE_GUID);
 		lmsRequest = new LMSRequest(request);
 		lmsUser = lmsRequest.getLmsUser();
 		assertTrue(lmsRequest.isComplete());
@@ -176,6 +183,36 @@ public class LMSRequestTest {
 		assertNotNull(lmsUser.getLastName());
 		assertNotNull(lmsUser.getUserId());
 		assertNull(lmsUser.getUserName());
+	}
+
+	@Test
+	public void testLTIRequest() throws Exception {
+
+		LMSRequest lmsRequest;
+		request = new MockHttpServletRequest();
+		try {
+			lmsRequest = new LMSRequest(request);
+		} catch (IllegalStateException e) {
+			assertEquals(e.getMessage(), LMSConstants.LTI_INVALID_REQUEST);
+		}
+
+	}
+
+	@Test
+	public void testInvalidServerId() throws Exception {
+
+		LMSRequest lmsRequest;
+		request = new MockHttpServletRequest();
+		request.setParameter(LMSConstants.LTI_VERSION, LMSConstants.LTI_VERSION_1P0);
+		request.setParameter(LMSConstants.LTI_CONSUMER_KEY, LTI_CONSUMER_KEY);
+		request.setParameter(LMSConstants.LTI_INSTANCE_GUID, LTI_INSTANCE_GUID);
+		request.setParameter(LMSConstants.LTI_LMS_VERSION, LTI_LMS_VERSION);
+		request.setParameter(LMSConstants.LTI_USER_ID, LTI_USER_ID);
+		try {
+			lmsRequest = new LMSRequest(request);
+		} catch (IllegalStateException e) {
+			assertEquals(e.getMessage(), LMSConstants.LTI_INVALID_SERVER_ID);
+		}
 	}
 
 }
