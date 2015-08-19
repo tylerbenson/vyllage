@@ -137,7 +137,7 @@ configure(javaProjects) {
 
             //trimTrailingWhitespace()
             //indentWithTabs()
-            //endWithNewline()
+            endWithNewline()
         }
         //*/
         format 'misc', {
