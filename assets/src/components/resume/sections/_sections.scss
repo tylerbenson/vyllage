@@ -1,19 +1,23 @@
-.sections {
-  margin: 1em 0;
+.section-holder,
+.subsection-holder {
+  position: relative;
+}
+
+.section-holder {
+  @include center();
+  margin: 1em auto;
+  max-width: 720px;
+  width: 80%;
 }
 
 .section {
-  @include center();
+  margin: 1.75em auto;
   position: relative;
 
-  &:first-child {
-    margin-top: 1.25em;
-
-    &:last-child {
-      .container {
-        & > .move {
-          display: none;
-        }
+  &:first-child:last-child {
+    .container {
+      & > .move {
+        display: none;
       }
     }
   }
@@ -24,7 +28,6 @@
     margin: 0.75em auto;
     padding: 2em 0 0 0;
     position: relative;
-    width: 80%;
   }
 
 
@@ -306,11 +309,13 @@
 }
 
 @media (max-width: $medium-landscape) {
+  .section-holder {
+    max-width: 768px;
+    width: 90%;
+  }
   .section {
     & > .container {
-      max-width: 768px;
       padding-top: 1em;
-      width: 90%;
     }
     .header {
       padding: 1em 2em;
@@ -339,11 +344,13 @@
 }
 
 @media (max-width: $medium-portrait) {
+  .section-holder {
+    margin: 0.5em auto;
+    width: 96%;
+  }
   .section {
     & > .container {
-      margin: 0.5em auto;
       padding: 1em 0 0;
-      width: 96%;
     }
     .content {
       padding: 0.75em 2.5em;
@@ -431,7 +438,15 @@ $muted-text: lighten($secondary-color, 25%);
   }
 }
 
+.ui-sortable-placeholder {
+  position: relative;
 
- .ui-sortable-helper{
-    left:25%;
+  &:before {
+    background: $section-footer-background;
+    content: '';
+    display: block;
+    position: relative;
+    width: 80%;
   }
+}
+

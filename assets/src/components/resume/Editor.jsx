@@ -17,16 +17,19 @@ require('jquery-ui-touch-punch');
 var SubSection = React.createClass({
 
     componentDidMount: function () {
-
         var self = this;
 
         jQuery('.subsection-holder').sortable({
             axis : 'y',
+            placeholder: "ui-sortable-placeholder",
+            opacity: 0.85,
+            scrollSpeed: 15,
+            scrollSensitivity: 20,
+            forcePlaceholderSize: true,
             cursor: "move",
             items: "div.subsection-wrapper",
             handle:'.move-sub',
             stop : function( event, ui ){
-
               var subsection_order = [];
               var type;
               jQuery(this).children().each(function(index) {
@@ -37,9 +40,8 @@ var SubSection = React.createClass({
 
                   type = jQuery(this).attr('rel');
               });
+
               actions.moveSectionOrder(subsection_order , type );
-
-
             }
         });
     },
@@ -59,11 +61,15 @@ var SubSection = React.createClass({
 
 var SectionGroup = React.createClass({
     componentDidMount: function () {
-
         var self = this;
 
         jQuery('.section-holder').sortable({
             axis : 'y',
+            placeholder: "ui-sortable-placeholder",
+            opacity: 0.85,
+            scrollSpeed: 15,
+            scrollSensitivity: 20,
+            forcePlaceholderSize: true,
             cursor: "move",
             items: "div.section",
             handle: '.move-section',
@@ -76,12 +82,10 @@ var SectionGroup = React.createClass({
                   });
               });
               actions.moveGroupOrder(order);
-
             }
         });
     },
     render: function(){
-
       var self = this;
       var subsection = function( sub_section , index ){
           return <SubSection key={index} data={sub_section} owner={self.props.section.owner} />
@@ -114,6 +118,7 @@ var SectionRender =  React.createClass({
       var render_section = function(section , index ){
          return <SectionGroup key={index} section={section} />
       }
+
       return (<div className="section-holder">{this.props.sections.map(render_section)}</div>);
     }
 });
