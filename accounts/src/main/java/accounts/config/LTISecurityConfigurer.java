@@ -8,7 +8,6 @@ import oauth.lti.LMSOAuthAuthenticationHandler;
 import oauth.lti.LMSOAuthProviderProcessingFilter;
 import oauth.model.service.LMSOAuthNonceServices;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;

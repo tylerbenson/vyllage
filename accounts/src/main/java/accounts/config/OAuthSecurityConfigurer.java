@@ -4,7 +4,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import oauth.lti.LMSConsumerDetailsService;
-import oauth.lti.LMSOAuthProviderProcessingFilter;
 import oauth.model.service.LMSAuthenticationHandler;
 import oauth.model.service.LMSOAuthNonceServices;
 import oauth.model.service.ZeroLeggedOAuthProviderProcessingFilter;

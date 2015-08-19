@@ -4,7 +4,6 @@
 package user.common;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

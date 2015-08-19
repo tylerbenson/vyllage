@@ -14,13 +14,11 @@ import oauth.model.LMSAccount;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import user.common.LMS;
 import accounts.domain.tables.records.LmsRecord;
 
 import com.newrelic.api.agent.NewRelic;
