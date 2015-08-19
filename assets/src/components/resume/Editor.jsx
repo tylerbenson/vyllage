@@ -49,11 +49,7 @@ var SubSection = React.createClass({
 
     render: function(){
       return(
-        <div className="sub-section" rel={this.props.data.type} data-id={this.props.data.sectionId} >
-          <span className="inverted secondary button small move move-section" {...this.props}>
-            <i className="ion-arrow-move"></i>
-            Move
-          </span>
+        <div className="sub-section" rel={this.props.data.type} data-id={this.props.data.sectionId}>
           <Section
             key={this.props.data.sectionId}
             section={this.props.data}
@@ -95,18 +91,21 @@ var SectionGroup = React.createClass({
       }
       return (
         <div className="section" rel={this.props.section.type}>
-            <div className="container">
-              <Header
-                title={this.props.section.title}
-                type={this.props.section.type}
-                owner={this.props.section.owner}
-              />
+          <div className="container">
+            <span className="inverted secondary button small move move-section" {...this.props}>
+              <i className="ion-arrow-move"></i>
+              Move
+            </span>
+            <Header
+              title={this.props.section.title}
+              type={this.props.section.type}
+              owner={this.props.section.owner}
+            />
 
-              <div className="subsection-holder">
-                { this.props.section.child.map(subsection) }
-              </div>
-
+            <div className="subsection-holder">
+              { this.props.section.child.map(subsection) }
             </div>
+          </div>
         </div>
       )
     }
