@@ -7,6 +7,7 @@
     "clone-deep": "^0.2.0",
     "jquery": "^2.1.4",
     "jquery-ui": "^1.10.5",
+    "jquery-ui-touch-punch": "^0.2.3",
     "lodash.assign": "^3.0.0",
     "lodash.difference": "^3.1.0",
     "lodash.filter": "^3.0.0",

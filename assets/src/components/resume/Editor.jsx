@@ -9,13 +9,10 @@ var Section = require('./sections');
 var Banner = require('./banner');
 var sortby = require('lodash.sortby');
 var Empty = require('./sections/Empty');
-var jQuery = require('jquery');
 
+window.jQuery = require('jquery');
 require('jquery-ui/sortable');
-require('../jquery.ui.touch-punch.js');
-
-
-
+require('jquery-ui-touch-punch');
 
 var SubSection = React.createClass({
 
