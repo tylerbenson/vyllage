@@ -124,6 +124,22 @@ configure(javaProjects) {
 
     apply plugin: 'com.diffplug.gradle.spotless'
     spotless {
+        /*
+        java {
+            importOrderFile "${rootProject.rootDir}/gradle/vyllage.eclipse.importorder" // An import ordering file, exported from Eclipse
+            eclipseFormatFile "${rootProject.rootDir}/gradle/vyllage.eclipseformat.xml"  // XML file dumped out by the Eclipse formatter
+
+            // You can also tweak the formatting with custom regexes or functions, such as:
+            // Eclipse formatter puts excess whitespace after lambda blocks
+            //    funcThatTakesLambdas(x -> {} , y -> {} )  // what Eclipse does
+            //    funcThatTakesLambdas(x -> {}, y -> {})    // what I wish Eclipse did
+            //custom 'Lambda fix', { it.replace('} )', '})').replace('} ,', '},') }
+
+            trimTrailingWhitespace()
+            indentWithTabs()
+            endWithNewline()
+        }
+        */
         format 'misc', {
             target '**/.gitignore', '**/*.gradle' //, '**/*.md', '**/*.sh'
             indentWithSpaces(4)
