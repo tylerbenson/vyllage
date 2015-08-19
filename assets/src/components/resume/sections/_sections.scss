@@ -8,6 +8,14 @@
 
   &:first-child {
     margin-top: 1.25em;
+
+    &:last-child {
+      .container {
+        & > .move {
+          display: none;
+        }
+      }
+    }
   }
 
   & > .container {
@@ -202,6 +210,16 @@
             width: 20%;
           }
         }
+      }
+    }
+  }
+}
+
+.subsection-wrapper {
+  &:first-child:last-child {
+    .subsection {
+      & > .move {
+        display: none;
       }
     }
   }

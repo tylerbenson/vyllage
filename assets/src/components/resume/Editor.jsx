@@ -26,7 +26,7 @@ var SubSection = React.createClass({
         jQuery('.subsection-holder').sortable({
             axis : 'y',
             cursor: "move",
-            items: "div.sub-section",
+            items: "div.subsection-wrapper",
             handle:'.move-sub',
             stop : function( event, ui ){
 
@@ -49,7 +49,7 @@ var SubSection = React.createClass({
 
     render: function(){
       return(
-        <div className="sub-section" rel={this.props.data.type} data-id={this.props.data.sectionId}>
+        <div className="subsection-wrapper" rel={this.props.data.type} data-id={this.props.data.sectionId}>
           <Section
             key={this.props.data.sectionId}
             section={this.props.data}
