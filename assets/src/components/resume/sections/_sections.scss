@@ -152,6 +152,7 @@
           .message {
             color: lighten($text-color, 10%);
             line-height: 1.4;
+            white-space: pre-wrap;
           }
         }
       }

@@ -26,7 +26,7 @@ var CommentList = React.createClass({
                     </div>
                   </div>
                   <div className="message">
-                    {comment.commentText}
+                    {comment.commentText.replace(/\n{3,}/,'\n\n')}
                   </div>
                 </div>
               </div>
