@@ -125,6 +125,8 @@ configure(javaProjects) {
     apply plugin: 'com.diffplug.gradle.spotless'
     spotless {
         java {
+            target 'src/**/*.java'
+
             trimTrailingWhitespace()
             indentWithTabs()
             endWithNewline()
