@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import lombok.NonNull;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
 import org.springframework.stereotype.Service;
@@ -53,9 +55,8 @@ public class AccountSettingsService {
 	}
 
 	@CheckPrivacy
-	public Optional<AccountSetting> getAccountSetting(final User user,
-			final String settingName) {
-		Assert.notNull(settingName);
+	public Optional<AccountSetting> getAccountSetting(@NonNull final User user,
+			@NonNull final String settingName) {
 
 		switch (settingName) {
 		case "firstName":
