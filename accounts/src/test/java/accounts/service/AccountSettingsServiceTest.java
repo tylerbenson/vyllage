@@ -37,7 +37,7 @@ public class AccountSettingsServiceTest {
 		Assert.assertTrue(userNamesSettings.isEmpty());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void getAccoutSettingSettingNameIsNull() {
 
 		AccountSettingRepository accountSettingRepository = Mockito

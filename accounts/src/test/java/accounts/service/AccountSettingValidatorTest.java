@@ -98,6 +98,18 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
+	public void testLengthSettingValidatorNullOk() {
+		int length = 5;
+		LengthValidator validator = new LengthValidator(length);
+		AccountSetting as = new AccountSetting();
+		as.setValue(null);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
 	public void testNotNullSettingValidatorReturnsOk() {
 		NotNullValidator validator = new NotNullValidator();
 		AccountSetting as = new AccountSetting();
@@ -145,7 +157,7 @@ public class AccountSettingValidatorTest {
 	public void testPhoneNumberSettingValidatorReturnsWithError() {
 		PhoneNumberValidator validator = new PhoneNumberValidator();
 		AccountSetting as = new AccountSetting();
-		as.setValue("a");
+		as.setValue("a234567890");
 
 		AccountSetting setting = validator.validate(as);
 
@@ -211,6 +223,45 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
+	public void testURLValidatorEmptyOk() {
+		final String url = "";
+
+		URLValidator validator = new URLValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(url);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void testURLValidatorNullOk() {
+		final String url = null;
+
+		URLValidator validator = new URLValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(url);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void testURLValidatorNotUrl() {
+		final String url = "https:.ae///";
+
+		URLValidator validator = new URLValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(url);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() != null);
+	}
+
+	@Test
 	public void testURLValidatorFacebookTest() {
 		final String facebook = "https://www.facebook.com/my.name";
 
@@ -263,6 +314,18 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
+	public void testOnlyAlphanumericNullOk() {
+
+		OnlyAlphanumericValidator validator = new OnlyAlphanumericValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(null);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
 	public void testOnlyAlphanumericFail() {
 		final String value = "/*+55aer";
 
@@ -289,6 +352,32 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
+	public void testFaceBookNullAllowed() {
+		final String value = null;
+
+		FacebookValidator validator = new FacebookValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(value);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
+	public void testFaceBookEmptyAllowed() {
+		final String value = "";
+
+		FacebookValidator validator = new FacebookValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(value);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
 	public void testFaceBookFail() {
 		final String value = "/*+5.";
 
@@ -304,6 +393,32 @@ public class AccountSettingValidatorTest {
 	@Test
 	public void testTwitterSuccess() {
 		final String value = "aeiou___123456";
+
+		TwitterValidator validator = new TwitterValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(value);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
+	public void testTwitterNull() {
+		final String value = null;
+
+		TwitterValidator validator = new TwitterValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(value);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
+	public void testTwitterEmpty() {
+		final String value = "";
 
 		TwitterValidator validator = new TwitterValidator();
 		AccountSetting as = new AccountSetting();
