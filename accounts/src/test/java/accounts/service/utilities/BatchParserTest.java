@@ -25,6 +25,20 @@ public class BatchParserTest {
 	}
 
 	@Test
+	public void parseSingleLineMissingFieldsTest() throws IOException {
+		BatchParser parser = new BatchParser();
+		String txt = "unemail@email.com,,,";
+
+		List<ParsedAccount> parsed = parser.parse(txt);
+		Assert.assertNotNull(parsed);
+		Assert.assertFalse(parsed.isEmpty());
+		Assert.assertEquals("unemail@email.com", parsed.get(0).getEmail());
+		Assert.assertEquals(null, parsed.get(0).getFirstName());
+		Assert.assertEquals(null, parsed.get(0).getMiddleName());
+		Assert.assertEquals(null, parsed.get(0).getLastName());
+	}
+
+	@Test
 	public void parseMultipleLinesTest() throws IOException {
 		BatchParser parser = new BatchParser();
 		String txt = "email@email.com, First Name, Middle Name, Last Name\nemail2@email.com, First Name2, Middle Name2, Last Name2";

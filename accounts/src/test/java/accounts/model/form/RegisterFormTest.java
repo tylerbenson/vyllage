@@ -1,6 +1,7 @@
 package accounts.model.form;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -100,6 +101,18 @@ public class RegisterFormTest {
 		form.setPassword("12345");
 
 		assertFalse(form.isValid());
+	}
+
+	@Test
+	public void passwordEqualsSixCharactersFailsTest() {
+
+		RegisterForm form = new RegisterForm();
+		form.setFirstName("firstName");
+		form.setLastName("lastName");
+		form.setEmail("email@gmail.com");
+		form.setPassword("123456");
+
+		assertTrue(form.isValid());
 	}
 
 	@Test
