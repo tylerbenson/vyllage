@@ -1,5 +1,7 @@
 package oauth.model.service;
 
+import oauth.utilities.LMSConstants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,8 +11,6 @@ import org.springframework.security.oauth.provider.BaseConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetails;
 import org.springframework.security.oauth.provider.ConsumerDetailsService;
 import org.springframework.stereotype.Component;
-
-import oauth.utilities.LMSConstants;
 
 @Component
 public class LMSConsumerDetails implements ConsumerDetailsService {

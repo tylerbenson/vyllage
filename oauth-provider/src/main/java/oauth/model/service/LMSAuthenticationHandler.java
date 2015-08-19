@@ -1,5 +1,13 @@
 package oauth.model.service;
 
+import java.security.Principal;
+import java.util.Collection;
+import java.util.HashSet;
+
+import javax.servlet.http.HttpServletRequest;
+
+import oauth.utilities.LMSConstants;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +20,6 @@ import org.springframework.security.oauth.provider.ConsumerCredentials;
 import org.springframework.security.oauth.provider.OAuthAuthenticationHandler;
 import org.springframework.security.oauth.provider.token.OAuthAccessProviderToken;
 import org.springframework.stereotype.Component;
-
-import oauth.utilities.LMSConstants;
-
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-import java.util.Collection;
-import java.util.HashSet;
 
 @Component
 public class LMSAuthenticationHandler implements OAuthAuthenticationHandler {

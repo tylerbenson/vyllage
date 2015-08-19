@@ -64,7 +64,6 @@ import accounts.validation.EmailValidator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newrelic.api.agent.NewRelic;
-
 import email.EmailBuilder;
 
 @Service

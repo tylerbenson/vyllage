@@ -1,11 +1,16 @@
 package accounts.repository;
 
+import static accounts.domain.tables.Lms.LMS;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
+
+import lombok.NonNull;
+import oauth.model.LMSAccount;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
@@ -14,15 +19,11 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-import accounts.domain.tables.records.LmsRecord;
-import lombok.NonNull;
 
-import static accounts.domain.tables.Lms.LMS;
+import user.common.LMS;
+import accounts.domain.tables.records.LmsRecord;
 
 import com.newrelic.api.agent.NewRelic;
-
-import oauth.model.LMSAccount;
-import user.common.LMS;
 
 @Repository
 public class LMSRepository {

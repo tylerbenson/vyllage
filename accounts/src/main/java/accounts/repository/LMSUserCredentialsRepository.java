@@ -3,6 +3,19 @@
  */
 package accounts.repository;
 
+import static accounts.domain.tables.LmsUserCredentials.LMS_USER_CREDENTIALS;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import lombok.NonNull;
+import oauth.lti.LMSRequest;
+import oauth.model.LMSAccount;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,28 +28,16 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
 
-import com.newrelic.api.agent.NewRelic;
-
-import static accounts.domain.tables.LmsUserCredentials.LMS_USER_CREDENTIALS;
+import user.common.LMSUserCredentials;
+import user.common.User;
+import user.common.UserOrganizationRole;
 import accounts.domain.tables.records.LmsUserCredentialsRecord;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import accounts.model.UserCredential;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
-import lombok.NonNull;
-import oauth.lti.LMSRequest;
-import oauth.model.LMSAccount;
-import user.common.LMSUserCredentials;
-import user.common.User;
-import user.common.UserOrganizationRole;
+
+import com.newrelic.api.agent.NewRelic;
 
 /**
  * @author kunal.shankar

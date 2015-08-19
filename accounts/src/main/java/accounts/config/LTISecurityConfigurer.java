@@ -3,6 +3,11 @@ package accounts.config;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import oauth.lti.LMSConsumerDetailsService;
+import oauth.lti.LMSOAuthAuthenticationHandler;
+import oauth.lti.LMSOAuthProviderProcessingFilter;
+import oauth.model.service.LMSOAuthNonceServices;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.CacheManager;
@@ -20,11 +25,6 @@ import org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoi
 import org.springframework.security.oauth.provider.token.InMemoryProviderTokenServices;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import oauth.lti.LMSConsumerDetailsService;
-import oauth.lti.LMSOAuthAuthenticationHandler;
-import oauth.lti.LMSOAuthProviderProcessingFilter;
-import oauth.model.service.LMSOAuthNonceServices;
 
 @ComponentScan({ "oauth.lti", "oauth.model.service" })
 @Configuration

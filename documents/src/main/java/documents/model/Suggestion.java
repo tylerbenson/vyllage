@@ -8,7 +8,6 @@ import util.dateSerialization.DocumentLocalDateTimeSerializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import documents.model.document.sections.DocumentSection;
 
 @ToString

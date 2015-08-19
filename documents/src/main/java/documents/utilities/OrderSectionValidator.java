@@ -8,7 +8,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
 
 import com.newrelic.api.agent.NewRelic;
-
 import documents.model.document.sections.DocumentSection;
 
 @Component

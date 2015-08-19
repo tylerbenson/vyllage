@@ -9,7 +9,6 @@ import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import com.github.heneke.thymeleaf.togglz.TogglzDialect;
-
 import email.MailService;
 
 @Configuration(value = "connections.BeansConfiguration")

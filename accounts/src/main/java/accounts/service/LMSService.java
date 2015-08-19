@@ -6,25 +6,26 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import lombok.NonNull;
+import oauth.lti.LMSRequest;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import com.newrelic.api.agent.NewRelic;
-
-import accounts.repository.LMSUserCredentialsRepository;
-import accounts.repository.LMSUserRepository;
-import accounts.repository.OrganizationRepository;
-import accounts.repository.UserNotFoundException;
-import lombok.NonNull;
-import oauth.lti.LMSRequest;
 import user.common.LMSUserCredentials;
 import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
+import accounts.repository.LMSUserCredentialsRepository;
+import accounts.repository.LMSUserRepository;
+import accounts.repository.OrganizationRepository;
+import accounts.repository.UserNotFoundException;
+
+import com.newrelic.api.agent.NewRelic;
 
 @Service
 public class LMSService {

@@ -8,6 +8,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import oauth.model.LMSAccount;
+import oauth.model.LMSType;
+import oauth.utilities.LMSConstants;
+import oauth.utilities.LMSEnum;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,10 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import oauth.model.LMSAccount;
-import oauth.model.LMSType;
-import oauth.utilities.LMSConstants;
-import oauth.utilities.LMSEnum;
 import user.common.Organization;
 import user.common.constants.RolesEnum;
 import user.common.lms.LMSUser;

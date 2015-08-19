@@ -129,7 +129,7 @@ configure(javaProjects) {
             indentWithTabs()
             endWithNewline()
 
-            //importOrderFile "${rootProject.rootDir}/gradle/vyllage.eclipse.importorder" // An import ordering file, exported from Eclipse
+            importOrderFile "${rootProject.rootDir}/gradle/vyllage.eclipse.importorder" // An import ordering file, exported from Eclipse
             //eclipseFormatFile "${rootProject.rootDir}/gradle/vyllage.eclipseformat.xml"  // XML file dumped out by the Eclipse formatter
 
             // You can also tweak the formatting with custom regexes or functions, such as:

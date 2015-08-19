@@ -1,11 +1,11 @@
 package oauth.model.service;
 
+import oauth.lti.LMSConsumerDetailsService;
+
 import org.springframework.security.oauth.provider.OAuthAuthenticationHandler;
 import org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint;
 import org.springframework.security.oauth.provider.filter.ProtectedResourceProcessingFilter;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
-
-import oauth.lti.LMSConsumerDetailsService;
 
 public class ZeroLeggedOAuthProviderProcessingFilter extends
 		ProtectedResourceProcessingFilter {
