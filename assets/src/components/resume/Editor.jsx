@@ -29,7 +29,11 @@ var SubSection = React.createClass({
             cursor: "move",
             items: "div.subsection-wrapper",
             handle:'.move-sub',
-            stop : function( event, ui ){
+            start: function(event, ui) {
+              jQuery('.banner .subheader').hide();
+            },
+            stop : function(event, ui){
+              jQuery('.banner .subheader').show();
               var subsection_order = [];
               var type;
               jQuery(this).children().each(function(index) {
@@ -72,8 +76,11 @@ var SectionGroup = React.createClass({
             forcePlaceholderSize: true,
             cursor: "move",
             items: "div.section",
-            handle: '.move-section',
-            stop: function( event, ui ) {
+            start: function(event, ui) {
+              jQuery('.banner .subheader').hide();
+            },
+            stop : function(event, ui){
+              jQuery('.banner .subheader').show();
               var order = [];
               jQuery('.section-holder').children().each(function(index) {
                   order.push({
