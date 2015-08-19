@@ -1,5 +1,5 @@
 springBoot {
-	mainClass = 'connections.Application'
+    mainClass = 'connections.Application'
 }
 
 jar {
@@ -7,17 +7,17 @@ jar {
 }
 
 dependencies {
-	compile parent.javascriptProjects.findAll { it != project}
-	
-	compile project(':email')
-	compile project(':user-common')
-	compile project(':togglz')
-	compile project(':util')
-	
-	compile 'org.apache.commons:commons-lang3:3.3.2'
-	
-	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.0'
-	
+    compile parent.javascriptProjects.findAll { it != project}
+
+    compile project(':email')
+    compile project(':user-common')
+    compile project(':togglz')
+    compile project(':util')
+
+    compile 'org.apache.commons:commons-lang3:3.3.2'
+
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.0'
+
     compile("org.springframework.boot:spring-boot-starter-security")
 //    compile("org.springframework.boot:spring-boot-starter-aop")
 //    compile("org.springframework.boot:spring-boot-starter-jdbc")
@@ -32,5 +32,5 @@ dependencies {
 //    compile("org.springframework.boot:spring-boot-starter-actuator")
 //    compile("org.springframework.boot:spring-boot-starter-remote-shell")
     testCompile("org.springframework.boot:spring-boot-starter-test")
-	testCompile 'com.jayway.restassured:spring-mock-mvc:2.4.0'
+    testCompile 'com.jayway.restassured:spring-mock-mvc:2.4.0'
 }

@@ -7,21 +7,21 @@ jar {
 }
 
 dependencies {
-	compile parent.javascriptProjects.findAll { it != project}
+    compile parent.javascriptProjects.findAll { it != project}
 
-	compile project(':email')
-	compile project(':user-common')
-	compile project(':togglz')
-	compile project(':util')
-	compile project(':oauth-provider')
-	
-	compile 'org.apache.commons:commons-lang3:3.3.2'
-	compile 'org.apache.commons:commons-csv:1.1'
-	
-	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'
-	
-	compile 'org.springframework.security.oauth:spring-security-oauth:2.0.7.RELEASE'
-		
+    compile project(':email')
+    compile project(':user-common')
+    compile project(':togglz')
+    compile project(':util')
+    compile project(':oauth-provider')
+
+    compile 'org.apache.commons:commons-lang3:3.3.2'
+    compile 'org.apache.commons:commons-csv:1.1'
+
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'
+
+    compile 'org.springframework.security.oauth:spring-security-oauth:2.0.7.RELEASE'
+
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-aop")
     compile("org.springframework.boot:spring-boot-starter-jdbc")

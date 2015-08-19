@@ -1,9 +1,9 @@
 jar {
-	baseName = 'util'
+    baseName = 'util'
 }
 
 dependencies {
-	compile 'com.fasterxml.jackson.core:jackson-core:2.5.4'
-	compile 'com.fasterxml.jackson.core:jackson-databind:2.5.4'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.5.4'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.4'
 
 }
