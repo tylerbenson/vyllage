@@ -34,12 +34,12 @@ var SubSection = React.createClass({
               var type;
               jQuery(this).children().each(function(index) {
                   subsection_order.push({
-                    sectionId : jQuery(this).data('id'), 
+                    sectionId : jQuery(this).data('id'),
                     index : index
                   });
 
                   type = jQuery(this).attr('rel');
-              });              
+              });
               actions.moveSectionOrder(subsection_order , type );
 
 
@@ -50,7 +50,10 @@ var SubSection = React.createClass({
     render: function(){
       return(
         <div className="sub-section" rel={this.props.data.type} data-id={this.props.data.sectionId} >
-          <span className="move-sub">MOVE-Sub</span>
+          <span className="inverted secondary button small move move-section" {...this.props}>
+            <i className="ion-arrow-move"></i>
+            Move
+          </span>
           <Section
             key={this.props.data.sectionId}
             section={this.props.data}
@@ -61,7 +64,7 @@ var SubSection = React.createClass({
     }
 });
 
-var SectionGroup = React.createClass({  
+var SectionGroup = React.createClass({
     componentDidMount: function () {
 
         var self = this;
@@ -75,10 +78,10 @@ var SectionGroup = React.createClass({
               var order = [];
               jQuery('.section-holder').children().each(function(index) {
                   order.push({
-                    type : jQuery(this).attr('rel'), 
+                    type : jQuery(this).attr('rel'),
                     index : index
                   });
-              });              
+              });
               actions.moveGroupOrder(order);
 
             }
@@ -91,16 +94,16 @@ var SectionGroup = React.createClass({
           return <SubSection key={index} data={sub_section} owner={self.props.section.owner} />
       }
       return (
-        <div className="section" rel={this.props.section.type}>  
+        <div className="section" rel={this.props.section.type}>
             <div className="container">
               <Header
                 title={this.props.section.title}
                 type={this.props.section.type}
                 owner={this.props.section.owner}
-              />  
+              />
 
               <div className="subsection-holder">
-                { this.props.section.child.map(subsection) }           
+                { this.props.section.child.map(subsection) }
               </div>
 
             </div>
@@ -110,8 +113,8 @@ var SectionGroup = React.createClass({
 });
 
 
-var SectionRender =  React.createClass({   
-    render: function () {   
+var SectionRender =  React.createClass({
+    render: function () {
       var render_section = function(section , index ){
          return <SectionGroup key={index} section={section} />
       }
@@ -121,12 +124,12 @@ var SectionRender =  React.createClass({
 
 
 var ResumeEditor = React.createClass({
-  
+
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
-  
+
   componentWillMount: function () {
     actions.getResume();
-    actions.getAllsections(); // used preEmit for this 
+    actions.getAllsections(); // used preEmit for this
   },
   moveSection: function (id, afterId) {
     actions.moveSection(id, afterId);
@@ -188,18 +191,18 @@ var ResumeEditor = React.createClass({
 
     var allSection;
 
-    if( this.state.resume.all_section != undefined ){    
+    if( this.state.resume.all_section != undefined ){
       if( this.state.resume.all_section.length > 0 ){
         allSection = <SectionRender sections={this.state.resume.all_section} />
       }else{
         allSection = <Empty />
       }
     }
-    
+
     return (
       <div>
-        <Banner header={this.state.resume.header} settings={this.state.settings} /> 
-        {allSection}  
+        <Banner header={this.state.resume.header} settings={this.state.settings} />
+        {allSection}
       </div>
     );
   }
