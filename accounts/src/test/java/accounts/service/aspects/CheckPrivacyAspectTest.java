@@ -3,6 +3,8 @@ package accounts.service.aspects;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,22 +19,19 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import user.common.User;
 import accounts.Application;
 import accounts.model.account.settings.AccountSetting;
-import accounts.model.account.settings.Privacy;
-import accounts.repository.AccountSettingRepository;
 import accounts.service.AccountSettingsService;
-import accounts.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 public class CheckPrivacyAspectTest {
 
-	private UserService userService = Mockito.mock(UserService.class);
-	private AccountSettingRepository accountSettingRepository = Mockito
-			.mock(AccountSettingRepository.class);
+	// private UserService userService = Mockito.mock(UserService.class);
+	// private AccountSettingRepository accountSettingRepository = Mockito
+	// .mock(AccountSettingRepository.class);
 
-	private final AccountSettingsService service = new AccountSettingsService(
-			userService, accountSettingRepository);
+	@Inject
+	private AccountSettingsService service;
 
 	@Test(expected = NullPointerException.class)
 	public void testCheckPrivacyNullUser() {
@@ -47,23 +46,37 @@ public class CheckPrivacyAspectTest {
 	}
 
 	@Test
-	public void testCheckPrivacyReturnOwnSettings() {
-		Long userId = 0L;
-		String settingName = "email";
+	public void testCheckPrivacyReturnsOk() {
+		Long loggedInUserId = 0L;
+		User loggedInUser = generateAndLoginUser();
 
-		User user = generateAndLoginUser();
-		Mockito.when(user.getUserId()).thenReturn(userId);
+		Mockito.when(loggedInUser.getUserId()).thenReturn(loggedInUserId);
 
-		AccountSetting as = new AccountSetting(null, userId, settingName,
-				"aaa@bbb.com", Privacy.PUBLIC.name());
-
-		Mockito.when(accountSettingRepository.getAccountSettings(user))
-				.thenReturn(Arrays.asList(as));
-
-		List<AccountSetting> accountSettings = service.getAccountSettings(user);
+		List<AccountSetting> accountSettings = service
+				.getAccountSettings(Arrays.asList(0L));
 
 		Assert.assertNotNull(accountSettings);
 		Assert.assertFalse(accountSettings.isEmpty());
+		Assert.assertTrue(accountSettings.size() >= 7);
+
+	}
+
+	@Test
+	public void testCheckPrivacyReturnsEmpty() {
+		Long loggedInUserId = 16L;
+
+		String settingName = "settingName";
+
+		User loggedInUser = generateAndLoginUser();
+
+		Mockito.when(loggedInUser.getUserId()).thenReturn(loggedInUserId);
+
+		List<AccountSetting> accountSettings = service
+				.getAccountSettings(Arrays.asList(0L));
+
+		Assert.assertNotNull(accountSettings);
+		Assert.assertTrue(accountSettings.stream().noneMatch(
+				as -> settingName.equalsIgnoreCase(as.getName())));
 
 	}
 
