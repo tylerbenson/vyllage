@@ -8,7 +8,7 @@ public class RandomPasswordGenerator {
 
 	/**
 	 * Generates a random alphanumeric password 20 characters long.
-	 * 
+	 *
 	 * @return password
 	 */
 	public String getRandomPassword() {
@@ -17,7 +17,7 @@ public class RandomPasswordGenerator {
 
 	/**
 	 * Generates a random alphanumeric string of the specified size.
-	 * 
+	 *
 	 * @param size
 	 * @return password
 	 */

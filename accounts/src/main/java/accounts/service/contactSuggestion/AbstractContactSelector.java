@@ -19,7 +19,7 @@ import accounts.repository.UserOrganizationRoleRepository;
 /**
  * Class that's used to suggest other users to the parameterized one based on
  * it's roles and organization.
- * 
+ *
  * @author uh
  *
  */

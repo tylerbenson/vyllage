@@ -23,8 +23,8 @@ import accounts.service.UserService;
 @Component("accounts.CheckPrivacyAspect")
 /**
  * Filters settings on privacy before returning them, compares the logged in user organization against the user's setting organization removing them if they are not the same.
- * 
- * 
+ *
+ *
  * @author uh
  *
  */

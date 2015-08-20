@@ -10,15 +10,12 @@ var Textarea = require('react-textarea-autosize');
 var Tag = require('./Tag');
 var TagInput = require('./Input');
 var MoveButton = require('../../buttons/move');
-var { DragDropMixin } = require('react-dnd');
-var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
 var SectionFooter = require('../sections/Footer');
 var DeleteSection = require('../Delete');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 
 var Tags = React.createClass({
-  mixins: [DragDropMixin],
   getInitialState: function() {
     return {
       tags: this.props.section.tags,
@@ -32,14 +29,7 @@ var Tags = React.createClass({
       section: {}
     }
   },
-  statics: {
-    configureDragDrop(register) {
-      register('section', {
-        dragSource,
-        dropTarget
-      });
-    }
-  },
+
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       tags: nextProps.section.tags,
@@ -105,8 +95,6 @@ var Tags = React.createClass({
   },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
-    var isDragging = this.getDragState('section').isDragging;
-    var isHovering = this.getDropState('section').isHovering;
     var content = this.state.tags instanceof Array ? this.state.tags.join(', ') : '';
 
     var tags = this.state.tags.map(function(tag, index){
@@ -116,14 +104,14 @@ var Tags = React.createClass({
     }.bind(this));
 
     var classes = cx({
-      'dragged': isDragging,
-      'hovered': isHovering,
       'subsection': true
     });
 
+
     return (
-      <div className={classes} {...this.dropTargetFor('section')}>
-        { this.props.owner ? <MoveButton {...this.dragSourceFor('section')} />: null }
+      <div className={classes}>
+        { this.props.owner ? <MoveButton />: null }
+        
         <div className='header'>
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }

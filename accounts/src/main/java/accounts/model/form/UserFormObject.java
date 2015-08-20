@@ -12,7 +12,7 @@ import user.common.UserOrganizationRole;
 
 /**
  * Represents a user for the forms
- * 
+ *
  * @author uh
  *
  */

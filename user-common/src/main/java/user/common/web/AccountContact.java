@@ -40,7 +40,7 @@ public class AccountContact {
 	 * firstName <br>
 	 * middleName <br>
 	 * lastName <br>
-	 * 
+	 *
 	 * @param user
 	 */
 	public AccountContact(User user) {

@@ -502,7 +502,7 @@ public class AdminUserController {
 	/**
 	 * Returns the user's organizations where the user is admin. If the user is
 	 * Vyllage admin then he sees all organizations.
-	 * 
+	 *
 	 * @param user
 	 * @return
 	 */

@@ -11,7 +11,7 @@ import org.springframework.core.env.Environment;
 /**
  * Since we're running multiple applications in the same JVM, we need to
  * initialize each apps database separately.
- * 
+ *
  * TODO: It'd be nice if we could do this more programmatically with less hard
  * coding.
  */

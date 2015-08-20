@@ -1,6 +1,7 @@
 var React = require('react');
 var actions = require('../actions');
 var AddBtn = require('../../buttons/add');
+var MoveButton = require('../../buttons/move');
 var filter = require('lodash.filter');
 
 var SectionHeader = React.createClass({
@@ -8,7 +9,7 @@ var SectionHeader = React.createClass({
     actions.postSection({
       title: this.props.title,
       type: this.props.type,
-      sectionPosition: this.props.groupPosition
+    //  sectionPosition: this.props.groupPosition
     });
   },
   render: function () {
@@ -22,6 +23,8 @@ var SectionHeader = React.createClass({
         {this.props.owner && showAdd ? <div className="actions">
           <AddBtn onClick={this.addSection} />
         </div>: null}
+
+        
       </div>
     );
   }

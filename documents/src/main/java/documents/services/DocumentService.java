@@ -36,7 +36,7 @@ import documents.utilities.OrderSectionValidator;
 
 /**
  * This service takes care of saving, retrieving and manipulating documents.
- * 
+ *
  * @author uh
  *
  */
@@ -87,7 +87,7 @@ public class DocumentService {
 	/**
 	 * Saves the DocumentSection, if the record is already present it will
 	 * update instead.
-	 * 
+	 *
 	 * @param body
 	 * @return the saved document
 	 * @throws ElementNotFoundException
@@ -150,7 +150,7 @@ public class DocumentService {
 
 	/**
 	 * Retrieves a single DocumentSection.
-	 * 
+	 *
 	 * @param id
 	 * @param sectionId
 	 * @return DocumentSection
@@ -163,7 +163,7 @@ public class DocumentService {
 
 	/**
 	 * Retrieves all the sections related to a Document.
-	 * 
+	 *
 	 * @param documentId
 	 * @return
 	 * @throws ElementNotFoundException
@@ -201,7 +201,7 @@ public class DocumentService {
 	/**
 	 * Returns the user's document, if it can't find one creates one with no
 	 * sections.
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 */
@@ -272,7 +272,7 @@ public class DocumentService {
 
 	/**
 	 * Deletes all documents from a user.
-	 * 
+	 *
 	 * @param userId
 	 */
 	public void deleteDocumentsFromUser(Long userId) {
@@ -281,7 +281,7 @@ public class DocumentService {
 
 	/**
 	 * Orders sections according to their position in the list.
-	 * 
+	 *
 	 * @param documentId
 	 * @param documentSectionIds
 	 * @throws ElementNotFoundException
@@ -333,7 +333,7 @@ public class DocumentService {
 	/**
 	 * Checks if a given document id exists for a given user. A document will
 	 * exist if, it exists, has sections and the user owns the document.
-	 * 
+	 *
 	 * @param user
 	 * @param documentId
 	 * @return true | false
@@ -354,7 +354,7 @@ public class DocumentService {
 
 	/**
 	 * Checks that a given user can read or write a given document.
-	 * 
+	 *
 	 * @param userId
 	 * @param documentId
 	 * @param access
@@ -372,7 +372,7 @@ public class DocumentService {
 
 	/**
 	 * Returns all the permissions for a given document.
-	 * 
+	 *
 	 * @param documentId
 	 * @return
 	 */
@@ -382,7 +382,7 @@ public class DocumentService {
 
 	/**
 	 * Returns all the user's document access permissions he granted.
-	 * 
+	 *
 	 * @param user
 	 * @return
 	 */
@@ -392,7 +392,7 @@ public class DocumentService {
 
 	/**
 	 * Revokes a documentAccess, deleting it.
-	 * 
+	 *
 	 * @param documentAccess
 	 */
 	public void deleteDocumentAccess(DocumentAccess documentAccess) {

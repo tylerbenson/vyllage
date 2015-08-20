@@ -3,7 +3,7 @@ package email;
 /**
  * Html email body, using the specified html template and key value context
  * generates the html email body.
- * 
+ *
  * @author uh
  *
  */
@@ -12,7 +12,7 @@ public class EmailHTMLBody extends EmailBody {
 	public final EmailContext ctx;
 
 	/**
-	 * 
+	 *
 	 * @param txt
 	 *            text body in case client doesn't support html.
 	 * @param ctx

@@ -26,21 +26,25 @@ import user.common.User;
 @Controller
 public class LMSAccountController {
 
-	private final Logger logger = Logger.getLogger(LMSAccountController.class.getName());
+	private final Logger logger = Logger.getLogger(LMSAccountController.class
+			.getName());
 
 	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
 
 	@Inject
-	public LMSAccountController(final SignInUtil signInUtil, final LMSService lmsService) {
+	public LMSAccountController(final SignInUtil signInUtil,
+			final LMSService lmsService) {
 		super();
 		this.signInUtil = signInUtil;
 		this.lmsService = lmsService;
 	}
 
-	@RequestMapping(value = "/lti/account", method = { RequestMethod.GET, RequestMethod.POST })
-	public String lti(HttpServletRequest request, WebRequest webRequest) throws UserNotFoundException {
+	@RequestMapping(value = "/lti/account", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public String lti(HttpServletRequest request, WebRequest webRequest)
+			throws UserNotFoundException {
 
 		LMSRequest lmsRequest = LMSRequest.getInstance();
 		if (lmsRequest == null) {
@@ -67,8 +71,10 @@ public class LMSAccountController {
 		// multiple instances. So will have to add some instanced specific key..
 
 		String lmsUserName = lmsRequest.getLmsUser().getUserName();
-		String userName = email != null && !email.isEmpty() ? email : lmsUserName;
-		String password = csrfTokenUtility.makeLTICompositePassword(request, "");
+		String userName = email != null && !email.isEmpty() ? email
+				: lmsUserName;
+		String password = csrfTokenUtility
+				.makeLTICompositePassword(request, "");
 		String lmsUserId = lmsRequest.getLmsUser().getUserId();
 		HttpSession session = request.getSession(false);
 		// Check LMS user exist or not
@@ -87,7 +93,8 @@ public class LMSAccountController {
 			// TODO: question - If user doesn't have email id with LMS details,
 			// then how they will get password..
 			// Create Vyllage user account.
-			User newUser = lmsService.createUser(userName, password, firstName, null, lastName, lmsRequest);
+			User newUser = lmsService.createUser(userName, password, firstName,
+					null, lastName, lmsRequest);
 
 			// Set user name in Session
 			session.setAttribute("user_name", newUser.getUsername());

@@ -121,7 +121,7 @@ public class DocumentLinkService {
 
 	/**
 	 * Checks if a given password is active and valid.
-	 * 
+	 *
 	 * @param userId
 	 * @param generatedPassword
 	 * @return

@@ -7,7 +7,7 @@ import org.springframework.social.security.SocialUserDetails;
 
 import user.common.User;
 
-public class LMSUsers implements SocialUserDetails{
+public class LMSUsers implements SocialUserDetails {
 
 	private static final long serialVersionUID = 1L;
 
@@ -16,7 +16,7 @@ public class LMSUsers implements SocialUserDetails{
 	public LMSUsers(User user) {
 		this.user = user;
 	}
-	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return user.getAuthorities();

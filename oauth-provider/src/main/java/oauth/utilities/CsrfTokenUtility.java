@@ -29,7 +29,8 @@ public class CsrfTokenUtility implements CsrfTokenRepository {
 	}
 
 	@Override
-	public void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response) {
+	public void saveToken(CsrfToken token, HttpServletRequest request,
+			HttpServletResponse response) {
 		if (token == null) {
 			HttpSession session = request.getSession(false);
 			if (session != null) {
@@ -59,12 +60,14 @@ public class CsrfTokenUtility implements CsrfTokenRepository {
 		return Long.valueOf(strBuffer.toString()).longValue();
 	}
 
-	public String makeLTICompositePassword(HttpServletRequest request, String sessionSalt) {
+	public String makeLTICompositePassword(HttpServletRequest request,
+			String sessionSalt) {
 
 		if (StringUtils.isBlank(sessionSalt)) {
 			sessionSalt = "A7k254A0itEuQ9ndKJuZ";
 		}
-		String composite = sessionSalt + "::" + request.getParameter(LMSConstants.LTI_INSTANCE_GUID) + "::"
+		String composite = sessionSalt + "::"
+				+ request.getParameter(LMSConstants.LTI_INSTANCE_GUID) + "::"
 				+ request.getParameter(LMSConstants.LTI_USER_ID);
 		String compositeKey = DigestUtils.md5Hex(composite);
 		return compositeKey;

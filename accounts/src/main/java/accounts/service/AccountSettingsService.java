@@ -177,7 +177,7 @@ public class AccountSettingsService {
 
 	/**
 	 * Updates the user's name.
-	 * 
+	 *
 	 * @param user
 	 * @param setting
 	 */
@@ -191,7 +191,7 @@ public class AccountSettingsService {
 
 	/**
 	 * Updates the user's name.
-	 * 
+	 *
 	 * @param user
 	 * @param setting
 	 */
@@ -205,7 +205,7 @@ public class AccountSettingsService {
 
 	/**
 	 * Updates the user's name.
-	 * 
+	 *
 	 * @param user
 	 * @param setting
 	 */
