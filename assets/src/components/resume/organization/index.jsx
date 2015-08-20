@@ -9,14 +9,11 @@ var Datepicker = require('../../datepicker');
 var Highlights = require('../highlights');
 var assign = require('lodash.assign')
 var MoveButton = require('../../buttons/move');
-var { DragDropMixin } = require('react-dnd');
-var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
 var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 
 var Organization = React.createClass({
-  mixins: [DragDropMixin],
   getInitialState: function () {
     return {
       section: assign({}, this.props.section),
@@ -24,14 +21,7 @@ var Organization = React.createClass({
       newSection: this.props.section.newSection
     };
   },
-  statics: {
-    configureDragDrop(register) {
-      register('section', {
-        dragSource,
-        dropTarget
-      });
-    }
-  },
+
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       section: nextProps.section,
@@ -84,19 +74,16 @@ var Organization = React.createClass({
     var section = this.state.section;
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
-    var isDragging = this.getDragState('section').isDragging;
-    var isHovering = this.getDropState('section').isHovering;
+
 
     var classes = cx({
-      'dragged': isDragging,
-      'hovered': isHovering,
       'subsection': true
     });
 
     return (
       <div>
-        <div className={classes} {...this.dropTargetFor('section')}>
-          { this.props.owner? <MoveButton {...this.dragSourceFor('section')} />: null }
+        <div className={classes}>
+          { this.props.owner? <MoveButton />: null }
           <div className='header'>
             <div className='title'>
               <h2>

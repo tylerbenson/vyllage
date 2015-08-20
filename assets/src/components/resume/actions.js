@@ -3,9 +3,6 @@ var request = require('superagent');
 var endpoints = require('../endpoints');
 var urlTemplate = require('url-template');
 
-
-
-
  var EditorActions = Reflux.createActions([
   //
   'getResume',
@@ -19,8 +16,6 @@ var urlTemplate = require('url-template');
   'postSection',
   'putSection',
   'deleteSection',
-  'updateSectionOrder',
-  'moveSection',
   'moveGroupOrder',
   'moveSectionOrder',
   // comments
@@ -36,11 +31,7 @@ var urlTemplate = require('url-template');
   'togglePrintModal'
 ]);
 
-
-
-
   EditorActions.getAllsections.preEmit = function(){
-
     var documentId = window.location.pathname.split('/')[2];
     var header;
 
@@ -70,9 +61,5 @@ var urlTemplate = require('url-template');
       });
 
   }
-
-
-
-
 
   module.exports = EditorActions;

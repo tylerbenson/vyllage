@@ -126,75 +126,19 @@ var SectionRender =  React.createClass({
       var render_section = function(section , index ){
          return <SectionGroup key={index} section={section} />
       }
-
       return (<div className="section-holder">{this.props.sections.map(render_section)}</div>);
     }
 });
 
 
 var ResumeEditor = React.createClass({
-
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
-
   componentWillMount: function () {
     actions.getResume();
-    actions.getAllsections(); // used preEmit for this
+    actions.getAllsections(); //preEmit
   },
-  moveSection: function (id, afterId) {
-    actions.moveSection(id, afterId);
-  },
-  renderGroup: function (sections, groupPosition) {
-    var owner=this.state.resume.header.owner;
-    var subsectionNodes = sections.map(function(section) {
-      return <Section
-          key={section.sectionId}
-          section={section}
-          moveSection={this.moveSection}
-          owner={owner} />
-    }.bind(this));
-
-    return (
-      <div className='section' key={groupPosition}>
-        <div className='container'>
-          <Header
-            title={sections[0].title}
-            type={sections[0].type}
-            owner={owner}
-            groupPosition={groupPosition}
-            sections={sections} />
-          {subsectionNodes}
-        </div>
-      </div>
-    )
-  },
-  renderSections: function () {
-    var owner = this.state.resume.header.owner;
-    var sectionGroupNodes = []
-    var sections = filter(this.state.resume.sections, {isSupported: true}) || [];
-    var previousTitle = '';
-    var nextTitle = '';
-    var groupSections = [];
-    var groupPosition = 1;
-
-    sections.forEach(function (section, index) {
-      nextTitle = (sections.length-1 !== index) ? sections[index + 1].title : '';
-      groupSections.push(section);
-      if (nextTitle !== section.title) {
-        sectionGroupNodes.push(this.renderGroup(groupSections, groupPosition));
-        groupPosition += groupSections.length;
-        groupSections = [];
-      }
-    }.bind(this));
-
-    return sectionGroupNodes;
-  },
-
-
-
   render: function () {
     var owner = this.state.resume.header.owner;
-    var sections = this.renderSections();
-
     var allSection;
 
     if( this.state.resume.all_section != undefined ){
@@ -213,10 +157,6 @@ var ResumeEditor = React.createClass({
     );
   }
 });
-
-
-
-
 
 
 module.exports = ResumeEditor;

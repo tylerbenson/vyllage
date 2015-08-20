@@ -151,10 +151,8 @@ module.exports = Reflux.createStore({
 
   },
 
-
   doProcessSection : function(sections , owner ){
     var tmp_section = [];
-   
     sections = sortby(sections ,'sectionPosition');
    
     if( sections.length > 0 ){
@@ -162,24 +160,20 @@ module.exports = Reflux.createStore({
       sections.forEach(function(section){
           section.isSupported = this.isSupportedSection(section.type);
           if( section.isSupported){
-
               if( tmp_section.length){
-
                 var findIt = findindex(tmp_section, {'type': section.type});
+                 if( findIt == -1){
 
-                   if( findIt == -1){
-
-                      tmp_section.push({
-                        type: section.type,
-                        title : section.title, 
-                        id : section.sectionId,
-                        owner : owner,                   
-                        child : where( sections, { 'type': section.type }) 
-                      });
-                   }
+                    tmp_section.push({
+                      type: section.type,
+                      title : section.title, 
+                      id : section.sectionId,
+                      owner : owner,                   
+                      child : where( sections, { 'type': section.type }) 
+                    });
+                 }
 
               }else{
-
                 tmp_section.push({
                   type: section.type, 
                   title : section.title,
@@ -190,26 +184,21 @@ module.exports = Reflux.createStore({
               }
           }
       }.bind(this));
-
       return tmp_section;
     }
   },
-
 
   onMoveGroupOrder: function( order ){
     var all_section = [];
     order.map(function( section , index ){
         all_section.push( filter(this.resume.all_section,{'type':section.type } )[0] );
     }.bind(this));
-    
     this.resume.all_section = all_section;
     this.makeItLinear( all_section );
   },
 
   onMoveSectionOrder:function( order , type ){
-
-     this.resume.all_section.map(function( sectionGroup , index ){
-        
+     this.resume.all_section.map(function( sectionGroup , index ){        
         if( sectionGroup.type == type ){  
             var section_order = [];
             order.map(function(section , index ){
@@ -217,17 +206,11 @@ module.exports = Reflux.createStore({
             });
             sectionGroup.child = section_order;
         }
-
      });
      this.makeItLinear( this.resume.all_section ); 
-
   },
-
-
   makeItLinear: function(all_section){
-
     var linear_section = [];
-
     all_section.map(function(group , index ){
           if( group.child.length ){
             group.child.map(function(section , section_index){
@@ -236,17 +219,14 @@ module.exports = Reflux.createStore({
             });
           }
       });
-
       this.resume.sections.map(function(section,index){
           var exist = filter( linear_section ,{ 'sectionId': section.sectionId });
           if( !exist.length ){
             section.sectionPosition = linear_section.length;
             linear_section.push(section);
           }
-        
       });
      this.postSectionOrder( linear_section );     
-
   },
 
   onPostSection: function (data) {
@@ -311,29 +291,6 @@ module.exports = Reflux.createStore({
         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
         this.trigger(this.resume);
       }.bind(this));
-  },
-  onUpdateSectionOrder: function (order) {
-    this.resume.sectionOrder = order;
-    this.trigger(this.resume);
-  },
-  onMoveSection: function (id, afterId) {
-    const { sections } = this.resume;
-    const section = sections.filter(c => c.sectionId === id)[0];
-    const afterSection = sections.filter(c => c.sectionId === afterId)[0];
-    const index = sections.indexOf(section);
-    const afterIndex = sections.indexOf(afterSection);
-
-    var obj = update(this.resume, {
-      sections: {
-        $splice: [
-          [index, 1],
-          [afterIndex, 0, section]
-        ]
-      }
-    });
-    this.resume.sections = obj.sections;
-    this.postSectionOrder();
-    this.trigger(this.resume);
   },
   onGetComments: function (sectionId) {
     var url = urlTemplate

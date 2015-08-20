@@ -4,7 +4,7 @@
   "dependencies": {
     "classnames": {
       "version": "1.2.2",
-      "from": "classnames@1.2.2"
+      "from": "classnames@>=1.2.2 <2.0.0"
     },
     "clone-deep": {
       "version": "0.2.0",
@@ -66,55 +66,55 @@
     },
     "jquery-ui-touch-punch": {
       "version": "0.2.3",
-      "from": "jquery-ui-touch-punch@*"
+      "from": "jquery-ui-touch-punch@0.2.3"
     },
     "lodash.assign": {
       "version": "3.2.0",
-      "from": "lodash.assign@3.2.0",
+      "from": "lodash.assign@>=3.0.0 <4.0.0",
       "dependencies": {
         "lodash._baseassign": {
           "version": "3.2.0",
-          "from": "lodash._baseassign@3.2.0",
+          "from": "lodash._baseassign@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._basecopy": {
               "version": "3.0.1",
-              "from": "lodash._basecopy@3.0.1"
+              "from": "lodash._basecopy@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash._createassigner": {
           "version": "3.1.1",
-          "from": "lodash._createassigner@3.1.1",
+          "from": "lodash._createassigner@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._bindcallback": {
               "version": "3.0.1",
-              "from": "lodash._bindcallback@3.0.1"
+              "from": "lodash._bindcallback@>=3.0.0 <4.0.0"
             },
             "lodash._isiterateecall": {
               "version": "3.0.9",
-              "from": "lodash._isiterateecall@3.0.9"
+              "from": "lodash._isiterateecall@>=3.0.0 <4.0.0"
             },
             "lodash.restparam": {
               "version": "3.6.1",
-              "from": "lodash.restparam@3.6.1"
+              "from": "lodash.restparam@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash.keys": {
           "version": "3.1.2",
-          "from": "lodash.keys@3.1.2",
+          "from": "lodash.keys@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._getnative": {
               "version": "3.9.1",
-              "from": "lodash._getnative@3.9.1"
+              "from": "lodash._getnative@>=3.0.0 <4.0.0"
             },
             "lodash.isarguments": {
               "version": "3.0.4",
-              "from": "lodash.isarguments@3.0.4"
+              "from": "lodash.isarguments@>=3.0.0 <4.0.0"
             },
             "lodash.isarray": {
               "version": "3.0.4",
-              "from": "lodash.isarray@3.0.4"
+              "from": "lodash.isarray@>=3.0.0 <4.0.0"
             }
           }
         }
@@ -122,27 +122,27 @@
     },
     "lodash.difference": {
       "version": "3.2.2",
-      "from": "lodash.difference@3.2.2",
+      "from": "lodash.difference@>=3.1.0 <4.0.0",
       "dependencies": {
         "lodash._basedifference": {
           "version": "3.0.3",
-          "from": "lodash._basedifference@3.0.3",
+          "from": "lodash._basedifference@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._baseindexof": {
               "version": "3.1.0",
-              "from": "lodash._baseindexof@3.1.0"
+              "from": "lodash._baseindexof@>=3.0.0 <4.0.0"
             },
             "lodash._cacheindexof": {
               "version": "3.0.2",
-              "from": "lodash._cacheindexof@3.0.2"
+              "from": "lodash._cacheindexof@>=3.0.0 <4.0.0"
             },
             "lodash._createcache": {
               "version": "3.1.2",
-              "from": "lodash._createcache@3.1.2",
+              "from": "lodash._createcache@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash._getnative": {
                   "version": "3.9.1",
-                  "from": "lodash._getnative@3.9.1"
+                  "from": "lodash._getnative@>=3.0.0 <4.0.0"
                 }
               }
             }
@@ -150,81 +150,81 @@
         },
         "lodash._baseflatten": {
           "version": "3.1.4",
-          "from": "lodash._baseflatten@3.1.4",
+          "from": "lodash._baseflatten@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash.isarguments": {
               "version": "3.0.4",
-              "from": "lodash.isarguments@3.0.4"
+              "from": "lodash.isarguments@>=3.0.0 <4.0.0"
             },
             "lodash.isarray": {
               "version": "3.0.4",
-              "from": "lodash.isarray@3.0.4"
+              "from": "lodash.isarray@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash.restparam": {
           "version": "3.6.1",
-          "from": "lodash.restparam@3.6.1"
+          "from": "lodash.restparam@>=3.0.0 <4.0.0"
         }
       }
     },
     "lodash.filter": {
       "version": "3.1.1",
-      "from": "lodash.filter@3.1.1",
+      "from": "lodash.filter@>=3.0.0 <4.0.0",
       "dependencies": {
         "lodash._arrayfilter": {
           "version": "3.0.0",
-          "from": "lodash._arrayfilter@3.0.0"
+          "from": "lodash._arrayfilter@>=3.0.0 <4.0.0"
         },
         "lodash._basecallback": {
           "version": "3.3.1",
-          "from": "lodash._basecallback@3.3.1",
+          "from": "lodash._basecallback@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._baseisequal": {
               "version": "3.0.7",
-              "from": "lodash._baseisequal@3.0.7",
+              "from": "lodash._baseisequal@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash.istypedarray": {
                   "version": "3.0.2",
-                  "from": "lodash.istypedarray@3.0.2"
+                  "from": "lodash.istypedarray@>=3.0.0 <4.0.0"
                 }
               }
             },
             "lodash._bindcallback": {
               "version": "3.0.1",
-              "from": "lodash._bindcallback@3.0.1"
+              "from": "lodash._bindcallback@>=3.0.0 <4.0.0"
             },
             "lodash.pairs": {
               "version": "3.0.1",
-              "from": "lodash.pairs@3.0.1"
+              "from": "lodash.pairs@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash._basefilter": {
           "version": "3.0.0",
-          "from": "lodash._basefilter@3.0.0",
+          "from": "lodash._basefilter@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._baseeach": {
               "version": "3.0.4",
-              "from": "lodash._baseeach@3.0.4"
+              "from": "lodash._baseeach@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash.isarray": {
           "version": "3.0.4",
-          "from": "lodash.isarray@3.0.4"
+          "from": "lodash.isarray@>=3.0.0 <4.0.0"
         },
         "lodash.keys": {
           "version": "3.1.2",
-          "from": "lodash.keys@3.1.2",
+          "from": "lodash.keys@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._getnative": {
               "version": "3.9.1",
-              "from": "lodash._getnative@3.9.1"
+              "from": "lodash._getnative@>=3.0.0 <4.0.0"
             },
             "lodash.isarguments": {
               "version": "3.0.4",
-              "from": "lodash.isarguments@3.0.4"
+              "from": "lodash.isarguments@>=3.0.0 <4.0.0"
             }
           }
         }
@@ -232,31 +232,31 @@
     },
     "lodash.findindex": {
       "version": "3.2.1",
-      "from": "lodash.findindex@3.2.1",
+      "from": "lodash.findindex@>=3.0.0 <4.0.0",
       "dependencies": {
         "lodash._basecallback": {
           "version": "3.3.1",
-          "from": "lodash._basecallback@3.3.1",
+          "from": "lodash._basecallback@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._baseisequal": {
               "version": "3.0.7",
-              "from": "lodash._baseisequal@3.0.7",
+              "from": "lodash._baseisequal@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash.istypedarray": {
                   "version": "3.0.2",
-                  "from": "lodash.istypedarray@3.0.2"
+                  "from": "lodash.istypedarray@>=3.0.0 <4.0.0"
                 },
                 "lodash.keys": {
                   "version": "3.1.2",
-                  "from": "lodash.keys@3.1.2",
+                  "from": "lodash.keys@>=3.0.0 <4.0.0",
                   "dependencies": {
                     "lodash._getnative": {
                       "version": "3.9.1",
-                      "from": "lodash._getnative@3.9.1"
+                      "from": "lodash._getnative@>=3.0.0 <4.0.0"
                     },
                     "lodash.isarguments": {
                       "version": "3.0.4",
-                      "from": "lodash.isarguments@3.0.4"
+                      "from": "lodash.isarguments@>=3.0.0 <4.0.0"
                     }
                   }
                 }
@@ -264,23 +264,23 @@
             },
             "lodash._bindcallback": {
               "version": "3.0.1",
-              "from": "lodash._bindcallback@3.0.1"
+              "from": "lodash._bindcallback@>=3.0.0 <4.0.0"
             },
             "lodash.pairs": {
               "version": "3.0.1",
-              "from": "lodash.pairs@3.0.1",
+              "from": "lodash.pairs@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash.keys": {
                   "version": "3.1.2",
-                  "from": "lodash.keys@3.1.2",
+                  "from": "lodash.keys@>=3.0.0 <4.0.0",
                   "dependencies": {
                     "lodash._getnative": {
                       "version": "3.9.1",
-                      "from": "lodash._getnative@3.9.1"
+                      "from": "lodash._getnative@>=3.0.0 <4.0.0"
                     },
                     "lodash.isarguments": {
                       "version": "3.0.4",
-                      "from": "lodash.isarguments@3.0.4"
+                      "from": "lodash.isarguments@>=3.0.0 <4.0.0"
                     }
                   }
                 }
@@ -290,37 +290,37 @@
         },
         "lodash._basefindindex": {
           "version": "3.6.0",
-          "from": "lodash._basefindindex@3.6.0"
+          "from": "lodash._basefindindex@>=3.0.0 <4.0.0"
         },
         "lodash.isarray": {
           "version": "3.0.4",
-          "from": "lodash.isarray@3.0.4"
+          "from": "lodash.isarray@>=3.0.0 <4.0.0"
         }
       }
     },
     "lodash.foreach": {
       "version": "3.0.3",
-      "from": "lodash.foreach@3.0.3",
+      "from": "lodash.foreach@>=3.0.3 <4.0.0",
       "dependencies": {
         "lodash._arrayeach": {
           "version": "3.0.0",
-          "from": "lodash._arrayeach@3.0.0"
+          "from": "lodash._arrayeach@>=3.0.0 <4.0.0"
         },
         "lodash._baseeach": {
           "version": "3.0.4",
-          "from": "lodash._baseeach@3.0.4",
+          "from": "lodash._baseeach@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash.keys": {
               "version": "3.1.2",
-              "from": "lodash.keys@3.1.2",
+              "from": "lodash.keys@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash._getnative": {
                   "version": "3.9.1",
-                  "from": "lodash._getnative@3.9.1"
+                  "from": "lodash._getnative@>=3.0.0 <4.0.0"
                 },
                 "lodash.isarguments": {
                   "version": "3.0.4",
-                  "from": "lodash.isarguments@3.0.4"
+                  "from": "lodash.isarguments@>=3.0.0 <4.0.0"
                 }
               }
             }
@@ -328,79 +328,79 @@
         },
         "lodash._bindcallback": {
           "version": "3.0.1",
-          "from": "lodash._bindcallback@3.0.1"
+          "from": "lodash._bindcallback@>=3.0.0 <4.0.0"
         },
         "lodash.isarray": {
           "version": "3.0.4",
-          "from": "lodash.isarray@3.0.4"
+          "from": "lodash.isarray@>=3.0.0 <4.0.0"
         }
       }
     },
     "lodash.max": {
       "version": "3.4.0",
-      "from": "lodash.max@3.4.0",
+      "from": "lodash.max@>=3.2.0 <4.0.0",
       "dependencies": {
         "lodash._basecallback": {
           "version": "3.3.1",
-          "from": "lodash._basecallback@3.3.1",
+          "from": "lodash._basecallback@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._baseisequal": {
               "version": "3.0.7",
-              "from": "lodash._baseisequal@3.0.7",
+              "from": "lodash._baseisequal@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash.istypedarray": {
                   "version": "3.0.2",
-                  "from": "lodash.istypedarray@3.0.2"
+                  "from": "lodash.istypedarray@>=3.0.0 <4.0.0"
                 }
               }
             },
             "lodash._bindcallback": {
               "version": "3.0.1",
-              "from": "lodash._bindcallback@3.0.1"
+              "from": "lodash._bindcallback@>=3.0.0 <4.0.0"
             },
             "lodash.pairs": {
               "version": "3.0.1",
-              "from": "lodash.pairs@3.0.1"
+              "from": "lodash.pairs@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash._baseeach": {
           "version": "3.0.4",
-          "from": "lodash._baseeach@3.0.4"
+          "from": "lodash._baseeach@>=3.0.0 <4.0.0"
         },
         "lodash._isiterateecall": {
           "version": "3.0.9",
-          "from": "lodash._isiterateecall@3.0.9"
+          "from": "lodash._isiterateecall@>=3.0.0 <4.0.0"
         },
         "lodash._toiterable": {
           "version": "3.0.4",
-          "from": "lodash._toiterable@3.0.4",
+          "from": "lodash._toiterable@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._basevalues": {
               "version": "3.0.0",
-              "from": "lodash._basevalues@3.0.0"
+              "from": "lodash._basevalues@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash.gt": {
           "version": "3.9.0",
-          "from": "lodash.gt@3.9.0"
+          "from": "lodash.gt@>=3.0.0 <4.0.0"
         },
         "lodash.isarray": {
           "version": "3.0.4",
-          "from": "lodash.isarray@3.0.4"
+          "from": "lodash.isarray@>=3.0.0 <4.0.0"
         },
         "lodash.keys": {
           "version": "3.1.2",
-          "from": "lodash.keys@3.1.2",
+          "from": "lodash.keys@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._getnative": {
               "version": "3.9.1",
-              "from": "lodash._getnative@3.9.1"
+              "from": "lodash._getnative@>=3.0.0 <4.0.0"
             },
             "lodash.isarguments": {
               "version": "3.0.4",
-              "from": "lodash.isarguments@3.0.4"
+              "from": "lodash.isarguments@>=3.0.0 <4.0.0"
             }
           }
         }
@@ -408,31 +408,31 @@
     },
     "lodash.omit": {
       "version": "3.1.0",
-      "from": "lodash.omit@3.1.0",
+      "from": "lodash.omit@>=3.0.0 <4.0.0",
       "dependencies": {
         "lodash._arraymap": {
           "version": "3.0.0",
-          "from": "lodash._arraymap@3.0.0"
+          "from": "lodash._arraymap@>=3.0.0 <4.0.0"
         },
         "lodash._basedifference": {
           "version": "3.0.3",
-          "from": "lodash._basedifference@3.0.3",
+          "from": "lodash._basedifference@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._baseindexof": {
               "version": "3.1.0",
-              "from": "lodash._baseindexof@3.1.0"
+              "from": "lodash._baseindexof@>=3.0.0 <4.0.0"
             },
             "lodash._cacheindexof": {
               "version": "3.0.2",
-              "from": "lodash._cacheindexof@3.0.2"
+              "from": "lodash._cacheindexof@>=3.0.0 <4.0.0"
             },
             "lodash._createcache": {
               "version": "3.1.2",
-              "from": "lodash._createcache@3.1.2",
+              "from": "lodash._createcache@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash._getnative": {
                   "version": "3.9.1",
-                  "from": "lodash._getnative@3.9.1"
+                  "from": "lodash._getnative@>=3.0.0 <4.0.0"
                 }
               }
             }
@@ -440,101 +440,101 @@
         },
         "lodash._baseflatten": {
           "version": "3.1.4",
-          "from": "lodash._baseflatten@3.1.4",
+          "from": "lodash._baseflatten@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash.isarguments": {
               "version": "3.0.4",
-              "from": "lodash.isarguments@3.0.4"
+              "from": "lodash.isarguments@>=3.0.0 <4.0.0"
             },
             "lodash.isarray": {
               "version": "3.0.4",
-              "from": "lodash.isarray@3.0.4"
+              "from": "lodash.isarray@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash._bindcallback": {
           "version": "3.0.1",
-          "from": "lodash._bindcallback@3.0.1"
+          "from": "lodash._bindcallback@>=3.0.0 <4.0.0"
         },
         "lodash._pickbyarray": {
           "version": "3.0.2",
-          "from": "lodash._pickbyarray@3.0.2"
+          "from": "lodash._pickbyarray@>=3.0.0 <4.0.0"
         },
         "lodash._pickbycallback": {
           "version": "3.0.0",
-          "from": "lodash._pickbycallback@3.0.0",
+          "from": "lodash._pickbycallback@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._basefor": {
               "version": "3.0.2",
-              "from": "lodash._basefor@3.0.2"
+              "from": "lodash._basefor@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash.keysin": {
           "version": "3.0.8",
-          "from": "lodash.keysin@3.0.8",
+          "from": "lodash.keysin@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash.isarguments": {
               "version": "3.0.4",
-              "from": "lodash.isarguments@3.0.4"
+              "from": "lodash.isarguments@>=3.0.0 <4.0.0"
             },
             "lodash.isarray": {
               "version": "3.0.4",
-              "from": "lodash.isarray@3.0.4"
+              "from": "lodash.isarray@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash.restparam": {
           "version": "3.6.1",
-          "from": "lodash.restparam@3.6.1"
+          "from": "lodash.restparam@>=3.0.0 <4.0.0"
         }
       }
     },
     "lodash.pick": {
       "version": "3.1.0",
-      "from": "lodash.pick@3.1.0",
+      "from": "lodash.pick@>=3.0.0 <4.0.0",
       "dependencies": {
         "lodash._baseflatten": {
           "version": "3.1.4",
-          "from": "lodash._baseflatten@3.1.4",
+          "from": "lodash._baseflatten@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash.isarguments": {
               "version": "3.0.4",
-              "from": "lodash.isarguments@3.0.4"
+              "from": "lodash.isarguments@>=3.0.0 <4.0.0"
             },
             "lodash.isarray": {
               "version": "3.0.4",
-              "from": "lodash.isarray@3.0.4"
+              "from": "lodash.isarray@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash._bindcallback": {
           "version": "3.0.1",
-          "from": "lodash._bindcallback@3.0.1"
+          "from": "lodash._bindcallback@>=3.0.0 <4.0.0"
         },
         "lodash._pickbyarray": {
           "version": "3.0.2",
-          "from": "lodash._pickbyarray@3.0.2"
+          "from": "lodash._pickbyarray@>=3.0.0 <4.0.0"
         },
         "lodash._pickbycallback": {
           "version": "3.0.0",
-          "from": "lodash._pickbycallback@3.0.0",
+          "from": "lodash._pickbycallback@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._basefor": {
               "version": "3.0.2",
-              "from": "lodash._basefor@3.0.2"
+              "from": "lodash._basefor@>=3.0.0 <4.0.0"
             },
             "lodash.keysin": {
               "version": "3.0.8",
-              "from": "lodash.keysin@3.0.8",
+              "from": "lodash.keysin@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash.isarguments": {
                   "version": "3.0.4",
-                  "from": "lodash.isarguments@3.0.4"
+                  "from": "lodash.isarguments@>=3.0.0 <4.0.0"
                 },
                 "lodash.isarray": {
                   "version": "3.0.4",
-                  "from": "lodash.isarray@3.0.4"
+                  "from": "lodash.isarray@>=3.0.0 <4.0.0"
                 }
               }
             }
@@ -542,69 +542,69 @@
         },
         "lodash.restparam": {
           "version": "3.6.1",
-          "from": "lodash.restparam@3.6.1"
+          "from": "lodash.restparam@>=3.0.0 <4.0.0"
         }
       }
     },
     "lodash.sortby": {
       "version": "3.1.5",
-      "from": "lodash.sortby@3.1.5",
+      "from": "lodash.sortby@>=3.1.0 <4.0.0",
       "dependencies": {
         "lodash._basecallback": {
           "version": "3.3.1",
-          "from": "lodash._basecallback@3.3.1",
+          "from": "lodash._basecallback@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._baseisequal": {
               "version": "3.0.7",
-              "from": "lodash._baseisequal@3.0.7",
+              "from": "lodash._baseisequal@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash.istypedarray": {
                   "version": "3.0.2",
-                  "from": "lodash.istypedarray@3.0.2"
+                  "from": "lodash.istypedarray@>=3.0.0 <4.0.0"
                 }
               }
             },
             "lodash._bindcallback": {
               "version": "3.0.1",
-              "from": "lodash._bindcallback@3.0.1"
+              "from": "lodash._bindcallback@>=3.0.0 <4.0.0"
             },
             "lodash.pairs": {
               "version": "3.0.1",
-              "from": "lodash.pairs@3.0.1"
+              "from": "lodash.pairs@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash._basecompareascending": {
           "version": "3.0.2",
-          "from": "lodash._basecompareascending@3.0.2"
+          "from": "lodash._basecompareascending@>=3.0.0 <4.0.0"
         },
         "lodash._baseeach": {
           "version": "3.0.4",
-          "from": "lodash._baseeach@3.0.4"
+          "from": "lodash._baseeach@>=3.0.0 <4.0.0"
         },
         "lodash._basesortby": {
           "version": "3.0.0",
-          "from": "lodash._basesortby@3.0.0"
+          "from": "lodash._basesortby@>=3.0.0 <4.0.0"
         },
         "lodash._isiterateecall": {
           "version": "3.0.9",
-          "from": "lodash._isiterateecall@3.0.9"
+          "from": "lodash._isiterateecall@>=3.0.0 <4.0.0"
         },
         "lodash.isarray": {
           "version": "3.0.4",
-          "from": "lodash.isarray@3.0.4"
+          "from": "lodash.isarray@>=3.0.0 <4.0.0"
         },
         "lodash.keys": {
           "version": "3.1.2",
-          "from": "lodash.keys@3.1.2",
+          "from": "lodash.keys@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._getnative": {
               "version": "3.9.1",
-              "from": "lodash._getnative@3.9.1"
+              "from": "lodash._getnative@>=3.0.0 <4.0.0"
             },
             "lodash.isarguments": {
               "version": "3.0.4",
-              "from": "lodash.isarguments@3.0.4"
+              "from": "lodash.isarguments@>=3.0.0 <4.0.0"
             }
           }
         }
@@ -612,83 +612,83 @@
     },
     "lodash.template": {
       "version": "3.6.2",
-      "from": "lodash.template@3.6.2",
+      "from": "lodash.template@>=3.3.0 <4.0.0",
       "dependencies": {
         "lodash._basecopy": {
           "version": "3.0.1",
-          "from": "lodash._basecopy@3.0.1"
+          "from": "lodash._basecopy@>=3.0.0 <4.0.0"
         },
         "lodash._basetostring": {
           "version": "3.0.1",
-          "from": "lodash._basetostring@3.0.1"
+          "from": "lodash._basetostring@>=3.0.0 <4.0.0"
         },
         "lodash._basevalues": {
           "version": "3.0.0",
-          "from": "lodash._basevalues@3.0.0"
+          "from": "lodash._basevalues@>=3.0.0 <4.0.0"
         },
         "lodash._isiterateecall": {
           "version": "3.0.9",
-          "from": "lodash._isiterateecall@3.0.9"
+          "from": "lodash._isiterateecall@>=3.0.0 <4.0.0"
         },
         "lodash._reinterpolate": {
           "version": "3.0.0",
-          "from": "lodash._reinterpolate@3.0.0"
+          "from": "lodash._reinterpolate@>=3.0.0 <4.0.0"
         },
         "lodash.escape": {
           "version": "3.0.0",
-          "from": "lodash.escape@3.0.0"
+          "from": "lodash.escape@>=3.0.0 <4.0.0"
         },
         "lodash.keys": {
           "version": "3.1.2",
-          "from": "lodash.keys@3.1.2",
+          "from": "lodash.keys@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._getnative": {
               "version": "3.9.1",
-              "from": "lodash._getnative@3.9.1"
+              "from": "lodash._getnative@>=3.0.0 <4.0.0"
             },
             "lodash.isarguments": {
               "version": "3.0.4",
-              "from": "lodash.isarguments@3.0.4"
+              "from": "lodash.isarguments@>=3.0.0 <4.0.0"
             },
             "lodash.isarray": {
               "version": "3.0.4",
-              "from": "lodash.isarray@3.0.4"
+              "from": "lodash.isarray@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash.restparam": {
           "version": "3.6.1",
-          "from": "lodash.restparam@3.6.1"
+          "from": "lodash.restparam@>=3.0.0 <4.0.0"
         },
         "lodash.templatesettings": {
           "version": "3.1.0",
-          "from": "lodash.templatesettings@3.1.0"
+          "from": "lodash.templatesettings@>=3.0.0 <4.0.0"
         }
       }
     },
     "lodash.uniq": {
       "version": "3.2.2",
-      "from": "lodash.uniq@3.2.2",
+      "from": "lodash.uniq@>=3.2.2 <4.0.0",
       "dependencies": {
         "lodash._basecallback": {
           "version": "3.3.1",
-          "from": "lodash._basecallback@3.3.1",
+          "from": "lodash._basecallback@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._baseisequal": {
               "version": "3.0.7",
-              "from": "lodash._baseisequal@3.0.7",
+              "from": "lodash._baseisequal@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash.istypedarray": {
                   "version": "3.0.2",
-                  "from": "lodash.istypedarray@3.0.2"
+                  "from": "lodash.istypedarray@>=3.0.0 <4.0.0"
                 },
                 "lodash.keys": {
                   "version": "3.1.2",
-                  "from": "lodash.keys@3.1.2",
+                  "from": "lodash.keys@>=3.0.0 <4.0.0",
                   "dependencies": {
                     "lodash.isarguments": {
                       "version": "3.0.4",
-                      "from": "lodash.isarguments@3.0.4"
+                      "from": "lodash.isarguments@>=3.0.0 <4.0.0"
                     }
                   }
                 }
@@ -696,19 +696,19 @@
             },
             "lodash._bindcallback": {
               "version": "3.0.1",
-              "from": "lodash._bindcallback@3.0.1"
+              "from": "lodash._bindcallback@>=3.0.0 <4.0.0"
             },
             "lodash.pairs": {
               "version": "3.0.1",
-              "from": "lodash.pairs@3.0.1",
+              "from": "lodash.pairs@>=3.0.0 <4.0.0",
               "dependencies": {
                 "lodash.keys": {
                   "version": "3.1.2",
-                  "from": "lodash.keys@3.1.2",
+                  "from": "lodash.keys@>=3.0.0 <4.0.0",
                   "dependencies": {
                     "lodash.isarguments": {
                       "version": "3.0.4",
-                      "from": "lodash.isarguments@3.0.4"
+                      "from": "lodash.isarguments@>=3.0.0 <4.0.0"
                     }
                   }
                 }
@@ -718,33 +718,33 @@
         },
         "lodash._baseuniq": {
           "version": "3.0.3",
-          "from": "lodash._baseuniq@3.0.3",
+          "from": "lodash._baseuniq@>=3.0.0 <4.0.0",
           "dependencies": {
             "lodash._baseindexof": {
               "version": "3.1.0",
-              "from": "lodash._baseindexof@3.1.0"
+              "from": "lodash._baseindexof@>=3.0.0 <4.0.0"
             },
             "lodash._cacheindexof": {
               "version": "3.0.2",
-              "from": "lodash._cacheindexof@3.0.2"
+              "from": "lodash._cacheindexof@>=3.0.0 <4.0.0"
             },
             "lodash._createcache": {
               "version": "3.1.2",
-              "from": "lodash._createcache@3.1.2"
+              "from": "lodash._createcache@>=3.0.0 <4.0.0"
             }
           }
         },
         "lodash._getnative": {
           "version": "3.9.1",
-          "from": "lodash._getnative@3.9.1"
+          "from": "lodash._getnative@>=3.0.0 <4.0.0"
         },
         "lodash._isiterateecall": {
           "version": "3.0.9",
-          "from": "lodash._isiterateecall@3.0.9"
+          "from": "lodash._isiterateecall@>=3.0.0 <4.0.0"
         },
         "lodash.isarray": {
           "version": "3.0.4",
-          "from": "lodash.isarray@3.0.4"
+          "from": "lodash.isarray@>=3.0.0 <4.0.0"
         }
       }
     },
@@ -900,7 +900,7 @@
     },
     "moment": {
       "version": "2.10.6",
-      "from": "moment@2.10.6"
+      "from": "moment@>=2.9.0 <3.0.0"
     },
     "phone-formatter": {
       "version": "0.0.2",
@@ -908,23 +908,23 @@
     },
     "pubsub-js": {
       "version": "1.5.2",
-      "from": "pubsub-js@1.5.2"
+      "from": "pubsub-js@>=1.5.2 <2.0.0"
     },
     "react": {
       "version": "0.12.2",
-      "from": "react@0.12.2",
+      "from": "react@>=0.12.2 <0.13.0",
       "dependencies": {
         "envify": {
           "version": "3.4.0",
-          "from": "envify@3.4.0",
+          "from": "envify@>=3.0.0 <4.0.0",
           "dependencies": {
             "through": {
               "version": "2.3.8",
-              "from": "through@2.3.8"
+              "from": "through@>=2.3.4 <2.4.0"
             },
             "jstransform": {
               "version": "10.1.0",
-              "from": "jstransform@10.1.0",
+              "from": "jstransform@>=10.0.1 <11.0.0",
               "dependencies": {
                 "base62": {
                   "version": "0.1.1",
@@ -940,7 +940,7 @@
                   "dependencies": {
                     "amdefine": {
                       "version": "1.0.0",
-                      "from": "amdefine@1.0.0"
+                      "from": "amdefine@>=0.0.4"
                     }
                   }
                 }
@@ -950,31 +950,17 @@
         }
       }
     },
-    "react-dnd": {
-      "version": "0.9.8",
-      "from": "react-dnd@0.9.8",
-      "dependencies": {
-        "flux": {
-          "version": "2.0.3",
-          "from": "flux@2.0.3"
-        },
-        "lodash": {
-          "version": "3.10.0",
-          "from": "lodash@3.10.0"
-        }
-      }
-    },
     "react-layer-mixin": {
       "version": "0.2.1",
-      "from": "react-layer-mixin@0.2.1"
+      "from": "react-layer-mixin@>=0.2.1 <0.3.0"
     },
     "react-textarea-autosize": {
       "version": "1.1.0",
-      "from": "react-textarea-autosize@1.1.0",
+      "from": "react-textarea-autosize@>=1.1.0 <2.0.0",
       "dependencies": {
         "object-assign": {
           "version": "2.1.1",
-          "from": "object-assign@2.1.1"
+          "from": "object-assign@>=2.0.0 <3.0.0"
         }
       }
     },
@@ -984,19 +970,19 @@
       "dependencies": {
         "lodash.throttle": {
           "version": "2.4.1",
-          "from": "lodash.throttle@2.4.1",
+          "from": "lodash.throttle@>=2.4.1 <3.0.0",
           "dependencies": {
             "lodash.debounce": {
               "version": "2.4.1",
-              "from": "lodash.debounce@2.4.1",
+              "from": "lodash.debounce@>=2.4.1 <2.5.0",
               "dependencies": {
                 "lodash.now": {
                   "version": "2.4.1",
-                  "from": "lodash.now@2.4.1",
+                  "from": "lodash.now@>=2.4.1 <2.5.0",
                   "dependencies": {
                     "lodash._isnative": {
                       "version": "2.4.1",
-                      "from": "lodash._isnative@2.4.1"
+                      "from": "lodash._isnative@>=2.4.1 <2.5.0"
                     }
                   }
                 }
@@ -1004,15 +990,15 @@
             },
             "lodash.isfunction": {
               "version": "2.4.1",
-              "from": "lodash.isfunction@2.4.1"
+              "from": "lodash.isfunction@>=2.4.1 <2.5.0"
             },
             "lodash.isobject": {
               "version": "2.4.1",
-              "from": "lodash.isobject@2.4.1",
+              "from": "lodash.isobject@>=2.4.1 <2.5.0",
               "dependencies": {
                 "lodash._objecttypes": {
                   "version": "2.4.1",
-                  "from": "lodash._objecttypes@2.4.1"
+                  "from": "lodash._objecttypes@>=2.4.1 <2.5.0"
                 }
               }
             }
@@ -1022,19 +1008,19 @@
     },
     "react-zeroclipboard": {
       "version": "0.4.1",
-      "from": "react-zeroclipboard@0.4.1",
+      "from": "react-zeroclipboard@>=0.4.1 <0.5.0",
       "dependencies": {
         "envify": {
           "version": "3.4.0",
-          "from": "envify@3.4.0",
+          "from": "envify@>=3.3.0 <4.0.0",
           "dependencies": {
             "through": {
               "version": "2.3.8",
-              "from": "through@2.3.8"
+              "from": "through@>=2.3.4 <2.4.0"
             },
             "jstransform": {
               "version": "10.1.0",
-              "from": "jstransform@10.1.0",
+              "from": "jstransform@>=10.0.1 <11.0.0",
               "dependencies": {
                 "base62": {
                   "version": "0.1.1",
@@ -1050,7 +1036,7 @@
                   "dependencies": {
                     "amdefine": {
                       "version": "1.0.0",
-                      "from": "amdefine@1.0.0"
+                      "from": "amdefine@>=0.0.4"
                     }
                   }
                 }
@@ -1072,7 +1058,7 @@
     },
     "superagent": {
       "version": "0.21.0",
-      "from": "superagent@0.21.0",
+      "from": "superagent@>=0.21.0 <0.22.0",
       "dependencies": {
         "qs": {
           "version": "1.2.0",
@@ -1100,7 +1086,7 @@
         },
         "debug": {
           "version": "2.2.0",
-          "from": "debug@2.2.0",
+          "from": "debug@>=2.0.0 <3.0.0",
           "dependencies": {
             "ms": {
               "version": "0.7.1",
@@ -1114,7 +1100,7 @@
         },
         "extend": {
           "version": "1.2.1",
-          "from": "extend@1.2.1"
+          "from": "extend@>=1.2.1 <1.3.0"
         },
         "form-data": {
           "version": "0.1.3",
@@ -1122,7 +1108,7 @@
           "dependencies": {
             "combined-stream": {
               "version": "0.0.7",
-              "from": "combined-stream@0.0.7",
+              "from": "combined-stream@>=0.0.4 <0.1.0",
               "dependencies": {
                 "delayed-stream": {
                   "version": "0.0.5",
@@ -1132,7 +1118,7 @@
             },
             "async": {
               "version": "0.9.2",
-              "from": "async@0.9.2"
+              "from": "async@>=0.9.0 <0.10.0"
             }
           }
         },
@@ -1142,7 +1128,7 @@
           "dependencies": {
             "core-util-is": {
               "version": "1.0.1",
-              "from": "core-util-is@1.0.1"
+              "from": "core-util-is@>=1.0.0 <1.1.0"
             },
             "isarray": {
               "version": "0.0.1",
@@ -1150,11 +1136,11 @@
             },
             "string_decoder": {
               "version": "0.10.31",
-              "from": "string_decoder@0.10.31"
+              "from": "string_decoder@>=0.10.0 <0.11.0"
             },
             "inherits": {
               "version": "2.0.1",
-              "from": "inherits@2.0.1"
+              "from": "inherits@>=2.0.1 <2.1.0"
             }
           }
         }
@@ -1162,15 +1148,15 @@
     },
     "tether": {
       "version": "0.6.5",
-      "from": "tether@0.6.5"
+      "from": "tether@>=0.6.5 <0.7.0"
     },
     "url-template": {
       "version": "2.0.6",
-      "from": "url-template@2.0.6"
+      "from": "url-template@>=2.0.5 <3.0.0"
     },
     "validator": {
       "version": "3.43.0",
-      "from": "validator@3.43.0"
+      "from": "validator@>=3.43.0 <4.0.0"
     }
   }
 }
