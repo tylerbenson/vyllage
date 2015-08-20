@@ -16,7 +16,7 @@ import accounts.validation.URLValidator;
 public class AccountSettingValidatorTest {
 
 	@Test
-	public void EmailSettingValidatorReturnsOk() {
+	public void testEmailSettingValidatorReturnsOk() {
 		EmailSettingValidator validator = new EmailSettingValidator();
 		AccountSetting as = new AccountSetting();
 		as.setValue("test@gmail.com");
@@ -27,7 +27,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void EmailSettingValidatorReturnsWithErrorForInvalidEmail() {
+	public void testEmailSettingValidatorReturnsWithErrorForInvalidEmail() {
 		EmailSettingValidator validator = new EmailSettingValidator();
 		AccountSetting as = new AccountSetting();
 		as.setValue("test");
@@ -38,7 +38,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void EmailSettingValidatorReturnsWithErrorForNullEmail() {
+	public void testEmailSettingValidatorReturnsWithErrorForNullEmail() {
 		EmailSettingValidator validator = new EmailSettingValidator();
 		AccountSetting as = new AccountSetting();
 		as.setValue(null);
@@ -49,7 +49,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void EmailSettingValidatorReturnsWithErrorForEmptyValue() {
+	public void testEmailSettingValidatorReturnsWithErrorForEmptyValue() {
 		EmailSettingValidator validator = new EmailSettingValidator();
 		AccountSetting as = new AccountSetting();
 		as.setValue("");
@@ -60,7 +60,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void LengthSettingValidatorReturnsOk() {
+	public void testLengthSettingValidatorReturnsOk() {
 		int length = 5;
 		LengthValidator validator = new LengthValidator(length);
 		AccountSetting as = new AccountSetting();
@@ -72,7 +72,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void LengthSettingValidatorReturnsWithError() {
+	public void testLengthSettingValidatorReturnsWithError() {
 		int length = 30;
 		LengthValidator validator = new LengthValidator(length);
 		AccountSetting as = new AccountSetting();
@@ -84,7 +84,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void LengthSettingValidatorReturnsWithErrorAndMessageEquals() {
+	public void testLengthSettingValidatorReturnsWithErrorAndMessageEquals() {
 		int length = 5;
 		LengthValidator validator = new LengthValidator(length);
 		AccountSetting as = new AccountSetting();
@@ -98,7 +98,19 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void NotNullSettingValidatorReturnsOk() {
+	public void testLengthSettingValidatorNullOk() {
+		int length = 5;
+		LengthValidator validator = new LengthValidator(length);
+		AccountSetting as = new AccountSetting();
+		as.setValue(null);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void testNotNullSettingValidatorReturnsOk() {
 		NotNullValidator validator = new NotNullValidator();
 		AccountSetting as = new AccountSetting();
 		as.setValue("");
@@ -109,7 +121,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void NotNullSettingValidatorReturnsWithError() {
+	public void testNotNullSettingValidatorReturnsWithError() {
 		NotNullValidator validator = new NotNullValidator();
 		AccountSetting as = new AccountSetting();
 		as.setValue(null);
@@ -120,7 +132,18 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void NumberSettingValidatorReturnsOk() {
+	public void testNotNullPhoneNumberSettingValidator() {
+		PhoneNumberValidator validator1 = new PhoneNumberValidator();
+		NotNullValidator validator2 = new NotNullValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(null);
+
+		AccountSetting setting = validator2.validate(validator1.validate(as));
+		Assert.isTrue(setting.getErrorMessage() != null);
+	}
+
+	@Test
+	public void testPhoneNumberSettingValidatorReturnsOk() {
 		PhoneNumberValidator validator = new PhoneNumberValidator();
 		AccountSetting as = new AccountSetting();
 		as.setValue("1234567890");
@@ -131,10 +154,10 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void NumberSettingValidatorReturnsWithError() {
+	public void testPhoneNumberSettingValidatorReturnsWithError() {
 		PhoneNumberValidator validator = new PhoneNumberValidator();
 		AccountSetting as = new AccountSetting();
-		as.setValue("a");
+		as.setValue("a234567890");
 
 		AccountSetting setting = validator.validate(as);
 
@@ -142,7 +165,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void NumberSettingValidatorReturnsWithLengthError1() {
+	public void testPhoneNumberSettingValidatorReturnsWithLengthError1() {
 		PhoneNumberValidator validator = new PhoneNumberValidator();
 		AccountSetting as = new AccountSetting();
 		as.setValue("12");
@@ -153,7 +176,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void NumberSettingValidatorReturnsWithLengthError2() {
+	public void testPhoneNumberSettingValidatorReturnsWithLengthError2() {
 		PhoneNumberValidator validator = new PhoneNumberValidator();
 		AccountSetting as = new AccountSetting();
 		as.setValue("1234567890505056406540");
@@ -164,7 +187,82 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void URLValidatorFacebookTest() {
+	public void testPhoneNumberSettingValidatorBlankValuesOk() {
+		PhoneNumberValidator validator = new PhoneNumberValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue("     ");
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void testPhoneNumberSettingValidatorEmptyValuesOk() {
+		PhoneNumberValidator validator = new PhoneNumberValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue("");
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void testPhoneNumberValidatorAndLengthSettingValidatorReturnsWithErrorAndMessageContainsComma() {
+		int length = 5;
+		PhoneNumberValidator validator1 = new PhoneNumberValidator();
+		LengthValidator validator2 = new LengthValidator(length);
+		AccountSetting as = new AccountSetting();
+		as.setValue("123456");
+
+		AccountSetting setting = validator2.validate(validator1.validate(as));
+
+		Assert.isTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage().contains(","));
+	}
+
+	@Test
+	public void testURLValidatorEmptyOk() {
+		final String url = "";
+
+		URLValidator validator = new URLValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(url);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void testURLValidatorNullOk() {
+		final String url = null;
+
+		URLValidator validator = new URLValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(url);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() == null);
+	}
+
+	@Test
+	public void testURLValidatorNotUrl() {
+		final String url = "https:.ae///";
+
+		URLValidator validator = new URLValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(url);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() != null);
+	}
+
+	@Test
+	public void testURLValidatorFacebookTest() {
 		final String facebook = "https://www.facebook.com/my.name";
 
 		URLValidator validator = new URLValidator();
@@ -177,7 +275,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void URLValidatorLinkedInTest() {
+	public void testURLValidatorLinkedInTest() {
 		final String linkedIn = "https://ar.linkedin.com/in/my.name";
 
 		URLValidator validator = new URLValidator();
@@ -190,7 +288,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void URLValidatorTwitterTest() {
+	public void testURLValidatorTwitterTest() {
 		final String twitter = "https://twitter.com/my.name";
 
 		URLValidator validator = new URLValidator();
@@ -203,7 +301,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void onlyAlphanumericSuccess() {
+	public void testOnlyAlphanumericSuccess() {
 		final String value = "aeiou123456";
 
 		OnlyAlphanumericValidator validator = new OnlyAlphanumericValidator();
@@ -216,7 +314,19 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void onlyAlphanumericFail() {
+	public void testOnlyAlphanumericNullOk() {
+
+		OnlyAlphanumericValidator validator = new OnlyAlphanumericValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(null);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
+	public void testOnlyAlphanumericFail() {
 		final String value = "/*+55aer";
 
 		OnlyAlphanumericValidator validator = new OnlyAlphanumericValidator();
@@ -229,7 +339,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void faceBookSuccess() {
+	public void testFaceBookSuccess() {
 		final String value = "aeiou.123456";
 
 		FacebookValidator validator = new FacebookValidator();
@@ -242,7 +352,33 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void faceBookFail() {
+	public void testFaceBookNullAllowed() {
+		final String value = null;
+
+		FacebookValidator validator = new FacebookValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(value);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
+	public void testFaceBookEmptyAllowed() {
+		final String value = "";
+
+		FacebookValidator validator = new FacebookValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(value);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
+	public void testFaceBookFail() {
 		final String value = "/*+5.";
 
 		FacebookValidator validator = new FacebookValidator();
@@ -255,7 +391,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void twitterSuccess() {
+	public void testTwitterSuccess() {
 		final String value = "aeiou___123456";
 
 		TwitterValidator validator = new TwitterValidator();
@@ -268,7 +404,33 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void twitterFail() {
+	public void testTwitterNull() {
+		final String value = null;
+
+		TwitterValidator validator = new TwitterValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(value);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
+	public void testTwitterEmpty() {
+		final String value = "";
+
+		TwitterValidator validator = new TwitterValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(value);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
+	public void testTwitterFail() {
 		final String value = "/*+5.";
 
 		TwitterValidator validator = new TwitterValidator();
@@ -281,7 +443,7 @@ public class AccountSettingValidatorTest {
 	}
 
 	@Test
-	public void twitterLengthFail() {
+	public void testTwitterLengthFail() {
 		final String value = "a123456789101112131415";
 
 		TwitterValidator validator = new TwitterValidator();

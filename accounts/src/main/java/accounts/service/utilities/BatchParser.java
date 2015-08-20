@@ -37,21 +37,6 @@ public class BatchParser {
 		private String middleName;
 		private String lastName;
 
-		public ParsedAccount(String email, String firstName, String middleName,
-				String lastName) {
-			super();
-
-			Assert.notNull(email);
-			Assert.isTrue(!email.isEmpty());
-
-			validateEmailAddress(email);
-
-			this.email = email;
-			this.firstName = firstName;
-			this.middleName = middleName;
-			this.lastName = lastName;
-		}
-
 		public ParsedAccount(CSVRecord record) {
 			super();
 
@@ -78,7 +63,7 @@ public class BatchParser {
 		protected void validateEmailAddress(String email) {
 			if (!EmailValidator.isValid(email))
 				throw new IllegalArgumentException(
-						"Contains invalid email addresses.");
+						"Contains invalid email address: " + email);
 		}
 
 		// lombok doesn't see this class
@@ -94,32 +79,16 @@ public class BatchParser {
 			return email;
 		}
 
-		public void setEmail(String email) {
-			this.email = email;
-		}
-
 		public String getFirstName() {
 			return firstName;
-		}
-
-		public void setFirstName(String firstName) {
-			this.firstName = firstName;
 		}
 
 		public String getMiddleName() {
 			return middleName;
 		}
 
-		public void setMiddleName(String middleName) {
-			this.middleName = middleName;
-		}
-
 		public String getLastName() {
 			return lastName;
-		}
-
-		public void setLastName(String lastName) {
-			this.lastName = lastName;
 		}
 
 	}
