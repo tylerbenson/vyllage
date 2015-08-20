@@ -11,65 +11,71 @@
 </head>
 
 <body>
-  <h1 th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '') + ' ' + (header.lastName != null ? header.lastName : '')}">Names!</h1>
-  <h2 th:text="${header.tagline}">This is my tagline</h2>
-  <label th:text="${header.address}">Casa 123</label>
-  <br/>
-  <label th:text="${header.email}"> abcd@abcd.com</label>
-  <br/>
-  <label th:text="${header.phoneNumber}">(555)1234-56789</label>
-  <br/>
-  <hr />
+  <div class="header cf">
+    <div class="info">
+      <h1 th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '') + ' ' + (header.lastName != null ? header.lastName : '')}">Names!</h1>
+      <em th:text="${header.tagline}">This is my tagline</em>
+      <p th:text="${header.address}">Casa 123</p>
+    </div>
+    <div class="contact">
+      <p th:text="${header.email}"> abcd@abcd.com</p>
+      <p th:text="${header.phoneNumber}">(555)1234-56789</p>
+      <p th:text="${header.twitter}">@abcd</p>
+    </div>
+  </div>
   <!-- loop over the sections -->
-  <th:block th:each="section : ${sections}">
-    <th:block th:switch="${section.type}">
+  <div class="sections">
+    <th:block th:each="section : ${sections}">
+      <th:block th:switch="${section.type}">
 
-      <th:block th:case="'SummarySection'">
-        <h3 th:text="${#strings.capitalizeWords(section.title)}">
-        </h3>
-        <p th:text="${section.description}"></p>
+        <th:block th:case="'SummarySection'">
+          <h2 th:text="${section.title}"></h2>
+          <p th:text="${section.description}"></p>
+        </th:block>
+
+        <th:block th:case="'EducationSection'">
+          <h2 th:text="${section.title}"></h2>
+          <h3 th:text="${section.organizationName}"></h3>
+          <h5 class="location" th:text="${section.location}"></h5>
+          <p th:text="${section.organizationDescription}"></p>
+          <div class="subsection">
+            <h4 class="role" th:text="${section.role}"></h4>
+            <h5 th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</h5>
+            <p th:text="${section.roleDescription}"></p>
+            <ul>
+              <th:block th:each="high : ${section.highlights}">
+                <li th:text="${high}"></li>
+              </th:block>
+            </ul>
+          </div>
+        </th:block>
+
+        <th:block th:case="'JobExperienceSection'">
+          <h2 th:text="${section.title}"></h2>
+          <h3 th:text="${section.organizationName}"></h3>
+          <h5 class="location" th:text="${section.location}"></h5>
+          <p th:text="${section.organizationDescription}"></p>
+          <div class="subsection">
+            <h4 class="role" th:text="${section.role}"></h4>
+            <h5 th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</h5>
+            <p th:text="${section.roleDescription}"></p>
+            <ul>
+              <th:block th:each="high : ${section.highlights}">
+                <li th:text="${high}"></li>
+              </th:block>
+            </ul>
+          </div>
+        </th:block>
+
+        <th:block th:case="'SkillsSection'">
+          <h2 th:text="${section.title}">
+          </h2>
+          <p th:utext="${#strings.listJoin(section.tags,', ')} + ' .'"></p>
+        </th:block>
+
       </th:block>
-
-      <th:block th:case="'EducationSection'">
-        <h3 th:text="${#strings.capitalizeWords(section.title)}">
-        </h3>
-        <h4 th:text="${section.organizationName}">
-        </h4>
-        <p th:text="${section.organizationDescription}"></p>
-        <p class="role" th:text="${section.role}"></p>
-        <p th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</p>
-        <p class="location" th:text="${section.location}"></p>
-        <p th:text="${section.roleDescription}"></p>
-        <ul th:each="high : ${section.highlights}">
-          <li th:text="${high}">
-        	</li>
-        </ul>
-      </th:block>
-
-      <th:block th:case="'JobExperienceSection'">
-        <h3 th:text="${#strings.capitalizeWords(section.title)}">
-        </h3>
-        <h4 th:text="${section.organizationName}">
-        </h4>
-        <p th:text="${section.organizationDescription}"></p>
-        <p class="role" th:text="${section.role}"></p>
-        <p th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</p>
-        <p class="location" th:text="${section.location}"></p>
-        <p th:text="${section.roleDescription}"></p>
-        <ul th:each="high : ${section.highlights}">
-          <li th:text="${high}">
-        	</li>
-        </ul>
-      </th:block>
-
-      <th:block th:case="'SkillsSection'">
-        <h3 th:text="${#strings.capitalizeWords(section.title)}">
-        </h3>
-        <p th:utext="${#strings.listJoin(section.tags,', ')} + ' .'"></p>
-      </th:block>
-
     </th:block>
-  </th:block>
+  </div>
 </body>
 
 </html>
