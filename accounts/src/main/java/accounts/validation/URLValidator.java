@@ -24,10 +24,12 @@ public class URLValidator extends SettingValidator {
 	@Override
 	public AccountSetting validate(AccountSetting setting) {
 
+		if (setting.getValue() == null || setting.getValue().isEmpty())
+			return setting;
+
 		matcher = pattern.matcher(setting.getValue());
 
-		if (setting.getValue() == null || setting.getValue().isEmpty()
-				|| !matcher.matches())
+		if (!matcher.matches())
 			setErrorMessage(setting, errorMessage);
 
 		return setting;
