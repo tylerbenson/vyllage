@@ -20,7 +20,8 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Component
-public class LMSOAuthAuthenticationHandler implements OAuthAuthenticationHandler {
+public class LMSOAuthAuthenticationHandler implements
+		OAuthAuthenticationHandler {
 
 	final static Logger log = LoggerFactory.getLogger(LMSOAuthAuthenticationHandler.class);
 

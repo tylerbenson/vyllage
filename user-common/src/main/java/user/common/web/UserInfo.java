@@ -13,7 +13,7 @@ import user.common.UserOrganizationRole;
 
 /**
  * For user metadata in webpage.
- * 
+ *
  * @author uh
  *
  */

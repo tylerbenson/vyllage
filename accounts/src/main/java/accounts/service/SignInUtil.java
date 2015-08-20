@@ -25,7 +25,7 @@ public class SignInUtil {
 
 	/**
 	 * Looks up the user and logs him in.
-	 * 
+	 *
 	 * @param user
 	 */
 	public User signIn(String username) {
@@ -40,7 +40,7 @@ public class SignInUtil {
 
 	/**
 	 * Looks up the user and logs him in.
-	 * 
+	 *
 	 * @param user
 	 */
 	public User signIn(Long userId) throws UserNotFoundException {
@@ -55,9 +55,9 @@ public class SignInUtil {
 
 	/**
 	 * Signs in the user.
-	 * 
+	 *
 	 * @param request
-	 * 
+	 *
 	 * @param user
 	 * @param password
 	 */
@@ -75,7 +75,7 @@ public class SignInUtil {
 
 	/**
 	 * Signs in the user.
-	 * 
+	 *
 	 * @param user
 	 */
 	public void signIn(User user) {

@@ -32,7 +32,7 @@ public class AccountSettingRepository {
 
 	/**
 	 * Retrieves account settings based on user ids.
-	 * 
+	 *
 	 * @param User
 	 *            ids
 	 * @return
@@ -83,7 +83,7 @@ public class AccountSettingRepository {
 
 	/**
 	 * Deletes all account settings that belong to the user id.
-	 * 
+	 *
 	 * @param userId
 	 */
 	public void deleteByUserId(Long userId) {

@@ -1,7 +1,7 @@
 /**
- * Populate git commit and branch metadata for inspection at http://spring.io/info.
- * See http://projects.spring.io/spring-boot/docs/spring-boot-actuator/docs/Features.html ("Info Endpoint")
- */
+* Populate git commit and branch metadata for inspection at http://spring.io/info.
+* See http://projects.spring.io/spring-boot/docs/spring-boot-actuator/docs/Features.html ("Info Endpoint")
+*/
 task writeGitPropertiesFile(dependsOn: [ processResources ]) {
     ext.outputFile = file("${sourceSets.main.output.resourcesDir}/git.properties")
 

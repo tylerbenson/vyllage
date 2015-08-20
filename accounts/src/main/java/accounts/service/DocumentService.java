@@ -42,7 +42,7 @@ public class DocumentService {
 
 	/**
 	 * Deletes documents from several users.
-	 * 
+	 *
 	 * @param request
 	 * @param token
 	 */
@@ -66,9 +66,9 @@ public class DocumentService {
 
 	/**
 	 * Returns the user document Id.
-	 * 
+	 *
 	 * @param request
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 * @throws ElementNotFoundException

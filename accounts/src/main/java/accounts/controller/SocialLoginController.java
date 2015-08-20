@@ -179,7 +179,7 @@ public class SocialLoginController {
 	/**
 	 * Generates a name for the user account, using email, provider's username
 	 * or a random one combining the user's names and numbers
-	 * 
+	 *
 	 * @param userProfile
 	 * @return userName
 	 */

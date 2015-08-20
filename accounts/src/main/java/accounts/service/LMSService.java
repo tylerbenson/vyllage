@@ -6,25 +6,25 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import lombok.NonNull;
+import oauth.lti.LMSRequest;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import com.newrelic.api.agent.NewRelic;
-
-import accounts.repository.LMSUserCredentialsRepository;
-import accounts.repository.LMSUserRepository;
-import accounts.repository.OrganizationRepository;
-import accounts.repository.UserNotFoundException;
-import lombok.NonNull;
-import oauth.lti.LMSRequest;
 import user.common.LMSUserCredentials;
 import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
+import accounts.repository.LMSUserCredentialsRepository;
+import accounts.repository.LMSUserRepository;
+import accounts.repository.OrganizationRepository;
+import accounts.repository.UserNotFoundException;
+
+import com.newrelic.api.agent.NewRelic;
 
 @Service
 public class LMSService {
@@ -35,7 +35,8 @@ public class LMSService {
 	private final LMSUserCredentialsRepository lmsUserCredentialsRepository;
 
 	@Inject
-	public LMSService(final OrganizationRepository organizationRepository, final LMSUserRepository lmsUserRepository,
+	public LMSService(final OrganizationRepository organizationRepository,
+			final LMSUserRepository lmsUserRepository,
 			final LMSUserCredentialsRepository lmsUserCredentialsRepository) {
 		super();
 		this.organizationRepository = organizationRepository;
@@ -55,7 +56,8 @@ public class LMSService {
 		return this.lmsUserCredentialsRepository.userExists(lmsUserId);
 	}
 
-	public LMSUserCredentials getLmsUser(String lmsUserId) throws UserNotFoundException {
+	public LMSUserCredentials getLmsUser(String lmsUserId)
+			throws UserNotFoundException {
 		return this.lmsUserCredentialsRepository.get(lmsUserId);
 	}
 
@@ -63,14 +65,16 @@ public class LMSService {
 		return this.lmsUserCredentialsRepository.getUserId(lmsUserId);
 	}
 
-	public User createUser(@NonNull String email, @NonNull String password, String firstName, String middleName,
-			String lastName, @NonNull LMSRequest lmsRequest) {
+	public User createUser(@NonNull String email, @NonNull String password,
+			String firstName, String middleName, String lastName,
+			@NonNull LMSRequest lmsRequest) {
 
 		// TODO: get LMS Admin audit user id
 		Long auditUserId = Long.valueOf(0);
 
 		if (auditUserId == null)
-			throw new AccessDeniedException("Vyllage account creation is not allowed without a referring user.");
+			throw new AccessDeniedException(
+					"Vyllage account creation is not allowed without a referring user.");
 
 		boolean enabled = true;
 		boolean accountNonExpired = true;
@@ -89,11 +93,14 @@ public class LMSService {
 		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
 
 		for (GrantedAuthority userOrganizationRole : auditUser.getAuthorities()) {
-			defaultAuthoritiesForNewUser.add(
-					new UserOrganizationRole(null, ((UserOrganizationRole) userOrganizationRole).getOrganizationId(),
-							RolesEnum.STUDENT.name(), auditUser.getUserId()));
+			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
+					((UserOrganizationRole) userOrganizationRole)
+							.getOrganizationId(), RolesEnum.STUDENT.name(),
+					auditUser.getUserId()));
 			Organization organization = new Organization(
-					((UserOrganizationRole) userOrganizationRole).getOrganizationId(), null);
+					((UserOrganizationRole) userOrganizationRole)
+							.getOrganizationId(),
+					null);
 			lmsRequest.getLmsAccount().setOrganization(organization);
 		}
 
@@ -103,8 +110,9 @@ public class LMSService {
 		 * lmsRequest.getLmsUser().getRole(), auditUser.getUserId());
 		 * defaultAuthoritiesForNewUser.add(userOrganizationRole);
 		 */
-		User user = new User(null, firstName, middleName, lastName, email, password, enabled, accountNonExpired,
-				credentialsNonExpired, accountNonLocked, defaultAuthoritiesForNewUser, null, null);
+		User user = new User(null, firstName, middleName, lastName, email,
+				password, enabled, accountNonExpired, credentialsNonExpired,
+				accountNonLocked, defaultAuthoritiesForNewUser, null, null);
 
 		lmsUserRepository.createUser(user, lmsRequest);
 

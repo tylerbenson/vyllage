@@ -2,7 +2,7 @@ package email;
 
 /**
  * Simple emil text body.
- * 
+ *
  * @author uh
  *
  */

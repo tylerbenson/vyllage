@@ -422,9 +422,9 @@ public class AdviceService {
 
 	/**
 	 * Returns the user document Id.
-	 * 
+	 *
 	 * @param request
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 * @throws ElementNotFoundException

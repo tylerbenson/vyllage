@@ -94,7 +94,7 @@ public class UserContactSuggestionService {
 
 	/**
 	 * If the list of user is less than the limit then we get more suggestions.
-	 * 
+	 *
 	 * @param user
 	 * @param users
 	 * @param limit

@@ -10,7 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
-public class DocumentLocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
+public class DocumentLocalDateTimeDeserializer extends
+		JsonDeserializer<LocalDateTime> {
 
 	private static final String YYYY_MM_DD = "yyyy-MM-dd'T'HH:mm:ss";
 

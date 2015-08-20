@@ -100,7 +100,7 @@ public class UserOrganizationRoleRepository {
 
 	/**
 	 * Deletes ALL the user's organizations and roles.
-	 * 
+	 *
 	 * @param userId
 	 */
 	public void deleteByUserId(Long userId) {
@@ -111,7 +111,7 @@ public class UserOrganizationRoleRepository {
 	/**
 	 * Deletes ALL the user's roles for an specific organization, including the
 	 * organization relationship.
-	 * 
+	 *
 	 * @param userId
 	 */
 	public void deleteByUserIdAndOrganizationId(Long userId, Long organizationId) {
@@ -124,7 +124,7 @@ public class UserOrganizationRoleRepository {
 	/**
 	 * Checks if the given combination of userId, organizationId, and Role
 	 * exists.
-	 * 
+	 *
 	 * @param userId
 	 */
 	public boolean exists(Long userId, Long organizationId, String role) {
