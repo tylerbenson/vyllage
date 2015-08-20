@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -129,11 +130,11 @@ public class DocumentLinkService {
 		return userCredentialsRepository.isActive(userId, generatedPassword);
 	}
 
-	public SocialDocumentLink getSocialDocumentLink(String shortUrl) {
+	public Optional<SocialDocumentLink> getSocialDocumentLink(String shortUrl) {
 		return sharedDocumentRepository.getSocialDocumentLink(shortUrl);
 	}
 
-	public EmailDocumentLink getEmailDocumentLink(String shortUrl) {
+	public Optional<EmailDocumentLink> getEmailDocumentLink(String shortUrl) {
 		return sharedDocumentRepository.getEmailDocumentLink(shortUrl);
 	}
 

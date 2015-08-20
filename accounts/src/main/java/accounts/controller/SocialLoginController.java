@@ -1,6 +1,7 @@
 package accounts.controller;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -91,7 +92,7 @@ public class SocialLoginController {
 		// TODO: generateName is only useful if either user names or email are
 		// present on the userProfile
 
-		SocialDocumentLink doclink = sharedDocumentRepository
+		Optional<SocialDocumentLink> doclink = sharedDocumentRepository
 				.getSocialDocumentLink((String) request.getSession(false)
 						.getAttribute(SocialSessionEnum.LINK_KEY.name()));
 
@@ -120,12 +121,12 @@ public class SocialLoginController {
 			registerForm.setPassword(password);
 
 			// create user
-			createUser(request, webRequest, registerForm, doclink);
+			createUser(request, webRequest, registerForm, doclink.get());
 
 		}
 
-		return "redirect:" + "/" + doclink.getDocumentType() + "/"
-				+ doclink.getDocumentId();
+		return "redirect:" + "/" + doclink.get().getDocumentType() + "/"
+				+ doclink.get().getDocumentId();
 	}
 
 	@RequestMapping(value = "/register-from-social", method = RequestMethod.GET)
@@ -142,14 +143,14 @@ public class SocialLoginController {
 			RegisterForm registerForm, Model model) {
 
 		if (registerForm.isValid()) {
-			SocialDocumentLink doclink = sharedDocumentRepository
+			Optional<SocialDocumentLink> doclink = sharedDocumentRepository
 					.getSocialDocumentLink((String) request.getSession(false)
 							.getAttribute(SocialSessionEnum.LINK_KEY.name()));
 
-			createUser(request, webRequest, registerForm, doclink);
+			createUser(request, webRequest, registerForm, doclink.get());
 
-			return "redirect:" + "/" + doclink.getDocumentType() + "/"
-					+ doclink.getDocumentId();
+			return "redirect:" + "/" + doclink.get().getDocumentType() + "/"
+					+ doclink.get().getDocumentId();
 		}
 
 		model.addAttribute("registerForm", registerForm);

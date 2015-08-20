@@ -6,6 +6,7 @@ var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
 var Textarea = require('react-textarea-autosize');
 var Datepicker = require('../../datepicker');
+var Highlights = require('../highlights');
 var assign = require('lodash.assign')
 var MoveButton = require('../../buttons/move');
 var { DragDropMixin } = require('react-dnd');
@@ -42,26 +43,8 @@ var Organization = React.createClass({
     }
   },
   handleChange: function(key, e) {
-    // e.preventDefault();
     var section = this.state.section;
-    if(key === 'highlights') {
-      var input = e.target.value.trim().split('\n');
-      var highlights = [];
-
-      for(var i=0;i<input.length;i++) {
-        var highlight = input[i].trim();
-        if(highlight.length > 0) {
-          highlights.push(highlight);
-        }
-      }
-
-      section[key] = highlights;
-      console.log(section[key]);
-    }
-    else {
-      section[key] = e.target.value;
-    }
-
+    section[key] = e.target.value;
     this.setState({section: section});
   },
   toggleCurrent: function () {
@@ -71,8 +54,11 @@ var Organization = React.createClass({
   },
   saveHandler: function(e) {
     var section = this.state.section;
+    section['highlights'] = this.refs.highlights.getHighlights();
     actions.putSection(section);
+
     this.setState({
+      section: section,
       uiEditMode: false
     });
   },
@@ -82,7 +68,7 @@ var Organization = React.createClass({
       actions.deleteSection(section.sectionId);
     } else {
       this.setState({
-        section: this.props.section,
+        section: section,
         uiEditMode: false
       });
     }
@@ -100,8 +86,6 @@ var Organization = React.createClass({
     var placeholders = this.props.placeholders || {};
     var isDragging = this.getDragState('section').isDragging;
     var isHovering = this.getDropState('section').isHovering;
-
-    var highlights = section.highlights instanceof Array ? section.highlights.join('\n') : '';
 
     var classes = cx({
       'dragged': isDragging,
@@ -208,15 +192,7 @@ var Organization = React.createClass({
                   value={section.location}
                   onChange={this.handleChange.bind(this, 'location')}
                 />
-                <Textarea
-                  disabled={!uiEditMode}
-                  className="flat"
-                  style={uiEditMode || (section.highlights && section.highlights.length > 0) ? {}: {display: 'none'}}
-                  rows="1"
-                  placeholder={placeholders.highlights || "Note at least three (3) notable accomplishments achieved during this position.."}
-                  defaultValue={highlights}
-                  onChange={this.handleChange.bind(this, 'highlights')}
-                ></Textarea>
+                <Highlights ref="highlights" highlights={section.highlights} uiEditMode={uiEditMode} />
               </div>
             </section>
           </div>

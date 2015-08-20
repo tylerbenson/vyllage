@@ -25,6 +25,8 @@ buildscript {
         classpath 'com.h2database:h2:1.4.185'
         classpath 'org.jooq:jooq-codegen:3.5.0'
         classpath 'nu.studer:gradle-jooq-plugin:1.0.5'
+        classpath 'com.palantir:jacoco-coverage:0.3.0'
+        classpath 'com.google.guava:guava:18.0' // Used by palantir jacoco-coverage but not properly declared.
     }
 }
 
@@ -40,21 +42,76 @@ configure(rootProject) {
     //apply from: 'gradle/gitMetadata.gradle'
 }
 
+
 configure(javaProjects) {
     apply plugin: 'java'
+    apply plugin: 'com.palantir.jacoco-coverage'
     apply plugin: 'jacoco'
     apply plugin: 'findbugs'
+
 
     jacoco {
         toolVersion = "0.7.4.201502262128"
         reportsDir = file("$buildDir/reports/jacoco")
     }
 
+    jacocoCoverage {
+        // Enforce minimum code coverage.
+        // https://github.com/palantir/gradle-jacoco-coverage
+        reportThreshold 0.25, BRANCH, "accounts"
+        reportThreshold 0.6, CLASS, "accounts"
+        reportThreshold 0.29, COMPLEXITY, "accounts"
+        reportThreshold 0.4, INSTRUCTION, "accounts"
+        reportThreshold 0.4, LINE, "accounts"
+        reportThreshold 0.32, METHOD, "accounts"
+
+        reportThreshold 0.0, BRANCH, "connections"
+        reportThreshold 0.3, CLASS, "connections"
+        reportThreshold 0.05, COMPLEXITY, "connections"
+        reportThreshold 0.037, INSTRUCTION, "connections"
+        reportThreshold 0.06, LINE, "connections"
+        reportThreshold 0.07, METHOD, "connections"
+
+        reportThreshold 0.42, BRANCH, "documents"
+        reportThreshold 0.85, CLASS, "documents"
+        reportThreshold 0.48, COMPLEXITY, "documents"
+        reportThreshold 0.57, INSTRUCTION, "documents"
+        reportThreshold 0.56, LINE, "documents"
+        reportThreshold 0.519, METHOD, "documents"
+
+        packageThreshold 0.20, ~"accounts/.*"
+        packageThreshold 0.0, ~"connections/.*" // :-(
+        packageThreshold 0.20, ~"documents/.*"
+
+        // Whitelist files that currently have 0 coverage.
+        packageThreshold 0.0, ~"accounts/controller.*"
+        packageThreshold 0.0, "accounts/model"
+        packageThreshold 0.0, ~"accounts/model/account.*"
+        packageThreshold 0.0, ~"accounts/model/link.*"
+        packageThreshold 0.0, ~"accounts/domain/tables/records.*"
+
+        packageThreshold 0.0, "documents/database"
+        packageThreshold 0.0, "documents/files/pdf"
+
+        packageThreshold 0.0, "site/controllers"
+
+        // Sadly, these don't even have any tests.
+        packageThreshold 0.20, ~"email/.*"
+        packageThreshold 0.20, ~"oauth-provider/.*"
+        packageThreshold 0.20, ~"site/.*"
+        packageThreshold 0.20, ~"togglz/.*"
+        packageThreshold 0.20, ~"user-common/.*"
+        packageThreshold 0.20, ~"util/.*"
+    }
+
     findbugs {
         ignoreFailures = false
-        //effort = "max"
+        effort = "max"
         reportLevel = "medium"
-        visitors = ["FindSqlInjection", "SwitchFallthrough"]
+        //CbeckMustOverrideSuperAnnotation is not a typo, that's the name of the class...
+		//https://code.google.com/p/findbugs/source/browse/findbugs/src/java/edu/umd/cs/findbugs/detect
+		visitors = ["FindSqlInjection", "SwitchFallthrough",  "FindUselessObjects", "BadSyntaxForRegularExpression", "BadUseOfReturnValue"
+		, "BooleanReturnNull"]
     }
 
     tasks.withType(FindBugs) {
@@ -82,6 +139,7 @@ configure(javaProjects) {
         compile "org.slf4j:slf4j-api:$slf4j"
         compile "org.projectlombok:lombok:$lombok"
         compile "com.newrelic.agent.java:newrelic-api:$newrelic"
+
         testCompile "junit:junit:$junit"
         testCompile "org.hamcrest:hamcrest-library:$hamcrest"
         testCompile "org.mockito:mockito-core:$mockito"

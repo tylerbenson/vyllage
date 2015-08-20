@@ -23,7 +23,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
 
 import com.newrelic.api.agent.NewRelic;
-
+import accounts.domain.tables.records.UsersRecord;
 import accounts.model.UserCredential;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
@@ -39,7 +39,6 @@ import user.common.lms.LMSUserDetails;
 import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 import static accounts.domain.tables.Users.USERS;
-import accounts.domain.tables.records.UsersRecord;
 
 @Repository
 public class LMSUserRepository implements LMSUserDetailsService {

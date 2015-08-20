@@ -10,7 +10,7 @@ var CommentList = React.createClass({
   render: function () {
     var comments = this.props.comments || [];
     var commentNodes = comments.map(function (comment, index) {
-      if(comment.commentText.length<1){
+      if(!comment.commentText){
         return null;
       }
       return <div key={index} className='comment'>
@@ -26,7 +26,7 @@ var CommentList = React.createClass({
                     </div>
                   </div>
                   <div className="message">
-                    {comment.commentText}
+                    {comment.commentText.replace(/\n{3,}/,'\n\n')}
                   </div>
                 </div>
               </div>

@@ -12,7 +12,7 @@ dependencies:
 
 test:
   override:
-    - ./gradlew check test circlePgTest
+    - ./gradlew check circlePgTest --quiet --parallel
     - npm test
 
 deployment:
@@ -28,4 +28,3 @@ deployment:
             bucket: vyllage-deployments
             key_pattern: vyllage-{BUILD_NUM}-{SHORT_COMMIT}.zip
         deployment_group: prod
-

@@ -2,6 +2,7 @@ package accounts.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -42,12 +43,12 @@ public class SharedDocumentRepositoryTest {
 
 		sharedDocumentRepository.create(docLink);
 
-		EmailDocumentLink emailDocumentLink = sharedDocumentRepository
+		Optional<EmailDocumentLink> emailDocumentLink = sharedDocumentRepository
 				.getEmailDocumentLink(emailKey);
 
-		Assert.assertEquals(docLink.getLinkKey(),
-				emailDocumentLink.getLinkKey());
-		Assert.assertTrue(emailDocumentLink.getVisits().equals(0L));
+		Assert.assertEquals(docLink.getLinkKey(), emailDocumentLink.get()
+				.getLinkKey());
+		Assert.assertTrue(emailDocumentLink.get().getVisits().equals(0L));
 	}
 
 	@Test
@@ -64,12 +65,12 @@ public class SharedDocumentRepositoryTest {
 
 		sharedDocumentRepository.create(docLink);
 
-		SocialDocumentLink socialDocumentLink = sharedDocumentRepository
+		Optional<SocialDocumentLink> socialDocumentLink = sharedDocumentRepository
 				.getSocialDocumentLink(socialKey);
 
-		Assert.assertEquals(docLink.getLinkKey(),
-				socialDocumentLink.getLinkKey());
-		Assert.assertTrue(socialDocumentLink.getVisits().equals(0L));
+		Assert.assertEquals(docLink.getLinkKey(), socialDocumentLink.get()
+				.getLinkKey());
+		Assert.assertTrue(socialDocumentLink.get().getVisits().equals(0L));
 	}
 
 	@Test
@@ -103,14 +104,14 @@ public class SharedDocumentRepositoryTest {
 		sharedDocumentRepository.registerVisit(emailLink.getLinkKey());
 		sharedDocumentRepository.registerVisit(socialLink.getLinkKey());
 
-		EmailDocumentLink emailDocumentLink = sharedDocumentRepository
+		Optional<EmailDocumentLink> emailDocumentLink = sharedDocumentRepository
 				.getEmailDocumentLink(emailKey);
 
-		SocialDocumentLink socialDocumentLink = sharedDocumentRepository
+		Optional<SocialDocumentLink> socialDocumentLink = sharedDocumentRepository
 				.getSocialDocumentLink(socialKey);
 
-		Assert.assertTrue(emailDocumentLink.getVisits().equals(2L));
-		Assert.assertTrue(socialDocumentLink.getVisits().equals(1L));
+		Assert.assertTrue(emailDocumentLink.get().getVisits().equals(2L));
+		Assert.assertTrue(socialDocumentLink.get().getVisits().equals(1L));
 	}
 
 	@Test

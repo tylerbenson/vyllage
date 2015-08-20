@@ -154,7 +154,7 @@ var ResumeEditor = React.createClass({
     }.bind(this));
 
     return (
-      <div className='section'>
+      <div className='section' key={groupPosition}>
         <div className='container'>
           <Header
             title={sections[0].title}
@@ -168,7 +168,7 @@ var ResumeEditor = React.createClass({
     )
   },
   renderSections: function () {
-    var owner=this.state.resume.header.owner;
+    var owner = this.state.resume.header.owner;
     var sectionGroupNodes = []
     var sections = filter(this.state.resume.sections, {isSupported: true}) || [];
     var previousTitle = '';
@@ -192,11 +192,8 @@ var ResumeEditor = React.createClass({
 
 
   render: function () {
-    var owner=this.state.resume.header.owner;
-
-    var sections = filter(this.renderSections(), function(n) {
-      return n;
-    });
+    var owner = this.state.resume.header.owner;
+    var sections = this.renderSections();
 
     var allSection;
 

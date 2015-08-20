@@ -27,17 +27,17 @@
     <div class="section content">
       <label> Create a key and secret for your LTI.
       </label>
-      <form name="adminForm" class="container" action="#" th:action="@{/admin/lti/keys}" th:object="${ltiKeyForm}"
-      method="post" onsubmit="adminFormSubmit()">
+      <form name="adminForm" class="container" action="#" th:action="@{/admin/lti/keys}" th:object="${ltiKeyForm}" method="post"
+      onsubmit="adminFormSubmit()">
         <select id='organizationId' name='organizationId' onchange="adminFormOrganizationChange()">
           <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}">Some organization</option>
         </select>
 
-		<label> Consumer Key, the selected organization will be automatically prepended.</label>
-		<input th:field="*{consumerKey}"></input>
+        <label> Consumer Key, the selected organization will be automatically prepended.</label>
+        <input th:field="*{consumerKey}"></input>
 
-		<label> Secret </label>
-		<input th:field="*{secret}"></input>
+        <label> Secret </label>
+        <input th:field="*{secret}"></input>
 
         <button name="save" type="submit" class="pull right padded send-btn">Submit</button>
         <label th:if="*{error != null}" th:text="*{error}" style="color: red;"></label>
@@ -67,8 +67,8 @@
   }
 
   adminFormSubmit = function() {
-    document.adminForm.organizationId.disabled = false;
-  }
+      document.adminForm.organizationId.disabled = false;
+    }
     // ]]>
   </script>
   <script togglz:active="GOOGLE_ANALYTICS">

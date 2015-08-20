@@ -396,7 +396,7 @@ public class UserService {
 	public List<AccountContact> getAccountContacts(HttpServletRequest request,
 			@NonNull List<Long> userIds) {
 
-		if (userIds == null || userIds.isEmpty())
+		if (userIds.isEmpty())
 			return Collections.emptyList();
 
 		// getting settings
