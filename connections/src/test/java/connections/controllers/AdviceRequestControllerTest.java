@@ -95,8 +95,8 @@ public class AdviceRequestControllerTest {
 				adviceService);
 
 		AccountContact contact = new AccountContact();
-
 		AdviceRequest adviceRequest = new AdviceRequest();
+
 		adviceRequest.setUsers(Arrays.asList(contact));
 
 		controller.validateAdviceRequest(adviceRequest);
@@ -108,8 +108,8 @@ public class AdviceRequestControllerTest {
 				adviceService);
 
 		NotRegisteredUser user = new NotRegisteredUser();
-
 		AdviceRequest adviceRequest = new AdviceRequest();
+
 		adviceRequest.setNotRegisteredUsers(Arrays.asList(user));
 
 		controller.validateAdviceRequest(adviceRequest);
