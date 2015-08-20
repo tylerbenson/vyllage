@@ -19,6 +19,7 @@ import accounts.service.SignInUtil;
 import oauth.lti.LMSRequest;
 import oauth.model.LMSAccount;
 import oauth.utilities.CsrfTokenUtility;
+import oauth.utilities.LMSConstants;
 import user.common.Organization;
 import user.common.User;
 
@@ -43,19 +44,19 @@ public class LMSAccountController {
 
 		LMSRequest lmsRequest = LMSRequest.getInstance();
 		if (lmsRequest == null) {
-			throw new AccessDeniedException("LTI request doesn't have LMS and User details..");
+			throw new AccessDeniedException(LMSConstants.LTI_INVALID_LMS_USER);
 		}
 		if (lmsRequest.getLmsUser() == null) {
-			throw new AccessDeniedException("LTI request doesn't have LMS user details");
+			throw new AccessDeniedException(LMSConstants.LTI_INVALID_USER);
 		}
 		LMSAccount lmsAccount = lmsRequest.getLmsAccount();
 		if (lmsAccount == null) {
-			throw new AccessDeniedException("LTI request doesn't have LMS detail");
+			throw new AccessDeniedException(LMSConstants.LTI_INVALID_LMS);
 		}
 
 		Organization organization = lmsAccount.getOrganization();
 		if (organization == null || organization.getOrganizationName() == null) {
-			throw new AccessDeniedException("LTI request doesn't have LMS instance Id");
+			throw new AccessDeniedException(LMSConstants.LTI_INVALID_LMS_INSTANCE);
 		}
 		csrfTokenUtility = new CsrfTokenUtility();
 		String email = lmsRequest.getLmsUser().getEmail();
@@ -70,7 +71,6 @@ public class LMSAccountController {
 		String password = csrfTokenUtility.makeLTICompositePassword(request, "");
 		String lmsUserId = lmsRequest.getLmsUser().getUserId();
 		HttpSession session = request.getSession(false);
-
 		// Check LMS user exist or not
 		boolean lmsUserExist = lmsService.lmsUserExists(lmsUserId);
 
@@ -86,7 +86,6 @@ public class LMSAccountController {
 		} else {
 			// TODO: question - If user doesn't have email id with LMS details,
 			// then how they will get password..
-
 			// Create Vyllage user account.
 			User newUser = lmsService.createUser(userName, password, firstName, null, lastName, lmsRequest);
 

@@ -45,7 +45,7 @@ public class LMSRequest {
 		ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		HttpServletRequest req = sra.getRequest();
 		if (req == null) {
-			throw new IllegalStateException("HttpServletRequest can't be null");
+			throw new IllegalStateException(LMSConstants.LTI_INVALID_HTTP_REQUEST);
 		}
 		LMSRequest ltiRequest = (LMSRequest) req.getAttribute(LMSRequest.class.getName());
 		if (ltiRequest == null) {
@@ -58,7 +58,7 @@ public class LMSRequest {
 
 		this.httpServletRequest = request;
 		if (!isLTIRequest(request)) {
-			throw new IllegalStateException("Not a LTI request");
+			throw new IllegalStateException(LMSConstants.LTI_INVALID_REQUEST);
 		}
 		processRequestParameters(request);
 
@@ -81,9 +81,21 @@ public class LMSRequest {
 		lmsAccount = new LMSAccount();
 		lmsUser = new LMSUser();
 
-		organization.setOrganizationName(getParam(LMSConstants.LTI_INSTANCE_GUID));
+		if (getParam(LMSConstants.LTI_INSTANCE_GUID) != null) {
+			organization.setOrganizationName(getParam(LMSConstants.LTI_INSTANCE_GUID));
+		} else if (getParam(LMSConstants.LTI_INSTANCE_SERVER_ID) != null) {
+			organization.setOrganizationName(getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
+		} else {
+			throw new IllegalStateException(LMSConstants.LTI_INVALID_SERVER_ID);
+		}
 
-		lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_GUID));
+		if (getParam(LMSConstants.LTI_INSTANCE_GUID) != null) {
+			lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_GUID));
+		} else if (getParam(LMSConstants.LTI_INSTANCE_SERVER_ID) != null) {
+			lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
+		} else {
+			throw new IllegalStateException(LMSConstants.LTI_INVALID_SERVER_ID);
+		}
 		lmsAccount.setOrganization(organization);
 		lmsAccount.setLtiVersion(getParam(LMSConstants.LTI_VERSION));
 		lmsAccount.setType(getLMSType(getParam(LMSConstants.LTI_INSTANCE_TYPE)));
@@ -120,7 +132,7 @@ public class LMSRequest {
 
 		complete = checkCompleteLTIRequest();
 		if (!complete) {
-			throw new IllegalStateException("LTI request doesn't have Consumer Key or/and LMS user id. ");
+			throw new IllegalStateException(LMSConstants.LTI_INVALID_KEY);
 		}
 		HttpSession session = this.httpServletRequest.getSession();
 		session.setAttribute(LMSConstants.LTI_USER_ID, lmsUser.getUserId());
