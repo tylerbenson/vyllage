@@ -3,6 +3,9 @@ var Textarea = require('react-textarea-autosize');
 
 var Highlight = React.createClass({
 	render: function() {
+		if(!this.props.text){
+      return null;
+    }
 		return (
 			<li className="highlight">
 				<Textarea disabled="disabled" rows="1" className="flat" value={this.props.text.replace(/\n{3,}/,'\n\n')} />
