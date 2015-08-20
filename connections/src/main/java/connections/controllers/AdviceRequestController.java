@@ -1,16 +1,15 @@
 package connections.controllers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -30,41 +29,39 @@ import connections.model.AdviceRequest;
 import connections.model.AdviceRequestParameter;
 import connections.model.UserFilterResponse;
 import connections.repository.ElementNotFoundException;
-import connections.service.AccountService;
 import connections.service.AdviceService;
 
 @Controller
 @RequestMapping("resume")
 public class AdviceRequestController {
 
-	@Autowired
-	private AdviceService adviceService;
+	private final AdviceService adviceService;
 
-	@Autowired
-	private AccountService accountService;
+	@Inject
+	public AdviceRequestController(AdviceService adviceService) {
+		this.adviceService = adviceService;
+	}
 
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger
 			.getLogger(AdviceRequestController.class.getName());
 
 	@ModelAttribute("accountName")
-	public AccountNames accountNames(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
-		Long userId = user.getUserId();
+	public AccountNames accountNames(@AuthenticationPrincipal User user) {
+		AccountNames an = new AccountNames();
 
-		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
-				request, Arrays.asList(userId));
-
-		if (namesForUsers.isEmpty()) {
-			AccountNames an = new AccountNames();
-			an.setUserId(userId);
+		if (user == null) {
+			an.setUserId(null);
 			an.setFirstName("");
 			an.setLastName("");
 			an.setMiddleName("");
-			return an;
+		} else {
+			an.setUserId(user.getUserId());
+			an.setFirstName(user.getFirstName());
+			an.setLastName(user.getLastName());
+			an.setMiddleName(user.getMiddleName());
 		}
-
-		return namesForUsers.get(0);
+		return an;
 	}
 
 	@ModelAttribute("userInfo")
