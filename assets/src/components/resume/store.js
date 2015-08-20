@@ -2,12 +2,14 @@ var Reflux = require('reflux');
 var request = require('superagent');
 var endpoints = require('../endpoints');
 var urlTemplate = require('url-template');
+var where = require('lodash.where');
 var findindex = require('lodash.findindex');
 var omit = require('lodash.omit');
 var assign = require('lodash.assign');
 var max = require('lodash.max');
 var update = require('react/lib/update');
 var sortby = require('lodash.sortby');
+var filter = require('lodash.filter');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -30,6 +32,7 @@ module.exports = Reflux.createStore({
         lastName: ''
       },
       sections: [],
+      all_section:[],
       sectionOrder: ['summary', 'experience', 'education', 'skills'],
       isNavOpen: false,
       isPrintModalOpen: false
@@ -40,11 +43,10 @@ module.exports = Reflux.createStore({
     // Return 0 if sections is empty
     return (section !== -Infinity) ? section.sectionPosition: 0;
   },
-  postSectionOrder: function () {
-    var order = this.resume.sections.map(function (section) {
+  postSectionOrder: function( sections ) {
+    var order = sections.map(function (section) {
       return section.sectionId;
     });
-    // console.log(order);
 
     var url = urlTemplate
                 .parse(endpoints.resumeSectionOrder)
@@ -74,6 +76,7 @@ module.exports = Reflux.createStore({
   onGetResume: function () {
     this.onGetHeader();
     this.onGetSections();
+
   },
   onGetHeader: function () {
     var url = urlTemplate
@@ -85,6 +88,7 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         if (res.ok) {
           this.resume.header = res.body;
+
           this.trigger(this.resume);
         }
       }.bind(this))
@@ -123,11 +127,108 @@ module.exports = Reflux.createStore({
             if (section.numberOfComments > 0) {
               this.onGetComments(section.sectionId);
             }
-          }.bind(this))
+          }.bind(this));       
           this.trigger(this.resume);
         }
+  
       }.bind(this));
   },
+
+
+  onPublishSections : function( sections , header ){
+
+      this.resume.header = header; 
+      this.resume.sections = sections;
+      this.resume.sections.forEach(function (section) {
+        section.isSupported = this.isSupportedSection(section.type);
+        if (section.numberOfComments > 0) {
+          this.onGetComments(section.sectionId);
+        }
+      }.bind(this)); 
+
+     this.resume.all_section = this.doProcessSection( this.resume.sections, header.owner);
+     this.trigger(this.resume);
+
+  },
+
+  doProcessSection : function(sections , owner ){
+    var tmp_section = [];
+    sections = sortby(sections ,'sectionPosition');
+   
+    if( sections.length > 0 ){
+
+      sections.forEach(function(section){
+          section.isSupported = this.isSupportedSection(section.type);
+          if( section.isSupported){
+              if( tmp_section.length){
+                var findIt = findindex(tmp_section, {'type': section.type});
+                 if( findIt == -1){
+
+                    tmp_section.push({
+                      type: section.type,
+                      title : section.title, 
+                      id : section.sectionId,
+                      owner : owner,                   
+                      child : where( sections, { 'type': section.type }) 
+                    });
+                 }
+
+              }else{
+                tmp_section.push({
+                  type: section.type, 
+                  title : section.title,
+                  id : section.sectionId, 
+                  owner : owner,                  
+                  child : where( sections, { 'type': section.type }) 
+                });  
+              }
+          }
+      }.bind(this));
+      return tmp_section;
+    }
+  },
+
+  onMoveGroupOrder: function( order ){
+    var all_section = [];
+    order.map(function( section , index ){
+        all_section.push( filter(this.resume.all_section,{'type':section.type } )[0] );
+    }.bind(this));
+    this.resume.all_section = all_section;
+    this.makeItLinear( all_section );
+  },
+
+  onMoveSectionOrder:function( order , type ){
+     this.resume.all_section.map(function( sectionGroup , index ){        
+        if( sectionGroup.type == type ){  
+            var section_order = [];
+            order.map(function(section , index ){
+              section_order.push( filter(sectionGroup.child ,{'sectionId': section.sectionId } )[0] );
+            });
+            sectionGroup.child = section_order;
+        }
+     });
+     this.makeItLinear( this.resume.all_section ); 
+  },
+  makeItLinear: function(all_section){
+    var linear_section = [];
+    all_section.map(function(group , index ){
+          if( group.child.length ){
+            group.child.map(function(section , section_index){
+               section.sectionPosition = linear_section.length;
+               linear_section.push(section);
+            });
+          }
+      });
+      this.resume.sections.map(function(section,index){
+          var exist = filter( linear_section ,{ 'sectionId': section.sectionId });
+          if( !exist.length ){
+            section.sectionPosition = linear_section.length;
+            linear_section.push(section);
+          }
+      });
+     this.postSectionOrder( linear_section );     
+  },
+
   onPostSection: function (data) {
     var url = urlTemplate
                 .parse(endpoints.resumeSections)
@@ -142,16 +243,14 @@ module.exports = Reflux.createStore({
         var section = assign({}, res.body);
         section.newSection = true;  // To indicate a section is newly created
         section.isSupported = this.isSupportedSection(section.type);
-        var newSectionPosition = section.sectionPosition;
-        this.resume.sections.forEach(function (section) {
-          section.isSupported = this.isSupportedSection(section.type);
-          // console.log(section);
-          if (section.sectionPosition >= newSectionPosition) {
-            section.sectionPosition += 1;
-          }
-        }.bind(this));
-        this.resume.sections.splice(newSectionPosition - 1, 0, section);
-        this.postSectionOrder();
+        
+        // section order should reflect into whole thing . 
+        section.sectionPosition = this.resume.sections.length + 1;
+        // get section position . 
+        this.resume.sections.push(section);
+        this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+
+      //  this.postSectionOrder();
         this.trigger(this.resume);
       }.bind(this));
   },
@@ -170,6 +269,7 @@ module.exports = Reflux.createStore({
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
         this.resume.sections[index] = res.body;
         this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
+        this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
         this.trigger(this.resume);
       }.bind(this));
   },
@@ -188,31 +288,9 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         this.resume.sections.splice(index, 1);
+        this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
         this.trigger(this.resume);
       }.bind(this));
-  },
-  onUpdateSectionOrder: function (order) {
-    this.resume.sectionOrder = order;
-    this.trigger(this.resume);
-  },
-  onMoveSection: function (id, afterId) {
-    const { sections } = this.resume;
-    const section = sections.filter(c => c.sectionId === id)[0];
-    const afterSection = sections.filter(c => c.sectionId === afterId)[0];
-    const index = sections.indexOf(section);
-    const afterIndex = sections.indexOf(afterSection);
-
-    var obj = update(this.resume, {
-      sections: {
-        $splice: [
-          [index, 1],
-          [afterIndex, 0, section]
-        ]
-      }
-    });
-    this.resume.sections = obj.sections;
-    this.postSectionOrder();
-    this.trigger(this.resume);
   },
   onGetComments: function (sectionId) {
     var url = urlTemplate
@@ -226,6 +304,7 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         this.resume.sections[index].comments = res.body;
+       // this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
         this.trigger(this.resume);
       }.bind(this))
   },
@@ -252,32 +331,38 @@ module.exports = Reflux.createStore({
           this.resume.sections[index].comments = [res.body];
         }
         this.resume.sections[index].numberOfComments += 1;
+         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
         this.trigger(this.resume);
       }.bind(this))
   },
   onEnableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].uiEditMode = true;
+    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
     this.trigger(this.resume);
   },
   onDisableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].uiEditMode = false;
+    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
     this.trigger(this.resume);
   },
   onShowComments: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showComments = true;
+    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
     this.trigger(this.resume);
   },
   onHideComments: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showComments = false;
+    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
     this.trigger(this.resume);
   },
   onToggleComments: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showComments = !this.resume.sections[index].showComments;
+    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
     // console.log(sectionId, index, this.resume.sections[index]);
     this.trigger(this.resume);
   },

@@ -3,10 +3,10 @@ var React = require('react');
 var MoveBtn = React.createClass({
   render: function() {
     return (
-      <a style={{textAlign: 'center'}} className="inverted secondary button small move" {...this.props}>
+     <span className="inverted secondary button small move move-sub" {...this.props}>
         <i className="ion-arrow-move"></i>
         Move
-      </a>
+      </span>
     );
   }
 });

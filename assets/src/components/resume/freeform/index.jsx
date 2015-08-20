@@ -8,15 +8,12 @@ var CancelBtn = require('../../buttons/cancel');
 var SectionFooter = require('../sections/Footer');
 var Textarea = require('react-textarea-autosize');
 var MoveButton = require('../../buttons/move');
-var { DragDropMixin } = require('react-dnd');
-var {dragSource, dropTarget} = require('../sections/sectionDragDrop');
 var SectionFooter = require('../sections/Footer');
 var DeleteSection = require('../Delete');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 
 var Freeform = React.createClass({
-  mixins: [DragDropMixin],
   getInitialState: function() {
     return {
       description: this.props.section.description,
@@ -28,14 +25,6 @@ var Freeform = React.createClass({
       title: '',
       placeholder: 'Tell us more..',
       section: {}
-    }
-  },
-  statics: {
-    configureDragDrop(register) {
-      register('section', {
-        dragSource,
-        dropTarget
-      });
     }
   },
   componentWillReceiveProps: function (nextProps) {
@@ -78,18 +67,14 @@ var Freeform = React.createClass({
   },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
-    var isDragging = this.getDragState('section').isDragging;
-    var isHovering = this.getDropState('section').isHovering;
 
     var classes = cx({
-      'dragged': isDragging,
-      'hovered': isHovering,
       'subsection': true
     });
 
     return (
-      <div className={classes} {...this.dropTargetFor('section')}>
-        { this.props.owner ? <MoveButton {...this.dragSourceFor('section')} />: null }
+      <div className={classes}>
+        { this.props.owner ? <MoveButton />: null }
         <div className='header'>
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
