@@ -38,10 +38,6 @@
 
         <label> Secret </label>
         <input th:field="*{secret}"></input>
-        
-          <label> LMS Instance Id </label>
-        <input th:field="*{lmsInstanceId}"></input>
-        
 
         <button name="save" type="submit" class="pull right padded send-btn">Submit</button>
         <label th:if="*{error != null}" th:text="*{error}" style="color: red;"></label>

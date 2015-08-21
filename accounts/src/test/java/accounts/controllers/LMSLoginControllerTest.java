@@ -3,7 +3,7 @@
  */
 package accounts.controllers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.UUID;
 
-import oauth.utilities.LMSConstants;
+import javax.validation.constraints.AssertTrue;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -34,6 +34,8 @@ import accounts.Application;
 import accounts.controller.LMSLoginController;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
+import oauth.utilities.LMSConstants;
+import user.common.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -63,25 +65,21 @@ public class LMSLoginControllerTest {
 	private static final String LIS_PERSON_PREFIX_GIVEN = "Kunal";
 	private static final String LIS_PERSON_PREFIX_FAMILY = "Shankar";
 	private static final String LTI_USER_ROLES = "urn%3Alti%3Arole%3Aims%2Flis%2FLearner";
-	private static final String LTI_OUATH_NONCE = String.valueOf(System
-			.currentTimeMillis());
+	private static final String LTI_OUATH_NONCE = String.valueOf(System.currentTimeMillis());
 	private static final String LTI_OUATH_SIGNATURE = "k2HzozMnUGRDpYzvO6W7RMg5CFM%3D";
 	private static final String LTI_OUATH_SIGNATURE_METHOD = "HMAC-SHA1";
 	private static final String LTI_OUATH_TIMESTAMP = time();
 
 	@BeforeClass
 	public static void init() {
-		System.setProperty("spring.thymeleaf.prefix",
-				"file:///" + System.getProperty("PROJECT_HOME")
-						+ "/assets/src/");
+		System.setProperty("spring.thymeleaf.prefix", "file:///" + System.getProperty("PROJECT_HOME") + "/assets/src/");
 	}
 
 	@Before
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
 		lmsLoginController = new LMSLoginController(signInUtil);
-		mockSession = new MockHttpSession(wContext.getServletContext(), UUID
-				.randomUUID().toString());
+		mockSession = new MockHttpSession(wContext.getServletContext(), UUID.randomUUID().toString());
 	}
 
 	@Test
@@ -95,41 +93,23 @@ public class LMSLoginControllerTest {
 		assertNotNull(lmsLoginController);
 
 		springMvc
-				.perform(
-						post("/lti/account")
-								.param(LMSConstants.LTI_VERSION,
-										LMSConstants.LTI_VERSION_1P0)
-								.param(LMSConstants.LTI_INSTANCE_GUID,
-										LTI_INSTANCE_GUID)
-								.param(LMSConstants.LTI_INSTANCE_TYPE,
-										LTI_INSTANCE_TYPE)
-								.param(LMSConstants.LTI_CONSUMER_KEY,
-										LTI_CONSUMER_KEY)
-								.param(LMSConstants.LTI_OAUTH_VERSION,
-										LTI_OAUTH_VERSION)
-								.param(LMSConstants.LTI_LMS_VERSION,
-										LTI_LMS_VERSION)
-								.param(LMSConstants.LTI_USER_ID, LTI_USER_ID)
-								.param(LMSConstants.LTI_USER_NAME,
-										LTI_USER_NAME)
-								.param(LMSConstants.LTI_USER_EMAIL,
-										LTI_USER_EMAIL)
-								.param((LMSConstants.LIS_PERSON_PREFIX + "given"),
-										LIS_PERSON_PREFIX_GIVEN)
-								.param((LMSConstants.LIS_PERSON_PREFIX + "family"),
-										LIS_PERSON_PREFIX_FAMILY)
-								.param(LMSConstants.LTI_USER_ROLES,
-										LTI_USER_ROLES))
-				.andExpect(status().isMovedTemporarily())
-				.andExpect(redirectedUrl("/lti/login")).andDo(print());
+				.perform(post("/lti/account").param(LMSConstants.LTI_VERSION, LMSConstants.LTI_VERSION_1P0)
+						.param(LMSConstants.LTI_INSTANCE_GUID, LTI_INSTANCE_GUID)
+						.param(LMSConstants.LTI_INSTANCE_TYPE, LTI_INSTANCE_TYPE)
+						.param(LMSConstants.LTI_CONSUMER_KEY, LTI_CONSUMER_KEY)
+						.param(LMSConstants.LTI_OAUTH_VERSION, LTI_OAUTH_VERSION)
+						.param(LMSConstants.LTI_LMS_VERSION, LTI_LMS_VERSION)
+						.param(LMSConstants.LTI_USER_ID, LTI_USER_ID).param(LMSConstants.LTI_USER_NAME, LTI_USER_NAME)
+						.param(LMSConstants.LTI_USER_EMAIL, LTI_USER_EMAIL)
+						.param((LMSConstants.LIS_PERSON_PREFIX + "given"), LIS_PERSON_PREFIX_GIVEN)
+						.param((LMSConstants.LIS_PERSON_PREFIX + "family"), LIS_PERSON_PREFIX_FAMILY)
+						.param(LMSConstants.LTI_USER_ROLES, LTI_USER_ROLES))
+				.andExpect(status().isMovedTemporarily()).andExpect(redirectedUrl("/lti/login")).andDo(print());
 		mockSession.setAttribute("user_name", LTI_USER_EMAIL);
-		ResultActions result = springMvc
-				.perform(post("/lti/login").session(mockSession))
-				.andExpect(status().isMovedTemporarily())
-				.andExpect(redirectedUrl("/resume/")).andDo(print());
+		ResultActions result = springMvc.perform(post("/lti/login").session(mockSession))
+				.andExpect(status().isMovedTemporarily()).andExpect(redirectedUrl("/resume/")).andDo(print());
 		assertNotNull(result);
-		assertEquals(result.andReturn().getResponse().getRedirectedUrl(),
-				"/resume/");
+		assertEquals(result.andReturn().getResponse().getRedirectedUrl(), "/resume/");
 		assertEquals(result.andReturn().getResponse().getStatus(), 302);
 	}
 
