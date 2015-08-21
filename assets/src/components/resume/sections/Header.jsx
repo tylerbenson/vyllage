@@ -3,6 +3,7 @@ var actions = require('../actions');
 var AddBtn = require('../../buttons/add');
 var MoveButton = require('../../buttons/move');
 var filter = require('lodash.filter');
+var sections = require('../../sections');
 
 var SectionHeader = React.createClass({
   addSection: function (e) {
@@ -13,18 +14,17 @@ var SectionHeader = React.createClass({
     });
   },
   render: function () {
-    var sections = filter(this.props.sections, {title: 'summary'});
-    var showAdd = !((this.props.title === 'summary') && (sections.length > 0));
+    var sectionSpec = filter(sections, {type: this.props.type});
+    var isMultiple = sectionSpec instanceof Array ? sectionSpec[0].isMultiple : false;
+
     return  (
       <div className='header'>
         <div className='title'>
           <h1>{this.props.title}</h1>
         </div>
-        {this.props.owner && showAdd ? <div className="actions">
+        {this.props.owner && isMultiple ? <div className="actions">
           <AddBtn onClick={this.addSection} />
         </div>: null}
-
-        
       </div>
     );
   }

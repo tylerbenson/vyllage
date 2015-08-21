@@ -75,8 +75,8 @@ var Organization = React.createClass({
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
 
-
     var classes = cx({
+      'single': !this.props.isMultiple,
       'subsection': true
     });
 
