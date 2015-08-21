@@ -68,45 +68,45 @@ public class LTIAdminController {
 	@RequestMapping(value = "/admin/lti/keys", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String LTIKeysPost(@AuthenticationPrincipal User user,
-			LTIKeyForm LTIKeyForm, Model model) {
+			LTIKeyForm ltiKeyForm, Model model) {
 
 		// validate
-		if (LTIKeyForm.isInvalid()) {
+		if (ltiKeyForm.isInvalid()) {
 
 			List<Organization> allOrganizations = getAdminOrganizations(user);
 			Assert.notNull(allOrganizations);
 			Assert.notEmpty(allOrganizations);
 
-			if (LTIKeyForm.getSecret() == null
-					|| LTIKeyForm.getSecret().isEmpty())
-				LTIKeyForm.setSecret(passwordGenerator.getRandomPassword());
+			if (ltiKeyForm.getSecret() == null
+					|| ltiKeyForm.getSecret().isEmpty())
+				ltiKeyForm.setSecret(passwordGenerator.getRandomPassword());
 
 			model.addAttribute("organizations", allOrganizations);
-			model.addAttribute("ltiKeyForm", LTIKeyForm);
+			model.addAttribute("ltiKeyForm", ltiKeyForm);
 
 			return "adminLTIKey";
 		}
 
 		// to show the result
-		final Organization organization = organizationRepository.get(LTIKeyForm
+		final Organization organization = organizationRepository.get(ltiKeyForm
 				.getOrganizationId());
 
 		final String consumerKey = organization.getOrganizationName()
 				.replaceAll(NON_ALPHANUMERIC, "")
-				+ LTIKeyForm.getConsumerKey().replaceAll(NON_ALPHANUMERIC, "");
+				+ ltiKeyForm.getConsumerKey().replaceAll(NON_ALPHANUMERIC, "");
 
 		// save
 
 		LTIKey key = LTIKeyRepository.save(user, organization, consumerKey,
-				LTIKeyForm.getSecret());
+				ltiKeyForm.getSecret());
 
 		model.addAttribute("organization", organization.getOrganizationName());
 		model.addAttribute("consumerKey", consumerKey);
-		model.addAttribute("secret", LTIKeyForm.getSecret());
+		model.addAttribute("secret", ltiKeyForm.getSecret());
 
 		logger.info(organization.getOrganizationName());
 		logger.info(key.getKeyKey());
-		logger.info(LTIKeyForm.getSecret());
+		logger.info(ltiKeyForm.getSecret());
 
 		return "adminLTIKeyDone";
 	}

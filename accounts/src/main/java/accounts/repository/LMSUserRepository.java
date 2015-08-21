@@ -98,6 +98,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			newRecord.setMiddleName(user.getMiddleName());
 			newRecord.setLastName(user.getLastName());
 			newRecord.setEnabled(user.isEnabled());
+			newRecord.setResetPasswordOnNextLogin(true);
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
 			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
