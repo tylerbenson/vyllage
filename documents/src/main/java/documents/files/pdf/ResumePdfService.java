@@ -55,10 +55,7 @@ public class ResumePdfService {
 		PackageUserAgentCallback callback = new PackageUserAgentCallback(
 				renderer.getOutputDevice(), Resource.class);
 		callback.setSharedContext(renderer.getSharedContext());
-		callback.setBaseURL("public/images/");
 		renderer.getSharedContext().setUserAgentCallback(callback);
-		// renderer.getSharedContext().setDPI(600);
-		renderer.getSharedContext().setBaseURL("public/images/");
 		renderer.setDocumentFromString(htmlContent);
 
 		renderer.layout();
