@@ -1,8 +1,10 @@
 package user.common.web;
 
 import java.time.ZoneOffset;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import lombok.ToString;
 
@@ -15,7 +17,6 @@ import user.common.UserOrganizationRole;
  * For user metadata in webpage.
  *
  * @author uh
- *
  */
 @ToString
 public class UserInfo {
@@ -33,10 +34,14 @@ public class UserInfo {
 		this.userId = user.getUserId();
 		this.registeredOn = user.getDateCreated().toInstant(ZoneOffset.UTC)
 				.getEpochSecond();
-		for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
-			organizationIds.add(((UserOrganizationRole) grantedAuthority)
+
+		Set<Long> organizationIdsSet = new HashSet<>();
+
+		for (GrantedAuthority grantedAuthority : user.getAuthorities())
+			organizationIdsSet.add(((UserOrganizationRole) grantedAuthority)
 					.getOrganizationId());
-		}
+		organizationIds.addAll(organizationIdsSet);
+
 	}
 
 	public String getEmail() {
