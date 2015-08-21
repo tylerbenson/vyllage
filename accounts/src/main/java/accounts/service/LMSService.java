@@ -9,7 +9,9 @@ import javax.inject.Inject;
 import lombok.NonNull;
 import oauth.lti.LMSRequest;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import user.common.LMSUserCredentials;
@@ -21,6 +23,8 @@ import accounts.repository.LMSUserCredentialsRepository;
 import accounts.repository.LMSUserRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.UserNotFoundException;
+
+import com.newrelic.api.agent.NewRelic;
 
 @Service
 public class LMSService {
@@ -65,14 +69,8 @@ public class LMSService {
 			String firstName, String middleName, String lastName,
 			@NonNull LMSRequest lmsRequest) {
 
-		final String externalOrganizationId = lmsRequest.getLmsAccount()
-				.getExternalOrganizationId();
-
-		final Organization organization = organizationRepository
-				.getByExternalId(externalOrganizationId);
-
-		final Long auditUserId = organizationRepository
-				.getAuditUser(externalOrganizationId);
+		// TODO: get LMS Admin audit user id
+		Long auditUserId = Long.valueOf(0);
 
 		if (auditUserId == null)
 			throw new AccessDeniedException(
@@ -83,11 +81,28 @@ public class LMSService {
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 
+		User auditUser = null;
+		try {
+			auditUser = this.getUser(auditUserId);
+		} catch (UserNotFoundException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+
+		// add similar organization
 		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
 
-		defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
-				organization.getOrganizationId(), RolesEnum.STUDENT.name(),
-				auditUserId));
+		for (GrantedAuthority userOrganizationRole : auditUser.getAuthorities()) {
+			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
+					((UserOrganizationRole) userOrganizationRole)
+							.getOrganizationId(), RolesEnum.STUDENT.name(),
+					auditUser.getUserId()));
+			Organization organization = new Organization(
+					((UserOrganizationRole) userOrganizationRole)
+							.getOrganizationId(),
+					null);
+			lmsRequest.getLmsAccount().setOrganization(organization);
+		}
 
 		/*
 		 * UserOrganizationRole userOrganizationRole = new

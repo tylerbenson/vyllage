@@ -8,7 +8,6 @@ import lombok.ToString;
 public class Organization {
 
 	private Long organizationId;
-	private String externalId;
 	private String organizationName;
 
 	public Organization() {
@@ -35,13 +34,4 @@ public class Organization {
 	public void setOrganizationName(String organizationName) {
 		this.organizationName = organizationName;
 	}
-
-	public String getExternalId() {
-		return externalId;
-	}
-
-	public void setExternalId(String externalId) {
-		this.externalId = externalId;
-	}
-
 }

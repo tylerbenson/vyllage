@@ -6,11 +6,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import oauth.lti.LMSRequest;
-import oauth.model.LMSAccount;
-import oauth.utilities.CsrfTokenUtility;
-import oauth.utilities.LMSConstants;
-
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -18,19 +13,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
-import user.common.User;
 import accounts.repository.UserNotFoundException;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
+import oauth.lti.LMSRequest;
+import oauth.model.LMSAccount;
+import oauth.utilities.CsrfTokenUtility;
+import oauth.utilities.LMSConstants;
+import user.common.Organization;
+import user.common.User;
 
 @Controller
 public class LMSAccountController {
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(LMSAccountController.class
 			.getName());
 
-	@SuppressWarnings("unused")
 	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
@@ -60,10 +58,9 @@ public class LMSAccountController {
 			throw new AccessDeniedException(LMSConstants.LTI_INVALID_LMS);
 		}
 
-		String externalOrganizationId = lmsAccount.getExternalOrganizationId();
-		if (externalOrganizationId == null || externalOrganizationId.isEmpty()) {
-			throw new AccessDeniedException(
-					LMSConstants.LTI_INVALID_LMS_INSTANCE);
+		Organization organization = lmsAccount.getOrganization();
+		if (organization == null || organization.getOrganizationName() == null) {
+			throw new AccessDeniedException(LMSConstants.LTI_INVALID_LMS_INSTANCE);
 		}
 		csrfTokenUtility = new CsrfTokenUtility();
 		String email = lmsRequest.getLmsUser().getEmail();

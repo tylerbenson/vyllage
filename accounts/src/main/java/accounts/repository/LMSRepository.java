@@ -19,7 +19,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import user.common.Organization;
 import accounts.domain.tables.records.LmsRecord;
 
 import com.newrelic.api.agent.NewRelic;
@@ -31,15 +30,12 @@ public class LMSRepository {
 			.getName());
 	private final DSLContext sql;
 	private final DataSourceTransactionManager txManager;
-	private final OrganizationRepository organizationRepository;
 
 	@Inject
 	public LMSRepository(final DSLContext sql,
-			final DataSourceTransactionManager txManager,
-			final OrganizationRepository organizationRepository) {
+			final DataSourceTransactionManager txManager) {
 		this.sql = sql;
 		this.txManager = txManager;
-		this.organizationRepository = organizationRepository;
 	}
 
 	public Long createLMSAccount(@NonNull LMSAccount lmsAccount) {
@@ -48,9 +44,6 @@ public class LMSRepository {
 				.getTransaction(new DefaultTransactionDefinition());
 		Object savepoint = transaction.createSavepoint();
 		try {
-			Organization organizationByExternalId = organizationRepository
-					.getByExternalId(lmsAccount.getExternalOrganizationId());
-
 			LmsRecord newRecord = sql.newRecord(LMS);
 			newRecord.setLmsGuid(lmsAccount.getLmsGuid());
 			newRecord.setLmsName(lmsAccount.getLmsName());
@@ -58,7 +51,8 @@ public class LMSRepository {
 			newRecord.setLtiVersion(lmsAccount.getLtiVersion());
 			newRecord.setOauthVersion(lmsAccount.getOauthVersion());
 			newRecord.setLmsTypeId(lmsAccount.getType().getTypeId());
-			newRecord.setOrganizationId(organizationByExternalId.getOrganizationId());
+			newRecord.setOrganizationId(lmsAccount.getOrganization()
+					.getOrganizationId());
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
 			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime

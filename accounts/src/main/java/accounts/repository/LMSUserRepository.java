@@ -1,7 +1,5 @@
 package accounts.repository;
 
-import static accounts.domain.tables.Users.USERS;
-
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -10,15 +8,12 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import lombok.NonNull;
-import oauth.lti.LMSRequest;
-import oauth.model.LMSAccount;
-import oauth.model.service.LMSUserDetailsService;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,16 +22,23 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.Assert;
 
-import user.common.User;
-import user.common.UserOrganizationRole;
-import user.common.lms.LMSUserDetails;
+import com.newrelic.api.agent.NewRelic;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.UserCredential;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
-
-import com.newrelic.api.agent.NewRelic;
+import lombok.NonNull;
+import oauth.lti.LMSRequest;
+import oauth.model.LMSAccount;
+import oauth.model.service.LMSUserDetailsService;
+import user.common.LMSUserCredentials;
+import user.common.User;
+import user.common.UserOrganizationRole;
+import user.common.lms.LMSUserDetails;
+import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
+import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
+import static accounts.domain.tables.Users.USERS;
 
 @Repository
 public class LMSUserRepository implements LMSUserDetailsService {
@@ -45,6 +47,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			.getName());
 	private final DSLContext sql;
 	private final UserOrganizationRoleRepository userOrganizationRoleRepository;
+	private final OrganizationRepository organizationRepository;
 	private final UserCredentialsRepository credentialsRepository;
 	private final AccountSettingRepository accountSettingRepository;
 	private final DataSourceTransactionManager txManager;
@@ -63,6 +66,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			final LMSUserCredentialsRepository lmsUserCredentialsRepository) {
 		this.sql = sql;
 		this.userOrganizationRoleRepository = userOrganizationRoleRepository;
+		this.organizationRepository = organizationRepository;
 		this.credentialsRepository = credentialsRepository;
 		this.accountSettingRepository = accountSettingRepository;
 		this.txManager = txManager;
