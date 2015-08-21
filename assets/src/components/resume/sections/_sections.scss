@@ -460,13 +460,5 @@ $muted-text: lighten($secondary-color, 25%);
 
 .ui-sortable-placeholder {
   position: relative;
-
-  &:before {
-    background: $section-footer-background;
-    content: '';
-    display: block;
-    position: relative;
-    width: 80%;
-  }
+  margin: 1.75em 0;
 }
-
