@@ -2,8 +2,6 @@ package user.common.web;
 
 import java.time.ZoneOffset;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import lombok.ToString;
@@ -27,7 +25,7 @@ public class UserInfo {
 	// for intercom...
 	private Long registeredOn;
 
-	private List<Long> organizationIds = new LinkedList<>();
+	private Set<Long> organizationIds = new HashSet<>();
 
 	public UserInfo(User user) {
 		this.email = user.getUsername();
@@ -35,12 +33,10 @@ public class UserInfo {
 		this.registeredOn = user.getDateCreated().toInstant(ZoneOffset.UTC)
 				.getEpochSecond();
 
-		Set<Long> organizationIdsSet = new HashSet<>();
-
 		for (GrantedAuthority grantedAuthority : user.getAuthorities())
-			organizationIdsSet.add(((UserOrganizationRole) grantedAuthority)
-					.getOrganizationId());
-		organizationIds.addAll(organizationIdsSet);
+			getOrganizationIds().add(
+					((UserOrganizationRole) grantedAuthority)
+							.getOrganizationId());
 
 	}
 
@@ -68,11 +64,11 @@ public class UserInfo {
 		this.registeredOn = registeredOn;
 	}
 
-	public List<Long> getOrganizationIds() {
+	public Set<Long> getOrganizationIds() {
 		return organizationIds;
 	}
 
-	public void setOrganizationIds(List<Long> organizationIds) {
+	public void setOrganizationIds(Set<Long> organizationIds) {
 		this.organizationIds = organizationIds;
 	}
 
