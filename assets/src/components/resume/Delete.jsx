@@ -26,7 +26,7 @@ var DeleteSection = React.createClass({
     return (
       <div style={{display: 'inline-block'}}>
         <button
-          className='inverted small icon'
+          className='inverted small icon delete'
           onClick={this.openModal}>
           <i className='ion-trash-a'></i>
         </button>

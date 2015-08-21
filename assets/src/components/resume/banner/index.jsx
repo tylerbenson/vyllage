@@ -29,7 +29,7 @@ var Banner = React.createClass({
   componentWillReceiveProps: function (nextProps) {
     //For delayed header response
     //TODO: should be converted into a promise on the store side
-    if (nextProps.header !== this.props.header) {
+    if (nextProps !== this.props) {
       this.setState({fields: nextProps.header});
     }
   },
@@ -283,13 +283,13 @@ var Banner = React.createClass({
                   <span>Edit Profile</span>
                 </button>
 
-                <AddSection />
+                <AddSection sections={this.props.sections} />
               </div>
             )}
           </div>
         :null)}
         {(header.owner?
-          <Subheader ref="subheader" avatar={header.avatarUrl} name={name} onEditProfile={this.toggleEditable.bind(this, true)} />
+          <Subheader ref="subheader" avatar={header.avatarUrl} name={name} onEditProfile={this.toggleEditable.bind(this, true)} sections={this.props.sections} />
         :null)}
       </section>
     );

@@ -3,6 +3,7 @@ var Modal = require('../modal');
 var AddSectionOption = require('./AddSectionOption');
 var sections = require('../sections');
 var actions = require('./actions');
+var filter = require('lodash.filter');
 
 var AddSection = React.createClass({
 	getInitialState: function () {
@@ -10,6 +11,9 @@ var AddSection = React.createClass({
       isOpen: false
     };
 	},
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return nextProps !== this.props || nextState !== this.state;
+  },
   closeModal: function (e) {
     e.preventDefault();
     this.setState({isOpen: false});
@@ -25,13 +29,34 @@ var AddSection = React.createClass({
       type: option.type,
       sectionPosition: 1
     });
+  },
+  editSection: function(type) {
+    jQuery('.section[rel="' + type + '"] .edit').click();
+  },
+  handleClick: function(option) {
+    if(option.isMultiple) {
+      this.addSection(option.index);
+    }
+    else if(option.isAlreadyAdded) {
+      this.editSection(option.type);
+    }
+    else {
+      this.addSection(option.index);
+    }
+
+    jQuery('.banner .subheader').removeClass('visible');
     this.setState({isOpen: false});
   },
 	render: function() {
     var index = 0;
+    var added_sections = this.props.sections;
+    var clickHandle = {};
     var sectionOptions = sections.map(function(option) {
+      option.isAlreadyAdded = filter(added_sections, {type: option.type}).length > 0;
+      option.index = index++;
+
       return (
-        <AddSectionOption key={index} option={option} onClick={this.addSection.bind(this, index++)} />
+        <AddSectionOption key={index} option={option} onClick={this.handleClick.bind(this, option)} />
       );
     }.bind(this));
 

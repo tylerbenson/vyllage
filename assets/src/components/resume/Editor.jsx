@@ -137,7 +137,7 @@ var ResumeEditor = React.createClass({
 
     return (
       <div>
-        <Banner header={this.state.resume.header} settings={this.state.settings} />
+        <Banner header={this.state.resume.header} settings={this.state.settings} sections={this.state.resume.all_section} />
         {allSection}
       </div>
     );
