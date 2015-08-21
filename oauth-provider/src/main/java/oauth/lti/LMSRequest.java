@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import user.common.Organization;
 import user.common.constants.RolesEnum;
 import user.common.lms.LMSUser;
 
@@ -39,16 +38,19 @@ public class LMSRequest {
 
 	private LMSAccount lmsAccount;
 	private LMSUser lmsUser;
-	Organization organization;
+	private String externalOrganizationId;
 
 	public static synchronized LMSRequest getInstance() {
 
-		ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder
+				.getRequestAttributes();
 		HttpServletRequest req = sra.getRequest();
 		if (req == null) {
-			throw new IllegalStateException(LMSConstants.LTI_INVALID_HTTP_REQUEST);
+			throw new IllegalStateException(
+					LMSConstants.LTI_INVALID_HTTP_REQUEST);
 		}
-		LMSRequest ltiRequest = (LMSRequest) req.getAttribute(LMSRequest.class.getName());
+		LMSRequest ltiRequest = (LMSRequest) req.getAttribute(LMSRequest.class
+				.getName());
 		if (ltiRequest == null) {
 			ltiRequest = new LMSRequest(req);
 		}
@@ -68,7 +70,8 @@ public class LMSRequest {
 	public String getParam(String paramName) {
 		String value = null;
 		if (this.httpServletRequest != null && paramName != null) {
-			value = StringUtils.trimToNull(this.httpServletRequest.getParameter(paramName));
+			value = StringUtils.trimToNull(this.httpServletRequest
+					.getParameter(paramName));
 		}
 		return value;
 	}
@@ -78,14 +81,13 @@ public class LMSRequest {
 		if (request != null && this.httpServletRequest != request) {
 			this.httpServletRequest = request;
 		}
-		organization = new Organization();
 		lmsAccount = new LMSAccount();
 		lmsUser = new LMSUser();
 
 		if (getParam(LMSConstants.LTI_INSTANCE_GUID) != null) {
-			organization.setOrganizationName(getParam(LMSConstants.LTI_INSTANCE_GUID));
+			externalOrganizationId = getParam(LMSConstants.LTI_INSTANCE_GUID);
 		} else if (getParam(LMSConstants.LTI_INSTANCE_SERVER_ID) != null) {
-			organization.setOrganizationName(getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
+			externalOrganizationId = getParam(LMSConstants.LTI_INSTANCE_SERVER_ID);
 		} else {
 			throw new IllegalStateException(LMSConstants.LTI_INVALID_SERVER_ID);
 		}
@@ -93,13 +95,15 @@ public class LMSRequest {
 		if (getParam(LMSConstants.LTI_INSTANCE_GUID) != null) {
 			lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_GUID));
 		} else if (getParam(LMSConstants.LTI_INSTANCE_SERVER_ID) != null) {
-			lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
+			lmsAccount
+					.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
 		} else {
 			throw new IllegalStateException(LMSConstants.LTI_INVALID_SERVER_ID);
 		}
-		lmsAccount.setOrganization(organization);
+		lmsAccount.setExternalOrganizationId(externalOrganizationId);
 		lmsAccount.setLtiVersion(getParam(LMSConstants.LTI_VERSION));
-		lmsAccount.setType(getLMSType(getParam(LMSConstants.LTI_INSTANCE_TYPE)));
+		lmsAccount
+				.setType(getLMSType(getParam(LMSConstants.LTI_INSTANCE_TYPE)));
 		lmsAccount.setConsumerKey(getParam(LMSConstants.LTI_CONSUMER_KEY));
 
 		lmsAccount.setOauthVersion(getParam(LMSConstants.LTI_OAUTH_VERSION));
@@ -110,15 +114,18 @@ public class LMSRequest {
 		lmsUser.setEmail(getParam(LMSConstants.LTI_USER_EMAIL));
 
 		if (getParam(LMSConstants.LIS_PERSON_PREFIX + "given") != null) {
-			lmsUser.setFirstName(getParam(LMSConstants.LIS_PERSON_PREFIX + "given"));
+			lmsUser.setFirstName(getParam(LMSConstants.LIS_PERSON_PREFIX
+					+ "given"));
 		}
 		if (getParam(LMSConstants.LIS_PERSON_PREFIX + "family") != null) {
-			lmsUser.setLastName(getParam(LMSConstants.LIS_PERSON_PREFIX + "family"));
+			lmsUser.setLastName(getParam(LMSConstants.LIS_PERSON_PREFIX
+					+ "family"));
 		}
 
 		rawUserRoles = getParam(LMSConstants.LTI_USER_ROLES);
 		userRoleNumber = makeUserRoleNum(rawUserRoles);
-		String[] splitRoles = StringUtils.split(StringUtils.trimToEmpty(rawUserRoles), ",");
+		String[] splitRoles = StringUtils.split(
+				StringUtils.trimToEmpty(rawUserRoles), ",");
 		ltiUserRoles = new HashSet<>(Arrays.asList(splitRoles));
 
 		if (isRoleAdministrator()) {
@@ -154,28 +161,35 @@ public class LMSRequest {
 	}
 
 	public boolean isRoleLearner() {
-		return (rawUserRoles != null && StringUtils.containsIgnoreCase(rawUserRoles, "learner"));
+		return (rawUserRoles != null && StringUtils.containsIgnoreCase(
+				rawUserRoles, "learner"));
 	}
 
 	public static boolean isLTIRequest(ServletRequest request) {
 		boolean valid = false;
-		String ltiVersion = StringUtils.trimToNull(request.getParameter(LMSConstants.LTI_VERSION));
+		String ltiVersion = StringUtils.trimToNull(request
+				.getParameter(LMSConstants.LTI_VERSION));
 
 		if (ltiVersion != null) {
-			boolean goodLTIVersion = LMSConstants.LTI_VERSION_1P0.equals(ltiVersion);
+			boolean goodLTIVersion = LMSConstants.LTI_VERSION_1P0
+					.equals(ltiVersion);
 			valid = goodLTIVersion;
 		}
 		return valid;
 	}
 
-	public static String makeLTICompositeKey(HttpServletRequest request, String sessionSalt) {
+	public static String makeLTICompositeKey(HttpServletRequest request,
+			String sessionSalt) {
 
 		if (StringUtils.isBlank(sessionSalt)) {
 			sessionSalt = "A7k254A0itEuQ9ndKJuZ";
 		}
-		String composite = sessionSalt + "::" + request.getParameter(LMSConstants.LTI_CONSUMER_KEY) + "::"
-				+ request.getParameter(LMSConstants.LTI_USER_ID) + "::" + (System.currentTimeMillis() / 1800)
-				+ request.getHeader("User-Agent") + "::" + request.getContextPath();
+		String composite = sessionSalt + "::"
+				+ request.getParameter(LMSConstants.LTI_CONSUMER_KEY) + "::"
+				+ request.getParameter(LMSConstants.LTI_USER_ID) + "::"
+				+ (System.currentTimeMillis() / 1800)
+				+ request.getHeader("User-Agent") + "::"
+				+ request.getContextPath();
 
 		String compositeKey = DigestUtils.md5Hex(composite);
 		return compositeKey;
