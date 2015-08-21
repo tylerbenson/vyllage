@@ -79,7 +79,7 @@ var Banner = React.createClass({
         banner.address =  this.getRefValue('address'),
         banner.email =  this.getRefValue('email'),
         banner.phoneNumber =  phoneFormatter.normalize(this.getRefValue('phoneNumber')),
-        banner.twitter =  this.getRefValue('twitter')
+        banner.twitter =  this.getRefValue('twitter');
 
     if(banner.tagline !== this.state.fields.tagline) {
       var fields = clone(this.state.fields);
@@ -105,7 +105,7 @@ var Banner = React.createClass({
       errors.push('twitter');
     }
 
-    if(errors.length === 0) {
+    if(errors.length === 0) {      
       this.setState({fields: banner});
       settingActions.updateSettings();
       this.toggleEditable(false);

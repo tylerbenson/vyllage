@@ -58,7 +58,6 @@ module.exports = Reflux.createStore({
     setting = this.validateField(setting);
 
     if (index !== -1) {
-      setting.value = this.settings[index].value;
       this.settings[index] = setting;
     } else {
       this.settings.push(setting);
