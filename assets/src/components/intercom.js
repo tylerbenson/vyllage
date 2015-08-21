@@ -1,7 +1,7 @@
-if(window.location.hostname == 'localhost'){
-  window.app_id = 'g503rj0r';
-}else{
+if(window.location.hostname == 'www.vyllage.com'){
   window.app_id = 'dtqkoq5u';
+}else{
+  window.app_id = 'g503rj0r';
 }
 
 (function() {
