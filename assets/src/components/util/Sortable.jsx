@@ -9,7 +9,7 @@ var Sortable = React.createClass({
 		jQuery(config.list).sortable({
 			axis : 'y',
 			placeholder: "ui-sortable-placeholder",
-			opacity: 0.85,
+			opacity: 0.95,
 			scrollSpeed: 15,
 			scrollSensitivity: 20,
 			forcePlaceholderSize: true,
