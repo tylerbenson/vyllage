@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -49,6 +50,15 @@ public class ResumePdfService {
 		String htmlContent = templateEngine.process("pdf-resume", ctx);
 
 		ITextRenderer renderer = new ITextRenderer();
+		renderer.setDocumentFromString(htmlContent);
+
+		PackageUserAgentCallback callback = new PackageUserAgentCallback(
+				renderer.getOutputDevice(), Resource.class);
+		callback.setSharedContext(renderer.getSharedContext());
+		callback.setBaseURL("public/images/");
+		renderer.getSharedContext().setUserAgentCallback(callback);
+		// renderer.getSharedContext().setDPI(600);
+		renderer.getSharedContext().setBaseURL("public/images/");
 		renderer.setDocumentFromString(htmlContent);
 
 		renderer.layout();
