@@ -1,8 +1,8 @@
 package user.common.web;
 
 import java.time.ZoneOffset;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import lombok.ToString;
 
@@ -15,7 +15,6 @@ import user.common.UserOrganizationRole;
  * For user metadata in webpage.
  *
  * @author uh
- *
  */
 @ToString
 public class UserInfo {
@@ -26,17 +25,19 @@ public class UserInfo {
 	// for intercom...
 	private Long registeredOn;
 
-	private List<Long> organizationIds = new LinkedList<>();
+	private Set<Long> organizationIds = new HashSet<>();
 
 	public UserInfo(User user) {
 		this.email = user.getUsername();
 		this.userId = user.getUserId();
 		this.registeredOn = user.getDateCreated().toInstant(ZoneOffset.UTC)
 				.getEpochSecond();
-		for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
-			organizationIds.add(((UserOrganizationRole) grantedAuthority)
-					.getOrganizationId());
-		}
+
+		for (GrantedAuthority grantedAuthority : user.getAuthorities())
+			getOrganizationIds().add(
+					((UserOrganizationRole) grantedAuthority)
+							.getOrganizationId());
+
 	}
 
 	public String getEmail() {
@@ -63,11 +64,11 @@ public class UserInfo {
 		this.registeredOn = registeredOn;
 	}
 
-	public List<Long> getOrganizationIds() {
+	public Set<Long> getOrganizationIds() {
 		return organizationIds;
 	}
 
-	public void setOrganizationIds(List<Long> organizationIds) {
+	public void setOrganizationIds(Set<Long> organizationIds) {
 		this.organizationIds = organizationIds;
 	}
 
