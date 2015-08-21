@@ -1,7 +1,6 @@
 var React = require('react');
 var actions = require('../actions');
 var EditBtn = require('../../buttons/edit');
-var AddBtn = require('../../buttons/add');
 var DeleteSection = require('../Delete');
 var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
@@ -69,6 +68,7 @@ var Freeform = React.createClass({
     var uiEditMode = this.state.uiEditMode;
 
     var classes = cx({
+      'single': !this.props.isMultiple,
       'subsection': true
     });
 

@@ -1,7 +1,6 @@
 var React = require('react');
 var actions = require('../actions');
 var EditBtn = require('../../buttons/edit');
-var AddBtn = require('../../buttons/add');
 var DeleteSection = require('../Delete');
 var SaveBtn = require('../../buttons/save');
 var CancelBtn = require('../../buttons/cancel');
@@ -29,7 +28,6 @@ var Tags = React.createClass({
       section: {}
     }
   },
-
   componentWillReceiveProps: function (nextProps) {
     this.setState({
       tags: nextProps.section.tags,
@@ -104,6 +102,7 @@ var Tags = React.createClass({
     }.bind(this));
 
     var classes = cx({
+      'single': !this.props.isMultiple,
       'subsection': true
     });
 
@@ -111,7 +110,7 @@ var Tags = React.createClass({
     return (
       <div className={classes}>
         { this.props.owner ? <MoveButton />: null }
-        
+
         <div className='header'>
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }

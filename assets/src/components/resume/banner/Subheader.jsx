@@ -3,6 +3,9 @@ var Avatar = require('../../avatar');
 var AddSection = require('../AddSection');
 
 var Subheader = React.createClass({
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return nextProps !== this.props || nextState !== this.state;
+  },
   render: function () {
   var name = this.props.name || '';
 
@@ -19,7 +22,8 @@ var Subheader = React.createClass({
             	<span>Edit Profile</span>
             </button>
           </div>
-          <AddSection />
+
+          <AddSection sections={this.props.sections} />
         </div>
       </section>
     );

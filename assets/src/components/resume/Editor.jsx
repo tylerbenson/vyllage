@@ -13,7 +13,9 @@ var Sortable = require('../util/Sortable');
 
 var SubSection = React.createClass({
   start: function(event, ui){
-    jQuery('.banner .subheader').fadeOut(200);
+    jQuery('.banner .subheader')
+      .removeClass('visible')
+      .addClass('dragging');
   },
   stop: function(event, ui){
     var subsection_order = [];
@@ -29,7 +31,7 @@ var SubSection = React.createClass({
     });
 
     actions.moveSectionOrder(subsection_order , type);
-    jQuery('.banner .subheader').fadeIn(200);
+    jQuery('.banner .subheader').removeClass('dragging');
   },
   render: function(){
     var config = {
@@ -53,7 +55,9 @@ var SubSection = React.createClass({
 
 var SectionGroup = React.createClass({
   start: function(event, ui) {
-    jQuery('.banner .subheader').fadeOut(200);
+    jQuery('.banner .subheader')
+      .removeClass('visible')
+      .addClass('dragging');
   },
   stop: function(event, ui){
     var order = [];
@@ -66,7 +70,7 @@ var SectionGroup = React.createClass({
     });
 
     actions.moveGroupOrder(order);
-    jQuery('.banner .subheader').fadeIn(200);
+    jQuery('.banner .subheader').removeClass('dragging');
   },
   render: function(){
     var self = this;
@@ -133,7 +137,7 @@ var ResumeEditor = React.createClass({
 
     return (
       <div>
-        <Banner header={this.state.resume.header} settings={this.state.settings} />
+        <Banner header={this.state.resume.header} settings={this.state.settings} sections={this.state.resume.all_section} />
         {allSection}
       </div>
     );

@@ -40,9 +40,6 @@
     padding: 0.5em 4em;
   }
 
-
-
-
   .empty {
     color: lighten($banner-background, 50%);
     font-size: 1.15em;
@@ -61,6 +58,7 @@
       font-weight: 700;
 
       h1 {
+        color: lighten($alternate-color-2, 12%);
         font-weight: 400;
         font-size: 1em;
         text-transform: uppercase;
@@ -95,8 +93,6 @@
 
   .footer {
     background: $section-footer-background;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
     border-top: darken($section-footer-background,3%) solid 1px;
     margin-top: 2em;
     font-size: 0.85em;
@@ -232,10 +228,19 @@
 .subsection {
   background: $section-background;
   border-top: darken($section-footer-background,3%) solid 1px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
   position: relative;
   transition: all .2s ease;
+
+  &.single {
+    border-top: none;
+    & > .header {
+      padding: 0 4em;
+      position: absolute;
+      right: 0;
+      left: 0;
+      top: -2.25em;
+    }
+  }
 
   .footer {
     transition: all .2s ease;
@@ -262,7 +267,7 @@
   }
 
   & > .header {
-    padding: 2em 4em 0em 4em;
+    padding: 1.5em 4em 0em 4em;
 
     h2 {
       color: $mode-color;
@@ -333,6 +338,11 @@
     & > .header {
       padding: 1.5em 2em 0 2em;
     }
+    &.single {
+      & > .header {
+        padding: 0 2em;
+      }
+    }
   }
   .subsubsection {
     & > .header {
@@ -394,6 +404,11 @@
       .header {
         padding: 0.75em 2.5em 0 2.5em;
       }
+      &.single {
+        & > .header {
+          padding: 0 2.5em;
+        }
+      }
       .content {
         padding: 0 2.5em;
       }
@@ -440,14 +455,31 @@ $muted-text: lighten($secondary-color, 25%);
 }
 
 .ui-sortable-placeholder {
+  background: rgba(0,0,0,0.03);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.05),
+    0 1px 0 rgba(255,255,255,0.9);
   position: relative;
+}
 
-  &:before {
-    background: $section-footer-background;
-    content: '';
-    display: block;
-    position: relative;
-    width: 80%;
+.section-holder {
+  & > .ui-sortable-placeholder {
+    margin: 1.75em 0;
+  }
+  & > .ui-sortable-helper {
+    & > .container {
+      box-shadow: 0 3px 9px rgba(0,0,0,0.2);
+      transform: scale(1.03);
+      transition: all .2s ease;
+    }
   }
 }
 
+.subsection-holder {
+  & > .ui-sortable-helper {
+    & > div .subsection {
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transform: scale(1.01);
+      transition: all .2s ease;
+    }
+  }
+}
