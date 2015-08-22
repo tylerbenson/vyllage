@@ -234,8 +234,8 @@ public class LMSRequest {
 			lmsType.setLmsName(LMSEnum.DESIRE2LEARN.name());
 			break;
 		case CANVAS:
-			lmsType.setTypeId((long) LMSEnum.MOODLE.getValue());
-			lmsType.setLmsName(LMSEnum.MOODLE.name());
+			lmsType.setTypeId((long) LMSEnum.CANVAS.getValue());
+			lmsType.setLmsName(LMSEnum.CANVAS.name());
 			break;
 		case MOODLE:
 			lmsType.setTypeId((long) LMSEnum.MOODLE.getValue());

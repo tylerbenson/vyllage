@@ -2,7 +2,7 @@ package oauth.utilities;
 
 public enum LMSEnum {
 
-	BLACKBOARD(1), SAKAI(2), DESIRE2LEARN(3), CANVAS(4), MOODLE(5), CUSTOM(6);
+	BLACKBOARD(0), SAKAI(1), DESIRE2LEARN(2), CANVAS(3), MOODLE(4), CUSTOM(5);
 
 	private final int value;
 
