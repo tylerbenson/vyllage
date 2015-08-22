@@ -90,7 +90,7 @@ hooks:
 #   in the script specified in "location".
   AfterInstall:
     - location: scripts/deploy/after-install.sh
-      timeout: 5
+      timeout: 15
       runas: ubuntu
 # During the ApplicationInstall deployment lifecycle event, run the commands
 #   in the script specified in "location".
