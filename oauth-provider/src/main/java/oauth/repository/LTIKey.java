@@ -24,6 +24,8 @@ public class LTIKey {
 
 	private LocalDateTime dateCreated;
 
+	private String externalOrganizationId;
+
 	protected LTIKey() {
 	}
 
@@ -159,6 +161,14 @@ public class LTIKey {
 
 	public void setDateCreated(LocalDateTime dateCreated) {
 		this.dateCreated = dateCreated;
+	}
+
+	public String getExternalOrganizationId() {
+		return externalOrganizationId;
+	}
+
+	public void setExternalOrganizationId(String externalOrganizationId) {
+		this.externalOrganizationId = externalOrganizationId;
 	}
 
 }

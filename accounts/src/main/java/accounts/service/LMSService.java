@@ -8,10 +8,9 @@ import javax.inject.Inject;
 
 import lombok.NonNull;
 import oauth.lti.LMSRequest;
+import oauth.repository.LTIKeyRepository;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import user.common.LMSUserCredentials;
@@ -24,24 +23,23 @@ import accounts.repository.LMSUserRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.UserNotFoundException;
 
-import com.newrelic.api.agent.NewRelic;
-
 @Service
 public class LMSService {
 
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
-	private final OrganizationRepository organizationRepository;
 	private final LMSUserRepository lmsUserRepository;
 	private final LMSUserCredentialsRepository lmsUserCredentialsRepository;
+	private final LTIKeyRepository ltiKeyRepository;
 
 	@Inject
 	public LMSService(final OrganizationRepository organizationRepository,
 			final LMSUserRepository lmsUserRepository,
-			final LMSUserCredentialsRepository lmsUserCredentialsRepository) {
+			final LMSUserCredentialsRepository lmsUserCredentialsRepository,
+			final LTIKeyRepository ltiKeyRepository) {
 		super();
-		this.organizationRepository = organizationRepository;
 		this.lmsUserRepository = lmsUserRepository;
 		this.lmsUserCredentialsRepository = lmsUserCredentialsRepository;
+		this.ltiKeyRepository = ltiKeyRepository;
 	}
 
 	public User getUser(Long userId) throws UserNotFoundException {
@@ -69,8 +67,14 @@ public class LMSService {
 			String firstName, String middleName, String lastName,
 			@NonNull LMSRequest lmsRequest) {
 
-		// TODO: get LMS Admin audit user id
-		Long auditUserId = Long.valueOf(0);
+		final String externalOrganizationId = lmsRequest.getLmsAccount()
+				.getExternalOrganizationId();
+
+		final Organization organization = ltiKeyRepository
+				.getOrganizationByExternalId(externalOrganizationId);
+
+		final Long auditUserId = ltiKeyRepository
+				.getAuditUser(externalOrganizationId);
 
 		if (auditUserId == null)
 			throw new AccessDeniedException(
@@ -81,28 +85,11 @@ public class LMSService {
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
 
-		User auditUser = null;
-		try {
-			auditUser = this.getUser(auditUserId);
-		} catch (UserNotFoundException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
-
-		// add similar organization
 		List<UserOrganizationRole> defaultAuthoritiesForNewUser = new ArrayList<>();
 
-		for (GrantedAuthority userOrganizationRole : auditUser.getAuthorities()) {
-			defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
-					((UserOrganizationRole) userOrganizationRole)
-							.getOrganizationId(), RolesEnum.STUDENT.name(),
-					auditUser.getUserId()));
-			Organization organization = new Organization(
-					((UserOrganizationRole) userOrganizationRole)
-							.getOrganizationId(),
-					null);
-			lmsRequest.getLmsAccount().setOrganization(organization);
-		}
+		defaultAuthoritiesForNewUser.add(new UserOrganizationRole(null,
+				organization.getOrganizationId(), RolesEnum.STUDENT.name(),
+				auditUserId));
 
 		/*
 		 * UserOrganizationRole userOrganizationRole = new

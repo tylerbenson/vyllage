@@ -1,10 +1,12 @@
 package accounts.repository;
 
 import static accounts.domain.tables.LtiCredentials.LTI_CREDENTIALS;
+import static accounts.domain.tables.Organizations.ORGANIZATIONS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Repository;
 
 import user.common.Organization;
 import user.common.User;
+import accounts.domain.tables.LtiCredentials;
+import accounts.domain.tables.Organizations;
 import accounts.domain.tables.records.LtiCredentialsRecord;
 
 @Repository
@@ -56,7 +60,8 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 	@Override
 	public LTIKey save(@NonNull final User user,
 			@NonNull final Organization organization,
-			@NonNull final String consumerKey, @NonNull final String secret) {
+			@NonNull final String consumerKey, @NonNull final String secret,
+			final String externalOrganizationId) {
 
 		final LtiCredentialsRecord existingRecord = sql.fetchOne(
 				LTI_CREDENTIALS,
@@ -79,6 +84,7 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 					.now(ZoneId.of("UTC"))));
 
 			newRecord.setKeyId(organization.getOrganizationId());
+			newRecord.setExternalOrganizationId(externalOrganizationId);
 
 			newRecord.store();
 
@@ -92,6 +98,7 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 			existingRecord.setSecret(secret);
 			existingRecord.setKeyId(organization.getOrganizationId());
 			existingRecord.setConsumerKey(consumerKey);
+			existingRecord.setExternalOrganizationId(externalOrganizationId);
 
 			existingRecord.store();
 
@@ -104,6 +111,38 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 		return lmsKey;
 	}
 
+	@Override
+	public Organization getOrganizationByExternalId(
+			String externalOrganizationId) {
+
+		Organizations o = ORGANIZATIONS.as("o");
+		LtiCredentials lti = LTI_CREDENTIALS.as("lti");
+
+		// since the primary key is the organization id there can only be one
+		List<Organization> list = sql.select(o.fields()).from(o).join(lti)
+				.on(o.ORGANIZATION_ID.eq(lti.KEY_ID))
+				.where(lti.EXTERNAL_ORGANIZATION_ID.eq(externalOrganizationId))
+				.fetchInto(Organization.class);
+
+		return list.get(0);
+	}
+
+	/**
+	 * Returns the id user that created the key.
+	 * 
+	 * @param externalOrganizationId
+	 * @return admin id
+	 */
+	@Override
+	public Long getAuditUser(String externalOrganizationId) {
+
+		final LtiCredentialsRecord existingRecord = sql.fetchOne(
+				LTI_CREDENTIALS, LTI_CREDENTIALS.EXTERNAL_ORGANIZATION_ID
+						.eq(externalOrganizationId));
+
+		return existingRecord.getCreatorUserId();
+	}
+
 	protected LTIKey getKey(@NonNull final LtiCredentialsRecord keyRecord) {
 
 		final LTIKey lmsKey = new LTIKey(keyRecord.getConsumerKey(),
@@ -114,6 +153,7 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 		lmsKey.setModifiedByUserId(keyRecord.getModifiedByUserId());
 		lmsKey.setLastModified(keyRecord.getLastModified().toLocalDateTime());
 		lmsKey.setDateCreated(keyRecord.getDateCreated().toLocalDateTime());
+		lmsKey.setExternalOrganizationId(keyRecord.getExternalOrganizationId());
 		return lmsKey;
 	}
 }

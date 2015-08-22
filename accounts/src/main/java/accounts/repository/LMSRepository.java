@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import lombok.NonNull;
 import oauth.model.LMSAccount;
+import oauth.repository.LTIKeyRepository;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import user.common.Organization;
 import accounts.domain.tables.records.LmsRecord;
 
 import com.newrelic.api.agent.NewRelic;
@@ -30,12 +32,15 @@ public class LMSRepository {
 			.getName());
 	private final DSLContext sql;
 	private final DataSourceTransactionManager txManager;
+	private final LTIKeyRepository ltiKeyRepository;
 
 	@Inject
 	public LMSRepository(final DSLContext sql,
-			final DataSourceTransactionManager txManager) {
+			final DataSourceTransactionManager txManager,
+			final LTIKeyRepository ltiKeyRepository) {
 		this.sql = sql;
 		this.txManager = txManager;
+		this.ltiKeyRepository = ltiKeyRepository;
 	}
 
 	public Long createLMSAccount(@NonNull LMSAccount lmsAccount) {
@@ -44,6 +49,10 @@ public class LMSRepository {
 				.getTransaction(new DefaultTransactionDefinition());
 		Object savepoint = transaction.createSavepoint();
 		try {
+			Organization organizationByExternalId = ltiKeyRepository
+					.getOrganizationByExternalId(lmsAccount
+							.getExternalOrganizationId());
+
 			LmsRecord newRecord = sql.newRecord(LMS);
 			newRecord.setLmsGuid(lmsAccount.getLmsGuid());
 			newRecord.setLmsName(lmsAccount.getLmsName());
@@ -51,7 +60,7 @@ public class LMSRepository {
 			newRecord.setLtiVersion(lmsAccount.getLtiVersion());
 			newRecord.setOauthVersion(lmsAccount.getOauthVersion());
 			newRecord.setLmsTypeId(lmsAccount.getType().getTypeId());
-			newRecord.setOrganizationId(lmsAccount.getOrganization()
+			newRecord.setOrganizationId(organizationByExternalId
 					.getOrganizationId());
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
