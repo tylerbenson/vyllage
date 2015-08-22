@@ -23,6 +23,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import user.common.constants.RolesEnum;
 import user.common.lms.LMSUser;
 
+import com.newrelic.api.agent.NewRelic;
+
 public class LMSRequest {
 
 	final static Logger log = LoggerFactory.getLogger(LMSRequest.class);
@@ -102,6 +104,10 @@ public class LMSRequest {
 		}
 		lmsAccount.setExternalOrganizationId(externalOrganizationId);
 		lmsAccount.setLtiVersion(getParam(LMSConstants.LTI_VERSION));
+
+		// logging custom parameter for later
+		NewRelic.addCustomParameter("LTI_INSTANCE_TYPE",
+				getParam(LMSConstants.LTI_INSTANCE_TYPE));
 		lmsAccount
 				.setType(getLMSType(getParam(LMSConstants.LTI_INSTANCE_TYPE)));
 		lmsAccount.setConsumerKey(getParam(LMSConstants.LTI_CONSUMER_KEY));
