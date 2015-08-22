@@ -21,8 +21,8 @@ public class UserNotificationTest {
 
 	@Test
 	public void testWasSentYesterday() {
-		UserNotification un = new UserNotification(0L, LocalDateTime.now()
-				.minusDays(1L));
+		UserNotification un = new UserNotification(0L, LocalDateTime.now(
+				ZoneId.of("UTC")).minusDays(1L));
 
 		assertFalse(un.wasSentToday());
 
