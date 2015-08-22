@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import lombok.NonNull;
 import oauth.lti.LMSRequest;
+import oauth.repository.LTIKeyRepository;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -26,18 +27,19 @@ import accounts.repository.UserNotFoundException;
 public class LMSService {
 
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
-	private final OrganizationRepository organizationRepository;
 	private final LMSUserRepository lmsUserRepository;
 	private final LMSUserCredentialsRepository lmsUserCredentialsRepository;
+	private final LTIKeyRepository ltiKeyRepository;
 
 	@Inject
 	public LMSService(final OrganizationRepository organizationRepository,
 			final LMSUserRepository lmsUserRepository,
-			final LMSUserCredentialsRepository lmsUserCredentialsRepository) {
+			final LMSUserCredentialsRepository lmsUserCredentialsRepository,
+			final LTIKeyRepository ltiKeyRepository) {
 		super();
-		this.organizationRepository = organizationRepository;
 		this.lmsUserRepository = lmsUserRepository;
 		this.lmsUserCredentialsRepository = lmsUserCredentialsRepository;
+		this.ltiKeyRepository = ltiKeyRepository;
 	}
 
 	public User getUser(Long userId) throws UserNotFoundException {
@@ -68,10 +70,10 @@ public class LMSService {
 		final String externalOrganizationId = lmsRequest.getLmsAccount()
 				.getExternalOrganizationId();
 
-		final Organization organization = organizationRepository
-				.getByExternalId(externalOrganizationId);
+		final Organization organization = ltiKeyRepository
+				.getOrganizationByExternalId(externalOrganizationId);
 
-		final Long auditUserId = organizationRepository
+		final Long auditUserId = ltiKeyRepository
 				.getAuditUser(externalOrganizationId);
 
 		if (auditUserId == null)

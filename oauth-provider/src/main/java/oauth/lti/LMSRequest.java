@@ -88,17 +88,35 @@ public class LMSRequest {
 
 		if (getParam(LMSConstants.LTI_INSTANCE_GUID) != null) {
 			externalOrganizationId = getParam(LMSConstants.LTI_INSTANCE_GUID);
+
+			NewRelic.addCustomParameter("LTI_INSTANCE_GUID - EXT ORGANIZATION",
+					getParam(LMSConstants.LTI_INSTANCE_GUID));
+
 		} else if (getParam(LMSConstants.LTI_INSTANCE_SERVER_ID) != null) {
+
 			externalOrganizationId = getParam(LMSConstants.LTI_INSTANCE_SERVER_ID);
+
+			NewRelic.addCustomParameter("LTI_INSTANCE_GUID - EXT ORGANIZATION",
+					getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
+
 		} else {
 			throw new IllegalStateException(LMSConstants.LTI_INVALID_SERVER_ID);
 		}
 
 		if (getParam(LMSConstants.LTI_INSTANCE_GUID) != null) {
+
 			lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_GUID));
+
+			NewRelic.addCustomParameter("LTI_INSTANCE_GUID",
+					getParam(LMSConstants.LTI_INSTANCE_GUID));
+
 		} else if (getParam(LMSConstants.LTI_INSTANCE_SERVER_ID) != null) {
+
 			lmsAccount
 					.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
+
+			NewRelic.addCustomParameter("LTI_INSTANCE_SERVER_ID",
+					getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
 		} else {
 			throw new IllegalStateException(LMSConstants.LTI_INVALID_SERVER_ID);
 		}

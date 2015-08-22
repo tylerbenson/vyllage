@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import lombok.NonNull;
 import oauth.model.LMSAccount;
+import oauth.repository.LTIKeyRepository;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
@@ -31,15 +32,15 @@ public class LMSRepository {
 			.getName());
 	private final DSLContext sql;
 	private final DataSourceTransactionManager txManager;
-	private final OrganizationRepository organizationRepository;
+	private final LTIKeyRepository ltiKeyRepository;
 
 	@Inject
 	public LMSRepository(final DSLContext sql,
 			final DataSourceTransactionManager txManager,
-			final OrganizationRepository organizationRepository) {
+			final LTIKeyRepository ltiKeyRepository) {
 		this.sql = sql;
 		this.txManager = txManager;
-		this.organizationRepository = organizationRepository;
+		this.ltiKeyRepository = ltiKeyRepository;
 	}
 
 	public Long createLMSAccount(@NonNull LMSAccount lmsAccount) {
@@ -48,8 +49,9 @@ public class LMSRepository {
 				.getTransaction(new DefaultTransactionDefinition());
 		Object savepoint = transaction.createSavepoint();
 		try {
-			Organization organizationByExternalId = organizationRepository
-					.getByExternalId(lmsAccount.getExternalOrganizationId());
+			Organization organizationByExternalId = ltiKeyRepository
+					.getOrganizationByExternalId(lmsAccount
+							.getExternalOrganizationId());
 
 			LmsRecord newRecord = sql.newRecord(LMS);
 			newRecord.setLmsGuid(lmsAccount.getLmsGuid());
@@ -58,7 +60,8 @@ public class LMSRepository {
 			newRecord.setLtiVersion(lmsAccount.getLtiVersion());
 			newRecord.setOauthVersion(lmsAccount.getOauthVersion());
 			newRecord.setLmsTypeId(lmsAccount.getType().getTypeId());
-			newRecord.setOrganizationId(organizationByExternalId.getOrganizationId());
+			newRecord.setOrganizationId(organizationByExternalId
+					.getOrganizationId());
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
 			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
