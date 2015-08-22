@@ -7,7 +7,6 @@ import java.time.ZoneId;
  * Used to determine if a user has received a notification.
  *
  * @author uh
- *
  */
 public class UserNotification {
 	private Long userId;
@@ -40,6 +39,6 @@ public class UserNotification {
 
 	public boolean wasSentToday() {
 		return LocalDateTime.now(ZoneId.of("UTC")).getDayOfMonth() == getDateCreated()
-				.getDayOfMonth();
+				.atZone(ZoneId.of("UTC")).getDayOfMonth();
 	}
 }
