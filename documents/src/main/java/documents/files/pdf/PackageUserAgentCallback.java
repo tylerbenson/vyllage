@@ -36,9 +36,12 @@ public class PackageUserAgentCallback extends ITextUserAgent {
 		try {
 			InputStream in = resourceClass.getResourceAsStream(uri);
 			
-			if(in == null)
-				throw new NullPointerException("Image for " + uri + " not found.");
-			
+			if(in == null) {
+				String error = "Image for " + uri + " not found. Replacing with blank image.";
+				logger.severe(error);
+				NewRelic.noticeError(error);
+				in = resourceClass.getResourceAsStream("/documents/images/blank.png");
+			}
 			
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			int numRead;
