@@ -23,6 +23,7 @@ import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
+import documents.model.Suggestion;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
 import documents.model.document.sections.DocumentSection;
@@ -52,7 +53,6 @@ public class DocumentService {
 
 	private CommentRepository commentRepository;
 
-	@SuppressWarnings("unused")
 	private SuggestionRepository suggestionRepository;
 
 	private AccountService accountService;
@@ -436,6 +436,11 @@ public class DocumentService {
 
 		header.setTagline(document.getTagline());
 		return header;
+	}
+	
+	public List<Suggestion> getDocumentSuggestions(Long documentId)
+			throws ElementNotFoundException {
+		return suggestionRepository.getSuggestions(documentId);
 	}
 
 }
