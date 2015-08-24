@@ -1,5 +1,7 @@
 package documents.repository;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +21,7 @@ import documents.model.document.sections.EducationSection;
 public class SuggestionRepositoryTest {
 
 	@Autowired
-	private IRepository<Suggestion> repository;
+	private SuggestionRepository repository;
 
 	private static final String JSON = "{"
 			+ "\"type\": \"JobExperienceSection\","
@@ -46,6 +48,28 @@ public class SuggestionRepositoryTest {
 
 		Assert.assertNotNull("Suggestion is null.", suggestion);
 		Assert.assertTrue(suggestion.getSuggestionId().equals(0L));
+	}
+
+	@Test
+	public void testRetrieveExistingSuggestions()
+			throws ElementNotFoundException {
+
+		Long sectionId = 127L;
+
+		// TODO: this is retrieving the stuff inserted in
+		// V99__data_documents.sql...
+		List<Suggestion> suggestion = repository.getSuggestions(sectionId);
+
+		Assert.assertNotNull("Suggestion is null.", suggestion);
+		Assert.assertTrue("No suggestions found. ", suggestion.size() > 0);
+
+		Assert.assertTrue(
+				"Suggestionsfor Section with Id " + sectionId + " not found.",
+				suggestion.stream().anyMatch(
+						s -> s.getDocumentSection() != null
+								&& sectionId.equals(s.getSectionId())
+								&& sectionId.equals(s.getDocumentSection()
+										.getSectionId())));
 	}
 
 	@Test
