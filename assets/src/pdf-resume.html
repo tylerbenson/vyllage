@@ -13,14 +13,26 @@
 <body>
   <div class="header cf">
     <div class="info">
-      <h1 th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '') + ' ' + (header.lastName != null ? header.lastName : '')}">Names!</h1>
-      <em th:text="${header.tagline}">This is my tagline</em>
-      <p th:text="${header.address}">Casa 123</p>
+      <div>
+        <h1 th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '') + ' ' + (header.lastName != null ? header.lastName : '')}">Names!</h1>
+      </div>
+      <div>
+        <em th:text="${header.tagline}">This is my tagline</em>
+      </div>
+      <div>
+        <p th:text="${header.address}">Casa 123</p>
+      </div>
     </div>
     <div class="contact">
-      <p th:text="${header.email}"> abcd@abcd.com</p>
-      <p th:text="${header.phoneNumber}">(555)1234-56789</p>
-      <p th:text="${header.twitter}">@abcd</p>
+      <div class="cf" th:if="${header.email != null}">
+        <img src="/documents/images/mail-icon.png" /><p th:text="${header.email}"> abcd@abcd.com</p>
+      </div>
+      <div th:if="${header.phoneNumber != null}">
+        <img src="/documents/images/phone-icon.png" /><p th:text="${header.phoneNumber}">(555)1234-56789</p>
+      </div>
+      <div th:if="${header.twitter != null}">
+        <img src="/documents/images/web-icon.png" /><p th:text="${header.twitter}">@abcd</p>
+      </div>
     </div>
   </div>
   <!-- loop over the sections -->
