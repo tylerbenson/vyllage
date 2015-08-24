@@ -13,10 +13,10 @@ import org.xhtmlrenderer.resource.ImageResource;
 
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Image;
+import com.newrelic.api.agent.NewRelic;
 
 public class PackageUserAgentCallback extends ITextUserAgent {
 
-	@SuppressWarnings("unused")
 	private static Logger logger = Logger
 			.getLogger(PackageUserAgentCallback.class.getName());
 
@@ -35,6 +35,14 @@ public class PackageUserAgentCallback extends ITextUserAgent {
 	public ImageResource getImageResource(String uri) {
 		try {
 			InputStream in = resourceClass.getResourceAsStream(uri);
+			
+			if(in == null) {
+				String error = "Image for " + uri + " not found. Replacing with blank image.";
+				logger.severe(error);
+				NewRelic.noticeError(error);
+				in = resourceClass.getResourceAsStream("/documents/images/blank.png");
+			}
+			
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			int numRead;
 			byte[] buffer = new byte[256];
@@ -48,8 +56,9 @@ public class PackageUserAgentCallback extends ITextUserAgent {
 			ITextFSImage fsi = new ITextFSImage(i);
 			return new ImageResource(uri, fsi);
 
-		} catch (BadElementException | IOException e) {
-			e.printStackTrace();
+		} catch (BadElementException | IOException | NullPointerException e) {
+			logger.severe(e.getMessage());
+			NewRelic.noticeError(e);
 		}
 		return null;
 	}
