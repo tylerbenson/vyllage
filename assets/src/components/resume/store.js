@@ -68,7 +68,7 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         if(res.ok && res.body.RESUME.length > 0) {
           this.resume.ownDocumentId = res.body.RESUME[0];
-          this.resume.documentId = typeof this.resume.documentId === 'number' ? this.resume.documentId : this.resume.ownDocumentId;
+          this.resume.documentId = typeof parseInt(this.resume.documentId) === 'number' ? this.resume.documentId : this.resume.ownDocumentId;
           this.trigger(this.resume);
         }
       }.bind(this));
