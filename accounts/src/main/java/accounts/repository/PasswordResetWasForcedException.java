@@ -10,7 +10,7 @@ import user.common.User;
 public class PasswordResetWasForcedException extends AccountStatusException {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3022902039825417428L;
 	private final User user;

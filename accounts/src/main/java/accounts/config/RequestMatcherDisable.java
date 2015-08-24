@@ -11,13 +11,15 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * Disables CSRF for the specified pages.
  * http://blogs.sourceallies.com/2014/04/customizing
  * -csrf-protection-in-spring-security/
- * 
+ *
  * @author uh
  *
  */
 public class RequestMatcherDisable implements RequestMatcher {
-	private Pattern allowedMethods = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
-	private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher("/togglz/edit", null);
+	private Pattern allowedMethods = Pattern
+			.compile("^(GET|HEAD|TRACE|OPTIONS)$");
+	private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher(
+			"/togglz/edit", null);
 
 	@Override
 	public boolean matches(HttpServletRequest request) {

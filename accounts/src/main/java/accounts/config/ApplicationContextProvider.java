@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 
 /**
  * Returns the application context.
- * 
+ *
  * @author uh
  *
  */

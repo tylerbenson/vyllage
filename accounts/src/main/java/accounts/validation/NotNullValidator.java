@@ -4,7 +4,7 @@ import accounts.model.account.settings.AccountSetting;
 
 /**
  * Checks that a given setting does not have a null value.
- * 
+ *
  * @author uh
  *
  */

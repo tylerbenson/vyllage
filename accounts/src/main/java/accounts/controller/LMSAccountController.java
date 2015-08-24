@@ -6,6 +6,11 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import oauth.lti.LMSRequest;
+import oauth.model.LMSAccount;
+import oauth.utilities.CsrfTokenUtility;
+import oauth.utilities.LMSConstants;
+
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -13,34 +18,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
+import user.common.User;
 import accounts.repository.UserNotFoundException;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
-import oauth.lti.LMSRequest;
-import oauth.model.LMSAccount;
-import oauth.utilities.CsrfTokenUtility;
-import oauth.utilities.LMSConstants;
-import user.common.Organization;
-import user.common.User;
 
 @Controller
 public class LMSAccountController {
 
-	private final Logger logger = Logger.getLogger(LMSAccountController.class.getName());
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger.getLogger(LMSAccountController.class
+			.getName());
 
+	@SuppressWarnings("unused")
 	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
 
 	@Inject
-	public LMSAccountController(final SignInUtil signInUtil, final LMSService lmsService) {
+	public LMSAccountController(final SignInUtil signInUtil,
+			final LMSService lmsService) {
 		super();
 		this.signInUtil = signInUtil;
 		this.lmsService = lmsService;
 	}
 
-	@RequestMapping(value = "/lti/account", method = { RequestMethod.GET, RequestMethod.POST })
-	public String lti(HttpServletRequest request, WebRequest webRequest) throws UserNotFoundException {
+	@RequestMapping(value = "/lti/account", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public String lti(HttpServletRequest request, WebRequest webRequest)
+			throws UserNotFoundException {
 
 		LMSRequest lmsRequest = LMSRequest.getInstance();
 		if (lmsRequest == null) {
@@ -54,9 +60,10 @@ public class LMSAccountController {
 			throw new AccessDeniedException(LMSConstants.LTI_INVALID_LMS);
 		}
 
-		Organization organization = lmsAccount.getOrganization();
-		if (organization == null || organization.getOrganizationName() == null) {
-			throw new AccessDeniedException(LMSConstants.LTI_INVALID_LMS_INSTANCE);
+		String externalOrganizationId = lmsAccount.getExternalOrganizationId();
+		if (externalOrganizationId == null || externalOrganizationId.isEmpty()) {
+			throw new AccessDeniedException(
+					LMSConstants.LTI_INVALID_LMS_INSTANCE);
 		}
 		csrfTokenUtility = new CsrfTokenUtility();
 		String email = lmsRequest.getLmsUser().getEmail();
@@ -67,8 +74,10 @@ public class LMSAccountController {
 		// multiple instances. So will have to add some instanced specific key..
 
 		String lmsUserName = lmsRequest.getLmsUser().getUserName();
-		String userName = email != null && !email.isEmpty() ? email : lmsUserName;
-		String password = csrfTokenUtility.makeLTICompositePassword(request, "");
+		String userName = email != null && !email.isEmpty() ? email
+				: lmsUserName;
+		String password = csrfTokenUtility
+				.makeLTICompositePassword(request, "");
 		String lmsUserId = lmsRequest.getLmsUser().getUserId();
 		HttpSession session = request.getSession(false);
 		// Check LMS user exist or not
@@ -87,7 +96,8 @@ public class LMSAccountController {
 			// TODO: question - If user doesn't have email id with LMS details,
 			// then how they will get password..
 			// Create Vyllage user account.
-			User newUser = lmsService.createUser(userName, password, firstName, null, lastName, lmsRequest);
+			User newUser = lmsService.createUser(userName, password, firstName,
+					null, lastName, lmsRequest);
 
 			// Set user name in Session
 			session.setAttribute("user_name", newUser.getUsername());

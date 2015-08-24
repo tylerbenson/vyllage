@@ -12,7 +12,7 @@ import togglz.TogglzConfiguration;
 
 /**
  * Not really a singleton, but this one works.
- * 
+ *
  * @author uh
  *
  */

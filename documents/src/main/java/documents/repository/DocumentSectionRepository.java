@@ -236,7 +236,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 
 	/**
 	 * Checks if there are any document sections for a given document.
-	 * 
+	 *
 	 * @param documentId
 	 * @return
 	 */
@@ -249,7 +249,7 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	/**
 	 * Generates a DocumentSection from the records containing the latest
 	 * versions of the document sections.
-	 * 
+	 *
 	 * @param existingRecord
 	 * @return
 	 */

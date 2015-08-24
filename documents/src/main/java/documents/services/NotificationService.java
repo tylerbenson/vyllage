@@ -42,7 +42,7 @@ public class NotificationService {
 
 	/**
 	 * Retrieves a single user notification.
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 */
@@ -52,14 +52,14 @@ public class NotificationService {
 
 	/**
 	 * Notifies a user that someone has commented his resume.
-	 * 
+	 *
 	 * @param user
 	 *            the user originating the notification
 	 * @param accountContact
 	 *            the user we are notifying
 	 * @param comment
 	 *            the comment
-	 * 
+	 *
 	 */
 	public void sendEmailNewCommentNotification(User user,
 			AccountContact accountContact, Comment comment) {

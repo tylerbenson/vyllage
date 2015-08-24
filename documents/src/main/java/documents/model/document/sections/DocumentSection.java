@@ -66,7 +66,7 @@ public abstract class DocumentSection {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param type
 	 *            any of the types in {@link SectionType}
 	 */
@@ -76,7 +76,7 @@ public abstract class DocumentSection {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param type
 	 *            any of the types in {@link SectionType}
 	 */

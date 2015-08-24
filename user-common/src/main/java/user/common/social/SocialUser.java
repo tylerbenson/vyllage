@@ -10,7 +10,7 @@ import user.common.User;
 public class SocialUser implements SocialUserDetails {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 851927112221485416L;
 	private User user;

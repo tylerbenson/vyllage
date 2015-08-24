@@ -266,8 +266,8 @@ public class UserDetailRepository implements UserDetailsManager,
 	/**
 	 * Disables user. Deletes credentials. Deletes account settings. Deletes
 	 * User Roles.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param userId
 	 */
 	@Override
@@ -340,7 +340,7 @@ public class UserDetailRepository implements UserDetailsManager,
 	/**
 	 * When the user resets the password we don't have the previous one to
 	 * compare against.
-	 * 
+	 *
 	 * @param newPassword
 	 */
 	public void changePassword(String newPassword) {
@@ -367,7 +367,7 @@ public class UserDetailRepository implements UserDetailsManager,
 
 	/**
 	 * Changes password upon first login
-	 * 
+	 *
 	 * @param newPassword
 	 */
 	public void forcedPasswordChange(final Long userId, final String userName,

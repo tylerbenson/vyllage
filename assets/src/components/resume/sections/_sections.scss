@@ -1,17 +1,36 @@
-.sections {
-  margin: 1em 0;
+.section-holder,
+.subsection-holder {
+  position: relative;
+}
+
+.section-holder {
+  @include center();
+  margin: 1em auto;
+  max-width: 720px;
+  width: 80%;
 }
 
 .section {
-  @include center();
+  margin: 1.75em auto;
+  position: relative;
+
+  &:first-child:last-child {
+    .container {
+      & > .move {
+        display: none;
+      }
+    }
+  }
+
   & > .container {
     background: $section-background;
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
     margin: 0.75em auto;
     padding: 2em 0 0 0;
     position: relative;
-    width: 80%;
   }
+
+
 
   &.mini {
     max-width: 720px;
@@ -39,6 +58,7 @@
       font-weight: 700;
 
       h1 {
+        color: lighten($alternate-color-2, 12%);
         font-weight: 400;
         font-size: 1em;
         text-transform: uppercase;
@@ -73,8 +93,6 @@
 
   .footer {
     background: $section-footer-background;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
     border-top: darken($section-footer-background,3%) solid 1px;
     margin-top: 2em;
     font-size: 0.85em;
@@ -157,6 +175,14 @@
         }
       }
 
+
+
+
+
+
+
+
+
       & > .comment-box {
         border-top: darken($section-footer-background,6%) solid 1px;
         .content {
@@ -189,13 +215,32 @@
   }
 }
 
+.subsection-wrapper {
+  &:first-child:last-child {
+    .subsection {
+      & > .move {
+        display: none;
+      }
+    }
+  }
+}
+
 .subsection {
   background: $section-background;
   border-top: darken($section-footer-background,3%) solid 1px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
   position: relative;
   transition: all .2s ease;
+
+  &.single {
+    border-top: none;
+    & > .header {
+      padding: 0 4em;
+      position: absolute;
+      right: 0;
+      left: 0;
+      top: -2.25em;
+    }
+  }
 
   .footer {
     transition: all .2s ease;
@@ -222,7 +267,7 @@
   }
 
   & > .header {
-    padding: 2em 4em 0em 4em;
+    padding: 1.5em 4em 0em 4em;
 
     h2 {
       color: $mode-color;
@@ -270,11 +315,13 @@
 }
 
 @media (max-width: $medium-landscape) {
+  .section-holder {
+    max-width: 768px;
+    width: 90%;
+  }
   .section {
     & > .container {
-      max-width: 768px;
       padding-top: 1em;
-      width: 90%;
     }
     .header {
       padding: 1em 2em;
@@ -291,6 +338,11 @@
     & > .header {
       padding: 1.5em 2em 0 2em;
     }
+    &.single {
+      & > .header {
+        padding: 0 2em;
+      }
+    }
   }
   .subsubsection {
     & > .header {
@@ -303,11 +355,13 @@
 }
 
 @media (max-width: $medium-portrait) {
+  .section-holder {
+    margin: 0.5em auto;
+    width: 96%;
+  }
   .section {
     & > .container {
-      margin: 0.5em auto;
       padding: 1em 0 0;
-      width: 96%;
     }
     .content {
       padding: 0.75em 2.5em;
@@ -350,6 +404,11 @@
       .header {
         padding: 0.75em 2.5em 0 2.5em;
       }
+      &.single {
+        & > .header {
+          padding: 0 2.5em;
+        }
+      }
       .content {
         padding: 0 2.5em;
       }
@@ -391,6 +450,36 @@ $muted-text: lighten($secondary-color, 25%);
     strong {
       display: block;
       font-size: 1.125em;
+    }
+  }
+}
+
+.ui-sortable-placeholder {
+  background: rgba(0,0,0,0.03);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.05),
+    0 1px 0 rgba(255,255,255,0.9);
+  position: relative;
+}
+
+.section-holder {
+  & > .ui-sortable-placeholder {
+    margin: 1.75em 0;
+  }
+  & > .ui-sortable-helper {
+    & > .container {
+      box-shadow: 0 3px 9px rgba(0,0,0,0.2);
+      transform: scale(1.03);
+      transition: all .2s ease;
+    }
+  }
+}
+
+.subsection-holder {
+  & > .ui-sortable-helper {
+    & > div .subsection {
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transform: scale(1.01);
+      transition: all .2s ease;
     }
   }
 }

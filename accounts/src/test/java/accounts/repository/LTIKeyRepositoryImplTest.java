@@ -37,37 +37,51 @@ public class LTIKeyRepositoryImplTest {
 	private OrganizationRepository organizationRepository;
 
 	@Test
-	public void testGet() throws UserNotFoundException {
-		final User user = service.getUser(1L);
-		final Organization organization = organizationRepository.get(1L);
+	public void testGet() {
 
-		final String consumerKey = "aeiou";
-		final String secret = "12345678911234567890";
+		final String consumerKey = "University12323213";
 
-		LTIKey savedKey = repository.save(user, organization, consumerKey,
-				secret);
+		final Optional<LTIKey> getKey = repository.get(consumerKey);
 
-		Optional<LTIKey> getKey = repository.get(consumerKey);
-
-		Assert.assertNotNull(savedKey);
 		Assert.assertTrue(getKey.isPresent());
-		Assert.assertEquals(savedKey, getKey.get());
 	}
 
 	@Test
 	public void testSave() throws UserNotFoundException {
 		final User user = service.getUser(1L);
-		final Organization organization = organizationRepository.get(1L);
+		final Organization organization = organizationRepository.get(3L);
 
-		final String consumerKey = "aeiou";
+		final String consumerKey = "aeiou2";
 		final String secret = "12345678911234567890";
+		final String externalOrganizationId = "asasassdsad";
 
-		LTIKey savedKey = repository.save(user, organization, consumerKey,
-				secret);
+		final LTIKey savedKey = repository.save(user, organization,
+				consumerKey, secret, externalOrganizationId);
 
 		Assert.assertNotNull(savedKey);
 		Assert.assertEquals(consumerKey, savedKey.getKeyKey());
 		Assert.assertEquals(secret, savedKey.getSecret());
+	}
+
+	@Test
+	public void testGetOrganization() {
+		final String externalOrganizationId = "FFgdPrsCVn8zKFpDUkFF2TaXzo6zIVULifyHjz8J:canvas-lms";
+
+		final Organization organization = organizationRepository.get(1L);
+
+		final Organization organizationByExternalId = repository
+				.getOrganizationByExternalId(externalOrganizationId);
+
+		Assert.assertEquals(organization, organizationByExternalId);
+	}
+
+	@Test
+	public void testGetAuditUserId() throws UserNotFoundException {
+		final String externalOrganizationId = "FFgdPrsCVn8zKFpDUkFF2TaXzo6zIVULifyHjz8J:canvas-lms";
+
+		final Long auditUser = repository.getAuditUser(externalOrganizationId);
+
+		Assert.assertEquals(new Long(1), auditUser);
 	}
 
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package user.common;
 

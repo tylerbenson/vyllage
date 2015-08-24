@@ -3,6 +3,8 @@ package accounts.model.form;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import org.jooq.tools.StringUtils;
+
 @ToString
 @EqualsAndHashCode
 public class LTIKeyForm {
@@ -12,6 +14,7 @@ public class LTIKeyForm {
 	private String secret;
 
 	private String error;
+	private String externalOrganizationId;
 
 	public Long getOrganizationId() {
 		return organizationId;
@@ -45,8 +48,17 @@ public class LTIKeyForm {
 		this.error = error;
 	}
 
+	public String getExternalOrganizationId() {
+		return externalOrganizationId;
+	}
+
+	public void setExternalOrganizationId(String externalOrganizationId) {
+		this.externalOrganizationId = externalOrganizationId;
+	}
+
 	public boolean isInvalid() {
-		return (consumerKeyNotValid() || secretNotValid());
+		return consumerKeyNotValid() || secretNotValid()
+				|| externalOrganizationIdIsInvalid();
 	}
 
 	protected boolean secretNotValid() {
@@ -70,6 +82,17 @@ public class LTIKeyForm {
 		if (this.consumerKey == null || this.consumerKey.isEmpty()) {
 			setError(getError() == null ? "Consumer key cannot be empty."
 					: getError() + " Consumer key cannot be empty.");
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean externalOrganizationIdIsInvalid() {
+		if (this.externalOrganizationId == null
+				|| StringUtils.isBlank(this.externalOrganizationId)) {
+			setError(getError() == null ? "External Organization Id cannot be empty."
+					: getError() + " External Organization Id cannot be empty.");
 			return true;
 		}
 

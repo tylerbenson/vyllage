@@ -18,7 +18,7 @@ public class SocialRepository {
 
 	/**
 	 * Determines whether a user is connected to a given social network.
-	 * 
+	 *
 	 * @param user
 	 * @param network
 	 * @return

@@ -5,7 +5,7 @@ import accounts.validation.EmailValidator;
 
 /**
  * Form to register a new user.
- * 
+ *
  * @author uh
  *
  */

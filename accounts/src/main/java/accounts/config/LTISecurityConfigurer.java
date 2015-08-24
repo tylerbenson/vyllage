@@ -3,7 +3,11 @@ package accounts.config;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import oauth.lti.LMSConsumerDetailsService;
+import oauth.lti.LMSOAuthAuthenticationHandler;
+import oauth.lti.LMSOAuthProviderProcessingFilter;
+import oauth.model.service.LMSOAuthNonceServices;
+
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -20,11 +24,6 @@ import org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoi
 import org.springframework.security.oauth.provider.token.InMemoryProviderTokenServices;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import oauth.lti.LMSConsumerDetailsService;
-import oauth.lti.LMSOAuthAuthenticationHandler;
-import oauth.lti.LMSOAuthProviderProcessingFilter;
-import oauth.model.service.LMSOAuthNonceServices;
 
 @ComponentScan({ "oauth.lti", "oauth.model.service" })
 @Configuration
@@ -49,17 +48,22 @@ public class LTISecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@PostConstruct
 	public void init() {
-		ltioAuthProviderProcessingFilter = new LMSOAuthProviderProcessingFilter(lmsConsumerDetailsService,
-				lmsOauthNonceServices, oauthProcessingFilterEntryPoint, lmsOauthAuthenticationHandler,
+		ltioAuthProviderProcessingFilter = new LMSOAuthProviderProcessingFilter(
+				lmsConsumerDetailsService, lmsOauthNonceServices,
+				oauthProcessingFilterEntryPoint, lmsOauthAuthenticationHandler,
 				oauthProviderTokenServices);
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.requestMatchers().antMatchers("/lti/account").and()
-				.addFilterBefore(ltioAuthProviderProcessingFilter, UsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests().anyRequest().hasRole("LTI").and().csrf().disable();
+		http.requestMatchers()
+				.antMatchers("/lti/account")
+				.and()
+				.addFilterBefore(ltioAuthProviderProcessingFilter,
+						UsernamePasswordAuthenticationFilter.class)
+				.authorizeRequests().anyRequest().hasRole("LTI").and().csrf()
+				.disable();
 
 		http.authorizeRequests().antMatchers("/lti/login").permitAll();
 

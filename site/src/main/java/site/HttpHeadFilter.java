@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * From http://axelfontaine.com/blog/http-head.html with FilterRegistrationBean
  * to execute before spring security.
- * 
+ *
  * @author tyler
  */
 public class HttpHeadFilter implements Filter {

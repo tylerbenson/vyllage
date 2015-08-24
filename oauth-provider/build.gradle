@@ -1,19 +1,19 @@
 springBoot {
-	mainClass = 'oauth-provider.Application'
+    mainClass = 'oauth-provider.Application'
 }
 
 jar {
-	baseName = 'oauth-provider'
+    baseName = 'oauth-provider'
 }
 
 dependencies {
-	compile parent.javascriptProjects.findAll { it != project}
-	compile project(':user-common')
-	compile 'org.springframework.security.oauth:spring-security-oauth:2.0.7.RELEASE'
-	compile 'org.springframework.security:spring-security-core:3.2.7.RELEASE'
+    compile parent.javascriptProjects.findAll { it != project}
+    compile project(':user-common')
+    compile 'org.springframework.security.oauth:spring-security-oauth:2.0.7.RELEASE'
+    compile 'org.springframework.security:spring-security-core:3.2.7.RELEASE'
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("javax.ws.rs:jsr311-api:0.11")
     compile("org.apache.commons:commons-lang3:3.0")
     compile("javax.inject:javax.inject:1")
-    
+
 }

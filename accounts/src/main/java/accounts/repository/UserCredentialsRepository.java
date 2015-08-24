@@ -16,7 +16,7 @@ import accounts.model.UserCredential;
 
 /**
  * Handles user's passwords.
- * 
+ *
  * @author uh
  *
  */
@@ -32,7 +32,7 @@ public class UserCredentialsRepository {
 
 	/**
 	 * Returns the permanent user credential, the one used to login, etc.
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -52,7 +52,7 @@ public class UserCredentialsRepository {
 
 	/**
 	 * Saves the user's password, does not expire.
-	 * 
+	 *
 	 * @param userId
 	 * @param password
 	 */
@@ -69,7 +69,7 @@ public class UserCredentialsRepository {
 
 	/**
 	 * Deactivates the user credential used to login, etc.
-	 * 
+	 *
 	 * @param userId
 	 */
 	public void deleteByUserId(long userId) {
@@ -85,7 +85,7 @@ public class UserCredentialsRepository {
 
 	/**
 	 * Determines if the given password is active.
-	 * 
+	 *
 	 * @param userId
 	 * @param password
 	 * @return
@@ -113,7 +113,7 @@ public class UserCredentialsRepository {
 	/**
 	 * Updates the credentials the users uses to login, ignores the ones for
 	 * document links.
-	 * 
+	 *
 	 * @param userCredential
 	 */
 	public void update(UserCredential userCredential) {

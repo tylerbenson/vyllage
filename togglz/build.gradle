@@ -1,24 +1,24 @@
 jar {
-	baseName = 'togglz'
+    baseName = 'togglz'
 }
 
 dependencies {
 
-	compile project(':user-common')
-	
-	compile 'org.togglz:togglz-core:2.1.0.Final'
-	compile 'org.togglz:togglz-servlet:2.1.0.Final'
-	compile 'org.togglz:togglz-spring:2.1.0.Final'
-	compile 'org.togglz:togglz-spring-security:2.1.0.Final'
-	compile 'org.togglz:togglz-console:2.1.0.Final'
-	
-	//https://github.com/heneke/thymeleaf-extras-togglz
-	compile files('lib/thymeleaf-extras-togglz-1.0.1.RELEASE.jar')
-	
-	compile 'org.springframework:spring-context:4.1.6.RELEASE'
-	
+    compile project(':user-common')
+
+    compile 'org.togglz:togglz-core:2.1.0.Final'
+    compile 'org.togglz:togglz-servlet:2.1.0.Final'
+    compile 'org.togglz:togglz-spring:2.1.0.Final'
+    compile 'org.togglz:togglz-spring-security:2.1.0.Final'
+    compile 'org.togglz:togglz-console:2.1.0.Final'
+
+    //https://github.com/heneke/thymeleaf-extras-togglz
+    compile files('lib/thymeleaf-extras-togglz-1.0.1.RELEASE.jar')
+
+    compile 'org.springframework:spring-context:4.1.6.RELEASE'
+
 //	compile 'org.springframework.security:spring-security-core:3.2.7.RELEASE'
 //	compile("org.springframework.boot:spring-boot-starter-security")
 //	compile("org.springframework.boot:spring-boot-starter-web")
-	
+
 }

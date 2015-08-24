@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class LMSOAuthNonceServices extends InMemoryNonceServices {
 
-    @Override
-    public long getValidityWindowSeconds() {
-        return 1200;
-    }
+	@Override
+	public long getValidityWindowSeconds() {
+		return 1200;
+	}
 
 }

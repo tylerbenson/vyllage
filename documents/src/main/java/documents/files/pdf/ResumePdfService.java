@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -51,6 +52,12 @@ public class ResumePdfService {
 		ITextRenderer renderer = new ITextRenderer();
 		renderer.setDocumentFromString(htmlContent);
 
+		PackageUserAgentCallback callback = new PackageUserAgentCallback(
+				renderer.getOutputDevice(), Resource.class);
+		callback.setSharedContext(renderer.getSharedContext());
+		renderer.getSharedContext().setUserAgentCallback(callback);
+		renderer.setDocumentFromString(htmlContent);
+
 		renderer.layout();
 		renderer.createPDF(out);
 		renderer.finishPDF();
@@ -61,7 +68,7 @@ public class ResumePdfService {
 
 	/**
 	 * Applies formatting to header phone number in Locale.US.
-	 * 
+	 *
 	 * @param resumeHeader
 	 * @throws ParseException
 	 */
@@ -74,7 +81,7 @@ public class ResumePdfService {
 
 	/**
 	 * Sorts sections based on their sectionPosition value.
-	 * 
+	 *
 	 * @return sorted sections
 	 */
 	protected Comparator<? super DocumentSection> sortSections() {

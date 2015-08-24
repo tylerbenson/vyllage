@@ -1,12 +1,9 @@
 package oauth.model;
 
 import lombok.ToString;
-import user.common.Organization;
 
 @ToString
 public class LMSAccount {
-
-	private Organization organization;
 
 	private String lmsId;
 	private String lmsGuid;
@@ -15,16 +12,16 @@ public class LMSAccount {
 	private LMSType type;
 	private String ltiVersion;
 	private String consumerKey;
-	private Long organizationId;
 	private Long lmsTypeId;
 	private String oauthVersion;
+	private String externalOrganizationId;
 
 	public LMSAccount() {
 
 	}
 
-	public LMSAccount(String lmsGuid, String lmsName, String lmsVersion, LMSType type, String ltiVersion,
-			String oauthVersion) {
+	public LMSAccount(String lmsGuid, String lmsName, String lmsVersion,
+			LMSType type, String ltiVersion, String oauthVersion) {
 		super();
 		this.setLmsGuid(lmsGuid);
 		this.setLmsName(lmsName);
@@ -125,36 +122,6 @@ public class LMSAccount {
 	}
 
 	/**
-	 * @return the organization
-	 */
-	public Organization getOrganization() {
-		return organization;
-	}
-
-	/**
-	 * @param organization
-	 *            the organization to set
-	 */
-	public void setOrganization(Organization organization) {
-		this.organization = organization;
-	}
-
-	/**
-	 * @return the organizationId
-	 */
-	public Long getOrganizationId() {
-		return organizationId;
-	}
-
-	/**
-	 * @param organizationId
-	 *            the organizationId to set
-	 */
-	public void setOrganizationId(Long organizationId) {
-		this.organizationId = organizationId;
-	}
-
-	/**
 	 * @return the lmsTypeId
 	 */
 	public Long getLmsTypeId() {
@@ -197,6 +164,14 @@ public class LMSAccount {
 	 */
 	public void setOauthVersion(String oauthVersion) {
 		this.oauthVersion = oauthVersion;
+	}
+
+	public String getExternalOrganizationId() {
+		return externalOrganizationId;
+	}
+
+	public void setExternalOrganizationId(String externalOrganizationId) {
+		this.externalOrganizationId = externalOrganizationId;
 	}
 
 }

@@ -22,7 +22,7 @@ import user.common.constants.RolesEnum;
 public class User implements UserDetails, CredentialsContainer {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 7500528494734101041L;
 
@@ -127,7 +127,7 @@ public class User implements UserDetails, CredentialsContainer {
 
 	/**
 	 * A user is guest if it only has the GUEST role.
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isGuest() {

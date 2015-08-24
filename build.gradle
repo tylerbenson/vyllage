@@ -27,6 +27,7 @@ buildscript {
         classpath 'nu.studer:gradle-jooq-plugin:1.0.5'
         classpath 'com.palantir:jacoco-coverage:0.3.0'
         classpath 'com.google.guava:guava:18.0' // Used by palantir jacoco-coverage but not properly declared.
+        classpath 'com.diffplug.gradle.spotless:spotless:1.1'
     }
 }
 
@@ -88,10 +89,11 @@ configure(javaProjects) {
         packageThreshold 0.0, "accounts/model"
         packageThreshold 0.0, ~"accounts/model/account.*"
         packageThreshold 0.0, ~"accounts/model/link.*"
-        packageThreshold 0.0, ~"accounts/domain/tables/records.*"
-		packageThreshold 0.0, ~"accounts/config.*"
+        packageThreshold 0.0, ~"accounts/domain/tables/.*"
+        packageThreshold 0.0, ~"accounts/config.*"
 
         packageThreshold 0.0, "documents/database"
+        packageThreshold 0.0, "documents/domain/tables/.*"
         packageThreshold 0.0, "documents/files/pdf"
 
         packageThreshold 0.0, "site/controllers"
@@ -109,10 +111,10 @@ configure(javaProjects) {
         ignoreFailures = false
         effort = "max"
         reportLevel = "medium"
-		//https://code.google.com/p/findbugs/source/browse/findbugs/src/java/edu/umd/cs/findbugs/detect
-		visitors = ["FindSqlInjection", "SwitchFallthrough",  "FindUselessObjects", "BadSyntaxForRegularExpression", "BadUseOfReturnValue"
-		, "BooleanReturnNull", "FindLocalSelfAssignment2", "FindNullDeref",  "FindRefComparison", "FindReturnRef", "FindUselessControlFlow"
-		, "HugeSharedStringConstants", "DuplicateBranches", "DroppedException", "DumbMethodInvocations"]
+        //https://code.google.com/p/findbugs/source/browse/findbugs/src/java/edu/umd/cs/findbugs/detect
+        visitors = ["FindSqlInjection", "SwitchFallthrough",  "FindUselessObjects", "BadSyntaxForRegularExpression", "BadUseOfReturnValue"
+        , "BooleanReturnNull", "FindLocalSelfAssignment2", "FindNullDeref",  "FindRefComparison", "FindReturnRef", "FindUselessControlFlow"
+        , "HugeSharedStringConstants", "DuplicateBranches", "DroppedException", "DumbMethodInvocations"]
     }
 
     tasks.withType(FindBugs) {
@@ -120,7 +122,36 @@ configure(javaProjects) {
             xml.enabled = false
             html.enabled = true
         }
-     }
+    }
+
+    apply plugin: 'com.diffplug.gradle.spotless'
+    spotless {
+        java {
+            target 'src/**/*.java'
+
+            trimTrailingWhitespace()
+            indentWithTabs()
+            endWithNewline()
+
+            importOrderFile "${rootProject.rootDir}/gradle/vyllage.eclipse.importorder" // An import ordering file, exported from Eclipse
+            //eclipseFormatFile "${rootProject.rootDir}/gradle/vyllage.eclipseformat.xml"  // XML file dumped out by the Eclipse formatter
+
+            // You can also tweak the formatting with custom regexes or functions, such as:
+            // Eclipse formatter puts excess whitespace after lambda blocks
+            //    funcThatTakesLambdas(x -> {} , y -> {} )  // what Eclipse does
+            //    funcThatTakesLambdas(x -> {}, y -> {})    // what I wish Eclipse did
+            //custom 'Lambda fix', { it.replace('} )', '})').replace('} ,', '},') }
+
+            custom 'Comment fix', { it.replace('\t*', '\t *').replaceAll('\n\\*', '\n *') }
+        }
+        format 'misc', {
+            target '**/.gitignore', '**/*.gradle' //, '**/*.md', '**/*.sh'
+            indentWithSpaces(4)
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+        lineEndings = com.diffplug.gradle.spotless.LineEnding.UNIX
+    }
 
     def slf4j = '1.7.12'
     def lombok = '1.16.4'
@@ -158,8 +189,8 @@ configure(javaProjects) {
 
     eclipse {
         classpath {
-             containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-             containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+            containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+            containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
         }
     }
 

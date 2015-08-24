@@ -8,7 +8,7 @@ import lombok.ToString;
 public class Role {
 
 	/**
-	 * 
+	 *
 	 */
 	private final String role;
 

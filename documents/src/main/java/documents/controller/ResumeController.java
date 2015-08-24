@@ -261,7 +261,7 @@ public class ResumeController {
 
 	/**
 	 * Writes the pdf document to the response.
-	 * 
+	 *
 	 * @param response
 	 * @param report
 	 * @throws DocumentException

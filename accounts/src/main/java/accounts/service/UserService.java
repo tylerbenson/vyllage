@@ -345,7 +345,7 @@ public class UserService {
 
 	/**
 	 * Returns names of the requested user ids.
-	 * 
+	 *
 	 * @param userIds
 	 * @return
 	 */
@@ -362,7 +362,7 @@ public class UserService {
 
 	/**
 	 * Returns the list of organizations a given user belongs too.
-	 * 
+	 *
 	 * @param user
 	 * @return
 	 */
@@ -390,7 +390,7 @@ public class UserService {
 
 	/**
 	 * Returns account contact information for several users.
-	 * 
+	 *
 	 * @param request
 	 */
 	public List<AccountContact> getAccountContacts(HttpServletRequest request,
@@ -460,7 +460,7 @@ public class UserService {
 
 	/**
 	 * Maps a list of contact related account settings into a contact object.
-	 * 
+	 *
 	 * @param entry
 	 * @return
 	 * @throws UserNotFoundException
@@ -536,9 +536,9 @@ public class UserService {
 
 	/**
 	 * Deletes a user and logs him out of the system.
-	 * 
+	 *
 	 * @param request
-	 * 
+	 *
 	 * @param userId
 	 * @param token
 	 * @throws ServletException
@@ -565,7 +565,7 @@ public class UserService {
 
 	/**
 	 * Process a link request, creates new user with a random password.
-	 * 
+	 *
 	 * @param linkRequest
 	 * @return link response
 	 * @throws EmailException
@@ -623,7 +623,7 @@ public class UserService {
 
 	/**
 	 * Creates a user using a registration form.
-	 * 
+	 *
 	 * @param registerForm
 	 * @return user
 	 * @throws EmailException
@@ -674,7 +674,7 @@ public class UserService {
 
 	/**
 	 * Creates a user using a registration form with a referring user.
-	 * 
+	 *
 	 * @param registerForm
 	 * @param auditUserId
 	 * @return User
@@ -782,7 +782,7 @@ public class UserService {
 
 	/**
 	 * Enables or disables a given user returning the new state.
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 */
@@ -793,7 +793,7 @@ public class UserService {
 	/**
 	 * Activates an user account, the account must be GUEST and have no other
 	 * role.
-	 * 
+	 *
 	 * @param userId
 	 * @throws UserNotFoundException
 	 * @throws EmailException
@@ -846,7 +846,7 @@ public class UserService {
 	/**
 	 * Returns the user's avatar based on the user's social networks profile or
 	 * avatar setting, if it can't find any returns a gravatar url.
-	 * 
+	 *
 	 * @param userId
 	 * @return avatar url
 	 * @throws UserNotFoundException
@@ -890,8 +890,8 @@ public class UserService {
 	 * Starts the email address (username) change process. <br>
 	 * Sends an email to confirm that the user wanted to change the email, until
 	 * the user clicks the confirmation link the email will remain the same.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param user
 	 * @param email
 	 * @throws EmailException

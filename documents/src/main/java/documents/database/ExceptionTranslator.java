@@ -9,7 +9,7 @@ import org.springframework.jdbc.support.SQLStateSQLExceptionTranslator;
 
 public class ExceptionTranslator extends DefaultExecuteListener {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 2057375536860098999L;
 

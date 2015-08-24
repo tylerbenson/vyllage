@@ -184,10 +184,10 @@ public class DocumentRepository implements IRepository<Document> {
 	 * Checks if a given document id exists for a given user. A document will
 	 * exist for a given user if, it exists, has sections and the user owns the
 	 * document.
-	 * 
+	 *
 	 * If a document exists, has no sections but the user is the owner then it
 	 * just means he has not added any sections yet.
-	 * 
+	 *
 	 * @param user
 	 * @param documentId
 	 * @return
@@ -217,7 +217,7 @@ public class DocumentRepository implements IRepository<Document> {
 
 	/**
 	 * Checks that a document exists.
-	 * 
+	 *
 	 * @param documentId
 	 * @return
 	 */

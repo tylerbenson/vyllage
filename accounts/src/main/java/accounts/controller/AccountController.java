@@ -119,7 +119,7 @@ public class AccountController {
 	/**
 	 * Returns a list containing the id, first, middle and last names for an
 	 * specific user.
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 * @throws UserNotFoundException
@@ -134,7 +134,7 @@ public class AccountController {
 
 	/**
 	 * Returns a list of advisors names for an specific user.
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 * @throws UserNotFoundException
@@ -367,7 +367,7 @@ public class AccountController {
 
 	/**
 	 * Returns an url pointing to the user's avatar.
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 * @throws UserNotFoundException

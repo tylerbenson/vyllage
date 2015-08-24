@@ -15,11 +15,11 @@ public class TogglzFeatureController {
 
 	/**
 	 * Returns if a certain feature is enabled or not.
-	 * 
+	 *
 	 * HtttpStatus 200 for True. <br>
 	 * HtttpStatus 202 for False. <br>
 	 * HtttpStatus 404 if the feature doesn't exist.
-	 * 
+	 *
 	 * @param feature
 	 * @return true: enabled, false: disabled.
 	 */
