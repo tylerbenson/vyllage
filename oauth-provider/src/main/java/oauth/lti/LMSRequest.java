@@ -60,7 +60,10 @@ public class LMSRequest {
 	}
 
 	public LMSRequest(HttpServletRequest request) {
+		this.httpServletRequest = request;
 
+		log.info(LMSConstants.LTI_VERSION + " "
+				+ getParam(LMSConstants.LTI_VERSION));
 		log.info(LMSConstants.LTI_INSTANCE_GUID + " "
 				+ getParam(LMSConstants.LTI_INSTANCE_GUID));
 		log.info(LMSConstants.LTI_CONSUMER_KEY + " "
@@ -84,7 +87,6 @@ public class LMSRequest {
 		log.info(LMSConstants.LTI_USER_EMAIL + " "
 				+ getParam(LMSConstants.LTI_USER_EMAIL));
 
-		this.httpServletRequest = request;
 		if (!isLTIRequest(request)) {
 			throw new IllegalStateException(LMSConstants.LTI_INVALID_REQUEST);
 		}
