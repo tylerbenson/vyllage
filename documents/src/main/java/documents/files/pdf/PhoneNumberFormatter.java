@@ -1,23 +1,27 @@
 package documents.files.pdf;
 
-import java.text.ParseException;
 import java.util.Locale;
 
-import org.springframework.format.Formatter;
+import org.springframework.format.Printer;
+import org.springframework.util.StringUtils;
 
 /**
  * Formats a phone number into US locale. <br>
  * ex: (555) 555-9999
  *
  * @author uh
- *
  */
-public class PhoneNumberFormatter implements Formatter<String> {
+public class PhoneNumberFormatter implements Printer<String> {
+
+	private final String defaultText = "(000) 000-0000";
 
 	@Override
 	public String print(String text, Locale locale) {
-		if (text == null || text.isEmpty() || text.length() != 10)
-			return text;
+
+		if (text == null)
+			return defaultText;
+
+		text = StringUtils.trimAllWhitespace(text);
 
 		// 10 because the frontend formatter uses that length, pads with N for
 		// missing numbers or ignores numbers after the 10th digit.
@@ -39,11 +43,6 @@ public class PhoneNumberFormatter implements Formatter<String> {
 		}
 
 		return sb.toString();
-	}
-
-	@Override
-	public String parse(String text, Locale locale) throws ParseException {
-		return print(text, locale);
 	}
 
 }
