@@ -30,7 +30,16 @@ var Banner = React.createClass({
     //For delayed header response
     //TODO: should be converted into a promise on the store side
     if (nextProps !== this.props) {
-      this.setState({fields: nextProps.header});
+      this.setState({fields: nextProps.header});      
+      if( nextProps.settings.length ){
+        var fields = this.state.fields  ;
+        nextProps.settings.forEach(function(field){
+          if( fields.hasOwnProperty(field.name) ){
+            fields[field.name] = field.value;
+          }
+        });
+        this.setState({fields: fields});
+      }     
     }
   },
   onScroll: function(){
@@ -101,13 +110,14 @@ var Banner = React.createClass({
       && banner.phoneNumber.trim().length !== 0) {
       errors.push('phoneNumber');
     }
-    if(banner.twitter.length > 140) {
+    var pattern = /^\w{1,32}$/; // ref : http://aaronsaray.com/blog/2012/08/07/jquery-validator-twitter-username-validator/
+    if(banner.twitter.length > 140 || pattern.test(banner.twitter) == false ) {
       errors.push('twitter');
     }
 
     if(errors.length === 0) {      
       this.setState({fields: banner});
-      settingActions.updateSettings();
+      settingActions.updateSettings(banner);
       this.toggleEditable(false);
       this.refs.phoneNumber.getDOMNode().value = banner.phoneNumber?phoneFormatter.format(banner.phoneNumber,"(NNN) NNN-NNNN"):'';
     }
