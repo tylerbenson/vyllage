@@ -31,5 +31,26 @@
     "tagline":"This is my tagline."
   }
 ```
-
 + Response 200
+
+Or Error 400 if the tagline fails the validation:
++ Body
+
+```
+{
+  "firstName": "Luke",
+  "middleName": "V",
+  "lastName": "Skywalker",
+  "tagline": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+  "address": "Avenida Siempreviva 123",
+  "email": "user@vyllage.com",
+  "phoneNumber": "",
+  "twitter": "",
+  "linkedIn": null,
+  "owner": true,
+  "avatarUrl": "https://secure.gravatar.com/avatar/631164c3aeb35618622fe67602ce5da8",
+  "error": "Tagline must be shorter than 100 characters.",
+  "inValid": true
+}
+```
+
