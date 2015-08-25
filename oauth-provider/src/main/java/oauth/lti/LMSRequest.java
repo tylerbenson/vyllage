@@ -215,16 +215,15 @@ public class LMSRequest {
 	}
 
 	public static boolean isLTIRequest(ServletRequest request) {
-		boolean valid = false;
 		String ltiVersion = StringUtils.trimToNull(request
 				.getParameter(LMSConstants.LTI_VERSION));
 
 		if (ltiVersion != null) {
-			boolean goodLTIVersion = LMSConstants.LTI_VERSION_1P0
-					.equals(ltiVersion);
-			valid = goodLTIVersion;
+			return LMSConstants.LTI_VERSION_1P0.equals(ltiVersion);
+		} else {
+			log.warn(LMSConstants.LTI_VERSION + " not found in LTI request.");
 		}
-		return valid;
+		return false;
 	}
 
 	public static String makeLTICompositeKey(HttpServletRequest request,
