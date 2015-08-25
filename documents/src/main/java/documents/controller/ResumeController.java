@@ -51,6 +51,7 @@ import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
 import documents.model.LinkPermissions;
+import documents.model.Suggestion;
 import documents.model.UserNotification;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.document.sections.DocumentSection;
@@ -437,6 +438,7 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
+	@CheckReadAccess
 	public @ResponseBody Comment saveCommentsForSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
@@ -490,6 +492,7 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
+	@CheckReadAccess
 	public void saveCommentsForComment(@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@PathVariable final Long commentId,
@@ -510,6 +513,28 @@ public class ResumeController {
 			comment.setOtherCommentId(commentId);
 
 		documentService.saveComment(comment);
+	}
+
+	// check read because this is for others
+	@RequestMapping(value = "{documentId}/section/{sectionId}/suggestion", method = RequestMethod.GET, produces = "application/json")
+	@CheckReadAccess
+	@ResponseStatus(value = HttpStatus.OK)
+	public void setSectionSuggestions(HttpServletRequest request,
+			@PathVariable final Long documentId,
+			@PathVariable final Long sectionId,
+			@AuthenticationPrincipal User user, Suggestion suggestion) {
+
+		// some assertions, if these are not present something's wrong with the
+		// client
+		Assert.isTrue(suggestion.getSectionId() != null);
+		Assert.isTrue(suggestion.getSectionVersion() != null);
+		Assert.isTrue(suggestion.getDocumentSection() != null);
+
+		if (suggestion.getUserId() == null)
+			suggestion.setUserId(user.getUserId());
+
+		documentService.saveSuggestion(suggestion);
+
 	}
 
 	private void setCommentData(final Long sectionId, final Comment comment,

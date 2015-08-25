@@ -39,7 +39,6 @@ import documents.utilities.OrderSectionValidator;
  * This service takes care of saving, retrieving and manipulating documents.
  *
  * @author uh
- *
  */
 @Service
 public class DocumentService {
@@ -437,10 +436,36 @@ public class DocumentService {
 		header.setTagline(document.getTagline());
 		return header;
 	}
-	
-	public List<Suggestion> getDocumentSuggestions(Long documentId)
-			throws ElementNotFoundException {
-		return suggestionRepository.getSuggestions(documentId);
+
+	public List<Suggestion> getSectionSuggestions(HttpServletRequest request,
+			Long documentId) {
+
+		List<Suggestion> suggestions = suggestionRepository
+				.getSuggestions(documentId);
+
+		List<AccountContact> names = accountService.getContactDataForUsers(
+				request,
+				suggestions.stream().map(s -> s.getUserId())
+						.collect(Collectors.toList()));
+
+		for (Suggestion suggestion : suggestions) {
+			Optional<AccountContact> accountContact = names
+					.stream()
+					.filter(an -> an.getUserId().equals(suggestion.getUserId()))
+					.findFirst();
+
+			accountContact.ifPresent(an -> suggestion.setUserName(an
+					.getFirstName() + " " + an.getLastName()));
+
+			accountContact.ifPresent(an -> suggestion.setAvatarUrl(an
+					.getAvatarUrl()));
+		}
+
+		return suggestions;
+	}
+
+	public void saveSuggestion(Suggestion suggestion) {
+		suggestionRepository.save(suggestion);
 	}
 
 }
