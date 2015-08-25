@@ -42,8 +42,6 @@ public class SuggestionRepositoryTest {
 	@Test
 	public void testRetrieveExistingSuggestion()
 			throws ElementNotFoundException {
-		// TODO: this is retrieving the stuff inserted in
-		// V99__data_documents.sql...
 		Suggestion suggestion = repository.get(0L);
 
 		Assert.assertNotNull("Suggestion is null.", suggestion);
@@ -51,13 +49,11 @@ public class SuggestionRepositoryTest {
 	}
 
 	@Test
-	public void testRetrieveExistingSuggestions()
+	public void testRetrieveExistingSuggestionsForSection()
 			throws ElementNotFoundException {
 
 		Long sectionId = 127L;
 
-		// TODO: this is retrieving the stuff inserted in
-		// V99__data_documents.sql...
 		List<Suggestion> suggestion = repository.getSuggestions(sectionId);
 
 		Assert.assertNotNull("Suggestion is null.", suggestion);
