@@ -61,6 +61,29 @@ public class LMSRequest {
 
 	public LMSRequest(HttpServletRequest request) {
 
+		log.info(LMSConstants.LTI_INSTANCE_GUID + " "
+				+ getParam(LMSConstants.LTI_INSTANCE_GUID));
+		log.info(LMSConstants.LTI_CONSUMER_KEY + " "
+				+ getParam(LMSConstants.LTI_CONSUMER_KEY));
+		log.info(LMSConstants.LTI_INSTANCE_NAME + " "
+				+ getParam(LMSConstants.LTI_INSTANCE_NAME));
+		log.info(LMSConstants.LTI_INSTANCE_SERVER_ID + " "
+				+ getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
+		log.info(LMSConstants.LTI_INSTANCE_TYPE + " "
+				+ getParam(LMSConstants.LTI_INSTANCE_TYPE));
+
+		log.info(LMSConstants.LTI_LMS_VERSION + " "
+				+ getParam(LMSConstants.LTI_LMS_VERSION));
+		log.info(LMSConstants.LTI_OAUTH_VERSION + " "
+				+ getParam(LMSConstants.LTI_OAUTH_VERSION));
+
+		log.info(LMSConstants.LTI_USER_ID + " "
+				+ getParam(LMSConstants.LTI_USER_ID));
+		log.info(LMSConstants.LTI_USER_NAME + " "
+				+ getParam(LMSConstants.LTI_USER_NAME));
+		log.info(LMSConstants.LTI_USER_EMAIL + " "
+				+ getParam(LMSConstants.LTI_USER_EMAIL));
+
 		this.httpServletRequest = request;
 		if (!isLTIRequest(request)) {
 			throw new IllegalStateException(LMSConstants.LTI_INVALID_REQUEST);
