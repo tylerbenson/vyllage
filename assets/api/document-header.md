@@ -24,11 +24,24 @@
 ## PUT /resume/{documentId}/header*
 + Parameters
   + documentId (string, `1`) - The id of the document.
+
+Note that only the tagline will be saved.
 + Body (application/json)
 
 ```
-  {
-    "tagline":"This is my tagline."
+{
+  "firstName": "Luke",
+  "middleName": "V",
+  "lastName": "Skywalker",
+  "tagline": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+  "address": "Avenida Siempreviva 123",
+  "email": "user@vyllage.com",
+  "phoneNumber": "",
+  "twitter": "",
+  "linkedIn": null,
+  "owner": true,
+  "avatarUrl": "https://secure.gravatar.com/avatar/631164c3aeb35618622fe67602ce5da8",
+  "error": null
   }
 ```
 + Response 200
