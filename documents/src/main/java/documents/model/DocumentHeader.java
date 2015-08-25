@@ -2,8 +2,14 @@ package documents.model;
 
 import lombok.ToString;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @ToString
+@JsonIgnoreProperties({ "inValid" })
 public class DocumentHeader {
+
+	// added inValid t be ignored in case the frontend sends back the
+	// same object with inValid as property
 
 	private String firstName;
 	private String middleName;
@@ -19,6 +25,8 @@ public class DocumentHeader {
 	private boolean owner = false;
 
 	private String avatarUrl;
+
+	private String error;
 
 	public DocumentHeader() {
 	}
@@ -109,6 +117,26 @@ public class DocumentHeader {
 
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public boolean isInValid() {
+		return tagLineIsInValid();
+	}
+
+	protected boolean tagLineIsInValid() {
+		if (tagline != null && this.tagline.length() > 100) {
+			setError("Tagline must be shorter than 100 characters.");
+			return true;
+		} else
+			return false;
 	}
 
 }

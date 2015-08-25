@@ -20,6 +20,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -410,15 +411,20 @@ public class ResumeController {
 	}
 
 	@RequestMapping(value = "{documentId}/header", method = RequestMethod.PUT, consumes = "application/json")
-	@ResponseStatus(value = HttpStatus.OK)
 	@CheckWriteAccess
-	public void updateHeader(@PathVariable final Long documentId,
+	public @ResponseBody ResponseEntity<DocumentHeader> updateHeader(
+			@PathVariable final Long documentId,
 			@RequestBody final DocumentHeader documentHeader)
 			throws ElementNotFoundException {
+
+		if (documentHeader.isInValid())
+			return new ResponseEntity<>(documentHeader, HttpStatus.BAD_REQUEST);
 
 		Document document = documentService.getDocument(documentId);
 		document.setTagline(documentHeader.getTagline());
 		documentService.saveDocument(document);
+
+		return new ResponseEntity<>(documentHeader, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.GET, produces = "application/json")
