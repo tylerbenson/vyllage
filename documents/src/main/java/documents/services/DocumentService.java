@@ -2,6 +2,7 @@ package documents.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -438,10 +439,13 @@ public class DocumentService {
 	}
 
 	public List<Suggestion> getSectionSuggestions(HttpServletRequest request,
-			Long documentId) {
+			Long sectionId) {
 
 		List<Suggestion> suggestions = suggestionRepository
-				.getSuggestions(documentId);
+				.getSuggestions(sectionId);
+
+		if (suggestions == null || suggestions.isEmpty())
+			return Collections.emptyList();
 
 		List<AccountContact> names = accountService.getContactDataForUsers(
 				request,
@@ -464,8 +468,8 @@ public class DocumentService {
 		return suggestions;
 	}
 
-	public void saveSuggestion(Suggestion suggestion) {
-		suggestionRepository.save(suggestion);
+	public Suggestion saveSuggestion(Suggestion suggestion) {
+		return suggestionRepository.save(suggestion);
 	}
 
 }

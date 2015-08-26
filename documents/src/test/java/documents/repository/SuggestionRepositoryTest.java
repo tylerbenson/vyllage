@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -18,6 +20,7 @@ import documents.model.document.sections.EducationSection;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class SuggestionRepositoryTest {
 
 	@Autowired
@@ -25,7 +28,7 @@ public class SuggestionRepositoryTest {
 
 	private static final String JSON = "{"
 			+ "\"type\": \"JobExperienceSection\","
-			+ "\"title\": \"experience\"," + "\"sectionId\": 127,"
+			+ "\"title\": \"experience\"," + "\"sectionId\": 128,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
@@ -82,7 +85,6 @@ public class SuggestionRepositoryTest {
 
 	@Test(expected = ElementNotFoundException.class)
 	public void testDeleteSuggestion() throws ElementNotFoundException {
-		// TODO: this is retrieving the suggestion inserted in V2__init.sql...
 		Suggestion suggestion = generateSuggestion();
 
 		suggestion = repository.save(suggestion);
@@ -98,7 +100,7 @@ public class SuggestionRepositoryTest {
 	private Suggestion generateSuggestion() {
 		Suggestion suggestion = new Suggestion();
 		suggestion.setDocumentSection(EducationSection.fromJSON(JSON));
-		suggestion.setSectionId(127L);
+		suggestion.setSectionId(128L);
 		suggestion.setSectionVersion(1L);
 		suggestion.setUserId(0L);
 		return suggestion;
