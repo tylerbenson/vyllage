@@ -53,10 +53,9 @@ public class LTIKeyRepositoryImplTest {
 
 		final String consumerKey = "aeiou2";
 		final String secret = "12345678911234567890";
-		final String externalOrganizationId = "asasassdsad";
 
 		final LTIKey savedKey = repository.save(user, organization,
-				consumerKey, secret, externalOrganizationId);
+				consumerKey, secret);
 
 		Assert.assertNotNull(savedKey);
 		Assert.assertEquals(consumerKey, savedKey.getKeyKey());

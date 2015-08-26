@@ -10,7 +10,7 @@ public interface LTIKeyRepository {
 	Optional<LTIKey> get(String consumerKey);
 
 	LTIKey save(User user, Organization organization, String consumerKey,
-			String secret, String externalOrganizationId);
+			String secret);
 
 	Organization getOrganizationByConsumerKey(String consumerKey);
 

@@ -60,8 +60,7 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 	@Override
 	public LTIKey save(@NonNull final User user,
 			@NonNull final Organization organization,
-			@NonNull final String consumerKey, @NonNull final String secret,
-			final String externalOrganizationId) {
+			@NonNull final String consumerKey, @NonNull final String secret) {
 
 		final LtiCredentialsRecord existingRecord = sql.fetchOne(
 				LTI_CREDENTIALS,
@@ -84,7 +83,6 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 					.now(ZoneId.of("UTC"))));
 
 			newRecord.setKeyId(organization.getOrganizationId());
-			newRecord.setExternalOrganizationId(externalOrganizationId);
 
 			newRecord.store();
 
@@ -98,7 +96,6 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 			existingRecord.setSecret(secret);
 			existingRecord.setKeyId(organization.getOrganizationId());
 			existingRecord.setConsumerKey(consumerKey);
-			existingRecord.setExternalOrganizationId(externalOrganizationId);
 
 			existingRecord.store();
 
@@ -151,7 +148,6 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 		lmsKey.setModifiedByUserId(keyRecord.getModifiedByUserId());
 		lmsKey.setLastModified(keyRecord.getLastModified().toLocalDateTime());
 		lmsKey.setDateCreated(keyRecord.getDateCreated().toLocalDateTime());
-		lmsKey.setExternalOrganizationId(keyRecord.getExternalOrganizationId());
 		return lmsKey;
 	}
 }

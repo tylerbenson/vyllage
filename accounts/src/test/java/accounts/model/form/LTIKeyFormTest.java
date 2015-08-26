@@ -14,8 +14,6 @@ public class LTIKeyFormTest {
 
 		form.setSecret(null);
 
-		form.setExternalOrganizationId("hola");
-
 		Assert.assertTrue(form.isInvalid());
 		Assert.assertFalse(form.consumerKeyNotValid());
 		Assert.assertTrue(form.secretNotValid());
@@ -29,8 +27,6 @@ public class LTIKeyFormTest {
 		form.setConsumerKey("aaaa");
 
 		form.setSecret("");
-
-		form.setExternalOrganizationId("hola");
 
 		Assert.assertTrue(form.isInvalid());
 		Assert.assertFalse(form.consumerKeyNotValid());
@@ -46,8 +42,6 @@ public class LTIKeyFormTest {
 
 		form.setSecret("123456789112345");
 
-		form.setExternalOrganizationId("hola");
-
 		Assert.assertTrue(form.isInvalid());
 		Assert.assertFalse(form.consumerKeyNotValid());
 		Assert.assertTrue(form.secretNotValid());
@@ -61,8 +55,6 @@ public class LTIKeyFormTest {
 		form.setConsumerKey("");
 
 		form.setSecret("1234567891123456");
-
-		form.setExternalOrganizationId("hola");
 
 		Assert.assertTrue(form.isInvalid());
 		Assert.assertTrue(form.consumerKeyNotValid());
@@ -78,45 +70,9 @@ public class LTIKeyFormTest {
 
 		form.setSecret("1234567891123456");
 
-		form.setExternalOrganizationId("hola");
-
 		Assert.assertTrue(form.isInvalid());
 		Assert.assertTrue(form.consumerKeyNotValid());
 		Assert.assertFalse(form.secretNotValid());
-	}
-
-	@Test
-	public void testExternalOrganizationIdNullIsInvalid() {
-
-		LTIKeyForm form = new LTIKeyForm();
-
-		form.setConsumerKey("Hello");
-
-		form.setSecret("1234567891123456");
-
-		form.setExternalOrganizationId(null);
-
-		Assert.assertTrue(form.isInvalid());
-		Assert.assertFalse(form.consumerKeyNotValid());
-		Assert.assertFalse(form.secretNotValid());
-		Assert.assertTrue(form.externalOrganizationIdIsInvalid());
-	}
-
-	@Test
-	public void testExternalOrganizationIdBlankIsInvalid() {
-
-		LTIKeyForm form = new LTIKeyForm();
-
-		form.setConsumerKey("Hello");
-
-		form.setSecret("1234567891123456");
-
-		form.setExternalOrganizationId("     ");
-
-		Assert.assertTrue(form.isInvalid());
-		Assert.assertFalse(form.consumerKeyNotValid());
-		Assert.assertFalse(form.secretNotValid());
-		Assert.assertTrue(form.externalOrganizationIdIsInvalid());
 	}
 
 	@Test
@@ -127,8 +83,6 @@ public class LTIKeyFormTest {
 		form.setConsumerKey("Hello");
 
 		form.setSecret("1234567891123456");
-
-		form.setExternalOrganizationId("hola");
 
 		Assert.assertFalse(form.isInvalid());
 		Assert.assertFalse(form.consumerKeyNotValid());

@@ -100,8 +100,7 @@ public class LTIAdminController {
 		LTIKey key = null;
 		try {
 			key = LTIKeyRepository.save(user, organization, consumerKey,
-					LTIKeyForm.getSecret(),
-					LTIKeyForm.getExternalOrganizationId());
+					LTIKeyForm.getSecret());
 
 		} catch (DuplicateKeyException e) {
 
@@ -118,13 +117,10 @@ public class LTIAdminController {
 		model.addAttribute("organization", organization.getOrganizationName());
 		model.addAttribute("consumerKey", consumerKey);
 		model.addAttribute("secret", LTIKeyForm.getSecret());
-		model.addAttribute("externalOrganizationId",
-				LTIKeyForm.getExternalOrganizationId());
 
 		logger.info(organization.getOrganizationName());
 		logger.info(key.getKeyKey());
 		logger.info(LTIKeyForm.getSecret());
-		logger.info(LTIKeyForm.getExternalOrganizationId());
 
 		return "adminLTIKeyDone";
 	}
