@@ -1,2 +1,1 @@
-drop index ix_organization_external_organization;
 alter table accounts.lti_credentials drop column external_organization_id;
