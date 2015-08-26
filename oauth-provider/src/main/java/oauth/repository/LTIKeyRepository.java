@@ -12,7 +12,7 @@ public interface LTIKeyRepository {
 	LTIKey save(User user, Organization organization, String consumerKey,
 			String secret, String externalOrganizationId);
 
-	Organization getOrganizationByExternalId(String externalOrganizationId);
+	Organization getOrganizationByConsumerKey(String consumerKey);
 
 	Long getAuditUser(String externalOrganizationId);
 

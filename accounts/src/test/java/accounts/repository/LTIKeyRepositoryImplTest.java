@@ -65,12 +65,12 @@ public class LTIKeyRepositoryImplTest {
 
 	@Test
 	public void testGetOrganization() {
-		final String externalOrganizationId = "FFgdPrsCVn8zKFpDUkFF2TaXzo6zIVULifyHjz8J:canvas-lms";
+		final String consumerKey = "University12323213";
 
 		final Organization organization = organizationRepository.get(1L);
 
 		final Organization organizationByExternalId = repository
-				.getOrganizationByExternalId(externalOrganizationId);
+				.getOrganizationByConsumerKey(consumerKey);
 
 		Assert.assertEquals(organization, organizationByExternalId);
 	}

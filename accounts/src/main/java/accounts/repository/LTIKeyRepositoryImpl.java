@@ -112,8 +112,7 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 	}
 
 	@Override
-	public Organization getOrganizationByExternalId(
-			String externalOrganizationId) {
+	public Organization getOrganizationByConsumerKey(String consumerKey) {
 
 		Organizations o = ORGANIZATIONS.as("o");
 		LtiCredentials lti = LTI_CREDENTIALS.as("lti");
@@ -121,7 +120,7 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 		// since the primary key is the organization id there can only be one
 		List<Organization> list = sql.select(o.fields()).from(o).join(lti)
 				.on(o.ORGANIZATION_ID.eq(lti.KEY_ID))
-				.where(lti.EXTERNAL_ORGANIZATION_ID.eq(externalOrganizationId))
+				.where(lti.CONSUMER_KEY.eq(consumerKey))
 				.fetchInto(Organization.class);
 
 		return list.get(0);
@@ -130,15 +129,14 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 	/**
 	 * Returns the id user that created the key.
 	 * 
-	 * @param externalOrganizationId
+	 * @param consumerKey
 	 * @return admin id
 	 */
 	@Override
-	public Long getAuditUser(String externalOrganizationId) {
+	public Long getAuditUser(String consumerKey) {
 
 		final LtiCredentialsRecord existingRecord = sql.fetchOne(
-				LTI_CREDENTIALS, LTI_CREDENTIALS.EXTERNAL_ORGANIZATION_ID
-						.eq(externalOrganizationId));
+				LTI_CREDENTIALS, LTI_CREDENTIALS.CONSUMER_KEY.eq(consumerKey));
 
 		return existingRecord.getCreatorUserId();
 	}

@@ -50,8 +50,7 @@ public class LMSRepository {
 		Object savepoint = transaction.createSavepoint();
 		try {
 			Organization organizationByExternalId = ltiKeyRepository
-					.getOrganizationByExternalId(lmsAccount
-							.getExternalOrganizationId());
+					.getOrganizationByConsumerKey(lmsAccount.getConsumerKey());
 
 			LmsRecord newRecord = sql.newRecord(LMS);
 			newRecord.setLmsGuid(lmsAccount.getLmsGuid());
