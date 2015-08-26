@@ -14,6 +14,6 @@ public interface LTIKeyRepository {
 
 	Organization getOrganizationByConsumerKey(String consumerKey);
 
-	Long getAuditUser(String externalOrganizationId);
+	Long getAuditUser(String consumerKey);
 
 }

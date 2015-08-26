@@ -77,9 +77,9 @@ public class LTIKeyRepositoryImplTest {
 
 	@Test
 	public void testGetAuditUserId() throws UserNotFoundException {
-		final String externalOrganizationId = "FFgdPrsCVn8zKFpDUkFF2TaXzo6zIVULifyHjz8J:canvas-lms";
+		final String consumerKey = "University12323213";
 
-		final Long auditUser = repository.getAuditUser(externalOrganizationId);
+		final Long auditUser = repository.getAuditUser(consumerKey);
 
 		Assert.assertEquals(new Long(1), auditUser);
 	}
