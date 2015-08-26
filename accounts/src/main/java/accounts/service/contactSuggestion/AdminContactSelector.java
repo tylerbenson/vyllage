@@ -38,7 +38,7 @@ public class AdminContactSelector extends AbstractContactSelector {
 		return sql().select(u.fields()).from(u).join(uor)
 				.on(u.USER_ID.eq(uor.USER_ID))
 				.where(uor.ORGANIZATION_ID.in(organizationIds))
-				.and(adminSearchCondition(uor));
+				.and(adminSearchCondition(uor)).and(u.ENABLED.eq(true));
 	}
 
 	private Condition adminSearchCondition(UserOrganizationRoles uor) {
@@ -64,10 +64,9 @@ public class AdminContactSelector extends AbstractContactSelector {
 						.map(a -> ((UserOrganizationRole) a)
 								.getOrganizationId())
 						.collect(Collectors.toList())))
-				.and(uor.ROLE.contains(RolesEnum.ADVISOR.name())).limit(limit)
-				.fetch()));
+				.and(uor.ROLE.contains(RolesEnum.ADVISOR.name()))
+				.and(u.ENABLED.eq(true)).limit(limit).fetch()));
 
 		return recordsToUser;
 	}
-
 }

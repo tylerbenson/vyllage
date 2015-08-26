@@ -5,7 +5,7 @@
 --NOTE: password == '$2a$10$6REiiQD8i4FTE4D/X3.chOnlgxghwWMGcngksAjyQun0njGDQznxq'
 insert into ACCOUNTS.users ( user_name, first_Name, middle_name, last_name, enabled, date_created, last_modified) values ( 'user@vyllage.com', 'Luke', 'V', 'Skywalker', true, CURRENT_DATE(), CURRENT_DATE());
 insert into ACCOUNTS.users ( user_name, enabled, date_created, last_modified ) values ( 'admin@vyllage.com', true, CURRENT_DATE(), CURRENT_DATE());
-insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'deana1@vyllage.com', 'Deana1', 'Troi', true, CURRENT_DATE(), CURRENT_DATE() );
+insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'deana1@vyllage.com', 'Deana1', 'Troi', false, CURRENT_DATE(), CURRENT_DATE() );
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'mario@toadstool.com', 'Mario', 'Mario', true, CURRENT_DATE(), CURRENT_DATE() );
 
 insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_created, last_modified ) values ( 'maquiavelo@vyllage.com', 'Mac', '', true, CURRENT_DATE(), CURRENT_DATE() );
