@@ -25,7 +25,7 @@ var SectionFooter = React.createClass({
             {moment(lastModified).isValid() ? moment.utc(lastModified).fromNow(): ''}
           </p>
           <div className='actions'>
-            <CommentsCount count={numberOfComments} onClick={this.clickComments}/>
+            <CommentsCount count={numberOfComments} onClick={this.clickComments} showComments={this.props.section.showComments} />
           </div> 
         </div>
         <Comments section={this.props.section} />
