@@ -162,8 +162,9 @@ public class SocialLoginController {
 			WebRequest webRequest, RegisterForm registerForm,
 			SocialDocumentLink doclink) {
 
+		final boolean forcePasswordChange = false;
 		User newUser = userService.createUserFromReferral(registerForm,
-				doclink.getUserId());
+				doclink.getUserId(), forcePasswordChange);
 
 		// replacing userId that created the link with the userId of the
 		// user that will have his permissions created
