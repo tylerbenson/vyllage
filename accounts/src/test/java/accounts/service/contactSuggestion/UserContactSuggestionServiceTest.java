@@ -111,8 +111,7 @@ public class UserContactSuggestionServiceTest {
 	@Test
 	public void guestTestNoAdmissionAdvisorFoundReturnsAdvisor() {
 		Long university1 = 1L;
-		User guest = createTestUser("guest-test2", RolesEnum.GUEST,
-				university1, true);
+		User guest = createTestUser("guest-test2", RolesEnum.GUEST, university1);
 
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				guest, null, 5);
@@ -124,8 +123,7 @@ public class UserContactSuggestionServiceTest {
 	@Test
 	public void guestTestNoAdvisorsFound() {
 		Long university2 = 2L;
-		User guest = createTestUser("guest-test2", RolesEnum.GUEST,
-				university2, true);
+		User guest = createTestUser("guest-test2", RolesEnum.GUEST, university2);
 
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				guest, null, 5);
@@ -400,13 +398,13 @@ public class UserContactSuggestionServiceTest {
 		return loadedUser;
 	}
 
-	public User createTestUser(String userName, RolesEnum role,
-			Long university, boolean enabled) {
+	public User createTestUser(String userName, RolesEnum role, Long university) {
 		String oldPassword = "password";
 
 		UserOrganizationRole auth = new UserOrganizationRole(null, university,
 				role.name().toUpperCase(), 0L);
 
+		boolean enabled = true;
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
