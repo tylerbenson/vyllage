@@ -56,7 +56,6 @@ module.exports = Reflux.createStore({
   onChangeSetting: function (setting) {
     var index = findindex(this.settings, {name: setting.name});
     setting = this.validateField(setting);
-
     if (index !== -1) {
       this.settings[index] = setting;
     } else {
@@ -80,7 +79,10 @@ module.exports = Reflux.createStore({
                                   null: "Invalid Phone Number";
         break;
       case 'twitter':
-        setting.errorMessage = setting.value.length <= 140 ? null: "Invalid Twitter Username";
+        var pattern = /^\w{1,32}$/; // ref : http://aaronsaray.com/blog/2012/08/07/jquery-validator-twitter-username-validator/
+        if(setting.value.length >= 140 || pattern.test(setting.value) == false ) {
+          setting.errorMessage = "Invalid Twitter Username";
+        }
         break;
       default:
         setting.errorMessage = null;
