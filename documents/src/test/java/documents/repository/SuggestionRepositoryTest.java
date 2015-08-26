@@ -1,11 +1,15 @@
 package documents.repository;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -16,14 +20,15 @@ import documents.model.document.sections.EducationSection;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class SuggestionRepositoryTest {
 
 	@Autowired
-	private IRepository<Suggestion> repository;
+	private SuggestionRepository repository;
 
 	private static final String JSON = "{"
 			+ "\"type\": \"JobExperienceSection\","
-			+ "\"title\": \"experience\"," + "\"sectionId\": 127,"
+			+ "\"title\": \"experience\"," + "\"sectionId\": 128,"
 			+ "\"sectionPosition\": 2," + "\"state\": \"shown\","
 			+ "\"organizationName\": \"DeVry Education Group\","
 			+ "\"organizationDescription\": \"Blah Blah Blah.\","
@@ -40,12 +45,30 @@ public class SuggestionRepositoryTest {
 	@Test
 	public void testRetrieveExistingSuggestion()
 			throws ElementNotFoundException {
-		// TODO: this is retrieving the stuff inserted in
-		// V99__data_documents.sql...
 		Suggestion suggestion = repository.get(0L);
 
 		Assert.assertNotNull("Suggestion is null.", suggestion);
 		Assert.assertTrue(suggestion.getSuggestionId().equals(0L));
+	}
+
+	@Test
+	public void testRetrieveExistingSuggestionsForSection()
+			throws ElementNotFoundException {
+
+		Long sectionId = 127L;
+
+		List<Suggestion> suggestion = repository.getSuggestions(sectionId);
+
+		Assert.assertNotNull("Suggestion is null.", suggestion);
+		Assert.assertTrue("No suggestions found. ", suggestion.size() > 0);
+
+		Assert.assertTrue(
+				"Suggestionsfor Section with Id " + sectionId + " not found.",
+				suggestion.stream().anyMatch(
+						s -> s.getDocumentSection() != null
+								&& sectionId.equals(s.getSectionId())
+								&& sectionId.equals(s.getDocumentSection()
+										.getSectionId())));
 	}
 
 	@Test
@@ -62,7 +85,6 @@ public class SuggestionRepositoryTest {
 
 	@Test(expected = ElementNotFoundException.class)
 	public void testDeleteSuggestion() throws ElementNotFoundException {
-		// TODO: this is retrieving the suggestion inserted in V2__init.sql...
 		Suggestion suggestion = generateSuggestion();
 
 		suggestion = repository.save(suggestion);
@@ -78,7 +100,7 @@ public class SuggestionRepositoryTest {
 	private Suggestion generateSuggestion() {
 		Suggestion suggestion = new Suggestion();
 		suggestion.setDocumentSection(EducationSection.fromJSON(JSON));
-		suggestion.setSectionId(127L);
+		suggestion.setSectionId(128L);
 		suggestion.setSectionVersion(1L);
 		suggestion.setUserId(0L);
 		return suggestion;

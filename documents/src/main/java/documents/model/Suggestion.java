@@ -3,6 +3,9 @@ package documents.model;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
+
+import org.springframework.util.Assert;
+
 import util.dateSerialization.DocumentLocalDateTimeDeserializer;
 import util.dateSerialization.DocumentLocalDateTimeSerializer;
 
@@ -16,12 +19,19 @@ public class Suggestion {
 	private Long suggestionId;
 	private Long sectionId;
 	private Long sectionVersion;
-	private DocumentSection documentSection;
 
 	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
 	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
 	private LocalDateTime lastModified;
 	private Long userId;
+
+	// not saved in the DB
+	private String userName;
+
+	// not saved in the DB
+	private String avatarUrl;
+
+	private DocumentSection documentSection;
 
 	public Long getSuggestionId() {
 		return suggestionId;
@@ -36,6 +46,7 @@ public class Suggestion {
 	}
 
 	public void setDocumentSection(DocumentSection documentSection) {
+		Assert.notNull(documentSection);
 		this.documentSection = documentSection;
 	}
 
@@ -52,6 +63,7 @@ public class Suggestion {
 	}
 
 	public void setSectionId(Long sectionId) {
+		Assert.notNull(sectionId);
 		this.sectionId = sectionId;
 	}
 
@@ -60,6 +72,7 @@ public class Suggestion {
 	}
 
 	public void setSectionVersion(Long sectionVersion) {
+		Assert.notNull(sectionVersion);
 		this.sectionVersion = sectionVersion;
 	}
 
@@ -70,4 +83,21 @@ public class Suggestion {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
+	}
+
 }

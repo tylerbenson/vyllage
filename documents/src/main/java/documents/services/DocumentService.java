@@ -2,6 +2,7 @@ package documents.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,6 +24,7 @@ import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
+import documents.model.Suggestion;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
 import documents.model.document.sections.DocumentSection;
@@ -38,7 +40,6 @@ import documents.utilities.OrderSectionValidator;
  * This service takes care of saving, retrieving and manipulating documents.
  *
  * @author uh
- *
  */
 @Service
 public class DocumentService {
@@ -52,7 +53,6 @@ public class DocumentService {
 
 	private CommentRepository commentRepository;
 
-	@SuppressWarnings("unused")
 	private SuggestionRepository suggestionRepository;
 
 	private AccountService accountService;
@@ -436,6 +436,40 @@ public class DocumentService {
 
 		header.setTagline(document.getTagline());
 		return header;
+	}
+
+	public List<Suggestion> getSectionSuggestions(HttpServletRequest request,
+			Long sectionId) {
+
+		List<Suggestion> suggestions = suggestionRepository
+				.getSuggestions(sectionId);
+
+		if (suggestions == null || suggestions.isEmpty())
+			return Collections.emptyList();
+
+		List<AccountContact> names = accountService.getContactDataForUsers(
+				request,
+				suggestions.stream().map(s -> s.getUserId())
+						.collect(Collectors.toList()));
+
+		for (Suggestion suggestion : suggestions) {
+			Optional<AccountContact> accountContact = names
+					.stream()
+					.filter(an -> an.getUserId().equals(suggestion.getUserId()))
+					.findFirst();
+
+			accountContact.ifPresent(an -> suggestion.setUserName(an
+					.getFirstName() + " " + an.getLastName()));
+
+			accountContact.ifPresent(an -> suggestion.setAvatarUrl(an
+					.getAvatarUrl()));
+		}
+
+		return suggestions;
+	}
+
+	public Suggestion saveSuggestion(Suggestion suggestion) {
+		return suggestionRepository.save(suggestion);
 	}
 
 }

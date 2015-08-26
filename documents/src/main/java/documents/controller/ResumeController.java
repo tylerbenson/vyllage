@@ -51,6 +51,7 @@ import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
 import documents.model.LinkPermissions;
+import documents.model.Suggestion;
 import documents.model.UserNotification;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.document.sections.DocumentSection;
@@ -437,6 +438,7 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
+	@CheckReadAccess
 	public @ResponseBody Comment saveCommentsForSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
@@ -490,6 +492,7 @@ public class ResumeController {
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
+	@CheckReadAccess
 	public void saveCommentsForComment(@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@PathVariable final Long commentId,
@@ -510,6 +513,68 @@ public class ResumeController {
 			comment.setOtherCommentId(commentId);
 
 		documentService.saveComment(comment);
+	}
+
+	// check read because this is for others
+	@RequestMapping(value = "{documentId}/section/{sectionId}/suggestion", method = RequestMethod.GET, produces = "application/json")
+	@CheckReadAccess
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody List<Suggestion> getSectionSuggestions(
+			HttpServletRequest request, @PathVariable final Long documentId,
+			@PathVariable final Long sectionId,
+			@AuthenticationPrincipal User user) {
+
+		return documentService.getSectionSuggestions(request, sectionId);
+
+	}
+
+	// check read because this is for others
+	@RequestMapping(value = "{documentId}/section/{sectionId}/suggestion", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@CheckReadAccess
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody Suggestion saveSectionSuggestion(
+			@PathVariable final Long documentId,
+			@PathVariable final Long sectionId,
+			@AuthenticationPrincipal final User user,
+			@RequestBody final Suggestion suggestion) {
+
+		// some assertions, if these are not present something's wrong with the
+		// client
+		Assert.isTrue(suggestion.getSectionVersion() != null);
+		Assert.isTrue(suggestion.getDocumentSection() != null);
+		Assert.isTrue(suggestion.getSectionId().equals(sectionId));
+
+		if (suggestion.getUserId() == null)
+			suggestion.setUserId(user.getUserId());
+
+		return documentService.saveSuggestion(suggestion);
+
+	}
+
+	// check read because this is for others
+	@RequestMapping(value = "{documentId}/section/{sectionId}/suggestion/{suggestionId}", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
+	@CheckReadAccess
+	@ResponseStatus(value = HttpStatus.OK)
+	public @ResponseBody Suggestion updateSectionSuggestion(
+			@PathVariable final Long documentId,
+			@PathVariable final Long sectionId,
+			@PathVariable final Long suggestionId,
+			@AuthenticationPrincipal final User user,
+			@RequestBody final Suggestion suggestion) {
+
+		// some assertions, if these are not present something's wrong with the
+		// client
+		Assert.isTrue(suggestion.getSectionId() != null);
+		Assert.isTrue(suggestion.getSectionVersion() != null);
+		Assert.isTrue(suggestion.getDocumentSection() != null);
+		Assert.isTrue(suggestion.getSectionId().equals(sectionId));
+		Assert.isTrue(suggestion.getSuggestionId().equals(suggestionId));
+
+		if (suggestion.getUserId() == null)
+			suggestion.setUserId(user.getUserId());
+
+		return documentService.saveSuggestion(suggestion);
+
 	}
 
 	private void setCommentData(final Long sectionId, final Comment comment,
