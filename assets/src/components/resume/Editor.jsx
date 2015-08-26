@@ -62,14 +62,12 @@ var SectionGroup = React.createClass({
   },
   stop: function(event, ui){
     var order = [];
-
     jQuery(event.target).children().each(function(index) {
         order.push({
           type : jQuery(this).attr("rel"),
           index : index
         });
     });
-
     actions.moveGroupOrder(order);
     jQuery('.banner .subheader').removeClass('dragging');
   },

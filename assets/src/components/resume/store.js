@@ -236,7 +236,6 @@ module.exports = Reflux.createStore({
             linear_section.push(section);
           }
       });
-      console.log( linear_section );
      this.postSectionOrder( linear_section );     
   },
 
