@@ -47,34 +47,37 @@ public class SuggestionRepository implements IRepository<Suggestion> {
 		Suggestion suggestion = recordToSuggestion(record);
 		return suggestion;
 	}
-	
+
 	public List<Suggestion> getSuggestions(Long sectionId) {
 		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
 		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
-	 Suggestions ss = SUGGESTIONS.as("ss");
+		Suggestions ss = SUGGESTIONS.as("ss");
 
 		List<Record> records = sql
 				.select(ss.fields())
 				.from(s1)
 				.leftOuterJoin(s2)
 				.on(s1.ID.eq(s2.ID).and(
-						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION))).join(ss)
-				.on(ss.SECTION_ID.eq(s1.ID))
+						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION)))
+				.join(ss).on(ss.SECTION_ID.eq(s1.ID))
 				.where(s2.ID.isNull().and(ss.SECTION_ID.eq(sectionId))).fetch();
 
 		List<Suggestion> suggestions = new ArrayList<>();
 		for (Record record : records) {
-			
+
 			Suggestion suggestion = new Suggestion();
-			suggestion.setLastModified(record.getValue(SUGGESTIONS.LAST_MODIFIED)
-					.toLocalDateTime());
+			suggestion.setLastModified(record.getValue(
+					SUGGESTIONS.LAST_MODIFIED).toLocalDateTime());
 			suggestion.setSectionId(sectionId);
-			suggestion.setSectionVersion(record.getValue(SUGGESTIONS.SECTION_VERSION));
-			suggestion.setSuggestionId(record.getValue(SUGGESTIONS.SUGGESTION_ID));
+			suggestion.setSectionVersion(record
+					.getValue(SUGGESTIONS.SECTION_VERSION));
+			suggestion.setSuggestionId(record
+					.getValue(SUGGESTIONS.SUGGESTION_ID));
 			suggestion.setUserId(record.getValue(SUGGESTIONS.USER_ID));
-			
-			DocumentSection documentSection = DocumentSection.fromJSON(record.getValue(SUGGESTIONS.JSON_DOCUMENT));
-			
+
+			DocumentSection documentSection = DocumentSection.fromJSON(record
+					.getValue(SUGGESTIONS.JSON_DOCUMENT));
+
 			suggestion.setDocumentSection(documentSection);
 			suggestions.add(suggestion);
 		}
