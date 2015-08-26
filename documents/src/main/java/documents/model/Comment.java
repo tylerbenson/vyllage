@@ -21,8 +21,11 @@ public class Comment {
 	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
 	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
 	private LocalDateTime lastModified;
+
+	// not saved in the DB
 	private String userName;
 
+	// not saved in the DB
 	private String avatarUrl;
 
 	public Long getCommentId() {
