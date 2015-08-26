@@ -32,7 +32,7 @@ public class LMSConstants {
 
 	// LMS Error Message
 	public static final String LTI_INVALID_HTTP_REQUEST = "HttpServletRequest can't be null";
-	public static final String LTI_INVALID_REQUEST = "Not a LTI request";
+	public static final String LTI_INVALID_REQUEST = "Not a valid LTI request";
 	public static final String LTI_INVALID_KEY = "LTI request doesn't have Consumer Key or/and LMS user id. ";
 	public static final String LTI_INVALID_SERVER_ID = "LTI Request doesn't have valid server Id.";
 	public static final String LTI_INVALID_LTIREQ = "Cannot create authentication for LTI because the LTIRequest is null";

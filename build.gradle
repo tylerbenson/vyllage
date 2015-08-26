@@ -177,12 +177,46 @@ configure(javaProjects) {
         testCompile "org.mockito:mockito-core:$mockito"
     }
 
-    configurations {
+    configurations.compile /* all? */ {
         // replaced with jcl-over-slf4j
-        all*.exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'commons-logging', module: 'commons-logging'
         // replaced with log4j-over-slf4j
-        all*.exclude group: 'log4j', module: 'log4j'
+        //exclude group: 'log4j', module: 'log4j'
+
+        resolutionStrategy {
+            // fail eagerly on version conflict (includes transitive dependencies)
+            // e.g. multiple different versions of the same dependency (group and name are equal)
+            failOnVersionConflict()
+
+
+            def spring = '4.1.7.RELEASE'
+            def jackson = '2.5.4'
+
+            // force certain versions of dependencies (including transitive)
+            //  *append new forced modules:
+            // TODO: extract common values to single definition.
+            force 'org.slf4j:slf4j-api:1.7.12'
+            force 'javax.activation:activation:1.1.1'
+            force "org.springframework:spring-webmvc:$spring"
+            force "org.springframework:spring-web:$spring"
+            force "org.springframework:spring-beans:$spring"
+            force "org.springframework:spring-core:$spring"
+            force "org.springframework:spring-aop:$spring"
+            force "org.springframework:spring-context:$spring"
+            force "org.springframework:spring-expression:$spring"
+            force "org.springframework:spring-tx:$spring"
+            force 'org.springframework.security:spring-security-core:3.2.7.RELEASE'
+            force 'org.springframework.security:spring-security-config:3.2.7.RELEASE'
+            force 'org.springframework.security:spring-security-web:3.2.7.RELEASE'
+            force "com.fasterxml.jackson.core:jackson-annotations:$jackson"
+            force "com.fasterxml.jackson.core:jackson-databind:$jackson"
+            force "com.fasterxml.jackson.core:jackson-core:$jackson"
+            force "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson"
+            force 'org.thymeleaf:thymeleaf:2.1.4.RELEASE'
+            force 'org.apache.commons:commons-lang3:3.3.2'
+        }
     }
+
 
     // Ensure that all Gradle-compiled classes are available to Eclipse's classpath.
     eclipseClasspath.dependsOn testClasses
