@@ -13,6 +13,8 @@ var SectionFooter = require('../sections/Footer');
 var DeleteSection = require('../Delete');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
+var Sortable = require('../../util/Sortable');
+var resumeActions = require('../actions');
 
 var Tags = React.createClass({
   getInitialState: function() {
@@ -32,6 +34,10 @@ var Tags = React.createClass({
     this.setState({
       tags: nextProps.section.tags,
     });
+  },
+
+  componentDidMount: function () {
+        
   },
   handleChange: function(e) {
     e.preventDefault();
@@ -91,13 +97,28 @@ var Tags = React.createClass({
       e.target.value = "";
     }
   },
+  stop: function(event, ui){
+
+    var self = this;
+    var order = [];
+    var sectionId;
+
+    jQuery(event.target).children().each(function(index) {
+      sectionId = jQuery(this).data("sec");
+      order.push({
+        index : index ,
+        text : jQuery(this).attr("rel")
+      });
+    });
+    resumeActions.moveTagOrder(order , sectionId );
+  },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
     var content = this.state.tags instanceof Array ? this.state.tags.join(', ') : '';
 
     var tags = this.state.tags.map(function(tag, index){
       return (
-        <Tag key={index} text={tag} onDelete={this.onTagDelete.bind(this, index)} uiEditMode={uiEditMode} />
+        <Tag key={index} text={tag} onDelete={this.onTagDelete.bind(this, index)} uiEditMode={uiEditMode} sectionId={this.props.section.sectionId}  />
       );
     }.bind(this));
 
@@ -106,6 +127,11 @@ var Tags = React.createClass({
       'subsection': true
     });
 
+    var config = {
+      list: ".tags",
+      items: "div.tag",
+      stop: this.stop
+    };
 
     return (
       <div className={classes}>
@@ -118,10 +144,10 @@ var Tags = React.createClass({
           </div>: null}
         </div>
         {this.props.section.sectionId ? <div>
-          <div className="tags content">
+          <Sortable config={config} className="tags content">
             {tags}
             {this.state.uiEditMode ? <TagInput onKeyPress={this.onTagAdd} /> : null}
-          </div>
+          </Sortable>
           <SectionFooter section={this.props.section} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
           {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}

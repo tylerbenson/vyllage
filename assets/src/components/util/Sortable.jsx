@@ -7,7 +7,7 @@ var Sortable = React.createClass({
 	componentDidMount: function () {
 		var config = this.props.config;
 		jQuery(config.list).sortable({
-			axis : 'y',
+			axis : config.axis ? config.axis : '',
 			placeholder: "ui-sortable-placeholder",
 			opacity: 0.95,
 			scrollSpeed: 15,

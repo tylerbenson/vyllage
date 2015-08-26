@@ -163,7 +163,6 @@ module.exports = Reflux.createStore({
               if( tmp_section.length){
                 var findIt = findindex(tmp_section, {'type': section.type});
                  if( findIt == -1){
-
                     tmp_section.push({
                       type: section.type,
                       title : section.title, 
@@ -172,7 +171,6 @@ module.exports = Reflux.createStore({
                       child : where( sections, { 'type': section.type }) 
                     });
                  }
-
               }else{
                 tmp_section.push({
                   type: section.type, 
@@ -188,6 +186,18 @@ module.exports = Reflux.createStore({
     }
   },
 
+  onMoveTagOrder: function(order,sectionId){
+
+    this.resume.all_section.forEach(function(sectionGroup){
+      if( sectionGroup.id == sectionId ){
+        sectionGroup.child[0].tags =[];
+        order.forEach(function(order){
+          sectionGroup.child[0].tags.push(order.text);
+        });
+      }
+    });
+    this.makeItLinear( this.resume.all_section );
+  },
   onMoveGroupOrder: function( order ){
     var all_section = [];
     order.map(function( section , index ){
@@ -226,6 +236,7 @@ module.exports = Reflux.createStore({
             linear_section.push(section);
           }
       });
+      console.log( linear_section );
      this.postSectionOrder( linear_section );     
   },
 
