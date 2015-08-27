@@ -143,13 +143,11 @@ public class LMSRequestTest {
 
 			final String consumerKey = LTI_CONSUMER_KEY;
 			final String secret = LTI_CONSUMER_SECRET;
-			final String externalOrganizationId = LTI_INSTANCE_GUID;
-			savedKey = repository.save(user, organization, consumerKey, secret,
-					externalOrganizationId);
+			savedKey = repository.save(user, organization, consumerKey, secret);
 		} catch (UserNotFoundException e1) {
 		}
 		assertNotNull(savedKey);
-		assertEquals(savedKey.getKeyKey(), LTI_CONSUMER_KEY);
+		assertEquals(savedKey.getConsumerKey(), LTI_CONSUMER_KEY);
 		assertNotNull(lmsAccount.getLtiVersion());
 		assertNotNull(LMSConstants.LTI_VERSION_1P0, lmsAccount.getLtiVersion());
 		assertNotNull(lmsAccount.getConsumerKey());

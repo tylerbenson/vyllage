@@ -40,7 +40,6 @@ public class LMSRequest {
 
 	private LMSAccount lmsAccount;
 	private LMSUser lmsUser;
-	private String externalOrganizationId;
 
 	public static synchronized LMSRequest getInstance() {
 
@@ -112,23 +111,6 @@ public class LMSRequest {
 		lmsUser = new LMSUser();
 
 		if (getParam(LMSConstants.LTI_INSTANCE_GUID) != null) {
-			externalOrganizationId = getParam(LMSConstants.LTI_INSTANCE_GUID);
-
-			NewRelic.addCustomParameter("LTI_INSTANCE_GUID - EXT ORGANIZATION",
-					getParam(LMSConstants.LTI_INSTANCE_GUID));
-
-		} else if (getParam(LMSConstants.LTI_INSTANCE_SERVER_ID) != null) {
-
-			externalOrganizationId = getParam(LMSConstants.LTI_INSTANCE_SERVER_ID);
-
-			NewRelic.addCustomParameter("LTI_INSTANCE_GUID - EXT ORGANIZATION",
-					getParam(LMSConstants.LTI_INSTANCE_SERVER_ID));
-
-		} else {
-			throw new IllegalStateException(LMSConstants.LTI_INVALID_SERVER_ID);
-		}
-
-		if (getParam(LMSConstants.LTI_INSTANCE_GUID) != null) {
 
 			lmsAccount.setLmsGuid(getParam(LMSConstants.LTI_INSTANCE_GUID));
 
@@ -145,7 +127,6 @@ public class LMSRequest {
 		} else {
 			throw new IllegalStateException(LMSConstants.LTI_INVALID_SERVER_ID);
 		}
-		lmsAccount.setExternalOrganizationId(externalOrganizationId);
 		lmsAccount.setLtiVersion(getParam(LMSConstants.LTI_VERSION));
 
 		// logging custom parameter for later

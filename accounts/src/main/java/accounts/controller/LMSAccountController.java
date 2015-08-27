@@ -60,11 +60,6 @@ public class LMSAccountController {
 			throw new AccessDeniedException(LMSConstants.LTI_INVALID_LMS);
 		}
 
-		String externalOrganizationId = lmsAccount.getExternalOrganizationId();
-		if (externalOrganizationId == null || externalOrganizationId.isEmpty()) {
-			throw new AccessDeniedException(
-					LMSConstants.LTI_INVALID_LMS_INSTANCE);
-		}
 		csrfTokenUtility = new CsrfTokenUtility();
 		String email = lmsRequest.getLmsUser().getEmail();
 		String firstName = lmsRequest.getLmsUser().getFirstName();
