@@ -1,6 +1,7 @@
 package accounts.repository;
 
 import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
+import static accounts.domain.tables.Users.USERS;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import user.common.User;
+import accounts.domain.tables.Users;
 import accounts.domain.tables.records.AccountSettingRecord;
 import accounts.model.account.settings.AccountSetting;
 
@@ -38,19 +40,25 @@ public class AccountSettingRepository {
 	 * @return
 	 */
 	public List<AccountSetting> getAccountSettings(List<Long> ids) {
-		List<Record> result = sql.select().from(ACCOUNT_SETTING)
-				.where(ACCOUNT_SETTING.USER_ID.in(ids)).fetch();
+		accounts.domain.tables.AccountSetting acs = ACCOUNT_SETTING.as("acs");
+		Users u = USERS.as("u");
+
+		List<Record> result = sql.select(acs.fields()).from(acs).join(u)
+				.on(acs.USER_ID.eq(u.USER_ID)).where(acs.USER_ID.in(ids))
+				.and(u.ENABLED.eq(true)).fetch();
 
 		return result.stream().map(createAccountSetting())
 				.collect(Collectors.toList());
 	}
 
 	public Optional<AccountSetting> get(Long userId, String settingName) {
+		accounts.domain.tables.AccountSetting acs = ACCOUNT_SETTING.as("acs");
+		Users u = USERS.as("u");
 
-		AccountSettingRecord settingRecord = sql.fetchOne(
-				ACCOUNT_SETTING,
-				ACCOUNT_SETTING.USER_ID.eq(userId).and(
-						ACCOUNT_SETTING.NAME.eq(settingName)));
+		Record settingRecord = sql.select(acs.fields()).from(acs).join(u)
+				.on(acs.USER_ID.eq(u.USER_ID)).where(acs.USER_ID.in(userId))
+				.and(acs.NAME.eq(settingName)).and(u.ENABLED.eq(true))
+				.fetchOne();
 
 		if (settingRecord == null)
 			return Optional.empty();

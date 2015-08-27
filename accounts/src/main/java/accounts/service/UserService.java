@@ -130,10 +130,6 @@ public class UserService {
 		return this.userRepository.loadUserByUsername(username);
 	}
 
-	public List<User> getAllUsers() {
-		return this.userRepository.getAll();
-	}
-
 	public boolean userExists(String userName) {
 		return this.userRepository.userExists(userName);
 	}

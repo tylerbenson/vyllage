@@ -60,7 +60,8 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 							.map(a -> ((UserOrganizationRole) a)
 									.getOrganizationId())
 							.collect(Collectors.toList())))
-					.and(nearGraduationSearchCondition(uor));
+					.and(nearGraduationSearchCondition(uor))
+					.and(u.ENABLED.eq(true));
 
 		}
 
@@ -76,7 +77,7 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 						.map(a -> ((UserOrganizationRole) a)
 								.getOrganizationId())
 						.collect(Collectors.toList())))
-				.and(studentSearchCondition(uor));
+				.and(studentSearchCondition(uor)).and(u.ENABLED.eq(true));
 
 	}
 
@@ -135,8 +136,8 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 						.map(a -> ((UserOrganizationRole) a)
 								.getOrganizationId())
 						.collect(Collectors.toList())))
-				.and(uor.ROLE.contains(RolesEnum.ADVISOR.name())).limit(limit)
-				.fetch()));
+				.and(uor.ROLE.contains(RolesEnum.ADVISOR.name()))
+				.and(u.ENABLED.eq(true)).limit(limit).fetch()));
 
 		// still not enough, we add students
 		if (recordsToUser == null || recordsToUser.isEmpty()
@@ -153,7 +154,7 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 									.getOrganizationId())
 							.collect(Collectors.toList())))
 					.and(uor.ROLE.contains(RolesEnum.STUDENT.name()))
-					.limit(limit).fetch()));
+					.and(u.ENABLED.eq(true)).limit(limit).fetch()));
 
 		return recordsToUser;
 	}
