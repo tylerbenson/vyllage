@@ -63,6 +63,32 @@ public class LTIKeyRepositoryImplTest {
 	}
 
 	@Test
+	public void testUpdate() throws UserNotFoundException {
+		final User user = service.getUser(1L);
+		final Organization organization = organizationRepository.get(4L);
+
+		final String consumerKey = "aeiou3";
+		final String secret = "12345678911234567890";
+
+		final LTIKey savedKey = repository.save(user, organization,
+				consumerKey, secret);
+
+		Assert.assertNotNull(savedKey);
+		Assert.assertEquals(consumerKey, savedKey.getKeyKey());
+		Assert.assertEquals(secret, savedKey.getSecret());
+
+		final String secret2 = "1234567891123456789X";
+
+		final LTIKey savedKey2 = repository.save(user, organization,
+				consumerKey, secret2);
+
+		Assert.assertNotNull(savedKey2);
+		Assert.assertEquals(consumerKey, savedKey2.getKeyKey());
+		Assert.assertEquals(secret2, savedKey2.getSecret());
+
+	}
+
+	@Test
 	public void testGetOrganization() {
 		final String consumerKey = "University12323213";
 
