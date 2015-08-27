@@ -124,15 +124,34 @@ public class RegisterFormTest {
 		form.setEmail("a@");
 		form.setPassword("password");
 
-		assertFalse(form.isValid());
+		assertFalse(form.emailIsValid());
 
 		form.setEmail("@b");
 
-		assertFalse(form.isValid());
+		assertFalse(form.emailIsValid());
 
-		form.setEmail("a@b");
+		form.setEmail("a@bcd");
 
-		assertFalse(form.isValid());
+		assertFalse(form.emailIsValid());
 	}
 
+	@Test
+	public void rightEmailPassesTest() {
+
+		RegisterForm form = new RegisterForm();
+		form.setFirstName("firstName");
+		form.setLastName("lastName");
+		form.setEmail("a@b.com");
+		form.setPassword("password");
+
+		assertTrue(form.emailIsValid());
+
+		form.setEmail("1@sub.acq.org");
+
+		assertTrue(form.emailIsValid());
+
+		form.setEmail("a@b.co");
+
+		assertTrue(form.emailIsValid());
+	}
 }
