@@ -11,6 +11,7 @@ import oauth.model.LMSAccount;
 import oauth.utilities.CsrfTokenUtility;
 import oauth.utilities.LMSConstants;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -93,6 +94,13 @@ public class LMSAccountController {
 		} else if (lmsService.userExists(userName)) {
 			return "redirect:/login";
 		} else {
+
+			if (StringUtils.isBlank(userName) || StringUtils.isBlank(firstName)
+					|| StringUtils.isBlank(lastName)) {
+				// redirect to form.
+
+			}
+
 			// TODO: question - If user doesn't have email id with LMS details,
 			// then how they will get password..
 			// Create Vyllage user account.
