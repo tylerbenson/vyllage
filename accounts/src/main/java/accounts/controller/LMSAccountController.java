@@ -11,15 +11,16 @@ import oauth.model.LMSAccount;
 import oauth.utilities.CsrfTokenUtility;
 import oauth.utilities.LMSConstants;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
+import accounts.model.form.RegisterForm;
 import accounts.repository.UserNotFoundException;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
@@ -31,7 +32,6 @@ public class LMSAccountController {
 	private final Logger logger = Logger.getLogger(LMSAccountController.class
 			.getName());
 
-	@SuppressWarnings("unused")
 	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
@@ -46,8 +46,8 @@ public class LMSAccountController {
 
 	@RequestMapping(value = "/lti/account", method = { RequestMethod.GET,
 			RequestMethod.POST })
-	public String lti(HttpServletRequest request, WebRequest webRequest)
-			throws UserNotFoundException {
+	public String lti(HttpServletRequest request, WebRequest webRequest,
+			Model model) throws UserNotFoundException {
 
 		LMSRequest lmsRequest = LMSRequest.getInstance();
 		if (lmsRequest == null) {
@@ -90,10 +90,18 @@ public class LMSAccountController {
 			return "redirect:/login";
 		} else {
 
-			if (StringUtils.isBlank(userName) || StringUtils.isBlank(firstName)
-					|| StringUtils.isBlank(lastName)) {
-				// redirect to form.
+			RegisterForm registerForm = new RegisterForm();
+			// fill all fields, maybe some are present
+			registerForm.setEmail(userName);
+			registerForm.setFirstName(firstName);
+			registerForm.setLastName(lastName);
 
+			// check all values are present, minus password
+			if (!registerForm.emailIsValid() || !registerForm.nameIsValid()) {
+
+				model.addAttribute("registerForm", registerForm);
+				setCSRFTokenInSession(request);
+				return "register-from-LTI";
 			}
 
 			// TODO: question - If user doesn't have email id with LMS details,
@@ -107,6 +115,39 @@ public class LMSAccountController {
 		}
 		setCSRFTokenInSession(request);
 		return "redirect:" + "/lti/login";
+	}
+
+	@RequestMapping(value = "/register-from-LTI", method = RequestMethod.GET)
+	public String register(Model model) {
+
+		if (!model.containsAttribute("registerForm")) {
+			RegisterForm registerForm = new RegisterForm();
+			model.addAttribute("registerForm", registerForm);
+		}
+		return "register-from-social";
+	}
+
+	@RequestMapping(value = "/register-from-LTI", method = RequestMethod.POST)
+	public String register(HttpServletRequest request,
+			RegisterForm registerForm, Model model) {
+
+		if (registerForm.isValid()) {
+			HttpSession session = request.getSession(false);
+			LMSRequest lmsRequest = LMSRequest.getInstance();
+
+			// Create Vyllage user account.
+			User newUser = lmsService.createUser(registerForm.getEmail(),
+					registerForm.getPassword(), registerForm.getFirstName(),
+					null, registerForm.getLastName(), lmsRequest);
+
+			session.setAttribute("user_name", newUser.getUsername());
+
+			return "redirect:" + "/lti/login";
+		}
+
+		model.addAttribute("registerForm", registerForm);
+
+		return "register-from-LTI";
 	}
 
 	private CsrfToken setCSRFTokenInSession(HttpServletRequest request) {
