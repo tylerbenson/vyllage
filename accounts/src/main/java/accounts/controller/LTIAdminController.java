@@ -104,7 +104,7 @@ public class LTIAdminController {
 		model.addAttribute("secret", LTIKeyForm.getSecret());
 
 		logger.info(organization.getOrganizationName());
-		logger.info(key.getKeyKey());
+		logger.info(key.getConsumerKey());
 		logger.info(LTIKeyForm.getSecret());
 
 		return "adminLTIKeyDone";

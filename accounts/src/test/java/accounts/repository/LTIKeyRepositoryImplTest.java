@@ -44,6 +44,7 @@ public class LTIKeyRepositoryImplTest {
 		final Optional<LTIKey> getKey = repository.get(consumerKey);
 
 		Assert.assertTrue(getKey.isPresent());
+		Assert.assertTrue(getKey.get().getConsumerKey().equals(consumerKey));
 	}
 
 	@Test
@@ -58,7 +59,7 @@ public class LTIKeyRepositoryImplTest {
 				consumerKey, secret);
 
 		Assert.assertNotNull(savedKey);
-		Assert.assertEquals(consumerKey, savedKey.getKeyKey());
+		Assert.assertEquals(consumerKey, savedKey.getConsumerKey());
 		Assert.assertEquals(secret, savedKey.getSecret());
 	}
 
@@ -74,7 +75,7 @@ public class LTIKeyRepositoryImplTest {
 				consumerKey, secret);
 
 		Assert.assertNotNull(savedKey);
-		Assert.assertEquals(consumerKey, savedKey.getKeyKey());
+		Assert.assertEquals(consumerKey, savedKey.getConsumerKey());
 		Assert.assertEquals(secret, savedKey.getSecret());
 
 		final String secret2 = "1234567891123456789X";
@@ -83,7 +84,7 @@ public class LTIKeyRepositoryImplTest {
 				consumerKey, secret2);
 
 		Assert.assertNotNull(savedKey2);
-		Assert.assertEquals(consumerKey, savedKey2.getKeyKey());
+		Assert.assertEquals(consumerKey, savedKey2.getConsumerKey());
 		Assert.assertEquals(secret2, savedKey2.getSecret());
 
 	}

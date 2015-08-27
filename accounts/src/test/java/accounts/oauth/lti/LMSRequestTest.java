@@ -147,7 +147,7 @@ public class LMSRequestTest {
 		} catch (UserNotFoundException e1) {
 		}
 		assertNotNull(savedKey);
-		assertEquals(savedKey.getKeyKey(), LTI_CONSUMER_KEY);
+		assertEquals(savedKey.getConsumerKey(), LTI_CONSUMER_KEY);
 		assertNotNull(lmsAccount.getLtiVersion());
 		assertNotNull(LMSConstants.LTI_VERSION_1P0, lmsAccount.getLtiVersion());
 		assertNotNull(lmsAccount.getConsumerKey());

@@ -12,7 +12,7 @@ public class LTIKey {
 
 	private String keySha256;
 
-	private String keyKey;
+	private String consumerKey;
 
 	private String secret;
 
@@ -27,9 +27,9 @@ public class LTIKey {
 	protected LTIKey() {
 	}
 
-	public LTIKey(String key, String secret) {
-		this.keyKey = key;
-		this.keySha256 = makeSHA256(key);
+	public LTIKey(String consumerKey, String secret) {
+		this.consumerKey = consumerKey;
+		this.keySha256 = makeSHA256(consumerKey);
 		if (StringUtils.isNotBlank(secret)) {
 			this.secret = secret;
 		}
@@ -51,12 +51,12 @@ public class LTIKey {
 		this.keySha256 = keySha256;
 	}
 
-	public String getKeyKey() {
-		return keyKey;
+	public String getConsumerKey() {
+		return consumerKey;
 	}
 
-	public void setKeyKey(String keyKey) {
-		this.keyKey = keyKey;
+	public void setConsumerKey(String keyKey) {
+		this.consumerKey = keyKey;
 	}
 
 	public String getSecret() {
@@ -71,7 +71,7 @@ public class LTIKey {
 	public int hashCode() {
 		int result = (int) keyId;
 		result = 31 * result + (keySha256 != null ? keySha256.hashCode() : 0);
-		result = 31 * result + (keyKey != null ? keyKey.hashCode() : 0);
+		result = 31 * result + (consumerKey != null ? consumerKey.hashCode() : 0);
 		return result;
 	}
 
@@ -96,8 +96,8 @@ public class LTIKey {
 		if (this.getKeyId() != other.getKeyId())
 			return false;
 
-		if (this.getKeyKey() == null ? other.getKeyKey() != null : !this
-				.getKeyKey().equals(other.getKeyKey()))
+		if (this.getConsumerKey() == null ? other.getConsumerKey() != null : !this
+				.getConsumerKey().equals(other.getConsumerKey()))
 			return false;
 
 		if (this.getKeySha256() == null ? other.getKeySha256() != null : !this
