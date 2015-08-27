@@ -17,7 +17,7 @@ var Avatar = React.createClass({
 
 		if(url.indexOf('gravatar') >= 0) {
 			return url + '?s=' + this.props.size * 2
-					+ '&d=' + encodeURIComponent('//vyllage.com/images/user.png');
+					+ '&d=' + encodeURIComponent('https://www.vyllage.com/images/user.png');
 		}
 
 		return url;
