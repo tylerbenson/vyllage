@@ -44,6 +44,7 @@ public class LTIKeyRepositoryImplTest {
 		final Optional<LTIKey> getKey = repository.get(consumerKey);
 
 		Assert.assertTrue(getKey.isPresent());
+		Assert.assertTrue(getKey.get().getConsumerKey().equals(consumerKey));
 	}
 
 	@Test
@@ -53,33 +54,58 @@ public class LTIKeyRepositoryImplTest {
 
 		final String consumerKey = "aeiou2";
 		final String secret = "12345678911234567890";
-		final String externalOrganizationId = "asasassdsad";
 
 		final LTIKey savedKey = repository.save(user, organization,
-				consumerKey, secret, externalOrganizationId);
+				consumerKey, secret);
 
 		Assert.assertNotNull(savedKey);
-		Assert.assertEquals(consumerKey, savedKey.getKeyKey());
+		Assert.assertEquals(consumerKey, savedKey.getConsumerKey());
 		Assert.assertEquals(secret, savedKey.getSecret());
 	}
 
 	@Test
+	public void testUpdate() throws UserNotFoundException {
+		final User user = service.getUser(1L);
+		final Organization organization = organizationRepository.get(4L);
+
+		final String consumerKey = "aeiou3";
+		final String secret = "12345678911234567890";
+
+		final LTIKey savedKey = repository.save(user, organization,
+				consumerKey, secret);
+
+		Assert.assertNotNull(savedKey);
+		Assert.assertEquals(consumerKey, savedKey.getConsumerKey());
+		Assert.assertEquals(secret, savedKey.getSecret());
+
+		final String secret2 = "1234567891123456789X";
+
+		final LTIKey savedKey2 = repository.save(user, organization,
+				consumerKey, secret2);
+
+		Assert.assertNotNull(savedKey2);
+		Assert.assertEquals(consumerKey, savedKey2.getConsumerKey());
+		Assert.assertEquals(secret2, savedKey2.getSecret());
+
+	}
+
+	@Test
 	public void testGetOrganization() {
-		final String externalOrganizationId = "FFgdPrsCVn8zKFpDUkFF2TaXzo6zIVULifyHjz8J:canvas-lms";
+		final String consumerKey = "University12323213";
 
 		final Organization organization = organizationRepository.get(1L);
 
 		final Organization organizationByExternalId = repository
-				.getOrganizationByExternalId(externalOrganizationId);
+				.getOrganizationByConsumerKey(consumerKey);
 
 		Assert.assertEquals(organization, organizationByExternalId);
 	}
 
 	@Test
 	public void testGetAuditUserId() throws UserNotFoundException {
-		final String externalOrganizationId = "FFgdPrsCVn8zKFpDUkFF2TaXzo6zIVULifyHjz8J:canvas-lms";
+		final String consumerKey = "University12323213";
 
-		final Long auditUser = repository.getAuditUser(externalOrganizationId);
+		final Long auditUser = repository.getAuditUser(consumerKey);
 
 		Assert.assertEquals(new Long(1), auditUser);
 	}
