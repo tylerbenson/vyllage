@@ -98,14 +98,16 @@ public class LMSAccountController {
 
 			// check all values are present, minus password
 			if (!registerForm.emailIsValid() || !registerForm.nameIsValid()) {
-
+				request.getHeader("Cookie");
 				model.addAttribute("registerForm", registerForm);
-				setCSRFTokenInSession(request);
+
+				CsrfToken token = setCSRFTokenInSession(request);
+				request.setAttribute("_csrf", token);
+				model.addAttribute("_csrf", token);
 				return "register-from-LTI";
 			}
 
-			// TODO: question - If user doesn't have email id with LMS details,
-			// then how they will get password..
+			// TODO: send password
 			// Create Vyllage user account.
 			User newUser = lmsService.createUser(userName, password, firstName,
 					null, lastName, lmsRequest);
@@ -118,13 +120,13 @@ public class LMSAccountController {
 	}
 
 	@RequestMapping(value = "/register-from-LTI", method = RequestMethod.GET)
-	public String register(Model model) {
-
+	public String register(HttpServletRequest request, Model model) {
+		request.getAttribute("_csrf");
 		if (!model.containsAttribute("registerForm")) {
 			RegisterForm registerForm = new RegisterForm();
 			model.addAttribute("registerForm", registerForm);
 		}
-		return "register-from-social";
+		return "register-from-LTI";
 	}
 
 	@RequestMapping(value = "/register-from-LTI", method = RequestMethod.POST)
@@ -135,6 +137,7 @@ public class LMSAccountController {
 			HttpSession session = request.getSession(false);
 			LMSRequest lmsRequest = LMSRequest.getInstance();
 
+			// TODO: send password
 			// Create Vyllage user account.
 			User newUser = lmsService.createUser(registerForm.getEmail(),
 					registerForm.getPassword(), registerForm.getFirstName(),
