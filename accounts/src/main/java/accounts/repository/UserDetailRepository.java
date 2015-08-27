@@ -82,6 +82,11 @@ public class UserDetailRepository implements UserDetailsManager,
 	public UserDetailRepository() {
 	}
 
+	/**
+	 * @param userId
+	 * @return
+	 * @throws UserNotFoundException
+	 */
 	public User get(Long userId) throws UserNotFoundException {
 
 		UsersRecord record = sql.fetchOne(USERS, USERS.USER_ID.eq(userId));
@@ -267,7 +272,6 @@ public class UserDetailRepository implements UserDetailsManager,
 	 * Disables user. Deletes credentials. Deletes account settings. Deletes
 	 * User Roles.
 	 *
-	 *
 	 * @param userId
 	 */
 	@Override
@@ -404,28 +408,6 @@ public class UserDetailRepository implements UserDetailsManager,
 	public boolean userExists(String username) {
 		return sql.fetchExists(sql.select().from(USERS)
 				.where(USERS.USER_NAME.eq(username)));
-	}
-
-	public List<User> getAll() {
-
-		final boolean accountNonExpired = true;
-		final boolean credentialsNonExpired = true;
-		final boolean accountNonLocked = true;
-
-		return sql
-				.fetch(USERS)
-				.stream()
-				.map((UsersRecord record) -> new User(record.getUserId(),
-						record.getFirstName(), record.getMiddleName(), record
-								.getLastName(), record.getUserName(),
-						credentialsRepository.get(record.getUserId())
-								.getPassword(), record.getEnabled(),
-						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, userOrganizationRoleRepository
-								.getByUserId(record.getUserId()), record
-								.getDateCreated().toLocalDateTime(), record
-								.getLastModified().toLocalDateTime()))
-				.collect(Collectors.toList());
 	}
 
 	public List<User> getAll(List<Long> userIds) {
@@ -581,6 +563,7 @@ public class UserDetailRepository implements UserDetailsManager,
 						USERS.LAST_NAME)
 				.from(USERS)
 				.where(USERS.USER_ID.in(userIds))
+				.and(USERS.ENABLED.eq(true))
 				.fetch()
 				.stream()
 				.map(r -> new AccountNames(r.getValue(USERS.USER_ID), r

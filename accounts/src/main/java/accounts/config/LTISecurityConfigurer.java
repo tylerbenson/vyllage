@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -45,13 +46,15 @@ public class LTISecurityConfigurer extends WebSecurityConfigurerAdapter {
 	OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
 	@Inject
 	OAuthProviderTokenServices oauthProviderTokenServices;
+	@Inject
+	Environment env;
 
 	@PostConstruct
 	public void init() {
 		ltioAuthProviderProcessingFilter = new LMSOAuthProviderProcessingFilter(
 				lmsConsumerDetailsService, lmsOauthNonceServices,
 				oauthProcessingFilterEntryPoint, lmsOauthAuthenticationHandler,
-				oauthProviderTokenServices);
+				oauthProviderTokenServices, env.acceptsProfiles("prod"));
 	}
 
 	@Override

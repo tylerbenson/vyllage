@@ -336,12 +336,11 @@ module.exports = Reflux.createStore({
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
         if (this.resume.sections[index].comments) {
           this.resume.sections[index].comments.push(res.body);
-          this.postSectionOrder();
         } else {
           this.resume.sections[index].comments = [res.body];
         }
         this.resume.sections[index].numberOfComments += 1;
-         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+        this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
         this.trigger(this.resume);
       }.bind(this))
   },

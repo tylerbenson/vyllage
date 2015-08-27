@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import oauth.repository.LTIKey;
 import oauth.repository.LTIKeyRepository;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -97,34 +96,16 @@ public class LTIAdminController {
 				+ LTIKeyForm.getConsumerKey().replaceAll(NON_ALPHANUMERIC, "");
 
 		// save
-		LTIKey key = null;
-		try {
-			key = LTIKeyRepository.save(user, organization, consumerKey,
-					LTIKeyForm.getSecret(),
-					LTIKeyForm.getExternalOrganizationId());
-
-		} catch (DuplicateKeyException e) {
-
-			List<Organization> allOrganizations = getAdminOrganizations(user);
-			LTIKeyForm
-					.setError("The LTI Instance Id you are trying to add already exists.");
-			model.addAttribute("organizations", allOrganizations);
-			model.addAttribute("ltiKeyForm", LTIKeyForm);
-
-			return "adminLTIKey";
-
-		}
+		LTIKey key = LTIKeyRepository.save(user, organization, consumerKey,
+				LTIKeyForm.getSecret());
 
 		model.addAttribute("organization", organization.getOrganizationName());
 		model.addAttribute("consumerKey", consumerKey);
 		model.addAttribute("secret", LTIKeyForm.getSecret());
-		model.addAttribute("externalOrganizationId",
-				LTIKeyForm.getExternalOrganizationId());
 
 		logger.info(organization.getOrganizationName());
-		logger.info(key.getKeyKey());
+		logger.info(key.getConsumerKey());
 		logger.info(LTIKeyForm.getSecret());
-		logger.info(LTIKeyForm.getExternalOrganizationId());
 
 		return "adminLTIKeyDone";
 	}

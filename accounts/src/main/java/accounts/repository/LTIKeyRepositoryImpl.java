@@ -60,8 +60,7 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 	@Override
 	public LTIKey save(@NonNull final User user,
 			@NonNull final Organization organization,
-			@NonNull final String consumerKey, @NonNull final String secret,
-			final String externalOrganizationId) {
+			@NonNull final String consumerKey, @NonNull final String secret) {
 
 		final LtiCredentialsRecord existingRecord = sql.fetchOne(
 				LTI_CREDENTIALS,
@@ -84,7 +83,6 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 					.now(ZoneId.of("UTC"))));
 
 			newRecord.setKeyId(organization.getOrganizationId());
-			newRecord.setExternalOrganizationId(externalOrganizationId);
 
 			newRecord.store();
 
@@ -98,7 +96,6 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 			existingRecord.setSecret(secret);
 			existingRecord.setKeyId(organization.getOrganizationId());
 			existingRecord.setConsumerKey(consumerKey);
-			existingRecord.setExternalOrganizationId(externalOrganizationId);
 
 			existingRecord.store();
 
@@ -112,8 +109,7 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 	}
 
 	@Override
-	public Organization getOrganizationByExternalId(
-			String externalOrganizationId) {
+	public Organization getOrganizationByConsumerKey(String consumerKey) {
 
 		Organizations o = ORGANIZATIONS.as("o");
 		LtiCredentials lti = LTI_CREDENTIALS.as("lti");
@@ -121,7 +117,7 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 		// since the primary key is the organization id there can only be one
 		List<Organization> list = sql.select(o.fields()).from(o).join(lti)
 				.on(o.ORGANIZATION_ID.eq(lti.KEY_ID))
-				.where(lti.EXTERNAL_ORGANIZATION_ID.eq(externalOrganizationId))
+				.where(lti.CONSUMER_KEY.eq(consumerKey))
 				.fetchInto(Organization.class);
 
 		return list.get(0);
@@ -130,15 +126,14 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 	/**
 	 * Returns the id user that created the key.
 	 * 
-	 * @param externalOrganizationId
+	 * @param consumerKey
 	 * @return admin id
 	 */
 	@Override
-	public Long getAuditUser(String externalOrganizationId) {
+	public Long getAuditUser(String consumerKey) {
 
 		final LtiCredentialsRecord existingRecord = sql.fetchOne(
-				LTI_CREDENTIALS, LTI_CREDENTIALS.EXTERNAL_ORGANIZATION_ID
-						.eq(externalOrganizationId));
+				LTI_CREDENTIALS, LTI_CREDENTIALS.CONSUMER_KEY.eq(consumerKey));
 
 		return existingRecord.getCreatorUserId();
 	}
@@ -153,7 +148,6 @@ public class LTIKeyRepositoryImpl implements LTIKeyRepository {
 		lmsKey.setModifiedByUserId(keyRecord.getModifiedByUserId());
 		lmsKey.setLastModified(keyRecord.getLastModified().toLocalDateTime());
 		lmsKey.setDateCreated(keyRecord.getDateCreated().toLocalDateTime());
-		lmsKey.setExternalOrganizationId(keyRecord.getExternalOrganizationId());
 		return lmsKey;
 	}
 }

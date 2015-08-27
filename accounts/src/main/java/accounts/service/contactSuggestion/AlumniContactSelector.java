@@ -38,7 +38,7 @@ public class AlumniContactSelector extends AbstractContactSelector {
 		return sql().select(u.fields()).from(u).join(uor)
 				.on(u.USER_ID.eq(uor.USER_ID))
 				.where(uor.ORGANIZATION_ID.in(organizationIds))
-				.and(alumniSearchCondition(uor));
+				.and(alumniSearchCondition(uor)).and(u.ENABLED.eq(true));
 	}
 
 	private Condition alumniSearchCondition(UserOrganizationRoles uor) {
@@ -64,8 +64,8 @@ public class AlumniContactSelector extends AbstractContactSelector {
 						.map(a -> ((UserOrganizationRole) a)
 								.getOrganizationId())
 						.collect(Collectors.toList())))
-				.and(uor.ROLE.contains(RolesEnum.ADVISOR.name())).limit(limit)
-				.fetch()));
+				.and(uor.ROLE.contains(RolesEnum.ADVISOR.name()))
+				.and(u.ENABLED.eq(true)).limit(limit).fetch()));
 
 		// still not enough, we add students
 		if (recordsToUser == null || recordsToUser.isEmpty()
@@ -83,7 +83,7 @@ public class AlumniContactSelector extends AbstractContactSelector {
 							.collect(Collectors.toList())))
 					.and(uor.ROLE.contains(RolesEnum.STUDENT.name()).or(
 							uor.ROLE.contains(RolesEnum.ALUMNI.name())))
-					.limit(limit).fetch()));
+					.and(u.ENABLED.eq(true)).limit(limit).fetch()));
 
 		return recordsToUser;
 	}

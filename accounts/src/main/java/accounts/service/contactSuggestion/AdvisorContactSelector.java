@@ -38,7 +38,7 @@ public class AdvisorContactSelector extends AbstractContactSelector {
 		return sql().select(u.fields()).from(u).join(uor)
 				.on(u.USER_ID.eq(uor.USER_ID))
 				.where(uor.ORGANIZATION_ID.in(organizationIds))
-				.and(advisorSearchCondition(uor));
+				.and(advisorSearchCondition(uor)).and(u.ENABLED.eq(true));
 	}
 
 	private Condition advisorSearchCondition(UserOrganizationRoles uor) {
@@ -65,7 +65,7 @@ public class AdvisorContactSelector extends AbstractContactSelector {
 						.collect(Collectors.toList())))
 				.and(uor.ROLE.contains(RolesEnum.ADMIN.name()).or(
 						uor.ROLE.contains(RolesEnum.STAFF.name())))
-				.limit(limit).fetch()));
+				.and(u.ENABLED.eq(true)).limit(limit).fetch()));
 
 		return recordsToUser;
 

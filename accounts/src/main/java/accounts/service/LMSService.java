@@ -67,14 +67,12 @@ public class LMSService {
 			String firstName, String middleName, String lastName,
 			@NonNull LMSRequest lmsRequest) {
 
-		final String externalOrganizationId = lmsRequest.getLmsAccount()
-				.getExternalOrganizationId();
+		final String consumerKey = lmsRequest.getLmsAccount().getConsumerKey();
 
 		final Organization organization = ltiKeyRepository
-				.getOrganizationByExternalId(externalOrganizationId);
+				.getOrganizationByConsumerKey(consumerKey);
 
-		final Long auditUserId = ltiKeyRepository
-				.getAuditUser(externalOrganizationId);
+		final Long auditUserId = ltiKeyRepository.getAuditUser(consumerKey);
 
 		if (auditUserId == null)
 			throw new AccessDeniedException(

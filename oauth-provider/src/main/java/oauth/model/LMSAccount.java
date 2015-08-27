@@ -14,7 +14,6 @@ public class LMSAccount {
 	private String consumerKey;
 	private Long lmsTypeId;
 	private String oauthVersion;
-	private String externalOrganizationId;
 
 	public LMSAccount() {
 
@@ -164,14 +163,6 @@ public class LMSAccount {
 	 */
 	public void setOauthVersion(String oauthVersion) {
 		this.oauthVersion = oauthVersion;
-	}
-
-	public String getExternalOrganizationId() {
-		return externalOrganizationId;
-	}
-
-	public void setExternalOrganizationId(String externalOrganizationId) {
-		this.externalOrganizationId = externalOrganizationId;
 	}
 
 }

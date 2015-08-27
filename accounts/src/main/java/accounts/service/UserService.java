@@ -130,10 +130,6 @@ public class UserService {
 		return this.userRepository.loadUserByUsername(username);
 	}
 
-	public List<User> getAllUsers() {
-		return this.userRepository.getAll();
-	}
-
 	public boolean userExists(String userName) {
 		return this.userRepository.userExists(userName);
 	}
@@ -538,7 +534,6 @@ public class UserService {
 	 * Deletes a user and logs him out of the system.
 	 *
 	 * @param request
-	 *
 	 * @param userId
 	 * @param token
 	 * @throws ServletException
@@ -677,10 +672,11 @@ public class UserService {
 	 *
 	 * @param registerForm
 	 * @param auditUserId
+	 * @param forcePasswordChange
 	 * @return User
 	 */
 	public User createUserFromReferral(RegisterForm registerForm,
-			Long auditUserId) {
+			Long auditUserId, boolean forcePasswordChange) {
 
 		if (auditUserId == null)
 			throw new AccessDeniedException(
@@ -715,7 +711,6 @@ public class UserService {
 				credentialsNonExpired, accountNonLocked,
 				defaultAuthoritiesForNewUser, null, null);
 
-		boolean forcePasswordChange = true;
 		userRepository.createUser(user, forcePasswordChange);
 
 		User newUser = this.getUser(user.getUsername());
@@ -890,7 +885,6 @@ public class UserService {
 	 * Starts the email address (username) change process. <br>
 	 * Sends an email to confirm that the user wanted to change the email, until
 	 * the user clicks the confirmation link the email will remain the same.
-	 *
 	 *
 	 * @param user
 	 * @param email
