@@ -297,11 +297,11 @@ public class UserContactSuggestionServiceTest {
 
 	@Test
 	public void adminTest() {
-		User staff = createTestUser("admin-test1", RolesEnum.ADMIN);
+		User admin = createTestUser("admin-test1", RolesEnum.ADMIN);
 		createTestUser("admin-test2", RolesEnum.ADMIN);
 
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
-				staff, null, 5);
+				admin, null, 5);
 
 		Assert.assertNotNull("No users found.", suggestions);
 		Assert.assertFalse("No users found.", suggestions.isEmpty());
@@ -321,11 +321,12 @@ public class UserContactSuggestionServiceTest {
 
 	@Test
 	public void advisorTest() {
-		User staff = createTestUser("advisor-test1", RolesEnum.ACADEMIC_ADVISOR);
+		User academicAdvisor = createTestUser("advisor-test1",
+				RolesEnum.ACADEMIC_ADVISOR);
 		createTestUser("advisor-test2", RolesEnum.CAREER_ADVISOR);
 
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
-				staff, null, 5);
+				academicAdvisor, null, 5);
 
 		Assert.assertNotNull("No users found.", suggestions);
 		Assert.assertFalse("No users found.", suggestions.isEmpty());
@@ -341,6 +342,21 @@ public class UserContactSuggestionServiceTest {
 
 	}
 
+	@Test
+	public void disabledUsersAreNotReturnedTest() {
+		User student = createTestUser("aStudent", RolesEnum.STUDENT);
+		createTestUser("advisor-test2", RolesEnum.ADVISOR, false);
+
+		List<User> suggestions = userContactSuggestionService.getSuggestions(
+				student, null, 5);
+
+		Assert.assertNotNull("No users found.", suggestions);
+		Assert.assertFalse("No users found.", suggestions.isEmpty());
+		Assert.assertFalse("Found disabled user.", suggestions.stream()
+				.anyMatch(u -> u.isEnabled() == false));
+
+	}
+
 	public User createTestUser(String userName, RolesEnum role) {
 		String oldPassword = "password";
 		Long university1 = 1L;
@@ -349,6 +365,26 @@ public class UserContactSuggestionServiceTest {
 				role.name().toUpperCase(), 0L);
 
 		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+
+		User user = new User(userName, oldPassword, enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
+
+		userRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+
+		User loadedUser = userRepository.loadUserByUsername(userName);
+		return loadedUser;
+	}
+
+	public User createTestUser(String userName, RolesEnum role, boolean enabled) {
+		String oldPassword = "password";
+		Long university1 = 1L;
+
+		UserOrganizationRole auth = new UserOrganizationRole(null, university1,
+				role.name().toUpperCase(), 0L);
+
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
 		boolean accountNonLocked = true;
