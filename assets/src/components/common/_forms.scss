@@ -148,15 +148,23 @@ table {
 }
 
 .tags {
+  @include cf();
   .tag {
     border-radius: 5px;
     background-color: lighten($secondary-color, 42%);
     border: lighten($secondary-color, 39%) solid 1px;
     color: $secondary-color;
     display: inline-block;
+    float: left;
     font-size: 0.95em;
     margin: 0.165em 0.15em;
     padding: 0.25em 0.75em;
+
+    &.ui-sortable-helper {
+      height: auto !important;
+      transform: scale(1.1);
+      width: auto !important;
+    }
 
     button {
       padding: 0 !important;
@@ -172,6 +180,13 @@ table {
     &:focus {
       background: none;
     }
+  }
+
+  .ui-sortable-placeholder {
+    @extend .tag;
+    background: rgba(0,0,0,0.02);
+    border-color: transparent;
+    height: 1.25em;
   }
 }
 
