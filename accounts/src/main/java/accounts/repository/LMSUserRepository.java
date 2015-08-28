@@ -163,6 +163,54 @@ public class LMSUserRepository implements LMSUserDetailsService {
 		}
 	}
 
+	/**
+	 * Adds LMS details to an existing user.
+	 * 
+	 * @param user
+	 * @param lmsRequest
+	 */
+	public void addLMSDetails(@NonNull User user, @NonNull LMSRequest lmsRequest) {
+
+		TransactionStatus transaction = txManager
+				.getTransaction(new DefaultTransactionDefinition());
+
+		Object savepoint = transaction.createSavepoint();
+
+		try {
+
+			LMSAccount lmsAccount = lmsRequest.getLmsAccount();
+			Long lmsId = null;
+
+			try {
+				lmsId = lmsRepository.get(lmsAccount.getLmsGuid());
+			} catch (LMSNotFoundException exception) {
+				lmsId = lmsRepository.createLMSAccount(lmsAccount);
+			}
+			Assert.notNull(lmsId);
+
+			// Check LMS user credentials exist
+			boolean isUserExist = lmsUserCredentialsRepository.userExists(
+					lmsRequest.getLmsUser().getUserId(), lmsId);
+
+			if (!isUserExist) {
+				// Create LMS user credentials
+				Assert.notNull(user.getUserId());
+				Assert.notNull(user.getPassword());
+				lmsUserCredentialsRepository.createUser(lmsRequest.getLmsUser()
+						.getUserId(), user.getUserId(), lmsId, user
+						.getPassword());
+			}
+		} catch (Exception e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			transaction.rollbackToSavepoint(savepoint);
+
+		} finally {
+			txManager.commit(transaction);
+
+		}
+	}
+
 	@Override
 	public boolean userExists(@NonNull String username) {
 		return sql.fetchExists(sql.select().from(USERS)

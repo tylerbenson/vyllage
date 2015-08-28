@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -31,8 +30,8 @@ public class LoginController {
 	// http://localhost:8080/login
 	@RequestMapping("/login")
 	public String login(HttpServletRequest request,
-			@RequestParam(value = "error", required = false) String error,
-			Model model) throws UserNotFoundException {
+			@RequestParam(value = "error", required = false) String error)
+			throws UserNotFoundException {
 
 		if (error != null) {
 
