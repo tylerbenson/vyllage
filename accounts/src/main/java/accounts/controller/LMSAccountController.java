@@ -89,7 +89,9 @@ public class LMSAccountController {
 
 			// LMS user doesn't exist but is on the system
 		} else if (userName != null && lmsService.userExists(userName)) {
-			return "redirect:/login";
+			session.setAttribute("user_name", userName);
+			session.setAttribute(LMSRequest.class.getName(), lmsRequest);
+			return "redirect:/lti/login-existing-user";
 		} else {
 
 			RegisterForm registerForm = new RegisterForm();
