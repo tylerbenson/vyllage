@@ -18,7 +18,6 @@ import accounts.domain.tables.records.LmsUserCredentialsRecord;
 
 /**
  * @author kunal.shankar
- *
  */
 
 @Repository
@@ -62,13 +61,12 @@ public class LMSUserCredentialsRepository {
 	}
 
 	public void createUser(@NonNull String lmsUserId, @NonNull Long userId,
-			@NonNull Long lmsId, String password) {
+			@NonNull Long lmsId) {
 		LmsUserCredentialsRecord newRecord = sql
 				.newRecord(LMS_USER_CREDENTIALS);
 		newRecord.setLmsUserId(lmsUserId);
 		newRecord.setUserId(userId);
 		newRecord.setLmsId(lmsId);
-		newRecord.setPassword(password);
 		newRecord.setExpires(null);
 		newRecord.insert();
 	}

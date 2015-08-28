@@ -149,8 +149,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			if (!isUserExist) {
 				// Create LMS user credentials
 				lmsUserCredentialsRepository.createUser(lmsRequest.getLmsUser()
-						.getUserId(), newRecord.getUserId(), lmsId, user
-						.getPassword());
+						.getUserId(), newRecord.getUserId(), lmsId);
 			}
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
@@ -197,8 +196,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 				Assert.notNull(user.getUserId());
 				Assert.notNull(user.getPassword());
 				lmsUserCredentialsRepository.createUser(lmsRequest.getLmsUser()
-						.getUserId(), user.getUserId(), lmsId, user
-						.getPassword());
+						.getUserId(), user.getUserId(), lmsId);
 			}
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
