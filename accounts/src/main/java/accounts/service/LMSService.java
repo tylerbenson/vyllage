@@ -103,4 +103,14 @@ public class LMSService {
 
 		return lmsUserRepository.loadUserByUsername(user.getUsername());
 	}
+
+	/**
+	 * Adds LMS details to an existing user.
+	 * 
+	 * @param user
+	 * @param lmsRequest
+	 */
+	public void addLMSDetails(User user, LMSRequest lmsRequest) {
+		lmsUserRepository.addLMSDetails(user, lmsRequest);
+	}
 }

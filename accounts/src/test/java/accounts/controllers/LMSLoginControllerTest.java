@@ -34,6 +34,7 @@ import accounts.Application;
 import accounts.controller.LMSLoginController;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
+import accounts.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -43,6 +44,7 @@ public class LMSLoginControllerTest {
 	private LMSLoginController lmsLoginController;
 	private SignInUtil signInUtil = mock(SignInUtil.class);
 	private LMSService lmsService = mock(LMSService.class);
+	private UserService userService = mock(UserService.class);
 
 	private MockMvc springMvc;
 	@Autowired
@@ -79,7 +81,8 @@ public class LMSLoginControllerTest {
 	@Before
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
-		lmsLoginController = new LMSLoginController(signInUtil);
+		lmsLoginController = new LMSLoginController(userService, lmsService,
+				signInUtil);
 		mockSession = new MockHttpSession(wContext.getServletContext(), UUID
 				.randomUUID().toString());
 	}
