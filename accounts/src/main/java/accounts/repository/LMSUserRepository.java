@@ -194,7 +194,6 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			if (!isUserExist) {
 				// Create LMS user credentials
 				Assert.notNull(user.getUserId());
-				Assert.notNull(user.getPassword());
 				lmsUserCredentialsRepository.createUser(lmsRequest.getLmsUser()
 						.getUserId(), user.getUserId(), lmsId);
 			}
