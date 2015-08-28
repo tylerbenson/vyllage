@@ -37,7 +37,7 @@
     <div class="sections">
       <section class="form section">
         <div class="container">
-          <form th:action="@{/register-from-social}" th:object="${registerForm}" th:method="POST">
+          <form th:action="@{/register-from-LTI}" th:object="${registerForm}" th:method="POST">
             <div class="content">
               <h1 class="centered">Complete Account Setup</h1>
               <p class="centered">You are almost there! Fill out the fields below to proceed. </p>
@@ -54,6 +54,7 @@
               <input type="password" th:field="*{password}" class="padded" />
               <label>Receive free professional career advice from Vyllage's partner schools.</label>
               <input type="checkbox" th:field="*{receiveAdvice}" />
+<!--               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> -->
               <div class="actions">
                 <button type="submit" class="padded">PROCEED</button>
               </div>

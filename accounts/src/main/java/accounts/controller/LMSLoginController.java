@@ -34,6 +34,7 @@ public class LMSLoginController {
 		String userName = (String) session.getAttribute("user_name");
 		// Login via LMS userName.
 		signInUtil.signIn(userName);
+		session.removeAttribute("user_name");
 		return "redirect:" + "/resume/";
 	}
 }

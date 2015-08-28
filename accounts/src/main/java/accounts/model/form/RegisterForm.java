@@ -1,13 +1,16 @@
 package accounts.model.form;
 
 import lombok.ToString;
+
+import org.jooq.tools.StringUtils;
+
 import accounts.validation.EmailValidator;
 
 /**
- * Form to register a new user.
+ * Form to register a new user. <br>
+ * Note: If more fields are required extend this class, don't modify it.
  *
  * @author uh
- *
  */
 @ToString
 public class RegisterForm {
@@ -36,8 +39,8 @@ public class RegisterForm {
 
 	public boolean passwordIsValid() {
 
-		boolean isValid = getPassword() != null && !getPassword().isEmpty()
-				&& getPassword().length() >= 6;
+		boolean isValid = !StringUtils.isBlank(this.password)
+				&& this.password.length() >= 6;
 		if (!isValid)
 			setErrorMsg("Invalid password. Cannot be empty and/or shorter than 6 characters.");
 
@@ -46,10 +49,8 @@ public class RegisterForm {
 
 	public boolean nameIsValid() {
 
-		boolean isFirstNameValid = getFirstName() != null
-				&& !getFirstName().isEmpty();
-		boolean isLastNameValid = getLastName() != null
-				&& !getLastName().isEmpty();
+		boolean isFirstNameValid = !StringUtils.isBlank(this.firstName);
+		boolean isLastNameValid = !StringUtils.isBlank(this.lastName);
 
 		if (!isFirstNameValid)
 			setErrorMsg("First name can't be empty");
