@@ -100,11 +100,8 @@ public class LMSAccountController {
 
 			// check all values are present, minus password
 			if (!registerForm.emailIsValid() || !registerForm.nameIsValid()) {
-				model.addAttribute("registerForm", registerForm);
 
-				CsrfToken token = setCSRFTokenInSession(request);
-				csrfTokenUtility.saveToken(token, request, response);
-				model.addAttribute("_csrf", token);
+				model.addAttribute("registerForm", registerForm);
 				session.setAttribute(LMSRequest.class.getName(), lmsRequest);
 
 				return "register-from-LTI";
