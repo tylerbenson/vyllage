@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import oauth.lti.LMSRequest;
@@ -46,8 +47,8 @@ public class LMSAccountController {
 
 	@RequestMapping(value = "/lti/account", method = { RequestMethod.GET,
 			RequestMethod.POST })
-	public String lti(HttpServletRequest request, WebRequest webRequest,
-			Model model) throws UserNotFoundException {
+	public String lti(HttpServletRequest request, HttpServletResponse response,
+			WebRequest webRequest, Model model) throws UserNotFoundException {
 
 		LMSRequest lmsRequest = LMSRequest.getInstance();
 		if (lmsRequest == null) {
@@ -86,7 +87,8 @@ public class LMSAccountController {
 			// Set user name in Session
 			session.setAttribute("user_name", user.getUsername());
 
-		} else if (lmsService.userExists(userName)) {
+			// LMS user doesn't exist but is on the system
+		} else if (userName != null && lmsService.userExists(userName)) {
 			return "redirect:/login";
 		} else {
 
@@ -98,12 +100,31 @@ public class LMSAccountController {
 
 			// check all values are present, minus password
 			if (!registerForm.emailIsValid() || !registerForm.nameIsValid()) {
-				request.getHeader("Cookie");
 				model.addAttribute("registerForm", registerForm);
 
 				CsrfToken token = setCSRFTokenInSession(request);
-				request.setAttribute("_csrf", token);
+				csrfTokenUtility.saveToken(token, request, response);
 				model.addAttribute("_csrf", token);
+				session.setAttribute(LMSRequest.class.getName(), lmsRequest);
+				// response.setHeader("X-CSRF-HEADER", token.getHeaderName());
+				// response.setHeader("X-CSRF-PARAM", token.getParameterName());
+				// response.setHeader("X-CSRF-TOKEN", token.getToken());
+				//
+				// Object csrf = request.getAttribute("_csrf");
+				//
+				// if (csrf == null) {
+				// System.out.println("csrf is null");
+				// } else {
+				// System.out.println(csrf.toString());
+				// if (csrf instanceof DefaultCsrfToken) {
+				// DefaultCsrfToken token2 = (DefaultCsrfToken) csrf;
+				// System.out.println("Parm name "
+				// + token2.getParameterName());
+				// System.out.println("Token " + token2.getToken());
+				// }
+				//
+				// }
+
 				return "register-from-LTI";
 			}
 
@@ -121,7 +142,7 @@ public class LMSAccountController {
 
 	@RequestMapping(value = "/register-from-LTI", method = RequestMethod.GET)
 	public String register(HttpServletRequest request, Model model) {
-		request.getAttribute("_csrf");
+
 		if (!model.containsAttribute("registerForm")) {
 			RegisterForm registerForm = new RegisterForm();
 			model.addAttribute("registerForm", registerForm);
@@ -135,7 +156,8 @@ public class LMSAccountController {
 
 		if (registerForm.isValid()) {
 			HttpSession session = request.getSession(false);
-			LMSRequest lmsRequest = LMSRequest.getInstance();
+			LMSRequest lmsRequest = (LMSRequest) session
+					.getAttribute(LMSRequest.class.getName());
 
 			// TODO: send password
 			// Create Vyllage user account.
@@ -144,7 +166,7 @@ public class LMSAccountController {
 					null, registerForm.getLastName(), lmsRequest);
 
 			session.setAttribute("user_name", newUser.getUsername());
-
+			session.removeAttribute(LMSRequest.class.getName());
 			return "redirect:" + "/lti/login";
 		}
 

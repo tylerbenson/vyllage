@@ -13,20 +13,26 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * -csrf-protection-in-spring-security/
  *
  * @author uh
- *
  */
 public class RequestMatcherDisable implements RequestMatcher {
 	private Pattern allowedMethods = Pattern
 			.compile("^(GET|HEAD|TRACE|OPTIONS)$");
-	private RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher(
+
+	private RegexRequestMatcher unprotectedTogglzMatcher = new RegexRequestMatcher(
 			"/togglz/edit", null);
+
+	private RegexRequestMatcher unprotectedRegisterLTIMatcher = new RegexRequestMatcher(
+			"/register-from-LTI", null);
 
 	@Override
 	public boolean matches(HttpServletRequest request) {
 		if (allowedMethods.matcher(request.getMethod()).matches())
 			return false;
 
-		if (unprotectedMatcher.matches(request))
+		if (unprotectedTogglzMatcher.matches(request))
+			return false;
+
+		if (unprotectedRegisterLTIMatcher.matches(request))
 			return false;
 
 		return true;
