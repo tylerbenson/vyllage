@@ -106,24 +106,6 @@ public class LMSAccountController {
 				csrfTokenUtility.saveToken(token, request, response);
 				model.addAttribute("_csrf", token);
 				session.setAttribute(LMSRequest.class.getName(), lmsRequest);
-				// response.setHeader("X-CSRF-HEADER", token.getHeaderName());
-				// response.setHeader("X-CSRF-PARAM", token.getParameterName());
-				// response.setHeader("X-CSRF-TOKEN", token.getToken());
-				//
-				// Object csrf = request.getAttribute("_csrf");
-				//
-				// if (csrf == null) {
-				// System.out.println("csrf is null");
-				// } else {
-				// System.out.println(csrf.toString());
-				// if (csrf instanceof DefaultCsrfToken) {
-				// DefaultCsrfToken token2 = (DefaultCsrfToken) csrf;
-				// System.out.println("Parm name "
-				// + token2.getParameterName());
-				// System.out.println("Token " + token2.getToken());
-				// }
-				//
-				// }
 
 				return "register-from-LTI";
 			}
