@@ -10,8 +10,10 @@ import lombok.NonNull;
 import oauth.lti.LMSRequest;
 import oauth.repository.LTIKeyRepository;
 
+import org.jooq.tools.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import user.common.LMSUserCredentials;
 import user.common.Organization;
@@ -67,6 +69,9 @@ public class LMSService {
 			String firstName, String middleName, String lastName,
 			@NonNull LMSRequest lmsRequest) {
 
+		Assert.isTrue(!StringUtils.isBlank(email));
+		Assert.isTrue(!StringUtils.isBlank(password));
+
 		final String consumerKey = lmsRequest.getLmsAccount().getConsumerKey();
 
 		final Organization organization = ltiKeyRepository
@@ -89,12 +94,6 @@ public class LMSService {
 				organization.getOrganizationId(), RolesEnum.STUDENT.name(),
 				auditUserId));
 
-		/*
-		 * UserOrganizationRole userOrganizationRole = new
-		 * UserOrganizationRole(null, storedOrg.getOrganizationId(),
-		 * lmsRequest.getLmsUser().getRole(), auditUser.getUserId());
-		 * defaultAuthoritiesForNewUser.add(userOrganizationRole);
-		 */
 		User user = new User(null, firstName, middleName, lastName, email,
 				password, enabled, accountNonExpired, credentialsNonExpired,
 				accountNonLocked, defaultAuthoritiesForNewUser, null, null);
@@ -102,5 +101,15 @@ public class LMSService {
 		lmsUserRepository.createUser(user, lmsRequest);
 
 		return lmsUserRepository.loadUserByUsername(user.getUsername());
+	}
+
+	/**
+	 * Adds LMS details to an existing user.
+	 * 
+	 * @param user
+	 * @param lmsRequest
+	 */
+	public void addLMSDetails(User user, LMSRequest lmsRequest) {
+		lmsUserRepository.addLMSDetails(user, lmsRequest);
 	}
 }

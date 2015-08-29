@@ -29,12 +29,12 @@ public class UserDetailRepositoryTest {
 	@Inject
 	UserDetailRepository userDetailRepository;
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testNullUser() {
 		userDetailRepository.createUser(null);
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testWithForcePasswordChange() {
 		userDetailRepository.createUser(null, false);
 	}
