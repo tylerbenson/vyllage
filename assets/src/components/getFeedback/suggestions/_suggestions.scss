@@ -4,15 +4,41 @@
 			padding: 0.5em 2em;
 		}
 	}
+	@media (max-width: $medium-portrait) {
+		&.section {
+			margin: 0;
+		}
+	}
 }
 
 .suggestion-group {
-	margin: 2em 0;
+	@include cf();
+	margin: 2em 1em;
 	text-align: center;
 
 	.suggestion {
 		height: 12em;
 		float: left;
+	}
+
+	@media (max-width: $medium-landscape) {
+		.suggestion {
+			width: 30%;
+			max-width: none;
+		}
+	}
+
+	@media (max-width: $large-portrait) {
+		.suggestion {
+			width: 45%;
+		}
+	}
+
+	@media (max-width: $small-landscape) {
+		.suggestion {
+			height: auto;
+			width: 100%;
+		}
 	}
 
 	.empty {
@@ -156,7 +182,7 @@
 	  	.requested {
 	  		display: inline-block;
 	  		font-size: 0.85em;
-	  		margin-top: 1em;
+	  		margin-top: 0.5em;
 	  	}
 	  }
 	}
@@ -228,6 +254,58 @@
 				display: none;
 			}
 		}
+
+		@media (max-width: $medium-landscape) {
+			.info {
+				@include column(0.7);
+			}
+			.actions {
+				@include column(0.7, 0.3);
+				text-align: left;
+
+				button {
+					border-radius: 5px;
+					padding: 0.15em 0.5em;
+
+					&.get-feedback span {
+						display: inline-block;
+						font-size: 0.85em;
+						margin-bottom: 0.1em;
+						margin-left: 0.25em;
+					}
+				}
+			}
+		}
+		@media (max-width: 798px) {
+			.avatar,
+			.info,
+			.actions {
+				@include stack();
+				text-align: center;
+
+				.name,
+				.tagline,
+				.requested {
+					text-align: center;
+				}
+			}
+
+			.avatar {
+				margin-bottom: 0.25em;
+				&.requested {
+					display: none;
+				}
+			}
+
+			.actions {
+				button {
+					&.get-feedback {
+						margin-bottom: 0.4em;
+						margin-top: 0.35em;
+					}
+				}
+			}
+		}
 	}
 
 	.view-more {
@@ -248,5 +326,9 @@
 		&:hover {
 			background: $section-footer-background;
 		}
+	}
+
+	@media (max-width: $medium-portrait) {
+		display: none;
 	}
 }
