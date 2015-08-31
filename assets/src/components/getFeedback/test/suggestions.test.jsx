@@ -13,10 +13,10 @@ describe('Suggestions', function() {
     this.server.respondWith("GET", "/resume//users", [200, { "Content-Type": "application/json" },
     	JSON.stringify({
 	      "recent" : [
-	        {"firstName": "Tyler", "middleName":"Middle", "lastName": "Benson", "userId": 1},
+	        {"firstName": "Tyler", "middleName":"Middle", "lastName": "Benson", "userId": 1, avatarUrl: '/images/avatars/1.jpg'},
 	      ],
 	      "recommended": [
-	        {"firstName": "Ashley", "middleName":"Middle", "lastName": "Benson", "userId": 6},
+	        {"firstName": "Ashley", "middleName":"Middle", "lastName": "Benson", "userId": 6, avatarUrl: '/images/avatars/1.jpg'},
 	      ]
 	    })
     ]);
