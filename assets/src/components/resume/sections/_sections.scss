@@ -66,10 +66,9 @@
 
       h2, h3 {
         textarea {
+          color: $alternate-color-2;
           font-weight: 400;
-          &[disabled] {
-            -webkit-text-fill-color: $alternate-color-2;
-          }
+          -webkit-text-fill-color: $alternate-color-2;
         }
       }
     }
