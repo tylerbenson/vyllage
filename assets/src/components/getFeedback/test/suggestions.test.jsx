@@ -55,4 +55,19 @@ describe('Suggestions', function() {
     var avatar = TestUtils.scryRenderedDOMComponentsWithClass(suggestionItem, 'avatar');
     expect(avatar[0]).toEqual(jasmine.any(Object));
   });
+
+  it('Item avatar should match avatarUrl', function() {
+    var suggestionItem = TestUtils.renderIntoDocument(<SuggestionItem user={dummyUser} />);
+    var avatar = TestUtils.scryRenderedDOMComponentsWithClass(suggestionItem, 'avatar');
+    var bg = avatar[0].getDOMNode().style.backgroundImage;
+    expect(bg).toEqual('url(http://localhost:9876/images/user.png)');
+  });
+
+  it('Item avatar should match avatar dimensions', function() {
+    var suggestionItem = TestUtils.renderIntoDocument(<SuggestionItem user={dummyUser} avatarSize="48" />);
+    var avatar = TestUtils.scryRenderedDOMComponentsWithClass(suggestionItem, 'avatar');
+    var height = avatar[0].getDOMNode().style.height;
+    var width = avatar[0].getDOMNode().style.width;
+    expect([height, width]).toEqual(['48px','48px']);
+  });
 });
