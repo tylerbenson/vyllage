@@ -260,11 +260,12 @@
 				@include column(0.7);
 			}
 			.actions {
-				@include column(0.7, 0.3);
+				@include column(0.75, 0.25);
 				text-align: left;
 
 				button {
 					border-radius: 5px;
+					margin-top: 0.25em;
 					padding: 0.15em 0.5em;
 
 					&.get-feedback span {
