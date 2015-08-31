@@ -5,9 +5,15 @@
 		}
 	}
 }
+
 .suggestion-group {
 	margin: 2em 0;
 	text-align: center;
+
+	.suggestion {
+		height: 12em;
+		float: left;
+	}
 
 	.empty {
 		font-size: 0.9em !important;
@@ -52,6 +58,7 @@
     }
   }
 }
+
 .suggestion {
 	border: lighten($secondary-color, 40%) solid 2px;
 	border-radius: 3px;
@@ -61,12 +68,25 @@
 	margin: 0.5em;
 	max-width: 185px;
 	padding: 1em 0.5em;
+	position: relative;
 	text-align: center;
 	width: 25%;
 
 	&.sponsored {
 		background-color: lighten($warning-color, 43%);
 		border-color: lighten($warning-color, 39%);
+	}
+
+	.avatar {
+		&.requested {
+			background: url(../images/checkmark.png);
+	    background-repeat: no-repeat;
+	    background-position: center center;
+	    background-size: 1.25em;
+			border: $inverted-text-color solid 2px;
+	    box-sizing: border-box;
+			display: none;
+		}
 	}
 
 	.name {
@@ -77,6 +97,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
 	.tagline {
 		color: $secondary-color;
 		font-size: 0.75em;
@@ -94,30 +115,48 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	button {
-		font-size: 0.7em;
 
-		&.success {
+	.info {
+		.requested {
+			color: $inverted-text-color;
 			display: none;
-			border-color: $success-color;
-			background: $inverted-text-color !important;
-
-			i, span {
-				color: $success-color;
-			}
+			font-size: 0.9em;
+			margin-top: 0.2em;
+			padding: 0 0.5em;
 		}
 	}
 
+	button {
+		font-size: 0.7em;
+	}
+
 	&.suggestion-leave {
+		background-color: lighten($banner-background, 10%);
 	  opacity: 1;
 	  transition: opacity .4s ease-out 1.6s;
+
+		.avatar {
+			display: none;
+			&.requested {
+				display: inline-block;
+			}
+		}
 
 	  button {
 	  	&.get-feedback {
 	  		display: none;
 	  	}
-	  	&.success {
+	  }
+
+	  .info {
+	  	.name,
+	  	.tagline {
+	  		display: none;
+	  	}
+	  	.requested {
 	  		display: inline-block;
+	  		font-size: 0.85em;
+	  		margin-top: 1em;
 	  	}
 	  }
 	}
@@ -126,6 +165,7 @@
 	  opacity: 0.01;
 	}
 }
+
 .suggestion-sidebar {
 	.empty {
 		font-size: 0.8em !important;
