@@ -65,11 +65,10 @@
       }
 
       h2, h3 {
-        input {
+        textarea {
+          color: $alternate-color-2;
           font-weight: 400;
-          &[disabled] {
-            -webkit-text-fill-color: $text-color;
-          }
+          -webkit-text-fill-color: $alternate-color-2;
         }
       }
     }
