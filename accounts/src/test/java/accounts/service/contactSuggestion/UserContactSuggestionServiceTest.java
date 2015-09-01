@@ -43,19 +43,19 @@ public class UserContactSuggestionServiceTest {
 	@Autowired
 	private AccountSettingRepository accountSettingRepository;
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void nullUserGetSuggestionsTest() {
 		userContactSuggestionService.getSuggestions(null, null, 5);
 
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void nullUserBackfillTest() {
 		userContactSuggestionService.backfill(null, Arrays.asList(), 5);
 
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void nullUserListBackfillTest() {
 		User guest = createTestUser("guest-test", RolesEnum.GUEST);
 		createTestUser("admissions-test", RolesEnum.ADMISSIONS_ADVISOR);

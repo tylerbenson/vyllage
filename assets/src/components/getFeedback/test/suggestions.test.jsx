@@ -5,7 +5,7 @@ var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
 describe('Suggestions', function() {
-	var dummyUser = {"firstName": "Ashley", "middleName":"Middle", "lastName": "Benson", "userId": 6};
+	var dummyUser = {"firstName": "Ashley", "middleName":"Middle", "lastName": "Benson", "userId": 6, avatarUrl: '/images/user.png'};
 
 	beforeEach(function () {
     this.server = sinon.fakeServer.create();
@@ -13,10 +13,10 @@ describe('Suggestions', function() {
     this.server.respondWith("GET", "/resume//users", [200, { "Content-Type": "application/json" },
     	JSON.stringify({
 	      "recent" : [
-	        {"firstName": "Tyler", "middleName":"Middle", "lastName": "Benson", "userId": 1},
+	        {"firstName": "Tyler", "middleName":"Middle", "lastName": "Benson", "userId": 1, avatarUrl: '/images/user.png'},
 	      ],
 	      "recommended": [
-	        {"firstName": "Ashley", "middleName":"Middle", "lastName": "Benson", "userId": 6},
+	        {"firstName": "Ashley", "middleName":"Middle", "lastName": "Benson", "userId": 6, avatarUrl: '/images/user.png'},
 	      ]
 	    })
     ]);
@@ -35,7 +35,6 @@ describe('Suggestions', function() {
   it('Item should have name', function() {
     var suggestionItem = TestUtils.renderIntoDocument(<SuggestionItem user={dummyUser} />);
     var name = TestUtils.findRenderedDOMComponentWithClass(suggestionItem, 'name');
-    expect(name.getDOMNode().textContent).toBe('Ashley Benson');
     expect(name).toEqual(jasmine.any(Object));
   });
 
@@ -53,7 +52,22 @@ describe('Suggestions', function() {
 
   it('Item should have avatar', function() {
     var suggestionItem = TestUtils.renderIntoDocument(<SuggestionItem user={dummyUser} />);
-    var avatar = TestUtils.findRenderedDOMComponentWithClass(suggestionItem, 'avatar');
-    expect(avatar).toEqual(jasmine.any(Object));
+    var avatar = TestUtils.scryRenderedDOMComponentsWithClass(suggestionItem, 'avatar');
+    expect(avatar[0]).toEqual(jasmine.any(Object));
+  });
+
+  it('Item avatar should match avatarUrl', function() {
+    var suggestionItem = TestUtils.renderIntoDocument(<SuggestionItem user={dummyUser} />);
+    var avatar = TestUtils.scryRenderedDOMComponentsWithClass(suggestionItem, 'avatar');
+    var bg = avatar[0].getDOMNode().style.backgroundImage;
+    expect(bg).toEqual('url(http://localhost:9876/images/user.png)');
+  });
+
+  it('Item avatar should match avatar dimensions', function() {
+    var suggestionItem = TestUtils.renderIntoDocument(<SuggestionItem user={dummyUser} avatarSize="48" />);
+    var avatar = TestUtils.scryRenderedDOMComponentsWithClass(suggestionItem, 'avatar');
+    var height = avatar[0].getDOMNode().style.height;
+    var width = avatar[0].getDOMNode().style.width;
+    expect([height, width]).toEqual(['48px','48px']);
   });
 });

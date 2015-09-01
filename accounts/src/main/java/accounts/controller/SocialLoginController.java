@@ -132,9 +132,10 @@ public class SocialLoginController {
 	@RequestMapping(value = "/register-from-social", method = RequestMethod.GET)
 	public String register(Model model) {
 
-		RegisterForm registerForm = new RegisterForm();
-
-		model.addAttribute("registerForm", registerForm);
+		if (!model.containsAttribute("registerForm")) {
+			RegisterForm registerForm = new RegisterForm();
+			model.addAttribute("registerForm", registerForm);
+		}
 		return "register-from-social";
 	}
 

@@ -4,10 +4,42 @@
 			padding: 0.5em 2em;
 		}
 	}
+	@media (max-width: $medium-portrait) {
+		&.section {
+			margin: 0;
+		}
+	}
 }
+
 .suggestion-group {
-	margin: 2em 0;
+	@include cf();
+	margin: 2em 1em;
 	text-align: center;
+
+	.suggestion {
+		height: 12em;
+		float: left;
+	}
+
+	@media (max-width: $medium-landscape) {
+		.suggestion {
+			width: 30%;
+			max-width: none;
+		}
+	}
+
+	@media (max-width: $large-portrait) {
+		.suggestion {
+			width: 45%;
+		}
+	}
+
+	@media (max-width: $small-landscape) {
+		.suggestion {
+			height: auto;
+			width: 100%;
+		}
+	}
 
 	.empty {
 		font-size: 0.9em !important;
@@ -52,6 +84,7 @@
     }
   }
 }
+
 .suggestion {
 	border: lighten($secondary-color, 40%) solid 2px;
 	border-radius: 3px;
@@ -61,12 +94,25 @@
 	margin: 0.5em;
 	max-width: 185px;
 	padding: 1em 0.5em;
+	position: relative;
 	text-align: center;
 	width: 25%;
 
 	&.sponsored {
 		background-color: lighten($warning-color, 43%);
 		border-color: lighten($warning-color, 39%);
+	}
+
+	.avatar {
+		&.requested {
+			background: url(../images/checkmark.png);
+	    background-repeat: no-repeat;
+	    background-position: center center;
+	    background-size: 1.25em;
+			border: $inverted-text-color solid 2px;
+	    box-sizing: border-box;
+			display: none;
+		}
 	}
 
 	.name {
@@ -77,6 +123,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
 	.tagline {
 		color: $secondary-color;
 		font-size: 0.75em;
@@ -94,30 +141,48 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	button {
-		font-size: 0.7em;
 
-		&.success {
+	.info {
+		.requested {
+			color: $inverted-text-color;
 			display: none;
-			border-color: $success-color;
-			background: $inverted-text-color !important;
-
-			i, span {
-				color: $success-color;
-			}
+			font-size: 0.9em;
+			margin-top: 0.2em;
+			padding: 0 0.5em;
 		}
 	}
 
+	button {
+		font-size: 0.7em;
+	}
+
 	&.suggestion-leave {
+		background-color: lighten($banner-background, 10%);
 	  opacity: 1;
-	  transition: opacity .8s ease-out .4s;
+	  transition: opacity .4s ease-out 1.6s;
+
+		.avatar {
+			display: none;
+			&.requested {
+				display: inline-block;
+			}
+		}
 
 	  button {
 	  	&.get-feedback {
 	  		display: none;
 	  	}
-	  	&.success {
+	  }
+
+	  .info {
+	  	.name,
+	  	.tagline {
+	  		display: none;
+	  	}
+	  	.requested {
 	  		display: inline-block;
+	  		font-size: 0.85em;
+	  		margin-top: 0.5em;
 	  	}
 	  }
 	}
@@ -126,6 +191,7 @@
 	  opacity: 0.01;
 	}
 }
+
 .suggestion-sidebar {
 	.empty {
 		font-size: 0.8em !important;
@@ -188,6 +254,59 @@
 				display: none;
 			}
 		}
+
+		@media (max-width: $medium-landscape) {
+			.info {
+				@include column(0.7);
+			}
+			.actions {
+				@include column(0.75, 0.25);
+				text-align: left;
+
+				button {
+					border-radius: 5px;
+					margin-top: 0.25em;
+					padding: 0.15em 0.5em;
+
+					&.get-feedback span {
+						display: inline-block;
+						font-size: 0.85em;
+						margin-bottom: 0.1em;
+						margin-left: 0.25em;
+					}
+				}
+			}
+		}
+		@media (max-width: 798px) {
+			.avatar,
+			.info,
+			.actions {
+				@include stack();
+				text-align: center;
+
+				.name,
+				.tagline,
+				.requested {
+					text-align: center;
+				}
+			}
+
+			.avatar {
+				margin-bottom: 0.25em;
+				&.requested {
+					display: none;
+				}
+			}
+
+			.actions {
+				button {
+					&.get-feedback {
+						margin-bottom: 0.4em;
+						margin-top: 0.35em;
+					}
+				}
+			}
+		}
 	}
 
 	.view-more {
@@ -208,5 +327,9 @@
 		&:hover {
 			background: $section-footer-background;
 		}
+	}
+
+	@media (max-width: $medium-portrait) {
+		display: none;
 	}
 }

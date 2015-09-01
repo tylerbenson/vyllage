@@ -94,7 +94,7 @@ header {
   }
 }
 
-@media (max-width: $medium-portrait) {
+@media (max-width: $large-portrait) {
   header {
     nav{
       .nav-toggle {
@@ -107,7 +107,7 @@ header {
         padding: 1em;
         position: fixed;
         top: 2.5em;
-        right: -50%;
+        right: -90%;
         z-index: 1;
         transition: all .4s ease;
 

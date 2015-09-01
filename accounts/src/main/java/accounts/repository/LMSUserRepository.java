@@ -98,6 +98,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			newRecord.setMiddleName(user.getMiddleName());
 			newRecord.setLastName(user.getLastName());
 			newRecord.setEnabled(user.isEnabled());
+			newRecord.setResetPasswordOnNextLogin(false);
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
 			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
@@ -148,8 +149,53 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			if (!isUserExist) {
 				// Create LMS user credentials
 				lmsUserCredentialsRepository.createUser(lmsRequest.getLmsUser()
-						.getUserId(), newRecord.getUserId(), lmsId, user
-						.getPassword());
+						.getUserId(), newRecord.getUserId(), lmsId);
+			}
+		} catch (Exception e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			transaction.rollbackToSavepoint(savepoint);
+
+		} finally {
+			txManager.commit(transaction);
+
+		}
+	}
+
+	/**
+	 * Adds LMS details to an existing user.
+	 * 
+	 * @param user
+	 * @param lmsRequest
+	 */
+	public void addLMSDetails(@NonNull User user, @NonNull LMSRequest lmsRequest) {
+
+		TransactionStatus transaction = txManager
+				.getTransaction(new DefaultTransactionDefinition());
+
+		Object savepoint = transaction.createSavepoint();
+
+		try {
+
+			LMSAccount lmsAccount = lmsRequest.getLmsAccount();
+			Long lmsId = null;
+
+			try {
+				lmsId = lmsRepository.get(lmsAccount.getLmsGuid());
+			} catch (LMSNotFoundException exception) {
+				lmsId = lmsRepository.createLMSAccount(lmsAccount);
+			}
+			Assert.notNull(lmsId);
+
+			// Check LMS user credentials exist
+			boolean isUserExist = lmsUserCredentialsRepository.userExists(
+					lmsRequest.getLmsUser().getUserId(), lmsId);
+
+			if (!isUserExist) {
+				// Create LMS user credentials
+				Assert.notNull(user.getUserId());
+				lmsUserCredentialsRepository.createUser(lmsRequest.getLmsUser()
+						.getUserId(), user.getUserId(), lmsId);
 			}
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));

@@ -127,7 +127,7 @@
     }
 
     #shareable-link {
-      border-right: 0;
+      border-right-width: 0;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
       max-width: 19em;
@@ -319,33 +319,7 @@
   }
 }
 
-@media (max-width: $medium-portrait) {
-  .get-feedback {
-    .to.content {
-      .form {
-        .field {
-          &:nth-child(3) { /* E-mail field */
-            margin-top: 1.15em;
-          }
-        }
-      }
-      button,
-      .button {
-        border: none;
-        padding: 0.4em 1em;
-        span > span {
-          display: none;
-        }
-        i {
-          display: inline;
-          margin: 0;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: $small-landscape) {
+@media (max-width: $medium-landscape) {
   .get-feedback {
     .recipients.header {
       .empty {
@@ -383,6 +357,35 @@
           }
         }
       }
+    }
+  }
+}
+
+@media (max-width: $large-landscape) {
+  .get-feedback {
+    .shareable {
+      #shareable-link {
+        border-right-width: 2px;
+        border-radius: 5px;
+        width: 100%;
+        margin: auto;
+        max-width: none;
+      }
+      .copy {
+        border-radius: 5px;
+        display: block;
+        margin: 1em auto 0 auto;
+      }
+    }
+  }
+}
+
+@media (max-width: $medium-portrait) {
+  .get-feedback {
+    .shareable,
+    .invite-form {
+      @include column(1);
+      margin: 0;
     }
   }
 }

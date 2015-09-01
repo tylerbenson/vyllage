@@ -49,7 +49,7 @@ public class LMSRepository {
 				.getTransaction(new DefaultTransactionDefinition());
 		Object savepoint = transaction.createSavepoint();
 		try {
-			Organization organizationByExternalId = ltiKeyRepository
+			Organization organizationByConsumerKey = ltiKeyRepository
 					.getOrganizationByConsumerKey(lmsAccount.getConsumerKey());
 
 			LmsRecord newRecord = sql.newRecord(LMS);
@@ -59,7 +59,7 @@ public class LMSRepository {
 			newRecord.setLtiVersion(lmsAccount.getLtiVersion());
 			newRecord.setOauthVersion(lmsAccount.getOauthVersion());
 			newRecord.setLmsTypeId(lmsAccount.getType().getTypeId());
-			newRecord.setOrganizationId(organizationByExternalId
+			newRecord.setOrganizationId(organizationByConsumerKey
 					.getOrganizationId());
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));

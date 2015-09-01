@@ -2,17 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Vyllage | Register</title>
+  <title>Vyllage | Log In</title>
   <base href="." th:href="@{/}" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="Vyllage | Register" />
+  <meta property="og:title" content="Vyllage | Login" />
   <meta property="og:image" content="https://www.vyllage.com/images/fb-cover.jpg" />
   <meta property="og:site_name" content="Vyllage" />
   <meta property="og:url" content="https://www.vyllage.com" />
-  <meta property="og:description" content="Welcome to Vyllage! Register to create your resume." />
+  <meta property="og:description" content="Welcome to Vyllage! Login to update your resume." />
 
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/login.css" />
@@ -35,28 +35,33 @@
       </div>
     </header>
     <div class="sections">
+      <section class="spiel section">
+        <div class="quote">He who would do great things should not attempt them alone.</div>
+        <div class="author"> — Seneca &bull; AD 55</div>
+      </section>
       <section class="form section">
         <div class="container">
-          <form th:action="@{/register-from-social}" th:object="${registerForm}" th:method="POST">
+          <form th:action="@{/lti/login-existing-user}" th:method="post" th:object="${form}">
             <div class="content">
-              <h1 class="centered">Complete Account Setup</h1>
-              <p class="centered">You are almost there! Fill out the fields below to proceed. </p>
-              <div th:if="${registerForm.errorMsg != null}">
-                <p class="centered error" th:text="*{errorMsg}">E-mail or Password invalid.</p>
+              <h1 class="centered">Log In</h1>
+              <div th:if="not ${form.error}">
+                <p class="centered">Welcome to Vyllage</p>
               </div>
-              <label>FIRST NAME</label>
-              <input type="text" th:field="*{firstName}" class="padded" />
-              <label>LAST NAME</label>
-              <input type="text" th:field="*{lastName}" class="padded" />
-              <label>E-MAIL</label>
-              <input type="text" th:field="*{email}" class="padded" />
+              <div th:if="${form.error}">
+                <p class="centered error">E-mail or Password invalid.</p>
+              </div>
+              <label>E-mail</label>
+              <input type="text" class="padded" name="email" />
               <label>Password</label>
-              <input type="password" th:field="*{password}" class="padded" />
-              <label>Receive free professional career advice from Vyllage's partner schools.</label>
-              <input type="checkbox" th:field="*{receiveAdvice}" />
+              <input type="password" class="padded" name="password" />
+              <a href="/account/reset-password" class="forgot">Forgot Password?</a>
               <div class="actions">
-                <button type="submit" class="padded">PROCEED</button>
+                <button class="padded">Submit</button>
               </div>
+            </div>
+            <div class="content account">
+              Don't have an account?
+              <a href="mailto:hello@vyllage.com?subject=Demo Request" className="flat button">Request a demo</a>
             </div>
           </form>
         </div>

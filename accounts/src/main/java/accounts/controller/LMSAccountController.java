@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import oauth.lti.LMSRequest;
@@ -14,11 +15,13 @@ import oauth.utilities.LMSConstants;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
+import accounts.model.form.RegisterForm;
 import accounts.repository.UserNotFoundException;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
@@ -30,7 +33,6 @@ public class LMSAccountController {
 	private final Logger logger = Logger.getLogger(LMSAccountController.class
 			.getName());
 
-	@SuppressWarnings("unused")
 	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
@@ -45,8 +47,8 @@ public class LMSAccountController {
 
 	@RequestMapping(value = "/lti/account", method = { RequestMethod.GET,
 			RequestMethod.POST })
-	public String lti(HttpServletRequest request, WebRequest webRequest)
-			throws UserNotFoundException {
+	public String lti(HttpServletRequest request, HttpServletResponse response,
+			WebRequest webRequest, Model model) throws UserNotFoundException {
 
 		LMSRequest lmsRequest = LMSRequest.getInstance();
 		if (lmsRequest == null) {
@@ -85,11 +87,29 @@ public class LMSAccountController {
 			// Set user name in Session
 			session.setAttribute("user_name", user.getUsername());
 
-		} else if (lmsService.userExists(userName)) {
-			return "redirect:/login";
+			// LMS user doesn't exist but is on the system
+		} else if (userName != null && lmsService.userExists(userName)) {
+			session.setAttribute("user_name", userName);
+			session.setAttribute(LMSRequest.class.getName(), lmsRequest);
+			return "redirect:/lti/login-existing-user";
 		} else {
-			// TODO: question - If user doesn't have email id with LMS details,
-			// then how they will get password..
+
+			RegisterForm registerForm = new RegisterForm();
+			// fill all fields, maybe some are present
+			registerForm.setEmail(userName);
+			registerForm.setFirstName(firstName);
+			registerForm.setLastName(lastName);
+
+			// check all values are present, minus password
+			if (!registerForm.emailIsValid() || !registerForm.nameIsValid()) {
+
+				model.addAttribute("registerForm", registerForm);
+				session.setAttribute(LMSRequest.class.getName(), lmsRequest);
+
+				return "register-from-LTI";
+			}
+
+			// TODO: send password
 			// Create Vyllage user account.
 			User newUser = lmsService.createUser(userName, password, firstName,
 					null, lastName, lmsRequest);
@@ -99,6 +119,41 @@ public class LMSAccountController {
 		}
 		setCSRFTokenInSession(request);
 		return "redirect:" + "/lti/login";
+	}
+
+	@RequestMapping(value = "/register-from-LTI", method = RequestMethod.GET)
+	public String register(HttpServletRequest request, Model model) {
+
+		if (!model.containsAttribute("registerForm")) {
+			RegisterForm registerForm = new RegisterForm();
+			model.addAttribute("registerForm", registerForm);
+		}
+		return "register-from-LTI";
+	}
+
+	@RequestMapping(value = "/register-from-LTI", method = RequestMethod.POST)
+	public String register(HttpServletRequest request,
+			RegisterForm registerForm, Model model) {
+
+		if (registerForm.isValid()) {
+			HttpSession session = request.getSession(false);
+			LMSRequest lmsRequest = (LMSRequest) session
+					.getAttribute(LMSRequest.class.getName());
+
+			// TODO: send password
+			// Create Vyllage user account.
+			User newUser = lmsService.createUser(registerForm.getEmail(),
+					registerForm.getPassword(), registerForm.getFirstName(),
+					null, registerForm.getLastName(), lmsRequest);
+
+			session.setAttribute("user_name", newUser.getUsername());
+			session.removeAttribute(LMSRequest.class.getName());
+			return "redirect:" + "/lti/login";
+		}
+
+		model.addAttribute("registerForm", registerForm);
+
+		return "register-from-LTI";
 	}
 
 	private CsrfToken setCSRFTokenInSession(HttpServletRequest request) {

@@ -33,12 +33,12 @@ public class CheckPrivacyAspectTest {
 	@Inject
 	private AccountSettingsService service;
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testCheckPrivacyNullUser() {
 		service.getAccountSetting(null, "a");
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testCheckPrivacyNullSettingName() {
 		User user = Mockito.mock(User.class);
 
