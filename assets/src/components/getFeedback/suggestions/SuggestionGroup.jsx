@@ -16,7 +16,7 @@ var SuggestionGroup = React.createClass({
 		var index = 0;
 		var suggestionItems = this.state.recommendations.map(function(user){
 			return (
-				<SuggestionItem key={index} index={index++} user={user} avatarSize="64" />
+				<SuggestionItem key={user.userId} index={index++} user={user} avatarSize="64" />
 			);
 		});
 
