@@ -87,7 +87,7 @@ var Organization = React.createClass({
           <div className='header'>
             <div className='title'>
               <h2>
-                <input
+                <Textarea
                   ref='organizationName'
                   disabled={!uiEditMode}
                   className='flat'
@@ -95,8 +95,9 @@ var Organization = React.createClass({
                   placeholder='Organization Name'
                   type='text'
                   value={section.organizationName}
+                  rows="1"
                   onChange={this.handleChange.bind(this, 'organizationName')}
-               />
+                />
               </h2>
             </div>
             {this.props.owner? <div className="actions">
@@ -114,17 +115,18 @@ var Organization = React.createClass({
               placeholder="Organization Description"
               value={section.organizationDescription}
               onChange={this.handleChange.bind(this, 'organizationDescription')}
-            ></Textarea>
+            />
             <section className="subsubsection">
               <div className="header">
                 <div className="title">
                   <h3>
-                    <input
+                    <Textarea
                       disabled={!uiEditMode}
                       className="flat"
                       style={uiEditMode || section.role ? {}: {display: 'none'}}
                       type="text"
                       placeholder={placeholders.role || "Degree / Position"}
+                      rows="1"
                       value={section.role}
                       onChange={this.handleChange.bind(this, 'role')}
                     />
@@ -140,7 +142,7 @@ var Organization = React.createClass({
                   placeholder={placeholders.roleDescription || "Role Description"}
                   value={section.roleDescription}
                   onChange={this.handleChange.bind(this, 'roleDescription')}
-                ></Textarea>
+                />
                 <Datepicker
                   name='startDate'
                   date={section.startDate}
