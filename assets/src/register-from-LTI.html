@@ -26,7 +26,7 @@
 
 <body class="login">
   <div id="container">
-    <header>
+    <header class="header">
       <div class="content">
         <div class="logo">
           <img src="images/logo-orange.png" alt="Vyllage" />
@@ -35,7 +35,9 @@
       </div>
     </header>
     <div class="sections">
+      
       <section class="form section">
+	    
         <div class="container">
           <form th:action="@{/register-from-LTI}" th:object="${registerForm}" th:method="POST">
             <div class="content">
@@ -54,7 +56,7 @@
               <input type="password" th:field="*{password}" class="padded" />
               <label>Receive free professional career advice from Vyllage's partner schools.</label>
               <input type="checkbox" th:field="*{receiveAdvice}" />
-<!--               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> -->
+              <!--               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> -->
               <div class="actions">
                 <button type="submit" class="padded">PROCEED</button>
               </div>
