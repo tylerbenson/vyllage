@@ -37,7 +37,7 @@ var Tags = React.createClass({
   },
 
   componentDidMount: function () {
-        
+
   },
   handleChange: function(e) {
     e.preventDefault();
@@ -97,8 +97,10 @@ var Tags = React.createClass({
       e.target.value = "";
     }
   },
+  start: function(event, ui) {
+    ui.placeholder.width(ui.item.width());
+  },
   stop: function(event, ui){
-
     var self = this;
     var order = [];
     var sectionId;
@@ -110,7 +112,8 @@ var Tags = React.createClass({
         text : jQuery(this).attr("rel")
       });
     });
-    resumeActions.moveTagOrder(order , sectionId );
+
+    resumeActions.moveTagOrder(order, sectionId );
   },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
@@ -130,7 +133,8 @@ var Tags = React.createClass({
     var config = {
       list: ".tags",
       items: "div.tag",
-      stop: this.stop
+      stop: this.stop,
+      start: this.start,
     };
 
     return (
