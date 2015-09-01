@@ -3,6 +3,7 @@ package accounts.config;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -13,10 +14,18 @@ import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
+import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.connect.web.ReconnectFilter;
 import org.springframework.social.facebook.web.DisconnectController;
+
+import accounts.controller.ConnectControllerWithRedirect;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import email.EmailBuilder;
 
 @Configuration
 @EnableSocial
@@ -40,21 +49,25 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		return jdbcUsersConnectionRepository;
 	}
 
-	// @Bean
-	// public ConnectController connectController(
-	// ConnectionFactoryLocator connectionFactoryLocator,
-	// ConnectionRepository connectionRepository) {
-	//
-	// ConnectController connectController = new ConnectController(
-	// connectionFactoryLocator, connectionRepository);
-	// connectController.setViewPath("/");
-	//
-	//
-	// // connectController.addInterceptor(new
-	// // PostToWallAfterConnectInterceptor());
-	// // connectController.addInterceptor(new TweetAfterConnectInterceptor());
-	// return connectController;
-	// }
+	@Bean
+	public ConnectController connectController(
+			ConnectionFactoryLocator connectionFactoryLocator,
+			ConnectionRepository connectionRepository, Environment environment,
+			@Qualifier("accounts.emailBuilder") EmailBuilder emailBuilder,
+			ObjectMapper mapper, TextEncryptor encryptor) {
+
+		ConnectControllerWithRedirect connectController = new ConnectControllerWithRedirect(
+				connectionFactoryLocator, connectionRepository);
+
+		connectController
+				.addInterceptor(new SendConfirmationEmailAfterConnectInterceptor(
+						environment, emailBuilder, mapper, encryptor));
+
+		// connectController.addInterceptor(new
+		// PostToWallAfterConnectInterceptor());
+		// connectController.addInterceptor(new TweetAfterConnectInterceptor());
+		return connectController;
+	}
 
 	@Override
 	@Bean
