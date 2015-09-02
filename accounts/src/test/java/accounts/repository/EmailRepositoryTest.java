@@ -29,7 +29,7 @@ public class EmailRepositoryTest {
 	}
 
 	@Test
-	public void test() {
+	public void testGetEmailsForUser() {
 		Long userId = 0L;
 
 		List<Email> emails = repository.getByUserId(userId);

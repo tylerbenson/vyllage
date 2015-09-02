@@ -11,7 +11,7 @@ public class Email {
 	private String email;
 	private boolean defaultEmail;
 	private boolean confirmed;
-	private LocalDateTime dateCreateed;
+	private LocalDateTime dateCreated;
 	private LocalDateTime lastModified;
 
 	public Long getEmailId() {
@@ -54,12 +54,12 @@ public class Email {
 		this.confirmed = confirmed;
 	}
 
-	public LocalDateTime getDateCreateed() {
-		return dateCreateed;
+	public LocalDateTime getDateCreated() {
+		return dateCreated;
 	}
 
-	public void setDateCreateed(LocalDateTime dateCreateed) {
-		this.dateCreateed = dateCreateed;
+	public void setDateCreated(LocalDateTime dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 	public LocalDateTime getLastModified() {
@@ -69,4 +69,5 @@ public class Email {
 	public void setLastModified(LocalDateTime lastModified) {
 		this.lastModified = lastModified;
 	}
+
 }
