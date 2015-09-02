@@ -185,19 +185,6 @@ module.exports = Reflux.createStore({
       return tmp_section;
     }
   },
-
-  onMoveTagOrder: function(order,sectionId){
-
-    this.resume.all_section.forEach(function(sectionGroup){
-      if( sectionGroup.id == sectionId ){
-        sectionGroup.child[0].tags =[];
-        order.forEach(function(order){
-          sectionGroup.child[0].tags.push(order.text);
-        });
-      }
-    });
-    this.makeItLinear( this.resume.all_section );
-  },
   onMoveGroupOrder: function( order ){
     var all_section = [];
     order.map(function( section , index ){

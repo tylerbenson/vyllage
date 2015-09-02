@@ -18,7 +18,6 @@ var urlTemplate = require('url-template');
   'deleteSection',
   'moveGroupOrder',
   'moveSectionOrder',
-  'moveTagOrder',
   // comments
   'getComments',
   'postComment',
