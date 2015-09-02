@@ -453,11 +453,14 @@ $muted-text: lighten($secondary-color, 25%);
   }
 }
 
-.ui-sortable-placeholder {
-  background: rgba(0,0,0,0.03);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,0.05),
-    0 1px 0 rgba(255,255,255,0.9);
-  position: relative;
+.section-holder,
+.subsection-holder {
+  & > .ui-sortable-placeholder {
+    background: rgba(0,0,0,0.03);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.05),
+      0 1px 0 rgba(255,255,255,0.9);
+    position: relative;
+  }
 }
 
 .section-holder {
