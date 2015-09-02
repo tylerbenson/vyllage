@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react/addons');
 var moment = require('moment');
 var classnames = require('classnames');
 var cloneWithProps = require('react/lib/cloneWithProps');
@@ -7,8 +7,9 @@ var Tether = require('tether/tether');
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var isTouch = require('../isTouch');
 
+
 var Datepicker = React.createClass({
-  mixins: [LayerMixin],
+  mixins: [React.addons.LinkedStateMixin , LayerMixin],
   getInitialState: function () {
     var date = this.props.date;
 
@@ -40,6 +41,35 @@ var Datepicker = React.createClass({
       });
     }
   },
+
+  updateDate : function(key){
+    var self = this;
+    return {
+      value: self.state[key],
+      requestChange: function(year) {
+        var newState = {};
+        newState[key] = year;
+        self.setState(newState);
+        var yearPattern = /^\d{4}$/;
+        if(year.match(yearPattern)) {
+          var month;
+          if( self.state.month == 'Invalid date' ){
+            month = moment(new Date()).format('MMM');
+          }else{
+            month = self.state.month;
+          } 
+          self.setState({
+            year: year,
+            date: month + ' ' + year
+          }, function () {
+            self.setDate();
+          });
+        }
+      }
+    }
+  },
+
+
   setDate: function () {
     this.props.setDate(this.props.name, {
       target: {
@@ -54,19 +84,6 @@ var Datepicker = React.createClass({
     }, function () {
       this.setDate();
     }.bind(this));
-  },
-  setYear: function (e) {
-    var year = e.target.value;
-    var yearPattern = /^\d{4}$/;
-
-    if(year.match(yearPattern)) {
-      this.setState({
-        year: year,
-        active_year : year
-      }, function () {
-        this.setDate();
-      }.bind(this));
-    }
   },
   incrementYear: function (e) {
     e.preventDefault();
@@ -100,7 +117,6 @@ var Datepicker = React.createClass({
           tmp_month = tmp_date[0],
           tmp_year = parseInt( tmp_date[1] );    
     }
-
     var year = this.state.date ? tmp_year : parseInt(moment(new Date()).format('YYYY'));
     var month = this.state.date ? tmp_month : moment(new Date()).format('MMM');
     year = year - 1;
@@ -112,9 +128,6 @@ var Datepicker = React.createClass({
     }, function () {
       this.setDate();
     }.bind(this));
-
-
-
   },
   changeHandler: function (e) {
     this.setState({
@@ -130,13 +143,6 @@ var Datepicker = React.createClass({
         isOpen: true
     });
   },
-
-  isValidDate : function(d){
-      if ( Object.prototype.toString.call(d) !== "[object Date]" )
-        return false;
-      return !isNaN(d.getTime());
-  },
-
   onBlur: function (e) {
     var input = e.target.value;
     if(input.length > 0) {
@@ -205,7 +211,7 @@ var Datepicker = React.createClass({
       var isCurrent = this.props.isCurrent;
 
       var activeMonth;
-      if( this.state.date ){
+      if( this.state.date && this.state.date.search("Invalid") != 0 ){
         activeMonth = this.state.date.split(' ')[0];
       }else{
         activeMonth = moment(new Date()).format('MMM');
@@ -236,8 +242,8 @@ var Datepicker = React.createClass({
             <button className="small inverted primary icon" onClick={this.decrementYear}>
               <i className="ion-arrow-left-c"></i>
             </button>
-
-            <input type="text" className="year" placeholder="Year" defaultValue={this.state.active_year} onChange={this.setYear} />
+            
+           <input type="text" className="year" placeholder="Year" valueLink={this.updateDate('active_year')} /> 
 
             <button className="small inverted primary icon" onClick={this.incrementYear}>
               <i className="ion-arrow-right-c"></i>
