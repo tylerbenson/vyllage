@@ -13,7 +13,7 @@ var Datepicker = React.createClass({
     var date = this.props.date;
 
     var active_year;
-    if( date == undefined || date =='NaN' || date == 'Present' ){
+    if( date == undefined || date =='NaN' || date == 'Present' || date == '' ){
       active_year = parseInt(moment(new Date()).format('YYYY'))
     }else{
       active_year = parseInt( date.split(' ')[1] );
@@ -62,7 +62,7 @@ var Datepicker = React.createClass({
     if(year.match(yearPattern)) {
       this.setState({
         year: year,
-        date: this.state.month + ' ' + year
+        active_year : year
       }, function () {
         this.setDate();
       }.bind(this));
@@ -237,7 +237,7 @@ var Datepicker = React.createClass({
               <i className="ion-arrow-left-c"></i>
             </button>
 
-           <input type="text" className="year" placeholder="Year" value={this.state.active_year} onChange={this.setYear} />
+            <input type="text" className="year" placeholder="Year" defaultValue={this.state.active_year} onChange={this.setYear} />
 
             <button className="small inverted primary icon" onClick={this.incrementYear}>
               <i className="ion-arrow-right-c"></i>
