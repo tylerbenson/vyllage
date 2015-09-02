@@ -402,7 +402,7 @@ public class AccountController {
 		return "email-change-success";
 	}
 
-	@RequestMapping(value = "email-confirmation/", method = RequestMethod.GET)
+	@RequestMapping(value = "email-confirmation", method = RequestMethod.GET)
 	public String confirmEmailAddress(
 			@RequestParam(value = "encodedLink", required = true) String encodedString,
 			@AuthenticationPrincipal User user) throws JsonParseException,
@@ -415,6 +415,7 @@ public class AccountController {
 
 		ConfirmEmailLink confirm = mapper.readValue(changeEmail,
 				ConfirmEmailLink.class);
+
 		return "email-confirmation-success";
 	}
 
