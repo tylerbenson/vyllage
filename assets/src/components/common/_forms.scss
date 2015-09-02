@@ -159,6 +159,7 @@ table {
     font-size: 0.95em;
     margin: 0.165em 0.15em;
     padding: 0.25em 0.75em;
+    word-break: break-word;
 
     &.ui-sortable-helper {
       height: auto !important;
