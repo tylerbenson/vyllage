@@ -16,6 +16,7 @@ var cx = require('react/lib/cx');
 var Sortable = require('../../util/Sortable');
 var resumeActions = require('../actions');
 
+
 var Tags = React.createClass({
   getInitialState: function() {
     return {
@@ -80,7 +81,6 @@ var Tags = React.createClass({
   onTagDelete: function (i) {
     var temp = this.state.tags.slice();
     temp.splice(i,1);
-
     this.setState({
       tags: temp
     });
@@ -106,18 +106,17 @@ var Tags = React.createClass({
     var sectionId;
 
     jQuery(event.target).children().each(function(index) {
-      sectionId = jQuery(this).data("sec");
-      order.push({
-        index : index ,
-        text : jQuery(this).attr("rel")
-      });
+      if( jQuery(this).attr("rel") )
+        order.push(jQuery(this).attr("rel") );
     });
-
-    resumeActions.moveTagOrder(order, sectionId );
+    this.setState({ tags : [] });
+    this.setState({ tags : order });
   },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
     var content = this.state.tags instanceof Array ? this.state.tags.join(', ') : '';
+
+   
 
     var tags = this.state.tags.map(function(tag, index){
       return (
@@ -131,16 +130,15 @@ var Tags = React.createClass({
     });
 
     var config = {
-      list: ".tags",
-      items: "div.tag",
-      stop: this.stop,
-      start: this.start,
-    };
+        list: ".move-tag",
+        items: "div.tag",
+        stop: this.stop,
+        start: this.start,
+      };
 
     return (
       <div className={classes}>
         { this.props.owner ? <MoveButton />: null }
-
         <div className='header'>
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
@@ -148,10 +146,12 @@ var Tags = React.createClass({
           </div>: null}
         </div>
         {this.props.section.sectionId ? <div>
-          <Sortable config={config} className="tags content">
+          { this.state.uiEditMode == undefined || this.state.uiEditMode == false ? <div className="tags content">{tags}</div> :
+          <Sortable config={config} className="tags content move-tag">
             {tags}
             {this.state.uiEditMode ? <TagInput onKeyPress={this.onTagAdd} /> : null}
-          </Sortable>
+          </Sortable> }           
+
           <SectionFooter section={this.props.section} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
           {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
