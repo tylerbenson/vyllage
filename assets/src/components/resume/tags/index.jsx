@@ -40,6 +40,7 @@ var Tags = React.createClass({
   componentDidMount: function () {
 
   },
+
   handleChange: function(e) {
     e.preventDefault();
     var input = e.target.value.trim().split(',');
@@ -55,10 +56,20 @@ var Tags = React.createClass({
     this.setState({tags: tags});
   },
   saveHandler: function(e) {
+    var tags = [];
+    var tagRef = this.refs.tags.getDOMNode();
+
+    jQuery(tagRef).find('.tag').each(function(index) {
+      if( jQuery(this).attr("rel") )
+        tags.push(jQuery(this).attr("rel") );
+    });
+
     var section = this.props.section;
-    section.tags = this.state.tags;
+    section.tags = tags;
     actions.putSection(section);
+
     this.setState({
+      tags: tags,
       uiEditMode: false
     })
   },
@@ -100,27 +111,13 @@ var Tags = React.createClass({
   start: function(event, ui) {
     ui.placeholder.width(ui.item.width());
   },
-  stop: function(event, ui){
-    var self = this;
-    var order = [];
-    var sectionId;
-
-    jQuery(event.target).children().each(function(index) {
-      if( jQuery(this).attr("rel") )
-        order.push(jQuery(this).attr("rel") );
-    });
-    this.setState({ tags : [] });
-    this.setState({ tags : order });
-  },
   render: function () {
     var uiEditMode = this.state.uiEditMode;
     var content = this.state.tags instanceof Array ? this.state.tags.join(', ') : '';
 
-   
-
     var tags = this.state.tags.map(function(tag, index){
       return (
-        <Tag key={index} text={tag} onDelete={this.onTagDelete.bind(this, index)} uiEditMode={uiEditMode} sectionId={this.props.section.sectionId}  />
+        <Tag key={index} text={tag} onDelete={this.onTagDelete.bind(this, index)} uiEditMode={uiEditMode} />
       );
     }.bind(this));
 
@@ -137,7 +134,7 @@ var Tags = React.createClass({
       };
 
     return (
-      <div className={classes}>
+      <div ref="tags" className={classes}>
         { this.props.owner ? <MoveButton />: null }
         <div className='header'>
           {this.props.owner ? <div className="actions">
@@ -150,7 +147,7 @@ var Tags = React.createClass({
           <Sortable config={config} className="tags content move-tag">
             {tags}
             {this.state.uiEditMode ? <TagInput onKeyPress={this.onTagAdd} /> : null}
-          </Sortable> }           
+          </Sortable> }
 
           <SectionFooter section={this.props.section} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
