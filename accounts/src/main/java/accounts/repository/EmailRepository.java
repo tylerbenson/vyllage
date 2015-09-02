@@ -2,14 +2,16 @@ package accounts.repository;
 
 import static accounts.domain.tables.Emails.EMAILS;
 
-import java.util.Collections;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.jooq.DSLContext;
-import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import accounts.domain.tables.records.EmailsRecord;
 import accounts.model.Email;
@@ -22,22 +24,56 @@ public class EmailRepository {
 
 	public List<Email> getByUserId(Long userId) {
 
-		Result<EmailsRecord> fetch = sql.fetch(EMAILS,
-				EMAILS.USER_ID.eq(userId));
+		return sql.fetch(EMAILS, EMAILS.USER_ID.eq(userId)).into(Email.class);
+	}
 
-		if (fetch == null || fetch.isEmpty())
-			return Collections.emptyList();
+	public Email save(Email email) {
 
-		return fetch.stream().map(r -> {
-			Email email = new Email();
-			email.setConfirmed(r.getConfirmed());
-			email.setDateCreated(r.getDateCreated().toLocalDateTime());
-			email.setDefaultEmail(r.getDefaultEmail());
-			email.setEmailId(r.getEmailId());
-			email.setLastModified(r.getLastModified().toLocalDateTime());
-			email.setUserId(r.getUserId());
+		EmailsRecord result = sql.fetchOne(EMAILS,
+				EMAILS.EMAIL.eq(email.getEmail()));
+
+		if (result == null) {
+			EmailsRecord newRecord = sql.newRecord(EMAILS, email);
+
+			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
+					.of("UTC"))));
+			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
+					.now(ZoneId.of("UTC"))));
+
+			newRecord.store();
+
+			Assert.notNull(newRecord.getEmailId());
+			email.setEmailId(newRecord.getEmailId());
+
 			return email;
-		}).collect(Collectors.toList());
+
+		} else {
+
+			result.from(email);
+
+			result.setLastModified(Timestamp.valueOf(LocalDateTime.now(ZoneId
+					.of("UTC"))));
+
+			result.update();
+			return email;
+		}
+	}
+
+	public Optional<Email> getByEmail(String emailAddress) {
+		EmailsRecord record = sql.fetchOne(EMAILS,
+				EMAILS.EMAIL.eq(emailAddress));
+
+		if (record == null)
+			return Optional.empty();
+
+		Email email = new Email();
+		email.setConfirmed(record.getConfirmed());
+		email.setDefaultEmail(record.getDefaultEmail());
+		email.setEmail(record.getEmail());
+		email.setEmailId(record.getEmailId());
+		email.setUserId(record.getUserId());
+
+		return Optional.of(email);
 	}
 
 }
