@@ -38,6 +38,7 @@ var SubSection = React.createClass({
       list: ".subsection-holder",
       items: "div.subsection-wrapper",
       handle: ".move-sub",
+      axis : 'y',
       start: this.start,
       stop: this.stop
     };
@@ -61,14 +62,12 @@ var SectionGroup = React.createClass({
   },
   stop: function(event, ui){
     var order = [];
-
     jQuery(event.target).children().each(function(index) {
         order.push({
           type : jQuery(this).attr("rel"),
           index : index
         });
     });
-
     actions.moveGroupOrder(order);
     jQuery('.banner .subheader').removeClass('dragging');
   },
@@ -81,6 +80,7 @@ var SectionGroup = React.createClass({
       list: ".section-holder",
       items: "div.section",
       handle: ".move-section",
+      axis : 'y',
       start: this.start,
       stop: this.stop
     };

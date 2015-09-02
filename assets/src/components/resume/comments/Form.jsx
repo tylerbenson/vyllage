@@ -6,6 +6,9 @@ var CommentForm = React.createClass({
   getInitialState: function () {
     return {value: ''}
   },
+  componentDidMount: function() {
+    this.refs.commentBox.getDOMNode().focus();
+  },
   changeHandler: function (e) {
     e.preventDefault();
     this.setState({value: e.target.value});
@@ -25,6 +28,7 @@ var CommentForm = React.createClass({
       <div className='comment-box'>
         <div className='content'>
           <Textarea
+            ref="commentBox"
             rows='1'
             placeholder='Share your advice..'
             onChange={this.changeHandler}

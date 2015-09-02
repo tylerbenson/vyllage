@@ -163,7 +163,6 @@ module.exports = Reflux.createStore({
               if( tmp_section.length){
                 var findIt = findindex(tmp_section, {'type': section.type});
                  if( findIt == -1){
-
                     tmp_section.push({
                       type: section.type,
                       title : section.title, 
@@ -172,7 +171,6 @@ module.exports = Reflux.createStore({
                       child : where( sections, { 'type': section.type }) 
                     });
                  }
-
               }else{
                 tmp_section.push({
                   type: section.type, 
@@ -187,7 +185,6 @@ module.exports = Reflux.createStore({
       return tmp_section;
     }
   },
-
   onMoveGroupOrder: function( order ){
     var all_section = [];
     order.map(function( section , index ){
