@@ -98,7 +98,6 @@ module.exports = Reflux.createStore({
   },
 
   onMakeFacebookDisconnect : function(){
-
     request
     .del('/disconnect/facebook')
     .set(this.tokenHeader, this.tokenValue)
@@ -106,8 +105,12 @@ module.exports = Reflux.createStore({
       this.facebook = res.body;
       this.update();
     }.bind(this));
-
-
+  },
+  onDoPing: function(){
+    request
+      .get('/account/ping')
+      .end(function (err, res) {
+      }.bind(this))
   },
   update: function () {
     this.trigger({
