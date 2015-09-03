@@ -465,8 +465,8 @@
                                           <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;font-size: 14px;">
 
                                             <h2 class="null">
-                                              <span style="font-size:16px">Dear Customer,</span>
-                                             
+                                              <span th:text="'Hello ' + ${firstName} + ','" style="font-size:16px">Dear Customer,</span>
+
                                             </h2>
 
                                           </td>
@@ -500,7 +500,7 @@
                                 </tr>
                               </tbody>
                             </table>
-                             <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylButtonBlock" style="margin: 10px auto;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylButtonBlock" style="margin: 10px auto;">
                               <tbody class="vylButtonBlockOuter">
                                 <tr>
                                   <td style="padding: 18px; background-color: #FDEFE4;" valign="top" align="center" class="vylButtonBlockInner">
@@ -509,7 +509,7 @@
                                         <tr>
                                           <td align="center" valign="middle" class="vylButtonContent" style="font-family: Arial; font-size: 16px; padding: 16px 24px;">
                                             <a class="vylButton " target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;"
-			                                	th:href="@{${url}(encodedLink=${encodedLink})}">Confirm Email</a>
+                                            th:href="@{${url}(encodedLink=${encodedLink})}">Confirm Email</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -597,4 +597,5 @@
     </table>
   </center>
 </body>
+
 </html>

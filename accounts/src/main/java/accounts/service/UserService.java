@@ -921,7 +921,7 @@ public class UserService {
 				.subject("Email Change Confirmation")
 				.setNoHtmlMessage(
 						"We received a request to change your email if you requested it please copy and paste the link to confirm. \\n"
-								+ url + encodedString)
+								+ url + "?changeEmail=" + encodedString)
 				.templateName("email-change-email-confirmation")
 				.addTemplateVariable("userName", user.getFirstName())
 				.addTemplateVariable("newEmail", link.getNewEmail())

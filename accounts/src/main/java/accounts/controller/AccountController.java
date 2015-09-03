@@ -45,7 +45,6 @@ import user.common.web.UserInfo;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.ChangePasswordForm;
-import accounts.model.account.ConfirmEmailLink;
 import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
 import accounts.repository.UserNotFoundException;
@@ -395,28 +394,12 @@ public class AccountController {
 				ChangeEmailLink.class);
 
 		if (!user.getUserId().equals(changeEmailLink.getUserId()))
-			throw new AccessDeniedException("Invalid link provided.");
+			throw new AccessDeniedException("User " + user
+					+ " provided an invalid link: " + changeEmail);
 
 		userService.changeEmail(user, changeEmailLink.getNewEmail());
 
 		return "email-change-success";
-	}
-
-	@RequestMapping(value = "email-confirmation", method = RequestMethod.GET)
-	public String confirmEmailAddress(
-			@RequestParam(value = "encodedLink", required = true) String encodedString,
-			@AuthenticationPrincipal User user) throws JsonParseException,
-			JsonMappingException, IOException {
-
-		String decodedString = new String(Base64.getUrlDecoder().decode(
-				encodedString));
-
-		String changeEmail = encryptor.decrypt(decodedString);
-
-		ConfirmEmailLink confirm = mapper.readValue(changeEmail,
-				ConfirmEmailLink.class);
-
-		return "email-confirmation-success";
 	}
 
 }

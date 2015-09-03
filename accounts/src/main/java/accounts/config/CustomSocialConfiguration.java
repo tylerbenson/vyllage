@@ -22,6 +22,7 @@ import org.springframework.social.connect.web.ReconnectFilter;
 import org.springframework.social.facebook.web.DisconnectController;
 
 import accounts.controller.ConnectControllerWithRedirect;
+import accounts.repository.EmailRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -54,14 +55,15 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 			ConnectionFactoryLocator connectionFactoryLocator,
 			ConnectionRepository connectionRepository, Environment environment,
 			@Qualifier("accounts.emailBuilder") EmailBuilder emailBuilder,
-			ObjectMapper mapper, TextEncryptor encryptor) {
+			EmailRepository emailRepository, ObjectMapper mapper) {
 
 		ConnectControllerWithRedirect connectController = new ConnectControllerWithRedirect(
 				connectionFactoryLocator, connectionRepository);
 
 		connectController
 				.addInterceptor(new SendConfirmationEmailAfterConnectInterceptor(
-						environment, emailBuilder, mapper, encryptor));
+						environment, emailBuilder, emailRepository, mapper,
+						textEncryptor));
 
 		// connectController.addInterceptor(new
 		// PostToWallAfterConnectInterceptor());
