@@ -17,7 +17,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
@@ -48,9 +47,7 @@ public class SendConfirmationEmailAfterConnectInterceptorTest {
 
 	private ObjectMapper mapper = new ObjectMapper();
 
-	private TextEncryptor encryptor = Encryptors.queryableText(
-			"hjQb7K3Nsgv5DL6kDNeRAR",
-			"686a5162374b334e73677635444c366b444e65524152");
+	private TextEncryptor encryptor = new MockTextEncryptor();
 
 	@Before
 	public void setUp() throws Exception {
@@ -64,6 +61,7 @@ public class SendConfirmationEmailAfterConnectInterceptorTest {
 				.thenReturn("no-reply@vyllage.com");
 		when(environment.getProperty("email.from.userName", "Chief of Vyllage"))
 				.thenReturn("Chief of Vyllage");
+
 	}
 
 	@Test
@@ -155,6 +153,25 @@ public class SendConfirmationEmailAfterConnectInterceptorTest {
 				return Mockito.RETURNS_DEFAULTS.answer(invocation);
 			}
 		}
+	}
+
+	/**
+	 * Mock encryptor for Solano, since it doesn't support JCE8...
+	 * 
+	 * @author uh
+	 */
+	class MockTextEncryptor implements TextEncryptor {
+
+		@Override
+		public String encrypt(String text) {
+			return text;
+		}
+
+		@Override
+		public String decrypt(String encryptedText) {
+			return encryptedText;
+		}
+
 	}
 
 }
