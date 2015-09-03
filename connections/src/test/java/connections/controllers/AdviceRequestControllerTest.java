@@ -74,6 +74,9 @@ public class AdviceRequestControllerTest {
 		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 		User user = Mockito.mock(User.class);
 
+		Mockito.when(accountService.canIRequestFeedback(request, user))
+				.thenReturn(true);
+
 		Assert.assertEquals("getFeedback", controller.askAdvice(request, user));
 	}
 
