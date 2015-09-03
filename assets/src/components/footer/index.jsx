@@ -4,7 +4,7 @@ var Footer = React.createClass({
 
   componentDidMount: function () {
 
-      var IDLE_TIMEOUT = 3600; // sec
+      var IDLE_TIMEOUT = 3600; //  60 min = 3600 sec
       var _idleSecondsCounter = 0;
       document.onclick = function() {
           _idleSecondsCounter = 0;
@@ -15,7 +15,7 @@ var Footer = React.createClass({
       document.onkeypress = function() {
           _idleSecondsCounter = 0;
       };
-      window.setInterval(CheckIdleTime, 600000); // mili sec
+      window.setInterval(CheckIdleTime, 600000); // 10 min = 600 sec = 60 * 10 * 1000 mil sec
 
       function CheckIdleTime() {
           _idleSecondsCounter++;
