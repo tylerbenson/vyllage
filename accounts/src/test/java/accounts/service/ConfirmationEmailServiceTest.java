@@ -1,7 +1,11 @@
-package accounts.config;
+package accounts.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.util.Base64;
 
 import org.apache.commons.mail.EmailException;
 import org.junit.Before;
@@ -10,27 +14,20 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.social.connect.Connection;
-import org.springframework.social.connect.UserProfile;
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
 import accounts.model.Email;
+import accounts.model.account.ConfirmEmailLink;
 import accounts.repository.EmailRepository;
-import accounts.service.ConfirmationEmailService;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import email.EmailBuilder;
 
-public class SendConfirmationEmailAfterConnectInterceptorTest {
-
-	private SendConfirmationEmailAfterConnectInterceptor interceptor;
+public class ConfirmationEmailServiceTest {
 
 	private ConfirmationEmailService confirmationEmailService;
 
@@ -50,21 +47,10 @@ public class SendConfirmationEmailAfterConnectInterceptorTest {
 
 		confirmationEmailService = new ConfirmationEmailService(environment,
 				emailBuilder, mapper, encryptor, emailRepository);
-
-		interceptor = new SendConfirmationEmailAfterConnectInterceptor(
-				confirmationEmailService);
-
-		when(environment.getProperty("vyllage.domain", "www.vyllage.com"))
-				.thenReturn("www.vyllage.com");
-		when(environment.getProperty("email.from", "no-reply@vyllage.com"))
-				.thenReturn("no-reply@vyllage.com");
-		when(environment.getProperty("email.from.userName", "Chief of Vyllage"))
-				.thenReturn("Chief of Vyllage");
-
 	}
 
 	@Test
-	public void testPostConnect() throws EmailException {
+	public void testSendConfirmationEmail() throws EmailException {
 
 		Long userId = 0L;
 		String userName = "email@email.com";
@@ -77,29 +63,51 @@ public class SendConfirmationEmailAfterConnectInterceptorTest {
 		when(user.getUsername()).thenReturn(userName);
 		when(user.getFirstName()).thenReturn(firstName);
 
-		@SuppressWarnings("unchecked")
-		Connection<Facebook> connection = mock(Connection.class);
-		WebRequest request = mock(WebRequest.class);
+		Email email = new Email();
+		email.setConfirmed(false);
+		email.setDefaultEmail(false);
+		email.setEmail(anotherEmail);
+		email.setUserId(user.getUserId());
 
-		UserProfile userProfile = mock(UserProfile.class);
-		when(connection.fetchUserProfile()).thenReturn(userProfile);
-
-		when(userProfile.getEmail()).thenReturn(anotherEmail);
-
-		Authentication authentication = mock(Authentication.class);
-
-		when(authentication.getPrincipal()).thenReturn(user);
-
-		SecurityContext securityContext = mock(SecurityContext.class);
-
-		when(securityContext.getAuthentication()).thenReturn(authentication);
-		SecurityContextHolder.setContext(securityContext);
-
-		interceptor.postConnect(connection, request);
-
-		Mockito.verify(emailRepository).save(Mockito.any(Email.class));
+		confirmationEmailService.sendConfirmationEmail(user, email);
+		Mockito.verify(emailRepository).save(email);
 		Mockito.verify(emailBuilder).send();
+	}
 
+	@Test
+	public void testGetEncodedLink() throws JsonParseException,
+			JsonMappingException, IOException {
+
+		Long userId = 0L;
+		String email = "anEmail@email.com";
+
+		ConfirmEmailLink confirmEmailLink = new ConfirmEmailLink(userId, email);
+		String encodedLink = confirmationEmailService
+				.getEncodedLink(confirmEmailLink);
+
+		String decodedString = new String(Base64.getUrlDecoder().decode(
+				encodedLink));
+
+		String changeEmail = encryptor.decrypt(decodedString);
+
+		ConfirmEmailLink confirmationLink = mapper.readValue(changeEmail,
+				ConfirmEmailLink.class);
+
+		assertEquals(userId, confirmationLink.getUserId());
+		assertEquals(email, confirmationLink.getEmail());
+
+	}
+
+	@Test
+	public void testSendEmail() throws EmailException {
+		String email = "anEmail@email.com";
+		String encodedConfirmEmailLink = "string";
+		String firstName = "firstName";
+
+		confirmationEmailService.sendEmail(email, encodedConfirmEmailLink,
+				firstName);
+
+		Mockito.verify(emailBuilder).send();
 	}
 
 	/**

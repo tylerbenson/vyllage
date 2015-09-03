@@ -3,7 +3,6 @@ package accounts.config;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -22,11 +21,7 @@ import org.springframework.social.connect.web.ReconnectFilter;
 import org.springframework.social.facebook.web.DisconnectController;
 
 import accounts.controller.ConnectControllerWithRedirect;
-import accounts.repository.EmailRepository;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import email.EmailBuilder;
+import accounts.service.ConfirmationEmailService;
 
 @Configuration
 @EnableSocial
@@ -53,17 +48,15 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 	@Bean
 	public ConnectController connectController(
 			ConnectionFactoryLocator connectionFactoryLocator,
-			ConnectionRepository connectionRepository, Environment environment,
-			@Qualifier("accounts.emailBuilder") EmailBuilder emailBuilder,
-			EmailRepository emailRepository, ObjectMapper mapper) {
+			ConnectionRepository connectionRepository,
+			ConfirmationEmailService confirmationEmailService) {
 
 		ConnectControllerWithRedirect connectController = new ConnectControllerWithRedirect(
 				connectionFactoryLocator, connectionRepository);
 
 		connectController
 				.addInterceptor(new SendConfirmationEmailAfterConnectInterceptor(
-						environment, emailBuilder, emailRepository, mapper,
-						textEncryptor));
+						confirmationEmailService));
 
 		// connectController.addInterceptor(new
 		// PostToWallAfterConnectInterceptor());

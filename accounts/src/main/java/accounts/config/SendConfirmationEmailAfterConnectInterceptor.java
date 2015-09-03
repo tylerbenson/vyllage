@@ -1,31 +1,18 @@
 package accounts.config;
 
-import java.util.Base64;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.mail.EmailException;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.web.ConnectInterceptor;
 import org.springframework.social.facebook.api.Facebook;
-import org.springframework.util.Assert;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
 import accounts.model.Email;
-import accounts.model.account.ConfirmEmailLink;
-import accounts.repository.EmailRepository;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.newrelic.api.agent.NewRelic;
-
-import email.EmailBuilder;
+import accounts.service.ConfirmationEmailService;
 
 public class SendConfirmationEmailAfterConnectInterceptor implements
 		ConnectInterceptor<Facebook> {
@@ -34,25 +21,11 @@ public class SendConfirmationEmailAfterConnectInterceptor implements
 			.getLogger(SendConfirmationEmailAfterConnectInterceptor.class
 					.getName());
 
-	private final Environment environment;
-
-	private final EmailBuilder emailBuilder;
-
-	private final ObjectMapper mapper;
-
-	private final TextEncryptor encryptor;
-
-	private final EmailRepository emailRepository;
+	private final ConfirmationEmailService confirmationEmailService;
 
 	public SendConfirmationEmailAfterConnectInterceptor(
-			final Environment environment, final EmailBuilder emailBuilder,
-			final EmailRepository emailRepository, final ObjectMapper mapper,
-			final TextEncryptor encryptor) {
-		this.environment = environment;
-		this.emailBuilder = emailBuilder;
-		this.emailRepository = emailRepository;
-		this.mapper = mapper;
-		this.encryptor = encryptor;
+			final ConfirmationEmailService confirmationEmailService) {
+		this.confirmationEmailService = confirmationEmailService;
 	}
 
 	@Override
@@ -79,13 +52,11 @@ public class SendConfirmationEmailAfterConnectInterceptor implements
 			email.setDefaultEmail(false);
 			email.setEmail(emailString);
 			email.setUserId(user.getUserId());
-			emailRepository.save(email);
 
-			String encodedConfirmEmailLink = this.getEncodedLink(
-					user.getUserId(), emailString);
+			logger.info("Sending confirmation email: " + email
+					+ " for Facebook connection.");
 
-			this.sendConfirmationEmail(emailString, encodedConfirmEmailLink,
-					user.getFirstName());
+			confirmationEmailService.sendConfirmationEmail(user, email);
 
 		}
 
@@ -94,78 +65,6 @@ public class SendConfirmationEmailAfterConnectInterceptor implements
 	protected Object getUser() {
 		return SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
-	}
-
-	protected String getEncodedLink(Long userId, String email) {
-
-		ConfirmEmailLink link = new ConfirmEmailLink(userId, email);
-
-		String jsonConfirmEmailLink = null;
-
-		try {
-
-			jsonConfirmEmailLink = mapper.writeValueAsString(link);
-
-		} catch (JsonProcessingException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
-
-		Assert.notNull(jsonConfirmEmailLink);
-
-		String encryptedString = encryptor.encrypt(jsonConfirmEmailLink);
-
-		String encodedString = Base64.getUrlEncoder().encodeToString(
-				encryptedString.getBytes());
-
-		return encodedString;
-	}
-
-	/**
-	 * Sends email confirmation.
-	 * 
-	 * @param email
-	 * @param encodedConfirmEmailLink
-	 * @param name
-	 * @throws EmailException
-	 */
-	protected void sendConfirmationEmail(final String email,
-			final String encodedConfirmEmailLink, final String firstName) {
-
-		String domain = environment.getProperty("vyllage.domain",
-				"www.vyllage.com");
-
-		final String txt = "https://" + domain
-				+ "/account/email/email-confirmation/";
-
-		Runnable run = () -> {
-			try {
-				String from = environment.getProperty("email.from",
-						"no-reply@vyllage.com");
-
-				final String fromUserName = environment.getProperty(
-						"email.from.userName", "Chief of Vyllage");
-
-				emailBuilder
-						.from(from)
-						.fromUserName(fromUserName)
-						.subject("Email Confirmation")
-						.to(email)
-						.templateName("email-confirm")
-						.setNoHtmlMessage(
-								txt + "?encodedLink=" + encodedConfirmEmailLink)
-						.addTemplateVariable("firstName", firstName)
-						.addTemplateVariable("url", txt)
-						.addTemplateVariable("encodedLink",
-								encodedConfirmEmailLink).send();
-			} catch (Exception e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
-			}
-		};
-
-		run.run();
-
 	}
 
 }
