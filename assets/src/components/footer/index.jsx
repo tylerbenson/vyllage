@@ -18,7 +18,7 @@ var Footer = React.createClass({
       window.setInterval(CheckIdleTime, 600000); // 10 min = 600 sec = 60 * 10 * 1000 mil sec
 
       function CheckIdleTime() {
-          _idleSecondsCounter++;
+          _idleSecondsCounter = _idleSecondsCounter + 600;
           if (_idleSecondsCounter <= IDLE_TIMEOUT) {
             SettingsActions.doPing();
           }
