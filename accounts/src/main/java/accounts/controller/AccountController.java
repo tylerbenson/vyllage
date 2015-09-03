@@ -42,11 +42,13 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.web.AccountContact;
 import user.common.web.UserInfo;
+import accounts.model.Email;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.ChangePasswordForm;
 import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
+import accounts.repository.EmailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
@@ -76,6 +78,8 @@ public class AccountController {
 
 	private final UserContactSuggestionService userContactSuggestionService;
 
+	private final EmailRepository emailRepository;
+
 	private final TextEncryptor encryptor;
 
 	private final ObjectMapper mapper;
@@ -89,12 +93,14 @@ public class AccountController {
 			final UserService userService,
 			final DocumentLinkService documentLinkService,
 			final UserContactSuggestionService userContactSuggestionService,
+			final EmailRepository emailRepository,
 			final TextEncryptor encryptor, final ObjectMapper mapper) {
 		super();
 		this.environment = environment;
 		this.userService = userService;
 		this.documentLinkService = documentLinkService;
 		this.userContactSuggestionService = userContactSuggestionService;
+		this.emailRepository = emailRepository;
 		this.encryptor = encryptor;
 		this.mapper = mapper;
 	}
@@ -321,7 +327,7 @@ public class AccountController {
 				.addTemplateVariable("encodedLink", encodedString).send();
 	}
 
-	private boolean isEmailValid(ResetPasswordForm resetPassword) {
+	protected boolean isEmailValid(ResetPasswordForm resetPassword) {
 		boolean isValid = resetPassword.isValid()
 				&& userService.userExists(resetPassword.getEmail());
 		resetPassword.setError(!isValid);
@@ -400,6 +406,20 @@ public class AccountController {
 		userService.changeEmail(user, changeEmailLink.getNewEmail());
 
 		return "email-change-success";
+	}
+
+	@RequestMapping(value = "{userId}/can-request-feedback", method = RequestMethod.GET)
+	public @ResponseBody Boolean canRequestFeedback(
+			@PathVariable(value = "userId") Long userId,
+			@AuthenticationPrincipal User user) {
+
+		List<Email> byUserId = emailRepository.getByUserId(userId);
+
+		if (byUserId == null || byUserId.isEmpty())
+			return false;
+
+		return byUserId.stream().allMatch(e -> e.isConfirmed());
+
 	}
 
 }

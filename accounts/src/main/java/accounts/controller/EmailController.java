@@ -48,6 +48,11 @@ public class EmailController {
 
 	// TODO: Move other methods related to email.
 
+	@RequestMapping(value = "needs-email-confirmation", method = RequestMethod.GET)
+	public String needsEmailConfirmation() {
+		return "needs-email-confirmation";
+	}
+
 	@RequestMapping(value = "email-confirmation", method = RequestMethod.GET)
 	public String confirmEmailAddress(
 			@RequestParam(value = "encodedLink", required = true) String encodedLink,
