@@ -63,7 +63,10 @@ var Tags = React.createClass({
       if( jQuery(this).attr("rel") )
         tags.push(jQuery(this).attr("rel") );
     });
-
+    var temp_value = jQuery(tagRef).find('input').val();
+    if( temp_value.length > 0 ){
+      tags.push(temp_value);
+    }
     var section = this.props.section;
     section.tags = tags;
     actions.putSection(section);
