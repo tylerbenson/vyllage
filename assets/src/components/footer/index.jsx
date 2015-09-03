@@ -1,6 +1,29 @@
 var React = require('react');
-
+var SettingsActions = require('../settings/actions');
 var Footer = React.createClass({
+
+  componentDidMount: function () {
+
+      var IDLE_TIMEOUT = 3600; //  60 min = 3600 sec
+      var _idleSecondsCounter = 0;
+      document.onclick = function() {
+          _idleSecondsCounter = 0;
+      };
+      document.onmousemove = function() {
+          _idleSecondsCounter = 0;
+      };
+      document.onkeypress = function() {
+          _idleSecondsCounter = 0;
+      };
+      window.setInterval(CheckIdleTime, 600000); // 10 min = 600 sec = 60 * 10 * 1000 mil sec
+
+      function CheckIdleTime() {
+          _idleSecondsCounter = _idleSecondsCounter + 600;
+          if (_idleSecondsCounter <= IDLE_TIMEOUT) {
+            SettingsActions.doPing();
+          }
+      }  
+  },
 
   render: function() {
     return (
