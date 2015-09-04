@@ -80,7 +80,7 @@ module.exports = Reflux.createStore({
         break;
       case 'twitter':
         var pattern = /^\w{1,32}$/; // ref : http://aaronsaray.com/blog/2012/08/07/jquery-validator-twitter-username-validator/
-        if(setting.value.length >= 140 || pattern.test(setting.value) == false ) {
+        if( setting.value.length > 0 && (setting.value.length >= 140 || pattern.test(setting.value) == false ) ) {
           setting.errorMessage = "Invalid Twitter Username";
         }
         break;
@@ -98,16 +98,19 @@ module.exports = Reflux.createStore({
   },
 
   onMakeFacebookDisconnect : function(){
-    
     request
     .del('/disconnect/facebook')
-    .set(this.tokenHeader, this.tokenValue) 
+    .set(this.tokenHeader, this.tokenValue)
     .end(function (err, res) {
       this.facebook = res.body;
       this.update();
     }.bind(this));
-
-
+  },
+  onDoPing: function(){
+    request
+      .get('/account/ping')
+      .end(function (err, res) {
+      }.bind(this))
   },
   update: function () {
     this.trigger({

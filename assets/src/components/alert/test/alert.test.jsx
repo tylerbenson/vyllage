@@ -7,7 +7,7 @@ describe('alert', function() {
 
   it('default state of alert component', function() {
     var alert = TestUtils.renderIntoDocument(<Alert />);
-    expect(alert.state).toEqual({isOpen: false, message: ''});
+    expect(alert.state).toEqual({isOpen: false, message: '', timeout: 4000});
   });
 
   it('should have default className alert', function() {
@@ -34,10 +34,10 @@ describe('alert', function() {
 
   it('Clicking on close button of alert should close it', function() {
     var alert = TestUtils.renderIntoDocument(<Alert />);
-    alert.setState({isOpen: true, message: 'Your data have been saved'});
+    alert.setState({isOpen: true, message: 'Your data have been saved', timeout: 4000});
     var closeButton = TestUtils.findRenderedDOMComponentWithTag(alert, 'button');
     TestUtils.Simulate.click(closeButton);
-    expect(alert.state).toEqual({isOpen: false, message: ''});
+    expect(alert.state.isOpen).toEqual(false);
     expect(alert.getDOMNode().textContent).toBe('');
   });
 
