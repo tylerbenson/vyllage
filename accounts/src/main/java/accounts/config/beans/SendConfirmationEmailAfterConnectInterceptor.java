@@ -14,6 +14,13 @@ import user.common.User;
 import accounts.model.Email;
 import accounts.service.ConfirmationEmailService;
 
+/**
+ * This interceptor is called after a user connects with a social account, when
+ * the User's email and the Social Account email are different it will send a
+ * request to confirm the new email address.
+ * 
+ * @author uh
+ */
 public class SendConfirmationEmailAfterConnectInterceptor implements
 		ConnectInterceptor<Facebook> {
 

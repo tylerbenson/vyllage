@@ -22,6 +22,15 @@ import accounts.model.Email;
 import accounts.repository.EmailRepository;
 import accounts.service.ConfirmationEmailService;
 
+/**
+ * After a user logins checks whether his email address has been confirmed or
+ * not if it hasn't then it will confirm it. This is for users created from the
+ * batch creation tool. <br>
+ * This only confirms the main email address/ username, all the others must be
+ * confirmed by email.
+ * 
+ * @author uh
+ */
 public class ConfirmEmailAddressSuccessHandler extends
 		SavedRequestAwareAuthenticationSuccessHandler implements
 		ApplicationContextAware {
