@@ -1,21 +1,17 @@
 package accounts.service;
 
-import static org.mockito.Mockito.mock;
-
 import java.io.IOException;
 
 import javax.inject.Inject;
 
 import org.apache.commons.mail.EmailException;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.core.env.Environment;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -23,20 +19,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import user.common.User;
 import user.common.constants.RolesEnum;
-import accounts.Application;
-import accounts.mocks.MockTextEncryptor;
-import accounts.mocks.SelfReturningAnswer;
+import accounts.ApplicationTestConfig;
 import accounts.model.BatchAccount;
-import accounts.repository.EmailRepository;
-import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import email.EmailBuilder;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class UserServiceTest {
@@ -49,35 +37,11 @@ public class UserServiceTest {
 	@Mock
 	private User user;
 
-	@Inject
-	private Environment environment;
-
-	@Inject
-	private EmailRepository emailRepository;
-
-	@Inject
-	private ObjectMapper mapper;
-
-	@Inject
-	private UserDetailRepository detailRepository;
-
-	private ConfirmationEmailService confirmationEmailService;
-
-	private EmailBuilder emailBuilder = mock(EmailBuilder.class,
-			new SelfReturningAnswer());
-
-	private TextEncryptor encryptor = new MockTextEncryptor();
-
-	@Before
-	public void setUp() {
-
-		confirmationEmailService = new ConfirmationEmailService(environment,
-				emailBuilder, mapper, encryptor, emailRepository);
-
-		detailRepository.setConfirmationEmailService(confirmationEmailService);
-
-		service.setEmailBuilder(emailBuilder);
-		service.setUserDetailsRepository(detailRepository);
+	@BeforeClass
+	public static void init() {
+		System.setProperty("spring.thymeleaf.prefix",
+				"file:///" + System.getProperty("PROJECT_HOME")
+						+ "/assets/src/");
 	}
 
 	@Test

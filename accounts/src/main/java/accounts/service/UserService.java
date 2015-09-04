@@ -957,26 +957,4 @@ public class UserService {
 		this.accountSettingsService.setAccountSetting(newUser, setting);
 	}
 
-	/**
-	 * For testing only, will be removed later.
-	 * 
-	 * @param detailRepository
-	 */
-	@Deprecated
-	public void setEmailBuilder(@NonNull EmailBuilder emailBuilder) {
-		this.emailBuilder = emailBuilder;
-	}
-
-	/**
-	 * For testing only, will be removed later.
-	 * 
-	 * @param detailRepository
-	 */
-	@Deprecated
-	public void setUserDetailsRepository(
-			@NonNull UserDetailRepository detailRepository) {
-		userRepository = detailRepository;
-
-	}
-
 }

@@ -16,6 +16,7 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter.XFrameOptionsMode;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import accounts.config.beans.RequestMatcherDisable;
 import accounts.config.handlers.ConfirmEmailAddressSuccessHandler;
 
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)

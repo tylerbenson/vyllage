@@ -10,10 +10,8 @@ import lombok.NonNull;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import user.common.User;
@@ -33,7 +31,6 @@ import email.EmailBuilder;
  * 
  * @author uh
  */
-@Service
 public class ConfirmationEmailService {
 
 	private final Logger logger = Logger
@@ -50,10 +47,9 @@ public class ConfirmationEmailService {
 	private final EmailRepository emailRepository;
 
 	@Inject
-	public ConfirmationEmailService(Environment environment,
-			@Qualifier("accounts.emailBuilder") EmailBuilder emailBuilder,
-			ObjectMapper mapper, TextEncryptor encryptor,
-			EmailRepository emailRepository) {
+	public ConfirmationEmailService(final Environment environment,
+			final EmailBuilder emailBuilder, final ObjectMapper mapper,
+			final TextEncryptor encryptor, final EmailRepository emailRepository) {
 		this.environment = environment;
 		this.emailBuilder = emailBuilder;
 		this.mapper = mapper;

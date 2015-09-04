@@ -20,6 +20,7 @@ import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.connect.web.ReconnectFilter;
 import org.springframework.social.facebook.web.DisconnectController;
 
+import accounts.config.beans.SendConfirmationEmailAfterConnectInterceptor;
 import accounts.controller.ConnectControllerWithRedirect;
 import accounts.service.ConfirmationEmailService;
 

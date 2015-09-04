@@ -40,13 +40,13 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import accounts.Application;
+import accounts.ApplicationTestConfig;
 import accounts.controller.LMSAccountController;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 public class LTISecurityConfigurerTest {
 

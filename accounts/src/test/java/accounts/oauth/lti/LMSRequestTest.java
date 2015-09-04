@@ -34,7 +34,7 @@ import org.springframework.web.context.WebApplicationContext;
 import user.common.Organization;
 import user.common.User;
 import user.common.lms.LMSUser;
-import accounts.Application;
+import accounts.ApplicationTestConfig;
 import accounts.controller.LMSAccountController;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.UserNotFoundException;
@@ -46,7 +46,7 @@ import accounts.service.UserService;
  * @author kunal.shankar
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 public class LMSRequestTest {
 

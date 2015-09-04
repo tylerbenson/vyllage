@@ -688,16 +688,4 @@ public class UserDetailRepository implements UserDetailsManager,
 				.where(USERS.USER_NAME.eq(userName)).execute();
 	}
 
-	/**
-	 * For testing only, will be removed later
-	 * 
-	 * @param confirmationEmailService
-	 */
-	@Deprecated
-	public void setConfirmationEmailService(
-			ConfirmationEmailService confirmationEmailService) {
-		this.confirmationEmailService = confirmationEmailService;
-
-	}
-
 }

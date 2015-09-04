@@ -18,6 +18,7 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
+import accounts.config.beans.SendConfirmationEmailAfterConnectInterceptor;
 import accounts.mocks.MockTextEncryptor;
 import accounts.mocks.SelfReturningAnswer;
 import accounts.model.Email;
