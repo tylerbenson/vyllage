@@ -1,14 +1,21 @@
 package accounts.repository;
 
+import static org.mockito.Mockito.mock;
+
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.jooq.DSLContext;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -18,7 +25,14 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
 import accounts.Application;
+import accounts.mocks.MockTextEncryptor;
+import accounts.mocks.SelfReturningAnswer;
 import accounts.model.account.AccountNames;
+import accounts.service.ConfirmationEmailService;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import email.EmailBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -26,8 +40,50 @@ import accounts.model.account.AccountNames;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class UserDetailRepositoryTest {
 
+	private UserDetailRepository userDetailRepository;
+
+	private ConfirmationEmailService confirmationEmailService;
+
 	@Inject
-	UserDetailRepository userDetailRepository;
+	private DSLContext sql;
+
+	@Inject
+	private UserOrganizationRoleRepository userOrganizationRoleRepository;
+
+	@Inject
+	private OrganizationRepository organizationRepository;
+
+	@Inject
+	private UserCredentialsRepository credentialsRepository;
+
+	@Inject
+	private AccountSettingRepository accountSettingRepository;
+
+	@Inject
+	private DataSourceTransactionManager txManager;
+
+	private Environment environment = mock(Environment.class);
+
+	private EmailBuilder emailBuilder = mock(EmailBuilder.class,
+			new SelfReturningAnswer());
+
+	private EmailRepository emailRepository = mock(EmailRepository.class);
+
+	private ObjectMapper mapper = new ObjectMapper();
+
+	private TextEncryptor encryptor = new MockTextEncryptor();
+
+	@Before
+	public void setUp() {
+		confirmationEmailService = new ConfirmationEmailService(environment,
+				emailBuilder, mapper, encryptor, emailRepository);
+
+		userDetailRepository = new UserDetailRepository(sql,
+				userOrganizationRoleRepository, organizationRepository,
+				credentialsRepository, accountSettingRepository, txManager,
+				confirmationEmailService);
+
+	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullUser() {

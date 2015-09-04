@@ -65,30 +65,38 @@ public class UserDetailRepository implements UserDetailsManager,
 	// @Autowired
 	private AuthenticationManager authenticationManager;
 
-	@Inject
-	private DSLContext sql;
+	private final DSLContext sql;
 
-	@Inject
-	private UserOrganizationRoleRepository userOrganizationRoleRepository;
+	private final UserOrganizationRoleRepository userOrganizationRoleRepository;
 
-	@Inject
-	private OrganizationRepository organizationRepository;
+	private final OrganizationRepository organizationRepository;
 
-	@Inject
-	private UserCredentialsRepository credentialsRepository;
+	private final UserCredentialsRepository credentialsRepository;
 
-	@Inject
-	private AccountSettingRepository accountSettingRepository;
+	private final AccountSettingRepository accountSettingRepository;
 
-	@Inject
-	private DataSourceTransactionManager txManager;
+	private final DataSourceTransactionManager txManager;
 
 	// Services should not be called from repositories but I don't see any other
 	// way right now, maybe handling this kind of logic with events?
-	@Inject
 	private ConfirmationEmailService confirmationEmailService;
 
-	public UserDetailRepository() {
+	@Inject
+	public UserDetailRepository(
+			DSLContext sql,
+			final UserOrganizationRoleRepository userOrganizationRoleRepository,
+			final OrganizationRepository organizationRepository,
+			final UserCredentialsRepository credentialsRepository,
+			final AccountSettingRepository accountSettingRepository,
+			final DataSourceTransactionManager txManager,
+			final ConfirmationEmailService confirmationEmailService) {
+		this.sql = sql;
+		this.userOrganizationRoleRepository = userOrganizationRoleRepository;
+		this.organizationRepository = organizationRepository;
+		this.credentialsRepository = credentialsRepository;
+		this.accountSettingRepository = accountSettingRepository;
+		this.txManager = txManager;
+		this.confirmationEmailService = confirmationEmailService;
 	}
 
 	/**
@@ -678,6 +686,18 @@ public class UserDetailRepository implements UserDetailsManager,
 	protected void setForcePasswordReset(String userName, boolean value) {
 		sql.update(USERS).set(USERS.RESET_PASSWORD_ON_NEXT_LOGIN, value)
 				.where(USERS.USER_NAME.eq(userName)).execute();
+	}
+
+	/**
+	 * For testing only, will be removed later
+	 * 
+	 * @param confirmationEmailService
+	 */
+	@Deprecated
+	public void setConfirmationEmailService(
+			ConfirmationEmailService confirmationEmailService) {
+		this.confirmationEmailService = confirmationEmailService;
+
 	}
 
 }

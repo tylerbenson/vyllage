@@ -7,8 +7,6 @@ import org.apache.commons.mail.EmailException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,6 +18,8 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
+import accounts.mocks.MockTextEncryptor;
+import accounts.mocks.SelfReturningAnswer;
 import accounts.model.Email;
 import accounts.repository.EmailRepository;
 import accounts.service.ConfirmationEmailService;
@@ -99,43 +99,6 @@ public class SendConfirmationEmailAfterConnectInterceptorTest {
 
 		Mockito.verify(emailRepository).save(Mockito.any(Email.class));
 		Mockito.verify(emailBuilder).send();
-
-	}
-
-	/**
-	 * From
-	 * https://stackoverflow.com/questions/8501920/how-to-mock-a-builder-with
-	 * -mockito
-	 */
-	class SelfReturningAnswer implements Answer<Object> {
-
-		@Override
-		public Object answer(InvocationOnMock invocation) throws Throwable {
-			Object mock = invocation.getMock();
-			if (invocation.getMethod().getReturnType().isInstance(mock)) {
-				return mock;
-			} else {
-				return Mockito.RETURNS_DEFAULTS.answer(invocation);
-			}
-		}
-	}
-
-	/**
-	 * Mock encryptor for Solano, since it doesn't support JCE8...
-	 * 
-	 * @author uh
-	 */
-	class MockTextEncryptor implements TextEncryptor {
-
-		@Override
-		public String encrypt(String text) {
-			return text;
-		}
-
-		@Override
-		public String decrypt(String encryptedText) {
-			return encryptedText;
-		}
 
 	}
 

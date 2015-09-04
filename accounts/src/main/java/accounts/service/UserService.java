@@ -152,6 +152,7 @@ public class UserService {
 
 		// note, for UserOrganizationRole there's no userId until it's
 		// saved.
+		Assert.notNull(randomPasswordGenerator);
 		List<User> users = parsedAccounts
 				.stream()
 				.map(pa -> new User(null, pa.getFirstName(),
@@ -947,10 +948,6 @@ public class UserService {
 		signInUtil.signIn(email);
 	}
 
-	public void setEmailBuilder(EmailBuilder emailBuilder) {
-		this.emailBuilder = emailBuilder;
-	}
-
 	private void createReceiveAdviceSetting(boolean receiveAdvice, User newUser) {
 
 		AccountSetting setting = new AccountSetting(null, newUser.getUserId(),
@@ -958,6 +955,28 @@ public class UserService {
 						.name().toLowerCase());
 
 		this.accountSettingsService.setAccountSetting(newUser, setting);
+	}
+
+	/**
+	 * For testing only, will be removed later.
+	 * 
+	 * @param detailRepository
+	 */
+	@Deprecated
+	public void setEmailBuilder(@NonNull EmailBuilder emailBuilder) {
+		this.emailBuilder = emailBuilder;
+	}
+
+	/**
+	 * For testing only, will be removed later.
+	 * 
+	 * @param detailRepository
+	 */
+	@Deprecated
+	public void setUserDetailsRepository(
+			@NonNull UserDetailRepository detailRepository) {
+		userRepository = detailRepository;
+
 	}
 
 }
