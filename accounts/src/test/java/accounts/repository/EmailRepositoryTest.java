@@ -45,6 +45,16 @@ public class EmailRepositoryTest {
 	}
 
 	@Test
+	public void testGetEmailsForUserNoEmailsFound() {
+		Long userId = 42L;
+
+		List<Email> emails = repository.getByUserId(userId);
+
+		assertNotNull(emails);
+		assertTrue(emails.isEmpty());
+	}
+
+	@Test
 	public void testSaveEmail() {
 		Long userId = 0L;
 		String emailAddress = "testEmail@mail.com";
