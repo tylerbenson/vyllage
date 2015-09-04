@@ -81,7 +81,7 @@ public class EmailController {
 
 		if (emailNotFound || emailsAreDifferent || usersAreDifferent) {
 			IllegalArgumentException e = new IllegalArgumentException("User: "
-					+ user + " provided and invalid link: " + confirmationLink);
+					+ user + " provided an invalid link: " + confirmationLink);
 
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);

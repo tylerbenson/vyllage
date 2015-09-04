@@ -47,11 +47,7 @@ public class SendConfirmationEmailAfterConnectInterceptor implements
 		// emails differ, must confirm
 		if (!user.getUsername().equalsIgnoreCase(emailString)) {
 
-			Email email = new Email();
-			email.setConfirmed(false);
-			email.setDefaultEmail(false);
-			email.setEmail(emailString);
-			email.setUserId(user.getUserId());
+			Email email = new Email(user.getUserId(), emailString, false, false);
 
 			logger.info("Sending confirmation email: " + email
 					+ " for Facebook connection.");

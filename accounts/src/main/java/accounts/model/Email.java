@@ -13,6 +13,25 @@ public class Email {
 	private boolean defaultEmail;
 	private boolean confirmed;
 
+	public Email(@NonNull Long emailId, @NonNull Long userId,
+			@NonNull String email, boolean defaultEmail, boolean confirmed) {
+		super();
+		this.emailId = emailId;
+		this.userId = userId;
+		this.email = email;
+		this.defaultEmail = defaultEmail;
+		this.confirmed = confirmed;
+	}
+
+	public Email(@NonNull Long userId, @NonNull String email,
+			boolean defaultEmail, boolean confirmed) {
+		super();
+		this.userId = userId;
+		this.email = email;
+		this.defaultEmail = defaultEmail;
+		this.confirmed = confirmed;
+	}
+
 	public Long getEmailId() {
 		return emailId;
 	}
@@ -52,4 +71,5 @@ public class Email {
 	public void setConfirmed(boolean confirmed) {
 		this.confirmed = confirmed;
 	}
+
 }

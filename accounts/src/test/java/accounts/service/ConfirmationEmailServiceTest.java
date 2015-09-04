@@ -63,11 +63,10 @@ public class ConfirmationEmailServiceTest {
 		when(user.getUsername()).thenReturn(userName);
 		when(user.getFirstName()).thenReturn(firstName);
 
-		Email email = new Email();
-		email.setConfirmed(false);
-		email.setDefaultEmail(false);
-		email.setEmail(anotherEmail);
-		email.setUserId(user.getUserId());
+		boolean defaultEmail = false;
+		boolean confirmed = false;
+		Email email = new Email(user.getUserId(), anotherEmail, defaultEmail,
+				confirmed);
 
 		confirmationEmailService.sendConfirmationEmail(user, email);
 		Mockito.verify(emailRepository).save(email);

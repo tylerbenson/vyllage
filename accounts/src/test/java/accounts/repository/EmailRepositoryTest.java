@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -23,6 +25,7 @@ import accounts.model.Email;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class EmailRepositoryTest {
 
 	@Inject
@@ -46,13 +49,12 @@ public class EmailRepositoryTest {
 		Long userId = 0L;
 		String emailAddress = "testEmail@mail.com";
 
-		Email email = new Email();
-		email.setConfirmed(false);
-		email.setDefaultEmail(false);
-		email.setEmailId(null);
+		boolean defaultEmail = false;
+		boolean confirmed = false;
 
-		email.setEmail(emailAddress);
-		email.setUserId(userId);
+		Email email = new Email(userId, emailAddress, defaultEmail, confirmed);
+
+		email.setEmailId(null);
 
 		Email savedEmail = repository.save(email);
 
@@ -116,16 +118,44 @@ public class EmailRepositoryTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetEmailNull() {
-		Email email = new Email();
+
+		boolean defaultEmail = false;
+		boolean confirmed = false;
+
+		Email email = new Email(1L, "a", defaultEmail, confirmed);
 
 		email.setEmail(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetUserIdNull() {
-		Email email = new Email();
+
+		boolean defaultEmail = false;
+		boolean confirmed = false;
+
+		Email email = new Email(1L, "a", defaultEmail, confirmed);
 
 		email.setUserId(null);
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testConstructorEmailNull() {
+
+		boolean defaultEmail = false;
+		boolean confirmed = false;
+
+		new Email(1L, null, defaultEmail, confirmed);
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testConstructorUserIdNull() {
+
+		boolean defaultEmail = false;
+		boolean confirmed = false;
+
+		new Email(null, "a", defaultEmail, confirmed);
 
 	}
 

@@ -16,6 +16,8 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter.XFrameOptionsMode;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import accounts.config.handlers.ConfirmEmailAddressSuccessHandler;
+
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @Configuration
 @EnableWebMvcSecurity
@@ -61,11 +63,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public AddUserAuthenticationSuccessHandler successHandler() {
-		AddUserAuthenticationSuccessHandler successHandler = new AddUserAuthenticationSuccessHandler();
-		successHandler.setDefaultTargetUrl("/resume/");
+	public ConfirmEmailAddressSuccessHandler successHandler() {
 
-		return successHandler;
+		ConfirmEmailAddressSuccessHandler confirmEmailAddressSuccessHandler = new ConfirmEmailAddressSuccessHandler();
+		confirmEmailAddressSuccessHandler.setDefaultTargetUrl("/resume/");
+
+		return confirmEmailAddressSuccessHandler;
 	}
 
 }

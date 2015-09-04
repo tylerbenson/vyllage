@@ -1,9 +1,12 @@
 package accounts.service;
 
 import java.util.Base64;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
+
+import lombok.NonNull;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
@@ -16,6 +19,7 @@ import org.springframework.util.Assert;
 import user.common.User;
 import accounts.model.Email;
 import accounts.model.account.ConfirmEmailLink;
+import accounts.repository.ElementNotFoundException;
 import accounts.repository.EmailRepository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,6 +28,11 @@ import com.newrelic.api.agent.NewRelic;
 
 import email.EmailBuilder;
 
+/**
+ * Service used to save new emails and request confirmation.
+ * 
+ * @author uh
+ */
 @Service
 public class ConfirmationEmailService {
 
@@ -52,7 +61,11 @@ public class ConfirmationEmailService {
 		this.emailRepository = emailRepository;
 	}
 
-	public void sendConfirmationEmail(User user, Email email) {
+	public void sendConfirmationEmail(@NonNull User user, @NonNull Email email) {
+		Assert.notNull(user.getUserId());
+		Assert.notNull(email.getUserId());
+		Assert.notNull(email.getEmail());
+		Assert.isTrue(user.getUserId().equals(email.getUserId()));
 
 		String encodedConfirmEmailLink = this
 				.getEncodedLink(new ConfirmEmailLink(user.getUserId(), email
@@ -139,6 +152,47 @@ public class ConfirmationEmailService {
 
 		run.run();
 
+	}
+
+	/**
+	 * Sets an email as confirmed.
+	 * 
+	 * @param email
+	 */
+	public void confirmEmail(Email email) {
+		email.setConfirmed(true);
+		emailRepository.save(email);
+
+		logger.info("Email " + email + " confirmed.");
+	}
+
+	/**
+	 * Confirms email change for user name.
+	 * 
+	 * @param oldEmail
+	 * @param newEmail
+	 */
+	public void confirmEmailChange(String oldEmail, String newEmail) {
+		Optional<Email> optional = emailRepository.getByEmail(oldEmail);
+
+		if (optional.isPresent()) {
+			Email email = optional.get();
+			email.setConfirmed(true);
+			email.setEmail(newEmail);
+			this.confirmEmail(email);
+		} else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Tried to confirm email change from '") //
+					.append(oldEmail) //
+					.append("' to '").append(newEmail) //
+					.append("' but the old email was not found."); //
+
+			ElementNotFoundException e = new ElementNotFoundException(
+					sb.toString());
+
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
 	}
 
 }

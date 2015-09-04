@@ -113,11 +113,11 @@ public class LMSUserRepository implements LMSUserDetailsService {
 
 			user.setUserId(newRecord.getUserId());
 
-			Email email = new Email();
-			email.setConfirmed(false);
-			email.setDefaultEmail(true);
-			email.setEmail(user.getUsername());
-			email.setUserId(newRecord.getUserId());
+			boolean defaultEmail = true;
+			boolean confirmed = false;
+			Email email = new Email(newRecord.getUserId(), user.getUsername(),
+					defaultEmail, confirmed);
+
 			this.confirmationEmailService.sendConfirmationEmail(user, email);
 
 			credentialsRepository.create(newRecord.getUserId(),

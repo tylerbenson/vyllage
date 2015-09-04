@@ -5,10 +5,13 @@ import static accounts.domain.tables.Emails.EMAILS;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.jooq.DSLContext;
+import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
@@ -24,7 +27,18 @@ public class EmailRepository {
 
 	public List<Email> getByUserId(Long userId) {
 
-		return sql.fetch(EMAILS, EMAILS.USER_ID.eq(userId)).into(Email.class);
+		Result<EmailsRecord> result = sql.fetch(EMAILS,
+				EMAILS.USER_ID.eq(userId));
+
+		if (result == null || result.isEmpty())
+			return Collections.emptyList();
+
+		return result
+				.stream()
+				.map(record -> new Email(record.getEmailId(), record
+						.getUserId(), record.getEmail(), record
+						.getDefaultEmail(), record.getConfirmed()))
+				.collect(Collectors.toList());
 	}
 
 	public Email save(Email email) {
@@ -66,12 +80,9 @@ public class EmailRepository {
 		if (record == null)
 			return Optional.empty();
 
-		Email email = new Email();
-		email.setConfirmed(record.getConfirmed());
-		email.setDefaultEmail(record.getDefaultEmail());
-		email.setEmail(record.getEmail());
-		email.setEmailId(record.getEmailId());
-		email.setUserId(record.getUserId());
+		Email email = new Email(record.getEmailId(), record.getUserId(),
+				record.getEmail(), record.getDefaultEmail(),
+				record.getConfirmed());
 
 		return Optional.of(email);
 	}
