@@ -114,7 +114,7 @@ var Banner = React.createClass({
       errors.push('phoneNumber');
     }
     var pattern = /^\w{1,32}$/; // ref : http://aaronsaray.com/blog/2012/08/07/jquery-validator-twitter-username-validator/
-    if(banner.twitter.length > 140 || pattern.test(banner.twitter) == false ) {
+    if( banner.twitter.length > 0 && (banner.twitter.length > 140 || pattern.test(banner.twitter) == false)  ) {
       errors.push('twitter');
     }
 
