@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -80,20 +79,20 @@ public class AccountController {
 
 	private final EmailRepository emailRepository;
 
+	private final EmailBuilder emailBuilder;
+
 	private final TextEncryptor encryptor;
 
 	private final ObjectMapper mapper;
 
-	@Autowired
-	@Qualifier(value = "accounts.emailBuilder")
-	private EmailBuilder emailBuilder;
-
 	@Inject
-	public AccountController(final Environment environment,
+	public AccountController(
+			final Environment environment,
 			final UserService userService,
 			final DocumentLinkService documentLinkService,
 			final UserContactSuggestionService userContactSuggestionService,
 			final EmailRepository emailRepository,
+			@Qualifier(value = "accounts.emailBuilder") final EmailBuilder emailBuilder,
 			final TextEncryptor encryptor, final ObjectMapper mapper) {
 		super();
 		this.environment = environment;
@@ -101,6 +100,7 @@ public class AccountController {
 		this.documentLinkService = documentLinkService;
 		this.userContactSuggestionService = userContactSuggestionService;
 		this.emailRepository = emailRepository;
+		this.emailBuilder = emailBuilder;
 		this.encryptor = encryptor;
 		this.mapper = mapper;
 	}
@@ -415,7 +415,16 @@ public class AccountController {
 
 		List<Email> byUserId = emailRepository.getByUserId(userId);
 
-		if (byUserId == null || byUserId.isEmpty())
+		// Optional<AccountSetting> accountSetting = accountSettingsService
+		// .getAccountSetting(user, AccountSettingsEnum.phoneNumber.name());
+
+		boolean noEmails = byUserId == null || byUserId.isEmpty();
+
+		// boolean noPhoneNumber = !accountSetting.isPresent()
+		// || (accountSetting.isPresent() && StringUtils
+		// .isBlank(accountSetting.get().getValue()));
+
+		if (noEmails)
 			return false;
 
 		return byUserId.stream().allMatch(e -> e.isConfirmed());
