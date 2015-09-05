@@ -121,9 +121,14 @@
         color: $inverted-text-color;
         font-size: 2em;
       }
-      p.centered {
-        color: $tagline-color;
-        margin-bottom: 2em;
+      p {
+        &.centered {
+          color: $tagline-color;
+          margin-bottom: 2em;
+        }
+        &.error {
+          color: darken($error-background, 20%);
+        }
       }
       .forgot {
         display: block;
