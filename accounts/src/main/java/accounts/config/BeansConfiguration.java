@@ -107,9 +107,11 @@ public class BeansConfiguration {
 	public ConfirmationEmailService confirmationEmailService(
 			Environment environment,
 			@Qualifier("accounts.emailBuilder") EmailBuilder emailBuilder,
-			ObjectMapper mapper, TextEncryptor encryptor,
-			EmailRepository emailRepository) {
+			ObjectMapper mapper,
+			TextEncryptor encryptor,
+			EmailRepository emailRepository,
+			@Qualifier(value = "accounts.ExecutorService") ExecutorService executorService) {
 		return new ConfirmationEmailService(environment, emailBuilder, mapper,
-				encryptor, emailRepository);
+				encryptor, emailRepository, executorService);
 	}
 }

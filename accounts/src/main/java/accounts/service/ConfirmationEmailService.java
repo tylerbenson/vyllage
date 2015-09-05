@@ -2,6 +2,7 @@ package accounts.service;
 
 import java.util.Base64;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -10,6 +11,7 @@ import lombok.NonNull;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.util.Assert;
@@ -46,15 +48,22 @@ public class ConfirmationEmailService {
 
 	private final EmailRepository emailRepository;
 
+	private ExecutorService executorService;
+
 	@Inject
-	public ConfirmationEmailService(final Environment environment,
-			final EmailBuilder emailBuilder, final ObjectMapper mapper,
-			final TextEncryptor encryptor, final EmailRepository emailRepository) {
+	public ConfirmationEmailService(
+			@NonNull final Environment environment,
+			@NonNull final EmailBuilder emailBuilder,
+			@NonNull final ObjectMapper mapper,
+			@NonNull final TextEncryptor encryptor,
+			@NonNull final EmailRepository emailRepository,
+			@NonNull @Qualifier(value = "accounts.ExecutorService") ExecutorService executorService) {
 		this.environment = environment;
 		this.emailBuilder = emailBuilder;
 		this.mapper = mapper;
 		this.encryptor = encryptor;
 		this.emailRepository = emailRepository;
+		this.executorService = executorService;
 	}
 
 	public void sendConfirmationEmail(@NonNull User user, @NonNull Email email) {
@@ -114,7 +123,7 @@ public class ConfirmationEmailService {
 	protected void sendEmail(final String email,
 			final String encodedConfirmEmailLink, final String firstName) {
 
-		String domain = environment.getProperty("vyllage.domain",
+		final String domain = environment.getProperty("vyllage.domain",
 				"www.vyllage.com");
 
 		final String txt = "https://" + domain
@@ -140,13 +149,13 @@ public class ConfirmationEmailService {
 						.addTemplateVariable("url", txt)
 						.addTemplateVariable("encodedLink",
 								encodedConfirmEmailLink).send();
-			} catch (Exception e) {
+			} catch (EmailException e) {
 				logger.severe(ExceptionUtils.getStackTrace(e));
 				NewRelic.noticeError(e);
 			}
 		};
 
-		run.run();
+		executorService.execute(run);
 
 	}
 

@@ -3,10 +3,14 @@ package accounts.config;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.concurrent.ExecutorService;
+
 import org.apache.commons.mail.EmailException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -46,11 +50,14 @@ public class SendConfirmationEmailAfterConnectInterceptorTest {
 
 	private TextEncryptor encryptor = new MockTextEncryptor();
 
+	private ExecutorService executorService = mock(ExecutorService.class);
+
 	@Before
 	public void setUp() throws Exception {
 
 		confirmationEmailService = new ConfirmationEmailService(environment,
-				emailBuilder, mapper, encryptor, emailRepository);
+				emailBuilder, mapper, encryptor, emailRepository,
+				executorService);
 
 		interceptor = new SendConfirmationEmailAfterConnectInterceptor(
 				confirmationEmailService);
@@ -61,6 +68,16 @@ public class SendConfirmationEmailAfterConnectInterceptorTest {
 				.thenReturn("no-reply@vyllage.com");
 		when(environment.getProperty("email.from.userName", "Chief of Vyllage"))
 				.thenReturn("Chief of Vyllage");
+
+		Mockito.doAnswer(new Answer<Void>() {
+
+			@Override
+			public Void answer(InvocationOnMock invocation) throws Throwable {
+				Runnable run = invocation.getArgumentAt(0, Runnable.class);
+				run.run();
+				return null;
+			}
+		}).when(executorService).execute(Mockito.any(Runnable.class));
 
 	}
 
@@ -99,7 +116,7 @@ public class SendConfirmationEmailAfterConnectInterceptorTest {
 		interceptor.postConnect(connection, request);
 
 		Mockito.verify(emailRepository).save(Mockito.any(Email.class));
-		Mockito.verify(emailBuilder).send();
+		Mockito.verify(emailBuilder, Mockito.timeout(500)).send();
 
 	}
 

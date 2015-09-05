@@ -136,7 +136,7 @@ public class UserService {
 
 	public void batchCreateUsers(BatchAccount batchAccount, User loggedInUser,
 			boolean forcePasswordChange) throws IllegalArgumentException,
-			EmailException, IOException {
+			IOException {
 
 		final boolean enabled = true;
 		final boolean accountNonExpired = true;
@@ -211,21 +211,35 @@ public class UserService {
 
 				this.update(newUpdateUser);
 
-				emailBuilder
-						.to(existingUser.getUsername())
-						.from(environment.getProperty("email.from",
-								"no-reply@vyllage.com"))
-						.fromUserName(
-								environment.getProperty("email.from.userName",
-										"Chief of Vyllage"))
-						.subject("Account Creation - Vyllage.com")
-						.setNoHtmlMessage(
-								"Your account has been created successfuly. \\n Your password is: "
-										+ user.getPassword())
-						.templateName("email-account-created")
-						.addTemplateVariable("password", newPassword)
-						.addTemplateVariable("firstName", user.getFirstName())
-						.send();
+				// this works? Ok.
+				final User exUser = existingUser;
+
+				Runnable run = () -> {
+
+					try {
+						emailBuilder
+								.to(exUser.getUsername())
+								.from(environment.getProperty("email.from",
+										"no-reply@vyllage.com"))
+								.fromUserName(
+										environment.getProperty(
+												"email.from.userName",
+												"Chief of Vyllage"))
+								.subject("Account Creation - Vyllage.com")
+								.setNoHtmlMessage(
+										"Your account has been created successfuly. \\n Your password is: "
+												+ user.getPassword())
+								.templateName("email-account-created")
+								.addTemplateVariable("password", newPassword)
+								.addTemplateVariable("firstName",
+										user.getFirstName()).send();
+					} catch (EmailException e) {
+						logger.severe(ExceptionUtils.getStackTrace(e));
+						NewRelic.noticeError(e);
+					}
+				};
+
+				executorService.execute(run);
 
 				// remove the user from the batch
 				iterator.remove();
@@ -285,39 +299,61 @@ public class UserService {
 	}
 
 	protected void sendAutomatedAccountCreationEmail(String email,
-			String password, String firstName) throws EmailException {
-		emailBuilder
-				.to(email)
-				.from(environment.getProperty("email.from",
-						"no-reply@vyllage.com"))
-				.fromUserName(
-						environment.getProperty("email.from.userName",
-								"Chief of Vyllage"))
-				.subject("Account Creation - Vyllage.com")
-				.setNoHtmlMessage(
-						"Your account has been created successfuly. \\n Your password is: "
-								+ password)
-				.templateName("email-account-created")
-				.addTemplateVariable("password", password)
-				.addTemplateVariable("firstName", firstName).send();
+			String password, String firstName) {
+		Runnable run = () -> {
+
+			try {
+				emailBuilder
+						.to(email)
+						.from(environment.getProperty("email.from",
+								"no-reply@vyllage.com"))
+						.fromUserName(
+								environment.getProperty("email.from.userName",
+										"Chief of Vyllage"))
+						.subject("Account Creation - Vyllage.com")
+						.setNoHtmlMessage(
+								"Your account has been created successfuly. \\n Your password is: "
+										+ password)
+						.templateName("email-account-created")
+						.addTemplateVariable("password", password)
+						.addTemplateVariable("firstName", firstName).send();
+			} catch (EmailException e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
+		};
+
+		executorService.execute(run);
+
 	}
 
 	protected void sendUserRegisteredEmail(String email, String password,
-			String firstName) throws EmailException {
-		emailBuilder
-				.to(email)
-				.from(environment.getProperty("email.from",
-						"no-reply@vyllage.com"))
-				.fromUserName(
-						environment.getProperty("email.from.userName",
-								"Chief of Vyllage"))
-				.subject("Account Creation - Vyllage.com")
-				.setNoHtmlMessage(
-						"Your account has been created successfuly. \\n Your password is: "
-								+ password)
-				.templateName("email-user-registered")
-				.addTemplateVariable("password", password)
-				.addTemplateVariable("firstName", firstName).send();
+			String firstName) {
+
+		Runnable run = () -> {
+
+			try {
+				emailBuilder
+						.to(email)
+						.from(environment.getProperty("email.from",
+								"no-reply@vyllage.com"))
+						.fromUserName(
+								environment.getProperty("email.from.userName",
+										"Chief of Vyllage"))
+						.subject("Account Creation - Vyllage.com")
+						.setNoHtmlMessage(
+								"Your account has been created successfuly. \\n Your password is: "
+										+ password)
+						.templateName("email-user-registered")
+						.addTemplateVariable("password", password)
+						.addTemplateVariable("firstName", firstName).send();
+			} catch (EmailException e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
+		};
+
+		executorService.execute(run);
 	}
 
 	protected void updateUserRolesByOrganization(
@@ -657,13 +693,8 @@ public class UserService {
 
 		createReceiveAdviceSetting(registerForm.getReceiveAdvice(), newUser);
 
-		try {
-			sendUserRegisteredEmail(newUser.getUsername(),
-					registerForm.getPassword(), newUser.getFirstName());
-		} catch (EmailException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
+		sendUserRegisteredEmail(newUser.getUsername(),
+				registerForm.getPassword(), newUser.getFirstName());
 
 		return newUser;
 	}
@@ -718,14 +749,8 @@ public class UserService {
 
 		createReceiveAdviceSetting(registerForm.getReceiveAdvice(), newUser);
 
-		try {
-			sendUserRegisteredEmail(newUser.getUsername(),
-					registerForm.getPassword(), newUser.getFirstName());
-		} catch (EmailException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
-
+		sendUserRegisteredEmail(newUser.getUsername(),
+				registerForm.getPassword(), newUser.getFirstName());
 		return newUser;
 	}
 
@@ -912,22 +937,34 @@ public class UserService {
 				+ environment.getProperty("vyllage.domain", "www.vyllage.com")
 				+ "/account/change-email/";
 
-		emailBuilder
-				.to(email)
-				.from(environment.getProperty("email.from",
-						"no-reply@vyllage.com"))
-				.fromUserName(
-						environment.getProperty("email.from.userName",
-								"Chief of Vyllage"))
-				.subject("Email Change Confirmation")
-				.setNoHtmlMessage(
-						"We received a request to change your email if you requested it please copy and paste the link to confirm. \\n"
-								+ url + "?changeEmail=" + encodedString)
-				.templateName("email-change-email-confirmation")
-				.addTemplateVariable("userName", user.getFirstName())
-				.addTemplateVariable("newEmail", link.getNewEmail())
-				.addTemplateVariable("url", url)
-				.addTemplateVariable("changeEmail", encodedString).send();
+		Runnable run = () -> {
+
+			try {
+
+				emailBuilder
+						.to(email)
+						.from(environment.getProperty("email.from",
+								"no-reply@vyllage.com"))
+						.fromUserName(
+								environment.getProperty("email.from.userName",
+										"Chief of Vyllage"))
+						.subject("Email Change Confirmation")
+						.setNoHtmlMessage(
+								"We received a request to change your email if you requested it please copy and paste the link to confirm. \\n"
+										+ url + "?changeEmail=" + encodedString)
+						.templateName("email-change-email-confirmation")
+						.addTemplateVariable("userName", user.getFirstName())
+						.addTemplateVariable("newEmail", link.getNewEmail())
+						.addTemplateVariable("url", url)
+						.addTemplateVariable("changeEmail", encodedString)
+						.send();
+			} catch (EmailException e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
+		};
+
+		executorService.execute(run);
 	}
 
 	public void changeEmail(@NonNull User user, @NonNull String email) {

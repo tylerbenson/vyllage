@@ -9,6 +9,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.util.concurrent.ExecutorService;
+
 import javax.inject.Inject;
 
 import oauth.lti.LMSRequest;
@@ -21,8 +23,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.core.env.Environment;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -36,11 +39,13 @@ import user.common.User;
 import user.common.lms.LMSUser;
 import accounts.ApplicationTestConfig;
 import accounts.controller.LMSAccountController;
+import accounts.mocks.SelfReturningAnswer;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
+import email.EmailBuilder;
 
 /**
  * @author kunal.shankar
@@ -54,21 +59,34 @@ public class LMSRequestTest {
 	private SignInUtil signInUtil = mock(SignInUtil.class);
 	private LMSService lmsService = mock(LMSService.class);
 	private LTIKeyRepository ltiKeyRepository = mock(LTIKeyRepository.class);
+	private EmailBuilder emailBuilder = Mockito.mock(EmailBuilder.class,
+			new SelfReturningAnswer());
 
 	private MockMvc springMvc;
-	@Autowired
-	WebApplicationContext wContext;
-	@Autowired
-	MockHttpSession session;
-	@Autowired
-	MockHttpServletRequest request;
+
+	@Inject
+	private WebApplicationContext wContext;
+
+	@Inject
+	private MockHttpSession session;
+
+	@Inject
+	private MockHttpServletRequest request;
+
+	@Inject
+	private Environment environment;
 
 	@Inject
 	private UserService service;
+
 	@Inject
 	private OrganizationRepository organizationRepository;
+
 	@Inject
 	private LTIKeyRepository repository;
+
+	@Inject
+	private ExecutorService executorService;
 
 	private static final String LTI_INSTANCE_GUID = "2c2d9edb89c64a6ca77ed4599042dsde";
 	private static final String LTI_INSTANCE_TYPE = "Blackboard";
@@ -92,7 +110,9 @@ public class LMSRequestTest {
 	@Before
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
-		lmsAccountcontoller = new LMSAccountController(signInUtil, lmsService);
+		lmsAccountcontoller = new LMSAccountController(environment, signInUtil,
+				lmsService, emailBuilder, executorService);
+
 	}
 
 	@Test

@@ -6,11 +6,14 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.commons.mail.EmailException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 
@@ -42,11 +45,24 @@ public class ConfirmationEmailServiceTest {
 
 	private TextEncryptor encryptor = new MockTextEncryptor();
 
+	private ExecutorService executorService = mock(ExecutorService.class);
+
 	@Before
 	public void setUp() throws Exception {
 
 		confirmationEmailService = new ConfirmationEmailService(environment,
-				emailBuilder, mapper, encryptor, emailRepository);
+				emailBuilder, mapper, encryptor, emailRepository,
+				executorService);
+
+		Mockito.doAnswer(new Answer<Void>() {
+
+			@Override
+			public Void answer(InvocationOnMock invocation) throws Throwable {
+				Runnable run = invocation.getArgumentAt(0, Runnable.class);
+				run.run();
+				return null;
+			}
+		}).when(executorService).execute(Mockito.any(Runnable.class));
 	}
 
 	@Test
