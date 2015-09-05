@@ -128,7 +128,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(127, 1, 3, 'Its a me, Mario!', CURRENT_TIMESTAMP());
 insert into DOCUMENTS.comments(section_Id, section_Version, user_id, comment_Text, last_Modified) values(128, 1, 2, 'Well played.', CURRENT_TIMESTAMP());
 
-insert into DOCUMENTS.suggestions(section_Id, section_Version, user_id, json_Document, last_Modified) values (127, 1, 0, '{
+insert into DOCUMENTS.section_advices(section_Id, section_Version, user_id, json_Document, last_Modified) values (127, 1, 0, '{
 	"type": "JobExperienceSection",
 	"title": "experience",
 	"sectionId": 127,

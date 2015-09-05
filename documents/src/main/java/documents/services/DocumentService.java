@@ -24,7 +24,7 @@ import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
-import documents.model.Suggestion;
+import documents.model.SectionAdvice;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
 import documents.model.document.sections.DocumentSection;
@@ -33,7 +33,7 @@ import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
-import documents.repository.SuggestionRepository;
+import documents.repository.SectionAdviceRepository;
 import documents.utilities.OrderSectionValidator;
 
 /**
@@ -53,7 +53,7 @@ public class DocumentService {
 
 	private CommentRepository commentRepository;
 
-	private SuggestionRepository suggestionRepository;
+	private SectionAdviceRepository sectionAdviceRepository;
 
 	private AccountService accountService;
 
@@ -65,7 +65,7 @@ public class DocumentService {
 	public DocumentService(DocumentRepository documentRepository,
 			DocumentSectionRepository documentSectionRepository,
 			CommentRepository commentRepository,
-			SuggestionRepository suggestionRepository,
+			SectionAdviceRepository suggestionRepository,
 			AccountService accountService,
 			OrderSectionValidator orderSectionValidator,
 			DocumentAccessRepository documentAccessRepository) {
@@ -73,7 +73,7 @@ public class DocumentService {
 		this.documentRepository = documentRepository;
 		this.documentSectionRepository = documentSectionRepository;
 		this.commentRepository = commentRepository;
-		this.suggestionRepository = suggestionRepository;
+		this.sectionAdviceRepository = suggestionRepository;
 		this.accountService = accountService;
 		this.orderSectionValidator = orderSectionValidator;
 		this.documentAccessRepository = documentAccessRepository;
@@ -438,38 +438,37 @@ public class DocumentService {
 		return header;
 	}
 
-	public List<Suggestion> getSectionSuggestions(HttpServletRequest request,
+	public List<SectionAdvice> getSectionAdvices(HttpServletRequest request,
 			Long sectionId) {
 
-		List<Suggestion> suggestions = suggestionRepository
-				.getSuggestions(sectionId);
+		List<SectionAdvice> sectionAdvices = sectionAdviceRepository
+				.getSectionAdvices(sectionId);
 
-		if (suggestions == null || suggestions.isEmpty())
+		if (sectionAdvices == null || sectionAdvices.isEmpty())
 			return Collections.emptyList();
 
 		List<AccountContact> names = accountService.getContactDataForUsers(
-				request,
-				suggestions.stream().map(s -> s.getUserId())
+				request, sectionAdvices.stream().map(s -> s.getUserId())
 						.collect(Collectors.toList()));
 
-		for (Suggestion suggestion : suggestions) {
+		for (SectionAdvice sectionAdvice : sectionAdvices) {
 			Optional<AccountContact> accountContact = names
 					.stream()
-					.filter(an -> an.getUserId().equals(suggestion.getUserId()))
-					.findFirst();
+					.filter(an -> an.getUserId().equals(
+							sectionAdvice.getUserId())).findFirst();
 
-			accountContact.ifPresent(an -> suggestion.setUserName(an
+			accountContact.ifPresent(an -> sectionAdvice.setUserName(an
 					.getFirstName() + " " + an.getLastName()));
 
-			accountContact.ifPresent(an -> suggestion.setAvatarUrl(an
+			accountContact.ifPresent(an -> sectionAdvice.setAvatarUrl(an
 					.getAvatarUrl()));
 		}
 
-		return suggestions;
+		return sectionAdvices;
 	}
 
-	public Suggestion saveSuggestion(Suggestion suggestion) {
-		return suggestionRepository.save(suggestion);
+	public SectionAdvice saveSectionAdvice(SectionAdvice sectionAdvice) {
+		return sectionAdviceRepository.save(sectionAdvice);
 	}
 
 }
