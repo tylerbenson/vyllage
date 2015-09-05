@@ -4,6 +4,7 @@ var Textarea = require('react-textarea-autosize');
 var Subheader = require('./Subheader');
 var AddSection = require('../AddSection');
 var Avatar = require('../../avatar');
+var EditAvatar = require('../../avatar/EditAvatar');
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
 var filter = require('lodash.filter');
@@ -30,7 +31,7 @@ var Banner = React.createClass({
     //For delayed header response
     //TODO: should be converted into a promise on the store side
     if (nextProps !== this.props) {
-      this.setState({fields: nextProps.header});      
+      this.setState({fields: nextProps.header});
       if( nextProps.settings.length ){
         var fields = this.state.fields  ;
         nextProps.settings.forEach(function(field){
@@ -39,7 +40,7 @@ var Banner = React.createClass({
           }
         });
         this.setState({fields: fields});
-      }     
+      }
     }
   },
   onScroll: function(){
@@ -115,7 +116,7 @@ var Banner = React.createClass({
       errors.push('twitter');
     }
 
-    if(errors.length === 0) {      
+    if(errors.length === 0) {
       this.setState({fields: banner});
       settingActions.updateSettings(banner);
       this.toggleEditable(false);
@@ -194,7 +195,9 @@ var Banner = React.createClass({
       <section className={(header.owner?'':'guest ') + 'banner'} ref="banner">
         <div className ="content">
           <div className="avatar-container">
-            <Avatar src={header.avatarUrl} size="80" borderWidth="3" />
+            <Avatar src={header.avatarUrl} size="80" borderWidth="3">
+              {this.state.editMode ? <EditAvatar /> : null}
+            </Avatar>
           </div>
           <div className="info">
             <div className="name">
