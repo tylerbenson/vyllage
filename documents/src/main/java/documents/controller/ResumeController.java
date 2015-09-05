@@ -51,7 +51,7 @@ import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
 import documents.model.LinkPermissions;
-import documents.model.Suggestion;
+import documents.model.SectionAdvice;
 import documents.model.UserNotification;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.document.sections.DocumentSection;
@@ -516,64 +516,65 @@ public class ResumeController {
 	}
 
 	// check read because this is for others
-	@RequestMapping(value = "{documentId}/section/{sectionId}/suggestion", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/advice", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody List<Suggestion> getSectionSuggestions(
+	public @ResponseBody List<SectionAdvice> getSectionAdvices(
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@AuthenticationPrincipal User user) {
 
-		return documentService.getSectionSuggestions(request, sectionId);
+		return documentService.getSectionAdvices(request, sectionId);
 
 	}
 
 	// check read because this is for others
-	@RequestMapping(value = "{documentId}/section/{sectionId}/suggestion", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/advice", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@CheckReadAccess
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody Suggestion saveSectionSuggestion(
+	public @ResponseBody SectionAdvice saveSectionAdvice(
 			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@AuthenticationPrincipal final User user,
-			@RequestBody final Suggestion suggestion) {
+			@RequestBody final SectionAdvice sectionAdvice) {
 
 		// some assertions, if these are not present something's wrong with the
 		// client
-		Assert.isTrue(suggestion.getSectionVersion() != null);
-		Assert.isTrue(suggestion.getDocumentSection() != null);
-		Assert.isTrue(suggestion.getSectionId().equals(sectionId));
+		Assert.isTrue(sectionAdvice.getSectionVersion() != null);
+		Assert.isTrue(sectionAdvice.getDocumentSection() != null);
+		Assert.isTrue(sectionAdvice.getSectionId().equals(sectionId));
 
-		if (suggestion.getUserId() == null)
-			suggestion.setUserId(user.getUserId());
+		if (sectionAdvice.getUserId() == null)
+			sectionAdvice.setUserId(user.getUserId());
 
-		return documentService.saveSuggestion(suggestion);
+		return documentService.saveSectionAdvice(sectionAdvice);
 
 	}
 
 	// check read because this is for others
-	@RequestMapping(value = "{documentId}/section/{sectionId}/suggestion/{suggestionId}", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/advice/{sectionAdviceId}", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
 	@CheckReadAccess
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody Suggestion updateSectionSuggestion(
+	public @ResponseBody SectionAdvice updateSectionAdvice(
 			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
-			@PathVariable final Long suggestionId,
+			@PathVariable final Long sectionAdviceId,
 			@AuthenticationPrincipal final User user,
-			@RequestBody final Suggestion suggestion) {
+			@RequestBody final SectionAdvice sectionAdvice) {
 
 		// some assertions, if these are not present something's wrong with the
 		// client
-		Assert.isTrue(suggestion.getSectionId() != null);
-		Assert.isTrue(suggestion.getSectionVersion() != null);
-		Assert.isTrue(suggestion.getDocumentSection() != null);
-		Assert.isTrue(suggestion.getSectionId().equals(sectionId));
-		Assert.isTrue(suggestion.getSuggestionId().equals(suggestionId));
+		Assert.isTrue(sectionAdvice.getSectionId() != null);
+		Assert.isTrue(sectionAdvice.getSectionVersion() != null);
+		Assert.isTrue(sectionAdvice.getDocumentSection() != null);
+		Assert.isTrue(sectionAdvice.getSectionId().equals(sectionId));
+		Assert.isTrue(sectionAdvice.getSectionAdviceId()
+				.equals(sectionAdviceId));
 
-		if (suggestion.getUserId() == null)
-			suggestion.setUserId(user.getUserId());
+		if (sectionAdvice.getUserId() == null)
+			sectionAdvice.setUserId(user.getUserId());
 
-		return documentService.saveSuggestion(suggestion);
+		return documentService.saveSectionAdvice(sectionAdvice);
 
 	}
 

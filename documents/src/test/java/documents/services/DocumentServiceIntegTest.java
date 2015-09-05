@@ -35,7 +35,7 @@ import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
-import documents.repository.SuggestionRepository;
+import documents.repository.SectionAdviceRepository;
 import documents.utilities.OrderSectionValidator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,7 +54,7 @@ public class DocumentServiceIntegTest {
 	private CommentRepository commentRepository;
 
 	@Inject
-	private SuggestionRepository suggestionRepository;
+	private SectionAdviceRepository sectionAdviceRepository;
 
 	@Inject
 	private AccountService accountService;
@@ -72,7 +72,7 @@ public class DocumentServiceIntegTest {
 
 		service = new DocumentService(documentRepository,
 				documentSectionRepository, commentRepository,
-				suggestionRepository, accountService, orderSectionValidator,
+				sectionAdviceRepository, accountService, orderSectionValidator,
 				documentAccessRepository);
 	}
 
@@ -182,7 +182,7 @@ public class DocumentServiceIntegTest {
 
 		DocumentService service = new DocumentService(documentRepository,
 				documentSectionRepository, commentRepository,
-				suggestionRepository, accountService, orderSectionValidator,
+				sectionAdviceRepository, accountService, orderSectionValidator,
 				documentAccessRepository);
 
 		DocumentHeader resumeHeader = service.getDocumentHeader(request,
