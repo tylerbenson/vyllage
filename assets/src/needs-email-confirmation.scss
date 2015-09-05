@@ -1,0 +1,100 @@
+@import "./components/common/variables";
+
+@import "jeet/scss/jeet/index";
+@import "./components/common/utilities";
+@import "./components/common/defaults";
+@import "./components/common/typography";
+
+.error {
+
+  header {
+    background: none;
+    padding: 3em 1em;
+    position: static;
+    text-align: center;
+
+    .logo {
+      float: none;
+      font-size: 1.5em;
+
+      span {
+        color: $primary-color;
+      }
+    }
+  }
+
+  .message {
+    margin-bottom: 5em;
+    text-align: center;
+  }
+
+  h1 {
+    color: $secondary-color;
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 0.15em;
+    margin-top: 1.15em;
+  }
+
+  p {
+    font-size: 1.35em;
+
+    a:hover {
+      border-bottom: $primary-color dashed 1px;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    transition: none;
+  }
+
+  .timestamp {
+    color: lighten($secondary-color, 10%);
+  }
+
+  .exception {
+    display: block;
+    line-height: 1.5;
+    margin: 0.5em 0 1.5em 0;
+
+    h2 {
+      color: $error-color;
+      font-family: monospace;
+    }
+  }
+
+  .stack-trace {
+    background: #222;
+    border: none;
+    color: $body-background;
+    font-family: monospace;
+    font-size: 0.85em;
+    line-height: 1.75;
+    margin-bottom: 3em;
+    max-height: 480px;
+    padding: 1em;
+    transition: none;
+  }
+
+  footer {
+    background: none;
+
+    .logo {
+      float: left;
+
+      span {
+        display: none;
+      }
+    }
+
+    nav ul li a {
+      color: lighten($secondary-color, 20%);
+
+      &:hover {
+        text-decoration: none;
+        color: lighten($secondary-color, 10%);
+      }
+    }
+  }
+}

@@ -7,10 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -20,27 +21,27 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
-import accounts.Application;
+import accounts.ApplicationTestConfig;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.AccountSettingRepository;
 import accounts.repository.UserDetailRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserContactSuggestionServiceTest {
 
 	private static final boolean FORCE_PASSWORD_CHANGE = false;
 
-	@Autowired
+	@Inject
 	private UserContactSuggestionService userContactSuggestionService;
 
-	@Autowired
-	private UserDetailRepository userRepository;
+	@Inject
+	private UserDetailRepository userDetailRepository;
 
-	@Autowired
+	@Inject
 	private AccountSettingRepository accountSettingRepository;
 
 	@Test(expected = IllegalArgumentException.class)
@@ -372,9 +373,9 @@ public class UserContactSuggestionServiceTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		userRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
-		User loadedUser = userRepository.loadUserByUsername(userName);
+		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 		return loadedUser;
 	}
 
@@ -392,9 +393,9 @@ public class UserContactSuggestionServiceTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		userRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
-		User loadedUser = userRepository.loadUserByUsername(userName);
+		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 		return loadedUser;
 	}
 
@@ -412,9 +413,9 @@ public class UserContactSuggestionServiceTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		userRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
-		User loadedUser = userRepository.loadUserByUsername(userName);
+		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
 		return loadedUser;
 	}

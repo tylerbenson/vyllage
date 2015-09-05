@@ -2,13 +2,15 @@ package accounts.service;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import org.apache.commons.mail.EmailException;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -17,23 +19,30 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import user.common.User;
 import user.common.constants.RolesEnum;
-import accounts.Application;
+import accounts.ApplicationTestConfig;
 import accounts.model.BatchAccount;
 import accounts.repository.UserNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class UserServiceTest {
 
 	private static final boolean FORCE_PASSWORD_CHANGE = false;
 
-	@Autowired
+	@Inject
 	private UserService service;
 
 	@Mock
 	private User user;
+
+	@BeforeClass
+	public static void init() {
+		System.setProperty("spring.thymeleaf.prefix",
+				"file:///" + System.getProperty("PROJECT_HOME")
+						+ "/assets/src/");
+	}
 
 	@Test
 	public void createUserBatchTest() throws IllegalArgumentException,
@@ -48,7 +57,6 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
-		service.setEmailBuilder(new EmailBuilderTest(null, null));
 		service.batchCreateUsers(batchAccount, user, false);
 
 		Assert.assertTrue(service.userExists("uno@gmail.com"));
@@ -70,7 +78,6 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
-		service.setEmailBuilder(new EmailBuilderTest(null, null));
 		service.batchCreateUsers(batchAccount, user, false);
 
 		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
@@ -88,7 +95,6 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
-		service.setEmailBuilder(new EmailBuilderTest(null, null));
 		service.batchCreateUsers(batchAccount, user, FORCE_PASSWORD_CHANGE);
 
 		Assert.assertFalse(service.userExists("siet@gmail.com"));
@@ -105,7 +111,6 @@ public class UserServiceTest {
 		batchAccount.setOrganization(1L);
 		batchAccount.setRole(RolesEnum.STUDENT.name().toUpperCase());
 
-		service.setEmailBuilder(new EmailBuilderTest(null, null));
 		service.batchCreateUsers(batchAccount, user, FORCE_PASSWORD_CHANGE);
 
 		Assert.assertFalse(service.userExists("diez@gmail.com"));

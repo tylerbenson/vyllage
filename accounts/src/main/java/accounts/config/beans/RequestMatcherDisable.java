@@ -1,4 +1,4 @@
-package accounts.config;
+package accounts.config.beans;
 
 import java.util.regex.Pattern;
 

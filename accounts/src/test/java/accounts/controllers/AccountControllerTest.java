@@ -12,13 +12,17 @@ import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 import user.common.User;
 import accounts.controller.AccountController;
+import accounts.mocks.SelfReturningAnswer;
 import accounts.repository.ElementNotFoundException;
+import accounts.repository.EmailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
 import accounts.service.contactSuggestion.UserContactSuggestionService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import email.EmailBuilder;
 
 public class AccountControllerTest {
 
@@ -32,6 +36,11 @@ public class AccountControllerTest {
 
 	private UserContactSuggestionService userContactSuggestionService = mock(UserContactSuggestionService.class);
 
+	private EmailRepository emailRepository = mock(EmailRepository.class);
+
+	private EmailBuilder emailBuilder = mock(EmailBuilder.class,
+			new SelfReturningAnswer());
+
 	private ObjectMapper mapper = new ObjectMapper();
 
 	private TextEncryptor encryptor = mock(TextEncryptor.class);
@@ -40,8 +49,8 @@ public class AccountControllerTest {
 	public void setUp() {
 
 		contoller = new AccountController(environment, userService,
-				documentLinkService, userContactSuggestionService, encryptor,
-				mapper);
+				documentLinkService, userContactSuggestionService,
+				emailRepository, emailBuilder, encryptor, mapper);
 	}
 
 	@Test
@@ -94,4 +103,5 @@ public class AccountControllerTest {
 		Assert.assertNotNull(avatarUrl);
 		Assert.assertTrue(gravatarUrl.contains(avatarUrl));
 	}
+
 }

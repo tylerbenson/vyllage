@@ -29,6 +29,7 @@ import connections.model.AdviceRequest;
 import connections.model.AdviceRequestParameter;
 import connections.model.UserFilterResponse;
 import connections.repository.ElementNotFoundException;
+import connections.service.AccountService;
 import connections.service.AdviceService;
 
 @Controller
@@ -36,10 +37,13 @@ import connections.service.AdviceService;
 public class AdviceRequestController {
 
 	private final AdviceService adviceService;
+	private AccountService accountService;
 
 	@Inject
-	public AdviceRequestController(AdviceService adviceService) {
+	public AdviceRequestController(AdviceService adviceService,
+			AccountService accountService) {
 		this.adviceService = adviceService;
+		this.accountService = accountService;
 	}
 
 	@SuppressWarnings("unused")
@@ -77,7 +81,11 @@ public class AdviceRequestController {
 	public String askAdvice(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
 
-		return "getFeedback";
+		if (accountService.canIRequestFeedback(request, user) == true)
+			return "getFeedback";
+
+		return "redirect:/account/email/needs-email-confirmation";
+
 	}
 
 	@RequestMapping(value = "get-feedback", method = RequestMethod.POST)

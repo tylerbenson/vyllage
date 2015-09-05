@@ -3,7 +3,7 @@ var React = require('react');
 var Tag = React.createClass({
 	render: function() {
 		return (
-			<div className="tag">
+			<div className="tag" rel={this.props.text} >
 				{this.props.text}
 				{this.props.uiEditMode ?
 					<button className="flat icon small secondary" onClick={this.props.onDelete}>
