@@ -1,0 +1,1 @@
+alter table accounts.account_setting add constraint uq_user_id_name unique (user_id, name);  

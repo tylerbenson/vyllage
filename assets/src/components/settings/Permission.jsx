@@ -7,13 +7,7 @@ var Actions = require('./actions');
 var SettingsStore = require('./store');
 
 var Permission = React.createClass({
-  mixins: [ SettingsMixin, Reflux.connect(SettingsStore) ],
-
-  componentWillMount: function(){
-
-
-
-  },
+  mixins: [Reflux.connect(SettingsStore)],
 
   render: function () {
 

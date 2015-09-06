@@ -1,1 +1,1 @@
-accounts.config.SingletonFeatureManagerProvider
+accounts.config.beans.SingletonFeatureManagerProvider

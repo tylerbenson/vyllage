@@ -88,4 +88,3 @@ insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_cre
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (8, 'email', 'canvas@example.edu', 'public');
 insert into ACCOUNTS.user_credentials (user_id, password, enabled, expires) values (8, '$2a$10$6REiiQD8i4FTE4D/X3.chOnlgxghwWMGcngksAjyQun0njGDQznxq', true, null);
 insert into ACCOUNTS.user_organization_roles ( organization_id, user_id, role, date_created, audit_user_id ) values ( 1, 8, 'ADVISOR', CURRENT_DATE(), 0 );
-

@@ -8,10 +8,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,23 +33,23 @@ import accounts.repository.UserDetailRepository;
 import accounts.repository.UserOrganizationRoleRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class LoginTest {
 
 	private static final boolean FORCE_PASSWORD_CHANGE = false;
 
-	@Autowired
-	private UserDetailRepository repository;
+	@Inject
+	private UserDetailRepository userDetailRepository;
 
-	@Autowired
-	private UserOrganizationRoleRepository authRepo;
+	@Inject
+	private UserOrganizationRoleRepository userOrganizationRoleRepository;
 
 	@Test
 	public void userExistsTest() {
 		String username = "mario@toadstool.com";
-		UserDetails loadUserByUsername = repository
+		UserDetails loadUserByUsername = userDetailRepository
 				.loadUserByUsername(username);
 
 		Assert.assertNotNull(loadUserByUsername);
@@ -58,7 +59,7 @@ public class LoginTest {
 
 	@Test(expected = UsernameNotFoundException.class)
 	public void testUserNotFound() {
-		repository.loadUserByUsername("invalidUser");
+		userDetailRepository.loadUserByUsername("invalidUser");
 	}
 
 	@Test(expected = PasswordResetWasForcedException.class)
@@ -76,9 +77,9 @@ public class LoginTest {
 				Arrays.asList(new UserOrganizationRole(null, 0L,
 						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
-		repository.createUser(user, forcePasswordChange);
+		userDetailRepository.createUser(user, forcePasswordChange);
 
-		repository.loadUserByUsername(userName);
+		userDetailRepository.loadUserByUsername(userName);
 	}
 
 	@Test
@@ -96,16 +97,16 @@ public class LoginTest {
 				Arrays.asList(new UserOrganizationRole(null, 0L,
 						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
-		repository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
 		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
 				user, oldPassword);
 
 		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 
-		repository.changePassword(oldPassword, newPassword);
+		userDetailRepository.changePassword(oldPassword, newPassword);
 
-		User loadedUser = repository.loadUserByUsername(userName);
+		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
 		Assert.assertNotNull(loadedUser);
 		Assert.assertNotNull(loadedUser.getPassword());
@@ -128,7 +129,7 @@ public class LoginTest {
 				Arrays.asList(new UserOrganizationRole(null, 0L,
 						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
-		repository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
 		// remember the user is logged in using the link in the email
 		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
@@ -136,9 +137,9 @@ public class LoginTest {
 
 		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 
-		repository.changePassword(newPassword);
+		userDetailRepository.changePassword(newPassword);
 
-		User loadedUser = repository.loadUserByUsername(userName);
+		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
 		Assert.assertNotNull(loadedUser);
 		Assert.assertNotNull(loadedUser.getPassword());
@@ -163,11 +164,11 @@ public class LoginTest {
 				Arrays.asList(new UserOrganizationRole(null, 0L,
 						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
-		repository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
-		repository.changePassword(oldPassword, newPassword);
+		userDetailRepository.changePassword(oldPassword, newPassword);
 
-		User loadedUser = repository.loadUserByUsername(userName);
+		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
 		Assert.assertNotNull(loadedUser);
 		Assert.assertNotNull(loadedUser.getPassword());
@@ -191,8 +192,8 @@ public class LoginTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		repository.createUser(user, FORCE_PASSWORD_CHANGE);
-		User loadedUser = repository.loadUserByUsername(userName);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
 		assertNotNull("User is null.", loadedUser);
 		assertEquals("User is different.", user, loadedUser);
@@ -209,9 +210,9 @@ public class LoginTest {
 				accountNonExpired, credentialsNonExpired, accountNonLocked,
 				Arrays.asList(auth2));
 
-		repository.createUser(user2, false);
+		userDetailRepository.createUser(user2, false);
 
-		User loadedUser2 = repository.loadUserByUsername(userName2);
+		User loadedUser2 = userDetailRepository.loadUserByUsername(userName2);
 
 		assertNotNull("User is null.", loadedUser2);
 		assertEquals("User is different.", user2, loadedUser2);
@@ -237,9 +238,9 @@ public class LoginTest {
 		User user = new User(userName, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		repository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
-		User loadedUser = repository.loadUserByUsername(userName);
+		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
 		assertNotNull("User is null.", loadedUser);
 		assertEquals("User is different.", user, loadedUser);
@@ -265,21 +266,24 @@ public class LoginTest {
 				Arrays.asList(new UserOrganizationRole(null, 0L,
 						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
-		repository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
-		User loadUserByUsername = repository.loadUserByUsername(userName);
+		User loadUserByUsername = userDetailRepository
+				.loadUserByUsername(userName);
 
 		assertNotNull(loadUserByUsername);
 
-		repository.deleteUser(userName);
+		userDetailRepository.deleteUser(userName);
 
-		User deletedUser = repository.loadUserByUsername(userName);
+		User deletedUser = userDetailRepository.loadUserByUsername(userName);
 
-		assertTrue("User not found.", repository.userExists(userName));
+		assertTrue("User not found.", userDetailRepository.userExists(userName));
 		assertFalse("User is enabled.", deletedUser.isEnabled());
 
-		assertTrue("Found Roles for user " + userName,
-				authRepo.getByUserId(loadUserByUsername.getUserId()).isEmpty());
+		assertTrue(
+				"Found Roles for user " + userName,
+				userOrganizationRoleRepository.getByUserId(
+						loadUserByUsername.getUserId()).isEmpty());
 
 	}
 
@@ -301,12 +305,12 @@ public class LoginTest {
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth1,
 						auth2));
 
-		repository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
 
-		User loadedUser = repository.loadUserByUsername(userName);
+		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
-		List<UserOrganizationRole> roles = authRepo.getByUserId(loadedUser
-				.getUserId());
+		List<UserOrganizationRole> roles = userOrganizationRoleRepository
+				.getByUserId(loadedUser.getUserId());
 		assertTrue("Found more than 1 authority, "
 				+ loadedUser.getAuthorities().size(), loadedUser
 				.getAuthorities().size() == 1);

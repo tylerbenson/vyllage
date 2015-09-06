@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
@@ -22,6 +23,9 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.togglz.console.TogglzConsoleServlet;
 
 import user.common.social.SimpleSignInAdapter;
+import accounts.config.beans.ApplicationContextProvider;
+import accounts.repository.EmailRepository;
+import accounts.service.ConfirmationEmailService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.heneke.thymeleaf.togglz.TogglzDialect;
@@ -97,5 +101,17 @@ public class BeansConfiguration {
 	public ExecutorService executorService() {
 		ExecutorService newCachedThreadPool = Executors.newCachedThreadPool();
 		return newCachedThreadPool;
+	}
+
+	@Bean
+	public ConfirmationEmailService confirmationEmailService(
+			Environment environment,
+			@Qualifier("accounts.emailBuilder") EmailBuilder emailBuilder,
+			ObjectMapper mapper,
+			TextEncryptor encryptor,
+			EmailRepository emailRepository,
+			@Qualifier(value = "accounts.ExecutorService") ExecutorService executorService) {
+		return new ConfirmationEmailService(environment, emailBuilder, mapper,
+				encryptor, emailRepository, executorService);
 	}
 }

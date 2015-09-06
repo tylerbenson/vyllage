@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.mail.EmailException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -395,7 +394,7 @@ public class AdminUserController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String batchAccountCreation(BatchAccount batch,
 			@AuthenticationPrincipal User user, Model model)
-			throws IllegalArgumentException, EmailException, IOException {
+			throws IllegalArgumentException, IOException {
 
 		if (batch.hasErrors()) {
 			prepareBatchError(

@@ -14,17 +14,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import documents.Application;
-import documents.model.Suggestion;
+import documents.model.SectionAdvice;
 import documents.model.document.sections.EducationSection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class SuggestionRepositoryTest {
+public class SectionAdviceRepositoryTest {
 
 	@Autowired
-	private SuggestionRepository repository;
+	private SectionAdviceRepository repository;
 
 	private static final String JSON = "{"
 			+ "\"type\": \"JobExperienceSection\","
@@ -45,10 +45,10 @@ public class SuggestionRepositoryTest {
 	@Test
 	public void testRetrieveExistingSuggestion()
 			throws ElementNotFoundException {
-		Suggestion suggestion = repository.get(0L);
+		SectionAdvice suggestion = repository.get(0L);
 
 		Assert.assertNotNull("Suggestion is null.", suggestion);
-		Assert.assertTrue(suggestion.getSuggestionId().equals(0L));
+		Assert.assertTrue(suggestion.getSectionAdviceId().equals(0L));
 	}
 
 	@Test
@@ -57,7 +57,7 @@ public class SuggestionRepositoryTest {
 
 		Long sectionId = 127L;
 
-		List<Suggestion> suggestion = repository.getSuggestions(sectionId);
+		List<SectionAdvice> suggestion = repository.getSectionAdvices(sectionId);
 
 		Assert.assertNotNull("Suggestion is null.", suggestion);
 		Assert.assertTrue("No suggestions found. ", suggestion.size() > 0);
@@ -74,31 +74,31 @@ public class SuggestionRepositoryTest {
 	@Test
 	public void suggestionSaveTest() {
 
-		Suggestion suggestion1 = generateSuggestion();
+		SectionAdvice suggestion1 = generateSuggestion();
 
 		suggestion1 = repository.save(suggestion1);
 
 		Assert.assertNotNull("Suggestion1 is null.", suggestion1);
 		Assert.assertNotNull("Suggestion id not found. ",
-				suggestion1.getSuggestionId());
+				suggestion1.getSectionAdviceId());
 	}
 
 	@Test(expected = ElementNotFoundException.class)
 	public void testDeleteSuggestion() throws ElementNotFoundException {
-		Suggestion suggestion = generateSuggestion();
+		SectionAdvice suggestion = generateSuggestion();
 
 		suggestion = repository.save(suggestion);
-		Long id = suggestion.getSuggestionId();
+		Long id = suggestion.getSectionAdviceId();
 
-		repository.delete(suggestion.getSuggestionId());
+		repository.delete(suggestion.getSectionAdviceId());
 
 		suggestion = repository.get(id);
 
 		Assert.assertNull("Suggestion is not null.", suggestion);
 	}
 
-	private Suggestion generateSuggestion() {
-		Suggestion suggestion = new Suggestion();
+	private SectionAdvice generateSuggestion() {
+		SectionAdvice suggestion = new SectionAdvice();
 		suggestion.setDocumentSection(EducationSection.fromJSON(JSON));
 		suggestion.setSectionId(128L);
 		suggestion.setSectionVersion(1L);

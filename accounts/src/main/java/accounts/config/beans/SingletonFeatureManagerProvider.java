@@ -1,4 +1,4 @@
-package accounts.config;
+package accounts.config.beans;
 
 import javax.sql.DataSource;
 

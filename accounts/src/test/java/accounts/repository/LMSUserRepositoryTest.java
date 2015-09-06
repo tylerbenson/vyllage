@@ -24,10 +24,10 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
 import user.common.lms.LMSUser;
-import accounts.Application;
+import accounts.ApplicationTestConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class LMSUserRepositoryTest {

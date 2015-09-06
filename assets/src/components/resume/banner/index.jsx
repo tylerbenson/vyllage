@@ -13,6 +13,9 @@ var validator = require('validator');
 var clone = require('clone-deep');
 var foreach = require('lodash.foreach');
 var OnScroll = require('react-window-mixins').OnScroll;
+var PubSub = require('pubsub-js');
+var Alert = require('../../alert');
+var uniq = require('lodash.uniq');
 
 var Banner = React.createClass({
   mixins: [OnScroll],
@@ -112,16 +115,28 @@ var Banner = React.createClass({
       errors.push('phoneNumber');
     }
     var pattern = /^\w{1,32}$/; // ref : http://aaronsaray.com/blog/2012/08/07/jquery-validator-twitter-username-validator/
-    if(banner.twitter.length > 140 || pattern.test(banner.twitter) == false ) {
+    if( banner.twitter.length > 0 && (banner.twitter.length > 140 || pattern.test(banner.twitter) == false)  ) {
       errors.push('twitter');
     }
 
     if(errors.length === 0) {
+      this.notifyChange(banner);
       this.setState({fields: banner});
       settingActions.updateSettings(banner);
       this.toggleEditable(false);
       this.refs.phoneNumber.getDOMNode().value = banner.phoneNumber?phoneFormatter.format(banner.phoneNumber,"(NNN) NNN-NNNN"):'';
     }
+  },
+  notifyChange: function(banner){
+    var message = "Your settings have been saved";
+    var timeout = 4000;
+
+    if(banner.email !== this.state.fields.email) {
+      message = "Please check your inbox and click the confirmation link to change your e-mail."
+      timeout = 6000;
+    }
+
+    PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
   },
   discardChanges: function(){
     foreach(this.refs, function(n, key){
@@ -301,6 +316,9 @@ var Banner = React.createClass({
             )}
           </div>
         :null)}
+
+        <Alert id='banner-alert' />
+
         {(header.owner?
           <Subheader ref="subheader" avatar={header.avatarUrl} name={name} onEditProfile={this.toggleEditable.bind(this, true)} sections={this.props.sections} />
         :null)}
