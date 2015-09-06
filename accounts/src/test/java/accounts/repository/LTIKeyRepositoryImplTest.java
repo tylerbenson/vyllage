@@ -18,11 +18,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import user.common.Organization;
 import user.common.User;
-import accounts.Application;
+import accounts.ApplicationTestConfig;
 import accounts.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class LTIKeyRepositoryImplTest {

@@ -31,10 +31,12 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.lms.LMSUserDetails;
 import accounts.domain.tables.records.UsersRecord;
+import accounts.model.Email;
 import accounts.model.UserCredential;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
+import accounts.service.ConfirmationEmailService;
 
 import com.newrelic.api.agent.NewRelic;
 
@@ -50,6 +52,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 	private final DataSourceTransactionManager txManager;
 	private final LMSRepository lmsRepository;
 	private final LMSUserCredentialsRepository lmsUserCredentialsRepository;
+	private ConfirmationEmailService confirmationEmailService;
 
 	@Inject
 	public LMSUserRepository(
@@ -60,7 +63,8 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			final AccountSettingRepository accountSettingRepository,
 			final DataSourceTransactionManager txManager,
 			final LMSRepository lmsRepository,
-			final LMSUserCredentialsRepository lmsUserCredentialsRepository) {
+			final LMSUserCredentialsRepository lmsUserCredentialsRepository,
+			final ConfirmationEmailService confirmationEmailService) {
 		this.sql = sql;
 		this.userOrganizationRoleRepository = userOrganizationRoleRepository;
 		this.credentialsRepository = credentialsRepository;
@@ -68,6 +72,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 		this.txManager = txManager;
 		this.lmsRepository = lmsRepository;
 		this.lmsUserCredentialsRepository = lmsUserCredentialsRepository;
+		this.confirmationEmailService = confirmationEmailService;
 	}
 
 	public User get(Long userId) throws UserNotFoundException {
@@ -105,6 +110,15 @@ public class LMSUserRepository implements LMSUserDetailsService {
 					.now(ZoneId.of("UTC"))));
 			newRecord.store();
 			Assert.notNull(newRecord.getUserId());
+
+			user.setUserId(newRecord.getUserId());
+
+			boolean defaultEmail = true;
+			boolean confirmed = false;
+			Email email = new Email(newRecord.getUserId(), user.getUsername(),
+					defaultEmail, confirmed);
+
+			this.confirmationEmailService.sendConfirmationEmail(user, email);
 
 			credentialsRepository.create(newRecord.getUserId(),
 					user.getPassword());

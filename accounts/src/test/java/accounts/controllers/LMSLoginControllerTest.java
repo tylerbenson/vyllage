@@ -30,14 +30,14 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import accounts.Application;
+import accounts.ApplicationTestConfig;
 import accounts.controller.LMSLoginController;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 public class LMSLoginControllerTest {
 

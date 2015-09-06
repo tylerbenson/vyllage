@@ -25,13 +25,16 @@
     </div>
     <div class="contact">
       <div class="cf" th:if="${header.email != null}">
-        <img src="/documents/images/mail-icon.png" /><p th:text="${header.email}"> abcd@abcd.com</p>
+        <img src="/documents/images/mail-icon.png" />
+        <p th:text="${header.email}"> abcd@abcd.com</p>
       </div>
       <div th:if="${header.phoneNumber != null}">
-        <img src="/documents/images/phone-icon.png" /><p th:text="${header.phoneNumber}">(555)1234-56789</p>
+        <img src="/documents/images/phone-icon.png" />
+        <p th:text="${header.phoneNumber}">(555)1234-56789</p>
       </div>
       <div th:if="${header.twitter != null}">
-        <img src="/documents/images/web-icon.png" /><p th:text="${header.twitter}">@abcd</p>
+        <img src="/documents/images/web-icon.png" />
+        <p th:text="${header.twitter}">@abcd</p>
       </div>
     </div>
   </div>

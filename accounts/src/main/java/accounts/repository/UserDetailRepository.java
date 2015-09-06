@@ -1,6 +1,7 @@
 package accounts.repository;
 
 import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
+import static accounts.domain.tables.Emails.EMAILS;
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 import static accounts.domain.tables.Userconnection.USERCONNECTION;
 import static accounts.domain.tables.Users.USERS;
@@ -13,13 +14,14 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import lombok.NonNull;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.security.access.AccessDeniedException;
@@ -42,12 +44,14 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.social.SocialUser;
 import accounts.domain.tables.records.UsersRecord;
+import accounts.model.Email;
 import accounts.model.UserCredential;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.AvatarSourceEnum;
 import accounts.model.account.settings.EmailFrequencyUpdates;
 import accounts.model.account.settings.Privacy;
+import accounts.service.ConfirmationEmailService;
 
 import com.newrelic.api.agent.NewRelic;
 
@@ -61,25 +65,38 @@ public class UserDetailRepository implements UserDetailsManager,
 	// @Autowired
 	private AuthenticationManager authenticationManager;
 
-	@Autowired
-	private DSLContext sql;
+	private final DSLContext sql;
 
-	@Autowired
-	private UserOrganizationRoleRepository userOrganizationRoleRepository;
+	private final UserOrganizationRoleRepository userOrganizationRoleRepository;
 
-	@Autowired
-	private OrganizationRepository organizationRepository;
+	private final OrganizationRepository organizationRepository;
 
-	@Autowired
-	private UserCredentialsRepository credentialsRepository;
+	private final UserCredentialsRepository credentialsRepository;
 
-	@Autowired
-	private AccountSettingRepository accountSettingRepository;
+	private final AccountSettingRepository accountSettingRepository;
 
-	@Autowired
-	private DataSourceTransactionManager txManager;
+	private final DataSourceTransactionManager txManager;
 
-	public UserDetailRepository() {
+	// Services should not be called from repositories but I don't see any other
+	// way right now, maybe handling this kind of logic with events?
+	private ConfirmationEmailService confirmationEmailService;
+
+	@Inject
+	public UserDetailRepository(
+			DSLContext sql,
+			final UserOrganizationRoleRepository userOrganizationRoleRepository,
+			final OrganizationRepository organizationRepository,
+			final UserCredentialsRepository credentialsRepository,
+			final AccountSettingRepository accountSettingRepository,
+			final DataSourceTransactionManager txManager,
+			final ConfirmationEmailService confirmationEmailService) {
+		this.sql = sql;
+		this.userOrganizationRoleRepository = userOrganizationRoleRepository;
+		this.organizationRepository = organizationRepository;
+		this.credentialsRepository = credentialsRepository;
+		this.accountSettingRepository = accountSettingRepository;
+		this.txManager = txManager;
+		this.confirmationEmailService = confirmationEmailService;
 	}
 
 	/**
@@ -180,6 +197,14 @@ public class UserDetailRepository implements UserDetailsManager,
 			newRecord.store();
 
 			Assert.notNull(newRecord.getUserId());
+			user.setUserId(newRecord.getUserId());
+
+			boolean defaultEmail = true;
+			boolean confirmed = false;
+			Email email = new Email(newRecord.getUserId(), user.getUsername(),
+					defaultEmail, confirmed);
+
+			this.confirmationEmailService.sendConfirmationEmail(user, email);
 
 			credentialsRepository.create(newRecord.getUserId(),
 					user.getPassword());
@@ -533,6 +558,19 @@ public class UserDetailRepository implements UserDetailsManager,
 						AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
 						Privacy.PRIVATE.name().toLowerCase()));
 
+				// Emails table.
+				// Email will be confirmed once the user logins.
+				otherInserts.add(sql.insertInto(EMAILS, EMAILS.CONFIRMED,
+						EMAILS.DATE_CREATED, EMAILS.DEFAULT_EMAIL,
+						EMAILS.EMAIL, EMAILS.LAST_MODIFIED, EMAILS.USER_ID)
+						.values(false,
+								Timestamp.valueOf(LocalDateTime.now(ZoneId
+										.of("UTC"))),
+								true,
+								user.getUsername(),
+								Timestamp.valueOf(LocalDateTime.now(ZoneId
+										.of("UTC"))), user.getUserId()));
+
 			}
 
 			sql.batch(otherInserts).execute();
@@ -592,22 +630,57 @@ public class UserDetailRepository implements UserDetailsManager,
 		return !enabled;
 	}
 
-	public void changeEmail(User user, @NonNull String email) {
-		Assert.isTrue(!email.isEmpty());
+	public void changeEmail(final User user, final @NonNull String newEmail) {
+		Assert.isTrue(!newEmail.isEmpty());
 
-		sql.update(USERS).set(USERS.USER_NAME, email)
-				.where(USERS.USER_ID.eq(user.getUserId())).execute();
+		final String oldEmail = user.getUsername();
 
-		// delete this, we don't need it anymore
-		accountSettingRepository.deleteByName(user.getUserId(), "newEmail");
+		TransactionStatus transaction = txManager
+				.getTransaction(new DefaultTransactionDefinition());
 
-		sql.update(ACCOUNT_SETTING)
-				.set(ACCOUNT_SETTING.VALUE, email)
-				.where(ACCOUNT_SETTING.USER_ID.eq(user.getUserId()).and(
-						ACCOUNT_SETTING.NAME.eq("email"))).execute();
+		Object savepoint = transaction.createSavepoint();
 
-		sql.update(USERCONNECTION).set(USERCONNECTION.USERID, email)
-				.where(USERCONNECTION.USERID.eq(user.getUsername())).execute();
+		try {
+
+			sql.update(USERS).set(USERS.USER_NAME, newEmail)
+					.where(USERS.USER_ID.eq(user.getUserId())).execute();
+
+			// delete this, we don't need it anymore
+			accountSettingRepository.deleteByName(user.getUserId(), "newEmail");
+
+			// if we are here then he confirmed the new email.
+
+			StringBuilder sb = new StringBuilder();
+			sb.append("User ").append(user) //
+					.append(" confirms username/email change from '")//
+					.append(oldEmail)//
+					.append("' to '")//
+					.append(newEmail)//
+					.append("'."); //
+
+			logger.info(sb.toString());
+
+			// maybe it should be the other way around? The service calling this
+			// repository?
+			this.confirmationEmailService
+					.confirmEmailChange(oldEmail, newEmail);
+
+			sql.update(ACCOUNT_SETTING)
+					.set(ACCOUNT_SETTING.VALUE, newEmail)
+					.where(ACCOUNT_SETTING.USER_ID.eq(user.getUserId()).and(
+							ACCOUNT_SETTING.NAME.eq("email"))).execute();
+
+			sql.update(USERCONNECTION).set(USERCONNECTION.USERID, newEmail)
+					.where(USERCONNECTION.USERID.eq(user.getUsername()))
+					.execute();
+
+		} catch (Exception e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			transaction.rollbackToSavepoint(savepoint);
+		} finally {
+			txManager.commit(transaction);
+		}
 	}
 
 	protected void setForcePasswordReset(String userName, boolean value) {

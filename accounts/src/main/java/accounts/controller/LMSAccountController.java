@@ -1,5 +1,6 @@
 package accounts.controller;
 
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -12,6 +13,10 @@ import oauth.model.LMSAccount;
 import oauth.utilities.CsrfTokenUtility;
 import oauth.utilities.LMSConstants;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.mail.EmailException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -26,6 +31,10 @@ import accounts.repository.UserNotFoundException;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 
+import com.newrelic.api.agent.NewRelic;
+
+import email.EmailBuilder;
+
 @Controller
 public class LMSAccountController {
 
@@ -36,13 +45,24 @@ public class LMSAccountController {
 	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
+	private final EmailBuilder emailBuilder;
+	private Environment environment;
+
+	private ExecutorService executorService;
 
 	@Inject
-	public LMSAccountController(final SignInUtil signInUtil,
-			final LMSService lmsService) {
+	public LMSAccountController(
+			final Environment environment,
+			final SignInUtil signInUtil,
+			final LMSService lmsService,
+			@Qualifier("accounts.emailBuilder") final EmailBuilder emailBuilder,
+			@Qualifier(value = "accounts.ExecutorService") ExecutorService executorService) {
 		super();
+		this.environment = environment;
 		this.signInUtil = signInUtil;
 		this.lmsService = lmsService;
+		this.emailBuilder = emailBuilder;
+		this.executorService = executorService;
 	}
 
 	@RequestMapping(value = "/lti/account", method = { RequestMethod.GET,
@@ -109,10 +129,12 @@ public class LMSAccountController {
 				return "register-from-LTI";
 			}
 
-			// TODO: send password
 			// Create Vyllage user account.
 			User newUser = lmsService.createUser(userName, password, firstName,
 					null, lastName, lmsRequest);
+
+			this.sendUserRegisteredEmail(registerForm.getEmail(), password,
+					firstName);
 
 			// Set user name in Session
 			session.setAttribute("user_name", newUser.getUsername());
@@ -140,11 +162,13 @@ public class LMSAccountController {
 			LMSRequest lmsRequest = (LMSRequest) session
 					.getAttribute(LMSRequest.class.getName());
 
-			// TODO: send password
 			// Create Vyllage user account.
 			User newUser = lmsService.createUser(registerForm.getEmail(),
 					registerForm.getPassword(), registerForm.getFirstName(),
 					null, registerForm.getLastName(), lmsRequest);
+
+			this.sendUserRegisteredEmail(registerForm.getEmail(),
+					registerForm.getPassword(), registerForm.getFirstName());
 
 			session.setAttribute("user_name", newUser.getUsername());
 			session.removeAttribute(LMSRequest.class.getName());
@@ -161,5 +185,43 @@ public class LMSAccountController {
 		HttpSession session = request.getSession();
 		session.setAttribute("_csrf", token);
 		return token;
+	}
+
+	/**
+	 * Sends an email with the password to the user.
+	 * 
+	 * @param email
+	 * @param password
+	 * @param firstName
+	 * @throws EmailException
+	 */
+	protected void sendUserRegisteredEmail(String email, String password,
+			String firstName) {
+
+		Runnable run = () -> {
+			try {
+
+				String from = environment.getProperty("email.from",
+						"no-reply@vyllage.com");
+
+				String fromUserName = environment.getProperty(
+						"email.from.userName", "Chief of Vyllage");
+
+				String noHTMLMessage = "Your account has been created successfuly. \\n Your password is: "
+						+ password;
+
+				emailBuilder.to(email).from(from).fromUserName(fromUserName)
+						.subject("Account Creation - Vyllage.com")
+						.setNoHtmlMessage(noHTMLMessage)
+						.templateName("email-user-registered")
+						.addTemplateVariable("password", password)
+						.addTemplateVariable("firstName", firstName).send();
+			} catch (Exception e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
+		};
+
+		executorService.execute(run);
 	}
 }

@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to the Vyllage! See your credentials.</title>
+  <title>Confirm email address </title>
   <link rel="stylesheet" href="../../public/css/email.css" />
   <style type="text/css">
   @media only screen and (max-width: 656px) {
@@ -276,19 +276,6 @@
   @media only screen and (max-width: 656px) {
     /*
 	@tab Mobile Styles
-	@section Preheader Text
-	@tip Make the preheader text larger in size for better readability on small screens.
-	*/
-    td[class=preheaderContainer] td[class=vylTextContent],
-    td[class=preheaderContainer] td[class=vylTextContent] p {
-      font-size: 10px !important;
-      line-height: 115% !important;
-    }
-  }
-  
-  @media only screen and (max-width: 656px) {
-    /*
-	@tab Mobile Styles
 	@section Header Text
 	@tip Make the header text larger in size for better readability on small screens.
 	*/
@@ -359,7 +346,8 @@
                                         <tr>
 
                                           <td valign="top" class="vylTextContent" style="padding: 16px 0px 16px 18px;color: #888888;">
-                                            Welcome to the Vyllage! See your credentials.
+
+                                            Confirm your email address.
                                           </td>
                                         </tr>
                                       </tbody>
@@ -371,7 +359,7 @@
 
                                           <td valign="top" class="vylTextContent" style="padding: 9px 18px 9px 0px; text-align: right;">
 
-                                            <a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}" target="_blank">Log In Now!</a>
+                                            <a href="" target="_blank">Visit website</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -424,6 +412,29 @@
                                 </tr>
                               </tbody>
                             </table>
+                            <!-- <table border="0" cellpadding="0" cellspacing="0" width="100%" class="vylBoxedTextBlock">
+												<tbody class="vylBoxedTextBlockOuter">
+													<tr>
+														<td valign="top" class="vylBoxedTextBlockInner">
+
+															<table align="left" border="0" cellpadding="0" cellspacing="0" width="640" class="vylBoxedTextContentContainer">
+																<tbody><tr>
+																	<td>
+																		<table border="0" cellpadding="18" cellspacing="0" class="vylTextContentContainer" width="100%">
+																			<tbody><tr>
+																				<td valign="top" class="vylTextContent" style="color: #827165;font-size: 12px;line-height: 100%;text-align: center; padding: 9px 9px 18px 9px;">
+																					<span style="font-size:12px"><span style="line-height:20.7999992370605px">HOW IT WORKS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; FAQS</span><span style="line-height:20.7999992370605px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="line-height:20.7999992370605px">REQUEST A DEMO</span><span style="line-height:20.7999992370605px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; LOGIN</span></span>
+																				</td>
+																			</tr>
+																		</tbody></table>
+																	</td>
+																</tr>
+															</tbody></table>
+
+														</td>
+													</tr>
+												</tbody>
+											</table> -->
                           </td>
                         </tr>
                       </table>
@@ -454,9 +465,8 @@
                                           <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;font-size: 14px;">
 
                                             <h2 class="null">
-                                              <span style="font-size:16px">Dear
-                                                <span style="font-size: 16px" th:if="${firstName} != null" th:text="${firstName}">
-                                                  Vyllager</span>,</span>
+                                              <span th:text="'Hello ' + ${firstName} + ','" style="font-size:16px">Dear Customer,</span>
+
                                             </h2>
 
                                           </td>
@@ -479,15 +489,8 @@
 
                                           <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
 
-                                            Welcome to Vyllage! Your school has created an account just for you.
-                                            <a th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}">Log In</a>                                            with this e-mail and the following password:
+                                            You recently registered with us. Please confirm your email address.
 
-                                            <br />
-
-                                            <div>
-                                              <strong>Password:</strong>
-                                            </div>
-                                            <code th:text="${password}">Oops, there was an error. Please contact us at <a href="mailto:hello@vyllage.com">hello@vyllage.com</a>.</code>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -505,8 +508,8 @@
                                       <tbody>
                                         <tr>
                                           <td align="center" valign="middle" class="vylButtonContent" style="font-family: Arial; font-size: 16px; padding: 16px 24px;">
-                                            <a class="vylButton " th:href="@{http://__${environment.getProperty('vyllage.domain','www.vyllage.com')}__/login}" target="_blank"
-                                            style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;">Log In Now!</a>
+                                            <a class="vylButton " target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;"
+                                            th:href="@{${url}(encodedLink=${encodedLink})}">Confirm Email</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -526,10 +529,10 @@
 
                                           <td valign="top" class="vylTextContent" style="padding: 9px 18px;color: #333333;">
 
-                                            I got a lot of exciting things over there for your career and I can't wait to have you on board.
+                                           	If you think this was sent by mistake contact us at  <a href="mailto:hello@vyllage.com">hello@vyllage.com</a> &nbsp;&nbsp;
 
                                             <br>
-                                            <br> See you there,
+                                            <br> Sincerely,
                                             <br>
                                             <img align="none" height="90" src="https://gallery.mailchimp.com/5cb918082a39aef5a646dcf3a/images/9d8f49b5-97eb-45f6-8828-72bf696e2b76.png"
                                             style="width: 130px; margin: 5px 0px -30px -10px;" width="215">

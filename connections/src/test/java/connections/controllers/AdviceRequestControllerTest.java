@@ -13,16 +13,19 @@ import user.common.web.AccountContact;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
 import connections.model.NotRegisteredUser;
+import connections.service.AccountService;
 import connections.service.AdviceService;
 
 public class AdviceRequestControllerTest {
 
 	private AdviceService adviceService = Mockito.mock(AdviceService.class);
 
+	private AccountService accountService = Mockito.mock(AccountService.class);
+
 	@Test
 	public void testAccountNames() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService);
+				adviceService, accountService);
 
 		User user = Mockito.mock(User.class);
 		Long userId = 0L;
@@ -51,7 +54,7 @@ public class AdviceRequestControllerTest {
 	@Test
 	public void testAccountNamesNoUserLogin() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService);
+				adviceService, accountService);
 
 		AccountNames accountNames = controller.accountNames(null);
 
@@ -66,23 +69,21 @@ public class AdviceRequestControllerTest {
 	@Test
 	public void testAskAdviceHttpServletRequestUser() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService);
+				adviceService, accountService);
 
 		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 		User user = Mockito.mock(User.class);
 
+		Mockito.when(accountService.canIRequestFeedback(request, user))
+				.thenReturn(true);
+
 		Assert.assertEquals("getFeedback", controller.askAdvice(request, user));
 	}
-
-	// @Test
-	// public void testAskAdviceHttpServletRequestAdviceRequestUser() {
-	// fail("Not yet implemented");
-	// }
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testValidateAdviceRequestAllNull() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService);
+				adviceService, accountService);
 
 		AdviceRequest adviceRequest = new AdviceRequest();
 
@@ -92,7 +93,7 @@ public class AdviceRequestControllerTest {
 	@Test
 	public void testValidateAdviceRequestNotRegisteredNull() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService);
+				adviceService, accountService);
 
 		AccountContact contact = new AccountContact();
 		AdviceRequest adviceRequest = new AdviceRequest();
@@ -105,7 +106,7 @@ public class AdviceRequestControllerTest {
 	@Test
 	public void testValidateAdviceRequestUsersNull() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService);
+				adviceService, accountService);
 
 		NotRegisteredUser user = new NotRegisteredUser();
 		AdviceRequest adviceRequest = new AdviceRequest();

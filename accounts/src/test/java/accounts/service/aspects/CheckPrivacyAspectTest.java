@@ -17,18 +17,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import user.common.User;
-import accounts.Application;
+import accounts.ApplicationTestConfig;
 import accounts.model.account.settings.AccountSetting;
 import accounts.service.AccountSettingsService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 public class CheckPrivacyAspectTest {
-
-	// private UserService userService = Mockito.mock(UserService.class);
-	// private AccountSettingRepository accountSettingRepository = Mockito
-	// .mock(AccountSettingRepository.class);
 
 	@Inject
 	private AccountSettingsService service;
