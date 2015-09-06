@@ -26,7 +26,7 @@
 
 <body class="login">
   <div id="container">
-    <header>
+    <header class="header">
       <div class="content">
         <div class="logo">
           <img src="images/logo-orange.png" alt="Vyllage" />
@@ -35,6 +35,10 @@
       </div>
     </header>
     <div class="sections">
+      <section class="spiel section">
+        <div class="quote">He who would do great things should not attempt them alone.</div>
+        <div class="author"> — Seneca &bull; AD 55</div>
+      </section>
       <section class="form section">
         <div class="container">
           <form th:action="@{/register-from-LTI}" th:object="${registerForm}" th:method="POST">

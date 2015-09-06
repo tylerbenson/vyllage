@@ -2,10 +2,8 @@ package documents.model;
 
 import java.time.LocalDateTime;
 
+import lombok.NonNull;
 import lombok.ToString;
-
-import org.springframework.util.Assert;
-
 import util.dateSerialization.DocumentLocalDateTimeDeserializer;
 import util.dateSerialization.DocumentLocalDateTimeSerializer;
 
@@ -15,8 +13,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import documents.model.document.sections.DocumentSection;
 
 @ToString
-public class Suggestion {
-	private Long suggestionId;
+public class SectionAdvice {
+	private Long sectionAdviceId;
 	private Long sectionId;
 	private Long sectionVersion;
 
@@ -33,20 +31,19 @@ public class Suggestion {
 
 	private DocumentSection documentSection;
 
-	public Long getSuggestionId() {
-		return suggestionId;
+	public Long getSectionAdviceId() {
+		return sectionAdviceId;
 	}
 
-	public void setSuggestionId(Long id) {
-		this.suggestionId = id;
+	public void setSectionAdviceId(Long id) {
+		this.sectionAdviceId = id;
 	}
 
 	public DocumentSection getDocumentSection() {
 		return documentSection;
 	}
 
-	public void setDocumentSection(DocumentSection documentSection) {
-		Assert.notNull(documentSection);
+	public void setDocumentSection(@NonNull DocumentSection documentSection) {
 		this.documentSection = documentSection;
 	}
 
@@ -62,8 +59,7 @@ public class Suggestion {
 		return sectionId;
 	}
 
-	public void setSectionId(Long sectionId) {
-		Assert.notNull(sectionId);
+	public void setSectionId(@NonNull Long sectionId) {
 		this.sectionId = sectionId;
 	}
 
@@ -71,8 +67,7 @@ public class Suggestion {
 		return sectionVersion;
 	}
 
-	public void setSectionVersion(Long sectionVersion) {
-		Assert.notNull(sectionVersion);
+	public void setSectionVersion(@NonNull Long sectionVersion) {
 		this.sectionVersion = sectionVersion;
 	}
 

@@ -1,5 +1,5 @@
-# Returns all the suggestions for a particular section.
-## GET /resume/{documentId}/section/{sectionId}/suggestion
+# Returns all the section advices for a particular section.
+## GET /resume/{documentId}/section/{sectionId}/advice
 + Parameters
   + documentId (string, `1`) - The id of the document.
   + sectionId  (string, `1`) - The id of the section.
@@ -8,7 +8,7 @@
 ```
 [
   {
-    "suggestionId": 1,
+    "sectionAdviceId": 1,
     "sectionId": 128,
     "sectionVersion": 1,
     "lastModified": "2015-08-26T00:19:43",
@@ -33,8 +33,8 @@
 ]
 ```
 
-# Creates a new suggestion for a section.
-## POST /resume/{documentId}/section/{sectionId}/suggestion
+# Creates a new section advice for a section.
+## POST /resume/{documentId}/section/{sectionId}/advice
 + Parameters
   + documentId (string, `1`) - The id of the document.
   + sectionId  (string, `1`) - The id of the section.
@@ -42,13 +42,13 @@
   + Body
 
 SectionId, SectionVersion, UserId and documentSection with the suggested changes are required. 
-UserName, avatarUrl can be null on POST, they are provided by the backend to show who created the suggestion.
+UserName, avatarUrl can be null on POST, they are provided by the backend to show who created the section advice.
 LastModified, is not required, can be null.
 
  ```
 [
   {
-    "suggestionId": null,
+    "sectionAdviceId": null,
     "sectionId": 128,
     "sectionVersion": 1,
     "lastModified": "2015-08-26T00:19:43",
@@ -73,23 +73,23 @@ LastModified, is not required, can be null.
 ]
 ```
 
-# Updates a suggestion
-## PUT /resume/{documentId}/section/{sectionId}/suggestion/{suggestionId}
+# Updates a section advice
+## PUT /resume/{documentId}/section/{sectionId}/advice/{sectionAdviceId}
 + Parameters
   + documentId (string, `1`) - The id of the document.
   + sectionId  (string, `1`) - The id of the section.
-  + suggestionId  (string, `1`) - The id of the suggestion to be updated.
+  + sectionAdviceId  (string, `1`) - The id of the section advice to be updated.
 + Request
   + Body
 
 SectionId, SectionVersion, UserId and documentSection with the suggested changes are required. 
-UserName, avatarUrl can be null on PUT, they are provided by the backend to show who created the suggestion.
+UserName, avatarUrl can be null on PUT, they are provided by the backend to show who created the section advice.
 LastModified, is not required, can be null.
 
  ```
 [
   {
-    "suggestionId": 1,
+    "sectionAdviceId": 1,
     "sectionId": 128,
     "sectionVersion": 1,
     "lastModified": "2015-08-26T00:19:43",

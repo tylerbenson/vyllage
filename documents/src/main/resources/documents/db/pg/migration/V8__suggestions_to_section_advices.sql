@@ -1,0 +1,3 @@
+alter table documents.suggestions rename to section_advices;
+alter table documents.section_advices rename column suggestion_id to section_advice_id;
+alter table documents.section_advices rename constraint fk_suggestions_document_sections to fk_section_advices_document_sections;

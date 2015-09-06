@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="Vyllage | Login" />
+  <meta property="og:title" content="Vyllage | Register" />
   <meta property="og:image" content="https://www.vyllage.com/images/fb-cover.jpg" />
   <meta property="og:site_name" content="Vyllage" />
   <meta property="og:url" content="https://www.vyllage.com" />
@@ -35,12 +35,16 @@
       </div>
     </header>
     <div class="sections">
+      <section class="spiel section">
+        <div class="quote">He who would do great things should not attempt them alone.</div>
+        <div class="author"> — Seneca &bull; AD 55</div>
+      </section>
       <section class="form section">
         <div class="container">
           <form th:action="@{/register}" th:object="${registerForm}" th:method="POST">
             <div class="content">
 
-              <h1 class="centered">Complete Account Setup</h1>
+              <h1 class="centered">Register</h1>
               <p class="centered">Fill out the fields below to proceed. </p>
 
               <div th:if="${registerForm.errorMsg != null}">
