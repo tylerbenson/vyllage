@@ -39,7 +39,7 @@ var EditAvatar = React.createClass({
             </p>
           </div>
           <div className="footer">
-            <a href="//en.gravatar.com" className="small inverted button" target="blank">
+            <a className="small inverted button" target="_blank" href="//en.gravatar.com">
             	<i className="ion-android-arrow-forward"></i>
               Open Gravatar Setup
             </a>
