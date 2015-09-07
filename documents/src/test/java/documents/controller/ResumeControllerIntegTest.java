@@ -1,4 +1,4 @@
-package documents.controllers;
+package documents.controller;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
