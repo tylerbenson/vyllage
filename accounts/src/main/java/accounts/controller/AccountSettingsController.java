@@ -1,5 +1,6 @@
 package accounts.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
+import user.common.constants.AccountSettingsEnum;
 import user.common.constants.RolesEnum;
 import user.common.web.UserInfo;
 import accounts.model.account.AccountNames;
@@ -148,16 +150,13 @@ public class AccountSettingsController {
 		List<AccountSetting> settings = accountSettingsService
 				.getAccountSettings(user);
 
+		// To prevent Chrome from showing the json object rather than the actual
+		// page.
+		// Firefox and others seem to ignore the cache, (odd) and display the
+		// page normally.
 		response.setHeader("Cache-Control", "no-cache,no-store");
 
-		// seems like these are not required
-
-		// response.setHeader("Pragma", "No-cache");
-		// response.setHeader("Cache-Control",
-		// "no-cache,no-store,must-revalidate");
-		// response.setDateHeader("Expires", 0);
-
-		return settings;
+		return addFacebookConnected(user, settings);
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.PUT, produces = "application/json")
@@ -165,6 +164,11 @@ public class AccountSettingsController {
 	public @ResponseBody ResponseEntity<List<AccountSetting>> setAccountSettings(
 			@RequestBody final List<AccountSetting> settings,
 			@AuthenticationPrincipal User user) {
+
+		// removing facebook connection since they will likely send it along and
+		// we don't want save that
+		settings.removeIf(ac -> AccountSettingsEnum.facebook_connected.name()
+				.equalsIgnoreCase(ac.getName()));
 
 		for (AccountSetting accountSetting : settings) {
 			// clean errors
@@ -188,6 +192,9 @@ public class AccountSettingsController {
 			return new ResponseEntity<List<AccountSetting>>(settings,
 					HttpStatus.BAD_REQUEST);
 
+		// adding facebook connection back...
+		addFacebookConnected(user, settings);
+
 		return new ResponseEntity<List<AccountSetting>>(
 				accountSettingsService.setAccountSettings(user, settings),
 				HttpStatus.OK);
@@ -196,6 +203,12 @@ public class AccountSettingsController {
 	@RequestMapping(value = "setting/{parameter}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AccountSetting> getAccountSetting(
 			@PathVariable String parameter, @AuthenticationPrincipal User user) {
+
+		if (AccountSettingsEnum.facebook_connected.name().equalsIgnoreCase(
+				parameter))
+			return this.addFacebookConnected(user,
+					new ArrayList<AccountSetting>());
+
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, parameter);
 
@@ -323,10 +336,19 @@ public class AccountSettingsController {
 		return permissions;
 	}
 
-	@RequestMapping(value = "social/{network}/is-connected", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody boolean isSocialConnected(
-			@PathVariable String network, @AuthenticationPrincipal User user) {
+	protected boolean isSocialNetworkConnected(String network, User user) {
 		return socialRepository.isConnected(user, network);
+	}
+
+	protected List<AccountSetting> addFacebookConnected(User user,
+			List<AccountSetting> settings) {
+		boolean facebookConnected = this.isSocialNetworkConnected(
+				AccountSettingsEnum.facebook.name(), user);
+
+		settings.add(new AccountSetting(null, user.getUserId(),
+				AccountSettingsEnum.facebook_connected.name(), String
+						.valueOf(facebookConnected), Privacy.PRIVATE.name()));
+		return settings;
 	}
 
 	@ExceptionHandler(value = { IllegalArgumentException.class })
