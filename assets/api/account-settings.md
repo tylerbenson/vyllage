@@ -9,6 +9,7 @@
 		{"accountSettingId":2,"userId":0,"name":"middleName","value":null,"privacy":"public"},
 		{"accountSettingId":3,"userId":0,"name":"lastName","value":null,"privacy":"private"},
 		{"accountSettingId":4,"userId":0,"name":"address","value":"Avenida Siempreviva 123","privacy":"public"}
+		{"accountSettingId":5,"userId":0,"name":"facebook_connected","value":"true","privacy":"private"}
 	]
 ```
 
@@ -58,7 +59,9 @@
 
 # Get values for an specific setting.
 ## GET /account/setting/{setting}/values
-+ setting: (String, `firstName`) The name of the setting. (emailUpdates | role | organization | privacy) 
+Note that you cannot save multiple settings with the same name with the PUT /account/setting endpoint.
+The returned values here might be assembled by the backend and not actually exist in the DB in "Account Setting" format. 
++ setting: (String, `firstName`) The name of the setting. (emailUpdates | email | address | organization | role | avatar | firstName | middleName | lastName | facebook_connected) 
 + Response (application/json)
 
 Email Updates.
@@ -86,6 +89,11 @@ Receive advice setting
  ["true","false"]
 ```
 
+Social Network connection
+```
+ ["true","false"]
+```
+
 ### Other settings: 
 
 + emailUpdates (weekly|biweekly|monthly|never) 
@@ -106,6 +114,7 @@ Receive advice setting
 		}
 	]
 ```
+
 # Get new email after change.
 ## GET /account/setting/newEmail
 
@@ -120,11 +129,6 @@ After the user changes his email address the value is stored under the name **ne
 		"privacy":"private"
 	}]
 ```
-
-# Check if a user is connected to a certain social network
-## GET /account/social/{network}/is-connected
-+ network: (String, `facebook`), valid networks: facebook.
-+ Response: true | false.
  
 
 
