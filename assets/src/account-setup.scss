@@ -5,7 +5,7 @@
 @import "./components/common/defaults";
 @import "./components/common/typography";
 
-.login {
+.account-setup {
   #container {
     background-color: $footer-background;
     background-image: url(../images/banner.jpg);
@@ -13,6 +13,37 @@
     background-repeat: no-repeat;
     background-size: cover;
     margin-top: 0;
+  }
+
+  input {
+    margin: auto;
+    max-width: 480px;
+    &.padded {
+      border-color: lighten($alternate-color-2, 5%);
+      box-shadow: 0 1px 1px rgba(255,255,255,0.1);
+    }
+  }
+
+  label {
+    color: $inverted-text-color;
+    margin: 1.75em auto 0 auto;
+    text-transform: uppercase;
+    max-width: 480px;
+  }
+
+  .checkbox {
+    max-width: 480px;
+    margin: 1.5em auto 2em auto;
+
+    input[type="checkbox"] {
+      float: left;
+      margin: 0.25em 0.5em 0.25em 0;
+    }
+
+    p {
+      color: $inverted-text-color;
+      font-size: 0.8em;
+    }
   }
 
   &.info {
@@ -25,17 +56,16 @@
     #container {
       background-image: url(../images/banner-3.jpg);
     }
-    .sections .form {
-      margin-top: 3.5em;
-    }
+    // .sections .form {
+      // margin-top: 3.5em;
+    // }
   }
 
   .section > .container {
-    background: #fff;
+    background: none;
     border-radius: 5px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     margin: 0.75em auto;
-    max-width: 480px;
+    max-width: 720px;
     padding: 2em 0;
     position: relative;
   }
@@ -43,10 +73,10 @@
     margin: 0;
     @include center();
     .section {
-      @include column(1/2);
       box-sizing: border-box;
     }
     .spiel {
+      display: none;
       @extend .inverted;
       padding: 0 1em;
       a {
@@ -59,7 +89,7 @@
       }
       .quote {
         font-size: 2.5em;
-        font-weight: 200;
+        font-weight: 100;
         line-height: 1.4;
       }
       .author {
@@ -70,7 +100,8 @@
       }
     }
     .form {
-      margin-top: -4.5em;
+      margin: auto;
+      max-width: 640px;
       padding: 0 1em 0 0;
       a {
         text-decoration: none;
@@ -79,7 +110,7 @@
         }
       }
       .container {
-        margin-top: -1.5em;
+        // margin-top: -1.5em;
         padding: 0;
 
         &.reset {
@@ -87,17 +118,31 @@
         }
       }
       h1 {
+        color: $inverted-text-color;
         font-size: 2em;
       }
+      p {
+        &.centered {
+          color: $tagline-color;
+          margin-bottom: 2em;
+        }
+        &.error {
+          color: darken($error-background, 20%);
+        }
+      }
       .forgot {
-        text-transform: uppercase;
+        display: block;
         font-size: 0.8em;
         font-weight: 400;
+        margin: 1em auto 0 auto;
+        text-transform: uppercase;
+        max-width: 480px;
       }
       .content {
-        border-bottom: lighten($secondary-color, 30%) solid 1px;
-        padding: 2em 3em;
+        // border-bottom: lighten($secondary-color, 30%) solid 1px;
+        padding: 0.5em 1em;
         &.account{
+          color: $inverted-text-color;
           font-size: 0.85em;
           border-bottom: none;
           padding: 1.5em;
@@ -111,18 +156,22 @@
         margin-bottom: 0.5em;
       }
       .actions {
-        margin-top: 1.5em;
+        margin: 1.5em auto 0 auto;
         text-align: right;
+        max-width: 480px;
       }
     }
   }
   header {
     background: none;
-    padding: 2em 1em;
+    padding: 0;
     position: static;
+    text-align: center;
   }
   .logo {
-    font-size: 1.5em;
+    font-size: 0.8em;
+    position: relative;
+    left: -0.5em;
   }
   footer {
     background: none;
@@ -137,7 +186,7 @@
 }
 
 @media (max-width: $medium-portrait) {
-  .login {
+  .account-setup {
     header {
       padding: 1em;
       text-align: center;
@@ -164,11 +213,10 @@
       }
       .section {
         @include column(1);
-        margin-top: 2em;
         padding: 0 1em;
 
         .content {
-          padding: 2em;
+          padding: 0 1em;
         }
       }
     }
@@ -179,7 +227,7 @@
           float: none;
           font-size: 0.75em;
           margin: 2em auto;
-          max-width: 480px;
+          max-max-width: 480px;
           padding: 0 3em;
           text-align: center;
           width: 100%;
