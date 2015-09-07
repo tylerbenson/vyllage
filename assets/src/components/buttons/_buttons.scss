@@ -70,6 +70,7 @@ input[type="reset"] {
     border-color: $primary-color;
 
     &:hover,
+    &:focus,
     &:active {
       background: $primary-color;
       color: $inverted-text-color;

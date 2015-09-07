@@ -33,7 +33,9 @@ var Avatar = React.createClass({
 		};
 
 		return (
-			<div className="avatar" style={styles}></div>
+			<div className="avatar" style={styles}>
+				{this.props.children}
+			</div>
 		);
 	}
 
