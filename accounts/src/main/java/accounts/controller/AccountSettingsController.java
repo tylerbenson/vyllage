@@ -150,10 +150,11 @@ public class AccountSettingsController {
 		List<AccountSetting> settings = accountSettingsService
 				.getAccountSettings(user);
 
-		// To prevent Chrome from showing the json object rather than the actual
-		// page.
-		// Firefox and others seem to ignore the cache, (odd) and display the
-		// page normally.
+		/**
+		 * To prevent Chrome from showing the json object rather than the actual
+		 * page. Firefox and others seem to ignore the cache, (odd) and display
+		 * the page normally.
+		 */
 		response.setHeader("Cache-Control", "no-cache,no-store");
 
 		return addFacebookConnected(user, settings);
@@ -165,8 +166,10 @@ public class AccountSettingsController {
 			@RequestBody final List<AccountSetting> settings,
 			@AuthenticationPrincipal User user) {
 
-		// removing facebook connection since they will likely send it along and
-		// we don't want save that
+		/**
+		 * Removing facebook connection since they will likely send it along and
+		 * we don't want to save that
+		 */
 		settings.removeIf(ac -> AccountSettingsEnum.facebook_connected.name()
 				.equalsIgnoreCase(ac.getName()));
 
