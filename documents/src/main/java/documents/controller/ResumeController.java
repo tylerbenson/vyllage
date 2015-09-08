@@ -490,6 +490,23 @@ public class ResumeController {
 		return documentService.saveComment(comment);
 	}
 
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.DELETE, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.ACCEPTED)
+	@CheckReadAccess
+	public void deleteCommentsForSection(HttpServletRequest request,
+			@PathVariable final Long documentId,
+			@PathVariable final Long sectionId,
+			@PathVariable final Long commentId,
+			@RequestBody final Comment comment,
+			@AuthenticationPrincipal User user) {
+
+		if (!user.getUserId().equals(comment.getUserId())
+				|| !commentId.equals(comment.getCommentId()))
+			throw new AccessDeniedException(
+					"You cannot delete another user's comment.");
+		documentService.deleteComment(comment);
+	}
+
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
