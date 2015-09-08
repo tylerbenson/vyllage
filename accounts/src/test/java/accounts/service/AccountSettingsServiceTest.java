@@ -218,8 +218,7 @@ public class AccountSettingsServiceTest {
 
 		Mockito.when(user.getUserId()).thenReturn(userId);
 
-		Mockito.when(accountSettingRepository.set(userId, setting)).thenReturn(
-				setting);
+		Mockito.when(accountSettingRepository.set(setting)).thenReturn(setting);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
 				userService, accountSettingRepository);

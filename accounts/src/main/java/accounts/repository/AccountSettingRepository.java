@@ -73,13 +73,13 @@ public class AccountSettingRepository {
 		return Optional.ofNullable(createAccountSetting().apply(settingRecord));
 	}
 
-	public AccountSetting set(Long userId, AccountSetting setting) {
+	public AccountSetting set(AccountSetting setting) {
 
 		logger.info("Preparing to save setting: " + setting);
 
 		AccountSettingRecord settingRecord = sql.fetchOne(
 				ACCOUNT_SETTING,
-				ACCOUNT_SETTING.USER_ID.eq(userId).and(
+				ACCOUNT_SETTING.USER_ID.eq(setting.getUserId()).and(
 						ACCOUNT_SETTING.NAME.eq(setting.getName())));
 
 		try {
@@ -88,7 +88,7 @@ public class AccountSettingRepository {
 				AccountSettingRecord newRecord = sql.newRecord(ACCOUNT_SETTING);
 				newRecord.setName(setting.getName());
 				newRecord.setPrivacy(setting.getPrivacy());
-				newRecord.setUserId(userId);
+				newRecord.setUserId(setting.getUserId());
 				newRecord.setValue(setting.getValue());
 				newRecord.store();
 				setting.setAccountSettingId(newRecord.getAccountSettingId());
