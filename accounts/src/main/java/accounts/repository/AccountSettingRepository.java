@@ -6,8 +6,10 @@ import static accounts.domain.tables.Users.USERS;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,13 @@ import accounts.domain.tables.Users;
 import accounts.domain.tables.records.AccountSettingRecord;
 import accounts.model.account.settings.AccountSetting;
 
+import com.newrelic.api.agent.NewRelic;
+
 @Repository
 public class AccountSettingRepository {
+
+	private final Logger logger = Logger
+			.getLogger(AccountSettingRepository.class.getName());
 
 	@Autowired
 	private DSLContext sql;
@@ -67,23 +74,35 @@ public class AccountSettingRepository {
 	}
 
 	public AccountSetting set(Long userId, AccountSetting setting) {
+
+		logger.info("Preparing to save setting: " + setting);
+
 		AccountSettingRecord settingRecord = sql.fetchOne(
 				ACCOUNT_SETTING,
 				ACCOUNT_SETTING.USER_ID.eq(userId).and(
 						ACCOUNT_SETTING.NAME.eq(setting.getName())));
 
-		if (settingRecord == null) {
-			AccountSettingRecord newRecord = sql.newRecord(ACCOUNT_SETTING);
-			newRecord.setName(setting.getName());
-			newRecord.setPrivacy(setting.getPrivacy());
-			newRecord.setUserId(userId);
-			newRecord.setValue(setting.getValue());
-			newRecord.store();
-			setting.setAccountSettingId(newRecord.getAccountSettingId());
-		} else {
-			settingRecord.setPrivacy(setting.getPrivacy());
-			settingRecord.setValue(setting.getValue());
-			settingRecord.store();
+		try {
+
+			if (settingRecord == null) {
+				AccountSettingRecord newRecord = sql.newRecord(ACCOUNT_SETTING);
+				newRecord.setName(setting.getName());
+				newRecord.setPrivacy(setting.getPrivacy());
+				newRecord.setUserId(userId);
+				newRecord.setValue(setting.getValue());
+				newRecord.store();
+				setting.setAccountSettingId(newRecord.getAccountSettingId());
+				logger.info("Created Setting: " + setting);
+			} else {
+				settingRecord.setPrivacy(setting.getPrivacy());
+				settingRecord.setValue(setting.getValue());
+				settingRecord.store();
+				logger.info("Updated: " + setting);
+			}
+
+		} catch (Exception e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
 		}
 
 		return setting;
