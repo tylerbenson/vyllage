@@ -1,4 +1,4 @@
-package documents.controllers;
+package documents.controller;
 
 import static com.jayway.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.equalTo;

@@ -1,4 +1,4 @@
-package connections.controllers;
+package connections.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;

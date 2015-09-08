@@ -1,4 +1,4 @@
-package accounts.controllers;
+package accounts.controller;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

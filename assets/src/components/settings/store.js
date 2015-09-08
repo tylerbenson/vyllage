@@ -26,18 +26,12 @@ module.exports = Reflux.createStore({
     .set('Accept', 'application/json')
     .end(function (err, res) {
       this.settings = res.body;
+      var fbIndex = findindex(this.settings, {name: 'facebook_connected'});
+      if( fbIndex ){
+        this.facebook = this.settings[fbIndex].value == "true" ? true : false;
+      }
       this.update();
     }.bind(this));
-
-    request
-    .get('/account/social/facebook/is-connected')
-    .set('Accept', 'application/json')
-    .end(function (err, res) {
-      this.facebook = res.body;
-      this.update();
-    }.bind(this));
-
-
   },
   onUpdateSettings: function (options) {
     options = options || {};
