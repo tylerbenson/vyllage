@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.NonNull;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -595,8 +597,8 @@ public class ResumeController {
 
 	}
 
-	private void setCommentData(final Long sectionId, final Comment comment,
-			User user) {
+	protected void setCommentData(@NonNull final Long sectionId,
+			@NonNull final Comment comment, @NonNull User user) {
 		if (comment.getUserId() == null)
 			comment.setUserId(user.getUserId());
 

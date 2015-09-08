@@ -20,8 +20,7 @@ public class CommentRepositoryTest {
 	private IRepository<Comment> repository;
 
 	@Test
-	public void testRetrieveExistingDocument() throws ElementNotFoundException {
-		// TODO: this is retrieving the comment inserted in V2__init.sql...
+	public void testRetrieveExistingComment() throws ElementNotFoundException {
 		Comment comment = repository.get(0L);
 
 		Assert.assertNotNull("Comment is null.", comment);

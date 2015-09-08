@@ -1,7 +1,9 @@
 package documents.controllers;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,8 +59,7 @@ public class ResumeControllerIntegTest {
 
 	@Test
 	public void updateTagLineTest() throws ElementNotFoundException,
-			NoSuchMethodException, SecurityException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+			IllegalArgumentException {
 
 		Document document = generateDocument();
 
@@ -383,11 +384,12 @@ public class ResumeControllerIntegTest {
 		User o = Mockito.mock(User.class);
 
 		Authentication authentication = Mockito.mock(Authentication.class);
-		Mockito.when(authentication.getPrincipal()).thenReturn(o);
+		when(authentication.getPrincipal()).thenReturn(o);
+
 		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-		Mockito.when(securityContext.getAuthentication()).thenReturn(
-				authentication);
-		Mockito.when(o.getUserId()).thenReturn(5L);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		when(o.getUserId()).thenReturn(5L);
+
 		SecurityContextHolder.setContext(securityContext);
 
 		Long documentId = 0L;
@@ -414,12 +416,13 @@ public class ResumeControllerIntegTest {
 		// different user
 		User o = Mockito.mock(User.class);
 
-		Authentication authentication = Mockito.mock(Authentication.class);
-		Mockito.when(authentication.getPrincipal()).thenReturn(o);
-		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-		Mockito.when(securityContext.getAuthentication()).thenReturn(
-				authentication);
-		Mockito.when(o.getUserId()).thenReturn(5L);
+		Authentication authentication = mock(Authentication.class);
+		when(authentication.getPrincipal()).thenReturn(o);
+
+		SecurityContext securityContext = mock(SecurityContext.class);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		when(o.getUserId()).thenReturn(5L);
+
 		SecurityContextHolder.setContext(securityContext);
 
 		controller.saveSection(documentId, createdSection.getSectionId(),
@@ -427,12 +430,40 @@ public class ResumeControllerIntegTest {
 
 	}
 
-	private User generateAndLoginUser() {
-		User o = Mockito.mock(User.class);
+	@Test
+	public void testCommentDelete() throws ElementNotFoundException {
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		Long documentId = 0L;
+		Long sectionId = 129L;
+		Long userId = 0L;
 
-		Authentication authentication = Mockito.mock(Authentication.class);
+		Comment comment = new Comment();
+		comment.setCommentId(null);
+		comment.setAvatarUrl(null);
+		comment.setCommentText("My own comment.");
+		comment.setOtherCommentId(null);
+		comment.setLastModified(null);
+		comment.setSectionId(129L);
+		comment.setSectionVersion(0L);
+		comment.setUserId(userId);
+		comment.setUserName(null);
+
+		User user = generateAndLoginUser();
+		when(user.getUserId()).thenReturn(userId);
+
+		controller.saveCommentsForSection(request, documentId, sectionId,
+				comment, user);
+	}
+
+	public void testSetCommentData() {
+	}
+
+	private User generateAndLoginUser() {
+		User o = mock(User.class);
+
+		Authentication authentication = mock(Authentication.class);
 		Mockito.when(authentication.getPrincipal()).thenReturn(o);
-		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+		SecurityContext securityContext = mock(SecurityContext.class);
 		Mockito.when(securityContext.getAuthentication()).thenReturn(
 				authentication);
 		SecurityContextHolder.setContext(securityContext);
