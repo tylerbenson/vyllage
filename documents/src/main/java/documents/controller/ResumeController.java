@@ -438,7 +438,7 @@ public class ResumeController {
 		return documentService.getCommentsForSection(request, sectionId);
 	}
 
-	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
 	public @ResponseBody Comment saveCommentsForSection(
