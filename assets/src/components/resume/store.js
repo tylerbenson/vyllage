@@ -331,6 +331,33 @@ module.exports = Reflux.createStore({
         this.trigger(this.resume);
       }.bind(this))
   },
+  onDeleteComment: function( comment , sectionId ){
+    var url = urlTemplate
+                .parse(endpoints.resumeComment)
+                .expand({
+                  documentId: this.documentId,
+                  sectionId: sectionId,
+                  commentId: comment.commentId
+                });
+    request
+      .del(url)
+      .set(this.tokenHeader, this.tokenValue)
+      .set('Content-Type', 'application/json')
+      .send(comment)
+      .end(function (err, res) {
+         if(res.status == 202){
+            var index = findindex(this.resume.sections, {sectionId: sectionId});
+            if (index != -1 ) {
+              var commentIndex = findindex(this.resume.sections[index].comments ,{ commentId : comment.commentId });
+              if( commentIndex != -1){
+                this.resume.sections[index].comments.splice(commentIndex , 1);
+                this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+                this.trigger(this.resume);
+              }
+            }
+         }
+      }.bind(this));
+  },
   onEnableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].uiEditMode = true;

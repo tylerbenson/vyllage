@@ -87,10 +87,12 @@ var SectionGroup = React.createClass({
     return (
       <Sortable config={config} className="section" rel={this.props.section.type}>
         <div className="container">
-          <span className="inverted secondary button small move move-section" {...this.props}>
-            <i className="ion-arrow-move"></i>
-            Move
-          </span>
+          { this.props.section.owner ? 
+            <span className="inverted secondary button small move move-section" {...this.props}>
+              <i className="ion-arrow-move"></i>
+              Move
+            </span> : null
+          }
           <Header
             title={this.props.section.title}
             type={this.props.section.type}

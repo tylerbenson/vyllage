@@ -152,7 +152,7 @@ var Tags = React.createClass({
             {this.state.uiEditMode ? <TagInput onKeyPress={this.onTagAdd} /> : null}
           </Sortable> }
 
-          <SectionFooter section={this.props.section} />
+          <SectionFooter section={this.props.section} owner={this.props.owner} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
           {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>
