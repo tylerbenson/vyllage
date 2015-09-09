@@ -1,4 +1,4 @@
-package connections.controllers;
+package connections.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.web.UserInfo;
+import util.web.account.AccountUrlConstants;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
 import connections.model.AdviceRequestParameter;
@@ -84,7 +85,8 @@ public class AdviceRequestController {
 		if (accountService.canIRequestFeedback(request, user) == true)
 			return "getFeedback";
 
-		return "redirect:/account/email/needs-email-confirmation";
+		return "redirect:/account/email/"
+				+ AccountUrlConstants.NEEDS_EMAIL_CONFIRMATION_VALID_PHONE_NUMBER;
 
 	}
 

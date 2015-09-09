@@ -188,7 +188,7 @@ public class UserContactSuggestionServiceTest {
 		AccountSetting setting = new AccountSetting(null, student.getUserId(),
 				"graduationDate", LocalDate.now().plusDays(10).toString(),
 				Privacy.PUBLIC.name());
-		accountSettingRepository.set(student.getUserId(), setting);
+		accountSettingRepository.set(setting);
 
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);
@@ -214,7 +214,7 @@ public class UserContactSuggestionServiceTest {
 
 		AccountSetting setting = new AccountSetting(null, student.getUserId(),
 				"graduationDate", "Aug 2015", Privacy.PUBLIC.name());
-		accountSettingRepository.set(student.getUserId(), setting);
+		accountSettingRepository.set(setting);
 
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);

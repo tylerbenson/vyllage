@@ -221,7 +221,7 @@ public class UserDetailRepository implements UserDetailsManager,
 			emailSetting.setUserId(newRecord.getUserId());
 			emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
 			emailSetting.setValue(user.getUsername());
-			accountSettingRepository.set(newRecord.getUserId(), emailSetting);
+			accountSettingRepository.set(emailSetting);
 
 			AccountSetting emailUpdatesSetting = new AccountSetting();
 			emailUpdatesSetting.setName("emailUpdates");
@@ -230,8 +230,7 @@ public class UserDetailRepository implements UserDetailsManager,
 					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
 			emailUpdatesSetting.setValue(EmailFrequencyUpdates.NEVER.name()
 					.toLowerCase());
-			accountSettingRepository.set(newRecord.getUserId(),
-					emailUpdatesSetting);
+			accountSettingRepository.set(emailUpdatesSetting);
 
 			AccountSetting avatarSetting = new AccountSetting();
 			avatarSetting.setName("avatar");
@@ -239,7 +238,9 @@ public class UserDetailRepository implements UserDetailsManager,
 			avatarSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
 			avatarSetting.setValue(AvatarSourceEnum.GRAVATAR.name()
 					.toLowerCase());
-			accountSettingRepository.set(newRecord.getUserId(), avatarSetting);
+
+			logger.info("About to save new avatar setting :" + avatarSetting);
+			accountSettingRepository.set(avatarSetting);
 
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
@@ -551,6 +552,7 @@ public class UserDetailRepository implements UserDetailsManager,
 						Privacy.PRIVATE.name().toLowerCase()));
 
 				// default avatar settings
+				logger.info("About to save default avatar setting batch account creation.");
 				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(

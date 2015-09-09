@@ -134,7 +134,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			emailSetting.setUserId(newRecord.getUserId());
 			emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
 			emailSetting.setValue(user.getUsername());
-			accountSettingRepository.set(newRecord.getUserId(), emailSetting);
+			accountSettingRepository.set(emailSetting);
 
 			AccountSetting emailUpdatesSetting = new AccountSetting();
 			emailUpdatesSetting.setName("emailUpdates");
@@ -143,8 +143,7 @@ public class LMSUserRepository implements LMSUserDetailsService {
 					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
 			emailUpdatesSetting.setValue(EmailFrequencyUpdates.NEVER.name()
 					.toLowerCase());
-			accountSettingRepository.set(newRecord.getUserId(),
-					emailUpdatesSetting);
+			accountSettingRepository.set(emailUpdatesSetting);
 
 			// Add LMS details if doesn't exist
 			LMSAccount lmsAccount = lmsRequest.getLmsAccount();

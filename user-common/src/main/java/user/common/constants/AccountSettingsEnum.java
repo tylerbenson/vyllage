@@ -1,5 +1,5 @@
 package user.common.constants;
 
 public enum AccountSettingsEnum {
-	phoneNumber
+	phoneNumber, facebook, facebook_connected
 }

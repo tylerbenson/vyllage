@@ -1,18 +1,24 @@
-package documents.controllers;
+package documents.controller;
 
-import java.io.IOException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 
+import org.apache.http.entity.ContentType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -22,13 +28,17 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import user.common.User;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import documents.Application;
-import documents.controller.ResumeController;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
@@ -51,8 +61,17 @@ public class ResumeControllerIntegTest {
 	@Inject
 	private DocumentService documentService;
 
+	private MockMvc mockMvc;
+
+	@Inject
+	private WebApplicationContext wContext;
+
+	@Inject
+	private ObjectMapper mapper;
+
 	@Before
 	public void setUp() throws Exception {
+		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
 	}
 
 	@Test
@@ -321,8 +340,7 @@ public class ResumeControllerIntegTest {
 	}
 
 	@Test
-	public void saveCommentsSuccessfully() throws JsonProcessingException,
-			IOException, ElementNotFoundException {
+	public void saveCommentsSuccessfully() throws Exception {
 		User user = generateAndLoginUser();
 		Long userId = 0L;
 		Long sectionId = 127L;
@@ -332,18 +350,31 @@ public class ResumeControllerIntegTest {
 		comment.setUserId(userId);
 		comment.setCommentId(null);
 		comment.setSectionVersion(1L);
+		comment.setCommentText("Some comment.");
 
-		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+		when(user.getUserId()).thenReturn(userId);
 
-		Mockito.when(user.getUserId()).thenReturn(userId);
+		MvcResult mvcResult = mockMvc
+				.perform(
+						post(
+								"/resume/" + documentId + "/section/"
+										+ sectionId + "/comment").contentType(
+								ContentType.APPLICATION_JSON.toString())
+								.content(mapper.writeValueAsString(comment)))
+				.andExpect(status().isOk()).andReturn();
 
-		controller.saveCommentsForSection(request, documentId, sectionId,
-				comment, user);
+		assertNotNull(mvcResult);
+
+		Comment savedComment = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), Comment.class);
+
+		assertNotNull(savedComment);
+		assertNotNull(savedComment.getCommentId());
+		assertEquals(comment.getCommentText(), savedComment.getCommentText());
 	}
 
-	@Test(expected = ElementNotFoundException.class)
-	public void saveCommentsDocumentNotFound() throws JsonProcessingException,
-			IOException, ElementNotFoundException {
+	@Test
+	public void saveCommentsDocumentNotFound() throws Exception {
 		User user = generateAndLoginUser();
 		Long userId = 0L;
 		Long sectionId = 123L;
@@ -354,40 +385,95 @@ public class ResumeControllerIntegTest {
 		comment.setCommentId(null);
 		comment.setSectionVersion(1L);
 
-		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+		when(user.getUserId()).thenReturn(userId);
 
-		Mockito.when(user.getUserId()).thenReturn(userId);
+		mockMvc.perform(
+				post(
+						"/resume/" + documentId + "/section/" + sectionId
+								+ "/comment").contentType(
+						ContentType.APPLICATION_JSON.toString()).content(
+						mapper.writeValueAsString(comment))).andExpect(
+				status().isNotFound());
 
-		controller.saveCommentsForSection(request, documentId, sectionId,
-				comment, user);
 	}
 
-	@Test(expected = ElementNotFoundException.class)
-	public void getResumeHeaderDocumentNotFound()
-			throws ElementNotFoundException, JsonProcessingException,
-			IOException {
+	@Test
+	public void testCommentDelete() throws Exception {
+		Long documentId = 0L;
+		Long sectionId = 129L;
+		Long sectionVersion = 1L;
+		Long userId = 0L;
+
+		Comment comment = new Comment();
+		comment.setCommentId(null);
+		comment.setAvatarUrl(null);
+		comment.setCommentText("My own comment.");
+		comment.setOtherCommentId(null);
+		comment.setLastModified(null);
+		comment.setSectionId(129L);
+		comment.setSectionVersion(sectionVersion);
+		comment.setUserId(userId);
+		comment.setUserName(null);
 
 		User user = generateAndLoginUser();
+		when(user.getUserId()).thenReturn(userId);
 
-		Long documentId = 999999L;
+		MvcResult mvcResult = mockMvc
+				.perform(
+						post(
+								"/resume/" + documentId + "/section/"
+										+ sectionId + "/comment").contentType(
+								ContentType.APPLICATION_JSON.toString())
+								.content(mapper.writeValueAsString(comment)))
+				.andExpect(status().isOk()).andReturn();
 
-		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+		Comment savedComment = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), Comment.class);
 
-		controller.getResumeHeader(request, documentId, user);
+		mockMvc.perform(
+				delete(
+						"/resume/" + documentId + "/section/" + sectionId
+								+ "/comment/" + savedComment.getCommentId())
+						.contentType(ContentType.APPLICATION_JSON.toString())
+						.content(mapper.writeValueAsString(savedComment)))
+				.andExpect(status().isAccepted());
 
+	}
+
+	@Test
+	public void testSetCommentData() {
+		Long userId = 0L;
+		Long sectionId = 129L;
+
+		Comment comment = new Comment();
+		comment.setCommentId(null);
+		comment.setAvatarUrl(null);
+		comment.setCommentText("My own comment.");
+		comment.setOtherCommentId(null);
+		comment.setLastModified(null);
+		comment.setSectionId(null);
+		comment.setSectionVersion(0L);
+		comment.setUserId(null);
+		comment.setUserName(null);
+
+		User user = generateAndLoginUser();
+		when(user.getUserId()).thenReturn(userId);
+		when(user.getFirstName()).thenReturn("firstName");
+		when(user.getLastName()).thenReturn("lastName");
+
+		controller.setCommentData(sectionId, comment, user);
 	}
 
 	@Test(expected = AccessDeniedException.class)
 	public void createSectionDenied() throws JsonProcessingException,
 			ElementNotFoundException {
-		User o = Mockito.mock(User.class);
+		User o = mock(User.class);
 
-		Authentication authentication = Mockito.mock(Authentication.class);
-		Mockito.when(authentication.getPrincipal()).thenReturn(o);
-		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-		Mockito.when(securityContext.getAuthentication()).thenReturn(
-				authentication);
-		Mockito.when(o.getUserId()).thenReturn(5L);
+		Authentication authentication = mock(Authentication.class);
+		when(authentication.getPrincipal()).thenReturn(o);
+		SecurityContext securityContext = mock(SecurityContext.class);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		when(o.getUserId()).thenReturn(5L);
 		SecurityContextHolder.setContext(securityContext);
 
 		Long documentId = 0L;
@@ -412,14 +498,13 @@ public class ResumeControllerIntegTest {
 		createdSection.setRoleDescription(newDescription);
 
 		// different user
-		User o = Mockito.mock(User.class);
+		User o = mock(User.class);
 
-		Authentication authentication = Mockito.mock(Authentication.class);
-		Mockito.when(authentication.getPrincipal()).thenReturn(o);
-		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-		Mockito.when(securityContext.getAuthentication()).thenReturn(
-				authentication);
-		Mockito.when(o.getUserId()).thenReturn(5L);
+		Authentication authentication = mock(Authentication.class);
+		when(authentication.getPrincipal()).thenReturn(o);
+		SecurityContext securityContext = mock(SecurityContext.class);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		when(o.getUserId()).thenReturn(5L);
 		SecurityContextHolder.setContext(securityContext);
 
 		controller.saveSection(documentId, createdSection.getSectionId(),
@@ -428,13 +513,12 @@ public class ResumeControllerIntegTest {
 	}
 
 	private User generateAndLoginUser() {
-		User o = Mockito.mock(User.class);
+		User o = mock(User.class);
 
-		Authentication authentication = Mockito.mock(Authentication.class);
-		Mockito.when(authentication.getPrincipal()).thenReturn(o);
-		SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-		Mockito.when(securityContext.getAuthentication()).thenReturn(
-				authentication);
+		Authentication authentication = mock(Authentication.class);
+		when(authentication.getPrincipal()).thenReturn(o);
+		SecurityContext securityContext = mock(SecurityContext.class);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
 		SecurityContextHolder.setContext(securityContext);
 		return o;
 	}

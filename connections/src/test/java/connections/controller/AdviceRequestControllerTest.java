@@ -1,4 +1,4 @@
-package connections.controllers;
+package connections.controller;
 
 import java.util.Arrays;
 
@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 
 import user.common.User;
 import user.common.web.AccountContact;
+import connections.controller.AdviceRequestController;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
 import connections.model.NotRegisteredUser;
