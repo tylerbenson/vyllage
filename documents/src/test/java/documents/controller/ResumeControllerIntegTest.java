@@ -398,11 +398,63 @@ public class ResumeControllerIntegTest {
 	}
 
 	@Test
-	public void testCommentDelete() throws Exception {
+	public void testCommentDeleteOwnComment() throws Exception {
+		Long documentId = 0L;
+		Long sectionId = 129L;
+		Long sectionVersion = 1L;
+		Long userId = 3L;
+		Long anotherUserId = 0L;
+
+		Document document = mock(Document.class);
+		when(documentService.getDocument(documentId)).thenReturn(document);
+		when(document.getUserId()).thenReturn(userId);
+
+		Comment comment = new Comment();
+		comment.setCommentId(null);
+		comment.setAvatarUrl(null);
+		comment.setCommentText("My own comment.");
+		comment.setOtherCommentId(null);
+		comment.setLastModified(null);
+		comment.setSectionId(129L);
+		comment.setSectionVersion(sectionVersion);
+		comment.setUserId(anotherUserId);
+		comment.setUserName(null);
+
+		User user = generateAndLoginUser();
+		when(user.getUserId()).thenReturn(userId);
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						post(
+								"/resume/" + documentId + "/section/"
+										+ sectionId + "/comment").contentType(
+								ContentType.APPLICATION_JSON.toString())
+								.content(mapper.writeValueAsString(comment)))
+				.andExpect(status().isOk()).andReturn();
+
+		Comment savedComment = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), Comment.class);
+
+		mockMvc.perform(
+				delete(
+						"/resume/" + documentId + "/section/" + sectionId
+								+ "/comment/" + savedComment.getCommentId())
+						.contentType(ContentType.APPLICATION_JSON.toString())
+						.content(mapper.writeValueAsString(savedComment)))
+				.andExpect(status().isAccepted());
+
+	}
+
+	@Test
+	public void testCommentDeleteOwnCommentFromOwnDocument() throws Exception {
 		Long documentId = 0L;
 		Long sectionId = 129L;
 		Long sectionVersion = 1L;
 		Long userId = 0L;
+
+		Document document = mock(Document.class);
+		when(documentService.getDocument(documentId)).thenReturn(document);
+		when(document.getUserId()).thenReturn(userId);
 
 		Comment comment = new Comment();
 		comment.setCommentId(null);
@@ -413,6 +465,54 @@ public class ResumeControllerIntegTest {
 		comment.setSectionId(129L);
 		comment.setSectionVersion(sectionVersion);
 		comment.setUserId(userId);
+		comment.setUserName(null);
+
+		User user = generateAndLoginUser();
+		when(user.getUserId()).thenReturn(userId);
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						post(
+								"/resume/" + documentId + "/section/"
+										+ sectionId + "/comment").contentType(
+								ContentType.APPLICATION_JSON.toString())
+								.content(mapper.writeValueAsString(comment)))
+				.andExpect(status().isOk()).andReturn();
+
+		Comment savedComment = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), Comment.class);
+
+		mockMvc.perform(
+				delete(
+						"/resume/" + documentId + "/section/" + sectionId
+								+ "/comment/" + savedComment.getCommentId())
+						.contentType(ContentType.APPLICATION_JSON.toString())
+						.content(mapper.writeValueAsString(savedComment)))
+				.andExpect(status().isAccepted());
+
+	}
+
+	@Test
+	public void testDocumentOwnerDeletesAnotherUserComment() throws Exception {
+		Long documentId = 0L;
+		Long sectionId = 129L;
+		Long sectionVersion = 1L;
+		Long userId = 0L;
+		Long anotherUserId = 3L;
+
+		Document document = mock(Document.class);
+		when(documentService.getDocument(documentId)).thenReturn(document);
+		when(document.getUserId()).thenReturn(userId);
+
+		Comment comment = new Comment();
+		comment.setCommentId(null);
+		comment.setAvatarUrl(null);
+		comment.setCommentText("My own comment.");
+		comment.setOtherCommentId(null);
+		comment.setLastModified(null);
+		comment.setSectionId(129L);
+		comment.setSectionVersion(sectionVersion);
+		comment.setUserId(anotherUserId);
 		comment.setUserName(null);
 
 		User user = generateAndLoginUser();

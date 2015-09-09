@@ -500,12 +500,21 @@ public class ResumeController {
 			@PathVariable final Long sectionId,
 			@PathVariable final Long commentId,
 			@RequestBody final Comment comment,
-			@AuthenticationPrincipal User user) {
+			@AuthenticationPrincipal User user) throws ElementNotFoundException {
+
+		Document document = this.documentService.getDocument(documentId);
+
+		// allow the document owner to delete all comments
+		if (user.getUserId().equals(document.getUserId())) {
+			documentService.deleteComment(comment);
+			return;
+		}
 
 		if (!user.getUserId().equals(comment.getUserId())
 				|| !commentId.equals(comment.getCommentId()))
 			throw new AccessDeniedException(
 					"You cannot delete another user's comment.");
+
 		documentService.deleteComment(comment);
 	}
 
