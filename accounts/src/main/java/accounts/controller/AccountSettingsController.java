@@ -195,11 +195,13 @@ public class AccountSettingsController {
 			return new ResponseEntity<List<AccountSetting>>(settings,
 					HttpStatus.BAD_REQUEST);
 
-		// adding facebook connection back...
-		addFacebookConnected(user, settings);
+		List<AccountSetting> savedAccountSettings = accountSettingsService
+				.setAccountSettings(user, settings);
 
-		return new ResponseEntity<List<AccountSetting>>(
-				accountSettingsService.setAccountSettings(user, settings),
+		// adding facebook connection back...
+		addFacebookConnected(user, savedAccountSettings);
+
+		return new ResponseEntity<List<AccountSetting>>(savedAccountSettings,
 				HttpStatus.OK);
 	}
 
