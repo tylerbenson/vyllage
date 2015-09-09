@@ -74,7 +74,7 @@ public class UserOrganizationRoleRepository {
 			roleSetting.setUserId(role.getUserId());
 			roleSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
 			roleSetting.setValue(role.getAuthority());
-			accountSettingRepository.set(role.getUserId(), roleSetting);
+			accountSettingRepository.set(roleSetting);
 
 			AccountSetting organizationSetting = new AccountSetting();
 			organizationSetting.setName("organization");
@@ -83,7 +83,7 @@ public class UserOrganizationRoleRepository {
 					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
 			organizationSetting.setValue(organizationRepository.get(
 					role.getOrganizationId()).getOrganizationName());
-			accountSettingRepository.set(role.getUserId(), organizationSetting);
+			accountSettingRepository.set(organizationSetting);
 		}
 	}
 
