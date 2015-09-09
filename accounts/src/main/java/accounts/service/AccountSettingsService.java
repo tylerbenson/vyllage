@@ -169,7 +169,7 @@ public class AccountSettingsService {
 				.stream()
 				.filter(set -> !set.getName().equalsIgnoreCase("role")
 						&& !set.getName().equalsIgnoreCase("organization"))
-				.map(set -> setAccountSetting(user, set))
+				.map(set -> this.setAccountSetting(user, set))
 				.collect(Collectors.toList()));
 
 		return savedSettings;
