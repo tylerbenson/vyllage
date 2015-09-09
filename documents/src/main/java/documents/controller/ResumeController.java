@@ -176,7 +176,6 @@ public class ResumeController {
 
 		model.addAttribute("accountName", accountName(request, user));
 		model.addAttribute("userInfo", userInfo(user));
-		model.addAttribute("documentId", documentId);
 		model.addAttribute("documentCreationDate", document.getDateCreated());
 
 		return "resume";
