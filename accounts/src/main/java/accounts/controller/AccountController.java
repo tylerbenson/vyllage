@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
@@ -39,6 +41,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
+import user.common.constants.AccountSettingsEnum;
 import user.common.web.AccountContact;
 import user.common.web.UserInfo;
 import accounts.model.Email;
@@ -47,11 +50,14 @@ import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.ChangePasswordForm;
 import accounts.model.account.ResetPasswordForm;
 import accounts.model.account.ResetPasswordLink;
+import accounts.model.account.settings.AccountSetting;
 import accounts.repository.EmailRepository;
 import accounts.repository.UserNotFoundException;
+import accounts.service.AccountSettingsService;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
 import accounts.service.contactSuggestion.UserContactSuggestionService;
+import accounts.validation.PhoneNumberValidator;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -77,6 +83,8 @@ public class AccountController {
 
 	private final UserContactSuggestionService userContactSuggestionService;
 
+	private final AccountSettingsService accountSettingsService;
+
 	private final EmailRepository emailRepository;
 
 	private final EmailBuilder emailBuilder;
@@ -91,6 +99,7 @@ public class AccountController {
 			final UserService userService,
 			final DocumentLinkService documentLinkService,
 			final UserContactSuggestionService userContactSuggestionService,
+			final AccountSettingsService accountSettingsService,
 			final EmailRepository emailRepository,
 			@Qualifier(value = "accounts.emailBuilder") final EmailBuilder emailBuilder,
 			final TextEncryptor encryptor, final ObjectMapper mapper) {
@@ -99,6 +108,7 @@ public class AccountController {
 		this.userService = userService;
 		this.documentLinkService = documentLinkService;
 		this.userContactSuggestionService = userContactSuggestionService;
+		this.accountSettingsService = accountSettingsService;
 		this.emailRepository = emailRepository;
 		this.emailBuilder = emailBuilder;
 		this.encryptor = encryptor;
@@ -415,20 +425,26 @@ public class AccountController {
 
 		List<Email> byUserId = emailRepository.getByUserId(userId);
 
-		// Optional<AccountSetting> accountSetting = accountSettingsService
-		// .getAccountSetting(user, AccountSettingsEnum.phoneNumber.name());
+		Optional<AccountSetting> accountSetting = accountSettingsService
+				.getAccountSetting(user, AccountSettingsEnum.phoneNumber.name());
 
 		boolean noEmails = byUserId == null || byUserId.isEmpty();
 
-		// boolean noPhoneNumber = !accountSetting.isPresent()
-		// || (accountSetting.isPresent() && StringUtils
-		// .isBlank(accountSetting.get().getValue()));
+		PhoneNumberValidator validator = new PhoneNumberValidator();
 
-		if (noEmails)
+		boolean noPhoneNumber = !accountSetting.isPresent();
+
+		noPhoneNumber |= accountSetting.isPresent()
+				&& StringUtils.isBlank(accountSetting.get().getValue());
+
+		noPhoneNumber |= accountSetting.isPresent()
+				&& validator.validate(accountSetting.get()).getErrorMessage() != null;
+
+		if (noEmails || noPhoneNumber)
 			return false;
 
-		return byUserId.stream().allMatch(e -> e.isConfirmed());
+		return byUserId.stream().allMatch(e -> e.isConfirmed())
+				&& !noPhoneNumber;
 
 	}
-
 }
