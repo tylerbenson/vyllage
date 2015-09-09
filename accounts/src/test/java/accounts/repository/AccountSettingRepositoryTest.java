@@ -96,12 +96,27 @@ public class AccountSettingRepositoryTest {
 		accountSettingRepository.set(setting);
 	}
 
-	@Test(expected = DataIntegrityViolationException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void saveNullUserId() {
 		Long userId = null;
 		AccountSetting setting = new AccountSetting();
 		String test = "test";
 		String aValue = "aValue";
+
+		setting.setName(test);
+		setting.setValue(aValue);
+		setting.setPrivacy(Privacy.PRIVATE.name());
+		setting.setUserId(userId);
+
+		accountSettingRepository.set(setting);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void saveEmptyName() {
+		Long userId = null;
+		AccountSetting setting = new AccountSetting();
+		String test = "test";
+		String aValue = "    ";
 
 		setting.setName(test);
 		setting.setValue(aValue);

@@ -12,8 +12,10 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.tools.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import user.common.User;
 import accounts.domain.tables.Users;
@@ -75,6 +77,11 @@ public class AccountSettingRepository {
 
 	public AccountSetting set(AccountSetting setting) {
 
+		Assert.notNull(setting.getUserId(), "User Id is null.");
+		Assert.notNull(setting.getName(), "Setting name is null.");
+		Assert.isTrue(!StringUtils.isBlank(setting.getName()),
+				"Setting name is blank.");
+
 		logger.info("Preparing to save setting: " + setting);
 
 		AccountSettingRecord settingRecord = sql.fetchOne(
@@ -103,6 +110,7 @@ public class AccountSettingRepository {
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
+			throw e;
 		}
 
 		return setting;
