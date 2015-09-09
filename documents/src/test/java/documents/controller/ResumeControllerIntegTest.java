@@ -1,10 +1,13 @@
 package documents.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -19,7 +22,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -31,14 +37,16 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
 import user.common.User;
+import user.common.web.AccountContact;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import documents.Application;
+import documents.ApplicationTestConfig;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
@@ -52,7 +60,7 @@ import documents.repository.UserNotificationRepository;
 import documents.services.DocumentService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ResumeControllerIntegTest {
@@ -67,6 +75,10 @@ public class ResumeControllerIntegTest {
 
 	@Inject
 	private UserNotificationRepository userNotificationRepository;
+
+	// this is a mock from the mock beans configuration
+	@Inject
+	private RestTemplate restTemplate;
 
 	@Inject
 	private WebApplicationContext wContext;
@@ -377,6 +389,62 @@ public class ResumeControllerIntegTest {
 		assertNotNull(savedComment);
 		assertNotNull(savedComment.getCommentId());
 		assertEquals(comment.getCommentText(), savedComment.getCommentText());
+	}
+
+	@Test
+	public void getCommentsForSectionEmptyComments() throws Exception {
+
+		Long documentId = 0L;
+
+		Long sectionId = 133L;
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						get("/resume/" + documentId + "/section/" + sectionId
+								+ "/comment")).andExpect(status().isOk())
+				.andReturn();
+
+		assertTrue(mvcResult != null);
+
+		@SuppressWarnings("unchecked")
+		List<Comment> list = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), List.class);
+
+		assertTrue(list.isEmpty());
+
+	}
+
+	@Test
+	public void getCommentsForSection() throws Exception {
+
+		Long documentId = 0L;
+
+		Long sectionId = 127L;
+
+		@SuppressWarnings("unchecked")
+		ResponseEntity<AccountContact[]> response = mock(ResponseEntity.class);
+
+		when(
+				restTemplate.exchange(Mockito.anyString(),
+						Mockito.eq(HttpMethod.GET), Mockito.any(),
+						Mockito.eq(AccountContact[].class))).thenReturn(
+				response);
+
+		when(response.getBody()).thenReturn(null);
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						get("/resume/" + documentId + "/section/" + sectionId
+								+ "/comment")).andExpect(status().isOk())
+				.andReturn();
+
+		assertTrue(mvcResult != null);
+
+		@SuppressWarnings("unchecked")
+		List<Comment> list = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), List.class);
+
+		assertFalse(list.isEmpty());
 	}
 
 	@Test

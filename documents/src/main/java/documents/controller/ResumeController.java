@@ -438,11 +438,13 @@ public class ResumeController {
 			throws ElementNotFoundException {
 		final Document document = this.documentService.getDocument(documentId);
 
-		documentService.getCommentsForSection(request, sectionId).forEach(
-				c -> c.setCanDeleteComment(canDeleteComment(c.getCommentId(),
-						c, user, document)));
+		List<Comment> commentsForSection = documentService
+				.getCommentsForSection(request, sectionId);
 
-		return documentService.getCommentsForSection(request, sectionId);
+		commentsForSection.forEach(c -> c.setCanDeleteComment(canDeleteComment(
+				c.getCommentId(), c, user, document)));
+
+		return commentsForSection;
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
