@@ -3,6 +3,7 @@ var Reflux = require('reflux');
 var ExportStore = require('./exportStore');
 var ExportAction = require('./exportAction');
 var ResumeStyleList = require('./stylelist');
+var PdfStyleRender = require('./pdfrender');
 
 
 module.exports = React.createClass({
@@ -21,7 +22,7 @@ module.exports = React.createClass({
 		if( this.state.styles != undefined && this.state.styles.length ){
 			showResumeStyle = <ResumeStyleList active={this.state.activeStyle} data={this.state.styles} />;
 		}
-		
+
     return (
     	<div>
 				<div className="banner">
@@ -37,6 +38,7 @@ module.exports = React.createClass({
 							{showResumeStyle}
 			    </div>
 		    </div>
+		    <PdfStyleRender active={this.state.activeStyle} />
 	    </div>
     );
   }
