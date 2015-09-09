@@ -172,8 +172,12 @@ public class ResumeController {
 			throw new ElementNotFoundException("Document with id '"
 					+ documentId + "' could not be found.");
 
+		Document document = documentService.getDocument(documentId);
+
 		model.addAttribute("accountName", accountName(request, user));
 		model.addAttribute("userInfo", userInfo(user));
+		model.addAttribute("documentId", documentId);
+		model.addAttribute("documentCreationDate", document.getDateCreated());
 
 		return "resume";
 	}
