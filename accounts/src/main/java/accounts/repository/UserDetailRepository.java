@@ -216,12 +216,12 @@ public class UserDetailRepository implements UserDetailsManager,
 
 			}
 
-			AccountSetting emailSetting = new AccountSetting();
-			emailSetting.setName("email");
-			emailSetting.setUserId(newRecord.getUserId());
-			emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-			emailSetting.setValue(user.getUsername());
-			accountSettingRepository.set(emailSetting);
+			// AccountSetting emailSetting = new AccountSetting();
+			// emailSetting.setName("email");
+			// emailSetting.setUserId(newRecord.getUserId());
+			// emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+			// emailSetting.setValue(user.getUsername());
+			// accountSettingRepository.set(emailSetting);
 
 			AccountSetting emailUpdatesSetting = new AccountSetting();
 			emailUpdatesSetting.setName("emailUpdates");
@@ -537,11 +537,11 @@ public class UserDetailRepository implements UserDetailsManager,
 
 				// create other user settings
 				// email
-				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
-						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
-						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
-						user.getUserId(), "email", user.getUsername(),
-						Privacy.PRIVATE.name().toLowerCase()));
+				// otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
+				// ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
+				// ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
+				// user.getUserId(), "email", user.getUsername(),
+				// Privacy.PRIVATE.name().toLowerCase()));
 
 				// email frequency updates
 				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
