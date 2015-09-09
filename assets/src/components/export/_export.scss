@@ -1,0 +1,29 @@
+#export{
+  .pdfholder {
+    background: $inverted-text-color;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  }
+  .banner {
+    background-color: $banner-background;
+    background-image: url(../images/banner-bg.png);
+    background-size: cover;
+    background-position: center;
+    padding: 1.5em 2em 1em 2em;
+
+    h1 {
+      color: $inverted-text-color;
+    }
+    p {
+      color: $tagline-color;
+      margin: 0;
+    }
+    .header-icon {
+      color: $inverted-text-color;
+      font-size: 3.5em;
+      float: left;
+      margin-right: 0.25em;
+      margin-top: -0.15em;
+    }
+  }
+
+}

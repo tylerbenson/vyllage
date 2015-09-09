@@ -7,6 +7,7 @@ module.exports = {
     'resume.js': './src/resume.jsx',
     'getFeedback.js': './src/getFeedback.jsx',
     'settings.js': './src/settings.jsx',
+    'export.js': './src/export.jsx',
     'intercom.js': './src/components/intercom.js'
   },
   output: {

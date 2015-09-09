@@ -1,8 +1,8 @@
 var React = require('react');
 var Header = require('./components/header');
 var Footer = require('./components/footer');
-var Exportresume = require('./components/export');
+var ExportResume = require('./components/export');
 
 
 React.initializeTouchEvents(true);
-React.render(<Exportresume />, document.getElementById('export'));
+React.render(<ExportResume />, document.getElementById('export'));
