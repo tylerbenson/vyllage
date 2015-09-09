@@ -28,6 +28,9 @@ public class Comment {
 	// not saved in the DB
 	private String avatarUrl;
 
+	// not saved in the DB
+	private boolean canDeleteComment;
+
 	public Long getCommentId() {
 		return commentId;
 	}
@@ -105,6 +108,14 @@ public class Comment {
 
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
+	}
+
+	public boolean getCanDeleteComment() {
+		return canDeleteComment;
+	}
+
+	public void setCanDeleteComment(boolean canDeleteComment) {
+		this.canDeleteComment = canDeleteComment;
 	}
 
 }

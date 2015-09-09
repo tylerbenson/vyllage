@@ -42,11 +42,13 @@ import documents.Application;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
+import documents.model.UserNotification;
 import documents.model.constants.DocumentTypeEnum;
 import documents.model.constants.SectionType;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
 import documents.repository.ElementNotFoundException;
+import documents.repository.UserNotificationRepository;
 import documents.services.DocumentService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,13 +57,16 @@ import documents.services.DocumentService;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ResumeControllerIntegTest {
 
+	private MockMvc mockMvc;
+
 	@Inject
 	private ResumeController controller;
 
 	@Inject
 	private DocumentService documentService;
 
-	private MockMvc mockMvc;
+	@Inject
+	private UserNotificationRepository userNotificationRepository;
 
 	@Inject
 	private WebApplicationContext wContext;
@@ -71,6 +76,7 @@ public class ResumeControllerIntegTest {
 
 	@Before
 	public void setUp() throws Exception {
+
 		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
 	}
 
@@ -403,11 +409,6 @@ public class ResumeControllerIntegTest {
 		Long sectionId = 129L;
 		Long sectionVersion = 1L;
 		Long userId = 3L;
-		Long anotherUserId = 0L;
-
-		Document document = mock(Document.class);
-		when(documentService.getDocument(documentId)).thenReturn(document);
-		when(document.getUserId()).thenReturn(userId);
 
 		Comment comment = new Comment();
 		comment.setCommentId(null);
@@ -417,7 +418,7 @@ public class ResumeControllerIntegTest {
 		comment.setLastModified(null);
 		comment.setSectionId(129L);
 		comment.setSectionVersion(sectionVersion);
-		comment.setUserId(anotherUserId);
+		comment.setUserId(userId);
 		comment.setUserName(null);
 
 		User user = generateAndLoginUser();
@@ -451,10 +452,6 @@ public class ResumeControllerIntegTest {
 		Long sectionId = 129L;
 		Long sectionVersion = 1L;
 		Long userId = 0L;
-
-		Document document = mock(Document.class);
-		when(documentService.getDocument(documentId)).thenReturn(document);
-		when(document.getUserId()).thenReturn(userId);
 
 		Comment comment = new Comment();
 		comment.setCommentId(null);
@@ -500,10 +497,6 @@ public class ResumeControllerIntegTest {
 		Long userId = 0L;
 		Long anotherUserId = 3L;
 
-		Document document = mock(Document.class);
-		when(documentService.getDocument(documentId)).thenReturn(document);
-		when(document.getUserId()).thenReturn(userId);
-
 		Comment comment = new Comment();
 		comment.setCommentId(null);
 		comment.setAvatarUrl(null);
@@ -517,6 +510,10 @@ public class ResumeControllerIntegTest {
 
 		User user = generateAndLoginUser();
 		when(user.getUserId()).thenReturn(userId);
+
+		// we cannot access the other projects so we don't send any
+		// notifications, just save one instead
+		userNotificationRepository.save(new UserNotification(userId));
 
 		MvcResult mvcResult = mockMvc
 				.perform(

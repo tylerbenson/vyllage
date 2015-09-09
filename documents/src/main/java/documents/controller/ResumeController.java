@@ -433,7 +433,14 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Comment> getCommentsForSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
-			@PathVariable final Long sectionId) {
+			@PathVariable final Long sectionId,
+			final @AuthenticationPrincipal User user)
+			throws ElementNotFoundException {
+		final Document document = this.documentService.getDocument(documentId);
+
+		documentService.getCommentsForSection(request, sectionId).forEach(
+				c -> c.setCanDeleteComment(canDeleteComment(c.getCommentId(),
+						c, user, document)));
 
 		return documentService.getCommentsForSection(request, sectionId);
 	}
@@ -504,18 +511,22 @@ public class ResumeController {
 
 		Document document = this.documentService.getDocument(documentId);
 
-		// allow the document owner to delete all comments
-		if (user.getUserId().equals(document.getUserId())) {
+		if (canDeleteComment(commentId, comment, user, document))
 			documentService.deleteComment(comment);
-			return;
-		}
+	}
+
+	protected boolean canDeleteComment(final Long commentId,
+			final Comment comment, final User user, final Document document) {
+
+		// allow the document owner to delete all comments
+		if (user.getUserId().equals(document.getUserId()))
+			return true;
 
 		if (!user.getUserId().equals(comment.getUserId())
 				|| !commentId.equals(comment.getCommentId()))
-			throw new AccessDeniedException(
-					"You cannot delete another user's comment.");
+			return false;
 
-		documentService.deleteComment(comment);
+		return false;
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
