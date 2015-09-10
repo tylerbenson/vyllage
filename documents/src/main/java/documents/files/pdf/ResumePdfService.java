@@ -127,20 +127,24 @@ public class ResumePdfService {
 			NewRelic.noticeError(e);
 		}
 
-		try (FileInputStream raf = new FileInputStream(tempFile)) {
-			FileChannel channel = raf.getChannel();
+		try (FileInputStream fis = new FileInputStream(tempFile)) {
+			FileChannel channel = fis.getChannel();
 			MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY,
 					0, channel.size());
 			PDFFile pdffile = new PDFFile(buf);
 
 			// draw the first page to an image
 			PDFPage page = pdffile.getPage(0);
+
 			// get the width and height for the doc at the default zoom
 			Rectangle rect = new Rectangle(0, 0, (int) page.getBBox()
 					.getWidth(), (int) page.getBBox().getHeight());
 
-			BufferedImage bufferedImage = new BufferedImage(rect.width,
-					rect.height, BufferedImage.TYPE_INT_RGB);
+			int width = 72;
+			int height = 128;
+
+			BufferedImage bufferedImage = new BufferedImage(width, height,
+					BufferedImage.TYPE_INT_RGB);
 
 			Image image = page.getImage(rect.width, rect.height, // width &
 																	// height
@@ -150,8 +154,12 @@ public class ResumePdfService {
 					true // block until drawing is done
 					);
 
+			Image scaledInstance = image.getScaledInstance(width, height,
+					Image.SCALE_SMOOTH);
+
 			Graphics2D bufImageGraphics = bufferedImage.createGraphics();
-			bufImageGraphics.drawImage(image, 0, 0, null);
+			bufImageGraphics.drawImage(scaledInstance, 0, 0, null);
+
 			ImageIO.write(bufferedImage, "png", out);
 
 		} catch (IOException e) {
