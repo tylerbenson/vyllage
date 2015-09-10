@@ -69,6 +69,19 @@ public class ResumeExportService {
 
 	}
 
+	/**
+	 * Generates a thumbnail of the resume in PNG using the selected style. <br>
+	 * http://stackoverflow.com/questions/4929813/convert-pdf-to-thumbnail-image
+	 * -in-java?lq=1
+	 * 
+	 * @param resumeHeader
+	 * @param sections
+	 * @param styleName
+	 * @param width
+	 * @param height
+	 * @return
+	 * @throws DocumentException
+	 */
 	public ByteArrayOutputStream generatePNGDocument(
 			final DocumentHeader resumeHeader,
 			final List<DocumentSection> sections, final String styleName,
