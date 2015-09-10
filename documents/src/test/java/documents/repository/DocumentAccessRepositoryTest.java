@@ -17,12 +17,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
-import documents.Application;
+import documents.ApplicationTestConfig;
 import documents.model.DocumentAccess;
 import documents.model.constants.DocumentAccessEnum;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class DocumentAccessRepositoryTest {

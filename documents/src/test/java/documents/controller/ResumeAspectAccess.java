@@ -26,11 +26,11 @@ import user.common.constants.RolesEnum;
 
 import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 
-import documents.Application;
+import documents.ApplicationTestConfig;
 import documents.repository.ElementNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 public class ResumeAspectAccess {
 

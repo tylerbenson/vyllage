@@ -26,7 +26,7 @@ import user.common.web.AccountContact;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import documents.Application;
+import documents.ApplicationTestConfig;
 import documents.model.Document;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
@@ -39,7 +39,7 @@ import documents.repository.SectionAdviceRepository;
 import documents.utilities.OrderSectionValidator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class DocumentServiceIntegTest {
