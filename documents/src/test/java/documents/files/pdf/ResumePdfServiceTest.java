@@ -22,7 +22,7 @@ public class ResumePdfServiceTest {
 
 	@Test
 	public void testFormat() {
-		ResumePdfService service = new ResumePdfService();
+		ResumeExportService service = new ResumeExportService();
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 
@@ -34,7 +34,7 @@ public class ResumePdfServiceTest {
 
 	@Test
 	public void testSortSections() {
-		ResumePdfService service = new ResumePdfService();
+		ResumeExportService service = new ResumeExportService();
 
 		SkillsSection s1 = new SkillsSection();
 

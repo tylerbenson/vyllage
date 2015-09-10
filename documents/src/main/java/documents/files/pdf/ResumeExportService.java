@@ -24,9 +24,11 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.xhtmlrenderer.util.FSImageWriter;
 
 import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
@@ -37,45 +39,31 @@ import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
 
 @Service
-public class ResumePdfService {
+public class ResumeExportService {
 
-	@SuppressWarnings("unused")
-	private final Logger logger = Logger.getLogger(ResumePdfService.class
+	private final Logger logger = Logger.getLogger(ResumeExportService.class
 			.getName());
 
 	@Inject
 	private TemplateEngine templateEngine;
 
-	public ByteArrayOutputStream generatePdfDocument(
+	public ByteArrayOutputStream generatePDFDocument(
 			DocumentHeader resumeHeader, List<DocumentSection> sections,
 			String styleName) throws DocumentException {
-		Context ctx = new Context();
-
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		format(resumeHeader);
+		try {
 
-		ctx.setVariable("styleName", styleName);
+			ITextRenderer renderer = preparePDF(resumeHeader, sections,
+					styleName);
+			renderer.createPDF(out);
+			renderer.finishPDF();
 
-		ctx.setVariable("header", resumeHeader);
-
-		ctx.setVariable("sections", sections.stream().sorted(sortSections())
-				.collect(Collectors.toList()));
-
-		String htmlContent = templateEngine.process("pdf-resume", ctx);
-
-		ITextRenderer renderer = new ITextRenderer();
-		renderer.setDocumentFromString(htmlContent);
-
-		PackageUserAgentCallback callback = new PackageUserAgentCallback(
-				renderer.getOutputDevice(), Resource.class);
-		callback.setSharedContext(renderer.getSharedContext());
-		renderer.getSharedContext().setUserAgentCallback(callback);
-		renderer.setDocumentFromString(htmlContent);
-
-		renderer.layout();
-		renderer.createPDF(out);
-		renderer.finishPDF();
+			out.close();
+		} catch (IOException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
 
 		return out;
 
@@ -83,35 +71,30 @@ public class ResumePdfService {
 
 	public ByteArrayOutputStream generatePNGDocument(
 			final DocumentHeader resumeHeader,
-			final List<DocumentSection> sections, final String styleName)
-			throws IOException, DocumentException {
-		Context ctx = new Context();
+			final List<DocumentSection> sections, final String styleName,
+			int width, int height) throws DocumentException {
+
+		if (width == 0 || height == 0) {
+			width = 64 * 2;
+			height = 98 * 2;
+		}
+
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		format(resumeHeader);
+		ITextRenderer renderer = preparePDF(resumeHeader, sections, styleName);
 
-		ctx.setVariable("styleName", styleName);
+		File tempFile = null;
 
-		ctx.setVariable("header", resumeHeader);
+		try {
+			tempFile = File.createTempFile("document", ".pdf");
+		} catch (IOException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
 
-		ctx.setVariable("sections", sections.stream().sorted(sortSections())
-				.collect(Collectors.toList()));
+		Assert.notNull(tempFile);
 
-		String htmlContent = templateEngine.process("pdf-resume", ctx);
-
-		ITextRenderer renderer = new ITextRenderer();
-		renderer.setDocumentFromString(htmlContent);
-
-		PackageUserAgentCallback callback = new PackageUserAgentCallback(
-				renderer.getOutputDevice(), Resource.class);
-		callback.setSharedContext(renderer.getSharedContext());
-		renderer.getSharedContext().setUserAgentCallback(callback);
-		renderer.setDocumentFromString(htmlContent);
-
-		renderer.layout();
-
-		File tempFile = File.createTempFile("document", ".pdf");
-
+		// saving the pdf
 		try (FileOutputStream fop = new FileOutputStream(tempFile)) {
 			renderer.createPDF(fop);
 			renderer.finishPDF();
@@ -127,6 +110,7 @@ public class ResumePdfService {
 			NewRelic.noticeError(e);
 		}
 
+		// loading the pdf and rendering an image of the first page
 		try (FileInputStream fis = new FileInputStream(tempFile)) {
 			FileChannel channel = fis.getChannel();
 			MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY,
@@ -140,9 +124,6 @@ public class ResumePdfService {
 			Rectangle rect = new Rectangle(0, 0, (int) page.getBBox()
 					.getWidth(), (int) page.getBBox().getHeight());
 
-			int width = 72;
-			int height = 128;
-
 			BufferedImage bufferedImage = new BufferedImage(width, height,
 					BufferedImage.TYPE_INT_RGB);
 
@@ -153,6 +134,7 @@ public class ResumePdfService {
 					true, // fill background with white
 					true // block until drawing is done
 					);
+			FSImageWriter w = new FSImageWriter("png");
 
 			Image scaledInstance = image.getScaledInstance(width, height,
 					Image.SCALE_SMOOTH);
@@ -161,6 +143,10 @@ public class ResumePdfService {
 			bufImageGraphics.drawImage(scaledInstance, 0, 0, null);
 
 			ImageIO.write(bufferedImage, "png", out);
+			w.write(bufferedImage, out);
+			tempFile.delete();
+
+			out.close();
 
 		} catch (IOException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
@@ -169,6 +155,34 @@ public class ResumePdfService {
 
 		return out;
 
+	}
+
+	protected ITextRenderer preparePDF(DocumentHeader resumeHeader,
+			List<DocumentSection> sections, String styleName) {
+		Context ctx = new Context();
+
+		format(resumeHeader);
+
+		ctx.setVariable("styleName", styleName);
+
+		ctx.setVariable("header", resumeHeader);
+
+		ctx.setVariable("sections", sections.stream().sorted(sortSections())
+				.collect(Collectors.toList()));
+
+		String htmlContent = templateEngine.process("pdf-resume", ctx);
+
+		ITextRenderer renderer = new ITextRenderer();
+		renderer.setDocumentFromString(htmlContent);
+
+		PackageUserAgentCallback callback = new PackageUserAgentCallback(
+				renderer.getOutputDevice(), Resource.class);
+		callback.setSharedContext(renderer.getSharedContext());
+		renderer.getSharedContext().setUserAgentCallback(callback);
+		renderer.setDocumentFromString(htmlContent);
+
+		renderer.layout();
+		return renderer;
 	}
 
 	// public ByteArrayOutputStream generatePNGDocument(

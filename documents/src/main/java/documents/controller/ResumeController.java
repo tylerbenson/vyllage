@@ -47,7 +47,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
 
-import documents.files.pdf.ResumePdfService;
+import documents.files.pdf.ResumeExportService;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
@@ -79,7 +79,7 @@ public class ResumeController {
 
 	private final NotificationService notificationService;
 
-	private final ResumePdfService resumePdfService;
+	private final ResumeExportService resumePdfService;
 
 	private final DocumentAccessRepository documentAccessRepository;
 
@@ -91,7 +91,7 @@ public class ResumeController {
 	public ResumeController(final DocumentService documentService,
 			final AccountService accountService,
 			final NotificationService notificationService,
-			final ResumePdfService resumePdfService,
+			final ResumeExportService resumePdfService,
 			final DocumentAccessRepository documentAccessRepository,
 			final Environment environment) {
 		this.documentService = documentService;
@@ -260,7 +260,7 @@ public class ResumeController {
 				&& this.pdfStyles.contains(styleName) ? styleName
 				: this.pdfStyles.get(0);
 
-		copyPDF(response, resumePdfService.generatePdfDocument(resumeHeader,
+		copyPDF(response, resumePdfService.generatePDFDocument(resumeHeader,
 				documentSections, style));
 		response.setStatus(HttpStatus.OK.value());
 		response.flushBuffer();
@@ -268,7 +268,7 @@ public class ResumeController {
 	}
 
 	/**
-	 * Writes the pdf document to the response.
+	 * Writes the PDF document to the response.
 	 *
 	 * @param response
 	 * @param report
@@ -293,6 +293,8 @@ public class ResumeController {
 			HttpServletResponse response,
 			@PathVariable final Long documentId,
 			@RequestParam(value = "styleName", required = false, defaultValue = "default") final String styleName,
+			@RequestParam(value = "width", required = false, defaultValue = "64") final int width,
+			@RequestParam(value = "height", required = false, defaultValue = "98") final int height,
 			@AuthenticationPrincipal User user)
 			throws ElementNotFoundException, DocumentException, IOException {
 
@@ -307,14 +309,14 @@ public class ResumeController {
 				: this.pdfStyles.get(0);
 
 		copyPNG(response, resumePdfService.generatePNGDocument(resumeHeader,
-				documentSections, style));
+				documentSections, style, width, height));
 		response.setStatus(HttpStatus.OK.value());
 		response.flushBuffer();
 
 	}
 
 	/**
-	 * Writes the pdf document to the response.
+	 * Writes the PNG thumbnail to the response.
 	 *
 	 * @param response
 	 * @param report

@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.env.Environment;
 
-import documents.files.pdf.ResumePdfService;
+import documents.files.pdf.ResumeExportService;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.document.sections.DocumentSection;
@@ -63,8 +63,8 @@ public class ResumeControllerTest {
 	private NotificationService notificationService = Mockito
 			.mock(NotificationService.class);
 
-	private ResumePdfService resumePdfService = Mockito
-			.mock(ResumePdfService.class);
+	private ResumeExportService resumePdfService = Mockito
+			.mock(ResumeExportService.class);
 
 	private DocumentAccessRepository documentAccessRepository = Mockito
 			.mock(DocumentAccessRepository.class);;
