@@ -13,6 +13,8 @@ dependencies {
     compile project(':togglz')
     compile project(':util')
 
+	compile files('lib/PDFRenderer-0.9.1.jar')
+	
     compile 'org.apache.commons:commons-lang3:3.3.2'
 
     compile 'org.xhtmlrenderer:flying-saucer-core:9.0.7'

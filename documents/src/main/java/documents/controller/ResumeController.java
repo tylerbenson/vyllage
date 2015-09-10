@@ -22,6 +22,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -282,6 +283,52 @@ public class ResumeController {
 		response.setContentType("application/pdf");
 		response.setHeader("Content-Disposition", "attachment; filename="
 				+ "report.pdf");
+	}
+
+	@RequestMapping(value = "{documentId}/file/png", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+	@ResponseStatus(value = HttpStatus.OK)
+	@CheckReadAccess
+	public void resumePNG(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable final Long documentId,
+			@RequestParam(value = "styleName", required = false, defaultValue = "default") final String styleName,
+			@AuthenticationPrincipal User user)
+			throws ElementNotFoundException, DocumentException, IOException {
+
+		DocumentHeader resumeHeader = documentService.getDocumentHeader(
+				request, documentId, user);
+
+		List<DocumentSection> documentSections = documentService
+				.getDocumentSections(documentId);
+
+		String style = styleName != null && !styleName.isEmpty()
+				&& this.pdfStyles.contains(styleName) ? styleName
+				: this.pdfStyles.get(0);
+
+		copyPNG(response, resumePdfService.generatePNGDocument(resumeHeader,
+				documentSections, style));
+		response.setStatus(HttpStatus.OK.value());
+		response.flushBuffer();
+
+	}
+
+	/**
+	 * Writes the pdf document to the response.
+	 *
+	 * @param response
+	 * @param report
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
+	private void copyPNG(HttpServletResponse response,
+			ByteArrayOutputStream report) throws DocumentException, IOException {
+		InputStream in = new ByteArrayInputStream(report.toByteArray());
+		FileCopyUtils.copy(in, response.getOutputStream());
+
+		response.setContentType(MediaType.IMAGE_PNG_VALUE);
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ "report.png");
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
