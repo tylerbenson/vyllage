@@ -161,4 +161,9 @@ public class DocumentController {
 
 		documentService.deleteDocumentAccess(filtered.get(0));
 	}
+
+	@RequestMapping(value = "{documentId}/export")
+	public String export(@PathVariable(value = "documentId") Long documentId) {
+		return "export";
+	}
 }
