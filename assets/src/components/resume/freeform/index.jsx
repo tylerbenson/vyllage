@@ -94,7 +94,7 @@ var Freeform = React.createClass({
               onChange={this.handleChange}
             ></Textarea>
           </div>
-          <SectionFooter section={this.props.section} />
+          <SectionFooter section={this.props.section} owner={this.props.owner} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
           {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>

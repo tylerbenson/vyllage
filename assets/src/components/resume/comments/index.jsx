@@ -12,6 +12,7 @@ var Comments = React.createClass({
           <CommentList 
             sectionId={section.sectionId}
             comments={section.comments}
+            owner={this.props.owner}
           />
           <CommentForm 
             sectionId={section.sectionId}

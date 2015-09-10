@@ -21,6 +21,7 @@ var urlTemplate = require('url-template');
   // comments
   'getComments',
   'postComment',
+  'deleteComment',
   // Ui
   'enableEditMode',
   'disableEditMode',
