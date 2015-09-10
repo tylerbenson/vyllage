@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import user.common.User;
+import util.web.account.AccountUrlConstants;
 import accounts.model.Email;
 import accounts.model.account.ConfirmEmailLink;
 import accounts.repository.EmailRepository;
@@ -48,9 +49,9 @@ public class EmailController {
 
 	// TODO: Move other methods related to email.
 
-	@RequestMapping(value = "needs-email-confirmation", method = RequestMethod.GET)
+	@RequestMapping(value = AccountUrlConstants.NEEDS_EMAIL_CONFIRMATION_VALID_PHONE_NUMBER, method = RequestMethod.GET)
 	public String needsEmailConfirmation() {
-		return "needs-email-confirmation";
+		return AccountUrlConstants.NEEDS_EMAIL_CONFIRMATION_VALID_PHONE_NUMBER;
 	}
 
 	@RequestMapping(value = "email-confirmation", method = RequestMethod.GET)
@@ -94,6 +95,6 @@ public class EmailController {
 
 		emailRepository.save(email);
 
-		return "email-confirmation-success";
+		return AccountUrlConstants.EMAIL_CONFIRMATION_SUCCESS;
 	}
 }
