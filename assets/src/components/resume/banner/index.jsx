@@ -4,6 +4,7 @@ var Textarea = require('react-textarea-autosize');
 var Subheader = require('./Subheader');
 var AddSection = require('../AddSection');
 var Avatar = require('../../avatar');
+var EditAvatar = require('../../avatar/EditAvatar');
 var actions = require('../actions');
 var settingActions = require('../../settings/actions');
 var filter = require('lodash.filter');
@@ -209,7 +210,9 @@ var Banner = React.createClass({
       <section className={(header.owner?'':'guest ') + 'banner'} ref="banner">
         <div className ="content">
           <div className="avatar-container">
-            <Avatar src={header.avatarUrl} size="80" borderWidth="3" />
+            <Avatar src={header.avatarUrl} size="80" borderWidth="3">
+              {this.state.editMode ? <EditAvatar /> : null}
+            </Avatar>
           </div>
           <div className="info">
             <div className="name">

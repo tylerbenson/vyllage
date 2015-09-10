@@ -147,7 +147,7 @@ public class AccountSettingsService {
 						setting.getUserId(), "newEmail", setting.getValue(),
 						setting.getPrivacy());
 
-				accountSettingRepository.set(user.getUserId(), newEmailSetting);
+				accountSettingRepository.set(newEmailSetting);
 
 				// but don't change the setting value yet, the user needs to
 				// confirm the change by mail.
@@ -156,7 +156,7 @@ public class AccountSettingsService {
 
 			return setting;
 		default:
-			return accountSettingRepository.set(user.getUserId(), setting);
+			return accountSettingRepository.set(setting);
 		}
 	}
 
@@ -169,7 +169,7 @@ public class AccountSettingsService {
 				.stream()
 				.filter(set -> !set.getName().equalsIgnoreCase("role")
 						&& !set.getName().equalsIgnoreCase("organization"))
-				.map(set -> setAccountSetting(user, set))
+				.map(set -> this.setAccountSetting(user, set))
 				.collect(Collectors.toList()));
 
 		return savedSettings;

@@ -98,6 +98,15 @@
 
     .content {
       padding: 0 1em;
+
+      span.delete-comment{
+        position: absolute;
+        right: 5px;
+        margin-top: -10px;
+        &:hover, &:focus {
+         color: $alternate-color-2;
+        }
+      }
     }
 
     & > .info {

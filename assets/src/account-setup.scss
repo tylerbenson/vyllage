@@ -1,0 +1,238 @@
+@import "./components/common/variables";
+
+@import "jeet/scss/jeet/index";
+@import "./components/common/utilities";
+@import "./components/common/defaults";
+@import "./components/common/typography";
+
+.account-setup {
+  #container {
+    background-color: $footer-background;
+    background-image: url(../images/banner.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: 0;
+  }
+
+  input {
+    margin: auto;
+    max-width: 480px;
+    &.padded {
+      border-color: lighten($alternate-color-2, 5%);
+      box-shadow: 0 1px 1px rgba(255,255,255,0.1);
+    }
+  }
+
+  label {
+    color: $inverted-text-color;
+    margin: 1.75em auto 0 auto;
+    text-transform: uppercase;
+    max-width: 480px;
+  }
+
+  .checkbox {
+    max-width: 480px;
+    margin: 1.5em auto 2em auto;
+
+    input[type="checkbox"] {
+      float: left;
+      margin: 0.25em 0.5em 0.25em 0;
+    }
+
+    p {
+      color: $inverted-text-color;
+      font-size: 0.8em;
+    }
+  }
+
+  &.info {
+    #container {
+      background-image: url(../images/banner-2.jpg);
+    }
+  }
+
+  &.guest {
+    #container {
+      background-image: url(../images/banner-3.jpg);
+    }
+    // .sections .form {
+      // margin-top: 3.5em;
+    // }
+  }
+
+  .section > .container {
+    background: none;
+    border-radius: 5px;
+    margin: 0.75em auto;
+    max-width: 720px;
+    padding: 2em 0;
+    position: relative;
+  }
+  .sections {
+    margin: 0;
+    @include center();
+    .section {
+      box-sizing: border-box;
+    }
+    .spiel {
+      display: none;
+      @extend .inverted;
+      padding: 0 1em;
+      a {
+        color: lighten($primary-color, 15%);
+        text-decoration: none;
+
+        &:hover {
+          color: lighten($primary-color, 20%);
+        }
+      }
+      .quote {
+        font-size: 2.5em;
+        font-weight: 100;
+        line-height: 1.4;
+      }
+      .author {
+        font-size: 1.25em;
+        font-weight: 400;
+        margin-top: 1em;
+        opacity: 0.85;
+      }
+    }
+    .form {
+      margin: auto;
+      max-width: 640px;
+      padding: 0 1em 0 0;
+      a {
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+      .container {
+        // margin-top: -1.5em;
+        padding: 0;
+
+        &.reset {
+          margin-top: 1.5em;
+        }
+      }
+      h1 {
+        color: $inverted-text-color;
+        font-size: 2em;
+      }
+      p {
+        &.centered {
+          color: $tagline-color;
+          margin-bottom: 2em;
+        }
+        &.error {
+          color: darken($error-background, 20%);
+        }
+      }
+      .forgot {
+        display: block;
+        font-size: 0.8em;
+        font-weight: 400;
+        margin: 1em auto 0 auto;
+        text-transform: uppercase;
+        max-width: 480px;
+      }
+      .content {
+        // border-bottom: lighten($secondary-color, 30%) solid 1px;
+        padding: 0.5em 1em;
+        &.account{
+          color: $inverted-text-color;
+          font-size: 0.85em;
+          border-bottom: none;
+          padding: 1.5em;
+          text-align: center;
+          a {
+            margin-left: 0.25em;
+          }
+        }
+      }
+      input {
+        margin-bottom: 0.5em;
+      }
+      .actions {
+        margin: 1.5em auto 0 auto;
+        text-align: right;
+        max-width: 480px;
+      }
+    }
+  }
+  header {
+    background: none;
+    padding: 0;
+    position: static;
+    text-align: center;
+  }
+  .logo {
+    font-size: 0.8em;
+    position: relative;
+    left: -0.5em;
+  }
+  footer {
+    background: none;
+    height: 2.8em;
+    a {
+      color: rgba($inverted-text-color, 0.35);
+      &:hover {
+        color: $inverted-text-color;
+      }
+    }
+  }
+}
+
+@media (max-width: $medium-portrait) {
+  .account-setup {
+    header {
+      padding: 1em;
+      text-align: center;
+    }
+    footer {
+      .content {
+        nav {
+          font-size: 0.8em;
+          float: none;
+          margin: auto;
+          width: 100%;
+          text-align: center;
+          white-space: nowrap;
+
+          a {
+            padding: 0 0.75em;
+          }
+        }
+      }
+    }
+    .sections {
+      .spiel {
+        display: none;
+      }
+      .section {
+        @include column(1);
+        padding: 0 1em;
+
+        .content {
+          padding: 0 1em;
+        }
+      }
+    }
+    &.info {
+      .sections {
+        .spiel {
+          display: block;
+          float: none;
+          font-size: 0.75em;
+          margin: 2em auto;
+          max-max-width: 480px;
+          padding: 0 3em;
+          text-align: center;
+          width: 100%;
+        }
+      }
+    }
+  }
+}

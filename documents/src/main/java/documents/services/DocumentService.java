@@ -471,4 +471,8 @@ public class DocumentService {
 		return sectionAdviceRepository.save(sectionAdvice);
 	}
 
+	public void deleteComment(Comment comment) {
+		commentRepository.delete(comment.getCommentId());
+	}
+
 }

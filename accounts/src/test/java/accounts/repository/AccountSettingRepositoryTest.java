@@ -39,7 +39,7 @@ public class AccountSettingRepositoryTest {
 		setting.setPrivacy(Privacy.PRIVATE.name());
 		setting.setUserId(userId);
 
-		accountSettingRepository.set(userId, setting);
+		accountSettingRepository.set(setting);
 
 		Optional<AccountSetting> savedSetting = accountSettingRepository.get(
 				userId, test);
@@ -64,7 +64,7 @@ public class AccountSettingRepositoryTest {
 		setting.setPrivacy(Privacy.PRIVATE.name());
 		setting.setUserId(userId);
 
-		accountSettingRepository.set(userId, setting);
+		accountSettingRepository.set(setting);
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
@@ -78,7 +78,7 @@ public class AccountSettingRepositoryTest {
 		setting.setPrivacy(Privacy.PRIVATE.name());
 		setting.setUserId(userId);
 
-		accountSettingRepository.set(userId, setting);
+		accountSettingRepository.set(setting);
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
@@ -93,10 +93,10 @@ public class AccountSettingRepositoryTest {
 		setting.setPrivacy(null);
 		setting.setUserId(userId);
 
-		accountSettingRepository.set(userId, setting);
+		accountSettingRepository.set(setting);
 	}
 
-	@Test(expected = DataIntegrityViolationException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void saveNullUserId() {
 		Long userId = null;
 		AccountSetting setting = new AccountSetting();
@@ -108,7 +108,22 @@ public class AccountSettingRepositoryTest {
 		setting.setPrivacy(Privacy.PRIVATE.name());
 		setting.setUserId(userId);
 
-		accountSettingRepository.set(userId, setting);
+		accountSettingRepository.set(setting);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void saveEmptyName() {
+		Long userId = null;
+		AccountSetting setting = new AccountSetting();
+		String test = "test";
+		String aValue = "    ";
+
+		setting.setName(test);
+		setting.setValue(aValue);
+		setting.setPrivacy(Privacy.PRIVATE.name());
+		setting.setUserId(userId);
+
+		accountSettingRepository.set(setting);
 	}
 
 	@Test()
@@ -123,7 +138,7 @@ public class AccountSettingRepositoryTest {
 		setting.setPrivacy(Privacy.PRIVATE.name());
 		setting.setUserId(userId);
 
-		accountSettingRepository.set(userId, setting);
+		accountSettingRepository.set(setting);
 		accountSettingRepository.deleteByName(userId, test);
 
 		Assert.assertFalse(accountSettingRepository.get(userId, test)
@@ -145,7 +160,7 @@ public class AccountSettingRepositoryTest {
 		setting.setPrivacy(Privacy.PRIVATE.name());
 		setting.setUserId(userId);
 
-		accountSettingRepository.set(userId, setting);
+		accountSettingRepository.set(setting);
 
 		AccountSetting setting2 = new AccountSetting();
 		String test2 = "delete";
@@ -156,7 +171,7 @@ public class AccountSettingRepositoryTest {
 		setting.setPrivacy(Privacy.PRIVATE.name());
 		setting.setUserId(userId);
 
-		accountSettingRepository.set(userId, setting2);
+		accountSettingRepository.set(setting2);
 
 		accountSettingRepository.deleteByUserId(userId);
 

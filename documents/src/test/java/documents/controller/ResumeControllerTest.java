@@ -1,13 +1,11 @@
-package documents.controllers;
+package documents.controller;
 
 import static com.jayway.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.equalTo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +13,6 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.env.Environment;
 
-import documents.controller.ResumeController;
 import documents.files.pdf.ResumePdfService;
 import documents.model.Comment;
 import documents.model.Document;
@@ -149,40 +146,10 @@ public class ResumeControllerTest {
 	}
 
 	@Test
-	public void getCommentsForSectionEmptyComments() {
+	public void testCanDeleteOwnComment() {
 
-		Long documentId = 1L;
-
-		Long sectionId = 123L;
-
-		Mockito.when(
-				documentService.getCommentsForSection(Mockito.any(),
-						Mockito.anyLong()))
-				.thenReturn(new ArrayList<Comment>());
-
-		given().standaloneSetup(controller)
-				.when()
-				.get("/resume/" + documentId + "/section/" + sectionId
-						+ "/comment").then().statusCode(200).and().assertThat()
-				.body(Matchers.equalTo("[]"));
-	}
-
-	@Test
-	public void getCommentsForSection() {
-
-		Long documentId = 1L;
-
-		Long sectionId = 123L;
-
-		Mockito.when(
-				documentService.getCommentsForSection(Mockito.any(),
-						Mockito.anyLong())).thenReturn(comments(sectionId));
-
-		given().standaloneSetup(controller)
-				.when()
-				.get("/resume/" + documentId + "/section/" + sectionId
-						+ "/comment").then().statusCode(200)
-				.body("[0].sectionId", equalTo(123));
+		// assertTrue(controller.canDeleteComment(commentId, comment, user,
+		// document));
 	}
 
 	private List<Comment> comments(Long sectionId) {

@@ -15,7 +15,7 @@
   <meta property="og:description" content="Welcome to Vyllage! Register to create your resume." />
 
   <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/login.css" />
+  <link rel="stylesheet" href="css/account-setup.css" />
   <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
 
   <link href='//fonts.googleapis.com/css?family=Lato:400,300,100' rel='stylesheet' type='text/css' />
@@ -24,7 +24,7 @@
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
-<body class="login">
+<body class="account-setup">
   <div id="container">
     <header>
       <div class="content">
@@ -48,16 +48,20 @@
               <div th:if="${registerForm.errorMsg != null}">
                 <p class="centered error" th:text="*{errorMsg}">E-mail or Password invalid.</p>
               </div>
-              <label>FIRST NAME</label>
+              <label>First Name</label>
               <input type="text" th:field="*{firstName}" class="padded" />
-              <label>LAST NAME</label>
+              <label>Last Name</label>
               <input type="text" th:field="*{lastName}" class="padded" />
-              <label>E-MAIL</label>
+              <label>E-mail</label>
               <input type="text" th:field="*{email}" class="padded" />
               <label>Password</label>
               <input type="password" th:field="*{password}" class="padded" />
-              <label>Receive free professional career advice from Vyllage's partner schools.</label>
-              <input type="checkbox" th:field="*{receiveAdvice}" />
+
+              <div class="checkbox">
+                <input type="checkbox" th:field="*{receiveAdvice}" />
+                <p>Receive free professional career advice from Vyllage's partner schools.</p>
+              </div>
+
               <div class="actions">
                 <button type="submit" class="padded">PROCEED</button>
               </div>
