@@ -24,18 +24,17 @@ insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, '
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'address', 'Avenida Siempreviva 123', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'organization', 'Vyllage', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'role', 'ADMIN', 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'email', 'user@vyllage.com', 'public');
+--insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'email', 'user@vyllage.com', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'avatar', 'gravatar', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'settingName', 'settingValue', 'private');
 
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (2, 'email', 'deana1@vyllage.com', 'public');
-
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (3, 'email', 'mario@toadstool.com', 'public');
-
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (4, 'email', 'maquiavelo@vyllage.com', 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (5, 'email', 'deana2@vyllage.com', 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (6, 'email', 'deana3@vyllage.com', 'public');
-insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (7, 'email', 'deana4@vyllage.com', 'public');
+-- dumy settings so they whow up, for users created through the app this is isn't a problem. 
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (2, 'emailUpdates', 'weekly', 'public');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (3, 'emailUpdates', 'weekly', 'public');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (4, 'emailUpdates', 'weekly', 'public');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (5, 'emailUpdates', 'weekly', 'public');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (6, 'emailUpdates', 'weekly', 'public');
+insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (7, 'emailUpdates', 'weekly', 'public');
 
 
 

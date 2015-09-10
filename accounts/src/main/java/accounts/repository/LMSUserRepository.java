@@ -129,12 +129,12 @@ public class LMSUserRepository implements LMSUserDetailsService {
 						.create((UserOrganizationRole) role);
 			}
 
-			AccountSetting emailSetting = new AccountSetting();
-			emailSetting.setName("email");
-			emailSetting.setUserId(newRecord.getUserId());
-			emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-			emailSetting.setValue(user.getUsername());
-			accountSettingRepository.set(emailSetting);
+			// AccountSetting emailSetting = new AccountSetting();
+			// emailSetting.setName("email");
+			// emailSetting.setUserId(newRecord.getUserId());
+			// emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+			// emailSetting.setValue(user.getUsername());
+			// accountSettingRepository.set(emailSetting);
 
 			AccountSetting emailUpdatesSetting = new AccountSetting();
 			emailUpdatesSetting.setName("emailUpdates");
