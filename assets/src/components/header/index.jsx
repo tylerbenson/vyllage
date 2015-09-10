@@ -1,6 +1,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var Print = require('../resume/Print');
+var Milestone = require('../milestones');
 var NavToggle = require('./NavToggle');
 var resumeStore = require('../resume/store');
 var FeatureToggle = require('../util/FeatureToggle');
@@ -44,6 +45,9 @@ var HeaderContainer = React.createClass({
                 <i className="ion-person-stalker"></i>
                 <span>Get Feedback</span>
               </a></li>
+              <li className="milestone-toggle">
+                <Milestone />
+              </li>
               <li><a href='/account/setting' className='flat settings button'>
                 <i className="ion-gear-a"></i>
                 <span>Settings</span>

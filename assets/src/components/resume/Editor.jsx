@@ -7,7 +7,6 @@ var filter = require('lodash.filter');
 var Header = require('./sections/Header');
 var Section = require('./sections');
 var Banner = require('./banner');
-var sortby = require('lodash.sortby');
 var Empty = require('./sections/Empty');
 var Sortable = require('../util/Sortable');
 
@@ -134,7 +133,7 @@ var ResumeEditor = React.createClass({
         allSection = <Empty />
       }
     }
-    
+
     return (
       <div>
         <Banner header={this.state.resume.header} settings={this.state.settings} sections={this.state.resume.all_section} />
