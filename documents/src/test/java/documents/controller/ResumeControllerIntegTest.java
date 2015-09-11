@@ -703,6 +703,24 @@ public class ResumeControllerIntegTest {
 	}
 
 	@Test
+	public void getPDFDocumentNarrowStyle() throws Exception {
+
+		Long documentId = 0L;
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						get("/resume/" + documentId + "/file/pdf").param(
+								"styleName", "narrow"))
+
+				.andExpect(status().isOk())
+				.andExpect(content().contentType("application/pdf"))
+				.andReturn();
+
+		assertTrue(mvcResult != null);
+
+	}
+
+	@Test
 	public void getPNGDocument() throws Exception {
 
 		Long documentId = 0L;
@@ -714,6 +732,60 @@ public class ResumeControllerIntegTest {
 				.andReturn();
 
 		assertTrue(mvcResult != null);
+
+	}
+
+	@Test
+	public void getPNGDocumentNarrowStyle() throws Exception {
+
+		Long documentId = 0L;
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						get("/resume/" + documentId + "/file/png").param(
+								"styleName", "narrow"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
+				.andReturn();
+
+		assertTrue(mvcResult != null);
+
+	}
+
+	@Test
+	public void getPNGDocumentWithSize() throws Exception {
+
+		Long documentId = 0L;
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						get("/resume/" + documentId + "/file/png").param(
+								"width", "16").param("height", "24"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
+				.andReturn();
+
+		assertTrue(mvcResult != null);
+
+	}
+
+	@Test
+	public void getAvailableStyles() throws Exception {
+
+		MvcResult mvcResult = mockMvc
+				.perform(get("/resume/file/pdf/styles"))
+				.andExpect(status().isOk())
+				.andExpect(
+						content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andReturn();
+
+		assertTrue(mvcResult != null);
+
+		@SuppressWarnings("unchecked")
+		List<String> result = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), List.class);
+
+		assertFalse(result.isEmpty());
 
 	}
 
