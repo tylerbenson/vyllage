@@ -20,7 +20,6 @@ import oauth.repository.LTIKeyRepository;
 import oauth.utilities.LMSConstants;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -99,13 +98,6 @@ public class LMSRequestTest {
 	private static final String LIS_PERSON_PREFIX_GIVEN = "Kunal";
 	private static final String LIS_PERSON_PREFIX_FAMILY = "Shankar";
 	private static final String LTI_USER_ROLES = "urn%3Alti%3Arole%3Aims%2Flis%2FLearner";
-
-	@BeforeClass
-	public static void init() {
-		System.setProperty("spring.thymeleaf.prefix",
-				"file:///" + System.getProperty("PROJECT_HOME")
-						+ "/assets/src/");
-	}
 
 	@Before
 	public void setUp() {

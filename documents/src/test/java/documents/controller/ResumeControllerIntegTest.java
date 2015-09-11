@@ -21,7 +21,6 @@ import javax.inject.Inject;
 import org.apache.http.entity.ContentType;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -91,15 +90,7 @@ public class ResumeControllerIntegTest {
 
 	@Before
 	public void setUp() throws Exception {
-
 		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
-	}
-
-	@BeforeClass
-	public static void init() {
-		System.setProperty("spring.thymeleaf.prefix",
-				"file:///" + System.getProperty("PROJECT_HOME")
-						+ "/assets/src/");
 	}
 
 	@Test

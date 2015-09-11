@@ -49,7 +49,6 @@ public class ResumeExportService {
 	@Inject
 	public ResumeExportService(final TemplateEngine templateEngine) {
 		this.templateEngine = templateEngine;
-
 	}
 
 	public ByteArrayOutputStream generatePDFDocument(

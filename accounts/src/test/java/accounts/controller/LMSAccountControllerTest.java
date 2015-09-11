@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import oauth.utilities.LMSConstants;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -33,7 +32,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import accounts.ApplicationTestConfig;
-import accounts.controller.LMSAccountController;
 import accounts.mocks.SelfReturningAnswer;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
@@ -83,13 +81,6 @@ public class LMSAccountControllerTest {
 	private static final String LTI_OUATH_SIGNATURE = "k2HzozMnUGRDpYzvO6W7RMg5CFM%3D";
 	private static final String LTI_OUATH_SIGNATURE_METHOD = "HMAC-SHA1";
 	private static final String LTI_OUATH_TIMESTAMP = time();
-
-	@BeforeClass
-	public static void init() {
-		System.setProperty("spring.thymeleaf.prefix",
-				"file:///" + System.getProperty("PROJECT_HOME")
-						+ "/assets/src/");
-	}
 
 	@Before
 	public void setUp() {
