@@ -44,8 +44,13 @@ public class ResumeExportService {
 	private final Logger logger = Logger.getLogger(ResumeExportService.class
 			.getName());
 
+	private final TemplateEngine templateEngine;
+
 	@Inject
-	private TemplateEngine templateEngine;
+	public ResumeExportService(final TemplateEngine templateEngine) {
+		this.templateEngine = templateEngine;
+
+	}
 
 	public ByteArrayOutputStream generatePDFDocument(
 			DocumentHeader resumeHeader, List<DocumentSection> sections,
