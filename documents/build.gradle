@@ -13,7 +13,8 @@ dependencies {
     compile project(':togglz')
     compile project(':util')
 
-    compile files('lib/PDFRenderer-0.9.1.jar')
+	//https://java.net/projects/pdf-renderer
+	compile 'org.swinglabs:pdf-renderer:1.0.5'
 
     compile 'org.apache.commons:commons-lang3:3.3.2'
 
