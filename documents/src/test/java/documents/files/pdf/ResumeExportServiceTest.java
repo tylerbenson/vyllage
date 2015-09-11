@@ -108,6 +108,98 @@ public class ResumeExportServiceTest {
 	}
 
 	@Test
+	public void testGeneratePNGDocumentWithZeroWidthHeight()
+			throws DocumentException {
+		ResumeExportService service = new ResumeExportService(templateEngine);
+
+		DocumentHeader resumeHeader = new DocumentHeader();
+		resumeHeader.setPhoneNumber("1234567899");
+
+		String styleName = "default";
+
+		List<DocumentSection> sections = new ArrayList<>();
+
+		SkillsSection s1 = new SkillsSection();
+		s1.setDocumentId(0L);
+		s1.setLastModified(LocalDateTime.now());
+		s1.setNumberOfComments(1);
+		s1.setSectionId(1L);
+		s1.setSectionVersion(1L);
+		s1.setTitle("Skills");
+		s1.setType("SkillsSection");
+		s1.setTags(Arrays.asList("Skill1", "Skill2"));
+
+		sections.add(s1);
+
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generatePNGDocument(resumeHeader, sections, styleName, 0, 0);
+
+		assertNotNull(byteArrayOutputStream);
+
+	}
+
+	@Test
+	public void testGeneratePNGDocumentWithZeroWidth() throws DocumentException {
+		ResumeExportService service = new ResumeExportService(templateEngine);
+
+		DocumentHeader resumeHeader = new DocumentHeader();
+		resumeHeader.setPhoneNumber("1234567899");
+
+		String styleName = "default";
+
+		List<DocumentSection> sections = new ArrayList<>();
+
+		SkillsSection s1 = new SkillsSection();
+		s1.setDocumentId(0L);
+		s1.setLastModified(LocalDateTime.now());
+		s1.setNumberOfComments(1);
+		s1.setSectionId(1L);
+		s1.setSectionVersion(1L);
+		s1.setTitle("Skills");
+		s1.setType("SkillsSection");
+		s1.setTags(Arrays.asList("Skill1", "Skill2"));
+
+		sections.add(s1);
+
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generatePNGDocument(resumeHeader, sections, styleName, 0, 98);
+
+		assertNotNull(byteArrayOutputStream);
+
+	}
+
+	@Test
+	public void testGeneratePNGDocumentWithZeroHeight()
+			throws DocumentException {
+		ResumeExportService service = new ResumeExportService(templateEngine);
+
+		DocumentHeader resumeHeader = new DocumentHeader();
+		resumeHeader.setPhoneNumber("1234567899");
+
+		String styleName = "default";
+
+		List<DocumentSection> sections = new ArrayList<>();
+
+		SkillsSection s1 = new SkillsSection();
+		s1.setDocumentId(0L);
+		s1.setLastModified(LocalDateTime.now());
+		s1.setNumberOfComments(1);
+		s1.setSectionId(1L);
+		s1.setSectionVersion(1L);
+		s1.setTitle("Skills");
+		s1.setType("SkillsSection");
+		s1.setTags(Arrays.asList("Skill1", "Skill2"));
+
+		sections.add(s1);
+
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generatePNGDocument(resumeHeader, sections, styleName, 64, 0);
+
+		assertNotNull(byteArrayOutputStream);
+
+	}
+
+	@Test
 	public void testFormat() {
 
 		ResumeExportService service = new ResumeExportService(templateEngine);

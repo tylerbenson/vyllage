@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,11 +21,13 @@ import javax.inject.Inject;
 import org.apache.http.entity.ContentType;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -90,6 +93,13 @@ public class ResumeControllerIntegTest {
 	public void setUp() throws Exception {
 
 		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
+	}
+
+	@BeforeClass
+	public static void init() {
+		System.setProperty("spring.thymeleaf.prefix",
+				"file:///" + System.getProperty("PROJECT_HOME")
+						+ "/assets/src/");
 	}
 
 	@Test
@@ -674,6 +684,36 @@ public class ResumeControllerIntegTest {
 
 		controller.saveSection(documentId, createdSection.getSectionId(),
 				createdSection);
+
+	}
+
+	@Test
+	public void getPDFDocument() throws Exception {
+
+		Long documentId = 0L;
+
+		MvcResult mvcResult = mockMvc
+				.perform(get("/resume/" + documentId + "/file/pdf"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType("application/pdf"))
+				.andReturn();
+
+		assertTrue(mvcResult != null);
+
+	}
+
+	@Test
+	public void getPNGDocument() throws Exception {
+
+		Long documentId = 0L;
+
+		MvcResult mvcResult = mockMvc
+				.perform(get("/resume/" + documentId + "/file/png"))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
+				.andReturn();
+
+		assertTrue(mvcResult != null);
 
 	}
 
