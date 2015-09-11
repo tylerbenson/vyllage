@@ -88,13 +88,16 @@ public class SocialLoginController {
 		registerForm.setFirstName(userProfile.getFirstName());
 		registerForm.setLastName(userProfile.getLastName());
 
-		// social account information is not present but user already exists
 		// TODO: generateName is only useful if either user names or email are
 		// present on the userProfile
 
 		Optional<SocialDocumentLink> doclink = sharedDocumentRepository
 				.getSocialDocumentLink((String) request.getSession(false)
 						.getAttribute(SocialSessionEnum.LINK_KEY.name()));
+
+		if (!doclink.isPresent())
+			throw new UnsupportedOperationException(
+					"Creation of Vyllage accounts from a social account without a valid link is not supported at this time.");
 
 		String generatedName = generateName(userProfile);
 
