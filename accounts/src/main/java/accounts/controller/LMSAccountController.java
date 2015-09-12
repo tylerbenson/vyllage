@@ -26,8 +26,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
+import user.common.constants.AccountSettingsEnum;
+import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.AvatarSourceEnum;
+import accounts.model.account.settings.Privacy;
 import accounts.model.form.RegisterForm;
 import accounts.repository.UserNotFoundException;
+import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 
@@ -46,9 +51,9 @@ public class LMSAccountController {
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
 	private final EmailBuilder emailBuilder;
-	private Environment environment;
-
-	private ExecutorService executorService;
+	private final Environment environment;
+	private final ExecutorService executorService;
+	private final AccountSettingsService accountSettingsService;
 
 	@Inject
 	public LMSAccountController(
@@ -56,13 +61,15 @@ public class LMSAccountController {
 			final SignInUtil signInUtil,
 			final LMSService lmsService,
 			@Qualifier("accounts.emailBuilder") final EmailBuilder emailBuilder,
-			@Qualifier(value = "accounts.ExecutorService") ExecutorService executorService) {
+			@Qualifier(value = "accounts.ExecutorService") ExecutorService executorService,
+			final AccountSettingsService accountSettingsService) {
 		super();
 		this.environment = environment;
 		this.signInUtil = signInUtil;
 		this.lmsService = lmsService;
 		this.emailBuilder = emailBuilder;
 		this.executorService = executorService;
+		this.accountSettingsService = accountSettingsService;
 	}
 
 	@RequestMapping(value = "/lti/account", method = { RequestMethod.GET,
@@ -86,6 +93,7 @@ public class LMSAccountController {
 		String email = lmsRequest.getLmsUser().getEmail();
 		String firstName = lmsRequest.getLmsUser().getFirstName();
 		String lastName = lmsRequest.getLmsUser().getLastName();
+		String userImageUrl = lmsRequest.getLmsUser().getUserImage();
 
 		// TODO; LMS User Name were unique for a LMS instance but may not be for
 		// multiple instances. So will have to add some instanced specific key..
@@ -119,6 +127,7 @@ public class LMSAccountController {
 			registerForm.setEmail(userName);
 			registerForm.setFirstName(firstName);
 			registerForm.setLastName(lastName);
+			registerForm.setUserImage(userImageUrl);
 
 			// check all values are present, minus password
 			if (!registerForm.emailIsValid() || !registerForm.nameIsValid()) {
@@ -133,6 +142,7 @@ public class LMSAccountController {
 			User newUser = lmsService.createUser(userName, password, firstName,
 					null, lastName, lmsRequest);
 
+			this.saveUserImage(userImageUrl, newUser);
 			this.sendUserRegisteredEmail(registerForm.getEmail(), password,
 					firstName);
 
@@ -167,6 +177,8 @@ public class LMSAccountController {
 					registerForm.getPassword(), registerForm.getFirstName(),
 					null, registerForm.getLastName(), lmsRequest);
 
+			this.saveUserImage(registerForm.getUserImage(), newUser);
+
 			this.sendUserRegisteredEmail(registerForm.getEmail(),
 					registerForm.getPassword(), registerForm.getFirstName());
 
@@ -178,6 +190,17 @@ public class LMSAccountController {
 		model.addAttribute("registerForm", registerForm);
 
 		return "register-from-LTI";
+	}
+
+	protected void saveUserImage(String userImageUrl, User newUser) {
+		accountSettingsService.setAccountSetting(newUser, new AccountSetting(
+				null, newUser.getUserId(), AccountSettingsEnum.avatar.name(),
+				AvatarSourceEnum.LTI.name(), Privacy.PRIVATE.name()));
+
+		accountSettingsService.setAccountSetting(newUser,
+				new AccountSetting(null, newUser.getUserId(),
+						AccountSettingsEnum.lti_avatar.name(), userImageUrl,
+						Privacy.PUBLIC.name()));
 	}
 
 	private CsrfToken setCSRFTokenInSession(HttpServletRequest request) {

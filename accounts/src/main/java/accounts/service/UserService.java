@@ -39,6 +39,7 @@ import org.springframework.util.Assert;
 import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
+import user.common.constants.AccountSettingsEnum;
 import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
 import user.common.web.AccountContact;
@@ -876,36 +877,62 @@ public class UserService {
 
 		User user = this.getUser(userId);
 		Optional<AccountSetting> avatarSetting = accountSettingsService
-				.getAccountSetting(user, "avatar");
+				.getAccountSetting(user, AccountSettingsEnum.avatar.name());
 
 		if (!avatarSetting.isPresent()) {
 			// create default
-			AccountSetting ac = new AccountSetting(null, userId, "avatar",
+			AccountSetting ac = new AccountSetting(null, userId,
+					AccountSettingsEnum.avatar.name(),
 					AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
 					Privacy.PUBLIC.name().toLowerCase());
 
 			logger.info("About to save new default avatar setting: " + ac);
 			accountSettingsService.setAccountSetting(user, ac);
-			return GRAVATAR_URL
-					+ new String(DigestUtils.md5Hex(user.getUsername()));
+			return getDefaultAvatar(user);
 		}
 
-		if (avatarSetting.isPresent()
+		boolean avatarSettingPresent_gravatar = avatarSetting.isPresent()
 				&& avatarSetting.get().getValue()
-						.equalsIgnoreCase(AvatarSourceEnum.GRAVATAR.name()))
-			return GRAVATAR_URL
-					+ new String(DigestUtils.md5Hex(user.getUsername()));
+						.equalsIgnoreCase(AvatarSourceEnum.GRAVATAR.name());
 
-		else if (avatarSetting.isPresent()) {
+		boolean avatarSettingPresent_lti = avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.LTI.name());
 
-			Optional<String> avatarUrl = avatarRepository.getAvatar(userId,
-					avatarSetting.get().getValue());
+		boolean avatarSettingPresent_facebook = avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.FACEBOOK.name());
 
-			if (avatarUrl.isPresent())
-				return avatarUrl.get();
+		if (avatarSettingPresent_gravatar) {
+			return getDefaultAvatar(user);
+		} else {
+
+			if (avatarSettingPresent_lti) {
+				// get avatar url
+				Optional<AccountSetting> ltiAvatarUrl = accountSettingsService
+						.getAccountSetting(user,
+								AccountSettingsEnum.lti_avatar.name());
+				if (ltiAvatarUrl.isPresent())
+					return ltiAvatarUrl.get().getValue();
+
+			} else {
+
+				if (avatarSettingPresent_facebook) {
+					// social
+					Optional<String> avatarUrl = avatarRepository.getAvatar(
+							userId, avatarSetting.get().getValue());
+
+					if (avatarUrl.isPresent())
+						return avatarUrl.get();
+				}
+			}
 		}
 
 		// nothing found, defaulting to gravatar
+		return getDefaultAvatar(user);
+	}
+
+	private String getDefaultAvatar(User user) {
 		return GRAVATAR_URL
 				+ new String(DigestUtils.md5Hex(user.getUsername()));
 	}
