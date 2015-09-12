@@ -6,9 +6,9 @@ var ResumeStyleList = React.createClass({
 	render: function(){
 		var self = this;
 		var resumeStyle = function(pdfstyle , index ){
-			var ActiveClass='';
+			var ActiveClass='pdf-thumb';
 			if( self.props.active == pdfstyle ){
-				ActiveClass = 'active';
+				ActiveClass = 'active pdf-thumb';
 			}
 			return <div onClick={self._handleActive.bind(self, pdfstyle )} key={index} className={ActiveClass} >{pdfstyle}</div>;
 		}

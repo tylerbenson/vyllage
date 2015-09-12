@@ -8,7 +8,6 @@ var PdfStyleRender = require('./pdfrender');
 
 module.exports = React.createClass({
 	mixins: [Reflux.connect(ExportStore)],
-
 	getInitialState: function () {
 	    return {
 	        'activeStyle' : 'default'  
@@ -22,7 +21,6 @@ module.exports = React.createClass({
 		if( this.state.styles != undefined && this.state.styles.length ){
 			showResumeStyle = <ResumeStyleList active={this.state.activeStyle} data={this.state.styles} />;
 		}
-
     return (
     	<div>
 				<div className="banner">
