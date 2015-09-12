@@ -24,7 +24,6 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.oauth.provider.OAuthProcessingFilterEntryPoint;
 import org.springframework.security.oauth.provider.token.InMemoryProviderTokenServices;
 import org.springframework.security.oauth.provider.token.OAuthProviderTokenServices;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @ComponentScan({ "oauth.lti", "oauth.model.service" })
 @Configuration
@@ -60,15 +59,18 @@ public class LTISecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.requestMatchers()
-				.antMatchers("/lti/account")
-				.and()
-				.addFilterBefore(ltioAuthProviderProcessingFilter,
-						UsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests().anyRequest().hasRole("LTI").and().csrf()
-				.disable();
+		// http.requestMatchers()
+		// .antMatchers("/lti/account")
+		// .and()
+		// .addFilterBefore(ltioAuthProviderProcessingFilter,
+		// UsernamePasswordAuthenticationFilter.class)
+		// .authorizeRequests().anyRequest().hasRole("LTI").and().csrf()
+		// .disable();
 
-		http.authorizeRequests().antMatchers("/lti/login").permitAll();
+		http.csrf().disable();
+
+		http.authorizeRequests().antMatchers("/lti/rss", "/lti/login")
+				.permitAll();
 
 		http.headers().disable();
 		http.authorizeRequests().anyRequest().authenticated();
