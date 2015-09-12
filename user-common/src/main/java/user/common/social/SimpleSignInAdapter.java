@@ -43,13 +43,8 @@ public class SimpleSignInAdapter implements SignInAdapter {
 
 		String originalUrl = extractOriginalUrl(request);
 
-		if (originalUrl == null) {
-			HttpServletRequest nativeReq = request
-					.getNativeRequest(HttpServletRequest.class);
-			// get it from the session.
-			return (String) nativeReq.getSession(false).getAttribute(
-					SocialSessionEnum.SOCIAL_REDIRECT_URL.name());
-		}
+		if (originalUrl == null)
+			return "/resume";
 
 		return originalUrl;
 	}
