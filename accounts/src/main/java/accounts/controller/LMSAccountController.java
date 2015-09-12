@@ -15,6 +15,7 @@ import oauth.utilities.LMSConstants;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
+import org.jooq.tools.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.security.access.AccessDeniedException;
@@ -193,14 +194,21 @@ public class LMSAccountController {
 	}
 
 	protected void saveUserImage(String userImageUrl, User newUser) {
-		accountSettingsService.setAccountSetting(newUser, new AccountSetting(
-				null, newUser.getUserId(), AccountSettingsEnum.avatar.name(),
-				AvatarSourceEnum.LTI.name(), Privacy.PRIVATE.name()));
 
-		accountSettingsService.setAccountSetting(newUser,
-				new AccountSetting(null, newUser.getUserId(),
-						AccountSettingsEnum.lti_avatar.name(), userImageUrl,
-						Privacy.PUBLIC.name()));
+		if (userImageUrl != null && StringUtils.isBlank(userImageUrl)) {
+
+			accountSettingsService
+					.setAccountSetting(newUser,
+							new AccountSetting(null, newUser.getUserId(),
+									AccountSettingsEnum.avatar.name(),
+									AvatarSourceEnum.LTI.name(),
+									Privacy.PRIVATE.name()));
+
+			accountSettingsService.setAccountSetting(newUser,
+					new AccountSetting(null, newUser.getUserId(),
+							AccountSettingsEnum.lti_avatar.name(),
+							userImageUrl, Privacy.PUBLIC.name()));
+		}
 	}
 
 	private CsrfToken setCSRFTokenInSession(HttpServletRequest request) {

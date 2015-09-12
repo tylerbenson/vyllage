@@ -41,6 +41,7 @@ import accounts.controller.LMSAccountController;
 import accounts.mocks.SelfReturningAnswer;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.UserNotFoundException;
+import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
@@ -87,6 +88,9 @@ public class LMSRequestTest {
 	@Inject
 	private ExecutorService executorService;
 
+	@Inject
+	private AccountSettingsService accountSettingsService;
+
 	private static final String LTI_INSTANCE_GUID = "2c2d9edb89c64a6ca77ed4599042dsde";
 	private static final String LTI_INSTANCE_TYPE = "Blackboard";
 	private static final String LTI_CONSUMER_KEY = "key";
@@ -103,7 +107,8 @@ public class LMSRequestTest {
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
 		lmsAccountcontoller = new LMSAccountController(environment, signInUtil,
-				lmsService, emailBuilder, executorService);
+				lmsService, emailBuilder, executorService,
+				accountSettingsService);
 
 	}
 
