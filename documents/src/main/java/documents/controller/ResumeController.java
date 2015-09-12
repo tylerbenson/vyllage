@@ -22,6 +22,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
@@ -46,7 +47,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
 
-import documents.files.pdf.ResumePdfService;
+import documents.files.pdf.ResumeExportService;
 import documents.model.AccountNames;
 import documents.model.Comment;
 import documents.model.Document;
@@ -78,7 +79,7 @@ public class ResumeController {
 
 	private final NotificationService notificationService;
 
-	private final ResumePdfService resumePdfService;
+	private final ResumeExportService resumePdfService;
 
 	private final DocumentAccessRepository documentAccessRepository;
 
@@ -90,7 +91,7 @@ public class ResumeController {
 	public ResumeController(final DocumentService documentService,
 			final AccountService accountService,
 			final NotificationService notificationService,
-			final ResumePdfService resumePdfService,
+			final ResumeExportService resumePdfService,
 			final DocumentAccessRepository documentAccessRepository,
 			final Environment environment) {
 		this.documentService = documentService;
@@ -172,8 +173,11 @@ public class ResumeController {
 			throw new ElementNotFoundException("Document with id '"
 					+ documentId + "' could not be found.");
 
+		Document document = documentService.getDocument(documentId);
+
 		model.addAttribute("accountName", accountName(request, user));
 		model.addAttribute("userInfo", userInfo(user));
+		model.addAttribute("documentCreationDate", document.getDateCreated());
 
 		return "resume";
 	}
@@ -256,7 +260,7 @@ public class ResumeController {
 				&& this.pdfStyles.contains(styleName) ? styleName
 				: this.pdfStyles.get(0);
 
-		copyPDF(response, resumePdfService.generatePdfDocument(resumeHeader,
+		copyPDF(response, resumePdfService.generatePDFDocument(resumeHeader,
 				documentSections, style));
 		response.setStatus(HttpStatus.OK.value());
 		response.flushBuffer();
@@ -264,7 +268,7 @@ public class ResumeController {
 	}
 
 	/**
-	 * Writes the pdf document to the response.
+	 * Writes the PDF document to the response.
 	 *
 	 * @param response
 	 * @param report
@@ -279,6 +283,54 @@ public class ResumeController {
 		response.setContentType("application/pdf");
 		response.setHeader("Content-Disposition", "attachment; filename="
 				+ "report.pdf");
+	}
+
+	@RequestMapping(value = "{documentId}/file/png", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+	@ResponseStatus(value = HttpStatus.OK)
+	@CheckReadAccess
+	public void resumePNG(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable final Long documentId,
+			@RequestParam(value = "styleName", required = false, defaultValue = "default") final String styleName,
+			@RequestParam(value = "width", required = false, defaultValue = "64") final int width,
+			@RequestParam(value = "height", required = false, defaultValue = "98") final int height,
+			@AuthenticationPrincipal User user)
+			throws ElementNotFoundException, DocumentException, IOException {
+
+		DocumentHeader resumeHeader = documentService.getDocumentHeader(
+				request, documentId, user);
+
+		List<DocumentSection> documentSections = documentService
+				.getDocumentSections(documentId);
+
+		String style = styleName != null && !styleName.isEmpty()
+				&& this.pdfStyles.contains(styleName) ? styleName
+				: this.pdfStyles.get(0);
+
+		copyPNG(response, resumePdfService.generatePNGDocument(resumeHeader,
+				documentSections, style, width, height));
+		response.setStatus(HttpStatus.OK.value());
+		response.flushBuffer();
+
+	}
+
+	/**
+	 * Writes the PNG thumbnail to the response.
+	 *
+	 * @param response
+	 * @param report
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
+	private void copyPNG(HttpServletResponse response,
+			ByteArrayOutputStream report) throws DocumentException, IOException {
+		InputStream in = new ByteArrayInputStream(report.toByteArray());
+		FileCopyUtils.copy(in, response.getOutputStream());
+
+		response.setContentType(MediaType.IMAGE_PNG_VALUE);
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ "report.png");
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
@@ -433,9 +485,18 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Comment> getCommentsForSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
-			@PathVariable final Long sectionId) {
+			@PathVariable final Long sectionId,
+			final @AuthenticationPrincipal User user)
+			throws ElementNotFoundException {
+		final Document document = this.documentService.getDocument(documentId);
 
-		return documentService.getCommentsForSection(request, sectionId);
+		List<Comment> commentsForSection = documentService
+				.getCommentsForSection(request, sectionId);
+
+		commentsForSection.forEach(c -> c.setCanDeleteComment(canDeleteComment(
+				c.getCommentId(), c, user, document)));
+
+		return commentsForSection;
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
@@ -500,13 +561,26 @@ public class ResumeController {
 			@PathVariable final Long sectionId,
 			@PathVariable final Long commentId,
 			@RequestBody final Comment comment,
-			@AuthenticationPrincipal User user) {
+			@AuthenticationPrincipal User user) throws ElementNotFoundException {
+
+		Document document = this.documentService.getDocument(documentId);
+
+		if (canDeleteComment(commentId, comment, user, document))
+			documentService.deleteComment(comment);
+	}
+
+	protected boolean canDeleteComment(final Long commentId,
+			final Comment comment, final User user, final Document document) {
+
+		// allow the document owner to delete all comments
+		if (user.getUserId().equals(document.getUserId()))
+			return true;
 
 		if (!user.getUserId().equals(comment.getUserId())
 				|| !commentId.equals(comment.getCommentId()))
-			throw new AccessDeniedException(
-					"You cannot delete another user's comment.");
-		documentService.deleteComment(comment);
+			return false;
+
+		return false;
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")

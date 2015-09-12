@@ -28,7 +28,7 @@ var SectionFooter = React.createClass({
             <CommentsCount count={numberOfComments} onClick={this.clickComments} showComments={this.props.section.showComments} />
           </div> 
         </div>
-        <Comments section={this.props.section} />
+        <Comments section={this.props.section} owner={this.props.owner} />
       </div>
     );
   }

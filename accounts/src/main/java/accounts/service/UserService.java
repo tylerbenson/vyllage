@@ -884,8 +884,7 @@ public class UserService {
 					AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
 					Privacy.PUBLIC.name().toLowerCase());
 
-			logger.info("About to save new default avatar setting :"
-					+ avatarSetting);
+			logger.info("About to save new default avatar setting: " + ac);
 			accountSettingsService.setAccountSetting(user, ac);
 			return GRAVATAR_URL
 					+ new String(DigestUtils.md5Hex(user.getUsername()));

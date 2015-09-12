@@ -57,6 +57,9 @@ public class LMSLoginController {
 	public String loginExistingUserGet(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
 
+		if (session == null)
+			return "redirect:/login";
+
 		LTILoginForm form = new LTILoginForm();
 
 		form.setEmail((String) session.getAttribute("user_name"));

@@ -13,12 +13,12 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import documents.Application;
+import documents.ApplicationTestConfig;
 import documents.model.SectionAdvice;
 import documents.model.document.sections.EducationSection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class SectionAdviceRepositoryTest {
@@ -57,7 +57,8 @@ public class SectionAdviceRepositoryTest {
 
 		Long sectionId = 127L;
 
-		List<SectionAdvice> suggestion = repository.getSectionAdvices(sectionId);
+		List<SectionAdvice> suggestion = repository
+				.getSectionAdvices(sectionId);
 
 		Assert.assertNotNull("Suggestion is null.", suggestion);
 		Assert.assertTrue("No suggestions found. ", suggestion.size() > 0);

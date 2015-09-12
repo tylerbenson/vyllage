@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
@@ -31,6 +32,8 @@ import accounts.repository.SharedDocumentRepository;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
 import accounts.service.utilities.RandomPasswordGenerator;
+
+import com.newrelic.api.agent.NewRelic;
 
 @Controller
 public class SocialLoginController {
@@ -88,13 +91,20 @@ public class SocialLoginController {
 		registerForm.setFirstName(userProfile.getFirstName());
 		registerForm.setLastName(userProfile.getLastName());
 
-		// social account information is not present but user already exists
 		// TODO: generateName is only useful if either user names or email are
 		// present on the userProfile
 
 		Optional<SocialDocumentLink> doclink = sharedDocumentRepository
 				.getSocialDocumentLink((String) request.getSession(false)
 						.getAttribute(SocialSessionEnum.LINK_KEY.name()));
+
+		if (!doclink.isPresent()) {
+			UnsupportedOperationException e = new UnsupportedOperationException(
+					"Creation of Vyllage accounts from a social account without a valid link is not supported at this time.");
+			logger.warning(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			throw e;
+		}
 
 		String generatedName = generateName(userProfile);
 

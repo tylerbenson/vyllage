@@ -2,11 +2,14 @@ package documents.files.pdf;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.io.Resource;
 import org.xhtmlrenderer.pdf.ITextOutputDevice;
 import org.xhtmlrenderer.resource.ImageResource;
 
+@RunWith(MockitoJUnitRunner.class)
 public class PackageUserAgentCallbackTest {
 
 	@Test

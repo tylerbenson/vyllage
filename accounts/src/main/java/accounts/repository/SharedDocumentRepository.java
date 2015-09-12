@@ -79,7 +79,7 @@ public class SharedDocumentRepository {
 				SHARED_DOCUMENT, SHARED_DOCUMENT.LINK_KEY.eq(linkKey));
 
 		if (sharedDocumentRecord == null)
-			return null;
+			return Optional.empty();
 
 		return Optional.of(buildSocialDocumentLink(sharedDocumentRecord));
 

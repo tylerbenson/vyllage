@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.mail.EmailException;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -36,13 +35,6 @@ public class UserServiceTest {
 
 	@Mock
 	private User user;
-
-	@BeforeClass
-	public static void init() {
-		System.setProperty("spring.thymeleaf.prefix",
-				"file:///" + System.getProperty("PROJECT_HOME")
-						+ "/assets/src/");
-	}
 
 	@Test
 	public void createUserBatchTest() throws IllegalArgumentException,
