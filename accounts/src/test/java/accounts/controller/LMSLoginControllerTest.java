@@ -43,6 +43,7 @@ public class LMSLoginControllerTest {
 	private SignInUtil signInUtil = mock(SignInUtil.class);
 	private LMSService lmsService = mock(LMSService.class);
 	private UserService userService = mock(UserService.class);
+	private AccountSettingsService accountSettingsService = mock(AccountSettingsService.class);
 
 	private MockMvc springMvc;
 	@Autowired
@@ -69,11 +70,19 @@ public class LMSLoginControllerTest {
 	private static final String LTI_OUATH_SIGNATURE_METHOD = "HMAC-SHA1";
 	private static final String LTI_OUATH_TIMESTAMP = time();
 
+	@BeforeClass
+	public static void init() {
+		System.setProperty("spring.thymeleaf.prefix",
+				"file:///" + System.getProperty("PROJECT_HOME")
+						+ "/assets/src/");
+	}
+
+
 	@Before
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
 		lmsLoginController = new LMSLoginController(userService, lmsService,
-				signInUtil);
+				signInUtil, accountSettingsService);
 		mockSession = new MockHttpSession(wContext.getServletContext(), UUID
 				.randomUUID().toString());
 	}
