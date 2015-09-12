@@ -13,6 +13,9 @@ dependencies {
     compile project(':togglz')
     compile project(':util')
 
+    //https://java.net/projects/pdf-renderer
+    compile 'org.swinglabs:pdf-renderer:1.0.5'
+
     compile 'org.apache.commons:commons-lang3:3.3.2'
 
     compile 'org.xhtmlrenderer:flying-saucer-core:9.0.7'

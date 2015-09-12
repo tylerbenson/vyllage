@@ -1,6 +1,5 @@
 package site;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -17,13 +16,6 @@ public class ApplicationTests {
 	// JdbcUserDetailsManager udm;
 	// @Autowired
 	// AuthenticationManagerBuilder amb;
-
-	@BeforeClass
-	public static void init() {
-		System.setProperty("spring.thymeleaf.prefix",
-				"file:///" + System.getProperty("PROJECT_HOME")
-						+ "/assets/src/");
-	}
 
 	@Test
 	public void contextLoads() {

@@ -80,9 +80,9 @@ configure(javaProjects) {
         reportThreshold 0.56, LINE, "documents"
         reportThreshold 0.519, METHOD, "documents"
 
-        packageThreshold 0.22, ~"accounts/.*"
+        packageThreshold 0.25, ~"accounts/.*"
         packageThreshold 0.0,  ~"connections/.*" // :-(
-        packageThreshold 0.21, ~"documents/.*"
+        packageThreshold 0.26, ~"documents/.*"
 
         // Whitelist files that currently have 0 coverage.
         packageThreshold 0.0, ~"accounts/controller.*"
