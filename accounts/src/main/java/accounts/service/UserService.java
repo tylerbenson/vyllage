@@ -917,6 +917,7 @@ public class UserService {
 
 			} else {
 
+				// we only have facebook right now
 				if (avatarSettingPresent_facebook) {
 					// social
 					Optional<String> avatarUrl = avatarRepository.getAvatar(

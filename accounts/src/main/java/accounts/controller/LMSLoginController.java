@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import oauth.lti.LMSRequest;
 
+import org.jooq.tools.StringUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import user.common.User;
+import user.common.constants.AccountSettingsEnum;
+import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.AvatarSourceEnum;
+import accounts.model.account.settings.Privacy;
 import accounts.model.form.LTILoginForm;
 import accounts.repository.UserNotFoundException;
+import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
@@ -32,13 +38,17 @@ public class LMSLoginController {
 
 	private final LMSService lmsService;
 
+	private final AccountSettingsService accountSettingsService;
+
 	@Inject
 	public LMSLoginController(final UserService userService,
-			final LMSService lmsService, final SignInUtil signInUtil) {
+			final LMSService lmsService, final SignInUtil signInUtil,
+			final AccountSettingsService accountSettingsService) {
 		super();
 		this.userService = userService;
 		this.lmsService = lmsService;
 		this.signInUtil = signInUtil;
+		this.accountSettingsService = accountSettingsService;
 	}
 
 	@RequestMapping(value = "/lti/login", method = { RequestMethod.GET,
@@ -88,6 +98,7 @@ public class LMSLoginController {
 					.getAttribute(LMSRequest.class.getName());
 
 			lmsService.addLMSDetails(user, lmsRequest);
+			this.saveUserImage(lmsRequest.getLmsUser().getUserImage(), user);
 
 			session.removeAttribute(LMSRequest.class.getName());
 			session.removeAttribute("user_name");
@@ -97,5 +108,20 @@ public class LMSLoginController {
 		}
 
 		return "redirect:/resume";
+	}
+
+	protected void saveUserImage(String userImageUrl, User user) {
+
+		if (userImageUrl != null && !StringUtils.isBlank(userImageUrl)) {
+
+			accountSettingsService.setAccountSetting(user, new AccountSetting(
+					null, user.getUserId(), AccountSettingsEnum.avatar.name(),
+					AvatarSourceEnum.LTI.name(), Privacy.PUBLIC.name()));
+
+			accountSettingsService.setAccountSetting(user,
+					new AccountSetting(null, user.getUserId(),
+							AccountSettingsEnum.lti_avatar.name(),
+							userImageUrl, Privacy.PUBLIC.name()));
+		}
 	}
 }

@@ -116,10 +116,14 @@ public class LMSAccountController {
 			// Set user name in Session
 			session.setAttribute("user_name", user.getUsername());
 
+			// here we'll have to do something about account sync
+			this.saveUserImage(userImageUrl, user);
+
 			// LMS user doesn't exist but is on the system
 		} else if (userName != null && lmsService.userExists(userName)) {
 			session.setAttribute("user_name", userName);
 			session.setAttribute(LMSRequest.class.getName(), lmsRequest);
+
 			return "redirect:/lti/login-existing-user";
 		} else {
 
@@ -198,11 +202,12 @@ public class LMSAccountController {
 		if (userImageUrl != null && StringUtils.isBlank(userImageUrl)) {
 
 			accountSettingsService
-					.setAccountSetting(newUser,
+					.setAccountSetting(
+							newUser,
 							new AccountSetting(null, newUser.getUserId(),
 									AccountSettingsEnum.avatar.name(),
-									AvatarSourceEnum.LTI.name(),
-									Privacy.PRIVATE.name()));
+									AvatarSourceEnum.LTI.name(), Privacy.PUBLIC
+											.name()));
 
 			accountSettingsService.setAccountSetting(newUser,
 					new AccountSetting(null, newUser.getUserId(),
