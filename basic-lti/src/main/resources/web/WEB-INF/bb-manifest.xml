@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <plugin>
+    <name value="Basic LTI tools" />
+    <description value="plugin.description" />
+    <handle value="BasicLTI" />
+    <default-locale value="en_US" />
+	  <version value="3.1.0" />
+    <webapp-type value="javaext" />
+	  <requires>
+ 	    <bbversion value="9.1.0" />
+	  </requires>
+	  <vendor>
+	    <id value="osc" />
+	    <name value="OSCELOT" />
+	    <url value="http://www.oscelot.org/" />
+	    <description value="plugin.vendor.description" />
+	  </vendor>
+	  <http-actions>
+  		<config value="system/tools.jsp?lti_page=tools" />
+  		<remove value="system/remove.jsp" />
+	  </http-actions>
+	  <application-defs>
+	    <application handle="BasicLTI" type="shared" name="plugin.application.name" is-course-tool="true" is-group-tool="true" is-org-tool="true" use-ssl="false" can-allow-guest="true">
+	      <description>plugin.application.description</description>
+	      <links>
+          <link>
+            <type value="system_tool" />
+  	        <name value="plugin.application.system.name" />
+	          <url value="system/tools.jsp" />
+	          <description value="plugin.application.system.description" />
+          </link>
+	        <link>
+	          <type value="course_tool" />
+  	        <name value="plugin.application.course_tool.name" />
+	          <url value="course/tools.jsp" />
+	          <description value="plugin.application.course_tool.description" />
+          </link>
+	        <link>
+	          <type value="group_tool" />
+  	        <name value="plugin.application.course_tool.name" />
+	          <url value="course/tools.jsp" />
+	          <description value="plugin.application.course_tool.description" />
+          </link>
+	        <link>
+	          <type value="tool" />
+  	        <name value="plugin.application.tool.name" />
+	          <url value="tools.jsp" />
+	          <description value="plugin.application.tool.description" />
+            <icons>
+              <toolbar value="images/lti_s.gif" />
+              <listitem value="images/lti.gif" />
+            </icons>
+          </link>
+	      </links>
+  	  </application>
+	  </application-defs>
+    <extension-defs>
+      <definition namespace="blackboard.platform">
+        <extension id="OscBasicLTICxComponent"
+                   point="blackboard.platform.cxComponent"
+                   class="org.oscelot.blackboard.utils.OscBasicLTICxComponent"
+                   singleton="true" />
+        <extension id="OscBasicLTIRenderingHookInstitution"
+                   point="blackboard.platform.renderingHook"
+                   class="org.oscelot.blackboard.utils.InstitutionRenderingHook"
+                   singleton="true" />
+        <extension id="OscBasicLTIRenderingHookCourse"
+                   point="blackboard.platform.renderingHook"
+                   class="org.oscelot.blackboard.utils.CourseRenderingHook"
+                   singleton="true" />
+      </definition>
+    </extension-defs>
+    <content-handlers>
+      <content-handler>
+        <name value="plugin.ch.name" />
+        <handle value= "resource/x-osc-basiclti" />
+        <http-actions>
+          <create value="ch/create.jsp" />
+          <modify value="ch/modify.jsp" />
+          <view value="tool.jsp" />
+          <cpview value="tool.jsp" />
+          <can-copy value="false" />
+        </http-actions>
+        <types>
+          <type>
+            <action-type value="collaborate" />
+          </type>
+        </types>
+        <icons>
+          <toolbar value="images/lti_s.gif" />
+          <listitem value="icon.jsp?course_id=@X@course.pk_string@X@&amp;content_id=@X@content.pk_string@X@" />
+        </icons>
+      </content-handler>
+      <content-handler>
+        <name value="plugin.ci.name" />
+        <handle value= "resource/x-osc-basiclti-item" />
+        <http-actions>
+          <create value="error.jsp" />
+          <modify value="ci/modify.jsp" />
+          <can-copy value="true" />
+        </http-actions>
+        <icons>
+          <toolbar value="images/lti_s.gif" />
+          <listitem value="icon.jsp?course_id=@X@course.pk_string@X@&amp;content_id=@X@content.pk_string@X@" />
+        </icons>
+      </content-handler>
+    </content-handlers>
+    <module-defs>
+      <module-type ext-ref="basiclti-module" title="plugin.module.name" uicreatable="true">
+        <jsp-dir>module</jsp-dir>
+        <jsp>
+          <admin>admin.jsp</admin>
+          <view>view.jsp</view>
+        </jsp>
+      </module-type>
+    </module-defs>
+	  <permissions>
+      <permission type="java.net.SocketPermission" name="*" actions="connect,listen" />
+      <permission type="attribute" name="user.personalinfo" actions="get" />
+      <permission type="attribute" name="user.authinfo" actions="get" />
+      <permission type="persist" name="Content" actions="create,modify" />
+			<permission type="persist" name="Outcome" actions="create,modify,delete" />
+			<permission type="persist" name="OutcomeDefinition" actions="create,modify" />
+			<permission type="persist" name="OutcomeDefinitionCategory" actions="create,modify" />
+			<permission type="persist" name="OutcomeDefinitionScale" actions="create,modify" />
+      <permission type="persist" name="GroupAssignment" actions="create,delete" />
+      <permission type="persist" name="ContentHandler" actions="create,modify,delete" />
+      <permission type="persist" name="NavigationItem" actions="create,modify,delete" />
+      <permission type="java.lang.RuntimePermission" name="injectRenderingHook" />
+      <permission type="java.lang.reflect.ReflectPermission" name="suppressAccessChecks" />
+      <permission type="java.io.FilePermission" name="&amp;lt;&amp;lt;ALL FILES&amp;gt;&amp;gt;" actions="read,write,delete" />
+    </permissions>
+    <required-webservices>
+      <tool-login>
+        <service name="Gradebook.WS">
+          <operation>getGrades</operation>
+        </service>
+      </tool-login>
+    </required-webservices>
+  </plugin>
+</manifest>
