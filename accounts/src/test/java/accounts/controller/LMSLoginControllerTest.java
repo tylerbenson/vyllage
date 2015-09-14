@@ -16,6 +16,7 @@ import java.util.UUID;
 import oauth.utilities.LMSConstants;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import accounts.ApplicationTestConfig;
+import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
@@ -76,7 +78,6 @@ public class LMSLoginControllerTest {
 				"file:///" + System.getProperty("PROJECT_HOME")
 						+ "/assets/src/");
 	}
-
 
 	@Before
 	public void setUp() {
