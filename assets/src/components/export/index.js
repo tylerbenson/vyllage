@@ -13,6 +13,9 @@ module.exports = React.createClass({
 	        'activeStyle' : 'default'  
 	    };
 	},
+	componentWillMount : function () {
+	  ExportAction.checkForOwner();    
+	},
 	componentDidMount: function () {
 		ExportAction.getAllResumeStyle();  
 	},

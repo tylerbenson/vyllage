@@ -4,7 +4,8 @@ var ExportAction = require('./exportAction');
 
 module.exports = React.createClass({
 	render:function(){
-		var pdfLink = 'http://localhost:8080/resume/0/file/pdf?style=' + this.props.active;
+		var documentId = window.location.pathname.split('/')[2];
+		var pdfLink = window.location.origin + '/resume/'+ documentId +'/file/pdf?style=' + this.props.active;
 		return(
 			<div>
 		    	<object data={pdfLink} type="application/pdf" className="pdfrender"></object>
