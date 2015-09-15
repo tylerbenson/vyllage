@@ -3,6 +3,7 @@ var actions = require('../actions');
 var EditBtn = require('../../buttons/edit');
 var DeleteSection = require('../Delete');
 var SaveBtn = require('../../buttons/save');
+var SuggestionBtn = require('../../buttons/suggestion');
 var CancelBtn = require('../../buttons/cancel');
 var SectionFooter = require('../sections/Footer');
 var Textarea = require('react-textarea-autosize');
@@ -16,6 +17,7 @@ var Freeform = React.createClass({
   getInitialState: function() {
     return {
       description: this.props.section.description,
+      oldDescription: this.props.section.description,
       uiEditMode: this.props.section.newSection,
     };
   },
@@ -79,7 +81,11 @@ var Freeform = React.createClass({
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
             {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
-          </div>: null}
+          </div>: <div className="actions"> 
+            {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
+            {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
+          </div>
+        }
         </div>
         {this.props.section.sectionId ? <div>
           <div className="content">
@@ -99,6 +105,15 @@ var Freeform = React.createClass({
           {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>
     );
+  },
+  _saveSuggestionHandler : function(){
+    var section = this.props.section;
+    section.description = this.state.description;
+    actions.saveSectionAdvice(section);
+    this.setState({
+      description : this.state.oldDescription,
+      uiEditMode: false
+    });
   }
 });
 

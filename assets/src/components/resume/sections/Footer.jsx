@@ -2,6 +2,7 @@ var React = require('react');
 var actions = require('../actions');
 var Comments = require('../comments');
 var CommentsCount = require('../../buttons/comments-count');
+var AdvicesCount = require('../../buttons/advices-count');
 var moment = require('moment');
 
 var SectionFooter = React.createClass({
@@ -17,6 +18,7 @@ var SectionFooter = React.createClass({
   },
   render: function () {
     var numberOfComments = this.props.section && this.props.section.numberOfComments;
+    var numberOfAdvices = this.props.section && this.props.section.numberOfAdvices;
     var lastModified = this.props.section.lastModified;
     return (
       <div className='footer' onClick={this.stopPropagation}>
@@ -25,6 +27,7 @@ var SectionFooter = React.createClass({
             {moment(lastModified).isValid() ? moment.utc(lastModified).fromNow(): ''}
           </p>
           <div className='actions'>
+            <AdvicesCount count={numberOfAdvices} />
             <CommentsCount count={numberOfComments} onClick={this.clickComments} showComments={this.props.section.showComments} />
           </div> 
         </div>

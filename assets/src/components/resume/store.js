@@ -144,6 +144,8 @@ module.exports = Reflux.createStore({
         if (section.numberOfComments > 0) {
           this.onGetComments(section.sectionId);
         }
+        // get the advice . 
+        this.onGetAdvice( section.sectionId);
       }.bind(this)); 
 
      this.resume.all_section = this.doProcessSection( this.resume.sections, header.owner);
@@ -356,6 +358,42 @@ module.exports = Reflux.createStore({
               }
             }
          }
+      }.bind(this));
+  },
+  onGetAdvice : function(sectionId){
+    request
+      .get('/resume/'+this.documentId+'/section/'+sectionId+'/advice')
+      .set('Accept', 'application/json')
+      .end(function (err, res) {
+        var index = findindex(this.resume.sections, {sectionId: sectionId});
+        this.resume.sections[index].advices = res.body;
+        if( res.body.length )
+        this.resume.sections[index].numberOfAdvices = res.body.length;
+        this.trigger(this.resume);
+      }.bind(this));
+  },
+  onSaveSectionAdvice: function( section ){
+    request
+      .post('/resume/'+this.documentId+'/section/'+section.sectionId+'/advice')
+      .set(this.tokenHeader, this.tokenValue)
+      .send({
+        sectionId : section.sectionId,
+        sectionVersion : 1,
+        userId : document.getElementById('meta_userInfo_user').content,
+        documentSection : omit(section, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','numberOfAdvices'])
+      })
+      .end(function(err,res){
+        if(res.status == 200){
+          var index = findindex(this.resume.sections, {sectionId: section.sectionId });
+          if (this.resume.sections[index].advices) {
+            this.resume.sections[index].advices.push(res.body);
+          } else {
+            this.resume.sections[index].advices = [res.body];
+          }
+          this.resume.sections[index].numberOfAdvices += 1;
+          this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+          this.trigger(this.resume);
+        }
       }.bind(this));
   },
   onEnableEditMode: function (sectionId) {
