@@ -23,6 +23,7 @@ public class RegisterForm {
 	private boolean receiveAdvice;
 
 	private String errorMsg;
+	private String userImage;
 
 	public boolean isValid() {
 		return nameIsValid() && emailIsValid() && passwordIsValid();
@@ -107,6 +108,14 @@ public class RegisterForm {
 
 	public void setReceiveAdvice(boolean receiveAdvice) {
 		this.receiveAdvice = receiveAdvice;
+	}
+
+	public String getUserImage() {
+		return userImage;
+	}
+
+	public void setUserImage(String userImage) {
+		this.userImage = userImage;
 	}
 
 }

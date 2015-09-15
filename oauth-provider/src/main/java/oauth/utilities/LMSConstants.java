@@ -29,6 +29,7 @@ public class LMSConstants {
 
 	public static final String LTI_USER_ROLES = "roles";
 	public static final String LTI_USER_ROLE = "user_role";
+	public static final String LTI_USER_IMAGE = "user_image";
 
 	// LMS Error Message
 	public static final String LTI_INVALID_HTTP_REQUEST = "HttpServletRequest can't be null";
