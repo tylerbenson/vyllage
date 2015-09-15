@@ -879,17 +879,8 @@ public class UserService {
 		Optional<AccountSetting> avatarSetting = accountSettingsService
 				.getAccountSetting(user, AccountSettingsEnum.avatar.name());
 
-		if (!avatarSetting.isPresent()) {
-			// create default
-			AccountSetting ac = new AccountSetting(null, userId,
-					AccountSettingsEnum.avatar.name(),
-					AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
-					Privacy.PUBLIC.name().toLowerCase());
-
-			logger.info("About to save new default avatar setting: " + ac);
-			accountSettingsService.setAccountSetting(user, ac);
+		if (!avatarSetting.isPresent())
 			return getDefaultAvatar(user);
-		}
 
 		boolean avatarSettingPresent_gravatar = avatarSetting.isPresent()
 				&& avatarSetting.get().getValue()

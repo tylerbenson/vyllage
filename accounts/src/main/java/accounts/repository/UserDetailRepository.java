@@ -42,6 +42,7 @@ import org.springframework.util.Assert;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
+import user.common.constants.AccountSettingsEnum;
 import user.common.social.SocialUser;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.Email;
@@ -224,7 +225,8 @@ public class UserDetailRepository implements UserDetailsManager,
 			// accountSettingRepository.set(emailSetting);
 
 			AccountSetting emailUpdatesSetting = new AccountSetting();
-			emailUpdatesSetting.setName("emailUpdates");
+			emailUpdatesSetting
+					.setName(AccountSettingsEnum.emailUpdates.name());
 			emailUpdatesSetting.setUserId(newRecord.getUserId());
 			emailUpdatesSetting
 					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
@@ -233,9 +235,9 @@ public class UserDetailRepository implements UserDetailsManager,
 			accountSettingRepository.set(emailUpdatesSetting);
 
 			AccountSetting avatarSetting = new AccountSetting();
-			avatarSetting.setName("avatar");
+			avatarSetting.setName(AccountSettingsEnum.avatar.name());
 			avatarSetting.setUserId(newRecord.getUserId());
-			avatarSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+			avatarSetting.setPrivacy(Privacy.PUBLIC.name().toLowerCase());
 			avatarSetting.setValue(AvatarSourceEnum.GRAVATAR.name()
 					.toLowerCase());
 
@@ -517,7 +519,8 @@ public class UserDetailRepository implements UserDetailsManager,
 					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
-							.values(user.getUserId(), "role",
+							.values(user.getUserId(),
+									AccountSettingsEnum.role.name(),
 									authority.getAuthority(),
 									Privacy.PRIVATE.name().toLowerCase()));
 
@@ -526,7 +529,7 @@ public class UserDetailRepository implements UserDetailsManager,
 							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
 							.values(user.getUserId(),
-									"organization",
+									AccountSettingsEnum.organization.name(),
 									organizationRepository.get(
 											((UserOrganizationRole) authority)
 													.getOrganizationId())
@@ -547,7 +550,8 @@ public class UserDetailRepository implements UserDetailsManager,
 				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
-						user.getUserId(), "emailUpdates",
+						user.getUserId(),
+						AccountSettingsEnum.emailUpdates.name(),
 						EmailFrequencyUpdates.NEVER.name().toLowerCase(),
 						Privacy.PRIVATE.name().toLowerCase()));
 
@@ -556,7 +560,7 @@ public class UserDetailRepository implements UserDetailsManager,
 				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
-						user.getUserId(), "avatar",
+						user.getUserId(), AccountSettingsEnum.avatar.name(),
 						AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
 						Privacy.PRIVATE.name().toLowerCase()));
 
@@ -648,7 +652,8 @@ public class UserDetailRepository implements UserDetailsManager,
 					.where(USERS.USER_ID.eq(user.getUserId())).execute();
 
 			// delete this, we don't need it anymore
-			accountSettingRepository.deleteByName(user.getUserId(), "newEmail");
+			accountSettingRepository.deleteByName(user.getUserId(),
+					AccountSettingsEnum.newEmail.name());
 
 			// if we are here then he confirmed the new email.
 
@@ -666,11 +671,6 @@ public class UserDetailRepository implements UserDetailsManager,
 			// repository?
 			this.confirmationEmailService
 					.confirmEmailChange(oldEmail, newEmail);
-
-			sql.update(ACCOUNT_SETTING)
-					.set(ACCOUNT_SETTING.VALUE, newEmail)
-					.where(ACCOUNT_SETTING.USER_ID.eq(user.getUserId()).and(
-							ACCOUNT_SETTING.NAME.eq("email"))).execute();
 
 			sql.update(USERCONNECTION).set(USERCONNECTION.USERID, newEmail)
 					.where(USERCONNECTION.USERID.eq(user.getUsername()))
