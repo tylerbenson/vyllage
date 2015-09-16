@@ -5,6 +5,7 @@ var Buttons = require('./Buttons');
 var SettingsMixin = require('./mixin');
 var Actions = require('./actions');
 var SettingsStore = require('./store');
+var FeatureToggle = require('../util/FeatureToggle');
 
 var Permission = React.createClass({
   mixins: [Reflux.connect(SettingsStore)],
@@ -44,6 +45,7 @@ var Permission = React.createClass({
             </form>
           </div>
           <div className="content">
+           <FeatureToggle name="GOOGLE_PLUS">
              <form action="/connect/google" method="POST">
               <div className="right-part">
                   {ggConnectButton}
@@ -55,6 +57,7 @@ var Permission = React.createClass({
                <input type="hidden" name="_csrf" value={metatoken} />
                <input type="hidden" name="scope" value="email profile" />
               </form>
+           </FeatureToggle>
           </div>
           { /*
           <div className="content">
