@@ -3,12 +3,20 @@ package documents.model.document.sections;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
+import util.dateSerialization.DocumentLocalDateTimeDeserializer;
+import util.dateSerialization.DocumentLocalDateTimeSerializer;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @ToString(callSuper = true)
 public class ProjectsSection extends DocumentSection {
 
 	private String projectTitle;
 	private String author;
+
+	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
+	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
 	private LocalDateTime projectDate;
 	private String projectImageUrl;
 
