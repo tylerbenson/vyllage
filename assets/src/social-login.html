@@ -58,16 +58,14 @@
             </div>
           </form>
           <!-- GOOGLE SIGNIN -->
-          <form name="fb_signin" id="fb_signin" th:action="@{/signin/google}" method="POST">
+          <form name="gg_signin" id="gg_signin" th:action="@{/signin/google}" method="POST">
             <div class="content">
-              <h1 class="centered">Guest Log In</h1>
-              <p class="centered">Give feedback on your friends resumé.</p>
               <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}"></input>
               <input type="hidden" name="scope" value="email profile"></input>
             </div>
             <div class="content account">
               <button class="padded google" type="submit">
-                <i class="ion-social-facebook"></i> Sign Up via Google
+                <i class="ion-social-google"></i> Sign Up via Google
               </button>
             </div>
           </form>
