@@ -61,7 +61,7 @@ var Milestone = React.createClass({
 				'priority' : !milestone.isDone && tasksShown++ < 3
 			});
 			return (
-				<li key={key++} className={listClasses}>
+				<li onMouseDown={milestone.action} key={key++} className={listClasses}>
 					<div className="icon">
 						<i className={milestone.icon ? milestone.icon : 'ion-trophy'}></i>
 					</div>
