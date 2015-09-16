@@ -20,7 +20,11 @@ var Permission = React.createClass({
         var fbConnectButton = <button name="facebook-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectFacebook}>Connected</button>;
     }
 
-
+ 	if( this.props.google == false){
+        var ggConnectButton = <button name="google-connect" type="submit" className='small inverted' value="connect">Connect</button>;
+    }else{
+        var ggConnectButton = <button name="google-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectGoogle}>Connected</button>;
+    }
 
     if (settings.length > 0) {
       return (
@@ -38,6 +42,19 @@ var Permission = React.createClass({
                <input type="hidden" name="scope" value="email,publish_actions" />
                {/*<input type="checkbox" className="social-checkbox" /> <span className="small-text"> Publish Vyllage updates on my timeline </span>*/}
             </form>
+          </div>
+          <div className="content">
+             <form action="/connect/google" method="POST">
+              <div className="right-part">
+                  {ggConnectButton}
+              </div>
+              <div className="left-part">
+                <i className="ion-social-google icon-google"></i>
+                 Google
+              </div>
+               <input type="hidden" name="_csrf" value={metatoken} />
+               <input type="hidden" name="scope" value="email profile" />
+              </form>
           </div>
           { /*
           <div className="content">
@@ -77,6 +94,10 @@ var Permission = React.createClass({
   connectWithFacebook : function() {
     console.log('connect with facebook');
   },
+  
+  connectWithGoogle: function(){
+    console.log('connect with google');
+  },
 
   connectWithTwitter: function(){
     console.log('connect with twitter');
@@ -88,6 +109,10 @@ var Permission = React.createClass({
 
   disconnectFacebook : function(){
       Actions.makeFacebookDisconnect();
+  },
+  
+  disconnectGoogle : function(){
+      Actions.makeGoogleDisconnect();
   }
 
 
