@@ -86,7 +86,7 @@ var SectionGroup = React.createClass({
     return (
       <Sortable config={config} className="section" rel={this.props.section.type}>
         <div className="container">
-          { this.props.section.owner ? 
+          { this.props.section.owner ?
             <span className="inverted secondary button small move move-section" {...this.props}>
               <i className="ion-arrow-move"></i>
               Move
@@ -122,7 +122,7 @@ var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
   componentWillMount: function () {
     actions.getResume();
-    actions.getAllsections(); //preEmit
+    actions.getAllSections(); //preEmit
   },
   render: function () {
     var owner = this.state.resume.header.owner;

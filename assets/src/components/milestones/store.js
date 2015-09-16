@@ -17,6 +17,7 @@ var MilestoneStore = Reflux.createStore({
 
     this.milestones = [];
     this.isOpen = false;
+    this.viewAll = false;
 
     this.listenTo(ResumeStore, this.onSyncMilestones);
   },
@@ -34,7 +35,7 @@ var MilestoneStore = Reflux.createStore({
       this.update();
     }
     else {
-      this.getSections();
+      this.getResume();
     }
   },
   update: function() {
@@ -45,7 +46,27 @@ var MilestoneStore = Reflux.createStore({
       name: this.resume.header.firstName + " " + this.resume.header.lastName,
       milestones: this.milestones,
       isOpen: this.isOpen,
+      viewAll: this.viewAll,
     });
+  },
+  getResume: function() {
+    this.getHeader();
+    this.getSections();
+  },
+  getHeader: function() {
+    var url = urlTemplate
+                .parse(endpoints.resumeHeader)
+                .expand({documentId: this.resume.ownDocumentId});
+
+    request
+      .get(url)
+      .set('Accept', 'application/json')
+      .end(function (err, res) {
+        if (res.ok) {
+          this.resume.header = res.body;
+          this.update();
+        }
+      }.bind(this));
   },
   getSections: function() {
     var url = urlTemplate
@@ -159,6 +180,10 @@ var MilestoneStore = Reflux.createStore({
   },
   onToggle: function(flag) {
     this.isOpen = flag !== undefined ? flag : !this.isOpen;
+    this.update();
+  },
+  onViewAllToggle: function(flag) {
+    this.viewAll = flag !== undefined ? flag : !this.viewAll;
     this.update();
   }
 });

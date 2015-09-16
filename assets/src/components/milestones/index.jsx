@@ -17,18 +17,34 @@ var Milestone = React.createClass({
 	// componentWillUnmount: function () {
 	//     window.removeListener('mousedown');
 	// },
+	viewAllToggle: function() {
+		MilestoneActions.viewAllToggle();
+	},
 	toggleMilestonesPanel: function(e) {
+		if(e.target.className.indexOf('milestone-ignore') > -1){
+			return;
+		}
 		//added the keyword 'milestone-toggle' to panel toggles
 		if(e.target.className.indexOf('milestone-toggle') > -1){
 			MilestoneActions.toggle();
 		}
-		else {
+		else{
 			MilestoneActions.toggle(false);
 		}
+
+		MilestoneActions.viewAllToggle(false);
 	},
 	render: function() {
 		if(!this.state.milestones) {
 			return null;
+		}
+
+		var body = document.querySelector('body');
+		if(this.state.isOpen) {
+			body.className += ' milestone-open';
+		}
+		else {
+			body.className = body.className.replace(/ milestone-open/g,'');
 		}
 
 		var milestones = this.state.milestones;
@@ -54,28 +70,35 @@ var Milestone = React.createClass({
 			);
 		});
 
+		var Toggle = <button onMouseDown={this.viewAllToggle} className="milestone-ignore toggle flat">{this.state.viewAll ? 'View Priority' : 'View All'}</button>
+
 		return (
 			<a className="flat milestones button milestone-toggle">
-				<Avatar className="milestone-toggle" src={this.state.avatar} size="18" borderWidth="0" />
-				{percentage !== 100 ? <div className="milestone-toggle pin"></div> : null}
+				<Avatar className="milestone-toggle" src={this.state.avatar} size="18" borderWidth="0">
+					{percentage !== 100 ? <div className="milestone-toggle pin"></div> : null}
+				</Avatar>
 				<span className="milestone-toggle">Milestones</span>
-				<div className={(this.state.isOpen ? 'visible ' : '') + 'panel'}>
-					<div className="overview">
-						<div className="avatar-container">
-							<Avatar src={this.state.avatar} size="48" borderWidth="2" />
-						</div>
-						<div className="info">
-							<div className="name">{this.state.name}</div>
-							<div className="progress-bar">
-								<div className="progress" style={{width: percentage + "%"}}></div>
-								<div className="percentage">{percentage + "%"}</div>
+
+				<div className={(this.state.isOpen ? 'visible ' : '') + 'overlay'}>
+					<div className='panel' ref='panel'>
+						<div className="overview">
+							<div className="avatar-container">
+								<Avatar src={this.state.avatar} size="48" borderWidth="2" />
+							</div>
+							<div className="info">
+								<div className="name">{this.state.name}</div>
+								<div className="progress-bar">
+									<div className="progress" style={{width: percentage + "%"}}></div>
+									<div className="percentage">{percentage + "%"}</div>
+								</div>
 							</div>
 						</div>
+						<div className="title">What&quot;s Next?</div>
+						<ul className={this.state.viewAll?'view-all':''}>
+							{NextSteps}
+						</ul>
+						{Toggle}
 					</div>
-					<div className="title">What's Next?</div>
-					<ul>
-						{NextSteps}
-					</ul>
 				</div>
 			</a>
 		);

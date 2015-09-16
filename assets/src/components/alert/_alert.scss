@@ -34,3 +34,19 @@
   	padding: 0 !important;
   }
 }
+
+@media only screen and (max-width: $medium-landscape) {
+  .alert {
+    &.visible {
+      top: 3.7em;
+    }
+  }
+}
+
+@media only screen and (max-width: $medium-portrait) {
+  .alert {
+    &.visible {
+      top: 3em;
+    }
+  }
+}

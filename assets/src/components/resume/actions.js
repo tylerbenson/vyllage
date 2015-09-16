@@ -10,7 +10,7 @@ var urlTemplate = require('url-template');
   'getDocumentId',
   'updateTagline',
   // sections
-  'getAllsections',
+  'getAllSections',
   'publishSections',
   'getSections',
   'postSection',
@@ -32,7 +32,7 @@ var urlTemplate = require('url-template');
   'togglePrintModal'
 ]);
 
-  EditorActions.getAllsections.preEmit = function(){
+  EditorActions.getAllSections.preEmit = function(){
     var documentId = window.location.pathname.split('/')[2];
     var header;
 

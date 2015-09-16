@@ -91,7 +91,7 @@ module.exports = Reflux.createStore({
 
           this.trigger(this.resume);
         }
-      }.bind(this))
+      }.bind(this));
   },
   onUpdateTagline: function (tagline) {
     var url = urlTemplate
