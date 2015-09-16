@@ -139,7 +139,7 @@ var MilestoneStore = Reflux.createStore({
         text: 'Input your twitter username.',
         icon: 'ion-social-twitter',
         isDone: this.hasTwitterUrl(),
-        priority: 0,
+        priority: 5,
         action: this.editBannerField.bind(this, 'twitter')
       },
       {
