@@ -35,7 +35,7 @@ public class CustomRssViewer extends AbstractRssFeedView {
 
 		Image image = new Image();
 		image.setTitle("Vyllage Editor");
-		image.setUrl("https://www.vyllage.com/images/logo.png");
+		image.setUrl("https://www.vyllage.com/images/launch-button.png");
 		image.setHeight(92);
 		image.setWidth(154);
 
