@@ -1,0 +1,1 @@
+alter table accounts.account_setting alter column value varchar(1024);

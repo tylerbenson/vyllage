@@ -45,6 +45,7 @@ import org.springframework.web.context.WebApplicationContext;
 import accounts.ApplicationTestConfig;
 import accounts.controller.LMSAccountController;
 import accounts.mocks.SelfReturningAnswer;
+import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 import email.EmailBuilder;
@@ -76,6 +77,9 @@ public class LTISecurityConfigurerTest {
 	@Inject
 	private MockHttpServletRequest request;
 
+	@Inject
+	private AccountSettingsService accountSettingsService;
+
 	private static final String LTI_INSTANCE_GUID = "2c2d9edb89c64a6ca77ed459866925b1";
 	private static final String LTI_INSTANCE_TYPE = "Blackboard";
 	private static final String LTI_CONSUMER_KEY = "University2abc2009";
@@ -97,7 +101,8 @@ public class LTISecurityConfigurerTest {
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
 		lmsAccountcontoller = new LMSAccountController(environment, signInUtil,
-				lmsService, emailBuilder, executorService);
+				lmsService, emailBuilder, executorService,
+				accountSettingsService);
 	}
 
 	@Test

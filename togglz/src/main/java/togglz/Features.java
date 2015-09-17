@@ -18,6 +18,9 @@ public enum Features implements Feature {
 	@Label("Google Analytics")
 	GOOGLE_ANALYTICS,
 
+	@Label("Google+")
+	GOOGLE_PLUS,
+
 	@EnabledByDefault
 	@Label("Intercom")
 	INTERCOM,

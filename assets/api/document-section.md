@@ -191,7 +191,7 @@ General notes.
 }
 ```
 
-### ProjectSection
+### ProjectsSection
 ```
 {
     "title": "projects",

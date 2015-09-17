@@ -11,6 +11,7 @@ public class LMSUser {
 	private String lastName;
 	private String email;
 	private String role;
+	private String userImage;
 
 	/**
 	 * @return the user
@@ -115,6 +116,14 @@ public class LMSUser {
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getUserImage() {
+		return userImage;
+	}
+
+	public void setUserImage(String userImage) {
+		this.userImage = userImage;
 	}
 
 }

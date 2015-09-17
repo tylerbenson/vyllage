@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+<channel>
+  <title>Vyllage</title>
+  <link>http://www.vyllage.com/resume</link>
+  <description>Improve your Resume with Guidance</description>
+  <image>
+      <url>https://www.vyllage.com/images/logo.png</url>
+      <title>Vyllage Editor</title>
+  </image>
+  <item>
+      <title>Improve your resume</title>
+      <link>http://www.vyllage.com/resume/</link>
+      <description>For a better tomorrow</description>
+  </item>
+</channel>
+</rss>
