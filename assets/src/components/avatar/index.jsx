@@ -5,7 +5,8 @@ var Avatar = React.createClass({
 		return {
 			src: '/images/user.png',
 			size: 80,
-			borderWidth: 2
+			borderWidth: 2,
+			className: ''
 		};
 	},
 	getImageURL: function(){
@@ -33,9 +34,7 @@ var Avatar = React.createClass({
 		};
 
 		return (
-			<div className="avatar" style={styles}>
-				{this.props.children}
-			</div>
+			<div {...this.props} className={this.props.className + " avatar"} style={styles}></div>
 		);
 	}
 

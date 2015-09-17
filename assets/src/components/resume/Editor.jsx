@@ -7,7 +7,6 @@ var filter = require('lodash.filter');
 var Header = require('./sections/Header');
 var Section = require('./sections');
 var Banner = require('./banner');
-var sortby = require('lodash.sortby');
 var Empty = require('./sections/Empty');
 var Sortable = require('../util/Sortable');
 
@@ -87,7 +86,7 @@ var SectionGroup = React.createClass({
     return (
       <Sortable config={config} className="section" rel={this.props.section.type}>
         <div className="container">
-          { this.props.section.owner ? 
+          { this.props.section.owner ?
             <span className="inverted secondary button small move move-section" {...this.props}>
               <i className="ion-arrow-move"></i>
               Move
@@ -123,7 +122,7 @@ var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
   componentWillMount: function () {
     actions.getResume();
-    actions.getAllsections(); //preEmit
+    actions.getAllSections(); //preEmit
   },
   render: function () {
     var owner = this.state.resume.header.owner;
@@ -136,7 +135,7 @@ var ResumeEditor = React.createClass({
         allSection = <Empty />
       }
     }
-    
+
     return (
       <div>
         <Banner header={this.state.resume.header} settings={this.state.settings} sections={this.state.resume.all_section} />
