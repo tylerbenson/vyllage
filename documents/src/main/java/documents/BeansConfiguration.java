@@ -49,5 +49,4 @@ public class BeansConfiguration {
 	public TogglzFeatureController togglzController() {
 		return new TogglzFeatureController();
 	}
-
 }

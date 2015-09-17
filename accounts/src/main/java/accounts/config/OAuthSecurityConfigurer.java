@@ -9,6 +9,7 @@ import oauth.model.service.LMSOAuthNonceServices;
 import oauth.model.service.ZeroLeggedOAuthProviderProcessingFilter;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
@@ -27,7 +28,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @ComponentScan({ "oauth.lti", "oauth.model.service" })
 @Configuration
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
 @EnableCaching
 @EnableWebMvcSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)

@@ -56,8 +56,6 @@ public class AccountControllerTest {
 
 	private TextEncryptor encryptor = mock(TextEncryptor.class);
 
-	private Object mockMvc;
-
 	@Before
 	public void setUp() {
 
