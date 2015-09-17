@@ -53,7 +53,7 @@ var CommentList = React.createClass({
     );
   },
   _handleDelete:function( comment ){
-    var confirmDelete =  confirm('do you really want to delete this ?');
+    var confirmDelete =  confirm('Do you really want to delete this ?');
     if( confirmDelete ){
       actions.deleteComment( comment ,this.props.sectionId);
     }

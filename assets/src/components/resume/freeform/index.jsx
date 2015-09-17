@@ -12,12 +12,12 @@ var SectionFooter = require('../sections/Footer');
 var DeleteSection = require('../Delete');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
+var cloneDeep = require('clone-deep');
 
 var Freeform = React.createClass({
   getInitialState: function() {
     return {
       description: this.props.section.description,
-      oldDescription: this.props.section.description,
       uiEditMode: this.props.section.newSection,
     };
   },
@@ -27,11 +27,6 @@ var Freeform = React.createClass({
       placeholder: 'Tell us more..',
       section: {}
     }
-  },
-  componentWillReceiveProps: function (nextProps) {
-    this.setState({
-      description: nextProps.section.description,
-    });
   },
   componentDidMount: function() {
     this.refs.description.getDOMNode().focus();
@@ -107,13 +102,15 @@ var Freeform = React.createClass({
     );
   },
   _saveSuggestionHandler : function(){
-    var section = this.props.section;
+
+    var section = cloneDeep(this.props.section);
     section.description = this.state.description;
     actions.saveSectionAdvice(section);
     this.setState({
-      description : this.state.oldDescription,
+      description : this.props.section.description,
       uiEditMode: false
     });
+
   }
 });
 

@@ -380,7 +380,7 @@ module.exports = Reflux.createStore({
         sectionId : section.sectionId,
         sectionVersion : 1,
         userId : document.getElementById('meta_userInfo_user').content,
-        documentSection : omit(section, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','numberOfAdvices'])
+        documentSection : omit(section, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','numberOfAdvices','showEdits'])
       })
       .end(function(err,res){
         if(res.status == 200){

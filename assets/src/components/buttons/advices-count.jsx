@@ -1,9 +1,15 @@
 var React = require('react');
 
 var CommentsCount = React.createClass({
+
+
   render: function() {
   	var count = this.props.count;
-  	if( count == undefined || count == NaN ) count = 0;
+
+    console.log(count);
+
+  //	if( count == undefined || count == 'NaN' ) count = 0;
+
     var showText;
     showText = count + ' edit' + (count !== 1 && count !== 0 ? 's' : '');
     return (

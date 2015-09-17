@@ -940,13 +940,22 @@
                   "dependencies": {
                     "amdefine": {
                       "version": "1.0.0",
-                      "from": "amdefine@1.0.0"
                     }
                   }
                 }
               }
             }
           }
+        }
+      }
+    },
+    "react-diff": {
+      "version": "0.0.5",
+      "from": "react-diff@*",
+      "dependencies": {
+        "diff": {
+          "version": "1.4.0",
+          "from": "diff@>=1.2.0 <2.0.0"
         }
       }
     },
