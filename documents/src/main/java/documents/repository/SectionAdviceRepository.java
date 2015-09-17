@@ -125,6 +125,8 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 
 		newRecord.store();
 		sectionAdvice.setSectionAdviceId(newRecord.getSectionAdviceId());
+		sectionAdvice.setLastModified(newRecord.getLastModified()
+				.toLocalDateTime());
 
 		return sectionAdvice;
 	}
@@ -154,6 +156,9 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 
 		existingRecord.update();
 
+		sectionAdvice.setLastModified(existingRecord.getLastModified()
+				.toLocalDateTime());
+
 		return sectionAdvice;
 	}
 
@@ -164,7 +169,8 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 		record.delete();
 	}
 
-	public static SectionAdvice recordToSectionAdvice(SectionAdvicesRecord record) {
+	public static SectionAdvice recordToSectionAdvice(
+			SectionAdvicesRecord record) {
 		SectionAdvice sectionAdvice = new SectionAdvice();
 		sectionAdvice.setSectionAdviceId(record.getSectionAdviceId());
 		sectionAdvice.setDocumentSection(DocumentSection.fromJSON(record
