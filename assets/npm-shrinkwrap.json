@@ -940,6 +940,7 @@
                   "dependencies": {
                     "amdefine": {
                       "version": "1.0.0",
+                      "from": "amdefine@1.0.0"
                     }
                   }
                 }
