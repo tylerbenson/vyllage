@@ -143,6 +143,13 @@
       .comment {
         border-top: darken($section-footer-background,6%) solid 1px;
         margin: 0;
+
+        &:hover {
+          .content .wrapper .info .comment-actions .delete {
+            opacity: 1;
+            pointer-events: inherit;
+          }
+        }
       }
 
       .content {
@@ -171,10 +178,12 @@
               display: inline-block;
               float: right;
 
-              & > div > button {
-                min-height: 0;
-                padding: 0;
+              .delete {
                 font-size: 1em;
+                min-height: 0;
+                opacity: 0;
+                pointer-events: none;
+                padding: 0;
               }
             }
           }
@@ -208,6 +217,10 @@
             min-height: 29px;
             top: 2px;
             width: 77%;
+
+            &:focus {
+              border-color: lighten($alternate-color-2, 40%);
+            }
           }
 
           button {
