@@ -1,6 +1,6 @@
 var React = require('react');
-var Modal = require('../modal');
-var actions = require('./actions');
+var Modal = require('../../modal');
+var actions = require('../actions');
 
 var DeleteSection = React.createClass({
   getInitialState: function () {
@@ -16,17 +16,17 @@ var DeleteSection = React.createClass({
     e.preventDefault();
     this.setState({isOpen: true});
   },
-  deleteSection: function (e) {
+  deleteComment: function (e) {
     e.preventDefault();
     this.setState({isOpen: false});
-    actions.deleteSection(this.props.sectionId);
+    actions.deleteComment(this.props.comment ,this.props.sectionId);
   },
   render: function () {
 
     return (
       <div style={{display: 'inline-block'}}>
         <button
-          className='inverted small icon delete'
+          className='flat small icon secondary delete'
           onClick={this.openModal}>
           <i className='ion-trash-a'></i>
         </button>
@@ -42,10 +42,10 @@ var DeleteSection = React.createClass({
             </div>
           </div>
           <div className="content">
-            <p>Do you want to delete this section?</p>
+            <p>Do you want to delete this comment?</p>
           </div>
           <div className="footer">
-            <button className="small inverted" onClick={this.deleteSection}>
+            <button className="small inverted" onClick={this.deleteComment}>
               <i className="ion-trash-a"></i>
               Delete
             </button>

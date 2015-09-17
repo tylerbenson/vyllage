@@ -154,7 +154,7 @@ var Banner = React.createClass({
     }
   },
   notifyChange: function(banner){
-    var message = "Your settings have been saved";
+    var message = "Your settings have been saved!";
     var timeout = 4000;
 
     if(banner.email !== this.state.fields.email) {

@@ -6,7 +6,6 @@
 @import "./components/common/typography";
 
 .error {
-
   header {
     background: none;
     padding: 3em 1em;
@@ -18,21 +17,24 @@
       font-size: 1.5em;
 
       span {
-        color: $primary-color;
+        color: $text-color;
       }
     }
   }
 
   .message {
-    margin-bottom: 5em;
+    font-size: 0.85em;
+    padding: 0.5em;
+    margin: 0 auto 3em auto;
+    max-width: $medium-portrait;
     text-align: center;
   }
 
   h1 {
     color: $secondary-color;
-    font-size: 3em;
+    font-size: 2.5em;
     font-weight: bold;
-    margin-bottom: 0.15em;
+    margin-bottom: 0.5em;
     margin-top: 1.15em;
   }
 
