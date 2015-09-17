@@ -39,14 +39,6 @@ var Milestone = React.createClass({
 			return null;
 		}
 
-		var body = document.querySelector('body');
-		if(this.state.isOpen) {
-			body.className += ' milestone-open';
-		}
-		else {
-			body.className = body.className.replace(/ milestone-open/g,'');
-		}
-
 		var milestones = this.state.milestones;
 		var numberOfTasksToShow = 3;
 

@@ -1,3 +1,4 @@
+var React = require('react');
 var Reflux = require('reflux');
 var request = require('superagent');
 var endpoints = require('../endpoints');
@@ -10,6 +11,7 @@ var max = require('lodash.max');
 var update = require('react/lib/update');
 var sortby = require('lodash.sortby');
 var filter = require('lodash.filter');
+var PubSub = require('pubsub-js');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -37,6 +39,12 @@ module.exports = Reflux.createStore({
       isNavOpen: false,
       isPrintModalOpen: false
     };
+  },
+  remindToShare: function() {
+    var message = <span>Your resumé has been updated!  Now, share  it to the world to <a href="/resume/get-feedback">get feedback.</a></span>;
+    var timeout = 6000;
+
+    PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
   },
   getMaxSectionPostion: function () {
     var section = max(this.resume.sections, 'sectionPosition');
@@ -247,7 +255,6 @@ module.exports = Reflux.createStore({
         this.resume.sections.push(section);
         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
 
-      //  this.postSectionOrder();
         this.trigger(this.resume);
       }.bind(this));
   },
@@ -267,6 +274,8 @@ module.exports = Reflux.createStore({
         this.resume.sections[index] = res.body;
         this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+
+        this.remindToShare();
         this.trigger(this.resume);
       }.bind(this));
   },
