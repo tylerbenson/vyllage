@@ -950,6 +950,16 @@
         }
       }
     },
+    "react-diff": {
+      "version": "0.0.5",
+      "from": "react-diff@*",
+      "dependencies": {
+        "diff": {
+          "version": "1.4.0",
+          "from": "diff@>=1.2.0 <2.0.0"
+        }
+      }
+    },
     "react-layer-mixin": {
       "version": "0.2.1",
       "from": "react-layer-mixin@0.2.1"
