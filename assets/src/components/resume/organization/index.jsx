@@ -18,7 +18,7 @@ var cloneDeep = require('clone-deep');
 var Organization = React.createClass({
   getInitialState: function () {
     return {
-      section: assign({}, this.props.section),
+      section: {},
       uiEditMode: this.props.section.newSection,
       newSection: this.props.section.newSection
     };
@@ -26,7 +26,7 @@ var Organization = React.createClass({
 
   componentWillReceiveProps: function (nextProps) {
     this.setState({
-      section: nextProps.section,
+      section: cloneDeep(nextProps.section),
     });
   },
   componentDidMount: function() {
@@ -203,7 +203,7 @@ var Organization = React.createClass({
     var section = cloneDeep(this.state.section);
     section['highlights'] = this.refs.highlights.getHighlights();
     actions.saveSectionAdvice(section);
-
+    
     this.setState({
       section : this.props.section,
       uiEditMode: false

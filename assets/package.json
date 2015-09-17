@@ -5,6 +5,7 @@
   "dependencies": {
     "classnames": "^1.2.2",
     "clone-deep": "^0.2.0",
+    "diff": "^2.1.1",
     "jquery": "^2.1.4",
     "jquery-ui": "^1.10.5",
     "jquery-ui-touch-punch": "^0.2.3",
@@ -24,7 +25,6 @@
     "phone-formatter": "0.0.2",
     "pubsub-js": "^1.5.2",
     "react": "^0.12.2",
-    "react-diff": "0.0.5",
     "react-layer-mixin": "^0.2.1",
     "react-textarea-autosize": "^1.1.0",
     "react-window-mixins": "0.0.6",

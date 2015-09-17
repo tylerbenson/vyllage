@@ -56,6 +56,10 @@
         }
       }
     },
+    "diff": {
+      "version": "2.1.1",
+      "from": "diff@*"
+    },
     "jquery": {
       "version": "2.1.4",
       "from": "jquery@2.1.4"
