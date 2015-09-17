@@ -2,6 +2,7 @@ package accounts.repository;
 
 import static accounts.domain.tables.AccountSetting.ACCOUNT_SETTING;
 import static accounts.domain.tables.Emails.EMAILS;
+import static accounts.domain.tables.UserCredentials.USER_CREDENTIALS;
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 import static accounts.domain.tables.Userconnection.USERCONNECTION;
 import static accounts.domain.tables.Users.USERS;
@@ -498,8 +499,11 @@ public class UserDetailRepository implements UserDetailsManager,
 
 			for (User user : users) {
 
-				credentialsRepository.create(user.getUserId(),
-						user.getPassword());
+				otherInserts.add(sql.insertInto(USER_CREDENTIALS,
+						USER_CREDENTIALS.ENABLED, USER_CREDENTIALS.EXPIRES,
+						USER_CREDENTIALS.PASSWORD, USER_CREDENTIALS.USER_ID)
+						.values(true, null, user.getPassword(),
+								user.getUserId()));
 
 				for (GrantedAuthority authority : user.getAuthorities()) {
 					otherInserts.add(sql.insertInto(USER_ORGANIZATION_ROLES,
@@ -556,7 +560,6 @@ public class UserDetailRepository implements UserDetailsManager,
 						Privacy.PRIVATE.name().toLowerCase()));
 
 				// default avatar settings
-				logger.info("About to save default avatar setting batch account creation.");
 				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
 						ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
 						ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
