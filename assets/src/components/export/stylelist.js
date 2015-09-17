@@ -5,12 +5,17 @@ var ExportAction = require('./exportAction');
 var ResumeStyleList = React.createClass({
 	render: function(){
 		var self = this;
+		var documentId = window.location.pathname.split('/')[2];
 		var resumeStyle = function(pdfstyle , index ){
 			var ActiveClass='pdf-thumb';
 			if( self.props.active == pdfstyle ){
 				ActiveClass = 'active pdf-thumb';
 			}
-			return <div onClick={self._handleActive.bind(self, pdfstyle )} key={index} className={ActiveClass} >{pdfstyle}</div>;
+			var url = '/resume/' + documentId +'/file/png?style='+pdfstyle;
+			return <div onClick={self._handleActive.bind(self, pdfstyle )} key={index} className={ActiveClass} >
+				<img src={url} className="pdfStyleScrsht" />
+				{pdfstyle}
+			</div>;
 		}
 		return (
 			<div>
