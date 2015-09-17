@@ -86,6 +86,9 @@ public class LMSRequest {
 		log.info(LMSConstants.LTI_USER_EMAIL + " "
 				+ getParam(LMSConstants.LTI_USER_EMAIL));
 
+		log.info(LMSConstants.LTI_USER_IMAGE + " "
+				+ getParam(LMSConstants.LTI_USER_IMAGE));
+
 		if (!isLTIRequest(request)) {
 			throw new IllegalStateException(LMSConstants.LTI_INVALID_REQUEST);
 		}
@@ -142,6 +145,7 @@ public class LMSRequest {
 		lmsUser.setUserId(getParam(LMSConstants.LTI_USER_ID));
 		lmsUser.setUserName(getParam(LMSConstants.LTI_USER_NAME));
 		lmsUser.setEmail(getParam(LMSConstants.LTI_USER_EMAIL));
+		lmsUser.setUserImage(getParam(LMSConstants.LTI_USER_IMAGE));
 
 		if (getParam(LMSConstants.LIS_PERSON_PREFIX + "given") != null) {
 			lmsUser.setFirstName(getParam(LMSConstants.LIS_PERSON_PREFIX

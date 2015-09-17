@@ -10,7 +10,7 @@ var urlTemplate = require('url-template');
   'getDocumentId',
   'updateTagline',
   // sections
-  'getAllsections',
+  'getAllSections',
   'publishSections',
   'getSections',
   'postSection',
@@ -34,7 +34,7 @@ var urlTemplate = require('url-template');
   'togglePrintModal'
 ]);
 
-  EditorActions.getAllsections.preEmit = function(){
+  EditorActions.getAllSections.preEmit = function(){
     var documentId = window.location.pathname.split('/')[2];
     var header;
 
@@ -46,7 +46,7 @@ var urlTemplate = require('url-template');
       .set('Accept', 'application/json')
       .end(function (err, res) {
         if (res.ok) {
-          // needed to make multi ajax 
+          // needed to make multi ajax
           header = res.body;
           var url = urlTemplate
                       .parse(endpoints.resumeSections)
@@ -57,7 +57,7 @@ var urlTemplate = require('url-template');
             .end(function (err, res) {
               if (res.ok) {
                 EditorActions.publishSections( res.body , header );
-              }  
+              }
             });
         }
 

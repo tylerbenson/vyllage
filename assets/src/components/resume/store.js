@@ -1,3 +1,4 @@
+var React = require('react');
 var Reflux = require('reflux');
 var request = require('superagent');
 var endpoints = require('../endpoints');
@@ -10,6 +11,7 @@ var max = require('lodash.max');
 var update = require('react/lib/update');
 var sortby = require('lodash.sortby');
 var filter = require('lodash.filter');
+var PubSub = require('pubsub-js');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -37,6 +39,12 @@ module.exports = Reflux.createStore({
       isNavOpen: false,
       isPrintModalOpen: false
     };
+  },
+  remindToShare: function() {
+    var message = <span>Your resumé has been updated!  Now, share  it to the world to <a href="/resume/get-feedback">get feedback.</a></span>;
+    var timeout = 6000;
+
+    PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
   },
   getMaxSectionPostion: function () {
     var section = max(this.resume.sections, 'sectionPosition');
@@ -91,7 +99,7 @@ module.exports = Reflux.createStore({
 
           this.trigger(this.resume);
         }
-      }.bind(this))
+      }.bind(this));
   },
   onUpdateTagline: function (tagline) {
     var url = urlTemplate
@@ -127,26 +135,26 @@ module.exports = Reflux.createStore({
             if (section.numberOfComments > 0) {
               this.onGetComments(section.sectionId);
             }
-          }.bind(this));       
+          }.bind(this));
           this.trigger(this.resume);
         }
-  
+
       }.bind(this));
   },
 
 
   onPublishSections : function( sections , header ){
 
-      this.resume.header = header; 
+      this.resume.header = header;
       this.resume.sections = sections;
       this.resume.sections.forEach(function (section) {
         section.isSupported = this.isSupportedSection(section.type);
         if (section.numberOfComments > 0) {
           this.onGetComments(section.sectionId);
         }
-        // get the advice . 
         this.onGetAdvice( section.sectionId);
       }.bind(this)); 
+
 
      this.resume.all_section = this.doProcessSection( this.resume.sections, header.owner);
      this.trigger(this.resume);
@@ -156,7 +164,7 @@ module.exports = Reflux.createStore({
   doProcessSection : function(sections , owner ){
     var tmp_section = [];
     sections = sortby(sections ,'sectionPosition');
-   
+
     if( sections.length > 0 ){
 
       sections.forEach(function(section){
@@ -167,20 +175,20 @@ module.exports = Reflux.createStore({
                  if( findIt == -1){
                     tmp_section.push({
                       type: section.type,
-                      title : section.title, 
+                      title : section.title,
                       id : section.sectionId,
-                      owner : owner,                   
-                      child : where( sections, { 'type': section.type }) 
+                      owner : owner,
+                      child : where( sections, { 'type': section.type })
                     });
                  }
               }else{
                 tmp_section.push({
-                  type: section.type, 
+                  type: section.type,
                   title : section.title,
-                  id : section.sectionId, 
-                  owner : owner,                  
-                  child : where( sections, { 'type': section.type }) 
-                });  
+                  id : section.sectionId,
+                  owner : owner,
+                  child : where( sections, { 'type': section.type })
+                });
               }
           }
       }.bind(this));
@@ -197,8 +205,8 @@ module.exports = Reflux.createStore({
   },
 
   onMoveSectionOrder:function( order , type ){
-     this.resume.all_section.map(function( sectionGroup , index ){        
-        if( sectionGroup.type == type ){  
+     this.resume.all_section.map(function( sectionGroup , index ){
+        if( sectionGroup.type == type ){
             var section_order = [];
             order.map(function(section , index ){
               section_order.push( filter(sectionGroup.child ,{'sectionId': section.sectionId } )[0] );
@@ -206,7 +214,7 @@ module.exports = Reflux.createStore({
             sectionGroup.child = section_order;
         }
      });
-     this.makeItLinear( this.resume.all_section ); 
+     this.makeItLinear( this.resume.all_section );
   },
   makeItLinear: function(all_section){
     var linear_section = [];
@@ -225,7 +233,7 @@ module.exports = Reflux.createStore({
             linear_section.push(section);
           }
       });
-     this.postSectionOrder( linear_section );     
+     this.postSectionOrder( linear_section );
   },
 
   onPostSection: function (data) {
@@ -242,14 +250,13 @@ module.exports = Reflux.createStore({
         var section = assign({}, res.body);
         section.newSection = true;  // To indicate a section is newly created
         section.isSupported = this.isSupportedSection(section.type);
-        
-        // section order should reflect into whole thing . 
+
+        // section order should reflect into whole thing .
         section.sectionPosition = this.resume.sections.length + 1;
-        // get section position . 
+        // get section position .
         this.resume.sections.push(section);
         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
 
-      //  this.postSectionOrder();
         this.trigger(this.resume);
       }.bind(this));
   },
@@ -269,6 +276,8 @@ module.exports = Reflux.createStore({
         this.resume.sections[index] = res.body;
         this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+
+        this.remindToShare();
         this.trigger(this.resume);
       }.bind(this));
   },

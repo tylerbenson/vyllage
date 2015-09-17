@@ -20,9 +20,11 @@ public class RequestMatcherDisable implements RequestMatcher {
 
 	private RegexRequestMatcher unprotectedTogglzMatcher = new RegexRequestMatcher(
 			"/togglz/edit", null);
-
 	private RegexRequestMatcher unprotectedRegisterLTIMatcher = new RegexRequestMatcher(
 			"/register-from-LTI", null);
+
+	private RegexRequestMatcher unprotectedRssLTIMatcher = new RegexRequestMatcher(
+			"/lti/rss", null);
 
 	@Override
 	public boolean matches(HttpServletRequest request) {
@@ -33,6 +35,9 @@ public class RequestMatcherDisable implements RequestMatcher {
 			return false;
 
 		if (unprotectedRegisterLTIMatcher.matches(request))
+			return false;
+
+		if (unprotectedRssLTIMatcher.matches(request))
 			return false;
 
 		return true;

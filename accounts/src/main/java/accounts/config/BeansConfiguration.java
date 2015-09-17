@@ -26,6 +26,7 @@ import user.common.social.SimpleSignInAdapter;
 import accounts.config.beans.ApplicationContextProvider;
 import accounts.repository.EmailRepository;
 import accounts.service.ConfirmationEmailService;
+import accounts.service.utilities.BatchParser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.heneke.thymeleaf.togglz.TogglzDialect;
@@ -113,5 +114,10 @@ public class BeansConfiguration {
 			@Qualifier(value = "accounts.ExecutorService") ExecutorService executorService) {
 		return new ConfirmationEmailService(environment, emailBuilder, mapper,
 				encryptor, emailRepository, executorService);
+	}
+
+	@Bean
+	public BatchParser batchParser() {
+		return new BatchParser();
 	}
 }

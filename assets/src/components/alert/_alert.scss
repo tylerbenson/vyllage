@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   background: rgba($warning-background, 0.97);
-  color: $warning-color;
+  color: darken($warning-color, 10%);
   padding: 0.8em 1.6em;
   text-align: center;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -32,5 +32,31 @@
   button {
   	margin: 0 !important;
   	padding: 0 !important;
+  }
+}
+
+
+.alert-open {
+  .subheader {
+    &.visible {
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+  }
+}
+
+@media only screen and (max-width: $medium-landscape) {
+  .alert {
+    &.visible {
+      top: 3.7em;
+    }
+  }
+}
+
+@media only screen and (max-width: $medium-portrait) {
+  .alert {
+    &.visible {
+      top: 3em;
+    }
   }
 }

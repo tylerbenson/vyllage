@@ -42,7 +42,7 @@ var DeleteSection = React.createClass({
             </div>
           </div>
           <div className="content">
-            <p>Do you want to delete this section ?</p>
+            <p>Do you want to delete this section?</p>
           </div>
           <div className="footer">
             <button className="small inverted" onClick={this.deleteSection}>

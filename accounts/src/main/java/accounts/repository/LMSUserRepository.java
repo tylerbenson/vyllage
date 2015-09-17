@@ -29,6 +29,7 @@ import org.springframework.util.Assert;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
+import user.common.constants.AccountSettingsEnum;
 import user.common.lms.LMSUserDetails;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.Email;
@@ -137,7 +138,8 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			// accountSettingRepository.set(emailSetting);
 
 			AccountSetting emailUpdatesSetting = new AccountSetting();
-			emailUpdatesSetting.setName("emailUpdates");
+			emailUpdatesSetting
+					.setName(AccountSettingsEnum.emailUpdates.name());
 			emailUpdatesSetting.setUserId(newRecord.getUserId());
 			emailUpdatesSetting
 					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());

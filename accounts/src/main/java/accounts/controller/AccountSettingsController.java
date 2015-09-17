@@ -157,7 +157,7 @@ public class AccountSettingsController {
 		 */
 		response.setHeader("Cache-Control", "no-cache,no-store");
 
-		return addFacebookConnected(user, settings);
+		return addSocialNetworkConnected(user, settings);
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.PUT, produces = "application/json")
@@ -171,7 +171,9 @@ public class AccountSettingsController {
 		 * we don't want to save that
 		 */
 		settings.removeIf(ac -> AccountSettingsEnum.facebook_connected.name()
-				.equalsIgnoreCase(ac.getName()));
+				.equalsIgnoreCase(ac.getName())
+				|| AccountSettingsEnum.google_connected.name()
+						.equalsIgnoreCase(ac.getName()));
 
 		for (AccountSetting accountSetting : settings) {
 			// clean errors
@@ -198,8 +200,8 @@ public class AccountSettingsController {
 		List<AccountSetting> savedAccountSettings = accountSettingsService
 				.setAccountSettings(user, settings);
 
-		// adding facebook connection back...
-		addFacebookConnected(user, savedAccountSettings);
+		// adding social connection back...
+		addSocialNetworkConnected(user, savedAccountSettings);
 
 		return new ResponseEntity<List<AccountSetting>>(savedAccountSettings,
 				HttpStatus.OK);
@@ -212,6 +214,11 @@ public class AccountSettingsController {
 		if (AccountSettingsEnum.facebook_connected.name().equalsIgnoreCase(
 				parameter))
 			return this.addFacebookConnected(user,
+					new ArrayList<AccountSetting>());
+
+		if (AccountSettingsEnum.google_connected.name().equalsIgnoreCase(
+				parameter))
+			return this.addGoogleConnected(user,
 					new ArrayList<AccountSetting>());
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
@@ -345,6 +352,15 @@ public class AccountSettingsController {
 		return socialRepository.isConnected(user, network);
 	}
 
+	protected List<AccountSetting> addSocialNetworkConnected(User user,
+			List<AccountSetting> settings) {
+
+		this.addFacebookConnected(user, settings);
+		this.addGoogleConnected(user, settings);
+
+		return settings;
+	}
+
 	protected List<AccountSetting> addFacebookConnected(User user,
 			List<AccountSetting> settings) {
 		boolean facebookConnected = this.isSocialNetworkConnected(
@@ -352,6 +368,17 @@ public class AccountSettingsController {
 
 		settings.add(new AccountSetting(null, user.getUserId(),
 				AccountSettingsEnum.facebook_connected.name(), String
+						.valueOf(facebookConnected), Privacy.PRIVATE.name()));
+		return settings;
+	}
+
+	protected List<AccountSetting> addGoogleConnected(User user,
+			List<AccountSetting> settings) {
+		boolean facebookConnected = this.isSocialNetworkConnected(
+				AccountSettingsEnum.google.name(), user);
+
+		settings.add(new AccountSetting(null, user.getUserId(),
+				AccountSettingsEnum.google_connected.name(), String
 						.valueOf(facebookConnected), Privacy.PRIVATE.name()));
 		return settings;
 	}

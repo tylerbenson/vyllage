@@ -16,6 +16,7 @@ var OnScroll = require('react-window-mixins').OnScroll;
 var PubSub = require('pubsub-js');
 var Alert = require('../../alert');
 var uniq = require('lodash.uniq');
+var urlParams = {};
 
 var Banner = React.createClass({
   mixins: [OnScroll],
@@ -44,6 +45,31 @@ var Banner = React.createClass({
         });
         this.setState({fields: fields});
       }
+
+      if('edit-banner' in urlParams) {
+        var field = urlParams['edit-banner'];
+
+        if(field in this.refs){
+          this.refs[field].getDOMNode().focus();
+          delete urlParams['edit-banner'];
+        }
+      }
+    }
+  },
+  componentWillMount: function(){
+    var parser = document.createElement('a');
+    parser.href = window.location.href;
+    var args = {};
+
+    parser.hash.substr(1).split('&').map(function(arg){
+      var pair = arg.split('=');
+      args[pair[0]] = pair[1];
+    });
+
+    urlParams = args;
+
+    if('edit-banner' in urlParams) {
+      this.setState({'editMode': true});
     }
   },
   onScroll: function(){
@@ -128,7 +154,7 @@ var Banner = React.createClass({
     }
   },
   notifyChange: function(banner){
-    var message = "Your settings have been saved";
+    var message = "Your settings have been saved!";
     var timeout = 4000;
 
     if(banner.email !== this.state.fields.email) {
@@ -253,7 +279,7 @@ var Banner = React.createClass({
                 readOnly={!header.owner}
                 disabled={isReadOnly}
                 key={fields.email || undefined}
-                className="inline transparent"
+                className="inline transparent email"
                 autoComplete="off"
                 ref="email"
                 defaultValue={fields.email}
@@ -268,7 +294,7 @@ var Banner = React.createClass({
                 placeholder="Contact Number"
                 disabled={isReadOnly}
                 key={fields.phoneNumber || undefined}
-                className="inline transparent"
+                className="inline transparent phoneNumber"
                 autoComplete="off"
                 ref="phoneNumber"
                 defaultValue={fields.phoneNumber?phoneFormatter.format(fields.phoneNumber,"(NNN) NNN-NNNN"):''}
