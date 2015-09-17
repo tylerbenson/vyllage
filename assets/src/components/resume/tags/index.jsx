@@ -16,6 +16,7 @@ var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 var Sortable = require('../../util/Sortable');
 var resumeActions = require('../actions');
+var cloneDeep = require('clone-deep');
 
 
 var Tags = React.createClass({
@@ -175,7 +176,7 @@ var Tags = React.createClass({
     if( temp_value.length > 0 ){
       tags.push(temp_value);
     }
-    var section = this.props.section;
+    var section = cloneDeep(this.props.section);
     section.tags = tags;
     actions.saveSectionAdvice(section);
 

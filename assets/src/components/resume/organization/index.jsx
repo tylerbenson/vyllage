@@ -13,12 +13,12 @@ var MoveButton = require('../../buttons/move');
 var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
+var cloneDeep = require('clone-deep');
 
 var Organization = React.createClass({
   getInitialState: function () {
     return {
       section: assign({}, this.props.section),
-      oldSection: assign({}, this.props.section),
       uiEditMode: this.props.section.newSection,
       newSection: this.props.section.newSection
     };
@@ -200,12 +200,12 @@ var Organization = React.createClass({
     );
   },
   _saveSuggestionHandler : function(){
-    var section = this.state.section;
+    var section = cloneDeep(this.state.section);
     section['highlights'] = this.refs.highlights.getHighlights();
     actions.saveSectionAdvice(section);
 
     this.setState({
-      section : this.state.oldSection,
+      section : this.props.section,
       uiEditMode: false
     });
   }
