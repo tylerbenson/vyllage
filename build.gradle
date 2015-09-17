@@ -216,6 +216,9 @@ configure(javaProjects) {
             force 'org.apache.commons:commons-lang3:3.3.2'
             force 'org.hamcrest:hamcrest-core:1.3'
             force "org.springframework:spring-test:$spring"
+            // from Swagger
+            // conflicts with 1.0.0 at testRuntime on task ':documents:flywayMigrate'. and during runtime
+            force 'com.fasterxml:classmate:1.2.0'
         }
     }
 

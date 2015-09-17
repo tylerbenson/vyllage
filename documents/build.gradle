@@ -12,6 +12,9 @@ dependencies {
     compile project(':user-common')
     compile project(':togglz')
     compile project(':util')
+    compile("org.webjars:jquery:2.0.3-1")
+    compile 'io.springfox:springfox-swagger2:2.2.2'
+    compile 'io.springfox:springfox-swagger-ui:2.2.2'
 
     //https://java.net/projects/pdf-renderer
     compile 'org.swinglabs:pdf-renderer:1.0.5'

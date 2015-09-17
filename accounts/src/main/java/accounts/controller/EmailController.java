@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -41,7 +42,8 @@ public class EmailController {
 
 	@Inject
 	public EmailController(final EmailRepository emailRepository,
-			final TextEncryptor encryptor, final ObjectMapper mapper) {
+			final TextEncryptor encryptor,
+			@Qualifier("accounts.objectMapper") final ObjectMapper mapper) {
 		this.emailRepository = emailRepository;
 		this.encryptor = encryptor;
 		this.mapper = mapper;

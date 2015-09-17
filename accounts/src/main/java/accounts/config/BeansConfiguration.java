@@ -46,7 +46,7 @@ public class BeansConfiguration {
 	@Value("${social.salt:686a5162374b334e73677635444c366b444e65524152}")
 	private final String SOCIAL_SALT = null;
 
-	@Bean
+	@Bean(name = "accounts.objectMapper")
 	public ObjectMapper objectMapper() {
 		return new ObjectMapper();
 	}
@@ -108,7 +108,7 @@ public class BeansConfiguration {
 	public ConfirmationEmailService confirmationEmailService(
 			Environment environment,
 			@Qualifier("accounts.emailBuilder") EmailBuilder emailBuilder,
-			ObjectMapper mapper,
+			@Qualifier("accounts.objectMapper") ObjectMapper mapper,
 			TextEncryptor encryptor,
 			EmailRepository emailRepository,
 			@Qualifier(value = "accounts.ExecutorService") ExecutorService executorService) {
