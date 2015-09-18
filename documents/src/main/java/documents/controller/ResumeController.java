@@ -640,6 +640,8 @@ public class ResumeController {
 		if (sectionAdvice.getUserId() == null)
 			sectionAdvice.setUserId(user.getUserId());
 
+		sectionAdvice.setStatus("pending");
+
 		return documentService.saveSectionAdvice(request, sectionAdvice);
 
 	}
