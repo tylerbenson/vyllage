@@ -23,9 +23,9 @@ public class SwaggerConfig {
 	}
 
 	private ApiInfo apiInfo() {
-		ApiInfo apiInfo = new ApiInfo("My Project's REST API",
-				"This is a description of your API.", "API TOS",
-				"me@wherever.com", "API License", "API License URL", null);
+		ApiInfo apiInfo = new ApiInfo("Vyllage's REST API",
+				"This is a description of our API.", "API TOS",
+				"admin@vyllage.com", "API License", "API License URL", null);
 		return apiInfo;
 	}
 
