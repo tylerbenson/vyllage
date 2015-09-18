@@ -2,7 +2,7 @@ var React = require('react');
 var actions = require('../actions');
 var moment = require('moment');
 var Avatar = require('../../avatar');
-var Diff = require('react-diff');
+var Diff = require('../../diff/react-diff');
 var AcceptBtn = require('../../buttons/accept');
 var CancelBtn = require('../../buttons/cancel');
 var EditBtn = require('../../buttons/edit');
@@ -49,7 +49,7 @@ var Advices = React.createClass({
                         <Diff inputA={section.organizationName} inputB={advice.documentSection.organizationName} type="words" />
                         <Diff inputA={section.organizationDescription} inputB={advice.documentSection.organizationDescription} type="words" />
                         <Diff inputA={section.role} inputB={advice.documentSection.role} type="words" />
-                        <Diff inputA={section.roleDescription} inputB={advice.documentSection.roleDescription} type="words" />
+                        <Diff inputA={section.roleDescription} inputB={advice.documentSection.roleDescription} type="words" /> <br/>
                         <Diff inputA={section.location} inputB={advice.documentSection.location} type="words" /> <br/>
                         {advice.documentSection.highlights != undefined ? advice.documentSection.highlights.map(showHighlights) : null }
                       </div>: null}

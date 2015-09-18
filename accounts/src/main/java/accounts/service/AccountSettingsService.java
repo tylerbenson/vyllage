@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import user.common.User;
+import user.common.constants.AccountSettingsEnum;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.AccountSettingRepository;
@@ -61,19 +62,23 @@ public class AccountSettingsService {
 		switch (settingName) {
 		case "firstName":
 			return Optional.of(new AccountSetting(null, user.getUserId(),
-					"firstName", user.getFirstName(), Privacy.PUBLIC.name()));
+					AccountSettingsEnum.firstName.name(), user.getFirstName(),
+					Privacy.PUBLIC.name()));
 
 		case "middleName":
 			return Optional.of(new AccountSetting(null, user.getUserId(),
-					"middleName", user.getMiddleName(), Privacy.PUBLIC.name()));
+					AccountSettingsEnum.middleName.name(),
+					user.getMiddleName(), Privacy.PUBLIC.name()));
 
 		case "lastName":
 			return Optional.of(new AccountSetting(null, user.getUserId(),
-					"lastName", user.getLastName(), Privacy.PUBLIC.name()));
+					AccountSettingsEnum.lastName.name(), user.getLastName(),
+					Privacy.PUBLIC.name()));
 
 		case "email":
 			return Optional.of(new AccountSetting(null, user.getUserId(),
-					"email", user.getUsername(), Privacy.PUBLIC.name()));
+					AccountSettingsEnum.email.name(), user.getUsername(),
+					Privacy.PUBLIC.name()));
 
 		default:
 			return accountSettingRepository.get(user.getUserId(), settingName);
@@ -94,19 +99,20 @@ public class AccountSettingsService {
 
 		for (User accountNames : userService.getUsers(userIds)) {
 			settings.add(new AccountSetting(null, accountNames.getUserId(),
-					"firstName", accountNames.getFirstName(), Privacy.PUBLIC
-							.name()));
+					AccountSettingsEnum.firstName.name(), accountNames
+							.getFirstName(), Privacy.PUBLIC.name()));
 
 			settings.add(new AccountSetting(null, accountNames.getUserId(),
-					"middleName", accountNames.getMiddleName(), Privacy.PUBLIC
-							.name()));
+					AccountSettingsEnum.middleName.name(), accountNames
+							.getMiddleName(), Privacy.PUBLIC.name()));
 
 			settings.add(new AccountSetting(null, accountNames.getUserId(),
-					"lastName", accountNames.getLastName(), Privacy.PUBLIC
-							.name()));
+					AccountSettingsEnum.lastName.name(), accountNames
+							.getLastName(), Privacy.PUBLIC.name()));
 
 			settings.add(new AccountSetting(null, accountNames.getUserId(),
-					"email", accountNames.getUsername(), Privacy.PUBLIC.name()));
+					AccountSettingsEnum.email.name(), accountNames
+							.getUsername(), Privacy.PUBLIC.name()));
 		}
 
 		return settings;
@@ -144,8 +150,9 @@ public class AccountSettingsService {
 				// save the new email as a new setting to query from the
 				// frontend.
 				AccountSetting newEmailSetting = new AccountSetting(null,
-						setting.getUserId(), "newEmail", setting.getValue(),
-						setting.getPrivacy());
+						setting.getUserId(),
+						AccountSettingsEnum.newEmail.name(),
+						setting.getValue(), setting.getPrivacy());
 
 				accountSettingRepository.set(newEmailSetting);
 

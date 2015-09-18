@@ -57,6 +57,19 @@
               </button>
             </div>
           </form>
+          <!-- GOOGLE SIGNIN -->
+          <form togglz:active="GOOGLE_PLUS" name="gg_signin" id="gg_signin" th:action="@{/signin/google}" method="POST">
+            <div class="content">
+              <input type="hidden" name="${_csrf.parameterName}" th:value="${_csrf.token}"></input>
+              <input type="hidden" name="scope" value="email profile"></input>
+            </div>
+            <div class="content account">
+              <button class="padded google" type="submit">
+                <i class="ion-social-google"></i> Sign Up via Google
+              </button>
+            </div>
+          </form>
+
           <!-- 			<form id="tw_signin" th:action="@{/signin/twitter}" method="POST"> -->
           <!-- 				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input> -->
           <!-- 				<button type="submit"></button> -->

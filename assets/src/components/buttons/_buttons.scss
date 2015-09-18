@@ -64,6 +64,19 @@ input[type="reset"] {
     }
   }
 
+  &.google {
+    @extend .normal-caps;
+    background: $google-color;
+
+    &:hover,&:focus {
+      background: lighten($google-color, 8%);
+    }
+
+    &:active {
+      background: darken($google-color, 3%);
+    }
+  }
+  
   &.inverted {
     background: transparent;
     color: $primary-color;

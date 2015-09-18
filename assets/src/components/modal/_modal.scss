@@ -18,6 +18,7 @@
   box-sizing: border-box;
   bottom: 0;
   display: inline-block;
+  font-size: 16px;
   left: 0;
   margin: auto;
   padding: 2em;
@@ -56,14 +57,20 @@
 
       button,
       .button {
+        min-height: 0;
         padding: 0;
+
+        i {
+          font-size: 1em;
+          margin: 0;
+        }
       }
     }
   }
 
   .content {
     font-weight: 400;
-    padding: 0.5em 0;
+    padding: 0.5em 0 !important;
 
     * {
       color: $text-color;

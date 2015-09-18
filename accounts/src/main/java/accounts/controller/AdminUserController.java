@@ -30,6 +30,7 @@ import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
 import user.common.web.UserInfo;
 import accounts.model.BatchAccount;
+import accounts.model.BatchResult;
 import accounts.model.account.AccountNames;
 import accounts.model.form.AccountsRoleManagementForm;
 import accounts.model.form.AdminUsersForm;
@@ -40,6 +41,7 @@ import accounts.model.form.UserRoleManagementForm;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserNotFoundException;
+import accounts.service.BatchAccountCreationService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
 
@@ -59,16 +61,19 @@ public class AdminUserController {
 
 	private final DocumentService documentService;
 
+	private final BatchAccountCreationService batchAccountCreationService;
+
 	@Inject
 	public AdminUserController(final UserService userService,
 			final RoleRepository roleRepository,
 			final OrganizationRepository organizationRepository,
-
-			final DocumentService documentService) {
+			final DocumentService documentService,
+			final BatchAccountCreationService batchAccountCreationService) {
 		this.userService = userService;
 		this.roleRepository = roleRepository;
 		this.organizationRepository = organizationRepository;
 		this.documentService = documentService;
+		this.batchAccountCreationService = batchAccountCreationService;
 	}
 
 	@ModelAttribute("accountName")
@@ -393,21 +398,29 @@ public class AdminUserController {
 	@RequestMapping(value = "/user/batch/createBatch", method = RequestMethod.POST)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String batchAccountCreation(BatchAccount batch,
-			@AuthenticationPrincipal User user, Model model)
-			throws IllegalArgumentException, IOException {
+			@AuthenticationPrincipal User user, Model model) throws IOException {
 
 		if (batch.hasErrors()) {
 			prepareBatchError(
 					batch,
 					model,
-					"Please provide ',' or line separated emails and select the Group the users will belong to.",
+					"Please provide ',' or line separated emails and select the Organization the users will belong to.",
 					user);
 			return "adminBatchAccountCreation";
 		}
 
-		userService.batchCreateUsers(batch, user, true);
+		final BatchResult batchResult = batchAccountCreationService
+				.batchCreateUsers(batch, user, true);
 
-		prepareBatch(model, user);
+		if (!batchResult.getExistingUsers().isEmpty())
+			prepareBatchError(
+					batch,
+					model,
+					"The following user(s) already exist: "
+							+ batchResult.getExistingUsers().stream()
+									.collect(Collectors.joining(",")), user);
+		else
+			prepareBatch(model, user);
 		return "adminBatchAccountCreation";
 	}
 

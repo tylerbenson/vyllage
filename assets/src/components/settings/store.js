@@ -19,6 +19,7 @@ module.exports = Reflux.createStore({
     this.settings = [];
     this.activeSettingsType = 'profile';
     this.facebook;
+    this.google;
   },
   onGetSettings: function () {
     request
@@ -30,6 +31,12 @@ module.exports = Reflux.createStore({
       if( fbIndex ){
         this.facebook = this.settings[fbIndex].value == "true" ? true : false;
       }
+      
+      var ggIndex = findindex(this.settings, {name: 'google_connected'});
+      if( ggIndex ){
+        this.google = this.settings[ggIndex].value == "true" ? true : false;
+      }
+      
       this.update();
     }.bind(this));
   },
@@ -100,6 +107,15 @@ module.exports = Reflux.createStore({
       this.update();
     }.bind(this));
   },
+  onMakeGoogleDisconnect : function(){
+	    request
+	    .del('/disconnect/google')
+	    .set(this.tokenHeader, this.tokenValue)
+	    .end(function (err, res) {
+	      this.google = res.body;
+	      this.update();
+	    }.bind(this));
+	  },
   onDoPing: function(){
     request
       .get('/account/ping')
@@ -110,14 +126,17 @@ module.exports = Reflux.createStore({
     this.trigger({
       settings: this.settings,
       activeSettingsType: this.activeSettingsType,
-      facebook : this.facebook
+      facebook : this.facebook,
+      google : this.google
+      
     });
   },
   getInitialState: function () {
     return {
       settings: this.settings,
       activeSettingsType: this.activeSettingsType ,
-      facebook : this.facebook
+      facebook : this.facebook,
+      google : this.google
     } ;
   }
 })

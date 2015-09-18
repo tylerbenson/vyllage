@@ -35,10 +35,19 @@ var Alert = React.createClass({
   	});
   },
   render: function () {
+    var body = document.querySelector('body');
+    if(this.state.isOpen) {
+      body.className += ' alert-open';
+    }
+    else {
+      body.className = body.className.replace(/ alert-open/g,'');
+    }
+
     var className = classnames({
       visible: this.state.isOpen,
       [this.props.className]: true
-    })
+    });
+
     return (
       <div className={className } >
       	{this.state.message}

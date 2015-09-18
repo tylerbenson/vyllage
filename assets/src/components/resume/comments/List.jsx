@@ -2,6 +2,7 @@ var React = require('react');
 var actions = require('../actions');
 var moment = require('moment');
 var Avatar = require('../../avatar');
+var DeleteComment = require('./DeleteComment');
 
 var CommentList = React.createClass({
   // componentWillMount: function () {
@@ -20,9 +21,9 @@ var CommentList = React.createClass({
       if(!comment.commentText){
         return null;
       }
-      var deleteShow = null;
+      var DeleteCommentButton = null;
       if( user_id == comment.userId || this.props.owner ){
-        deleteShow =  <span className="delete-comment" onClick={this._handleDelete.bind(this,comment)}><i className="ion-trash-a"></i></span>;
+        DeleteCommentButton = <DeleteComment comment={comment} sectionId={this.props.sectionId} />
       }
 
       return <div key={index} className='comment'>
@@ -31,15 +32,17 @@ var CommentList = React.createClass({
                   <Avatar src={comment.avatarUrl} size="30" />
                 </div>
                 <div className='wrapper'>
-                  {deleteShow}
                   <div className='info'>
                     <div className="author">{comment.userName?comment.userName:'Vyllage User'}</div>
-                    <div className="timestamp">
-                      {moment(comment.lastModified).isValid() ? moment.utc(comment.lastModified).fromNow(): ''}
+                    <div className="comment-actions">
+                      {DeleteCommentButton}
                     </div>
                   </div>
                   <div className="message">
                     {comment.commentText.replace(/\n{3,}/,'\n\n')}
+                  </div>
+                  <div className="timestamp">
+                    {moment(comment.lastModified).isValid() ? moment.utc(comment.lastModified).fromNow(): 'Just now'}
                   </div>
                 </div>
               </div>
@@ -51,12 +54,6 @@ var CommentList = React.createClass({
         {commentNodes}
       </div>
     );
-  },
-  _handleDelete:function( comment ){
-    var confirmDelete =  confirm('Do you really want to delete this ?');
-    if( confirmDelete ){
-      actions.deleteComment( comment ,this.props.sectionId);
-    }
   }
 });
 

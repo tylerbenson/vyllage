@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
 
 import user.common.User;
 import accounts.model.account.settings.AccountSetting;
@@ -21,9 +22,10 @@ import accounts.model.account.settings.AccountSetting;
  */
 public class CheckWriteAspect {
 
-	@Before("execution(* *(..)) && args(settings) && @annotation(CheckWriteAccess)")
+	@Before("execution(* *(..)) && args(settings, user) && @annotation(CheckWriteAccess)")
 	public void checkOwnerMany(JoinPoint joinPoint,
-			List<AccountSetting> settings) throws AccessDeniedException {
+			List<AccountSetting> settings, User user)
+			throws AccessDeniedException {
 
 		if (settings != null
 				&& !settings.isEmpty()
@@ -41,9 +43,10 @@ public class CheckWriteAspect {
 
 	}
 
-	@Before("execution(* *(..)) && args(parameter, setting) && @annotation(CheckWriteAccess)")
+	@Before("execution(* *(..)) && args(parameter, setting, user, result) && @annotation(CheckWriteAccess)")
 	public void checkOwnerSingle(JoinPoint joinPoint, String parameter,
-			AccountSetting setting) throws AccessDeniedException {
+			AccountSetting setting, User user, BindingResult result)
+			throws AccessDeniedException {
 
 		if (setting.getUserId() == null)
 			return;

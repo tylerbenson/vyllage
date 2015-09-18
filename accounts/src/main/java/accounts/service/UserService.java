@@ -2,12 +2,10 @@ package accounts.service;
 
 import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,10 +37,10 @@ import org.springframework.util.Assert;
 import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
+import user.common.constants.AccountSettingsEnum;
 import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
 import user.common.web.AccountContact;
-import accounts.model.BatchAccount;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.settings.AccountSetting;
@@ -56,8 +54,6 @@ import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.repository.UserOrganizationRoleRepository;
-import accounts.service.utilities.BatchParser;
-import accounts.service.utilities.BatchParser.ParsedAccount;
 import accounts.service.utilities.RandomPasswordGenerator;
 import accounts.validation.EmailValidator;
 
@@ -120,8 +116,6 @@ public class UserService {
 	@Autowired
 	private SignInUtil signInUtil;
 
-	private BatchParser batchParser = new BatchParser();
-
 	public User getUser(Long userId) throws UserNotFoundException {
 		return userRepository.get(userId);
 	}
@@ -132,199 +126,6 @@ public class UserService {
 
 	public boolean userExists(String userName) {
 		return this.userRepository.userExists(userName);
-	}
-
-	public void batchCreateUsers(BatchAccount batchAccount, User loggedInUser,
-			boolean forcePasswordChange) throws IllegalArgumentException,
-			IOException {
-
-		final boolean enabled = true;
-		final boolean accountNonExpired = true;
-		final boolean credentialsNonExpired = true;
-		final boolean accountNonLocked = true;
-
-		Assert.notNull(batchAccount.getOrganization());
-		Assert.notNull(batchAccount.getRole());
-		Assert.notNull(batchAccount.getTxt());
-
-		List<ParsedAccount> parsedAccounts = batchParser.parse(batchAccount
-				.getTxt());
-
-		// note, for UserOrganizationRole there's no userId until it's
-		// saved.
-		Assert.notNull(randomPasswordGenerator);
-		List<User> users = parsedAccounts
-				.stream()
-				.map(pa -> new User(null, pa.getFirstName(),
-						pa.getMiddleName(), pa.getLastName(), pa.getEmail(),
-						randomPasswordGenerator.getRandomPassword(), enabled,
-						accountNonExpired, credentialsNonExpired,
-						accountNonLocked, Arrays
-								.asList(new UserOrganizationRole(null,
-										batchAccount.getOrganization(),
-										batchAccount.getRole(), loggedInUser
-												.getUserId())), null, null))
-				.collect(Collectors.toList());
-
-		// find existing GUEST users to activate
-		// https://github.com/natebenson/vyllage/issues/502
-		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
-			User user = iterator.next();
-			User existingUser = null;
-
-			try {
-				existingUser = userRepository.loadUserByUsername(user
-						.getUsername());
-			} catch (Exception e) {
-				// continue.
-			}
-
-			if (existingUser != null && existingUser.isGuest()) {
-				String newPassword = randomPasswordGenerator
-						.getRandomPassword();
-
-				this.changePassword(existingUser.getUserId(), newPassword);
-
-				List<UserOrganizationRole> newRolesForOrganization = new ArrayList<>();
-				for (GrantedAuthority grantedAuthority : existingUser
-						.getAuthorities())
-					newRolesForOrganization
-							.add((UserOrganizationRole) grantedAuthority);
-
-				newRolesForOrganization.add(new UserOrganizationRole(
-						existingUser.getUserId(), batchAccount
-								.getOrganization(), batchAccount.getRole(),
-						loggedInUser.getUserId()));
-
-				updateUserRolesByOrganization(newRolesForOrganization,
-						loggedInUser);
-
-				User newUpdateUser = new User(existingUser.getUserId(),
-						user.getFirstName(), user.getMiddleName(),
-						user.getLastName(), existingUser.getUsername(),
-						newPassword, existingUser.isEnabled(),
-						existingUser.isAccountNonExpired(),
-						existingUser.isCredentialsNonExpired(),
-						existingUser.isAccountNonLocked(),
-						newRolesForOrganization, existingUser.getDateCreated(),
-						existingUser.getLastModified());
-
-				this.update(newUpdateUser);
-
-				// this works? Ok.
-				final User exUser = existingUser;
-
-				Runnable run = () -> {
-
-					try {
-						emailBuilder
-								.to(exUser.getUsername())
-								.from(environment.getProperty("email.from",
-										"no-reply@vyllage.com"))
-								.fromUserName(
-										environment.getProperty(
-												"email.from.userName",
-												"Chief of Vyllage"))
-								.subject("Account Creation - Vyllage.com")
-								.setNoHtmlMessage(
-										"Your account has been created successfuly. \\n Your password is: "
-												+ user.getPassword())
-								.templateName("email-account-created")
-								.addTemplateVariable("password", newPassword)
-								.addTemplateVariable("firstName",
-										user.getFirstName()).send();
-					} catch (EmailException e) {
-						logger.severe(ExceptionUtils.getStackTrace(e));
-						NewRelic.noticeError(e);
-					}
-				};
-
-				executorService.execute(run);
-
-				// remove the user from the batch
-				iterator.remove();
-			}
-		}
-
-		// find existing users to update instead of save/activate
-		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
-			User user = iterator.next();
-			User existingUser = null;
-
-			try {
-				existingUser = userRepository.loadUserByUsername(user
-						.getUsername());
-			} catch (Exception e) {
-				// continue.
-			}
-
-			if (existingUser != null) {
-				// change roles
-				Long userId = existingUser.getUserId();
-
-				List<UserOrganizationRole> newRolesForOrganization = new ArrayList<>();
-				for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
-					newRolesForOrganization
-							.add((UserOrganizationRole) grantedAuthority);
-				}
-
-				newRolesForOrganization.stream().forEach(
-						ga -> ga.setUserId(userId));
-
-				// remove duplicates
-				// newRolesForOrganization
-				// .removeAll(existingUser.getAuthorities());
-				// newRolesForOrganization.addAll(existingUser.getAuthorities());
-
-				updateUserRolesByOrganization(newRolesForOrganization,
-						loggedInUser);
-
-				existingUser.setFirstName(user.getFirstName());
-				existingUser.setMiddleName(user.getMiddleName());
-				existingUser.setLastName(user.getLastName());
-				this.update(existingUser);
-
-				// remove the user from the batch
-				iterator.remove();
-			}
-		}
-
-		userRepository.addUsers(users, loggedInUser, forcePasswordChange);
-
-		// send mails
-		for (User user : users) {
-			sendAutomatedAccountCreationEmail(user.getUsername(),
-					user.getPassword(), user.getFirstName());
-		}
-	}
-
-	protected void sendAutomatedAccountCreationEmail(String email,
-			String password, String firstName) {
-		Runnable run = () -> {
-
-			try {
-				emailBuilder
-						.to(email)
-						.from(environment.getProperty("email.from",
-								"no-reply@vyllage.com"))
-						.fromUserName(
-								environment.getProperty("email.from.userName",
-										"Chief of Vyllage"))
-						.subject("Account Creation - Vyllage.com")
-						.setNoHtmlMessage(
-								"Your account has been created successfuly. \\n Your password is: "
-										+ password)
-						.templateName("email-account-created")
-						.addTemplateVariable("password", password)
-						.addTemplateVariable("firstName", firstName).send();
-			} catch (EmailException e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
-			}
-		};
-
-		executorService.execute(run);
-
 	}
 
 	protected void sendUserRegisteredEmail(String email, String password,
@@ -876,36 +677,54 @@ public class UserService {
 
 		User user = this.getUser(userId);
 		Optional<AccountSetting> avatarSetting = accountSettingsService
-				.getAccountSetting(user, "avatar");
+				.getAccountSetting(user, AccountSettingsEnum.avatar.name());
 
-		if (!avatarSetting.isPresent()) {
-			// create default
-			AccountSetting ac = new AccountSetting(null, userId, "avatar",
-					AvatarSourceEnum.GRAVATAR.name().toLowerCase(),
-					Privacy.PUBLIC.name().toLowerCase());
+		if (!avatarSetting.isPresent())
+			return getDefaultAvatar(user);
 
-			logger.info("About to save new default avatar setting: " + ac);
-			accountSettingsService.setAccountSetting(user, ac);
-			return GRAVATAR_URL
-					+ new String(DigestUtils.md5Hex(user.getUsername()));
-		}
-
-		if (avatarSetting.isPresent()
+		boolean avatarSettingPresent_gravatar = avatarSetting.isPresent()
 				&& avatarSetting.get().getValue()
-						.equalsIgnoreCase(AvatarSourceEnum.GRAVATAR.name()))
-			return GRAVATAR_URL
-					+ new String(DigestUtils.md5Hex(user.getUsername()));
+						.equalsIgnoreCase(AvatarSourceEnum.GRAVATAR.name());
 
-		else if (avatarSetting.isPresent()) {
+		boolean avatarSettingPresent_lti = avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.LTI.name());
 
-			Optional<String> avatarUrl = avatarRepository.getAvatar(userId,
-					avatarSetting.get().getValue());
+		boolean avatarSettingPresent_facebook = avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.FACEBOOK.name());
 
-			if (avatarUrl.isPresent())
-				return avatarUrl.get();
+		if (avatarSettingPresent_gravatar) {
+			return getDefaultAvatar(user);
+		} else {
+
+			if (avatarSettingPresent_lti) {
+				// get avatar url
+				Optional<AccountSetting> ltiAvatarUrl = accountSettingsService
+						.getAccountSetting(user,
+								AccountSettingsEnum.lti_avatar.name());
+				if (ltiAvatarUrl.isPresent())
+					return ltiAvatarUrl.get().getValue();
+
+			} else {
+
+				// we only have facebook right now
+				if (avatarSettingPresent_facebook) {
+					// social
+					Optional<String> avatarUrl = avatarRepository.getAvatar(
+							userId, avatarSetting.get().getValue());
+
+					if (avatarUrl.isPresent())
+						return avatarUrl.get();
+				}
+			}
 		}
 
 		// nothing found, defaulting to gravatar
+		return getDefaultAvatar(user);
+	}
+
+	private String getDefaultAvatar(User user) {
 		return GRAVATAR_URL
 				+ new String(DigestUtils.md5Hex(user.getUsername()));
 	}

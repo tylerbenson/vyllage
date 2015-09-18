@@ -11,6 +11,7 @@ module.exports = Reflux.createActions([
   'updateOther',
   'removeOther',
   'makeFacebookDisconnect',
+  'makeGoogleDisconnect',
   'doPing'
 ]);
 

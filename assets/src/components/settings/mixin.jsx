@@ -35,7 +35,7 @@ module.exports = {
   saveHandler: function (e) {
     e.preventDefault();
 
-    var message = "Your settings have been saved";
+    var message = "Your settings have been saved!";
     var timeout = 4000;
 
     //Custom message and timeout on e-mail change

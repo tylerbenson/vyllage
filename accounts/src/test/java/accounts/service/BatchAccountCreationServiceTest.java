@@ -26,12 +26,15 @@ import accounts.repository.UserNotFoundException;
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-public class UserServiceTest {
+public class BatchAccountCreationServiceTest {
 
 	private static final boolean FORCE_PASSWORD_CHANGE = false;
 
 	@Inject
-	private UserService service;
+	private BatchAccountCreationService service;
+
+	@Inject
+	private UserService userService;
 
 	@Mock
 	private User user;
@@ -51,10 +54,10 @@ public class UserServiceTest {
 
 		service.batchCreateUsers(batchAccount, user, false);
 
-		Assert.assertTrue(service.userExists("uno@gmail.com"));
-		Assert.assertFalse(service.getUser("uno@gmail.com").getPassword() == null);
-		Assert.assertTrue(service.userExists("dos@test.com"));
-		Assert.assertTrue(service.userExists("tres@yahoo.com"));
+		Assert.assertTrue(userService.userExists("uno@gmail.com"));
+		Assert.assertFalse(userService.getUser("uno@gmail.com").getPassword() == null);
+		Assert.assertTrue(userService.userExists("dos@test.com"));
+		Assert.assertTrue(userService.userExists("tres@yahoo.com"));
 	}
 
 	@Test
@@ -72,10 +75,11 @@ public class UserServiceTest {
 
 		service.batchCreateUsers(batchAccount, user, false);
 
-		Assert.assertTrue(service.userExists("cuatro@gmail.com"));
-		Assert.assertFalse(service.getUser("cuatro@gmail.com").getPassword() == null);
-		Assert.assertTrue(service.userExists("cinco@test.com"));
-		Assert.assertTrue(service.userExists("seis@yahoo.com"));
+		Assert.assertTrue(userService.userExists("cuatro@gmail.com"));
+		Assert.assertFalse(userService.getUser("cuatro@gmail.com")
+				.getPassword() == null);
+		Assert.assertTrue(userService.userExists("cinco@test.com"));
+		Assert.assertTrue(userService.userExists("seis@yahoo.com"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -89,9 +93,9 @@ public class UserServiceTest {
 
 		service.batchCreateUsers(batchAccount, user, FORCE_PASSWORD_CHANGE);
 
-		Assert.assertFalse(service.userExists("siet@gmail.com"));
-		Assert.assertFalse(service.userExists(" "));
-		Assert.assertFalse(service.userExists("nueve@yahoo.com"));
+		Assert.assertFalse(userService.userExists("siet@gmail.com"));
+		Assert.assertFalse(userService.userExists(" "));
+		Assert.assertFalse(userService.userExists("nueve@yahoo.com"));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -105,15 +109,15 @@ public class UserServiceTest {
 
 		service.batchCreateUsers(batchAccount, user, FORCE_PASSWORD_CHANGE);
 
-		Assert.assertFalse(service.userExists("diez@gmail.com"));
-		Assert.assertFalse(service.userExists("once.@"));
-		Assert.assertFalse(service.userExists("doce@yahoo.com"));
+		Assert.assertFalse(userService.userExists("diez@gmail.com"));
+		Assert.assertFalse(userService.userExists("once.@"));
+		Assert.assertFalse(userService.userExists("doce@yahoo.com"));
 	}
 
 	@Test(expected = UserNotFoundException.class)
 	public void getUserNullId() throws UserNotFoundException {
 		Long userId = null;
 
-		service.getUser(userId);
+		userService.getUser(userId);
 	}
 }

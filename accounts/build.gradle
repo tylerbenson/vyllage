@@ -17,6 +17,7 @@ dependencies {
 
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'org.apache.commons:commons-csv:1.1'
+    compile 'com.rometools:rome:1.5.1'
 
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'
 
