@@ -17,26 +17,6 @@ import com.google.common.base.Predicate;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-	// @Bean
-	// public Docket api() {
-	//
-	// AuthorizationScope[] authScopes = new AuthorizationScope[1];
-	// authScopes[0] = new AuthorizationScopeBuilder().scope("read")
-	// .description("read access").build();
-	//
-	// SecurityReference securityReference = SecurityReference.builder()
-	// .reference("test").scopes(authScopes).build();
-	//
-	// List<SecurityContext> securityContexts = newArrayList(SecurityContext
-	// .builder().securityReferences(newArrayList(securityReference))
-	// .build());
-	//
-	// return new Docket(DocumentationType.SWAGGER_2)
-	// .securitySchemes(newArrayList((new BasicAuth("test"))))
-	// .securityContexts(securityContexts).select()
-	// .apis(RequestHandlerSelectors.any()).paths( and(regex("/.*"), not()))
-	// .build().apiInfo(apiInfo());
-	// }
 
 	@Bean
 	public Docket documentsApi() {
@@ -86,7 +66,6 @@ public class SwaggerConfig {
 				.select().paths(allPaths()).build().apiInfo(apiInfo());
 	}
 
-	@SuppressWarnings("unchecked")
 	protected Predicate<String> allPaths() {
 		return regex("/.*");
 	}
@@ -94,7 +73,8 @@ public class SwaggerConfig {
 	private ApiInfo apiInfo() {
 		ApiInfo apiInfo = new ApiInfo("Vyllage's REST API",
 				"This is a description of our API.", "API TOS",
-				"admin@vyllage.com", "API License", "API License URL", null);
+				"admin@vyllage.com", "Vyllage", "API License URL",
+				"www.vyllage.com");
 		return apiInfo;
 	}
 
