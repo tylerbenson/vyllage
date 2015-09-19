@@ -20,6 +20,10 @@ public class ProjectsSection extends DocumentSection {
 	private LocalDateTime projectDate;
 	private String projectImageUrl;
 
+	private String projectDescription;
+	private String role;
+	private String roleDescription;
+
 	public String getProjectTitle() {
 		return projectTitle;
 	}
@@ -50,6 +54,30 @@ public class ProjectsSection extends DocumentSection {
 
 	public void setProjectImageUrl(String projectImageUrl) {
 		this.projectImageUrl = projectImageUrl;
+	}
+
+	public String getProjectDescription() {
+		return projectDescription;
+	}
+
+	public void setProjectDescription(String projectDescription) {
+		this.projectDescription = projectDescription;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getRoleDescription() {
+		return roleDescription;
+	}
+
+	public void setRoleDescription(String roleDescription) {
+		this.roleDescription = roleDescription;
 	}
 
 }

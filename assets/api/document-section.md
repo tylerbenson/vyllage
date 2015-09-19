@@ -204,7 +204,10 @@ General notes.
     "projectTitle": "My project",
     "author": "Someone",
     "projectDate": null,
-    "projectImageUrl": "http://img"
+    "projectImageUrl": "http://img",
+    "projectDescription":"Some project description."
+    "role":"Some role",
+    "roleDescription":"Some role description",
 }
 ```
 
