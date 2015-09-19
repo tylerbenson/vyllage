@@ -2,18 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title th:text="'Vyllage | ' + ${status} + ' - ' + ${error}">Vyllage | Oops, something went wrong.</title>
   <base href="." th:href="@{/}" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-  <link rel="stylesheet" href="/css/base.css" />
   <link rel="stylesheet" href="/css/error.css" />
-  <link rel="shortcut icon" type="image/png" href="/images/logo-orange.png" />
-
   <link href='//fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css' />
-  <th:block th:replace="fragment-userInfo :: userInfo">
+  <th:block th:replace="fragment-header :: header ('Vyllage | ' + ${status} + ' - ' + ${error})">
   </th:block>
-  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body class="error">

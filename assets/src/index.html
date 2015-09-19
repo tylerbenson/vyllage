@@ -2,11 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Welcome to Vyllage | Make a Difference</title>
   <base href="." th:href="@{/}" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+  
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Learn More about Vyllage" />
   <meta property="og:image" content="https://www.vyllage.com/images/fb-cover.jpg" />
@@ -15,11 +12,9 @@
   <meta property="og:description" content="Success is a community effort." />
 
   <link rel="stylesheet" href="css/homepage.css" />
-  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
   <link href='//fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css' />
-  <th:block th:replace="fragment-userInfo :: userInfo">
+  <th:block th:replace="fragment-header :: header ('Welcome to Vyllage | Make a Difference')">
   </th:block>
-  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body>

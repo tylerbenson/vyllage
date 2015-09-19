@@ -2,23 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" moznomarginboxes="" mozdisallowselectionprint="">
 
 <head>
-  <title>Vyllage | Resume</title>
   <base href="." th:href="@{/}" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
-  <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
-  <meta name="document_creation_date" th:content="${documentCreationDate}" id="meta_document_creation_date" />
-  <th:block th:replace="fragment-userInfo :: userInfo">
-  </th:block>
-
-  <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/resume.css" />
   <link href='//fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css' />
-  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" />
-
-  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
+  <meta name="document_creation_date" th:content="${documentCreationDate}" id="meta_document_creation_date" />
+  <th:block th:replace="fragment-header :: header ('Vyllage | Resume')">
+  </th:block>
 </head>
 
 <body>

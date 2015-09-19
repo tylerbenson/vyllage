@@ -2,22 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Vyllage Admin | Account Organization Management</title>
   <base href="." th:href="@{/}" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/admin.css" />
-  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
-
   <link href='//fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css' />
-
-  <meta name="_csrf_token" th:content="${_csrf.token}" id="meta_token" />
-  <meta name="_csrf_header" th:content="${_csrf.headerName}" id="meta_header" />
-  <th:block th:replace="fragment-userInfo :: userInfo">
+  <th:block th:replace="fragment-header :: header ('Vyllage Admin | Account Organization Management')">
   </th:block>
-  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body class="admin">

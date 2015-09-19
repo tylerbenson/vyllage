@@ -2,26 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Vyllage | Register</title>
   <base href="." th:href="@{/}" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Vyllage | Register" />
   <meta property="og:image" content="https://www.vyllage.com/images/fb-cover.jpg" />
   <meta property="og:site_name" content="Vyllage" />
   <meta property="og:url" content="https://www.vyllage.com" />
-  <meta property="og:description" content="Welcome to Vyllage! Login to update your resume." />
+  <meta property="og:description" content="Welcome to Vyllage! Register and login to create your resume." />
 
-  <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/account-setup.css" />
-  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
-
   <link href='//fonts.googleapis.com/css?family=Lato:400,300,100' rel='stylesheet' type='text/css' />
-  <th:block th:replace="fragment-userInfo :: userInfo">
+  <th:block th:replace="fragment-header :: header ('Vyllage | Register')">
   </th:block>
-  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body class="account-setup">

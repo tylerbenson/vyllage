@@ -2,15 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Vyllage | Account Deleted</title>
   <base href="." th:href="@{/}" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/login.css" />
-  <link rel="shortcut icon" type="image/png" href="images/logo-orange.png" />
-
   <link href='//fonts.googleapis.com/css?family=Lato:400,300,100' rel='stylesheet' type='text/css' />
 
   <style>
@@ -18,9 +11,8 @@
     background-image: url(images/banner-2.jpg);
   }
   </style>
-  <th:block th:replace="fragment-userInfo :: userInfo">
+  <th:block th:replace="fragment-header :: header ('Vyllage | Account Deleted')">
   </th:block>
-  <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
 <body class="login info">
