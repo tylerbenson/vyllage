@@ -1,6 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
-var Print = require('../resume/Print');
+var Print = require('../resume/Export');
 var Milestone = require('../milestones');
 var NavToggle = require('./NavToggle');
 var resumeStore = require('../resume/store');

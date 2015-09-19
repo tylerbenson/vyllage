@@ -13,7 +13,7 @@ var Print = React.createClass({
   print: function(e) {
     e.preventDefault();
     if(filter(this.state.resume.sections, {isSupported: true}).length > 0) {
-      window.location = "/resume/"+this.state.resume.documentId+"/file/pdf";
+      window.location = "/document/"+this.state.resume.documentId+"/export";
     }
     else {
       actions.togglePrintModal(true);
@@ -27,7 +27,7 @@ var Print = React.createClass({
       <span className="wrapper">
   			<a onClick={this.print} className="flat print button">
           <i className="ion-printer"></i>
-          <span>Print</span>
+          <span>Export</span>
         </a>
         <Modal isOpen={this.state.resume.isPrintModalOpen} close={this.closeModal}>
           <div className="header">
