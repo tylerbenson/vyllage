@@ -19,7 +19,7 @@
   <div togglz:active="NEW_RELIC" th:remove="tag" th:utext="${T(com.newrelic.api.agent.NewRelic).getBrowserTimingHeader()}"></div>
 </head>
 
-<body>
+<body class="export">
   <div id='container'>
     <header id="header-container" title="Export" th:name="${accountName.firstName}"></header>
     <div id="export"></div>

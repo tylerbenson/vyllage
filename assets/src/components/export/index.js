@@ -1,28 +1,41 @@
 var React = require('react');
 var Reflux = require('reflux');
+var viewport = require('viewport-dimensions');
+
 var ExportStore = require('./exportStore');
 var ExportAction = require('./exportAction');
 var ResumeStyleList = require('./stylelist');
 var PdfStyleRender = require('./pdfrender');
-
+var OnResize = require('react-window-mixins').OnResize;
+var configs = require('../configs');
+var MAX_WIDTH = configs.breakpoints.largePortrait;
 
 module.exports = React.createClass({
-	mixins: [Reflux.connect(ExportStore)],
+	mixins: [Reflux.connect(ExportStore), OnResize],
 	getInitialState: function () {
-	    return {
-	        'activeStyle' : 'default'  
-	    };
+    return {
+      'activeStyle' : 'default',
+      'viewportWidth' : viewport.width()
+    };
 	},
 	componentWillMount : function () {
-	  ExportAction.checkForOwner();    
+	  ExportAction.checkForOwner();
 	},
 	componentDidMount: function () {
-		ExportAction.getAllResumeStyle();  
+		ExportAction.getAllResumeStyle();
 	},
+	shouldComponentUpdate: function(nextProps, nextState) {
+		return true;
+	},
+	onResize: function() {
+		this.setState({
+			'viewportWidth': viewport.width()
+		});
+  },
   render: function () {
-		var showResumeStyle = '';
+		var styleList = '';
 		if( this.state.styles != undefined && this.state.styles.length ){
-			showResumeStyle = <ResumeStyleList active={this.state.activeStyle} data={this.state.styles} />;
+			styleList = <ResumeStyleList active={this.state.activeStyle} data={this.state.styles} />;
 		}
     return (
     	<div>
@@ -33,13 +46,12 @@ module.exports = React.createClass({
 						<p>Elegant templates for the job that awaits you!</p>
 					</div>
 				</div>
-				<div className="pdfholder">
-			    <div className="content">
-							<p>Select from our templates below. More to come soon!</p> <br/>
-							{showResumeStyle}
+				<div className="style-list-container">
+					<div className="content">
+						{styleList}
+				    {this.state.viewportWidth >= MAX_WIDTH ? <PdfStyleRender active={this.state.activeStyle} /> : null}
 			    </div>
 		    </div>
-		    <PdfStyleRender active={this.state.activeStyle} />
 	    </div>
     );
   }
