@@ -37,8 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/signup/**", "/social-login/**", "/link/e/**",
 						"/link/s/**", "/register", "/register-from-social",
 						"/register-from-LTI", "/careers", "/privacy",
-						"/contact", "/lti/login-existing-user", "/lti/rss")
-				.permitAll();
+						"/contact", "/lti/login-existing-user", "/lti/rss",
+						"/robots.txt").permitAll();
 
 		// disabling CSRF for the togglz console.
 		http.csrf().requireCsrfProtectionMatcher(new RequestMatcherDisable());
