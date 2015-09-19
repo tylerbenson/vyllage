@@ -28,15 +28,15 @@ module.exports = Reflux.createStore({
     .end(function (err, res) {
       this.settings = res.body;
       var fbIndex = findindex(this.settings, {name: 'facebook_connected'});
-      if( fbIndex ){
+      if( fbIndex > -1 ){
         this.facebook = this.settings[fbIndex].value == "true" ? true : false;
       }
-      
+
       var ggIndex = findindex(this.settings, {name: 'google_connected'});
-      if( ggIndex ){
+      if( ggIndex > -1 ){
         this.google = this.settings[ggIndex].value == "true" ? true : false;
       }
-      
+
       this.update();
     }.bind(this));
   },
@@ -57,7 +57,7 @@ module.exports = Reflux.createStore({
   onChangeSetting: function (setting) {
     var index = findindex(this.settings, {name: setting.name});
     setting = this.validateField(setting);
-    if (index !== -1) {
+    if (index > -1) {
       this.settings[index] = setting;
     } else {
       this.settings.push(setting);
@@ -128,7 +128,7 @@ module.exports = Reflux.createStore({
       activeSettingsType: this.activeSettingsType,
       facebook : this.facebook,
       google : this.google
-      
+
     });
   },
   getInitialState: function () {
