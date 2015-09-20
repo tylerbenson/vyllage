@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,6 +22,7 @@ import javax.inject.Inject;
 import org.apache.http.entity.ContentType;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -28,6 +30,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.restdocs.RestDocumentation;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -67,6 +71,10 @@ import documents.services.DocumentService;
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ResumeControllerIntegTest {
 
+	@Rule
+	public final RestDocumentation restDocumentation = new RestDocumentation(
+			"build/generated-snippets");
+
 	private MockMvc mockMvc;
 
 	@Inject
@@ -90,7 +98,15 @@ public class ResumeControllerIntegTest {
 
 	@Before
 	public void setUp() throws Exception {
-		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
+
+		Assert.assertNotNull(this.wContext);
+		Assert.assertNotNull(this.restDocumentation);
+
+		mockMvc = MockMvcBuilders
+				.webAppContextSetup(this.wContext)
+				.apply(MockMvcRestDocumentation
+						.documentationConfiguration(restDocumentation)).build();
+
 	}
 
 	@Test
@@ -380,7 +396,8 @@ public class ResumeControllerIntegTest {
 										+ sectionId + "/comment").contentType(
 								ContentType.APPLICATION_JSON.toString())
 								.content(mapper.writeValueAsString(comment)))
-				.andExpect(status().isOk()).andReturn();
+				.andExpect(status().isOk()).andDo(document("comment-post"))
+				.andReturn();
 
 		assertNotNull(mvcResult);
 
@@ -403,7 +420,7 @@ public class ResumeControllerIntegTest {
 				.perform(
 						get("/resume/" + documentId + "/section/" + sectionId
 								+ "/comment")).andExpect(status().isOk())
-				.andReturn();
+				.andDo(document("comment-get-empty")).andReturn();
 
 		assertTrue(mvcResult != null);
 
@@ -437,7 +454,7 @@ public class ResumeControllerIntegTest {
 				.perform(
 						get("/resume/" + documentId + "/section/" + sectionId
 								+ "/comment")).andExpect(status().isOk())
-				.andReturn();
+				.andDo(document("comment-get")).andReturn();
 
 		assertTrue(mvcResult != null);
 

@@ -42,4 +42,5 @@ dependencies {
     //    compile("org.springframework.boot:spring-boot-starter-remote-shell")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile 'com.jayway.restassured:spring-mock-mvc:2.4.0'
+    testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:1.0.0.RC1'
 }
