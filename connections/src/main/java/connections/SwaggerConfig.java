@@ -1,4 +1,4 @@
-package documents;
+package connections;
 
 import static com.google.common.base.Predicates.or;
 import static springfox.documentation.builders.PathSelectors.regex;
@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import com.google.common.base.Predicate;
 
-@Configuration(value = "documents.SwaggerConfig")
+@Configuration(value = "connections.SwaggerConfig")
 @EnableSwagger2
 public class SwaggerConfig {
 
@@ -25,7 +25,7 @@ public class SwaggerConfig {
 	}
 
 	protected Predicate<String> documentsPaths() {
-		return or(regex("/resume/.*"), regex("/document/.*"));
+		return or(regex("/resume/get-feedback"), regex("/document/users"));
 	}
 
 	// @Bean
@@ -33,7 +33,7 @@ public class SwaggerConfig {
 	// return new Docket(DocumentationType.SWAGGER_2).groupName("accounts")
 	// .select().paths(accountsPaths()).build().apiInfo(apiInfo());
 	// }
-	//
+
 	// @SuppressWarnings("unchecked")
 	// protected Predicate<String> accountsPaths() {
 	// return or(regex("/admin/.*"), regex("/account/.*"),
@@ -49,7 +49,7 @@ public class SwaggerConfig {
 	// protected Predicate<String> socialPaths() {
 	// return or(regex("/connect/.*"), regex("/disconnect/.*"));
 	// }
-	//
+
 	// @Bean
 	// public Docket ltiApi() {
 	// return new Docket(DocumentationType.SWAGGER_2).groupName("lti")
@@ -59,7 +59,7 @@ public class SwaggerConfig {
 	// protected Predicate<String> ltiPaths() {
 	// return regex("/lti/.*");
 	// }
-	//
+
 	// @Bean
 	// public Docket allApi() {
 	// return new Docket(DocumentationType.SWAGGER_2).groupName("all")
