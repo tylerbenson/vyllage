@@ -2,7 +2,9 @@ package documents;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan(basePackages = { "documents" }, excludeFilters = { @Filter(type = FilterType.ASSIGNABLE_TYPE, value = {
 		BeansConfiguration.class, Application.class }) })
 @PropertySource("classpath:/documents/application.properties")
+@EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
 public class ApplicationTestConfig implements CommandLineRunner {
 
 	@Override
