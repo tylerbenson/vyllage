@@ -46,7 +46,6 @@ UserName, avatarUrl can be null on POST, they are provided by the backend to sho
 LastModified, is not required, can be null.
 
  ```
-[
   {
     "sectionAdviceId": null,
     "sectionId": 128,
@@ -70,7 +69,6 @@ LastModified, is not required, can be null.
       ]
     }
   }
-]
 ```
 
 # Updates a section advice
@@ -87,7 +85,6 @@ UserName, avatarUrl can be null on PUT, they are provided by the backend to show
 LastModified, is not required, can be null.
 
  ```
-[
   {
     "sectionAdviceId": 1,
     "sectionId": 128,
@@ -111,6 +108,5 @@ LastModified, is not required, can be null.
       ]
     }
   }
-]
 ```
 
