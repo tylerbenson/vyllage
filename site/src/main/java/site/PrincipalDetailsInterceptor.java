@@ -21,16 +21,25 @@ public class PrincipalDetailsInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) {
 		Principal userPrincipal = request.getUserPrincipal();
+
 		if (userPrincipal != null) {
+
 			NewRelic.addCustomParameter("email", userPrincipal.getName());
+
 			if (userPrincipal instanceof UsernamePasswordAuthenticationToken) {
+
 				UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) userPrincipal;
+				int i = 0;
+
 				for (GrantedAuthority grantedAuthority : token.getAuthorities()) {
+
 					if (grantedAuthority instanceof UserOrganizationRole) {
+						i++;
 						UserOrganizationRole uor = (UserOrganizationRole) grantedAuthority;
-						NewRelic.addCustomParameter("userId", uor.getUserId());
+						NewRelic.addCustomParameter("userId-" + i,
+								uor.getUserId());
 						NewRelic.addCustomParameter(
-								"userRole",
+								"userRole-" + i,
 								uor.getOrganizationId() + "-"
 										+ uor.getAuthority());
 					}

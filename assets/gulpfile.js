@@ -67,7 +67,12 @@ gulp.task('copy-fonts', function () {
     .pipe(gulp.dest('public/fonts'));
 });
 
-gulp.task('copy', ['copy-images', 'copy-html', 'copy-fonts']);
+gulp.task('copy-robots', function () {
+	  return gulp.src(['src/robots.txt'])
+	    .pipe(gulp.dest('public'));
+	});
+
+gulp.task('copy', ['copy-images', 'copy-html', 'copy-fonts', 'copy-robots']);
 
 gulp.task('styles', function () {
   return gulp.src(['src/**/*.scss'])
