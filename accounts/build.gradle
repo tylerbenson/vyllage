@@ -15,9 +15,9 @@ dependencies {
     compile project(':util')
     compile project(':oauth-provider')
 
-	compile 'io.springfox:springfox-swagger2:2.2.2'
-	compile 'io.springfox:springfox-swagger-ui:2.2.2'
-	
+    compile 'io.springfox:springfox-swagger2:2.2.2'
+    compile 'io.springfox:springfox-swagger-ui:2.2.2'
+
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'org.apache.commons:commons-csv:1.1'
     compile 'com.rometools:rome:1.5.1'
