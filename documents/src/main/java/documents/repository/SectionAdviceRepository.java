@@ -111,6 +111,7 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 
 		newRecord.setSectionId(sectionAdvice.getSectionId());
 		newRecord.setSectionVersion(sectionAdvice.getSectionVersion());
+		newRecord.setStatus(sectionAdvice.getStatus());
 		try {
 			newRecord.setJsonDocument(sectionAdvice.getDocumentSection()
 					.asJSON());
@@ -141,6 +142,7 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 
 		existingRecord.setSectionId(sectionAdvice.getSectionId());
 		existingRecord.setSectionVersion(sectionAdvice.getSectionVersion());
+		existingRecord.setStatus(sectionAdvice.getStatus());
 
 		try {
 			existingRecord.setJsonDocument(sectionAdvice.getDocumentSection()
