@@ -60,6 +60,9 @@ public class LMSRequest {
 
 	public LMSRequest(HttpServletRequest request) {
 		this.httpServletRequest = request;
+		// TODO: capture LTI properties and add as a NewRelic custom parameter.
+		// May want to include some additional ones from here:
+		// https://www.eduappcenter.com/docs/basics/post_parameters
 
 		log.info(LMSConstants.LTI_VERSION + " "
 				+ getParam(LMSConstants.LTI_VERSION));

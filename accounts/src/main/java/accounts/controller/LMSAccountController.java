@@ -153,6 +153,8 @@ public class LMSAccountController {
 
 			// Set user name in Session
 			session.setAttribute("user_name", newUser.getUsername());
+			// TODO: why not just log in here rather than
+			// redirecting to login with session magic?
 		}
 		setCSRFTokenInSession(request);
 		return "redirect:" + "/lti/login";
