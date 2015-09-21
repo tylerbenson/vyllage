@@ -36,8 +36,9 @@ public class CustomRssViewer extends AbstractRssFeedView {
 		Image image = new Image();
 		image.setTitle("Vyllage Editor");
 		image.setUrl("https://www.vyllage.com/images/launch-button.png");
-		image.setHeight(92);
-		image.setWidth(154);
+		// Module ignores the size, but set to -1 if not set otherwise.
+		image.setHeight(38);
+		image.setWidth(203);
 
 		feed.setImage(image);
 
@@ -53,19 +54,21 @@ public class CustomRssViewer extends AbstractRssFeedView {
 		List<RssItem> listContent = (List<RssItem>) model.get("feedContent");
 		List<Item> items = new ArrayList<Item>();
 
-		for (RssItem rssItem : listContent) {
-			Item item = new Item();
+		if (listContent != null)
+			for (RssItem rssItem : listContent) {
+				Item item = new Item();
 
-			item.setTitle(rssItem.getTitle());
-			item.setLink(rssItem.getLink());
+				item.setTitle(rssItem.getTitle());
+				// The basic module seems to ignore the link :-(
+				// item.setLink(rssItem.getLink());
 
-			Description description = new Description();
-			description.setValue(rssItem.getDescription());
+				Description description = new Description();
+				description.setValue(rssItem.getDescription());
 
-			item.setDescription(description);
+				item.setDescription(description);
 
-			items.add(item);
-		}
+				items.add(item);
+			}
 
 		return items;
 	}
