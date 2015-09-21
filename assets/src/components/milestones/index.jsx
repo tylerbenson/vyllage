@@ -47,11 +47,17 @@ var Milestone = React.createClass({
 
 		var key = 0;
 		var tasksShown = 0;
+		var incompleteTasks = 0;
 		var NextSteps = sortby(milestones, "priority").map(function(milestone){
+			if(!milestone.isDone){
+				incompleteTasks++;
+			}
+
 			var listClasses = classnames({
 				'done' : milestone.isDone,
 				'priority' : !milestone.isDone && tasksShown++ < 3
 			});
+
 			return (
 				<li onMouseDown={milestone.action} key={key++} className={listClasses}>
 					<div className="icon">
@@ -89,7 +95,7 @@ var Milestone = React.createClass({
 						<ul className={this.state.viewAll?'view-all':''}>
 							{NextSteps}
 						</ul>
-						{Toggle}
+						{incompleteTasks > numberOfTasksToShow ? Toggle : null}
 					</div>
 				</div>
 			</a>
