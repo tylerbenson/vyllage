@@ -183,6 +183,7 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 		sectionAdvice.setSectionId(record.getSectionId());
 		sectionAdvice.setSectionVersion(record.getSectionVersion());
 		sectionAdvice.setUserId(record.getUserId());
+		sectionAdvice.setStatus(record.getStatus());
 
 		return sectionAdvice;
 	}
