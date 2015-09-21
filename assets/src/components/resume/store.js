@@ -270,13 +270,12 @@ module.exports = Reflux.createStore({
     request
       .put(url)
       .set(this.tokenHeader, this.tokenValue)
-      .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported']))
+      .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','numberOfAdvices','showEdits']))
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
         this.resume.sections[index] = res.body;
         this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-
         this.remindToShare();
         this.trigger(this.resume);
       }.bind(this));
@@ -375,19 +374,30 @@ module.exports = Reflux.createStore({
       .set('Accept', 'application/json')
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
-        this.resume.sections[index].advices = res.body;
-        if( res.body.length )
-        this.resume.sections[index].numberOfAdvices = res.body.length;
-        this.trigger(this.resume);
+        var advices = [];
+        if( res.body.length ){
+
+          res.body.map(function(advice){
+            console.log(advice.status);
+            if( advice.status == null || advice.status == 'pending'){
+              advices.push(advice);
+            }
+          });
+        
+          this.resume.sections[index].advices = advices;
+          this.resume.sections[index].numberOfAdvices = advices.length;
+          this.trigger(this.resume);
+        }
       }.bind(this));
   },
   onSaveSectionAdvice: function( section ){
+    section.status = 'pending';
     request
       .post('/resume/'+this.documentId+'/section/'+section.sectionId+'/advice')
       .set(this.tokenHeader, this.tokenValue)
       .send({
         sectionId : section.sectionId,
-        sectionVersion : 1,
+        sectionVersion : section.sectionVersion,
         userId : document.getElementById('meta_userInfo_user').content,
         documentSection : omit(section, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','numberOfAdvices','showEdits'])
       })
@@ -405,6 +415,55 @@ module.exports = Reflux.createStore({
         }
       }.bind(this));
   },
+  onDeleteAdvice : function( advice , section ){
+    request
+      .put('/resume/'+this.documentId+'/section/'+section.sectionId+'/advice/'+advice.sectionAdviceId)
+      .set(this.tokenHeader, this.tokenValue)
+      .send(advice)      
+      .end(function (err, res) {
+        if( res.status == 200){
+          var index = findindex(this.resume.sections,{sectionId: section.sectionId});
+          var adviceIndex = findindex( this.resume.sections[index].advices ,{ sectionAdviceId :advice.sectionAdviceId });
+          this.resume.sections[index].advices[adviceIndex] = res.body;
+          this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+          this.trigger(this.resume);
+        }
+      }.bind(this));
+  },
+  onMergeAdvice : function( advice , section ){
+    request
+      .put('/resume/'+this.documentId+'/section/'+section.sectionId+'/advice/'+advice.sectionAdviceId)
+      .set(this.tokenHeader, this.tokenValue)
+      .send(advice)      
+      .end(function (err, res) {
+        if( res.status == 200){
+          var index = findindex(this.resume.sections,{sectionId: section.sectionId});
+          var modifiedSection = this.MergeRecursive(this.resume.sections[index] , res.body.documentSection );               
+          // need to save it . 
+          this.onPutSection( modifiedSection );
+          
+          //this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+          //this.trigger(this.resume);
+        }
+      }.bind(this));
+  },
+
+  MergeRecursive : function(obj1, obj2) {
+    for (var p in obj2) {
+      try {
+        if ( obj2[p].constructor==Object ) {
+          obj1[p] = this.MergeRecursive(obj1[p], obj2[p]);
+        } else {
+          obj1[p] = obj2[p];
+        }
+      } catch(e) {
+        obj1[p] = obj2[p];
+      }
+    }
+    return obj1;
+  },
+
+
   onEnableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].uiEditMode = true;

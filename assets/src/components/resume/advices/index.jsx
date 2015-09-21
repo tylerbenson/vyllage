@@ -26,6 +26,7 @@ var Advices = React.createClass({
       }.bind(this);
 
       var adviceList = this.props.section.advices.map(function(advice ,index){
+        if( advice.status == 'pending' || advice.status == null )
         return <div key={index} className='comment'>
                 <div className='advice-content'>
                     { this.props.owner ? <div className="actions">
@@ -77,10 +78,12 @@ var Advices = React.createClass({
     }
   },
   _acceptHandler : function(advice){
-    // it will replace the doc with the advice.doc 
+    advice.status = 'accepted';
+    actions.mergeAdvice( advice , this.props.section );
   },
   _cancelHandler : function( advice ){
-
+    advice.status = 'rejected';
+    actions.deleteAdvice(advice , this.props.section );
   },
   _editHandler : function( advice ){
 
