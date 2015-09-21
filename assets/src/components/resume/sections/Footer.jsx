@@ -35,7 +35,12 @@ var SectionFooter = React.createClass({
   },
   render: function () {
     var numberOfComments = this.props.section && this.props.section.numberOfComments;
-    var numberOfAdvices = this.state.section.advices != undefined ? this.state.section.advices.length : 0;
+    var numberOfAdvices = 0;
+    if( this.state.section.advices != undefined ){
+      this.state.section.advices.map(function(advice , index){
+        if(advice.status == 'pending' || advice.status == null ) numberOfAdvices++;
+      });
+    }
     var lastModified = this.props.section.lastModified;
 
     

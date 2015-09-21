@@ -28,6 +28,11 @@ var Freeform = React.createClass({
       section: {}
     }
   },
+  componentWillReceiveProps: function (nextProps) {
+    if( nextProps.section != undefined){
+      this.setState({ description : nextProps.section.description });  
+    } 
+  },
   componentDidMount: function() {
     this.refs.description.getDOMNode().focus();
   },
@@ -102,7 +107,6 @@ var Freeform = React.createClass({
     );
   },
   _saveSuggestionHandler : function(){
-
     var section = cloneDeep(this.props.section);
     section.description = this.state.description;
     actions.saveSectionAdvice(section);
