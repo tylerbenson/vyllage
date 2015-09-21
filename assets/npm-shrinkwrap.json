@@ -1157,6 +1157,10 @@
     "validator": {
       "version": "3.43.0",
       "from": "validator@3.43.0"
+    },
+    "viewport-dimensions": {
+      "version": "0.2.0",
+      "from": "viewport-dimensions@*"
     }
   }
 }
