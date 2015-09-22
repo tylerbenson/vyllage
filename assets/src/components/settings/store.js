@@ -79,12 +79,6 @@ module.exports = Reflux.createStore({
                                setting.value.length === 0 ?
                                   null: "Invalid Phone Number";
         break;
-      case 'twitter':
-        var pattern = /^\w{1,32}$/; // ref : http://aaronsaray.com/blog/2012/08/07/jquery-validator-twitter-username-validator/
-        if( setting.value.length > 0 && (setting.value.length >= 140 || pattern.test(setting.value) == false ) ) {
-          setting.errorMessage = "Invalid Twitter Username";
-        }
-        break;
       default:
         setting.errorMessage = null;
     }

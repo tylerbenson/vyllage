@@ -100,8 +100,8 @@ var Banner = React.createClass({
       },
       {
         errorMessage: null,
-        name: 'twitter',
-        value: fields.twitter,
+        name: 'site_url',
+        value: fields.site_url,
         privacy: 'private'
       }
     ];
@@ -118,7 +118,7 @@ var Banner = React.createClass({
         banner.address =  this.getRefValue('address'),
         banner.email =  this.getRefValue('email'),
         banner.phoneNumber =  phoneFormatter.normalize(this.getRefValue('phoneNumber')),
-        banner.twitter =  this.getRefValue('twitter');
+        banner.site_url =  this.getRefValue('site_url');
 
     if(banner.tagline !== this.state.fields.tagline) {
       var fields = clone(this.state.fields);
@@ -140,11 +140,7 @@ var Banner = React.createClass({
       && banner.phoneNumber.trim().length !== 0) {
       errors.push('phoneNumber');
     }
-    var pattern = /^\w{1,32}$/; // ref : http://aaronsaray.com/blog/2012/08/07/jquery-validator-twitter-username-validator/
-    if( banner.twitter.length > 0 && (banner.twitter.length > 140 || pattern.test(banner.twitter) == false)  ) {
-      errors.push('twitter');
-    }
-
+    
     if(errors.length === 0) {
       this.notifyChange(banner);
       this.setState({fields: banner});
@@ -227,7 +223,7 @@ var Banner = React.createClass({
     var fields = this.state.fields;
     var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {};
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {};
-    var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {};
+    var siteUrlSetting = filter(this.props.settings, {name: 'site_url'})[0] || {};
     var isReadOnly = (!header.owner) || (header.owner && !this.state.editMode);
     var name = (header.firstName ? header.firstName : '') + ' '
              + (header.lastName ? header.lastName : '');
@@ -299,20 +295,19 @@ var Banner = React.createClass({
               <p className='error'>{phoneNumberSetting.errorMessage}</p>
             </div>
             <div className='detail'>
-              <i className="ion-social-twitter"></i>
-              <span className='tip'>@</span>
+              <i className="ion-link"></i>
               <input
                 required
                 type='text'
-                placeholder="Twitter Username"
+                placeholder="Site url"
                 disabled={isReadOnly}
-                key={fields.twitter || undefined}
-                className="inline transparent twitter"
+                key={fields.site_url || undefined}
+                className="inline transparent"
                 autoComplete="off"
-                ref="twitter"
-                defaultValue={fields.twitter}
+                ref="site_url"
+                defaultValue={fields.site_url}
               />
-              <p className='error'>{twitterSetting.errorMessage}</p>
+              <p className='error'>{siteUrlSetting.errorMessage}</p>
             </div>
           </div>
           :null)}
