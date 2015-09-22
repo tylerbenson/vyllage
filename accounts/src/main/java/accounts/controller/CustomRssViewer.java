@@ -30,7 +30,7 @@ public class CustomRssViewer extends AbstractRssFeedView {
 			HttpServletRequest request) {
 
 		feed.setTitle("Vyllage");
-		feed.setDescription(" ");
+		feed.setDescription("\u200B"); // unicode 0-width space to trick module.
 		feed.setLink("http://www.vyllage.com/resume");
 
 		Image image = new Image();
@@ -54,7 +54,7 @@ public class CustomRssViewer extends AbstractRssFeedView {
 		List<RssItem> listContent = (List<RssItem>) model.get("feedContent");
 		List<Item> items = new ArrayList<Item>();
 
-		if (listContent != null)
+		if (listContent != null) {
 			for (RssItem rssItem : listContent) {
 				Item item = new Item();
 
@@ -69,6 +69,7 @@ public class CustomRssViewer extends AbstractRssFeedView {
 
 				items.add(item);
 			}
+		}
 
 		return items;
 	}
