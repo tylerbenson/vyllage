@@ -30,7 +30,7 @@ public class CustomRssViewer extends AbstractRssFeedView {
 			HttpServletRequest request) {
 
 		feed.setTitle("Vyllage");
-		feed.setDescription("");
+		feed.setDescription(" ");
 		feed.setLink("http://www.vyllage.com/resume");
 
 		Image image = new Image();
