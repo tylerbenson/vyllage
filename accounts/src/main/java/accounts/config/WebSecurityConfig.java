@@ -44,6 +44,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/swagger-ui.html", "/v2/api-docs/**",
 						"/swagger-resources").hasAuthority("ADMIN");
 
+		http.authorizeRequests()
+				.antMatchers("/swagger-ui.html", "/v2/api-docs/**",
+						"/swagger-resources").hasAuthority("ADMIN");
+
 		// disabling CSRF for the togglz console.
 		http.csrf().requireCsrfProtectionMatcher(new RequestMatcherDisable());
 
