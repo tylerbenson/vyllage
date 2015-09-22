@@ -64,7 +64,6 @@ module.exports = Reflux.createStore({
       .set(this.tokenHeader, this.tokenValue)
       .send(order)
       .end(function (err, res) {
-        // console.log(err, res.body, order, url);
       }.bind(this))
   },
   onGetDocumentId: function() {
@@ -375,15 +374,12 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         var advices = [];
-        console.log(res.body);
         if( res.body.length ){
           res.body.map(function(advice){
-            console.log(advice.status);
             if( advice.status == null || advice.status == 'pending'){
               advices.push(advice);
             }
           });
-        
           this.resume.sections[index].advices = advices;
           this.resume.sections[index].numberOfAdvices = advices.length;
           this.trigger(this.resume);
