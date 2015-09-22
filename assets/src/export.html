@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" moznomarginboxes="" mozdisallowselectionprint="">
+
+<head>
+  <base href="." th:href="@{/}" />
+  <link rel="stylesheet" href="css/export.css" />
+  <link href='//fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css' />
+  <meta name="document_creation_date" th:content="${documentCreationDate}" id="meta_document_creation_date" />
+  <th:block th:replace="fragment-header :: header ('Vyllage | Export')">
+  </th:block>
+</head>
+
+<body class="export">
+  <div id='container'>
+    <header id="header-container" title="Export" th:name="${accountName.firstName}"></header>
+    <div id="export"></div>
+  </div>
+  <div id='footer'></div>
+  <script type="text/javascript" src="javascript/base.js"></script>
+  <script type="text/javascript" src="javascript/export.js"></script>
+  <th:block th:replace="fragment-footer :: footer">
+  </th:block>
+</body>
+
+</html>

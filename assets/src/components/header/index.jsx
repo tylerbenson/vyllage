@@ -1,14 +1,18 @@
 var React = require('react');
 var Reflux = require('reflux');
-var Print = require('../resume/Print');
+var ExportButton = require('../export/ExportButton');
 var Milestone = require('../milestones');
 var NavToggle = require('./NavToggle');
 var resumeStore = require('../resume/store');
+var resumeActions = require('../resume/actions');
 var FeatureToggle = require('../util/FeatureToggle');
 var AdminLink = require('../admin/AdminLink');
 
 var HeaderContainer = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
+  componentWillMount: function(){
+    resumeActions.getResume();
+  },
   componentDidMount: function () {
     var path = window.location.href;
     var re = new RegExp(/\/resume\/[0-9]+$/)
@@ -17,6 +21,7 @@ var HeaderContainer = React.createClass({
   render: function() {
     var name = this.props.name || 'user';
     var title = this.props.title;
+    var resume = this.state.resume;
     // var owner = this.state.resume.header.owner;
     // var showLink = owner || !this.isResumePage;
 
@@ -36,7 +41,7 @@ var HeaderContainer = React.createClass({
                 <span>Resume</span>
               </a></li>
               <FeatureToggle name="PRINTING">
-                <li><Print /></li>
+                <li><ExportButton documentId={resume.ownDocumentId} sections={resume.sections}  /></li>
               </FeatureToggle>
               <li>
               	<AdminLink />

@@ -1,0 +1,101 @@
+.export{
+  #container {
+    background: #ccc;
+
+    &:after {
+      display: none;
+    }
+  }
+  #footer {
+    display: none;
+  }
+
+  .banner {
+    background-color: $banner-background;
+    background-image: url(../images/banner-bg.png);
+    background-size: cover;
+    background-position: center;
+    padding: 1.5em 2em 1em 2em;
+
+    h1 {
+      color: $inverted-text-color;
+    }
+    p {
+      color: $tagline-color;
+      margin: 0;
+    }
+    .header-icon {
+      color: $inverted-text-color;
+      font-size: 3.5em;
+      float: left;
+      margin-right: 0.25em;
+      margin-top: -0.15em;
+    }
+  }
+
+  .style-list-container > .content{
+    @include cf();
+    padding: 1em 1em 0 1em;
+  }
+
+  .style-list {
+    @include cf();
+    @include column(1/5);
+
+    &.mobile {
+      @include column(1);
+      .pdf-thumb {
+        img {
+          border-color: lighten($secondary-color, 20%) !important;
+        }
+      }
+    }
+
+    .pdf-thumb {
+      float: left;
+      cursor: pointer;
+      display: inline-block;
+      margin: 0.5em;
+      text-align: center;
+      text-decoration: none;
+
+      &:hover {
+        img {
+          border-color: $secondary-color;
+        }
+      }
+
+      &.active {
+        img {
+          border-color: $alternate-color-1;
+        }
+      }
+
+      img {
+        border: transparent solid 1px;
+        border-radius: 3px;
+        max-width: 160px;
+        width: 100%;
+        transition: border .2s ease;
+      }
+
+      span {
+        color: $alternate-color-2;
+        display: block;
+        font-size: 0.8em;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .live-preview {
+    @include column(4/5);
+
+    .pdfrender {
+      height: 100%;
+      min-height: 640px;
+      width: 100%;
+    }
+  }
+}

@@ -218,7 +218,16 @@ var MilestoneStore = Reflux.createStore({
     }).length > 0;
   },
   onToggle: function(flag) {
+    var body = document.querySelector('body');
     this.isOpen = flag !== undefined ? flag : !this.isOpen;
+
+    if(this.isOpen) {
+      body.className += ' milestone-open';
+    }
+    else {
+      body.className = body.className.replace(/ milestone-open/g,'');
+    }
+
     this.update();
   },
   onViewAllToggle: function(flag) {

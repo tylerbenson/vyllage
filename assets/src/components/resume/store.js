@@ -25,6 +25,7 @@ module.exports = Reflux.createStore({
       this.tokenValue = metaToken.content;
     }
     this.documentId = window.location.pathname.split('/')[2];
+    this.onGetDocumentId();
     this.resume = {
       ownDocumentId: this.documentId,
       documentId: this.documentId,
@@ -73,10 +74,13 @@ module.exports = Reflux.createStore({
     request
       .get(url)
       .end(function (err, res) {
-        if(res.ok && res.body.RESUME.length > 0) {
-          this.resume.ownDocumentId = res.body.RESUME[0];
-          this.resume.documentId = typeof parseInt(this.resume.documentId) === 'number' ? this.resume.documentId : this.resume.ownDocumentId;
-          this.trigger(this.resume);
+        if(res) {
+          if(res.ok && res.body.RESUME.length > 0) {
+            this.resume.ownDocumentId = res.body.RESUME[0];
+            this.resume.documentId = parseInt(this.resume.documentId) === NaN ? this.resume.documentId : this.resume.ownDocumentId;
+            this.documentId = this.resume.documentId;
+            this.trigger(this.resume);
+          }
         }
       }.bind(this));
   },

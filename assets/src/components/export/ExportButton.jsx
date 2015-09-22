@@ -1,35 +1,39 @@
 var React = require('react');
 var Reflux = require('reflux');
-var actions = require('./actions');
-var resumeStore = require('./store');
 var filter = require('lodash.filter');
 var Modal = require('../modal');
 
-var Print = React.createClass({
-  mixins: [Reflux.connect(resumeStore, 'resume')],
-  componentWillMount: function() {
-  	actions.getDocumentId();
+var ExportButton = React.createClass({
+  getInitialState: function(){
+    return {
+      isPrintModalOpen: false
+    };
   },
   print: function(e) {
     e.preventDefault();
-    if(filter(this.state.resume.sections, {isSupported: true}).length > 0) {
-      window.location = "/resume/"+this.state.resume.documentId+"/file/pdf";
+    if(filter(this.props.sections, {isSupported: true}).length > 0) {
+      window.location = "/document/"+this.props.documentId+"/export";
     }
     else {
-      actions.togglePrintModal(true);
+      this.togglePrintModal(true);
     }
   },
   closeModal: function() {
-    actions.togglePrintModal(false);
+    this.togglePrintModal(false);
+  },
+  togglePrintModal: function(flag){
+    this.setState({
+      isPrintModalOpen: (flag !== undefined ? flag : !this.state.isPrintModalOpen)
+    });
   },
 	render: function() {
 		return (
       <span className="wrapper">
-  			<a onClick={this.print} className="flat print button">
+			<a onClick={this.print} className="flat print button">
           <i className="ion-printer"></i>
-          <span>Print</span>
+          <span>Export</span>
         </a>
-        <Modal isOpen={this.state.resume.isPrintModalOpen} close={this.closeModal}>
+        <Modal isOpen={this.state.isPrintModalOpen} close={this.closeModal}>
           <div className="header">
             <div className="title">
               <h1>Resumé Empty</h1>
@@ -55,4 +59,4 @@ var Print = React.createClass({
 
 });
 
-module.exports = Print;
+module.exports = ExportButton;
