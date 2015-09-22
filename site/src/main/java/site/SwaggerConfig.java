@@ -1,4 +1,4 @@
-package accounts.config;
+package site;
 
 import static com.google.common.base.Predicates.or;
 import static springfox.documentation.builders.PathSelectors.regex;
@@ -18,15 +18,15 @@ import com.google.common.base.Predicate;
 @EnableSwagger2
 public class SwaggerConfig {
 
-	// @Bean
-	// public Docket documentsApi() {
-	// return new Docket(DocumentationType.SWAGGER_2).groupName("documents")
-	// .select().paths(documentsPaths()).build().apiInfo(apiInfo());
-	// }
-	//
-	// protected Predicate<String> documentsPaths() {
-	// return or(regex("/resume/.*"), regex("/document/.*"));
-	// }
+	@Bean
+	public Docket documentsApi() {
+		return new Docket(DocumentationType.SWAGGER_2).groupName("documents")
+				.select().paths(documentsPaths()).build().apiInfo(apiInfo());
+	}
+
+	protected Predicate<String> documentsPaths() {
+		return or(regex("/resume/.*"), regex("/document/.*"));
+	}
 
 	@Bean
 	public Docket accountsApi() {
