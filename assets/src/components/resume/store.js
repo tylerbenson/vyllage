@@ -375,8 +375,8 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         var advices = [];
+        console.log(res.body);
         if( res.body.length ){
-
           res.body.map(function(advice){
             console.log(advice.status);
             if( advice.status == null || advice.status == 'pending'){
@@ -391,7 +391,6 @@ module.exports = Reflux.createStore({
       }.bind(this));
   },
   onSaveSectionAdvice: function( section ){
-    section.status = 'pending';
     request
       .post('/resume/'+this.documentId+'/section/'+section.sectionId+'/advice')
       .set(this.tokenHeader, this.tokenValue)
