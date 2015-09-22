@@ -304,33 +304,55 @@ public class UserService {
 		AccountContact ac = new AccountContact();
 
 		Long userId = entry.getKey();
-		Optional<AccountSetting> address = entry.getValue().stream()
-				.filter(as -> as.getName().equalsIgnoreCase("address"))
-				.findFirst();
-		Optional<AccountSetting> email = entry.getValue().stream()
-				.filter(as -> as.getName().equalsIgnoreCase("email"))
-				.findFirst();
-		Optional<AccountSetting> phoneNumber = entry.getValue().stream()
-				.filter(as -> as.getName().equalsIgnoreCase("phoneNumber"))
-				.findFirst();
-		Optional<AccountSetting> twitter = entry.getValue().stream()
-				.filter(as -> as.getName().equalsIgnoreCase("twitter"))
-				.findFirst();
-		Optional<AccountSetting> linkedIn = entry.getValue().stream()
-				.filter(as -> as.getName().equalsIgnoreCase("linkedIn"))
-				.findFirst();
+		Optional<AccountSetting> address = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.address.name())).findFirst();
+		Optional<AccountSetting> email = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.email.name())).findFirst();
+		Optional<AccountSetting> phoneNumber = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.phoneNumber.name())).findFirst();
+		Optional<AccountSetting> twitter = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.twitter.name())).findFirst();
+		Optional<AccountSetting> linkedIn = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.linkedIn.name())).findFirst();
 
-		Optional<AccountSetting> firstName = entry.getValue().stream()
-				.filter(as -> as.getName().equalsIgnoreCase("firstName"))
-				.findFirst();
+		Optional<AccountSetting> firstName = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.firstName.name())).findFirst();
 
-		Optional<AccountSetting> middleName = entry.getValue().stream()
-				.filter(as -> as.getName().equalsIgnoreCase("middleName"))
-				.findFirst();
+		Optional<AccountSetting> middleName = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.middleName.name())).findFirst();
 
-		Optional<AccountSetting> lastName = entry.getValue().stream()
-				.filter(as -> as.getName().equalsIgnoreCase("lastName"))
-				.findFirst();
+		Optional<AccountSetting> lastName = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.lastName.name())).findFirst();
+
+		Optional<AccountSetting> siteUrl = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.siteUrl.name())).findFirst();
 
 		ac.setUserId(userId);
 
@@ -364,6 +386,9 @@ public class UserService {
 
 		if (lastName.isPresent())
 			ac.setLastName(lastName.get().getValue());
+
+		if (siteUrl.isPresent())
+			ac.setSiteUrl(siteUrl.get().getValue());
 
 		return ac;
 	}

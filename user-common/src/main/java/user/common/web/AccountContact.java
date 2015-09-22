@@ -21,6 +21,7 @@ public class AccountContact {
 	private String tagline;
 
 	private boolean isAdvisor;
+	private String siteUrl;
 
 	public Long getUserId() {
 		return userId;
@@ -137,6 +138,14 @@ public class AccountContact {
 
 	public void setAdvisor(boolean isAdvisor) {
 		this.isAdvisor = isAdvisor;
+	}
+
+	public String getSiteUrl() {
+		return siteUrl;
+	}
+
+	public void setSiteUrl(String siteUrl) {
+		this.siteUrl = siteUrl;
 	}
 
 }
