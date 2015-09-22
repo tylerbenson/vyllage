@@ -111,6 +111,7 @@ body {
 
 #about {
   h1 {
+    color: $inverted-text-color;
     font-size: 2.75em;
     font-weight: 100;
     margin-top: 3.5em;
@@ -119,6 +120,7 @@ body {
     text-transform: uppercase;
   }
   p {
+    color: $inverted-text-color;
     font-size: 1.35em;
     font-weight: 100;
     line-height: 1.4;
@@ -283,6 +285,11 @@ p {
   text-align: center;
   color: #fff;
   background-color: #47382b;
+
+  .content {
+    color: $inverted-text-color;
+  }
+
   a {
     text-decoration: none;
     color: #bf9a7a;
