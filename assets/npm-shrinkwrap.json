@@ -1160,7 +1160,7 @@
     },
     "viewport-dimensions": {
       "version": "0.2.0",
-      "from": "viewport-dimensions@*"
+      "from": "viewport-dimensions@0.2.0"
     }
   }
 }

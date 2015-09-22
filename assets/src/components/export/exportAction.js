@@ -10,7 +10,8 @@ var ExportAction = Reflux.createActions([
   'resultForOwner',
   'getAllResumeStyle',
   'grabResumeStyle',
-  'changeActive'
+  'changeActive',
+  'togglePrintModal'
 ]);
 
 ExportAction.checkForOwner.preEmit = function(){
