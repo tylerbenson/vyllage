@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +25,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
+import documents.model.AccountNames;
 import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.LinkPermissions;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
+import documents.services.AccountService;
 import documents.services.DocumentService;
 import documents.services.aspect.CheckWriteAccess;
 
@@ -45,9 +48,34 @@ public class DocumentController {
 
 	private final DocumentService documentService;
 
+	private final AccountService accountService;
+
 	@Inject
-	public DocumentController(DocumentService documentService) {
+	public DocumentController(DocumentService documentService,
+			final AccountService accountService) {
 		this.documentService = documentService;
+		this.accountService = accountService;
+
+	}
+
+	@ModelAttribute("accountName")
+	public AccountNames accountName(HttpServletRequest request,
+			@AuthenticationPrincipal User user) {
+		Long userId = user.getUserId();
+
+		List<AccountNames> namesForUsers = accountService.getNamesForUsers(
+				request, Arrays.asList(userId));
+
+		if (namesForUsers.isEmpty()) {
+			AccountNames an = new AccountNames();
+			an.setUserId(userId);
+			an.setFirstName("");
+			an.setLastName("");
+			an.setMiddleName("");
+			return an;
+		}
+
+		return namesForUsers.get(0);
 	}
 
 	@RequestMapping(value = "delete", method = RequestMethod.DELETE, consumes = "application/json")

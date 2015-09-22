@@ -32,7 +32,8 @@
     "superagent": "^0.21.0",
     "tether": "^0.6.5",
     "url-template": "^2.0.5",
-    "validator": "^3.43.0"
+    "validator": "^3.43.0",
+    "viewport-dimensions": "^0.2.0"
   },
   "devDependencies": {
     "babel-core": "^4.3.0",
