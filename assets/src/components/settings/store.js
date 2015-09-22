@@ -114,6 +114,9 @@ module.exports = Reflux.createStore({
     request
       .get('/account/ping')
       .end(function (err, res) {
+        if(res.status != 200){
+          window.location.href = '/logout';
+        }
       }.bind(this))
   },
   update: function () {
