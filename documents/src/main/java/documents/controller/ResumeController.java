@@ -1,7 +1,5 @@
 package documents.controller;
 
-import io.swagger.annotations.Api;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -68,7 +66,6 @@ import documents.services.NotificationService;
 import documents.services.aspect.CheckReadAccess;
 import documents.services.aspect.CheckWriteAccess;
 
-@Api(value = "resume", description = "resume")
 @Controller
 @RequestMapping("resume")
 public class ResumeController {

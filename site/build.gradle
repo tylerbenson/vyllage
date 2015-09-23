@@ -10,6 +10,9 @@ dependencies {
     compile parent.javascriptProjects.findAll { it != project}
     compile parent.bootProjects.findAll { it != project}
 
+    compile 'io.springfox:springfox-swagger2:2.2.2'
+    compile 'io.springfox:springfox-swagger-ui:2.2.2'
+
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
