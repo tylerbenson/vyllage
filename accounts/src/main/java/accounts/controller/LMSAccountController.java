@@ -1,5 +1,7 @@
 package accounts.controller;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
@@ -199,9 +201,21 @@ public class LMSAccountController {
 		return "register-from-LTI";
 	}
 
-	protected void saveUserImage(String userImageUrl, User newUser) {
+	protected void saveUserImage(final String userImageUrl, final User newUser) {
+		// save the avatar
+		if (userImageUrl != null && !StringUtils.isBlank(userImageUrl)) {
 
-		if (userImageUrl != null && StringUtils.isBlank(userImageUrl)) {
+			// remove blackboard's https://blackboard.ccu.edu and others
+			List<String> urls = Arrays.asList(userImageUrl.split("https://"));
+
+			final String cleanUserImageUrl;
+
+			if (urls.size() > 1)
+				// get the third, the first will always be blank
+				// and the second is blackboard's duplicate url
+				cleanUserImageUrl = "https://" + urls.get(2);
+			else
+				cleanUserImageUrl = userImageUrl;
 
 			accountSettingsService
 					.setAccountSetting(
@@ -214,7 +228,7 @@ public class LMSAccountController {
 			accountSettingsService.setAccountSetting(newUser,
 					new AccountSetting(null, newUser.getUserId(),
 							AccountSettingsEnum.lti_avatar.name(),
-							userImageUrl, Privacy.PUBLIC.name()));
+							cleanUserImageUrl, Privacy.PUBLIC.name()));
 		}
 	}
 
