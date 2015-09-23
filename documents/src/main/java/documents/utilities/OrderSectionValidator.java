@@ -32,8 +32,12 @@ public class OrderSectionValidator {
 	public void checkDuplicateSectionIds(List<Long> documentSectionIds) {
 		FindDuplicates finder = new FindDuplicates();
 		if (!finder.findDuplicates(documentSectionIds).isEmpty()) {
+
+			final String sectionIds = documentSectionIds.stream()
+					.map(l -> l.toString()).collect(Collectors.joining(","));
+
 			IllegalArgumentException e = new IllegalArgumentException(
-					"Duplicate IDs found.");
+					"Duplicate IDs found: [" + sectionIds + "]");
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			throw e;
@@ -43,20 +47,27 @@ public class OrderSectionValidator {
 	public void compareExistingIdsWithRequestedIds(
 			List<Long> documentSectionIds,
 			List<DocumentSection> documentSections) {
+
+		final String documentSectionIdsToOrderAsString = documentSectionIds
+				.stream().map(l -> l.toString())
+				.collect(Collectors.joining(","));
+
+		final String existingSectionIdsAsString = documentSections.stream()
+				.map(ds -> ds.getSectionId().toString())
+				.collect(Collectors.joining(","));
+
 		if (documentSectionIds.size() != documentSections.size()) {
+
 			IllegalArgumentException e = new IllegalArgumentException(
 					"The amount of section ids does not match the number of existing sections in the database. "
 							+ "Expected: "
 							+ documentSections.size()
 							+ " ids ["
-							+ documentSections.stream()
-									.map(ds -> ds.getSectionId().toString())
-									.collect(Collectors.joining(","))
-									.toString()
+							+ existingSectionIdsAsString
 							+ "] received: "
 							+ documentSectionIds.size()
-							+ " "
-							+ documentSectionIds.toString());
+							+ " ids ["
+							+ documentSectionIdsToOrderAsString + "]");
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			throw e;
@@ -64,8 +75,15 @@ public class OrderSectionValidator {
 
 		if (!documentSections.stream().map(ds -> ds.getSectionId())
 				.collect(Collectors.toList()).containsAll(documentSectionIds)) {
+
 			IllegalArgumentException e = new IllegalArgumentException(
-					"The sections ids do not match the existing sections in the database.");
+					"The sections ids do not match the existing sections in the database. Expected: "
+							+ " ids ["
+							+ existingSectionIdsAsString
+							+ "]"
+							+ " received "
+							+ " ids ["
+							+ documentSectionIdsToOrderAsString + "]");
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 			throw e;
