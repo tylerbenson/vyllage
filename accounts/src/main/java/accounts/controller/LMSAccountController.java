@@ -46,10 +46,10 @@ import email.EmailBuilder;
 @Controller
 public class LMSAccountController {
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(LMSAccountController.class
 			.getName());
 
+	@SuppressWarnings("unused")
 	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
@@ -210,7 +210,7 @@ public class LMSAccountController {
 
 			final String cleanUserImageUrl;
 
-			if (urls.size() > 1)
+			if (urls.size() >= 2)
 				// get the third, the first will always be blank
 				// and the second is blackboard's duplicate url
 				cleanUserImageUrl = "https://" + urls.get(2);
