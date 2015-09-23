@@ -12,7 +12,8 @@ dependencies:
 
 test:
   override:
-    - export TERM="dumb" ./gradlew check circlePgTest
+    - export TERM="dumb"
+    - ./gradlew check circlePgTest
     - npm test
 
 deployment:
