@@ -104,6 +104,7 @@ public class SectionAdviceRepositoryTest {
 		suggestion.setSectionId(128L);
 		suggestion.setSectionVersion(1L);
 		suggestion.setUserId(0L);
+		suggestion.setStatus("pending");
 		return suggestion;
 	}
 

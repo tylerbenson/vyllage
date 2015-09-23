@@ -31,6 +31,9 @@ public class SectionAdvice {
 
 	private DocumentSection documentSection;
 
+	// accepted, rejected, pending, handled by the frontend.
+	private String status;
+
 	public Long getSectionAdviceId() {
 		return sectionAdviceId;
 	}
@@ -93,6 +96,14 @@ public class SectionAdvice {
 
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

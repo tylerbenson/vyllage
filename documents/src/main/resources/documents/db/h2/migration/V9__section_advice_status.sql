@@ -1,0 +1,1 @@
+alter table documents.section_advices add status varchar_ignorecase(20) not null DEFAULT 'pending';

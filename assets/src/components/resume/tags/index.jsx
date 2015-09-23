@@ -3,6 +3,7 @@ var actions = require('../actions');
 var EditBtn = require('../../buttons/edit');
 var DeleteSection = require('../Delete');
 var SaveBtn = require('../../buttons/save');
+var SuggestionBtn = require('../../buttons/suggestion');
 var CancelBtn = require('../../buttons/cancel');
 var SectionFooter = require('../sections/Footer');
 var Textarea = require('react-textarea-autosize');
@@ -15,6 +16,7 @@ var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 var Sortable = require('../../util/Sortable');
 var resumeActions = require('../actions');
+var cloneDeep = require('clone-deep');
 
 
 var Tags = React.createClass({
@@ -143,7 +145,11 @@ var Tags = React.createClass({
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
             {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
-          </div>: null}
+          </div>: <div className="actions"> 
+            {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
+            {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
+          </div>
+        }
         </div>
         {this.props.section.sectionId ? <div>
           { this.state.uiEditMode == undefined || this.state.uiEditMode == false ? <div className="tags content">{tags}</div> :
@@ -157,6 +163,27 @@ var Tags = React.createClass({
           {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>
     );
+  },
+  _saveSuggestionHandler : function(){
+   var tags = [];
+    var tagRef = this.refs.tags.getDOMNode();
+
+    jQuery(tagRef).find('.tag').each(function(index) {
+      if( jQuery(this).attr("rel") )
+        tags.push(jQuery(this).attr("rel") );
+    });
+    var temp_value = jQuery(tagRef).find('input').val();
+    if( temp_value.length > 0 ){
+      tags.push(temp_value);
+    }
+    var section = cloneDeep(this.props.section);
+    section.tags = tags;
+    actions.saveSectionAdvice(section);
+
+    this.setState({
+      tags: this.props.section.tags,
+      uiEditMode: false
+    })
   }
 });
 

@@ -626,7 +626,7 @@ public class ResumeController {
 	@CheckReadAccess
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody SectionAdvice saveSectionAdvice(
-			@PathVariable final Long documentId,
+			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@AuthenticationPrincipal final User user,
 			@RequestBody final SectionAdvice sectionAdvice) {
@@ -640,7 +640,9 @@ public class ResumeController {
 		if (sectionAdvice.getUserId() == null)
 			sectionAdvice.setUserId(user.getUserId());
 
-		return documentService.saveSectionAdvice(sectionAdvice);
+		sectionAdvice.setStatus("pending");
+
+		return documentService.saveSectionAdvice(request, sectionAdvice);
 
 	}
 
@@ -649,7 +651,7 @@ public class ResumeController {
 	@CheckReadAccess
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody SectionAdvice updateSectionAdvice(
-			@PathVariable final Long documentId,
+			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@PathVariable final Long sectionAdviceId,
 			@AuthenticationPrincipal final User user,
@@ -667,7 +669,7 @@ public class ResumeController {
 		if (sectionAdvice.getUserId() == null)
 			sectionAdvice.setUserId(user.getUserId());
 
-		return documentService.saveSectionAdvice(sectionAdvice);
+		return documentService.saveSectionAdvice(request, sectionAdvice);
 
 	}
 

@@ -467,8 +467,25 @@ public class DocumentService {
 		return sectionAdvices;
 	}
 
-	public SectionAdvice saveSectionAdvice(SectionAdvice sectionAdvice) {
-		return sectionAdviceRepository.save(sectionAdvice);
+	public SectionAdvice saveSectionAdvice(HttpServletRequest request,
+			final SectionAdvice sectionAdvice) {
+		final SectionAdvice savedSection = sectionAdviceRepository
+				.save(sectionAdvice);
+
+		List<AccountContact> names = accountService.getContactDataForUsers(
+				request, Arrays.asList(savedSection.getUserId()));
+
+		Optional<AccountContact> accountContact = names.stream()
+				.filter(an -> an.getUserId().equals(savedSection.getUserId()))
+				.findFirst();
+
+		accountContact.ifPresent(an -> savedSection.setUserName(an
+				.getFirstName() + " " + an.getLastName()));
+
+		accountContact.ifPresent(an -> savedSection.setAvatarUrl(an
+				.getAvatarUrl()));
+
+		return savedSection;
 	}
 
 	public void deleteComment(Comment comment) {

@@ -74,6 +74,7 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 			sectionAdvice.setSectionAdviceId(record
 					.getValue(SECTION_ADVICES.SECTION_ADVICE_ID));
 			sectionAdvice.setUserId(record.getValue(SECTION_ADVICES.USER_ID));
+			sectionAdvice.setStatus(record.getValue(SECTION_ADVICES.STATUS));
 
 			DocumentSection documentSection = DocumentSection.fromJSON(record
 					.getValue(SECTION_ADVICES.JSON_DOCUMENT));
@@ -111,6 +112,7 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 
 		newRecord.setSectionId(sectionAdvice.getSectionId());
 		newRecord.setSectionVersion(sectionAdvice.getSectionVersion());
+		newRecord.setStatus(sectionAdvice.getStatus());
 		try {
 			newRecord.setJsonDocument(sectionAdvice.getDocumentSection()
 					.asJSON());
@@ -125,6 +127,8 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 
 		newRecord.store();
 		sectionAdvice.setSectionAdviceId(newRecord.getSectionAdviceId());
+		sectionAdvice.setLastModified(newRecord.getLastModified()
+				.toLocalDateTime());
 
 		return sectionAdvice;
 	}
@@ -139,6 +143,7 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 
 		existingRecord.setSectionId(sectionAdvice.getSectionId());
 		existingRecord.setSectionVersion(sectionAdvice.getSectionVersion());
+		existingRecord.setStatus(sectionAdvice.getStatus());
 
 		try {
 			existingRecord.setJsonDocument(sectionAdvice.getDocumentSection()
@@ -154,6 +159,9 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 
 		existingRecord.update();
 
+		sectionAdvice.setLastModified(existingRecord.getLastModified()
+				.toLocalDateTime());
+
 		return sectionAdvice;
 	}
 
@@ -164,7 +172,8 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 		record.delete();
 	}
 
-	public static SectionAdvice recordToSectionAdvice(SectionAdvicesRecord record) {
+	public static SectionAdvice recordToSectionAdvice(
+			SectionAdvicesRecord record) {
 		SectionAdvice sectionAdvice = new SectionAdvice();
 		sectionAdvice.setSectionAdviceId(record.getSectionAdviceId());
 		sectionAdvice.setDocumentSection(DocumentSection.fromJSON(record
@@ -175,6 +184,7 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 		sectionAdvice.setSectionId(record.getSectionId());
 		sectionAdvice.setSectionVersion(record.getSectionVersion());
 		sectionAdvice.setUserId(record.getUserId());
+		sectionAdvice.setStatus(record.getStatus());
 
 		return sectionAdvice;
 	}
