@@ -261,7 +261,7 @@ public class LMSAccountController {
 					+ http + ")")));
 		} else {
 			// not a valid http
-			logger.warning("Could not save avatar, no valid url found in: "
+			logger.warning("Could not get avatar url, no valid url found in: "
 					+ userImageUrl);
 		}
 
