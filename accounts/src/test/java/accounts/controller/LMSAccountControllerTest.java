@@ -22,6 +22,7 @@ import oauth.utilities.LMSConstants;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.core.env.Environment;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -165,6 +166,25 @@ public class LMSAccountControllerTest {
 		assertTrue(avatarSetting.isPresent());
 		assertTrue(avatarUrlSetting.isPresent()
 				&& LTI_USER_IMAGE.equals(avatarUrlSetting.get().getValue()));
+	}
+
+	@Test
+	public void testDuplicateHttps() {
+		User user = Mockito.mock(User.class);
+		Mockito.when(user.getUserId()).thenReturn(0L);
+		String badUrl = "https://blackboard.ccu.eduhttps://my.url.with.img";
+		final String goodUrl = "https://my.url.with.img";
+
+		lmsAccountcontoller.saveUserImage(badUrl, user);
+
+		Optional<AccountSetting> avatarSetting = accountSettingsService
+				.getAccountSetting(user, AccountSettingsEnum.avatar.name());
+		Optional<AccountSetting> avatarUrlSetting = accountSettingsService
+				.getAccountSetting(user, AccountSettingsEnum.lti_avatar.name());
+
+		assertTrue(avatarSetting.isPresent());
+		assertTrue(avatarUrlSetting.isPresent()
+				&& goodUrl.equals(avatarUrlSetting.get().getValue()));
 	}
 
 	private static String time() {

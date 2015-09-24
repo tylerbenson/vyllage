@@ -1,5 +1,6 @@
 package accounts.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -206,14 +207,17 @@ public class LMSAccountController {
 		if (userImageUrl != null && !StringUtils.isBlank(userImageUrl)) {
 
 			// remove blackboard's https://blackboard.ccu.edu and others
-			List<String> urls = Arrays.asList(userImageUrl.split("https://"));
+			List<String> urls = new ArrayList<String>(
+					Arrays.asList(userImageUrl.split("https://")));
+
+			urls.removeIf(s -> s == null || StringUtils.isBlank(s));
 
 			final String cleanUserImageUrl;
 
 			if (urls.size() >= 2)
-				// get the third, the first will always be blank
-				// and the second is blackboard's duplicate url
-				cleanUserImageUrl = "https://" + urls.get(2);
+				// get the second, the first will always be
+				// blackboard's duplicate url or any other's
+				cleanUserImageUrl = "https://" + urls.get(1);
 			else
 				cleanUserImageUrl = userImageUrl;
 
