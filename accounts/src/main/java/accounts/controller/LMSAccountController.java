@@ -3,6 +3,7 @@ package accounts.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
@@ -203,23 +204,17 @@ public class LMSAccountController {
 	}
 
 	protected void saveUserImage(final String userImageUrl, final User newUser) {
+
 		// save the avatar
 		if (userImageUrl != null && !StringUtils.isBlank(userImageUrl)) {
 
 			// remove blackboard's https://blackboard.ccu.edu and others
-			List<String> urls = new ArrayList<String>(
-					Arrays.asList(userImageUrl.split("https://")));
+			final Optional<String> url = cleanUrl(userImageUrl);
 
-			urls.removeIf(s -> s == null || StringUtils.isBlank(s));
+			if (!url.isPresent())
+				return;
 
-			final String cleanUserImageUrl;
-
-			if (urls.size() >= 2)
-				// get the second, the first will always be
-				// blackboard's duplicate url or any other's
-				cleanUserImageUrl = "https://" + urls.get(1);
-			else
-				cleanUserImageUrl = userImageUrl;
+			final String cleanUserImageUrl = url.get();
 
 			accountSettingsService
 					.setAccountSetting(
@@ -234,6 +229,54 @@ public class LMSAccountController {
 							AccountSettingsEnum.lti_avatar.name(),
 							cleanUserImageUrl, Privacy.PUBLIC.name()));
 		}
+	}
+
+	protected Optional<String> cleanUrl(final String userImageUrl) {
+		final String https = "https://";
+		final String http = "http://";
+
+		List<String> urls = null;
+
+		// split while keeping the schema.
+		// both https
+		if (userImageUrl.startsWith(https) && !userImageUrl.contains(http)) {
+			urls = new ArrayList<String>(Arrays.asList(userImageUrl.split("(?="
+					+ https + ")")));
+
+			// http - https
+		} else if (userImageUrl.startsWith(http)
+				&& userImageUrl.contains(https)) {
+			urls = new ArrayList<String>(Arrays.asList(userImageUrl.split("(?="
+					+ https + ")")));
+
+			// both http
+		} else if (userImageUrl.startsWith(http)
+				&& !userImageUrl.contains(https)) {
+			urls = new ArrayList<String>(Arrays.asList(userImageUrl.split("(?="
+					+ http + ")")));
+
+			// https - http
+		} else if (userImageUrl.startsWith(https)) {
+			urls = new ArrayList<String>(Arrays.asList(userImageUrl.split("(?="
+					+ http + ")")));
+		} else {
+			// not a valid http
+			logger.warning("Could not save avatar, no valid url found in: "
+					+ userImageUrl);
+		}
+
+		if (urls == null || urls.isEmpty())
+			return Optional.empty();
+
+		urls.removeIf(s -> s == null || StringUtils.isBlank(s));
+
+		if (urls.size() >= 2)
+			// get the second, the first will always be
+			// blackboard's duplicate url or any other's
+			return Optional.of(urls.get(1));
+		else
+			return Optional.of(urls.get(0));
+
 	}
 
 	private CsrfToken setCSRFTokenInSession(HttpServletRequest request) {

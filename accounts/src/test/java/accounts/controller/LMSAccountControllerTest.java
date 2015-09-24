@@ -4,6 +4,7 @@
 package accounts.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -185,6 +186,85 @@ public class LMSAccountControllerTest {
 		assertTrue(avatarSetting.isPresent());
 		assertTrue(avatarUrlSetting.isPresent()
 				&& goodUrl.equals(avatarUrlSetting.get().getValue()));
+	}
+
+	@Test
+	public void testDuplicateHttp() {
+		User user = Mockito.mock(User.class);
+		Mockito.when(user.getUserId()).thenReturn(0L);
+		String badUrl = "http://blackboard.ccu.eduhttp://my.url.with.img";
+		final String goodUrl = "http://my.url.with.img";
+
+		lmsAccountcontoller.saveUserImage(badUrl, user);
+
+		Optional<AccountSetting> avatarSetting = accountSettingsService
+				.getAccountSetting(user, AccountSettingsEnum.avatar.name());
+		Optional<AccountSetting> avatarUrlSetting = accountSettingsService
+				.getAccountSetting(user, AccountSettingsEnum.lti_avatar.name());
+
+		assertTrue(avatarSetting.isPresent());
+		assertTrue(avatarUrlSetting.isPresent()
+				&& goodUrl.equals(avatarUrlSetting.get().getValue()));
+	}
+
+	@Test
+	public void testCleanUrlsHttpsHttps() {
+		final String goodUrl = "https://my.url.with.img";
+		final String userImageUrl = "https://blackboard.ccu.edu" + goodUrl;
+
+		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
+
+		assertFalse(url == null);
+		assertTrue(url.isPresent());
+		assertTrue(goodUrl.equals(url.get()));
+	}
+
+	@Test
+	public void testCleanUrlsHttpsHttp() {
+		final String goodUrl = "http://my.url.with.img";
+		final String userImageUrl = "https://blackboard.ccu.edu" + goodUrl;
+
+		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
+
+		assertFalse(url == null);
+		assertTrue(url.isPresent());
+		assertTrue(goodUrl.equals(url.get()));
+	}
+
+	@Test
+	public void testCleanUrlsHttpHttp() {
+		final String goodUrl = "http://my.url.with.img";
+		final String userImageUrl = "http://blackboard.ccu.edu" + goodUrl;
+
+		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
+
+		assertFalse(url == null);
+		assertTrue(url.isPresent());
+		assertTrue(goodUrl.equals(url.get()));
+	}
+
+	@Test
+	public void testCleanUrlsHttps() {
+		final String goodUrl = "https://my.url.with.img";
+		final String userImageUrl = goodUrl;
+
+		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
+
+		assertFalse(url == null);
+		assertTrue(url.isPresent());
+		assertTrue(goodUrl.equals(url.get()));
+	}
+
+	@Test
+	public void testCleanUrlsHttp() {
+		final String goodUrl = "http://my.url.with.img";
+		final String userImageUrl = goodUrl;
+
+		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
+
+		assertFalse(url == null);
+		assertTrue(url.isPresent());
+		assertTrue(goodUrl.equals(url.get()));
 	}
 
 	private static String time() {
