@@ -100,8 +100,8 @@ var Banner = React.createClass({
       },
       {
         errorMessage: null,
-        name: 'site_url',
-        value: fields.site_url,
+        name: 'siteUrl',
+        value: fields.siteUrl,
         privacy: 'private'
       }
     ];
@@ -118,7 +118,7 @@ var Banner = React.createClass({
         banner.address =  this.getRefValue('address'),
         banner.email =  this.getRefValue('email'),
         banner.phoneNumber =  phoneFormatter.normalize(this.getRefValue('phoneNumber')),
-        banner.site_url =  this.getRefValue('site_url');
+        banner.siteUrl =  this.getRefValue('siteUrl');
 
     if(banner.tagline !== this.state.fields.tagline) {
       var fields = clone(this.state.fields);
@@ -223,7 +223,7 @@ var Banner = React.createClass({
     var fields = this.state.fields;
     var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {};
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {};
-    var siteUrlSetting = filter(this.props.settings, {name: 'site_url'})[0] || {};
+    var siteUrlSetting = filter(this.props.settings, {name: 'siteUrl'})[0] || {};
     var isReadOnly = (!header.owner) || (header.owner && !this.state.editMode);
     var name = (header.firstName ? header.firstName : '') + ' '
              + (header.lastName ? header.lastName : '');
@@ -301,11 +301,11 @@ var Banner = React.createClass({
                 type='text'
                 placeholder="Site url"
                 disabled={isReadOnly}
-                key={fields.site_url || undefined}
+                key={fields.siteUrl || undefined}
                 className="inline transparent"
                 autoComplete="off"
-                ref="site_url"
-                defaultValue={fields.site_url}
+                ref="siteUrl"
+                defaultValue={fields.siteUrl}
               />
               <p className='error'>{siteUrlSetting.errorMessage}</p>
             </div>
