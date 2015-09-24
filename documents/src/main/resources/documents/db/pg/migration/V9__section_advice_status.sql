@@ -1,0 +1,1 @@
+alter table documents.section_advices add status varchar not null DEFAULT 'pending';

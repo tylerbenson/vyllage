@@ -67,10 +67,13 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"sectionId": 130,
 	"sectionPosition": 8,
 	"state": "shown",
-	"projectTitle": "My project",
-	"author":"Someone",
-	"projectDate":null,
-	"projectImageUrl":"http://img"
+	"projectTitle": "Rebellion Project",
+	"author":"Luke",
+	"projectDate":"2015-09-22T15:37:32",
+	"projectImageUrl":"http://img",
+	"role":"Leader",
+	"projectDescription":"Rebellion against the Empire.",
+	"roleDescription":"Rebellion Jedi Leader"
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(131, 1, 0, 9, '{
@@ -91,15 +94,15 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"references":
 		[{ 
 			"pictureUrl": "http://img",
-			"firstName": "Leia",
-			"lastName": "Organa",
-			"description": "Rebel Leader"							
+			"firstName": "Emperor",
+			"lastName": "Palpatine",
+			"description": "Emperor"							
 		},
 		{
 			"pictureUrl": "http://img",
-			"firstName": "Obi Wan",
-   			"lastName": "Kenobi",
-			"description": "Jedi Master"
+			"firstName": "Darth",
+   			"lastName": "Vader",
+			"description": "Sith Lord"
 		}]
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 

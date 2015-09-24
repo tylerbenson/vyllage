@@ -102,7 +102,8 @@ public class AccountController {
 			final AccountSettingsService accountSettingsService,
 			final EmailRepository emailRepository,
 			@Qualifier(value = "accounts.emailBuilder") final EmailBuilder emailBuilder,
-			final TextEncryptor encryptor, final ObjectMapper mapper) {
+			final TextEncryptor encryptor,
+			@Qualifier("accounts.objectMapper") final ObjectMapper mapper) {
 		super();
 		this.environment = environment;
 		this.userService = userService;

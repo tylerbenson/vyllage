@@ -81,11 +81,47 @@
             </ul>
           </div>
         </th:block>
-
+	
+		<th:block th:case="'ProjectsSection'">
+          <h2 th:text="${section.title}"></h2>
+          <h3 th:text="${section.projectTitle}"></h3>
+          <h5 class="location" th:text="${section.author}"></h5>
+          <p th:text="${section.projectDescription}"></p>
+          <div class="subsection">
+            <h4 class="role" th:text="${section.role}"></h4>
+            <h5 th:if="${section.projectDate != null }" th:text="${#temporals.format(section.projectDate, 'MMM yyyy')}">ProjectDate</h5>
+            <p th:text="${section.roleDescription}"></p>
+          </div>
+        </th:block>
+	
         <th:block th:case="'SkillsSection'">
           <h2 th:text="${section.title}">
           </h2>
           <p th:utext="${#strings.listJoin(section.tags,', ')} + ' .'"></p>
+        </th:block>
+        
+		<th:block th:case="'CareerInterestsSection'">
+          <h2 th:text="${section.title}">
+          </h2>
+          <p th:utext="${#strings.listJoin(section.tags,', ')} + ' .'"></p>
+        </th:block>        
+		
+		<th:block th:case="'PersonalReferencesSection'">
+          <h2 th:text="${section.title}">
+          </h2>
+          <div class="subsection" th:each="reference : ${section.references}">
+         	<p th:text="${reference.firstName} + ' '  + ${reference.lastName} + '.'"></p>
+         	<p th:text="${reference.description}"></p>
+          </div>
+        </th:block>
+        
+        <th:block th:case="'ProfessionalReferencesSection'">
+          <h2 th:text="${section.title}">
+          </h2>
+          <div class="subsection" th:each="reference : ${section.references}">
+         	<p th:text="${reference.firstName} + ' '  + ${reference.lastName} + '.'"></p>
+         	<p th:text="${reference.description} + '.'"></p>
+          </div>
         </th:block>
 
       </th:block>

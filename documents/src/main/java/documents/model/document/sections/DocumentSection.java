@@ -26,7 +26,7 @@ import documents.model.constants.SectionType;
 import documents.model.constants.Visibility;
 
 @ToString
-@JsonIgnoreProperties(value = { "documentId", "sectionVersion" })
+@JsonIgnoreProperties(value = { "documentId" })
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
 		@Type(value = AchievementsSection.class, name = "AchievementsSection"),
@@ -66,7 +66,6 @@ public abstract class DocumentSection {
 	}
 
 	/**
-	 *
 	 * @param type
 	 *            any of the types in {@link SectionType}
 	 */
@@ -76,7 +75,6 @@ public abstract class DocumentSection {
 	}
 
 	/**
-	 *
 	 * @param type
 	 *            any of the types in {@link SectionType}
 	 */

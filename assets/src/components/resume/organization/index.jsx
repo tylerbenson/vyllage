@@ -3,6 +3,7 @@ var actions = require('../actions');
 var EditBtn = require('../../buttons/edit');
 var DeleteSection = require('../Delete');
 var SaveBtn = require('../../buttons/save');
+var SuggestionBtn = require('../../buttons/suggestion');
 var CancelBtn = require('../../buttons/cancel');
 var Textarea = require('react-textarea-autosize');
 var Datepicker = require('../../datepicker');
@@ -12,11 +13,12 @@ var MoveButton = require('../../buttons/move');
 var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
+var cloneDeep = require('clone-deep');
 
 var Organization = React.createClass({
   getInitialState: function () {
     return {
-      section: assign({}, this.props.section),
+      section: {},
       uiEditMode: this.props.section.newSection,
       newSection: this.props.section.newSection
     };
@@ -24,7 +26,7 @@ var Organization = React.createClass({
 
   componentWillReceiveProps: function (nextProps) {
     this.setState({
-      section: nextProps.section,
+      section: cloneDeep(nextProps.section),
     });
   },
   componentDidMount: function() {
@@ -103,7 +105,13 @@ var Organization = React.createClass({
             {this.props.owner? <div className="actions">
               {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
               {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
-            </div>: null}
+            </div>:  <div className="actions"> 
+               {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
+               {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
+            </div>
+            }
+
+
           </div>
           <div className='content'>
             <Textarea
@@ -190,6 +198,16 @@ var Organization = React.createClass({
         {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>
     );
+  },
+  _saveSuggestionHandler : function(){
+    var section = cloneDeep(this.state.section);
+    section['highlights'] = this.refs.highlights.getHighlights();
+    actions.saveSectionAdvice(section);
+    
+    this.setState({
+      section : this.props.section,
+      uiEditMode: false
+    });
   }
 });
 

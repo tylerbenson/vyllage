@@ -1,5 +1,9 @@
 package accounts.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
@@ -44,10 +48,10 @@ import email.EmailBuilder;
 @Controller
 public class LMSAccountController {
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(LMSAccountController.class
 			.getName());
 
+	@SuppressWarnings("unused")
 	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
@@ -199,23 +203,90 @@ public class LMSAccountController {
 		return "register-from-LTI";
 	}
 
-	protected void saveUserImage(String userImageUrl, User newUser) {
+	protected void saveUserImage(final String userImageUrl, final User newUser) {
 
-		if (userImageUrl != null && StringUtils.isBlank(userImageUrl)) {
-
-			accountSettingsService
-					.setAccountSetting(
-							newUser,
-							new AccountSetting(null, newUser.getUserId(),
-									AccountSettingsEnum.avatar.name(),
-									AvatarSourceEnum.LTI.name(), Privacy.PUBLIC
-											.name()));
-
-			accountSettingsService.setAccountSetting(newUser,
-					new AccountSetting(null, newUser.getUserId(),
-							AccountSettingsEnum.lti_avatar.name(),
-							userImageUrl, Privacy.PUBLIC.name()));
+		// save the avatar
+		if (StringUtils.isBlank(userImageUrl)) {
+			logger.warning("Could not get avatar url, avatar url is null or empty: "
+					+ userImageUrl);
+			return;
 		}
+
+		// remove blackboard's https://blackboard.ccu.edu and others
+		final Optional<String> url = cleanUrl(userImageUrl);
+
+		if (!url.isPresent())
+			return;
+
+		final String cleanUserImageUrl = url.get();
+
+		accountSettingsService.setAccountSetting(newUser, new AccountSetting(
+				null, newUser.getUserId(), AccountSettingsEnum.avatar.name(),
+				AvatarSourceEnum.LTI.name(), Privacy.PUBLIC.name()));
+
+		accountSettingsService.setAccountSetting(newUser,
+				new AccountSetting(null, newUser.getUserId(),
+						AccountSettingsEnum.lti_avatar.name(),
+						cleanUserImageUrl, Privacy.PUBLIC.name()));
+
+	}
+
+	protected Optional<String> cleanUrl(final String userImageUrl) {
+
+		if (StringUtils.isBlank(userImageUrl))
+			return Optional.empty();
+
+		final String https = "https://";
+		final String http = "http://";
+
+		List<String> urls = null;
+
+		// split while keeping the schema.
+		// both https
+		if (userImageUrl.startsWith(https) && !userImageUrl.contains(http)) {
+			urls = new ArrayList<String>(Arrays.asList(userImageUrl.split("(?="
+					+ https + ")")));
+
+			// http - https
+		} else if (userImageUrl.startsWith(http)
+				&& userImageUrl.contains(https)) {
+			urls = new ArrayList<String>(Arrays.asList(userImageUrl.split("(?="
+					+ https + ")")));
+
+			// both http
+		} else if (userImageUrl.startsWith(http)
+				&& !userImageUrl.contains(https)) {
+			urls = new ArrayList<String>(Arrays.asList(userImageUrl.split("(?="
+					+ http + ")")));
+
+			// https - http
+		} else if (userImageUrl.startsWith(https)) {
+			urls = new ArrayList<String>(Arrays.asList(userImageUrl.split("(?="
+					+ http + ")")));
+		} else {
+			// not a valid http
+			logger.warning("Could not get avatar url, no valid url found in: "
+					+ userImageUrl);
+		}
+
+		if (urls == null || urls.isEmpty())
+			return Optional.empty();
+
+		urls.removeIf(s -> s == null || StringUtils.isBlank(s));
+
+		if (urls.size() >= 2)
+			// get the second, the first will always be
+			// blackboard's duplicate url or any other's
+			return Optional.of(urls.get(1));
+		else if (urls.size() == 1)
+			return Optional.of(urls.get(0));
+		else {
+
+			logger.warning("Could not get avatar url, after processing we got an empty list from: "
+					+ userImageUrl);
+			return Optional.empty();
+		}
+
 	}
 
 	private CsrfToken setCSRFTokenInSession(HttpServletRequest request) {

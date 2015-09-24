@@ -5,7 +5,9 @@ import java.util.logging.Logger;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
@@ -13,6 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan(basePackageClasses = { connections.Application.class,
 		documents.Application.class, accounts.Application.class,
 		Application.class })
+@EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
 @PropertySource("classpath:/connections/application.properties")
 @PropertySource("classpath:/documents/application.properties")
 @PropertySource("classpath:/accounts/application.properties")

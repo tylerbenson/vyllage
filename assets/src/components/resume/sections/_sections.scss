@@ -139,6 +139,8 @@
       }
     }
 
+
+
     .comments {
       .comment {
         border-top: darken($section-footer-background,6%) solid 1px;
@@ -150,6 +152,39 @@
             pointer-events: inherit;
           }
         }
+      }
+
+      .advice-content{
+        margin:auto;
+        max-width:650px;
+        padding:1em 2em;
+
+        .wrapper {
+    
+          .info {
+            @include cf();
+            .author {
+              color: $primary-color;
+              display: inline-block;
+              padding: 0.25em 0;
+            }
+
+            .timestamp {
+              display: inline-block;
+              float: right;
+              font-size: 0.9em;
+              padding: 0.35em 0 0.25em 0;
+            }
+          }
+
+          .message {
+            color: lighten($text-color, 10%);
+            line-height: 1.4;
+            white-space: pre-wrap;
+          }
+        }
+
+
       }
 
       .content {

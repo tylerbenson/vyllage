@@ -202,13 +202,16 @@ var Banner = React.createClass({
 
     if(scrollDirection != 0) {
       var height = this.refs.banner.getDOMNode().offsetHeight;
-      var subheader = this.refs.subheader.getDOMNode();
-      var dragging = subheader.className.indexOf('dragging') > -1;
-      var className = ' visible';
+      var subheader;
+      if( this.refs.subheader != undefined ){
+        subheader = this.refs.subheader.getDOMNode();
+        var dragging = subheader.className.indexOf('dragging') > -1;
+        var className = ' visible';
 
-      subheader.className = subheader.className.replace(className, '');
-      if(scrollTop > height && scrollDirection < 0 && !dragging) {
-        subheader.className += className;
+        subheader.className = subheader.className.replace(className, '');
+        if(scrollTop > height && scrollDirection < 0 && !dragging) {
+          subheader.className += className;
+        }
       }
     }
   },
