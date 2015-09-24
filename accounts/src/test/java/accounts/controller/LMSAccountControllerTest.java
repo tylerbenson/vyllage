@@ -256,6 +256,26 @@ public class LMSAccountControllerTest {
 	}
 
 	@Test
+	public void testCleanUrlsEmpty() {
+		final String userImageUrl = " ";
+
+		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
+
+		assertFalse(url == null);
+		assertFalse(url.isPresent());
+	}
+
+	@Test
+	public void testCleanUrlsNull() {
+		final String userImageUrl = " ";
+
+		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
+
+		assertFalse(url == null);
+		assertFalse(url.isPresent());
+	}
+
+	@Test
 	public void testCleanUrlsHttp() {
 		final String goodUrl = "http://my.url.with.img";
 		final String userImageUrl = goodUrl;

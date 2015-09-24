@@ -206,32 +206,36 @@ public class LMSAccountController {
 	protected void saveUserImage(final String userImageUrl, final User newUser) {
 
 		// save the avatar
-		if (userImageUrl != null && !StringUtils.isBlank(userImageUrl)) {
-
-			// remove blackboard's https://blackboard.ccu.edu and others
-			final Optional<String> url = cleanUrl(userImageUrl);
-
-			if (!url.isPresent())
-				return;
-
-			final String cleanUserImageUrl = url.get();
-
-			accountSettingsService
-					.setAccountSetting(
-							newUser,
-							new AccountSetting(null, newUser.getUserId(),
-									AccountSettingsEnum.avatar.name(),
-									AvatarSourceEnum.LTI.name(), Privacy.PUBLIC
-											.name()));
-
-			accountSettingsService.setAccountSetting(newUser,
-					new AccountSetting(null, newUser.getUserId(),
-							AccountSettingsEnum.lti_avatar.name(),
-							cleanUserImageUrl, Privacy.PUBLIC.name()));
+		if (StringUtils.isBlank(userImageUrl)) {
+			logger.warning("Could not get avatar url, avatar url is null or empty: "
+					+ userImageUrl);
+			return;
 		}
+
+		// remove blackboard's https://blackboard.ccu.edu and others
+		final Optional<String> url = cleanUrl(userImageUrl);
+
+		if (!url.isPresent())
+			return;
+
+		final String cleanUserImageUrl = url.get();
+
+		accountSettingsService.setAccountSetting(newUser, new AccountSetting(
+				null, newUser.getUserId(), AccountSettingsEnum.avatar.name(),
+				AvatarSourceEnum.LTI.name(), Privacy.PUBLIC.name()));
+
+		accountSettingsService.setAccountSetting(newUser,
+				new AccountSetting(null, newUser.getUserId(),
+						AccountSettingsEnum.lti_avatar.name(),
+						cleanUserImageUrl, Privacy.PUBLIC.name()));
+
 	}
 
 	protected Optional<String> cleanUrl(final String userImageUrl) {
+
+		if (StringUtils.isBlank(userImageUrl))
+			return Optional.empty();
+
 		final String https = "https://";
 		final String http = "http://";
 
