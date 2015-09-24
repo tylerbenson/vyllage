@@ -3,6 +3,7 @@ package util.dateSerialization;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.logging.Logger;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -31,9 +32,13 @@ public class DocumentLocalDateTimeDeserializer extends
 			return null;
 
 		// logger.info(dateString);
-
-		LocalDateTime date = LocalDateTime.parse(dateString,
-				DateTimeFormatter.ofPattern(YYYY_MM_DD));
+		LocalDateTime date = null;
+		try {
+			date = LocalDateTime.parse(dateString,
+					DateTimeFormatter.ofPattern(YYYY_MM_DD));
+		} catch (DateTimeParseException e) {
+			// date remains null.
+		}
 
 		return date;
 	}
