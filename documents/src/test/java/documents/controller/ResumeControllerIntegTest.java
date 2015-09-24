@@ -85,8 +85,7 @@ public class ResumeControllerIntegTest {
 	@Inject
 	private WebApplicationContext wContext;
 
-	@Inject
-	private ObjectMapper mapper;
+	private ObjectMapper mapper = new ObjectMapper();
 
 	@Before
 	public void setUp() throws Exception {

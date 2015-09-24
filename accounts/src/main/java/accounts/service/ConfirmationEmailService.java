@@ -54,7 +54,7 @@ public class ConfirmationEmailService {
 	public ConfirmationEmailService(
 			@NonNull final Environment environment,
 			@NonNull final EmailBuilder emailBuilder,
-			@NonNull final ObjectMapper mapper,
+			@Qualifier("accounts.objectMapper") @NonNull final ObjectMapper mapper,
 			@NonNull final TextEncryptor encryptor,
 			@NonNull final EmailRepository emailRepository,
 			@NonNull @Qualifier(value = "accounts.ExecutorService") ExecutorService executorService) {
