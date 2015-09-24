@@ -244,6 +244,18 @@ public class LMSAccountControllerTest {
 	}
 
 	@Test
+	public void testCleanUrlsHttpHttps() {
+		final String goodUrl = "https://my.url.with.img";
+		final String userImageUrl = "http://blackboard.ccu.edu" + goodUrl;
+
+		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
+
+		assertFalse(url == null);
+		assertTrue(url.isPresent());
+		assertTrue(goodUrl.equals(url.get()));
+	}
+
+	@Test
 	public void testCleanUrlsHttps() {
 		final String goodUrl = "https://my.url.with.img";
 		final String userImageUrl = goodUrl;
