@@ -18,6 +18,7 @@
     "state": "hidden",
     "sectionPosition": 3,
     "numberOfComments": 0,
+    "numberOfAdvices": 0,
     "lastModified": "2015-07-22T22:35:54",
     "organizationName": "Keller Graduate School of Management",
     "organizationDescription": "Management School.",
@@ -48,6 +49,8 @@
   }
 ]
 ```
+
+Number of comments and number of advices are calculated dynamically.
 
 # Retrieves the specified section. 
 ## GET /resume/{documentId}/section/{sectionId}*

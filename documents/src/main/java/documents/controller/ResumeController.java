@@ -223,11 +223,23 @@ public class ResumeController {
 						.map(ds -> ds.getSectionId())
 						.collect(Collectors.toList()));
 
+		Map<Long, Integer> numberOfAdvicesForSections = documentService
+				.getNumberOfAdvicesForSections(documentSections.stream()
+						.map(ds -> ds.getSectionId())
+						.collect(Collectors.toList()));
+
 		documentSections
 				.stream()
 				.filter(ds -> numberOfCommentsForSections.get(ds.getSectionId()) != null)
 				.forEach(
 						ds -> ds.setNumberOfComments(numberOfCommentsForSections
+								.get(ds.getSectionId())));
+
+		documentSections
+				.stream()
+				.filter(ds -> numberOfAdvicesForSections.get(ds.getSectionId()) != null)
+				.forEach(
+						ds -> ds.setNumberOfAdvices(numberOfAdvicesForSections
 								.get(ds.getSectionId())));
 
 		return documentSections;

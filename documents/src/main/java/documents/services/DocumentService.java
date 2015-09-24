@@ -492,4 +492,8 @@ public class DocumentService {
 		commentRepository.delete(comment.getCommentId());
 	}
 
+	public Map<Long, Integer> getNumberOfAdvicesForSections(List<Long> sectionIds) {
+		return sectionAdviceRepository.getNumberOfAdvicesForSections(sectionIds);
+	}
+
 }
