@@ -256,6 +256,18 @@ public class LMSAccountControllerTest {
 	}
 
 	@Test
+	public void testCleanUrlsHttp() {
+		final String goodUrl = "http://my.url.with.img";
+		final String userImageUrl = goodUrl;
+
+		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
+
+		assertFalse(url == null);
+		assertTrue(url.isPresent());
+		assertTrue(goodUrl.equals(url.get()));
+	}
+
+	@Test
 	public void testCleanUrlsEmpty() {
 		final String userImageUrl = " ";
 
@@ -267,24 +279,12 @@ public class LMSAccountControllerTest {
 
 	@Test
 	public void testCleanUrlsNull() {
-		final String userImageUrl = " ";
+		final String userImageUrl = null;
 
 		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
 
 		assertFalse(url == null);
 		assertFalse(url.isPresent());
-	}
-
-	@Test
-	public void testCleanUrlsHttp() {
-		final String goodUrl = "http://my.url.with.img";
-		final String userImageUrl = goodUrl;
-
-		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
-
-		assertFalse(url == null);
-		assertTrue(url.isPresent());
-		assertTrue(goodUrl.equals(url.get()));
 	}
 
 	private static String time() {
