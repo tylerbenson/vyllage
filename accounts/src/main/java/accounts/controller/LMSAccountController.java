@@ -274,8 +274,14 @@ public class LMSAccountController {
 			// get the second, the first will always be
 			// blackboard's duplicate url or any other's
 			return Optional.of(urls.get(1));
-		else
+		else if (urls.size() == 1)
 			return Optional.of(urls.get(0));
+		else {
+
+			logger.warning("Could not get avatar url, after processing we got an empty list from: "
+					+ userImageUrl);
+			return Optional.empty();
+		}
 
 	}
 
