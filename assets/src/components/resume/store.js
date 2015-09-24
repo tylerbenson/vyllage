@@ -379,9 +379,10 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         var advices = [];
+        
         if( res.body.length ){
           res.body.map(function(advice){
-            if( advice.status == null || advice.status == 'pending'){
+            if(advice.status == 'pending'){
               advices.push(advice);
             }
           });
@@ -409,7 +410,7 @@ module.exports = Reflux.createStore({
           } else {
             this.resume.sections[index].advices = [res.body];
           }
-          this.resume.sections[index].numberOfAdvices += 1;
+          this.resume.sections[index].numberOfAdvices++;
           this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
           this.trigger(this.resume);
         }
@@ -425,6 +426,7 @@ module.exports = Reflux.createStore({
           var index = findindex(this.resume.sections,{sectionId: section.sectionId});
           var adviceIndex = findindex( this.resume.sections[index].advices ,{ sectionAdviceId :advice.sectionAdviceId });
           this.resume.sections[index].advices[adviceIndex] = res.body;
+          this.resume.sections[index].numberOfAdvices--;
           this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
           this.trigger(this.resume);
         }
