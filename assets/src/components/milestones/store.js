@@ -143,7 +143,7 @@ var MilestoneStore = Reflux.createStore({
         action: this.editBannerField.bind(this, 'twitter')
       },
       {
-        text: 'Give users an overview of your resumé. Add a Summary Section.',
+        text: 'Give users an overview of your resumé. Add an Objective Section.',
         icon: 'ion-ios-book',
         isDone: this.hasSummarySection(),
         priority: 1,
@@ -157,7 +157,7 @@ var MilestoneStore = Reflux.createStore({
         action: this.addSection.bind(this, 2)
       },
       {
-        text: 'Got some job experience? Add a Job Experience Section to your resumé to showcase that.',
+        text: 'Have any job or volunteer experience? Add an Experience Section to your resumé to showcase them.',
         icon: 'ion-briefcase',
         isDone: this.hasExperienceSection(),
         priority: 2,
@@ -171,14 +171,14 @@ var MilestoneStore = Reflux.createStore({
         action: this.addSection.bind(this, 3)
       },
       {
-        text: 'What are the fields that you find most interesting? Add the Career Interests Section and list them all.',
+        text: 'What are the career fields that you find most interesting? Add the Career Interests Section and list them all.',
         icon: 'ion-heart',
         isDone: this.hasCareerInterestsSection(),
         priority: 3,
         action: this.addSection.bind(this, 4)
       },
       {
-        text: 'Receive a feedback. Share your resumé to your friends and mentors and get some pieces of advice.',
+        text: 'Receive feedback. Share your resumé with your friends and mentors to get advice.',
         icon: 'ion-chatbubble',
         isDone: this.hasComments(),
         priority: 4
