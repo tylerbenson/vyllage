@@ -308,7 +308,7 @@ var Banner = React.createClass({
             </div>
             <div className='detail'>
               <i className="ion-link"></i>
-              { isReadOnly ? this.autolink(fields.siteUrl, { target: "_blank" }) :
+              { isReadOnly ? fields.siteUrl ? this.autolink(fields.siteUrl, { target: "_blank" }) : 'Site url' :
               <input
                 required
                 type='text'
