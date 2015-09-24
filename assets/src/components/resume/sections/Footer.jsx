@@ -35,6 +35,9 @@ var SectionFooter = React.createClass({
   },
   render: function () {
     var numberOfComments = this.props.section && this.props.section.numberOfComments;
+    if( numberOfComments == undefined ){
+      numberOfComments = 0;
+    }
     var numberOfAdvices = 0;
     if( this.state.section.advices != undefined ){
       this.state.section.advices.map(function(advice , index){

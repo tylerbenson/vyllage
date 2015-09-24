@@ -18,17 +18,17 @@ var cloneDeep = require('clone-deep');
 var Organization = React.createClass({
   getInitialState: function () {
     return {
-      section: {},
+      section: this.props.section,
       uiEditMode: this.props.section.newSection,
       newSection: this.props.section.newSection
     };
   },
 
-  componentWillReceiveProps: function (nextProps) {
-    this.setState({
-      section: cloneDeep(nextProps.section),
-    });
-  },
+  // componentWillReceiveProps: function (nextProps) {
+  //   this.setState({
+  //     section: nextProps.section
+  //   });
+  // },
   componentDidMount: function() {
     if (this.state.uiEditMode) {
       this.refs.organizationName.getDOMNode().focus();
