@@ -12,6 +12,7 @@ var update = require('react/lib/update');
 var sortby = require('lodash.sortby');
 var filter = require('lodash.filter');
 var PubSub = require('pubsub-js');
+var clone = require('clone-deep');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -135,7 +136,7 @@ module.exports = Reflux.createStore({
           // Fetching comments here instead of comments component to avoid infinite loop of api calls to comments
           this.resume.sections.forEach(function (section) {
             section.isSupported = this.isSupportedSection(section.type);
-            if (section.numberOfComments > 0) {
+            if (section.numberOfComments != undefined ) {
               this.onGetComments(section.sectionId);
             }
           }.bind(this));
@@ -166,36 +167,41 @@ module.exports = Reflux.createStore({
 
   doProcessSection : function(sections , owner ){
     var tmp_section = [];
-    sections = sortby(sections ,'sectionPosition');
-
-    if( sections.length > 0 ){
-
-      sections.forEach(function(section){
+    var all_section = clone( sections );
+    all_section = sortby(all_section ,'sectionPosition');
+    if( all_section.length > 0 ){
+      all_section.forEach(function(section){
           section.isSupported = this.isSupportedSection(section.type);
           if( section.isSupported){
               if( tmp_section.length){
                 var findIt = findindex(tmp_section, {'type': section.type});
                  if( findIt == -1){
-                    tmp_section.push({
+                  var tmp_data = {
                       type: section.type,
                       title : section.title,
                       id : section.sectionId,
                       owner : owner,
-                      child : where( sections, { 'type': section.type })
-                    });
+                      child : []
+                  }
+                  tmp_data.child = where( all_section, { 'type': section.type });
+                  tmp_section.push(tmp_data);
                  }
               }else{
-                tmp_section.push({
+                var tmp_data ={
                   type: section.type,
                   title : section.title,
                   id : section.sectionId,
                   owner : owner,
-                  child : where( sections, { 'type': section.type })
-                });
+                  child : []
+                };
+                tmp_data.child = where( all_section, { 'type': section.type });
+                tmp_section.push(tmp_data);
               }
           }
       }.bind(this));
-      return tmp_section;
+      if(tmp_section.length > 0 ) return tmp_section; else [];
+    }else{
+      return [];
     }
   },
   onMoveGroupOrder: function( order ){
@@ -253,13 +259,8 @@ module.exports = Reflux.createStore({
         var section = assign({}, res.body);
         section.newSection = true;  // To indicate a section is newly created
         section.isSupported = this.isSupportedSection(section.type);
-
-        // section order should reflect into whole thing .
-        section.sectionPosition = this.resume.sections.length + 1;
-        // get section position .
         this.resume.sections.push(section);
         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-
         this.trigger(this.resume);
       }.bind(this));
   },
@@ -378,9 +379,10 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         var advices = [];
+        
         if( res.body.length ){
           res.body.map(function(advice){
-            if( advice.status == null || advice.status == 'pending'){
+            if(advice.status == 'pending'){
               advices.push(advice);
             }
           });
@@ -408,7 +410,7 @@ module.exports = Reflux.createStore({
           } else {
             this.resume.sections[index].advices = [res.body];
           }
-          this.resume.sections[index].numberOfAdvices += 1;
+          this.resume.sections[index].numberOfAdvices++;
           this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
           this.trigger(this.resume);
         }
@@ -424,6 +426,7 @@ module.exports = Reflux.createStore({
           var index = findindex(this.resume.sections,{sectionId: section.sectionId});
           var adviceIndex = findindex( this.resume.sections[index].advices ,{ sectionAdviceId :advice.sectionAdviceId });
           this.resume.sections[index].advices[adviceIndex] = res.body;
+          this.resume.sections[index].numberOfAdvices--;
           this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
           this.trigger(this.resume);
         }

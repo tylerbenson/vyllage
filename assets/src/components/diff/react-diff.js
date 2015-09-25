@@ -29,13 +29,13 @@ module.exports = React.createClass({
 
   render: function render() {
     var diff = fnMap[this.props.type](this.props.inputA, this.props.inputB);
-    var result = diff.map(function (part) {
+    var result = diff.map(function (part , diffIndex ) {
       var spanStyle = {
         backgroundColor: part.added ? 'lightgreen' : part.removed ? 'salmon' : 'lightgrey'
       };
       return React.createElement(
         'span',
-        { style: spanStyle },
+        { style: spanStyle , key : diffIndex },
         part.value
       );
     });

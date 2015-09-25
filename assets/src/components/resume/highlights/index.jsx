@@ -10,7 +10,7 @@ var Highlights = React.createClass({
 	},
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			highlights: nextProps.highlights
+			highlights: nextProps.highlights != undefined ? nextProps.highlights : []
 		});
 	},
   onHighlightDelete: function(i) {
@@ -42,7 +42,7 @@ var Highlights = React.createClass({
 
 		return (
 			<ul className="highlights">
-				{highlights}
+				{this.state.highlights != undefined ? highlights : null }
 				{uiEditMode ? <HighlightInput onAdd={this.onHighlightAdd} /> : null}
 			</ul>
 		);
