@@ -27,6 +27,7 @@ public class DocumentHeader {
 	private String avatarUrl;
 
 	private String error;
+	private String siteUrl;
 
 	public DocumentHeader() {
 	}
@@ -117,6 +118,14 @@ public class DocumentHeader {
 
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;
+	}
+
+	public String getSiteUrl() {
+		return siteUrl;
+	}
+
+	public void setSiteUrl(String siteUrl) {
+		this.siteUrl = siteUrl;
 	}
 
 	public String getError() {

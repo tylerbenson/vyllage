@@ -432,6 +432,7 @@ public class DocumentService {
 			header.setTwitter(accountContactData.get(0).getTwitter());
 			header.setLinkedIn(accountContactData.get(0).getLinkedIn());
 			header.setAvatarUrl(accountContactData.get(0).getAvatarUrl());
+			header.setSiteUrl(accountContactData.get(0).getSiteUrl());
 		}
 
 		header.setTagline(document.getTagline());

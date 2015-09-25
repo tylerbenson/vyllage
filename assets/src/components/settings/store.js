@@ -73,17 +73,14 @@ module.exports = Reflux.createStore({
       case 'email':
         setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid E-mail";
         break;
+      case 'siteUrl':
+        setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid Url";
+        break;
       case 'phoneNumber':
         setting.errorMessage = ((validator.isNumeric(setting.value) &&
                                (setting.value.length === 10))) ||
                                setting.value.length === 0 ?
                                   null: "Invalid Phone Number";
-        break;
-      case 'twitter':
-        var pattern = /^\w{1,32}$/; // ref : http://aaronsaray.com/blog/2012/08/07/jquery-validator-twitter-username-validator/
-        if( setting.value.length > 0 && (setting.value.length >= 140 || pattern.test(setting.value) == false ) ) {
-          setting.errorMessage = "Invalid Twitter Username";
-        }
         break;
       default:
         setting.errorMessage = null;
@@ -120,6 +117,9 @@ module.exports = Reflux.createStore({
     request
       .get('/account/ping')
       .end(function (err, res) {
+        if(res.status != 200){
+          window.location.href = '/logout';
+        }
       }.bind(this))
   },
   update: function () {

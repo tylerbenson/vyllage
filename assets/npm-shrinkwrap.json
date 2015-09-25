@@ -954,6 +954,16 @@
         }
       }
     },
+    "react-autolink": {
+      "version": "0.2.0",
+      "from": "react-autolink@*",
+      "dependencies": {
+        "object-assign": {
+          "version": "2.1.1",
+          "from": "object-assign@>=2.0.0 <3.0.0"
+        }
+      }
+    },
     "react-layer-mixin": {
       "version": "0.2.1",
       "from": "react-layer-mixin@0.2.1"

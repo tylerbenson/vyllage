@@ -16,10 +16,12 @@ var OnScroll = require('react-window-mixins').OnScroll;
 var PubSub = require('pubsub-js');
 var Alert = require('../../alert');
 var uniq = require('lodash.uniq');
+var ReactAutolink = require('react-autolink');
+
 var urlParams = {};
 
 var Banner = React.createClass({
-  mixins: [OnScroll],
+  mixins: [OnScroll,ReactAutolink],
   getInitialState: function () {
     return {
       editMode: false,
@@ -31,6 +33,7 @@ var Banner = React.createClass({
       fields: clone(this.props.header)
     }
   },
+
   componentWillReceiveProps: function (nextProps) {
     //For delayed header response
     //TODO: should be converted into a promise on the store side
@@ -56,6 +59,7 @@ var Banner = React.createClass({
       }
     }
   },
+
   componentWillMount: function(){
     var parser = document.createElement('a');
     parser.href = window.location.href;
@@ -100,8 +104,8 @@ var Banner = React.createClass({
       },
       {
         errorMessage: null,
-        name: 'twitter',
-        value: fields.twitter,
+        name: 'siteUrl',
+        value: fields.siteUrl,
         privacy: 'private'
       }
     ];
@@ -118,7 +122,7 @@ var Banner = React.createClass({
         banner.address =  this.getRefValue('address'),
         banner.email =  this.getRefValue('email'),
         banner.phoneNumber =  phoneFormatter.normalize(this.getRefValue('phoneNumber')),
-        banner.twitter =  this.getRefValue('twitter');
+        banner.siteUrl =  this.getRefValue('siteUrl');
 
     if(banner.tagline !== this.state.fields.tagline) {
       var fields = clone(this.state.fields);
@@ -135,16 +139,15 @@ var Banner = React.createClass({
     if(!validator.isEmail(banner.email)) {
       errors.push('email');
     }
+    if(!validator.isURL(banner.siteUrl)) {
+      errors.push('siteUrl');
+    }
     if(!(validator.isNumeric(banner.phoneNumber)
       && banner.phoneNumber.length === 10)
       && banner.phoneNumber.trim().length !== 0) {
       errors.push('phoneNumber');
     }
-    var pattern = /^\w{1,32}$/; // ref : http://aaronsaray.com/blog/2012/08/07/jquery-validator-twitter-username-validator/
-    if( banner.twitter.length > 0 && (banner.twitter.length > 140 || pattern.test(banner.twitter) == false)  ) {
-      errors.push('twitter');
-    }
-
+    
     if(errors.length === 0) {
       this.notifyChange(banner);
       this.setState({fields: banner});
@@ -225,16 +228,18 @@ var Banner = React.createClass({
       });
     }
   },
+
   render: function() {
     var header = this.props.header || {};
     var fields = this.state.fields;
     var emailSetting = filter(this.props.settings, {name: 'email'})[0] || {};
     var phoneNumberSetting = filter(this.props.settings, {name: 'phoneNumber'})[0] || {};
-    var twitterSetting = filter(this.props.settings, {name: 'twitter'})[0] || {};
+    var siteUrlSetting = filter(this.props.settings, {name: 'siteUrl'})[0] || {};
     var isReadOnly = (!header.owner) || (header.owner && !this.state.editMode);
     var name = (header.firstName ? header.firstName : '') + ' '
              + (header.lastName ? header.lastName : '');
 
+    
     return (
       <section className={(header.owner?'':'guest ') + 'banner'} ref="banner">
         <div className ="content">
@@ -302,20 +307,22 @@ var Banner = React.createClass({
               <p className='error'>{phoneNumberSetting.errorMessage}</p>
             </div>
             <div className='detail'>
-              <i className="ion-social-twitter"></i>
-              <span className='tip'>@</span>
+              <i className="ion-link"></i>
+              { isReadOnly ? fields.siteUrl ? this.autolink(fields.siteUrl, { target: "_blank" }) : 'Site url' :
               <input
                 required
                 type='text'
-                placeholder="Twitter Username"
+                placeholder="Site url"
                 disabled={isReadOnly}
-                key={fields.twitter || undefined}
-                className="inline transparent twitter"
+                key={fields.siteUrl || undefined}
+                className="inline transparent"
                 autoComplete="off"
-                ref="twitter"
-                defaultValue={fields.twitter}
+                ref="siteUrl"
+                defaultValue={fields.siteUrl}
               />
-              <p className='error'>{twitterSetting.errorMessage}</p>
+              }
+              
+              <p className='error'>{siteUrlSetting.errorMessage}</p>
             </div>
           </div>
           :null)}
