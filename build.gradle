@@ -13,7 +13,7 @@ wrapper.gradleVersion = '2.5'
 
 buildscript {
     ext {
-        springBootVersion = '1.2.5.RELEASE'
+        springBootVersion = '1.2.6.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -264,6 +264,7 @@ configure(bootProjects) {
             "-Dspring.profiles.active=${profile}"
             //,"-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9999"
     ]
+
 }
 
 configure(dbProjects) {
