@@ -1,10 +1,10 @@
 var sections = [
 	{
-		title: 'Summary',
+		title: 'Objective',
 		type: 'SummarySection',
 		component: 'Freeform',
 		icon: 'ion-android-list',
-		description: 'Create a profile overview with your career objectives.',
+		description: 'Create a profile overview with a summary of your goal for your next career move.',
 		isMultiple: false
 	},
 	{
@@ -28,7 +28,7 @@ var sections = [
 		type: 'SkillsSection',
 		component: 'Tags',
 		icon: 'ion-hammer',
-		description: 'List skills that you have been practicing for work.',
+		description: 'List skills that you have been developing.',
 		isMultiple: false
 	},
 	// {
