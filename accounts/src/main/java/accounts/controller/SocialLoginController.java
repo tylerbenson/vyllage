@@ -41,7 +41,7 @@ public class SocialLoginController {
 	private final Logger logger = Logger.getLogger(SocialLoginController.class
 			.getName());
 
-	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
+	private final ProviderSignInUtils providerSignInUtils;
 
 	private final SignInUtil signInUtil;
 
@@ -58,12 +58,14 @@ public class SocialLoginController {
 			final UserService userService,
 			final SharedDocumentRepository sharedDocumentRepository,
 			final RandomPasswordGenerator randomPasswordGenerator,
-			final ConnectionRepository connectionRepository) {
+			final ConnectionRepository connectionRepository,
+			final ProviderSignInUtils providerSignInUtils) {
 		this.signInUtil = signInUtil;
 		this.userService = userService;
 		this.sharedDocumentRepository = sharedDocumentRepository;
 		this.randomPasswordGenerator = randomPasswordGenerator;
 		this.connectionRepository = connectionRepository;
+		this.providerSignInUtils = providerSignInUtils;
 	}
 
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)

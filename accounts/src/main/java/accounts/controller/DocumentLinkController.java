@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,19 +57,28 @@ public class DocumentLinkController {
 	private final Logger logger = Logger.getLogger(DocumentLinkController.class
 			.getName());
 
-	@Autowired
-	private DocumentLinkService documentLinkService;
+	private final DocumentLinkService documentLinkService;
 
-	@Autowired
-	private SignInUtil signInUtil;
+	private final SignInUtil signInUtil;
 
-	@Autowired
-	private Environment environment;
+	private final Environment environment;
 
-	@Autowired
-	private DocumentService documentService;
+	private final DocumentService documentService;
 
-	private ProviderSignInUtils providerSignInUtils = new ProviderSignInUtils();
+	private final ProviderSignInUtils providerSignInUtils;
+
+	@Inject
+	public DocumentLinkController(
+			final DocumentLinkService documentLinkService,
+			final SignInUtil signInUtil, final Environment environment,
+			final DocumentService documentService,
+			final ProviderSignInUtils providerSignInUtils) {
+		this.documentLinkService = documentLinkService;
+		this.signInUtil = signInUtil;
+		this.environment = environment;
+		this.documentService = documentService;
+		this.providerSignInUtils = providerSignInUtils;
+	}
 
 	@RequestMapping(value = "/e/{linkKey}", method = RequestMethod.GET)
 	public String sharedLinkLogin(HttpServletRequest request,
@@ -118,7 +127,6 @@ public class DocumentLinkController {
 	}
 
 	/**
-	 *
 	 * @param linkRequest
 	 * @return map containing the user's email as key and the generated link as
 	 *         value.
@@ -153,6 +161,10 @@ public class DocumentLinkController {
 
 		Optional<SocialDocumentLink> optionalDocumentLink = documentLinkService
 				.getSocialDocumentLink(linkKey);
+
+		if (!optionalDocumentLink.isPresent())
+			throw new AccessDeniedException(
+					"Either the link expired or an invalid link was provided.");
 
 		SocialDocumentLink socialDocumentLink = optionalDocumentLink.get();
 

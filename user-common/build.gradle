@@ -3,10 +3,10 @@ jar {
 }
 
 dependencies {
-    compile 'org.springframework.social:spring-social-core:1.1.0.RELEASE'
-    compile 'org.springframework.social:spring-social-config:1.1.0.RELEASE'
-    compile 'org.springframework.social:spring-social-web:1.1.0.RELEASE'
-    compile 'org.springframework.social:spring-social-security:1.1.0.RELEASE'
+    compile 'org.springframework.social:spring-social-core:1.1.2.RELEASE'
+    compile 'org.springframework.social:spring-social-config:1.1.2.RELEASE'
+    compile 'org.springframework.social:spring-social-web:1.1.2.RELEASE'
+    compile 'org.springframework.social:spring-social-security:1.1.2.RELEASE'
     compile 'org.springframework.social:spring-social-facebook:2.0.1.RELEASE'
     compile 'org.springframework.social:spring-social-facebook-web:2.0.1.RELEASE'
     compile 'org.springframework.social:spring-social-google:1.0.0.RELEASE'

@@ -209,6 +209,12 @@ configure(javaProjects) {
             force "org.springframework:spring-web:$spring"
             force "org.springframework:spring-webmvc:$spring"
 
+            //conflicts with 1.1.0 dragged by something...
+            force 'org.springframework.social:spring-social-core:1.1.2.RELEASE'
+            force 'org.springframework.social:spring-social-config:1.1.2.RELEASE'
+            force 'org.springframework.social:spring-social-web:1.1.2.RELEASE'
+            force 'org.springframework.social:spring-social-security:1.1.2.RELEASE'
+
             force 'org.springframework.security:spring-security-core:3.2.7.RELEASE'
             force 'org.springframework.security:spring-security-config:3.2.7.RELEASE'
             force 'org.springframework.security:spring-security-web:3.2.7.RELEASE'
