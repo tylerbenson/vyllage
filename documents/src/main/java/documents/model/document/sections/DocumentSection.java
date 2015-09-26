@@ -48,7 +48,7 @@ public abstract class DocumentSection {
 	private Visibility state;
 	private Long sectionPosition;
 	private int numberOfComments;
-	private int numberOfAdvices;
+	private int numberOfSuggestedEdits;
 
 	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
 	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
@@ -143,12 +143,12 @@ public abstract class DocumentSection {
 		this.lastModified = lastModified;
 	}
 
-	public void setNumberOfAdvices(int integer) {
-		numberOfAdvices = integer;
+	public void setNumberOfSuggestedEdits(int integer) {
+		numberOfSuggestedEdits = integer;
 	}
 
-	public int getNumberOfAdvices() {
-		return numberOfAdvices;
+	public int getNumberOfSuggestedEdits() {
+		return numberOfSuggestedEdits;
 	}
 
 	public static DocumentSection fromJSON(String json) {
