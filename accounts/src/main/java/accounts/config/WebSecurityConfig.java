@@ -31,21 +31,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/lti/login", "/account/reset-password",
-						"/account/reset-password-change/**",
-						"account/password-change-success", "/signin/**",
-						"/signup/**", "/social-login/**", "/link/e/**",
-						"/link/s/**", "/register", "/register-from-social",
-						"/register-from-LTI", "/careers", "/privacy",
-						"/contact", "/lti/login-existing-user", "/lti/rss",
+				.antMatchers("/lti/login", "/account/reset-password", //
+						"/account/reset-password-change/**", //
+						"account/password-change-success", //
+						"/signin/**", //
+						"/signup/**", //
+						"/social-login/**", //
+						"/link/e/**", //
+						"/link/s/**", //
+						"/register", //
+						"/register-from-social", //
+						"/register-from-LTI", //
+						"/careers", "/privacy", //
+						"/contact", //
+						"/lti/login-existing-user", //
+						"/lti/rss", //
 						"/robots.txt").permitAll();
 
-		http.authorizeRequests()
-				.antMatchers("/swagger-ui.html", "/v2/api-docs/**",
-						"/swagger-resources").hasAuthority("ADMIN");
-
-		http.authorizeRequests()
-				.antMatchers("/swagger-ui.html", "/v2/api-docs/**",
+		http.authorizeRequests() //
+				.antMatchers( //
+						"/swagger-ui.html", //
+						"/v2/api-docs/**", //
 						"/swagger-resources").hasAuthority("ADMIN");
 
 		// disabling CSRF for the togglz console.
@@ -54,16 +60,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// Allow frames to enable the h2 console.
 		http.headers().addHeaderWriter(
 				new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
+
 		http.headers().disable();
-		http.authorizeRequests()
-				.antMatchers("/", "/status", "/status-*", "/css/**",
-						"/images/**", "/javascript/**").permitAll();
+
+		http.authorizeRequests().antMatchers("/", //
+				"/status", //
+				"/status-*", //
+				"/css/**", //
+				"/images/**", //
+				"/javascript/**").permitAll();
+
 		http.authorizeRequests().anyRequest().authenticated();
 
 		SimpleUrlAuthenticationSuccessHandler successHandler = successHandler();
 		successHandler.setAlwaysUseDefaultTargetUrl(true);
-		http.formLogin().loginPage("/login").usernameParameter("email")
-				.defaultSuccessUrl("/resume/").successHandler(successHandler)
+
+		http.formLogin() //
+				.loginPage("/login") //
+				.usernameParameter("email") //
+				.defaultSuccessUrl("/resume/") //
+				.successHandler(successHandler) //
 				.permitAll();
 
 		http.logout()
