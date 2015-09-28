@@ -9,6 +9,7 @@ var Section = require('./sections');
 var Banner = require('./banner');
 var Empty = require('./sections/Empty');
 var Sortable = require('../util/Sortable');
+var Tour = require('../tour');
 
 var SubSection = React.createClass({
   start: function(event, ui){
@@ -138,6 +139,7 @@ var ResumeEditor = React.createClass({
 
     return (
       <div>
+        <Tour page="resume" />
         <Banner header={this.state.resume.header} settings={this.state.settings} sections={this.state.resume.all_section} />
         {allSection}
       </div>
