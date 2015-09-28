@@ -30,8 +30,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	// http://stackoverflow.com/questions/21231057/how-to-configure-spring-4-0-with-spring-boot-and-spring-security-openid?rq=1
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/lti/login", "/account/reset-password", //
+		http.authorizeRequests() //
+				.antMatchers( //
+						"/lti/login", //
+						"/account/reset-password", //
 						"/account/reset-password-change/**", //
 						"account/password-change-success", //
 						"/signin/**", //
@@ -63,12 +65,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.headers().disable();
 
-		http.authorizeRequests().antMatchers("/", //
-				"/status", //
-				"/status-*", //
-				"/css/**", //
-				"/images/**", //
-				"/javascript/**").permitAll();
+		http.authorizeRequests() //
+				.antMatchers("/", //
+						"/status", //
+						"/status-*", //
+						"/css/**", //
+						"/images/**", //
+						"/javascript/**").permitAll();
 
 		http.authorizeRequests().anyRequest().authenticated();
 
