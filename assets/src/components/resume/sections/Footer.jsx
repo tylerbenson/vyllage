@@ -9,7 +9,7 @@ var moment = require('moment');
 var SectionFooter = React.createClass({
 
   componentWillReceiveProps: function (nextProps) {
-      console.log( nextProps );  
+     // console.log( nextProps );  
   },
 
   stopPropagation: function (e) {
