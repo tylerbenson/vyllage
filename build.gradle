@@ -82,7 +82,7 @@ configure(javaProjects) {
 
         packageThreshold 0.25, ~"accounts/.*"
         packageThreshold 0.0,  ~"connections/.*" // :-(
-        packageThreshold 0.26, ~"documents/.*"
+        packageThreshold 0.33, ~"documents/.*"
 
         // Whitelist files that currently have 0 coverage.
         packageThreshold 0.0, ~"accounts/controller.*"
@@ -93,8 +93,7 @@ configure(javaProjects) {
         packageThreshold 0.0, ~"accounts/config.*"
 
         packageThreshold 0.0, "documents/database"
-        packageThreshold 0.0, "documents/domain/tables/.*"
-        packageThreshold 0.0, "documents/files/pdf"
+        packageThreshold 0.0, ~"documents/domain/tables/.*"
 
         packageThreshold 0.0, "site/controllers"
 

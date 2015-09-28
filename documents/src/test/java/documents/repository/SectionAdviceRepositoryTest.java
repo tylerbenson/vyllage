@@ -1,8 +1,14 @@
 package documents.repository;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,8 +53,8 @@ public class SectionAdviceRepositoryTest {
 			throws ElementNotFoundException {
 		SectionAdvice suggestion = repository.get(0L);
 
-		Assert.assertNotNull("Suggestion is null.", suggestion);
-		Assert.assertTrue(suggestion.getSectionAdviceId().equals(0L));
+		assertNotNull("Suggestion is null.", suggestion);
+		assertTrue(suggestion.getSectionAdviceId().equals(0L));
 	}
 
 	@Test
@@ -60,10 +66,10 @@ public class SectionAdviceRepositoryTest {
 		List<SectionAdvice> suggestion = repository
 				.getSectionAdvices(sectionId);
 
-		Assert.assertNotNull("Suggestion is null.", suggestion);
-		Assert.assertTrue("No suggestions found. ", suggestion.size() > 0);
+		assertNotNull("Suggestion is null.", suggestion);
+		assertTrue("No suggestions found. ", suggestion.size() > 0);
 
-		Assert.assertTrue(
+		assertTrue(
 				"Suggestionsfor Section with Id " + sectionId + " not found.",
 				suggestion.stream().anyMatch(
 						s -> s.getDocumentSection() != null
@@ -73,15 +79,45 @@ public class SectionAdviceRepositoryTest {
 	}
 
 	@Test
-	public void suggestionSaveTest() {
+	public void testAdviceSave() {
 
 		SectionAdvice suggestion1 = generateSuggestion();
 
 		suggestion1 = repository.save(suggestion1);
 
-		Assert.assertNotNull("Suggestion1 is null.", suggestion1);
-		Assert.assertNotNull("Suggestion id not found. ",
+		assertNotNull("Suggestion1 is null.", suggestion1);
+		assertNotNull("Suggestion id not found. ",
 				suggestion1.getSectionAdviceId());
+	}
+
+	@Test
+	public void testAdviceUpdate() throws ElementNotFoundException {
+
+		SectionAdvice sectionAdvice1 = generateSuggestion();
+
+		sectionAdvice1 = repository.save(sectionAdvice1);
+
+		assertNotNull("Suggestion1 is null.", sectionAdvice1);
+		assertNotNull("Suggestion id not found. ",
+				sectionAdvice1.getSectionAdviceId());
+
+		SectionAdvice sectionAdvice2 = repository.get(sectionAdvice1
+				.getSectionAdviceId());
+
+		assertNotNull("Suggestion1 is null.", sectionAdvice2);
+		assertNotNull("Suggestion id not found. ",
+				sectionAdvice2.getSectionAdviceId());
+
+		final String status = "accepted";
+		sectionAdvice2.setStatus(status);
+
+		SectionAdvice sectionAdvice3 = repository.save(sectionAdvice2);
+
+		assertNotNull("Suggestion1 is null.", sectionAdvice3);
+		assertNotNull("Suggestion id not found. ",
+				sectionAdvice3.getSectionAdviceId());
+		assertEquals(status, sectionAdvice3.getStatus());
+
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -95,7 +131,20 @@ public class SectionAdviceRepositoryTest {
 
 		suggestion = repository.get(id);
 
-		Assert.assertNull("Suggestion is not null.", suggestion);
+		assertNull("Suggestion is not null.", suggestion);
+	}
+
+	@Test
+	public void testGetNumberOfAdvicesForSections() {
+		Long sectionId = 127L;
+		List<Long> sectionIds = Arrays.asList(sectionId);
+
+		Map<Long, Integer> numberOfAdvicesForSections = repository
+				.getNumberOfAdvicesForSections(sectionIds);
+
+		assertNotNull(numberOfAdvicesForSections);
+		assertTrue(numberOfAdvicesForSections.containsKey(sectionId));
+		assertEquals(new Integer(1), numberOfAdvicesForSections.get(sectionId));
 	}
 
 	private SectionAdvice generateSuggestion() {

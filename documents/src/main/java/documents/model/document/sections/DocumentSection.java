@@ -48,6 +48,7 @@ public abstract class DocumentSection {
 	private Visibility state;
 	private Long sectionPosition;
 	private int numberOfComments;
+	private int numberOfSuggestedEdits;
 
 	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
 	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
@@ -140,6 +141,14 @@ public abstract class DocumentSection {
 
 	public void setLastModified(LocalDateTime lastModified) {
 		this.lastModified = lastModified;
+	}
+
+	public void setNumberOfSuggestedEdits(int integer) {
+		numberOfSuggestedEdits = integer;
+	}
+
+	public int getNumberOfSuggestedEdits() {
+		return numberOfSuggestedEdits;
 	}
 
 	public static DocumentSection fromJSON(String json) {

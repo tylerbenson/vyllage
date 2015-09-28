@@ -7,14 +7,18 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Record2;
 import org.jooq.Result;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -187,5 +191,31 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 		sectionAdvice.setStatus(record.getStatus());
 
 		return sectionAdvice;
+	}
+
+	public Map<Long, Integer> getNumberOfAdvicesForSections(
+			List<Long> sectionIds) {
+		DocumentSections s1 = DOCUMENT_SECTIONS.as("s1");
+		DocumentSections s2 = DOCUMENT_SECTIONS.as("s2");
+		SectionAdvices sa = SECTION_ADVICES.as("sa");
+
+		Map<Long, Integer> sectionadvices = new HashMap<>();
+
+		Result<Record2<Long, Integer>> fetch = sql
+				.select(s1.ID, DSL.count(sa.SECTION_ADVICE_ID))
+				.from(s1)
+				.leftOuterJoin(s2)
+				.on(s1.ID.eq(s2.ID).and(
+						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION)))
+				.join(sa).on(sa.SECTION_ID.eq(s1.ID))
+				.where(s2.ID.isNull().and(s1.ID.in(sectionIds))).groupBy(s1.ID)
+				.fetch();
+
+		for (Record2<Long, Integer> record : fetch) {
+			sectionadvices.put((Long) record.getValue(0),
+					(Integer) record.getValue(1));
+		}
+
+		return sectionadvices;
 	}
 }
