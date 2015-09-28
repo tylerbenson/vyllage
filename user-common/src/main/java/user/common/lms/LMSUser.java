@@ -1,8 +1,15 @@
 package user.common.lms;
 
+import java.io.Serializable;
+
 import user.common.User;
 
-public class LMSUser {
+public class LMSUser implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -352440556474522197L;
 
 	private User user;
 	private String userId;

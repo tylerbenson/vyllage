@@ -2,13 +2,14 @@ package accounts.service;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
-import oauth.lti.LMSRequest;
+import oauth.model.LMSAccount;
 import oauth.repository.LTIKeyRepository;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import user.common.User;
+import user.common.lms.LMSUser;
 import accounts.repository.LMSUserCredentialsRepository;
 import accounts.repository.LMSUserRepository;
 import accounts.repository.OrganizationRepository;
@@ -35,10 +36,11 @@ public class LMSServiceTest {
 		String firstName = "firstName";
 		String middleName = "middleName";
 		String lastName = "lastName";
-		LMSRequest lmsRequest = mock(LMSRequest.class);
+		LMSAccount lmsAccount = mock(LMSAccount.class);
+		LMSUser lmsUser = mock(LMSUser.class);
 
 		lmsService.createUser(email, password, firstName, middleName, lastName,
-				lmsRequest);
+				lmsAccount, lmsUser);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -49,10 +51,11 @@ public class LMSServiceTest {
 		String firstName = "firstName";
 		String middleName = "middleName";
 		String lastName = "lastName";
-		LMSRequest lmsRequest = mock(LMSRequest.class);
+		LMSAccount lmsAccount = mock(LMSAccount.class);
+		LMSUser lmsUser = mock(LMSUser.class);
 
 		lmsService.createUser(email, password, firstName, middleName, lastName,
-				lmsRequest);
+				lmsAccount, lmsUser);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -63,10 +66,12 @@ public class LMSServiceTest {
 		String firstName = "firstName";
 		String middleName = "middleName";
 		String lastName = "lastName";
-		LMSRequest lmsRequest = mock(LMSRequest.class);
+
+		LMSAccount lmsAccount = mock(LMSAccount.class);
+		LMSUser lmsUser = mock(LMSUser.class);
 
 		User createUser = lmsService.createUser(email, password, firstName,
-				middleName, lastName, lmsRequest);
+				middleName, lastName, lmsAccount, lmsUser);
 		assertNotNull(createUser);
 	}
 
@@ -78,24 +83,41 @@ public class LMSServiceTest {
 		String firstName = "firstName";
 		String middleName = "middleName";
 		String lastName = "lastName";
-		LMSRequest lmsRequest = mock(LMSRequest.class);
+		LMSAccount lmsAccount = mock(LMSAccount.class);
+		LMSUser lmsUser = mock(LMSUser.class);
 
 		lmsService.createUser(email, password, firstName, middleName, lastName,
-				lmsRequest);
+				lmsAccount, lmsUser);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testCreateUserNullLMSRequestFails() {
+	public void testCreateUserNullLMSAccountFails() {
 
 		String email = "email";
 		String password = "password";
 		String firstName = "firstName";
 		String middleName = "middleName";
 		String lastName = "lastName";
-		LMSRequest lmsRequest = null;
+		LMSAccount lmsAccount = null;
+		LMSUser lmsUser = mock(LMSUser.class);
 
 		lmsService.createUser(email, password, firstName, middleName, lastName,
-				lmsRequest);
+				lmsAccount, lmsUser);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateUserNullLMSUserFails() {
+
+		String email = "email";
+		String password = "password";
+		String firstName = "firstName";
+		String middleName = "middleName";
+		String lastName = "lastName";
+		LMSAccount lmsAccount = mock(LMSAccount.class);
+		LMSUser lmsUser = null;
+
+		lmsService.createUser(email, password, firstName, middleName, lastName,
+				lmsAccount, lmsUser);
 	}
 
 }

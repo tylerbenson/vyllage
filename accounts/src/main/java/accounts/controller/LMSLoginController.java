@@ -6,7 +6,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import oauth.lti.LMSRequest;
+import oauth.model.LMSAccount;
 
 import org.jooq.tools.StringUtils;
 import org.springframework.security.core.AuthenticationException;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import user.common.User;
 import user.common.constants.AccountSettingsEnum;
+import user.common.lms.LMSUser;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.AvatarSourceEnum;
 import accounts.model.account.settings.Privacy;
@@ -94,13 +95,20 @@ public class LMSLoginController {
 			}
 
 			HttpSession session = request.getSession(false);
-			LMSRequest lmsRequest = (LMSRequest) session
-					.getAttribute(LMSRequest.class.getName());
+			// LMSRequest lmsRequest = (LMSRequest) session
+			// .getAttribute(LMSRequest.class.getName());
 
-			lmsService.addLMSDetails(user, lmsRequest);
-			this.saveUserImage(lmsRequest.getLmsUser().getUserImage(), user);
+			LMSAccount lmsAccount = (LMSAccount) session
+					.getAttribute(LMSAccount.class.getName());
 
-			session.removeAttribute(LMSRequest.class.getName());
+			LMSUser lmsUser = (LMSUser) session.getAttribute(LMSUser.class
+					.getName());
+
+			lmsService.addLMSDetails(user, lmsAccount, lmsUser);
+			this.saveUserImage(lmsUser.getUserImage(), user);
+
+			session.removeAttribute(LMSAccount.class.getName());
+			session.removeAttribute(LMSUser.class.getName());
 			session.removeAttribute("user_name");
 		} else {
 			model.addAttribute("form", form);

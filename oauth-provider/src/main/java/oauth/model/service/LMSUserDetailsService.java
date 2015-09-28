@@ -1,12 +1,13 @@
 package oauth.model.service;
 
-import oauth.lti.LMSRequest;
+import oauth.model.LMSAccount;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import user.common.lms.LMSUser;
 import user.common.lms.LMSUserDetails;
 
 public interface LMSUserDetailsService {
@@ -18,7 +19,6 @@ public interface LMSUserDetailsService {
 			throws UsernameNotFoundException, DataAccessException;
 
 	/**
-	 *
 	 * @param username
 	 * @return
 	 * @throws UsernameNotFoundException
@@ -29,7 +29,7 @@ public interface LMSUserDetailsService {
 	/**
 	 * Create a new user with the supplied details.
 	 */
-	void createUser(UserDetails user, LMSRequest lmsRequest);
+	void createUser(UserDetails user, LMSAccount lmsAccount, LMSUser lmsUser);
 
 	/**
 	 * Check if a user with the supplied login name exists in the system.
