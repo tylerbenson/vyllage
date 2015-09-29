@@ -30,6 +30,7 @@ import org.springframework.util.Assert;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.AccountSettingsEnum;
+import user.common.lms.LMSUser;
 import user.common.lms.LMSUserDetails;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.Email;
@@ -87,8 +88,8 @@ public class LMSUserRepository implements LMSUserDetailsService {
 	}
 
 	@Override
-	public void createUser(UserDetails userDetails,
-			@NonNull LMSRequest lmsRequest) {
+	public void createUser(@NonNull UserDetails userDetails,
+			@NonNull LMSAccount lmsAccount, @NonNull LMSUser lmsUser) {
 		User user = (User) userDetails;
 
 		TransactionStatus transaction = txManager
@@ -148,7 +149,6 @@ public class LMSUserRepository implements LMSUserDetailsService {
 			accountSettingRepository.set(emailUpdatesSetting);
 
 			// Add LMS details if doesn't exist
-			LMSAccount lmsAccount = lmsRequest.getLmsAccount();
 			Long lmsId = null;
 			try {
 				lmsId = lmsRepository.get(lmsAccount.getLmsGuid());
@@ -159,12 +159,57 @@ public class LMSUserRepository implements LMSUserDetailsService {
 
 			// Check LMS user credentials exist
 			boolean isUserExist = lmsUserCredentialsRepository.userExists(
-					lmsRequest.getLmsUser().getUserId(), lmsId);
+					lmsUser.getUserId(), lmsId);
 
 			if (!isUserExist) {
 				// Create LMS user credentials
-				lmsUserCredentialsRepository.createUser(lmsRequest.getLmsUser()
-						.getUserId(), newRecord.getUserId(), lmsId);
+				lmsUserCredentialsRepository.createUser(lmsUser.getUserId(),
+						newRecord.getUserId(), lmsId);
+			}
+		} catch (Exception e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			transaction.rollbackToSavepoint(savepoint);
+
+		} finally {
+			txManager.commit(transaction);
+
+		}
+	}
+
+	/**
+	 * Adds LMS details to an existing user.
+	 * 
+	 * @param user
+	 * @param lmsRequest
+	 */
+	public void addLMSDetails(final User user, final LMSAccount lmsAccount,
+			final LMSUser lmsUser) {
+		TransactionStatus transaction = txManager
+				.getTransaction(new DefaultTransactionDefinition());
+
+		Object savepoint = transaction.createSavepoint();
+
+		try {
+
+			Long lmsId = null;
+
+			try {
+				lmsId = lmsRepository.get(lmsAccount.getLmsGuid());
+			} catch (LMSNotFoundException exception) {
+				lmsId = lmsRepository.createLMSAccount(lmsAccount);
+			}
+			Assert.notNull(lmsId);
+
+			// Check LMS user credentials exist
+			boolean isUserExist = lmsUserCredentialsRepository.userExists(
+					lmsUser.getUserId(), lmsId);
+
+			if (!isUserExist) {
+				// Create LMS user credentials
+				Assert.notNull(user.getUserId());
+				lmsUserCredentialsRepository.createUser(lmsUser.getUserId(),
+						user.getUserId(), lmsId);
 			}
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));

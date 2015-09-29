@@ -60,7 +60,6 @@ public class LMSUserRepositoryTest {
 		User user = new User(username, "123456", enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(uor));
 
-		LMSRequest lmsRequest = mock(LMSRequest.class);
 		LMSUser lmsUser = mock(LMSUser.class);
 
 		String lmsGuid = "guid";
@@ -69,12 +68,9 @@ public class LMSUserRepositoryTest {
 
 		lmsAccount.setConsumerKey(consumerKey);
 
-		when(lmsRequest.getLmsAccount()).thenReturn(lmsAccount);
-
-		when(lmsRequest.getLmsUser()).thenReturn(lmsUser);
 		when(lmsUser.getUserId()).thenReturn("someotherid");
 
-		repository.createUser(user, lmsRequest);
+		repository.createUser(user, lmsAccount, lmsUser);
 
 		User userByUsername = repository.loadUserByUsername(username);
 

@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import lombok.NonNull;
 import oauth.lti.LMSRequest;
+import oauth.model.LMSAccount;
 import oauth.repository.LTIKeyRepository;
 
 import org.jooq.tools.StringUtils;
@@ -20,6 +21,7 @@ import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
+import user.common.lms.LMSUser;
 import accounts.repository.LMSUserCredentialsRepository;
 import accounts.repository.LMSUserRepository;
 import accounts.repository.OrganizationRepository;
@@ -67,12 +69,12 @@ public class LMSService {
 
 	public User createUser(@NonNull String email, @NonNull String password,
 			String firstName, String middleName, String lastName,
-			@NonNull LMSRequest lmsRequest) {
+			@NonNull LMSAccount lmsAccount, @NonNull LMSUser lmsUser) {
 
 		Assert.isTrue(!StringUtils.isBlank(email));
 		Assert.isTrue(!StringUtils.isBlank(password));
 
-		final String consumerKey = lmsRequest.getLmsAccount().getConsumerKey();
+		final String consumerKey = lmsAccount.getConsumerKey();
 
 		final Organization organization = ltiKeyRepository
 				.getOrganizationByConsumerKey(consumerKey);
@@ -98,7 +100,7 @@ public class LMSService {
 				password, enabled, accountNonExpired, credentialsNonExpired,
 				accountNonLocked, defaultAuthoritiesForNewUser, null, null);
 
-		lmsUserRepository.createUser(user, lmsRequest);
+		lmsUserRepository.createUser(user, lmsAccount, lmsUser);
 
 		return lmsUserRepository.loadUserByUsername(user.getUsername());
 	}
@@ -111,5 +113,15 @@ public class LMSService {
 	 */
 	public void addLMSDetails(User user, LMSRequest lmsRequest) {
 		lmsUserRepository.addLMSDetails(user, lmsRequest);
+	}
+
+	/**
+	 * Adds LMS details to an existing user.
+	 * 
+	 * @param user
+	 * @param lmsRequest
+	 */
+	public void addLMSDetails(User user, LMSAccount lmAccount, LMSUser lmsUser) {
+		lmsUserRepository.addLMSDetails(user, lmAccount, lmsUser);
 	}
 }
