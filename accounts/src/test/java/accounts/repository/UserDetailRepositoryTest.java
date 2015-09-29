@@ -5,10 +5,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.jooq.DSLContext;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -18,7 +21,9 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
 import accounts.ApplicationTestConfig;
+import accounts.model.Email;
 import accounts.model.account.AccountNames;
+import accounts.service.ConfirmationEmailService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
@@ -28,6 +33,27 @@ public class UserDetailRepositoryTest {
 
 	@Inject
 	private UserDetailRepository userDetailRepository;
+
+	@Inject
+	private DSLContext sql;
+
+	@Inject
+	private UserOrganizationRoleRepository userOrganizationRoleRepository;
+
+	@Inject
+	private OrganizationRepository organizationRepository;
+
+	@Inject
+	private UserCredentialsRepository credentialsRepository;
+
+	@Inject
+	private AccountSettingRepository accountSettingRepository;
+
+	@Inject
+	private DataSourceTransactionManager txManager;
+
+	private ConfirmationEmailService confirmationEmailService = Mockito
+			.mock(ConfirmationEmailService.class);
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullUser() {
@@ -117,6 +143,39 @@ public class UserDetailRepositoryTest {
 				.loadUserByUsername(username);
 
 		Assert.assertFalse(loadDisabledUserByUsername.isEnabled());
+	}
+
+	@Test()
+	public void testCreatesUserDoesNotSendConfirmationEmail() {
+		UserDetailRepository repo = new UserDetailRepository(sql,
+				userOrganizationRoleRepository, organizationRepository,
+				credentialsRepository, accountSettingRepository, txManager,
+				confirmationEmailService);
+
+		String username = "email3@google.com";
+		UserOrganizationRole uor = new UserOrganizationRole(null, 0L,
+				RolesEnum.ALUMNI.name(), 0L);
+
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = false;
+		boolean accountNonLocked = false;
+
+		User user = new User(username, "123456", enabled, accountNonExpired,
+				credentialsNonExpired, accountNonLocked, Arrays.asList(uor));
+
+		repo.createUser(user, false, false);
+
+		User loadUserByUsername = repo.loadUserByUsername(username);
+
+		Assert.assertNotNull(loadUserByUsername);
+
+		Assert.assertEquals(username, loadUserByUsername.getUsername());
+
+		Mockito.verify(confirmationEmailService, Mockito.never())
+				.sendConfirmationEmail(Mockito.any(User.class),
+						Mockito.any(Email.class));
+
 	}
 
 	@Test
