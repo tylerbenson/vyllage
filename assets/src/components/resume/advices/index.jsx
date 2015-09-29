@@ -26,7 +26,7 @@ var Advices = React.createClass({
       }.bind(this);
 
       var adviceList = this.props.section.advices.map(function(advice ,index){
-        if( advice.status == 'pending' || advice.status == null )
+        if( advice.status == 'pending' )
         return <div key={index} className='comment'>
                 <div className='advice-content'>
                     { this.props.owner ? <div className="actions">

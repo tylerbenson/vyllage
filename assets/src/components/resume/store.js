@@ -278,9 +278,7 @@ module.exports = Reflux.createStore({
       .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','numberOfAdvices','showEdits']))
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
-        //this.resume.sections[index] = res.body;
         this.resume.sections[index] = tmp_data;
-        // this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
         this.remindToShare();
         this.trigger(this.resume);
@@ -317,8 +315,6 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         this.resume.sections[index].comments = res.body;
-      //  this.resume.sections[index].showComments = false;
-       // this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
         this.trigger(this.resume);
       }.bind(this))
   },
@@ -382,7 +378,6 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         var advices = [];
-        
         if( res.body.length ){
           res.body.map(function(advice){
             if(advice.status == 'pending'){
@@ -444,9 +439,13 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         if( res.status == 200){
           var index = findindex(this.resume.sections,{sectionId: section.sectionId});
-          var modifiedSection = this.MergeRecursive(this.resume.sections[index] , res.body.documentSection );               
-          // need to save it . 
+          var adviceIndex = findindex( this.resume.sections[index].advices ,{ sectionAdviceId :advice.sectionAdviceId });
+          this.resume.sections[index].advices.splice(adviceIndex , 1);
+          this.resume.sections[index].numberOfSuggestedEdits--;   
+          var modifiedSection = this.MergeRecursive(this.resume.sections[index] , res.body.documentSection ); 
           this.onPutSection( modifiedSection );
+          this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);          
+          this.trigger(this.resume);          
         }
       }.bind(this));
   },
