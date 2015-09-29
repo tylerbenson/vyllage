@@ -7,11 +7,6 @@ var AdvicesCount = require('../../buttons/advices-count');
 var moment = require('moment');
 
 var SectionFooter = React.createClass({
-
-  componentWillReceiveProps: function (nextProps) {
-     // console.log( nextProps );  
-  },
-
   stopPropagation: function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -20,7 +15,8 @@ var SectionFooter = React.createClass({
     actions.toggleComments(this.props.section.sectionId);
   },
   clickEdits: function(e){
-    this.setState({showEdits:!this.state.showEdits});
+    actions.toggleEdits( this.props.section.sectionId );
+   // this.setState({showEdits:!this.state.showEdits});
   },
   hideComments: function () {
     actions.hideComments(this.props.section.sectionId);
@@ -40,7 +36,7 @@ var SectionFooter = React.createClass({
             {moment(lastModified).isValid() ? moment.utc(lastModified).fromNow(): ''}
           </p>
           <div className='actions'>
-           { this.props.section.numberOfAdvices  ? <AdvicesCount count={this.props.section.numberOfAdvices} onClick={this.clickEdits} /> : null }
+           { this.props.section.numberOfSuggestedEdits  ? <AdvicesCount count={this.props.section.numberOfSuggestedEdits} onClick={this.clickEdits} /> : null }
             <CommentsCount count={numberOfComments} onClick={this.clickComments} showComments={this.props.section.showComments} />
           </div> 
         </div>

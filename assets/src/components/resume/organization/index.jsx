@@ -193,7 +193,7 @@ var Organization = React.createClass({
               </div>
             </section>
           </div>
-          <SectionFooter section={section} owner={this.props.owner} />
+          <SectionFooter section={this.props.section} owner={this.props.owner} />
         </div>
         {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>
