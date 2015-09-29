@@ -190,6 +190,8 @@ configure(javaProjects) {
 
 
             def spring = '4.1.7.RELEASE'
+            def springSession = '1.1.2.RELEASE'
+            def springSecurity = '3.2.7.RELEASE'
             def jackson = '2.5.4'
 
             // force certain versions of dependencies (including transitive)
@@ -210,14 +212,14 @@ configure(javaProjects) {
             force "org.springframework:spring-webmvc:$spring"
 
             //conflicts with 1.1.0 dragged by something...
-            force 'org.springframework.social:spring-social-core:1.1.2.RELEASE'
-            force 'org.springframework.social:spring-social-config:1.1.2.RELEASE'
-            force 'org.springframework.social:spring-social-web:1.1.2.RELEASE'
-            force 'org.springframework.social:spring-social-security:1.1.2.RELEASE'
+            force "org.springframework.social:spring-social-core:$springSession"
+            force "org.springframework.social:spring-social-config:$springSession"
+            force "org.springframework.social:spring-social-web:$springSession"
+            force "org.springframework.social:spring-social-security:$springSession"
 
-            force 'org.springframework.security:spring-security-core:3.2.7.RELEASE'
-            force 'org.springframework.security:spring-security-config:3.2.7.RELEASE'
-            force 'org.springframework.security:spring-security-web:3.2.7.RELEASE'
+            force "org.springframework.security:spring-security-core:$springSecurity"
+            force "org.springframework.security:spring-security-config:$springSecurity"
+            force "org.springframework.security:spring-security-web:$springSecurity"
 
             force "com.fasterxml.jackson.core:jackson-annotations:$jackson"
             force "com.fasterxml.jackson.core:jackson-databind:$jackson"
