@@ -439,9 +439,6 @@ module.exports = Reflux.createStore({
       .send(advice)      
       .end(function (err, res) {
         if( res.status == 200){
-          if( res.body.documentSection.numberOfSuggestedEdits != 0 ){
-            res.body.documentSection.numberOfSuggestedEdits--;  
-          }
           this.onPutSection( res.body.documentSection );
           var index = findindex(this.resume.sections,{sectionId: section.sectionId});
           var adviceIndex = findindex( this.resume.sections[index].advices ,{ sectionAdviceId :advice.sectionAdviceId });
