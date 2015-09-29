@@ -5,8 +5,10 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.jooq.tools.StringUtils;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -60,7 +62,20 @@ public class LoginController {
 
 	// http://localhost:8080/expire
 	@RequestMapping("/expire")
-	public String expire() {
+	public String expire(
+			@RequestParam(value = "title", required = false) String title,
+			@RequestParam(value = "message", required = false) String message,
+			Model model) {
+
+		if (StringUtils.isBlank(message)) {
+			model.addAttribute("title", "Your session has expired.");
+			model.addAttribute(
+					"message",
+					"Please go back to the <a href=\"/login\"\\>login page</a> and enter your credentials.");
+		} else {
+			model.addAttribute("title", title);
+			model.addAttribute("message", message);
+		}
 		return "expire";
 	}
 

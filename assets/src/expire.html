@@ -21,8 +21,8 @@
         </div>
       </header>
       <div class="message">
-        <h1>Your session has expired.</h1>
-        <p>
+        <h1 th:utext="${title}">Your session has expired.</h1>
+        <p th:utext="${message}">
           Please go back to the <a href="/login">login page</a> and enter your credentials.
         </p>
       </div>
