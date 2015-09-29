@@ -130,14 +130,14 @@
         min-width: 14em;
         padding: 0.3em 0.6em;
         text-align: left;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
 
       input {
         min-width: 15em;
-
-        &.twitter {
-          padding-left: 1.6em;
-        }
       }
 
       .error {
