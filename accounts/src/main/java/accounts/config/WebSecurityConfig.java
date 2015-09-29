@@ -32,23 +32,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests() //
 				.antMatchers( //
-						"/lti/login", //
 						"/account/reset-password", //
 						"/account/reset-password-change/**", //
 						"account/password-change-success", //
-						"/signin/**", //
-						"/signup/**", //
-						"/social-login/**", //
-						"/link/e/**", //
-						"/link/s/**", //
+						"/careers", //
+						"/contact", //
+						"/lti/login-existing-user", //
+						"/lti/login", //
+						"/lti/rss", //
+						"/privacy", //
 						"/register", //
 						"/register-from-social", //
 						"/register-from-LTI", //
-						"/careers", "/privacy", //
-						"/contact", //
-						"/lti/login-existing-user", //
-						"/lti/rss", //
-						"/robots.txt").permitAll();
+						"/robots.txt", //
+						"/signin/**", //
+						"/signup/**", //
+						"/social-login/**").permitAll();
 
 		http.authorizeRequests() //
 				.antMatchers( //
