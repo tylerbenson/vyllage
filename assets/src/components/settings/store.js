@@ -74,7 +74,11 @@ module.exports = Reflux.createStore({
         setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid E-mail";
         break;
       case 'siteUrl':
-        setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid Url";
+        if( setting.value.length != 0 ){
+          setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid Url";          
+        }else{
+          setting.errorMessage = null;
+        }
         break;
       case 'phoneNumber':
         setting.errorMessage = ((validator.isNumeric(setting.value) &&
