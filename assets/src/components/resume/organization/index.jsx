@@ -73,7 +73,7 @@ var Organization = React.createClass({
     });
   },
   render: function () {
-    var section = this.state.section;
+    var section = this.props.section;
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
 
