@@ -285,6 +285,13 @@
         }
       }
     }
+
+    &.guest {
+      .avatar-container {
+        float: none;
+        margin: 0;
+      }
+    }
   }
 }
 
