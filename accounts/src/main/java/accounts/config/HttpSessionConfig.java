@@ -7,7 +7,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @Configuration
 @EnableRedisHttpSession
 @Profile(value = "prod")
-// TODO: change to prod.
 public class HttpSessionConfig {
 
 }
