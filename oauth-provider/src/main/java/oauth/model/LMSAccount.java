@@ -1,9 +1,16 @@
 package oauth.model;
 
+import java.io.Serializable;
+
 import lombok.ToString;
 
 @ToString
-public class LMSAccount {
+public class LMSAccount implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -513392020151282855L;
 
 	private String lmsId;
 	private String lmsGuid;

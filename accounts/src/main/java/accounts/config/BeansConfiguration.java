@@ -17,6 +17,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -119,5 +122,13 @@ public class BeansConfiguration {
 	@Bean
 	public BatchParser batchParser() {
 		return new BatchParser();
+	}
+
+	@Bean
+	public ProviderSignInUtils providerSignInUtils(
+			ConnectionFactoryLocator connectionFactoryLocator,
+			UsersConnectionRepository connectionRepository) {
+		return new ProviderSignInUtils(connectionFactoryLocator,
+				connectionRepository);
 	}
 }

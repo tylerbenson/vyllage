@@ -136,10 +136,10 @@ var Banner = React.createClass({
     var errors = [];
 
     //Validation
-    if(!validator.isEmail(banner.email)) {
+    if(!validator.isEmail(banner.email) ) {
       errors.push('email');
     }
-    if(!validator.isURL(banner.siteUrl)) {
+    if( banner.siteUrl.length > 0 && !validator.isURL(banner.siteUrl)) {
       errors.push('siteUrl');
     }
     if(!(validator.isNumeric(banner.phoneNumber)

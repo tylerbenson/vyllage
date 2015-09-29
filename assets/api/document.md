@@ -22,7 +22,7 @@
 This endpoint is not intended for consumption from the UI. Only admins can use this endpoint.
 
 # Returns a PDF file conversion of the selected document
-## GET /resume/{documentId}/file/pdf?styleName=styleName
+## GET /resume/{documentId}/file/pdf?style=styleName
 + Parameters
 	++ documentId (string, `1`) - The id of the document.
 	++ styleName (string, `1`) - Style to use in the pdf. Optional parameter. 
@@ -30,13 +30,13 @@ This endpoint is not intended for consumption from the UI. Only admins can use t
 
 
 # Returns a PNG file conversion of the selected document
-## GET /resume/{documentId}/file/pdf?styleName=styleName&width=width&height=height
+## GET /resume/{documentId}/file/png?style=styleName&width=width&height=height
 + Parameters
 	++ documentId (string, `1`) - The id of the document.
 	++ styleName (string, `1`) - Style to use in the pdf. Optional parameter. 
 	++ width (int, `1`) - The width of the image.
 	++ height (int, `1`) - The height of the image.
-+ Response 200 (application/pdf)
++ Response 200 (image/png)
 
 # Get pdf styles
 ## GET /resume/file/pdf/styles

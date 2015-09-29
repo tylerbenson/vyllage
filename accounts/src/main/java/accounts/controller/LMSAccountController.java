@@ -32,6 +32,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
 import user.common.constants.AccountSettingsEnum;
+import user.common.lms.LMSUser;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.AvatarSourceEnum;
 import accounts.model.account.settings.Privacy;
@@ -126,7 +127,12 @@ public class LMSAccountController {
 			// LMS user doesn't exist but is on the system
 		} else if (userName != null && lmsService.userExists(userName)) {
 			session.setAttribute("user_name", userName);
-			session.setAttribute(LMSRequest.class.getName(), lmsRequest);
+
+			// session.setAttribute(LMSRequest.class.getName(), lmsRequest);
+			session.setAttribute(LMSUser.class.getName(),
+					lmsRequest.getLmsUser());
+			session.setAttribute(LMSAccount.class.getName(),
+					lmsRequest.getLmsAccount());
 
 			return "redirect:/lti/login-existing-user";
 		} else {
@@ -142,14 +148,20 @@ public class LMSAccountController {
 			if (!registerForm.emailIsValid() || !registerForm.nameIsValid()) {
 
 				model.addAttribute("registerForm", registerForm);
-				session.setAttribute(LMSRequest.class.getName(), lmsRequest);
+
+				// session.setAttribute(LMSRequest.class.getName(), lmsRequest);
+				session.setAttribute(LMSUser.class.getName(),
+						lmsRequest.getLmsUser());
+				session.setAttribute(LMSAccount.class.getName(),
+						lmsRequest.getLmsAccount());
 
 				return "register-from-LTI";
 			}
 
 			// Create Vyllage user account.
 			User newUser = lmsService.createUser(userName, password, firstName,
-					null, lastName, lmsRequest);
+					null, lastName, lmsRequest.getLmsAccount(),
+					lmsRequest.getLmsUser());
 
 			this.saveUserImage(userImageUrl, newUser);
 			this.sendUserRegisteredEmail(registerForm.getEmail(), password,
@@ -180,13 +192,19 @@ public class LMSAccountController {
 
 		if (registerForm.isValid()) {
 			HttpSession session = request.getSession(false);
-			LMSRequest lmsRequest = (LMSRequest) session
-					.getAttribute(LMSRequest.class.getName());
+			// LMSRequest lmsRequest = (LMSRequest) session
+			// .getAttribute(LMSRequest.class.getName());
+
+			LMSAccount lmsAccount = (LMSAccount) session
+					.getAttribute(LMSAccount.class.getName());
+
+			LMSUser lmsUser = (LMSUser) session.getAttribute(LMSUser.class
+					.getName());
 
 			// Create Vyllage user account.
 			User newUser = lmsService.createUser(registerForm.getEmail(),
 					registerForm.getPassword(), registerForm.getFirstName(),
-					null, registerForm.getLastName(), lmsRequest);
+					null, registerForm.getLastName(), lmsAccount, lmsUser);
 
 			this.saveUserImage(registerForm.getUserImage(), newUser);
 
@@ -194,7 +212,8 @@ public class LMSAccountController {
 					registerForm.getPassword(), registerForm.getFirstName());
 
 			session.setAttribute("user_name", newUser.getUsername());
-			session.removeAttribute(LMSRequest.class.getName());
+			session.removeAttribute(LMSAccount.class.getName());
+			session.removeAttribute(LMSUser.class.getName());
 			return "redirect:" + "/lti/login";
 		}
 

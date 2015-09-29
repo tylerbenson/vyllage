@@ -15,7 +15,7 @@ dependencies {
     //https://github.com/heneke/thymeleaf-extras-togglz
     compile files('lib/thymeleaf-extras-togglz-1.0.1.RELEASE.jar')
 
-    compile 'org.springframework:spring-context:4.1.6.RELEASE'
+    compile 'org.springframework:spring-context:4.1.7.RELEASE'
 
 //	compile 'org.springframework.security:spring-security-core:3.2.7.RELEASE'
 //	compile("org.springframework.boot:spring-boot-starter-security")

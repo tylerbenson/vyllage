@@ -223,11 +223,24 @@ public class ResumeController {
 						.map(ds -> ds.getSectionId())
 						.collect(Collectors.toList()));
 
+		Map<Long, Integer> numberOfSuggestedEditsForSections = documentService
+				.getNumberOfAdvicesForSections(documentSections.stream()
+						.map(ds -> ds.getSectionId())
+						.collect(Collectors.toList()));
+
 		documentSections
 				.stream()
 				.filter(ds -> numberOfCommentsForSections.get(ds.getSectionId()) != null)
 				.forEach(
 						ds -> ds.setNumberOfComments(numberOfCommentsForSections
+								.get(ds.getSectionId())));
+
+		documentSections
+				.stream()
+				.filter(ds -> numberOfSuggestedEditsForSections.get(ds
+						.getSectionId()) != null)
+				.forEach(
+						ds -> ds.setNumberOfSuggestedEdits(numberOfSuggestedEditsForSections
 								.get(ds.getSectionId())));
 
 		return documentSections;
@@ -246,7 +259,7 @@ public class ResumeController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "styleName", required = false, defaultValue = "default") final String styleName,
+			@RequestParam(value = "style", required = false, defaultValue = "default") final String styleName,
 			@AuthenticationPrincipal User user)
 			throws ElementNotFoundException, DocumentException, IOException {
 
@@ -292,7 +305,7 @@ public class ResumeController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "styleName", required = false, defaultValue = "default") final String styleName,
+			@RequestParam(value = "style", required = false, defaultValue = "default") final String styleName,
 			@RequestParam(value = "width", required = false, defaultValue = "64") final int width,
 			@RequestParam(value = "height", required = false, defaultValue = "98") final int height,
 			@AuthenticationPrincipal User user)
@@ -342,10 +355,15 @@ public class ResumeController {
 		int commentsForSection = documentService
 				.getNumberOfCommentsForSection(sectionId);
 
+		int advicesForSection = documentService
+				.getNumberOfAdvicesForSection(sectionId);
+
 		DocumentSection documentSection = documentService
 				.getDocumentSection(sectionId);
 
 		documentSection.setNumberOfComments(commentsForSection);
+
+		documentSection.setNumberOfSuggestedEdits(advicesForSection);
 		return documentSection;
 	}
 
