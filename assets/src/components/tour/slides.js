@@ -24,6 +24,11 @@ var slides = {
 			title: "Export",
 			image: "/images/resume-tour-5.png",
 			content: "Select a template and convert your Vyllage Resumé to PDF. Ready to print and submit!"
+		},
+		{
+			title: "Access Vyllage Anywhere",
+			image: "/images/resume-tour-6.png",
+			content: "Need to exchange feedback and check updates on-the-go? Vyllage works beautifully across all of your devices."
 		}
 	],
 	get_feedback: [
