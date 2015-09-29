@@ -468,15 +468,14 @@ public class UserService {
 				credentialsNonExpired, accountNonLocked,
 				defaultAuthoritiesForNewUser, null, null);
 
-		boolean forcePasswordChange = true;
-		userRepository.createUser(user, forcePasswordChange);
+		boolean forcePasswordChange = false;
+		boolean sendConfirmationEmail = false;
+		User guestUser = userRepository.createUser(user, forcePasswordChange,
+				sendConfirmationEmail);
 
-		User loadUserByUsername = userRepository.loadUserByUsername(linkRequest
-				.getEmail());
+		createReceiveAdviceSetting(false, guestUser);
 
-		createReceiveAdviceSetting(false, loadUserByUsername);
-
-		return loadUserByUsername;
+		return guestUser;
 	}
 
 	/**
@@ -512,7 +511,9 @@ public class UserService {
 		logger.info(newUser.toString());
 
 		boolean forcePasswordChange = false;
-		this.userRepository.createUser(newUser, forcePasswordChange);
+		boolean sendConfirmationEmail = true;
+		this.userRepository.createUser(newUser, forcePasswordChange,
+				sendConfirmationEmail);
 
 		// get id
 		newUser = this.getUser(registerForm.getEmail());
@@ -569,7 +570,9 @@ public class UserService {
 				credentialsNonExpired, accountNonLocked,
 				defaultAuthoritiesForNewUser, null, null);
 
-		userRepository.createUser(user, forcePasswordChange);
+		boolean sendConfirmationEmail = false;
+		userRepository.createUser(user, forcePasswordChange,
+				sendConfirmationEmail);
 
 		User newUser = this.getUser(user.getUsername());
 

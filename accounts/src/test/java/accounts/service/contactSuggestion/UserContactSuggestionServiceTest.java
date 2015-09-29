@@ -35,6 +35,8 @@ public class UserContactSuggestionServiceTest {
 
 	private static final boolean FORCE_PASSWORD_CHANGE = false;
 
+	private static final boolean SEND_CONFIRMATION_EMAIL = false;
+
 	@Inject
 	private UserContactSuggestionService userContactSuggestionService;
 
@@ -373,7 +375,8 @@ public class UserContactSuggestionServiceTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 
 		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 		return loadedUser;
@@ -393,7 +396,8 @@ public class UserContactSuggestionServiceTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 
 		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 		return loadedUser;
@@ -413,7 +417,8 @@ public class UserContactSuggestionServiceTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 
 		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 

@@ -36,7 +36,7 @@ public class UserDetailRepositoryTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testWithForcePasswordChange() {
-		userDetailRepository.createUser(null, false);
+		userDetailRepository.createUser(null, false, false);
 	}
 
 	@Test(expected = PasswordResetWasForcedException.class)
