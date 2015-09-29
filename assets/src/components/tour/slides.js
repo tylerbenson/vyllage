@@ -34,22 +34,22 @@ var slides = {
 	get_feedback: [
 		{
 			title: "Hello there!",
-			image: "",
+			image: "/images/get-feedback-tour-1.png",
 			content: "This page differentiates your Vyllage Resumé among others. Through this, we are providing you several ways to connect with your community and improve your resumé."
 		},
 		{
-			title: "Social",
-			image: "",
+			title: "URL Sharing",
+			image: "/images/get-feedback-tour-2.png",
 			content: "Connect with your peers! Just copy the shareable link provided and paste it anywhere in the web. You can also share directly over your social media accounts."
 		},
 		{
 			title: "E-mail ",
-			image: "",
-			content: "You can also invite directly via email. Makes asking for feedback a bit more personal and professional."
+			image: "/images/get-feedback-tour-3.png",
+			content: "You can also invite directly via email. You can add a custom message to make asking for feedback a bit more personal and professional."
 		},
 		{
 			title: "Suggestions",
-			image: "",
+			image: "/images/get-feedback-tour-4.png",
 			content: "Based on the contents of your profile, we'll match you with other Vyllage users and advisors. Meet new people and get relevant insights!"
 		}
 	]

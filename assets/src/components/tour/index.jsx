@@ -13,7 +13,7 @@ var Tour = React.createClass({
 	},
 	componentWillMount: function(){
     var page = this.props.page;
-		var tour = cookie.get(page + '-tour');
+		var tour = cookie.get(page + '_tour');
 
     //no cookie yet
 		if(tour === null) {
@@ -48,13 +48,13 @@ var Tour = React.createClass({
       this.setState({
         isOpen: false
       });
-      cookie.set(page + '-tour', -1);
+      cookie.set(page + '_tour', -1);
     }
     else {
       this.setState({
         index: index
       });
-      cookie.set(page + '-tour', index);
+      cookie.set(page + '_tour', index);
     }
   },
 	render: function() {
