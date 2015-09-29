@@ -125,6 +125,13 @@
         top: 0.25em;
       }
 
+      a {
+        display: inline-block;
+        min-width: 14em;
+        padding: 0.3em 0.6em;
+        text-align: left;
+      }
+
       input {
         min-width: 15em;
 
