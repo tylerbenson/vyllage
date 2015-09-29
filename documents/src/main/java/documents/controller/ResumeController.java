@@ -237,7 +237,8 @@ public class ResumeController {
 
 		documentSections
 				.stream()
-				.filter(ds -> numberOfSuggestedEditsForSections.get(ds.getSectionId()) != null)
+				.filter(ds -> numberOfSuggestedEditsForSections.get(ds
+						.getSectionId()) != null)
 				.forEach(
 						ds -> ds.setNumberOfSuggestedEdits(numberOfSuggestedEditsForSections
 								.get(ds.getSectionId())));
@@ -258,7 +259,7 @@ public class ResumeController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "styleName", required = false, defaultValue = "default") final String styleName,
+			@RequestParam(value = "style", required = false, defaultValue = "default") final String styleName,
 			@AuthenticationPrincipal User user)
 			throws ElementNotFoundException, DocumentException, IOException {
 
@@ -304,7 +305,7 @@ public class ResumeController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "styleName", required = false, defaultValue = "default") final String styleName,
+			@RequestParam(value = "style", required = false, defaultValue = "default") final String styleName,
 			@RequestParam(value = "width", required = false, defaultValue = "64") final int width,
 			@RequestParam(value = "height", required = false, defaultValue = "98") final int height,
 			@AuthenticationPrincipal User user)
