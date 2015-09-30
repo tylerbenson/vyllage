@@ -17,7 +17,7 @@ var Datepicker = React.createClass({
     if( date == undefined || date =='NaN' || date == 'Present' || date == '' ){
       active_year = parseInt(moment(new Date()).format('YYYY'))
     }else{
-      active_year = parseInt( date.split(' ')[1] );
+      active_year = parseInt(moment(new Date(date)).format('YYYY'));
     }
 
     return {
@@ -57,7 +57,7 @@ var Datepicker = React.createClass({
             month = moment(new Date()).format('MMM');
           }else{
             month = self.state.month;
-          } 
+          }
           self.setState({
             year: year,
             date: month + ' ' + year
@@ -91,13 +91,13 @@ var Datepicker = React.createClass({
     if( this.state.date ){
       var tmp_date = this.state.date.split(' '),
           tmp_month = tmp_date[0],
-          tmp_year = parseInt( tmp_date[1] );    
+          tmp_year = parseInt( tmp_date[1] );
     }
 
     var year = this.state.date ? tmp_year : parseInt(moment(new Date()).format('YYYY'));
     var month = this.state.date ? tmp_month : moment(new Date()).format('MMM');
     year = year + 1;
- 
+
 
     this.setState({
       year: year,
@@ -115,7 +115,7 @@ var Datepicker = React.createClass({
     if( this.state.date ){
       var tmp_date = this.state.date.split(' '),
           tmp_month = tmp_date[0],
-          tmp_year = parseInt( tmp_date[1] );    
+          tmp_year = parseInt( tmp_date[1] );
     }
     var year = this.state.date ? tmp_year : parseInt(moment(new Date()).format('YYYY'));
     var month = this.state.date ? tmp_month : moment(new Date()).format('MMM');
@@ -147,7 +147,7 @@ var Datepicker = React.createClass({
     var input = e.target.value;
     if(input.length > 0) {
       var date = moment(new Date(input)).format('MMM YYYY');
-      if(date != 'Invalid date') {    
+      if(date != 'Invalid date') {
         this.setState({
           date: date,
           month: moment(new Date(input)).format('MMM'),
@@ -242,8 +242,8 @@ var Datepicker = React.createClass({
             <button className="small inverted primary icon" onClick={this.decrementYear}>
               <i className="ion-arrow-left-c"></i>
             </button>
-            
-           <input type="text" className="year" placeholder="Year" valueLink={this.updateDate('active_year')} /> 
+
+           <input type="text" className="year" placeholder="Year" valueLink={this.updateDate('active_year')} />
 
             <button className="small inverted primary icon" onClick={this.incrementYear}>
               <i className="ion-arrow-right-c"></i>

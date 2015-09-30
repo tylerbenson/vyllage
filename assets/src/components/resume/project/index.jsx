@@ -7,7 +7,6 @@ var SuggestionBtn = require('../../buttons/suggestion');
 var CancelBtn = require('../../buttons/cancel');
 var Textarea = require('react-textarea-autosize');
 var Datepicker = require('../../datepicker');
-var Highlights = require('../highlights');
 var assign = require('lodash.assign')
 var MoveButton = require('../../buttons/move');
 var SectionFooter = require('../sections/Footer');
@@ -15,7 +14,7 @@ var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 var cloneDeep = require('clone-deep');
 
-var Organization = React.createClass({
+var Project = React.createClass({
   getInitialState: function () {
     return {
       section: this.props.section,
@@ -23,15 +22,9 @@ var Organization = React.createClass({
       newSection: this.props.section.newSection
     };
   },
-
-  // componentWillReceiveProps: function (nextProps) {
-  //   this.setState({
-  //     section: nextProps.section
-  //   });
-  // },
   componentDidMount: function() {
     if (this.state.uiEditMode) {
-      this.refs.organizationName.getDOMNode().focus();
+      this.refs.projectTitle.getDOMNode().focus();
     }
   },
   handleChange: function(key, e) {
@@ -46,7 +39,6 @@ var Organization = React.createClass({
   },
   saveHandler: function(e) {
     var section = this.state.section;
-    section['highlights'] = this.refs.highlights.getHighlights();
     actions.putSection(section);
 
     this.setState({
@@ -69,7 +61,7 @@ var Organization = React.createClass({
     this.setState({
       uiEditMode: true
     }, function () {
-      this.refs.organizationName.getDOMNode().focus();
+      this.refs.projectTitle.getDOMNode().focus();
     });
   },
   render: function () {
@@ -90,15 +82,15 @@ var Organization = React.createClass({
             <div className='title'>
               <h2>
                 <Textarea
-                  ref='organizationName'
+                  ref='projectTitle'
                   disabled={!uiEditMode}
                   className='flat'
-                  style={uiEditMode || section.organizationName ? {}: {display: 'none'}}
-                  placeholder='Organization Name'
+                  style={uiEditMode || section.projectTitle ? {}: {display: 'none'}}
+                  placeholder='Project Title'
                   type='text'
-                  value={section.organizationName}
+                  value={section.projectTitle}
                   rows="1"
-                  onChange={this.handleChange.bind(this, 'organizationName')}
+                  onChange={this.handleChange.bind(this, 'projectTitle')}
                 />
               </h2>
             </div>
@@ -116,13 +108,13 @@ var Organization = React.createClass({
           <div className='content'>
             <Textarea
               disabled={!uiEditMode}
-              style={uiEditMode || section.organizationDescription ? {}: {display: 'none'}}
+              style={uiEditMode || section.projectDescription ? {}: {display: 'none'}}
               className="flat"
               rows="1"
               autoComplete="off"
-              placeholder="Organization Description"
-              value={section.organizationDescription}
-              onChange={this.handleChange.bind(this, 'organizationDescription')}
+              placeholder="Project Description"
+              value={section.projectDescription}
+              onChange={this.handleChange.bind(this, 'projectDescription')}
             />
             <section className="subsubsection">
               <div className="header">
@@ -133,7 +125,7 @@ var Organization = React.createClass({
                       className="flat"
                       style={uiEditMode || section.role ? {}: {display: 'none'}}
                       type="text"
-                      placeholder={placeholders.role || "Degree / Position"}
+                      placeholder={placeholders.role || "Role"}
                       rows="1"
                       value={section.role}
                       onChange={this.handleChange.bind(this, 'role')}
@@ -152,44 +144,18 @@ var Organization = React.createClass({
                   onChange={this.handleChange.bind(this, 'roleDescription')}
                 />
                 <Datepicker
-                  name='startDate'
-                  date={section.startDate}
+                  name='projectDate'
+                  date={section.projectDate}
                   setDate={this.handleChange}
                 >
                   <input
                     disabled={!uiEditMode}
-                    style={uiEditMode || section.startDate ? {}: {display: 'none'}}
+                    style={uiEditMode || section.projectDate ? {}: {display: 'none'}}
                     type="text"
-                    className="inline flat date"
-                    placeholder="Start Date"
+                    className="inline flat project date"
+                    placeholder="Project Date"
                   />
                 </Datepicker>
-                {(uiEditMode || (section.startDate && (section.endDate || section.isCurrent)))? '-': null}
-                <Datepicker
-                  name='endDate'
-                  date={section.isCurrent? "Present": section.endDate}
-                  setDate={this.handleChange}
-                  isCurrent={section.isCurrent}
-                  toggleCurrent={this.toggleCurrent}
-                >
-                  <input
-                    disabled={!uiEditMode}
-                    style={uiEditMode || section.endDate || section.isCurrent ? {}: {display: 'none'}}
-                    type="text"
-                    className="inline flat date"
-                    placeholder="End Date"
-                  />
-                </Datepicker>
-                <input
-                  disabled={!uiEditMode}
-                  type="text"
-                  className="flat location"
-                  style={uiEditMode || section.location ? {}: {display: 'none'}}
-                  placeholder="Location"
-                  value={section.location}
-                  onChange={this.handleChange.bind(this, 'location')}
-                />
-                <Highlights ref="highlights" highlights={section.highlights} uiEditMode={uiEditMode} />
               </div>
             </section>
           </div>
@@ -201,7 +167,6 @@ var Organization = React.createClass({
   },
   _saveSuggestionHandler : function(){
     var section = cloneDeep(this.state.section);
-    section['highlights'] = this.refs.highlights.getHighlights();
     actions.saveSectionAdvice(section);
 
     this.setState({
@@ -211,4 +176,4 @@ var Organization = React.createClass({
   }
 });
 
-module.exports = Organization;
+module.exports = Project;
