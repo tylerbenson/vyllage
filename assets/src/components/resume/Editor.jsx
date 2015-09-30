@@ -8,6 +8,7 @@ var Header = require('./sections/Header');
 var Section = require('./sections');
 var Banner = require('./banner');
 var Empty = require('./sections/Empty');
+var Loading = require('./sections/Loading');
 var Sortable = require('../util/Sortable');
 
 var SubSection = React.createClass({
@@ -128,12 +129,18 @@ var ResumeEditor = React.createClass({
     var owner = this.state.resume.header.owner;
     var allSection;
 
-    if( this.state.resume.all_section != undefined ){
-      if( this.state.resume.all_section.length > 0 ){
-        allSection = <SectionRender sections={this.state.resume.all_section} />
-      }else{
-        allSection = <Empty />
-      }
+    if(this.state.resume.all_section !== undefined && this.state.resume.all_section.length > 0 ){
+      allSection = <SectionRender sections={this.state.resume.all_section} />
+    }
+    else if(owner === undefined) {
+      allSection = <Loading />;
+    }
+    else if(filter(this.state.resume.sections, {isSupported: true}).length === 0 &&
+        this.state.resume.all_section.length === 0) {
+      allSection = <Empty />
+    }
+    else {
+      allSection = <Loading />;
     }
 
     return (
