@@ -33,6 +33,7 @@
     "reflux": "^0.2.6",
     "superagent": "^0.21.0",
     "tether": "^0.6.5",
+    "tiny-cookie": "^0.5.4",
     "url-template": "^2.0.5",
     "validator": "^3.43.0",
     "viewport-dimensions": "^0.2.0"

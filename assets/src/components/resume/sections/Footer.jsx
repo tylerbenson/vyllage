@@ -28,7 +28,7 @@ var SectionFooter = React.createClass({
     }
     var lastModified = this.props.section.lastModified;
 
-    
+
     return (
       <div className='footer' onClick={this.stopPropagation}>
         <div className='content'>
@@ -38,10 +38,10 @@ var SectionFooter = React.createClass({
           <div className='actions'>
            { this.props.section.numberOfSuggestedEdits  ? <AdvicesCount count={this.props.section.numberOfSuggestedEdits} onClick={this.clickEdits} /> : null }
             <CommentsCount count={numberOfComments} onClick={this.clickComments} showComments={this.props.section.showComments} />
-          </div> 
+          </div>
         </div>
         <Comments section={this.props.section} owner={this.props.owner} />
-        { this.props.section != undefined ? <Advices section={this.props.section} owner={this.props.owner} /> : null } 
+        { this.props.section != undefined ? <Advices section={this.props.section} owner={this.props.owner} /> : null }
       </div>
     );
   }

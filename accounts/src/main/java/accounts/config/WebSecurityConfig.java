@@ -37,6 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"account/password-change-success", //
 						"/careers", //
 						"/contact", //
+						"/link/e/**", //
+						"/link/s/**", //
 						"/lti/login-existing-user", //
 						"/lti/login", //
 						"/lti/rss", //
