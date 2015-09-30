@@ -226,6 +226,26 @@ header {
       overflow-x: hidden;
       overflow-y: auto;
 
+      .completed {
+        background-image: url(../images/confetti.png);
+        background-position: top center;
+        background-repeat: repeat-x;
+        background-size: cover;
+
+        .message {
+          background: rgba(255,255,255,0.75);
+          color: $alternate-color-2;
+          display: block;
+          font-weight: bold;
+          line-height: 1.5;
+          padding: 2.5em;
+          text-align: center;
+          text-transform: none;
+          text-shadow: 0 0 3px #fff;
+          white-space: normal;
+        }
+      }
+
       &.view-all {
         li {
           display: block;

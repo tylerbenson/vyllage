@@ -32,6 +32,40 @@
     width: $medium-landscape;
   }
 
+  &.medium {
+    width: $medium-portrait;
+  }
+
+  &.tour {
+    text-align: center;
+    .header {
+      .title {
+        @include column(1);
+        float: none;
+
+        h1 {
+          font-size: 1.25em;
+        }
+      }
+    }
+    .content {
+      font-size: 1.15em;
+
+      .banner {
+        background: none;
+        height: 12em;
+        padding: 1em;
+      }
+      p {
+        max-width: $small-landscape;
+        margin: 0.5em auto;
+      }
+    }
+    .footer {
+      padding: 0;
+    }
+  }
+
   .header {
     @include cf();
     padding: 0;
@@ -131,10 +165,19 @@
 @media (max-width: $medium-landscape) {
   .section .modal,
   .modal {
-    &.large {
+    &.large,
+    &.medium {
       border-radius: 0;
       margin: 0 !important;
       width: 100%;
+    }
+
+    &.tour {
+      .content {
+        .banner {
+          height: 10em;
+        }
+      }
     }
   }
 }

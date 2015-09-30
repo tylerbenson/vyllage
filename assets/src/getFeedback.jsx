@@ -7,6 +7,7 @@ var ShareableLink = require('./components/getFeedback/ShareableLink');
 var Suggestions = require('./components/getFeedback/suggestions/Suggestions');
 var InviteForm = require('./components/getFeedback');
 var GetFeedbackStore = require('./components/getFeedback/store');
+var Tour = require('./components/tour');
 var actions = require('./components/getFeedback/actions');
 
 
@@ -32,6 +33,7 @@ var GetFeedback = React.createClass({
 
 		return (
 			<div>
+			<Tour page="get_feedback" />
 			<div className="banner">
 				<div className="content">
 					<i className="header-icon ion-person-stalker"></i>

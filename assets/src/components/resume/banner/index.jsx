@@ -147,7 +147,7 @@ var Banner = React.createClass({
       && banner.phoneNumber.trim().length !== 0) {
       errors.push('phoneNumber');
     }
-    
+
     if(errors.length === 0) {
       this.notifyChange(banner);
       this.setState({fields: banner});
@@ -239,7 +239,7 @@ var Banner = React.createClass({
     var name = (header.firstName ? header.firstName : '') + ' '
              + (header.lastName ? header.lastName : '');
 
-    
+
     return (
       <section className={(header.owner?'':'guest ') + 'banner'} ref="banner">
         <div className ="content">
@@ -308,20 +308,20 @@ var Banner = React.createClass({
             </div>
             <div className='detail'>
               <i className="ion-link"></i>
-              { isReadOnly ? fields.siteUrl ? this.autolink(fields.siteUrl, { target: "_blank" }) : 'Site url' :
-              <input
-                required
-                type='text'
-                placeholder="Site url"
-                disabled={isReadOnly}
-                key={fields.siteUrl || undefined}
-                className="inline transparent"
-                autoComplete="off"
-                ref="siteUrl"
-                defaultValue={fields.siteUrl}
-              />
+              { isReadOnly && fields.siteUrl ? this.autolink(fields.siteUrl, { target: "_blank" }) :
+                <input
+                  required
+                  type='text'
+                  placeholder="Website URL"
+                  disabled={isReadOnly}
+                  key={fields.siteUrl || undefined}
+                  className="inline transparent"
+                  autoComplete="off"
+                  ref="siteUrl"
+                  defaultValue={fields.siteUrl}
+                />
               }
-              
+
               <p className='error'>{siteUrlSetting.errorMessage}</p>
             </div>
           </div>
