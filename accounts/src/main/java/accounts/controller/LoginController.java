@@ -63,19 +63,12 @@ public class LoginController {
 	// http://localhost:8080/expire
 	@RequestMapping("/expire")
 	public String expire(
-			@RequestParam(value = "title", required = false) String title,
 			@RequestParam(value = "message", required = false) String message,
 			Model model) {
 
-		if (StringUtils.isBlank(message)) {
-			model.addAttribute("title", "Your session has expired.");
-			model.addAttribute(
-					"message",
-					"Please go back to the <a href=\"/login\"\\>login page</a> and enter your credentials.");
-		} else {
-			model.addAttribute("title", title);
-			model.addAttribute("message", message);
-		}
+		if (StringUtils.isBlank(message))
+			model.addAttribute("default", true);
+
 		return "expire";
 	}
 
