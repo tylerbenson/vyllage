@@ -39,6 +39,7 @@ import accounts.repository.UserOrganizationRoleRepository;
 public class LoginTest {
 
 	private static final boolean FORCE_PASSWORD_CHANGE = false;
+	private static final boolean SEND_CONFIRMATION_EMAIL = false;
 
 	@Inject
 	private UserDetailRepository userDetailRepository;
@@ -77,7 +78,8 @@ public class LoginTest {
 				Arrays.asList(new UserOrganizationRole(null, 0L,
 						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
-		userDetailRepository.createUser(user, forcePasswordChange);
+		userDetailRepository.createUser(user, forcePasswordChange,
+				SEND_CONFIRMATION_EMAIL);
 
 		userDetailRepository.loadUserByUsername(userName);
 	}
@@ -97,7 +99,8 @@ public class LoginTest {
 				Arrays.asList(new UserOrganizationRole(null, 0L,
 						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
-		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 
 		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
 				user, oldPassword);
@@ -129,7 +132,8 @@ public class LoginTest {
 				Arrays.asList(new UserOrganizationRole(null, 0L,
 						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
-		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 
 		// remember the user is logged in using the link in the email
 		UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(
@@ -164,7 +168,8 @@ public class LoginTest {
 				Arrays.asList(new UserOrganizationRole(null, 0L,
 						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
-		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 
 		userDetailRepository.changePassword(oldPassword, newPassword);
 
@@ -192,7 +197,8 @@ public class LoginTest {
 		User user = new User(userName, oldPassword, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
 		assertNotNull("User is null.", loadedUser);
@@ -210,7 +216,8 @@ public class LoginTest {
 				accountNonExpired, credentialsNonExpired, accountNonLocked,
 				Arrays.asList(auth2));
 
-		userDetailRepository.createUser(user2, false);
+		userDetailRepository.createUser(user2, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 
 		User loadedUser2 = userDetailRepository.loadUserByUsername(userName2);
 
@@ -238,7 +245,8 @@ public class LoginTest {
 		User user = new User(userName, password, enabled, accountNonExpired,
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth));
 
-		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 
 		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
@@ -266,7 +274,8 @@ public class LoginTest {
 				Arrays.asList(new UserOrganizationRole(null, 0L,
 						RolesEnum.STUDENT.name().toUpperCase(), 0L)));
 
-		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 
 		User loadUserByUsername = userDetailRepository
 				.loadUserByUsername(userName);
@@ -305,7 +314,8 @@ public class LoginTest {
 				credentialsNonExpired, accountNonLocked, Arrays.asList(auth1,
 						auth2));
 
-		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE);
+		userDetailRepository.createUser(user, FORCE_PASSWORD_CHANGE,
+				SEND_CONFIRMATION_EMAIL);
 
 		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 

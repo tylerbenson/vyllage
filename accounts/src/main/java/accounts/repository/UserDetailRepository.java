@@ -113,7 +113,7 @@ public class UserDetailRepository implements UserDetailsManager,
 		if (record == null)
 			throw new UserNotFoundException("User with id '" + userId
 					+ "' not found.");
-		User user = getUserData(record);
+		User user = this.getUserData(record);
 
 		if (record.getResetPasswordOnNextLogin())
 			throw new PasswordResetWasForcedException(
@@ -134,7 +134,7 @@ public class UserDetailRepository implements UserDetailsManager,
 			throw new UsernameNotFoundException("User with username '"
 					+ username + "' not found.");
 
-		User user = getUserData(record);
+		User user = this.getUserData(record);
 
 		if (record.getResetPasswordOnNextLogin())
 			throw new PasswordResetWasForcedException(
@@ -142,6 +142,22 @@ public class UserDetailRepository implements UserDetailsManager,
 							+ record.getUserName(), user);
 
 		return user;
+	}
+
+	/**
+	 * Gets the user without checking if the user has to change his password.
+	 * 
+	 * @param username
+	 * @return
+	 */
+	private User getUser(String username) {
+		UsersRecord record = sql.fetchOne(USERS, USERS.USER_NAME.eq(username));
+
+		if (record == null)
+			throw new UsernameNotFoundException("User with username '"
+					+ username + "' not found.");
+
+		return getUserData(record);
 	}
 
 	protected User getUserData(@NonNull UsersRecord record) {
@@ -165,15 +181,44 @@ public class UserDetailRepository implements UserDetailsManager,
 		return user;
 	}
 
-	public void createUser(@NonNull UserDetails userDetails,
-			boolean forcePasswordChange) {
+	/**
+	 * Creates a new user, optionally forces him to reset his password on the
+	 * next login and sends confirmation email to verify the email address.
+	 * 
+	 * @param userDetails
+	 * @param forcePasswordChange
+	 * @param sendConfirmationEmail
+	 * @return
+	 */
+	public User createUser(final @NonNull UserDetails userDetails,
+			final boolean forcePasswordChange,
+			final boolean sendConfirmationEmail) {
 		this.createUser(userDetails);
 		this.setForcePasswordReset(userDetails.getUsername(),
 				forcePasswordChange);
+
+		User user = getUser(userDetails.getUsername());
+
+		if (sendConfirmationEmail) {
+
+			boolean defaultEmail = true;
+			boolean confirmed = false;
+			Email email = new Email(user.getUserId(), user.getUsername(),
+					defaultEmail, confirmed);
+
+			this.confirmationEmailService.sendConfirmationEmail(user, email);
+		}
+
+		return user;
 	}
 
+	/**
+	 * Create a new user with the supplied details. Use the other
+	 * {@link #createUser(UserDetails, boolean, boolean) createUser} method
+	 * instead.
+	 */
 	@Override
-	// @Transactional
+	@Deprecated()
 	public void createUser(@NonNull UserDetails userDetails) {
 
 		User user = (User) userDetails;
@@ -200,13 +245,6 @@ public class UserDetailRepository implements UserDetailsManager,
 
 			Assert.notNull(newRecord.getUserId());
 			user.setUserId(newRecord.getUserId());
-
-			boolean defaultEmail = true;
-			boolean confirmed = false;
-			Email email = new Email(newRecord.getUserId(), user.getUsername(),
-					defaultEmail, confirmed);
-
-			this.confirmationEmailService.sendConfirmationEmail(user, email);
 
 			credentialsRepository.create(newRecord.getUserId(),
 					user.getPassword());
