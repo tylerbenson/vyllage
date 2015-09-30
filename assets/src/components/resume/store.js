@@ -280,6 +280,14 @@ module.exports = Reflux.createStore({
         var index = findindex(this.resume.sections, {sectionId: data.sectionId});
         this.resume.sections[index] = res.body;
         this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
+        if( data.advices != undefined ){
+          this.resume.sections[index].advices = [];    
+          this.resume.sections[index].advices = data.advices;
+        }
+        if( data.comments != undefined ){
+          this.resume.sections[index].comments = [];
+          this.resume.sections[index].comments = data.comments;
+        }
         this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
         this.remindToShare();
         this.trigger(this.resume);
@@ -423,12 +431,11 @@ module.exports = Reflux.createStore({
       .send(advice)      
       .end(function (err, res) {
         if( res.status == 200){
-          var index = findindex(this.resume.sections,{sectionId: section.sectionId});
-          var adviceIndex = findindex( this.resume.sections[index].advices ,{ sectionAdviceId :advice.sectionAdviceId });
-          this.resume.sections[index].advices[adviceIndex] = res.body;
-          this.resume.sections[index].numberOfSuggestedEdits--;
-          this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-          this.trigger(this.resume);
+          var newsection = clone(section);
+          if(newsection.numberOfSuggestedEdits != 0){
+            newsection.numberOfSuggestedEdits--;
+          }
+          this.onPutSectionForAdvice( newsection , section , res.body );
         }
       }.bind(this));
   },
@@ -439,31 +446,52 @@ module.exports = Reflux.createStore({
       .send(advice)      
       .end(function (err, res) {
         if( res.status == 200){
-          this.onPutSection( res.body.documentSection );
-          var index = findindex(this.resume.sections,{sectionId: section.sectionId});
-          var adviceIndex = findindex( this.resume.sections[index].advices ,{ sectionAdviceId :advice.sectionAdviceId });
-          this.resume.sections[index].advices[adviceIndex] = res.body;
-          this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);          
-          this.trigger(this.resume);          
+          var newsection = res.body.documentSection;
+          var advice_count = 0;
+          if( section.advices != undefined ){
+            section.advices.map( function(adv , ind ){
+              if( adv.status == 'pending' ){
+                advice_count++;
+              }
+            });
+          }
+          if( advice_count > 1 ) advice_count = advice_count -1; // for the merge . 
+          newsection.numberOfSuggestedEdits = advice_count;
+          this.onPutSectionForAdvice( newsection , section , res.body );
         }
       }.bind(this));
   },
 
-  MergeRecursive : function(obj1, obj2) {
-    for (var p in obj2) {
-      try {
-        if ( obj2[p].constructor==Object ) {
-          obj1[p] = this.MergeRecursive(obj1[p], obj2[p]);
-        } else {
-          obj1[p] = obj2[p];
+  onPutSectionForAdvice : function( data , section , advice ){
+    var url = urlTemplate
+                .parse(endpoints.resumeSection)
+                .expand({
+                  documentId: this.documentId,
+                  sectionId: data.sectionId
+                });
+    request
+      .put(url)
+      .set(this.tokenHeader, this.tokenValue)
+      .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','showEdits']))
+      .end(function (err, res) {
+        var index = findindex(this.resume.sections,{sectionId: section.sectionId});
+        var adviceIndex = findindex( section ,{ sectionAdviceId :advice.sectionAdviceId });
+        this.resume.sections[index] = res.body;
+        this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
+        this.resume.sections[index].advices = [];
+        this.resume.sections[index].comments = [];
+        if( section.advices != undefined ){
+          this.resume.sections[index].advices = clone(section.advices);  
+          this.resume.sections[index].advices[adviceIndex] = advice;
         }
-      } catch(e) {
-        obj1[p] = obj2[p];
-      }
-    }
-    return obj1;
-  },
+        if( section.comments != undefined ){
+          this.resume.sections[index].comments = clone(section.comments);
+        }
+        this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);          
+        this.trigger(this.resume); 
 
+      }.bind(this));
+  },
 
   onEnableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
