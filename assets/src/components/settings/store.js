@@ -122,7 +122,7 @@ module.exports = Reflux.createStore({
       .get('/account/ping')
       .end(function (err, res) {
         if(res.status != 200){
-          window.location.href = '/logout';
+          window.location.href = '/expire';
         }
       }.bind(this))
   },
