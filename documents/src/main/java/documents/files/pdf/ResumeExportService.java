@@ -5,12 +5,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.util.Comparator;
 import java.util.List;
@@ -24,7 +20,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -100,26 +95,11 @@ public class ResumeExportService {
 
 		ITextRenderer renderer = preparePDF(resumeHeader, sections, styleName);
 
-		File tempFile = null;
-
-		try {
-			tempFile = File.createTempFile("document", ".pdf");
-		} catch (IOException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
-
-		Assert.notNull(tempFile);
-
 		// saving the pdf
-		try (FileOutputStream fop = new FileOutputStream(tempFile)) {
+		final ByteArrayOutputStream fop = new ByteArrayOutputStream();
+		try {
 			renderer.createPDF(fop);
 			renderer.finishPDF();
-			// if file doesn't exists, then create it
-			if (!tempFile.exists()) {
-				tempFile.createNewFile();
-			}
-
 			fop.flush();
 
 		} catch (IOException e) {
@@ -128,10 +108,9 @@ public class ResumeExportService {
 		}
 
 		// loading the pdf and rendering an image of the first page
-		try (FileInputStream fis = new FileInputStream(tempFile)) {
-			FileChannel channel = fis.getChannel();
-			MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY,
-					0, channel.size());
+		try {
+			ByteBuffer buf = ByteBuffer.wrap(fop.toByteArray());
+
 			PDFFile pdffile = new PDFFile(buf);
 
 			// draw the first page to an image
@@ -161,7 +140,6 @@ public class ResumeExportService {
 
 			ImageIO.write(bufferedImage, "png", out);
 			w.write(bufferedImage, out);
-			tempFile.delete();
 
 			out.close();
 
