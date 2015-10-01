@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 
+import lombok.NonNull;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -55,17 +57,11 @@ public class ResumeExportService {
 	}
 
 	public ByteArrayOutputStream generatePDFDocument(
-			DocumentHeader resumeHeader, List<DocumentSection> sections,
-			String styleName) throws DocumentException {
-		final ByteArrayOutputStream pdfBytes;
+			@NonNull final DocumentHeader resumeHeader,
+			@NonNull final List<DocumentSection> sections,
+			@NonNull final String styleName) throws DocumentException {
 
-		final String key = this.getCacheKey(resumeHeader, sections, styleName);
-
-		pdfBytes = this.getCachedDocument(key, resumeHeader, sections,
-				styleName);
-
-		return pdfBytes;
-
+		return this.getCachedDocument(resumeHeader, sections, styleName);
 	}
 
 	/**
@@ -93,9 +89,7 @@ public class ResumeExportService {
 
 		final ByteArrayOutputStream imageByteArrayOutputStream = new ByteArrayOutputStream();
 
-		final String key = this.getCacheKey(resumeHeader, sections, styleName);
-
-		final ByteArrayOutputStream pdfBytes = this.getCachedDocument(key,
+		final ByteArrayOutputStream pdfBytes = this.getCachedDocument(
 				resumeHeader, sections, styleName);
 
 		try {
@@ -142,9 +136,12 @@ public class ResumeExportService {
 
 	}
 
-	protected ByteArrayOutputStream getCachedDocument(final String key,
+	protected ByteArrayOutputStream getCachedDocument(
 			final DocumentHeader resumeHeader,
 			final List<DocumentSection> sections, final String styleName) {
+
+		final String key = this.getCacheKey(resumeHeader, sections, styleName);
+
 		ByteArrayOutputStream pdfBytes = null;
 
 		try {
@@ -174,20 +171,6 @@ public class ResumeExportService {
 		return pdfBytes;
 	}
 
-	private String getCacheKey(DocumentHeader resumeHeader,
-			List<DocumentSection> sections, String styleName) {
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(resumeHeader.hashCode()).append("-");
-
-		if (!sections.isEmpty())
-			sb.append(sections.hashCode()).append("-");
-
-		sb.append(styleName);
-
-		return sb.toString();
-	}
-
 	protected ITextRenderer preparePDF(DocumentHeader resumeHeader,
 			List<DocumentSection> sections, String styleName) {
 		Context ctx = new Context();
@@ -214,6 +197,29 @@ public class ResumeExportService {
 
 		renderer.layout();
 		return renderer;
+	}
+
+	/**
+	 * Generates a key based on the hash of the resume header, sections and
+	 * style name.
+	 * 
+	 * @param resumeHeader
+	 * @param sections
+	 * @param styleName
+	 * @return
+	 */
+	private String getCacheKey(DocumentHeader resumeHeader,
+			List<DocumentSection> sections, String styleName) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(resumeHeader.hashCode()).append("-");
+
+		if (!sections.isEmpty())
+			sb.append(sections.hashCode()).append("-");
+
+		sb.append(styleName);
+
+		return sb.toString();
 	}
 
 	/**
