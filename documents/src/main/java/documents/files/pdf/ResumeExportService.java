@@ -25,6 +25,8 @@ import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import org.xhtmlrenderer.util.FSImageWriter;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
 import com.sun.pdfview.PDFFile;
@@ -41,9 +43,12 @@ public class ResumeExportService {
 
 	private final TemplateEngine templateEngine;
 
+	private Cache<String, ByteArrayOutputStream> pdfs;
+
 	@Inject
 	public ResumeExportService(final TemplateEngine templateEngine) {
 		this.templateEngine = templateEngine;
+		pdfs = CacheBuilder.newBuilder().maximumSize(100).build();
 	}
 
 	public ByteArrayOutputStream generatePDFDocument(
@@ -91,25 +96,35 @@ public class ResumeExportService {
 			height = 98 * 2;
 		}
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		final ByteArrayOutputStream imageByteArrayOutputStream = new ByteArrayOutputStream();
 
-		ITextRenderer renderer = preparePDF(resumeHeader, sections, styleName);
+		final ITextRenderer renderer = preparePDF(resumeHeader, sections,
+				styleName);
 
-		// saving the pdf
-		final ByteArrayOutputStream fop = new ByteArrayOutputStream();
-		try {
-			renderer.createPDF(fop);
-			renderer.finishPDF();
-			fop.flush();
+		final String key = this.getCacheKey(resumeHeader, sections, styleName);
 
-		} catch (IOException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
+		ByteArrayOutputStream pdfBytes = pdfs.getIfPresent(key);
+
+		if (pdfBytes == null) {
+
+			try {
+				pdfBytes = new ByteArrayOutputStream();
+
+				renderer.createPDF(pdfBytes);
+				renderer.finishPDF();
+				pdfBytes.flush();
+
+				pdfs.put(key, pdfBytes);
+
+			} catch (IOException e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
 		}
-
 		// loading the pdf and rendering an image of the first page
 		try {
-			ByteBuffer buf = ByteBuffer.wrap(fop.toByteArray());
+
+			ByteBuffer buf = ByteBuffer.wrap(pdfBytes.toByteArray());
 
 			PDFFile pdffile = new PDFFile(buf);
 
@@ -130,7 +145,7 @@ public class ResumeExportService {
 					true, // fill background with white
 					true // block until drawing is done
 					);
-			FSImageWriter w = new FSImageWriter("png");
+			FSImageWriter imageWritter = new FSImageWriter("png");
 
 			Image scaledInstance = image.getScaledInstance(width, height,
 					Image.SCALE_SMOOTH);
@@ -138,18 +153,32 @@ public class ResumeExportService {
 			Graphics2D bufImageGraphics = bufferedImage.createGraphics();
 			bufImageGraphics.drawImage(scaledInstance, 0, 0, null);
 
-			ImageIO.write(bufferedImage, "png", out);
-			w.write(bufferedImage, out);
+			ImageIO.write(bufferedImage, "png", imageByteArrayOutputStream);
+			imageWritter.write(bufferedImage, imageByteArrayOutputStream);
 
-			out.close();
+			imageByteArrayOutputStream.close();
 
 		} catch (IOException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 		}
 
-		return out;
+		return imageByteArrayOutputStream;
 
+	}
+
+	private String getCacheKey(DocumentHeader resumeHeader,
+			List<DocumentSection> sections, String styleName) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(resumeHeader.getEmail()).append("-");
+
+		if (!sections.isEmpty())
+			sb.append(sections.get(0).getDocumentId()).append("-");
+
+		sb.append(styleName);
+
+		return sb.toString();
 	}
 
 	protected ITextRenderer preparePDF(DocumentHeader resumeHeader,
