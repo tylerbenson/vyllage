@@ -1,6 +1,7 @@
 package site;
 
 import java.security.Principal;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,9 +31,12 @@ public class PrincipalDetailsInterceptor extends HandlerInterceptorAdapter {
 
 			NewRelic.addCustomParameter("email", userPrincipal.getName());
 
-			if (userPrincipal instanceof User)
+			if (userPrincipal instanceof User) {
 				NewRelic.addCustomParameter("date-created",
 						this.getUserDateCreated(userPrincipal));
+				NewRelic.addCustomParameter("date-created-unix",
+						this.getUserDateCreatedUnix(userPrincipal));
+			}
 
 			if (userPrincipal instanceof User)
 				NewRelic.addCustomParameter("userId",
@@ -64,5 +68,11 @@ public class PrincipalDetailsInterceptor extends HandlerInterceptorAdapter {
 		return ((User) userPrincipal).getDateCreated() != null ? ((User) userPrincipal)
 				.getDateCreated().format(formatter)
 				: "No creation date present";
+	}
+
+	protected long getUserDateCreatedUnix(Principal userPrincipal) {
+		return ((User) userPrincipal).getDateCreated() != null ? ((User) userPrincipal)
+				.getDateCreated().toInstant(ZoneOffset.UTC).toEpochMilli()
+				: 0;
 	}
 }
