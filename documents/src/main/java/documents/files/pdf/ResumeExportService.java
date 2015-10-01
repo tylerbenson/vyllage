@@ -11,6 +11,8 @@ import java.text.ParseException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -48,28 +50,21 @@ public class ResumeExportService {
 	@Inject
 	public ResumeExportService(final TemplateEngine templateEngine) {
 		this.templateEngine = templateEngine;
-		pdfs = CacheBuilder.newBuilder().maximumSize(100).build();
+		pdfs = CacheBuilder.newBuilder().maximumSize(10)
+				.expireAfterAccess(15, TimeUnit.MINUTES).build();
 	}
 
 	public ByteArrayOutputStream generatePDFDocument(
 			DocumentHeader resumeHeader, List<DocumentSection> sections,
 			String styleName) throws DocumentException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		final ByteArrayOutputStream pdfBytes;
 
-		try {
+		final String key = this.getCacheKey(resumeHeader, sections, styleName);
 
-			ITextRenderer renderer = preparePDF(resumeHeader, sections,
-					styleName);
-			renderer.createPDF(out);
-			renderer.finishPDF();
+		pdfBytes = this.getCachedDocument(key, resumeHeader, sections,
+				styleName);
 
-			out.close();
-		} catch (IOException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
-
-		return out;
+		return pdfBytes;
 
 	}
 
@@ -98,30 +93,11 @@ public class ResumeExportService {
 
 		final ByteArrayOutputStream imageByteArrayOutputStream = new ByteArrayOutputStream();
 
-		final ITextRenderer renderer = preparePDF(resumeHeader, sections,
-				styleName);
-
 		final String key = this.getCacheKey(resumeHeader, sections, styleName);
 
-		ByteArrayOutputStream pdfBytes = pdfs.getIfPresent(key);
+		final ByteArrayOutputStream pdfBytes = this.getCachedDocument(key,
+				resumeHeader, sections, styleName);
 
-		if (pdfBytes == null) {
-
-			try {
-				pdfBytes = new ByteArrayOutputStream();
-
-				renderer.createPDF(pdfBytes);
-				renderer.finishPDF();
-				pdfBytes.flush();
-
-				pdfs.put(key, pdfBytes);
-
-			} catch (IOException e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
-			}
-		}
-		// loading the pdf and rendering an image of the first page
 		try {
 
 			ByteBuffer buf = ByteBuffer.wrap(pdfBytes.toByteArray());
@@ -162,19 +138,50 @@ public class ResumeExportService {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 		}
-
 		return imageByteArrayOutputStream;
 
+	}
+
+	protected ByteArrayOutputStream getCachedDocument(final String key,
+			final DocumentHeader resumeHeader,
+			final List<DocumentSection> sections, final String styleName) {
+		ByteArrayOutputStream pdfBytes = null;
+
+		try {
+			pdfBytes = pdfs
+					.get(key,
+							() -> {
+
+								final ITextRenderer renderer = preparePDF(
+										resumeHeader, sections, styleName);
+
+								ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+								renderer.createPDF(out);
+								renderer.finishPDF();
+								out.flush();
+
+								pdfs.put(key, out);
+
+								return out;
+							});
+
+		} catch (ExecutionException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+
+		return pdfBytes;
 	}
 
 	private String getCacheKey(DocumentHeader resumeHeader,
 			List<DocumentSection> sections, String styleName) {
 
 		StringBuilder sb = new StringBuilder();
-		sb.append(resumeHeader.getEmail()).append("-");
+		sb.append(resumeHeader.hashCode()).append("-");
 
 		if (!sections.isEmpty())
-			sb.append(sections.get(0).getDocumentId()).append("-");
+			sb.append(sections.hashCode()).append("-");
 
 		sb.append(styleName);
 

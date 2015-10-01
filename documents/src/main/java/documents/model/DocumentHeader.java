@@ -1,10 +1,12 @@
 package documents.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @ToString
+@EqualsAndHashCode
 @JsonIgnoreProperties({ "inValid" })
 public class DocumentHeader {
 

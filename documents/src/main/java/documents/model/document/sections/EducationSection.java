@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import util.dateSerialization.LocalDateDeserializer;
 import util.dateSerialization.LocalDateSerializer;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class EducationSection extends DocumentSection {
 
 	private String organizationName;
