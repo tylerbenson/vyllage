@@ -24,32 +24,31 @@ public class PrincipalDetailsInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) {
-		Principal userPrincipal = request.getUserPrincipal();
+		final Principal userPrincipal = request.getUserPrincipal();
 
 		if (userPrincipal != null) {
 
 			NewRelic.addCustomParameter("email", userPrincipal.getName());
 
-			if (userPrincipal instanceof User) {
-				String dateCreated = ((User) userPrincipal).getDateCreated() != null ? ((User) userPrincipal)
-						.getDateCreated().format(formatter)
-						: "No creation date present";
+			if (userPrincipal instanceof User)
+				NewRelic.addCustomParameter("date-created",
+						this.getUserDateCreated(userPrincipal));
 
-				NewRelic.addCustomParameter("date-created", dateCreated);
-			}
+			if (userPrincipal instanceof User)
+				NewRelic.addCustomParameter("userId",
+						((User) userPrincipal).getUserId());
 
 			if (userPrincipal instanceof UsernamePasswordAuthenticationToken) {
 
-				UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) userPrincipal;
 				int i = 0;
+				UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) userPrincipal;
 
 				for (GrantedAuthority grantedAuthority : token.getAuthorities()) {
 
 					if (grantedAuthority instanceof UserOrganizationRole) {
 						i++;
 						UserOrganizationRole uor = (UserOrganizationRole) grantedAuthority;
-						NewRelic.addCustomParameter("userId-" + i,
-								uor.getUserId());
+
 						NewRelic.addCustomParameter(
 								"userRole-" + i,
 								uor.getOrganizationId() + "-"
@@ -59,5 +58,11 @@ public class PrincipalDetailsInterceptor extends HandlerInterceptorAdapter {
 			}
 		}
 		return true;
+	}
+
+	protected String getUserDateCreated(Principal userPrincipal) {
+		return ((User) userPrincipal).getDateCreated() != null ? ((User) userPrincipal)
+				.getDateCreated().format(formatter)
+				: "No creation date present";
 	}
 }
