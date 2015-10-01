@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties({ "inValid" })
 public class DocumentHeader {
 
-	// added inValid t be ignored in case the frontend sends back the
+	// added inValid to be ignored in case the frontend sends back the
 	// same object with inValid as property
 
 	private String firstName;
