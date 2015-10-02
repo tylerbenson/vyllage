@@ -1,6 +1,7 @@
 package site;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
@@ -31,16 +32,22 @@ public class PrincipalDetailsInterceptor extends HandlerInterceptorAdapter {
 
 			NewRelic.addCustomParameter("email", userPrincipal.getName());
 
-			if (userPrincipal instanceof User) {
-				NewRelic.addCustomParameter("date-created",
-						this.getUserDateCreated(userPrincipal));
-				NewRelic.addCustomParameter("date-created-unix",
-						this.getUserDateCreatedUnix(userPrincipal));
-			}
+			if (request.getSession() != null)
+				NewRelic.addCustomParameter("date-last-access", request
+						.getSession(false).getCreationTime());
 
-			if (userPrincipal instanceof User)
+			if (userPrincipal instanceof User) {
 				NewRelic.addCustomParameter("userId",
 						((User) userPrincipal).getUserId());
+
+				NewRelic.addCustomParameter("date-created-unix", this
+						.getUserDateUnix(((User) userPrincipal)
+								.getDateCreated()));
+
+				NewRelic.addCustomParameter("date-modified-unix", this
+						.getUserDateUnix(((User) userPrincipal)
+								.getLastModified()));
+			}
 
 			if (userPrincipal instanceof UsernamePasswordAuthenticationToken) {
 
@@ -64,15 +71,7 @@ public class PrincipalDetailsInterceptor extends HandlerInterceptorAdapter {
 		return true;
 	}
 
-	protected String getUserDateCreated(Principal userPrincipal) {
-		return ((User) userPrincipal).getDateCreated() != null ? ((User) userPrincipal)
-				.getDateCreated().format(formatter)
-				: "No creation date present";
-	}
-
-	protected long getUserDateCreatedUnix(Principal userPrincipal) {
-		return ((User) userPrincipal).getDateCreated() != null ? ((User) userPrincipal)
-				.getDateCreated().toInstant(ZoneOffset.UTC).toEpochMilli()
-				: 0;
+	protected long getUserDateUnix(LocalDateTime date) {
+		return date != null ? date.toInstant(ZoneOffset.UTC).toEpochMilli() : 0;
 	}
 }
