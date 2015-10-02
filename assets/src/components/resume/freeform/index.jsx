@@ -13,6 +13,7 @@ var DeleteSection = require('../Delete');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 var cloneDeep = require('clone-deep');
+var FeatureToggle = require('../../util/FeatureToggle');
 
 var Freeform = React.createClass({
   getInitialState: function() {
@@ -81,10 +82,10 @@ var Freeform = React.createClass({
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
             {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
-          </div>: <div className="actions"> 
+          </div>: <FeatureToggle name="ADVICES"><div className="actions"> 
             {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
             {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
-          </div>
+          </div></FeatureToggle>
         }
         </div>
         {this.props.section.sectionId ? <div>

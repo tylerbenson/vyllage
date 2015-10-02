@@ -14,6 +14,7 @@ var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 var cloneDeep = require('clone-deep');
+var FeatureToggle = require('../../util/FeatureToggle');
 
 var Organization = React.createClass({
   getInitialState: function () {
@@ -105,10 +106,10 @@ var Organization = React.createClass({
             {this.props.owner? <div className="actions">
               {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
               {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
-            </div>:  <div className="actions"> 
+            </div>: <FeatureToggle name="ADVICES"> <div className="actions"> 
                {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
-               {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
-            </div>
+               {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null } 
+            </div></FeatureToggle>
             }
 
 

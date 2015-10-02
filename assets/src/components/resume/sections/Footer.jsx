@@ -5,6 +5,7 @@ var Advices = require('../advices');
 var CommentsCount = require('../../buttons/comments-count');
 var AdvicesCount = require('../../buttons/advices-count');
 var moment = require('moment');
+var FeatureToggle = require('../../util/FeatureToggle');
 
 var SectionFooter = React.createClass({
   stopPropagation: function (e) {
@@ -35,12 +36,14 @@ var SectionFooter = React.createClass({
             {moment(lastModified).isValid() ? moment.utc(lastModified).fromNow(): ''}
           </p>
           <div className='actions'>
-           { this.props.section.numberOfSuggestedEdits > 0  ? <AdvicesCount count={this.props.section.numberOfSuggestedEdits} onClick={this.clickEdits} showEdits={this.props.section.showEdits} /> : null }
+           <FeatureToggle name="ADVICES">
+             { this.props.section.numberOfSuggestedEdits  ? <AdvicesCount count={this.props.section.numberOfSuggestedEdits} onClick={this.clickEdits} showEdits={this.props.section.showEdits} /> : null }
+           </FeatureToggle>
             <CommentsCount count={numberOfComments} onClick={this.clickComments} showComments={this.props.section.showComments} />
           </div>
         </div>
         <Comments section={this.props.section} owner={this.props.owner} />
-        { this.props.section != undefined ? <Advices section={this.props.section} owner={this.props.owner} /> : null }
+        <FeatureToggle name="ADVICES">{ this.props.section != undefined ? <Advices section={this.props.section} owner={this.props.owner} /> : null }</FeatureToggle>
       </div>
     );
   }
