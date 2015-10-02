@@ -48,10 +48,10 @@ public class PrincipalDetailsInterceptor extends HandlerInterceptorAdapter {
 					// NewRelic.addCustomParameter("date-document-last-modified",
 					// userDocumentLastModification);
 
-					NewRelic.addCustomParameter("date-created-unix",
+					NewRelic.addCustomParameter("userCreated",
 							this.getUserDateUnix(user.getDateCreated()));
 
-					NewRelic.addCustomParameter("date-modified-unix",
+					NewRelic.addCustomParameter("userLastModified",
 							this.getUserDateUnix(user.getLastModified()));
 				}
 
