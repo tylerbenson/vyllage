@@ -32,9 +32,9 @@
         <img src="/documents/images/phone-icon.png" />
         <p th:text="${header.phoneNumber}">(555)1234-56789</p>
       </div>
-      <div th:if="${header.twitter != null}">
+      <div th:if="${header.siteUrl != null}">
         <img src="/documents/images/web-icon.png" />
-        <p th:text="${header.twitter}">@abcd</p>
+        <p th:text="${header.siteUrl}">@abcd</p>
       </div>
     </div>
   </div>

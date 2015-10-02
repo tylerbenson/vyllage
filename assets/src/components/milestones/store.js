@@ -136,11 +136,11 @@ var MilestoneStore = Reflux.createStore({
         action: this.editBannerField.bind(this, 'address')
       },
       {
-        text: 'Input your twitter username.',
-        icon: 'ion-social-twitter',
-        isDone: this.hasTwitterUrl(),
+        text: 'Input your website URL.',
+        icon: 'ion-link',
+        isDone: this.hasSiteURL(),
         priority: 5,
-        action: this.editBannerField.bind(this, 'twitter')
+        action: this.editBannerField.bind(this, 'siteUrl')
       },
       {
         text: 'Give users an overview of your resumé. Add an Objective Section.',
@@ -201,8 +201,8 @@ var MilestoneStore = Reflux.createStore({
   hasContactNumber: function() {
     return Boolean(this.resume.header.phoneNumber);
   },
-  hasTwitterUrl: function() {
-    return Boolean(this.resume.header.twitter);
+  hasSiteURL: function() {
+    return Boolean(this.resume.header.siteUrl);
   },
   hasSummarySection: function() {
     return filter(this.resume.sections, {type: "SummarySection"}).length > 0;

@@ -14,7 +14,7 @@
     <header th:replace="adminHeader :: header">
     </header>
     <div class="section content">
-      <form name="adminForm" class="container" action="#" th:action="@{/admin/users}" th:object="${adminUsersForm}" method="POST"
+      <form name="adminForm" class="container" action="#" th:action="@{/admin/users}" th:object="${adminUsersForm}" method="GET"
       onsubmit="adminFormSubmit()">
         <select id='organizationId' name='organizationId' onchange="this.form.submit()">
           <option th:each="org : ${organizations}" th:value="${org.organizationId}" th:text="${org.organizationName}" th:selected="${org.selected}">Some organization</option>

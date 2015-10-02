@@ -125,12 +125,19 @@
         top: 0.25em;
       }
 
+      a {
+        display: inline-block;
+        min-width: 14em;
+        padding: 0.3em 0.6em;
+        text-align: left;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
       input {
         min-width: 15em;
-
-        &.twitter {
-          padding-left: 1.6em;
-        }
       }
 
       .error {
@@ -276,6 +283,13 @@
         .name {
           font-size: 1em;
         }
+      }
+    }
+
+    &.guest {
+      .avatar-container {
+        float: none;
+        margin: 0;
       }
     }
   }

@@ -1164,6 +1164,10 @@
       "version": "0.6.5",
       "from": "tether@0.6.5"
     },
+    "tiny-cookie": {
+      "version": "0.5.4",
+      "from": "tiny-cookie@0.5.4"
+    },
     "url-template": {
       "version": "2.0.6",
       "from": "url-template@2.0.6"

@@ -68,6 +68,15 @@ var Milestone = React.createClass({
 			);
 		});
 
+		var TasksComplete = (
+			<div className="completed">
+				<div className="message">
+					Well done for completing your Vyllage Resumé!
+					Keep sharing to get some valuable feedback.
+				</div>
+			</div>
+		);
+
 		var Toggle = <button onMouseDown={this.viewAllToggle} className="milestone-ignore toggle flat">{this.state.viewAll ? 'View Priority' : 'View All'}</button>
 
 		return (
@@ -91,9 +100,13 @@ var Milestone = React.createClass({
 								</div>
 							</div>
 						</div>
-						<div className="title">What&quot;s Next?</div>
+						<div className="title">{ incompleteTasks > 0 ? "Next Steps" : "Tasks Complete!" }</div>
 						<ul className={this.state.viewAll?'view-all':''}>
-							{NextSteps}
+							{
+								incompleteTasks > 0 ?
+								NextSteps :
+								TasksComplete
+							}
 						</ul>
 						{incompleteTasks > numberOfTasksToShow ? Toggle : null}
 					</div>

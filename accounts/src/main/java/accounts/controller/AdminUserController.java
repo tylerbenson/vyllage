@@ -45,6 +45,8 @@ import accounts.service.BatchAccountCreationService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
 
+import com.newrelic.api.agent.Trace;
+
 @Controller
 @RequestMapping("admin")
 public class AdminUserController {
@@ -155,65 +157,42 @@ public class AdminUserController {
 		return "redirect:/admin/user/roles";
 	}
 
+	@Trace
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String showUsers(final HttpServletRequest request,
-			@AuthenticationPrincipal User user, Model model) {
-
-		List<Organization> allOrganizations = getAdminOrganizations(user);
-
-		List<UserFormObject> usersFromOrganization = userService
-				.getUsersFromOrganization(
-						allOrganizations.get(0).getOrganizationId())
-				.stream()
-				.parallel()
-				.map(u -> new UserFormObject(u))
-				.map(uf -> {
-					try {
-						uf.setDocuments(documentService.getUserDocumentId(
-								request, uf.getUserId()));
-					} catch (Exception e) {
-						// no documents, empty list
-						uf.setDocuments(Collections.emptyList());
-					}
-					return uf;
-				})
-				.map(uf -> {
-					uf.getAuthorities().removeIf(
-							auth -> !auth.getOrganizationId()
-									.equals(allOrganizations.get(0)
-											.getOrganizationId()));
-					return uf;
-				}).collect(Collectors.toList());
-
-		List<OrganizationOptionForm> organizationOptions = allOrganizations
-				.stream().map(org1 -> new OrganizationOptionForm(org1, false))
-				.collect(Collectors.toList());
-
-		organizationOptions.get(0).setSelected(true);
-
-		model.addAttribute("organizations", organizationOptions);
-		model.addAttribute("users", usersFromOrganization);
-		model.addAttribute("adminUsersForm", new AdminUsersForm());
-
-		return "adminUsers";
-	}
-
-	@RequestMapping(value = "/users", method = RequestMethod.POST)
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public String showUsersPOST(HttpServletRequest request,
 			@AuthenticationPrincipal User user, final AdminUsersForm form,
 			Model model) {
 
-		List<OrganizationOptionForm> organizationOptions = getAdminOrganizations(
-				user)
-				.stream()
-				.map(org1 -> new OrganizationOptionForm(org1, org1
-						.getOrganizationId().equals(form.getOrganizationId())))
-				.collect(Collectors.toList());
+		final Long organizationId;
+
+		final List<Organization> allOrganizations;
+
+		final List<OrganizationOptionForm> organizationOptions;
+
+		if (form != null && form.getOrganizationId() != null) {
+			organizationId = form.getOrganizationId();
+			organizationOptions = getAdminOrganizations(user)
+					.stream()
+					.map(org1 -> new OrganizationOptionForm(org1, org1
+							.getOrganizationId().equals(organizationId)))
+					.collect(Collectors.toList());
+		} else {
+			allOrganizations = getAdminOrganizations(user);
+			organizationId = allOrganizations.get(0).getOrganizationId();
+
+			organizationOptions = allOrganizations.stream()
+					.map(org1 -> new OrganizationOptionForm(org1, false))
+					.collect(Collectors.toList());
+
+			organizationOptions.get(0).setSelected(true);
+
+			model.addAttribute("adminUsersForm", new AdminUsersForm());
+
+		}
 
 		List<UserFormObject> usersFromOrganization = userService
-				.getUsersFromOrganization(form.getOrganizationId())
+				.getUsersFromOrganization(organizationId)
 				.stream()
 				.parallel()
 				.map(u -> new UserFormObject(u))
@@ -230,7 +209,7 @@ public class AdminUserController {
 				.map(uf -> {
 					uf.getAuthorities().removeIf(
 							auth -> !auth.getOrganizationId().equals(
-									form.getOrganizationId()));
+									organizationId));
 					return uf;
 				}).collect(Collectors.toList());
 

@@ -78,6 +78,132 @@ public class ResumeExportServiceTest {
 	}
 
 	@Test
+	public void testGeneratePDFDocumentEmptyHeader() throws DocumentException {
+		ResumeExportService service = new ResumeExportService(templateEngine);
+
+		DocumentHeader resumeHeader = new DocumentHeader();
+
+		String styleName = "default";
+
+		List<DocumentSection> sections = new ArrayList<>();
+
+		SkillsSection s1 = new SkillsSection();
+		s1.setDocumentId(0L);
+		s1.setLastModified(LocalDateTime.now());
+		s1.setNumberOfComments(1);
+		s1.setSectionId(1L);
+		s1.setSectionVersion(1L);
+		s1.setTitle("Skills");
+		s1.setType("SkillsSection");
+		s1.setTags(Arrays.asList("Skill1", "Skill2"));
+
+		sections.add(s1);
+
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generatePDFDocument(resumeHeader, sections, styleName);
+
+		assertNotNull(byteArrayOutputStream);
+
+	}
+
+	@Test
+	public void testGeneratePDFDocumentEmptySections() throws DocumentException {
+		ResumeExportService service = new ResumeExportService(templateEngine);
+
+		DocumentHeader resumeHeader = new DocumentHeader();
+		resumeHeader.setPhoneNumber("1234567899");
+
+		String styleName = "default";
+
+		List<DocumentSection> sections = new ArrayList<>();
+
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generatePDFDocument(resumeHeader, sections, styleName);
+
+		assertNotNull(byteArrayOutputStream);
+
+	}
+
+	@Test
+	public void testGeneratePDFDocumentEmptySectionsAndHeader()
+			throws DocumentException {
+		ResumeExportService service = new ResumeExportService(templateEngine);
+
+		DocumentHeader resumeHeader = new DocumentHeader();
+
+		String styleName = "default";
+
+		List<DocumentSection> sections = new ArrayList<>();
+
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generatePDFDocument(resumeHeader, sections, styleName);
+
+		assertNotNull(byteArrayOutputStream);
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGeneratePDFDocumentNullSectionsAndHeader()
+			throws DocumentException {
+		ResumeExportService service = new ResumeExportService(templateEngine);
+
+		String styleName = "default";
+
+		DocumentHeader resumeHeader = null;
+		List<DocumentSection> sections = null;
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generatePDFDocument(resumeHeader, sections, styleName);
+
+		assertNotNull(byteArrayOutputStream);
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGeneratePDFDocumentNullSections() throws DocumentException {
+		ResumeExportService service = new ResumeExportService(templateEngine);
+
+		String styleName = "default";
+
+		DocumentHeader resumeHeader = new DocumentHeader();
+		List<DocumentSection> sections = null;
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generatePDFDocument(resumeHeader, sections, styleName);
+
+		assertNotNull(byteArrayOutputStream);
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGeneratePDFDocumentNullStyle() throws DocumentException {
+		ResumeExportService service = new ResumeExportService(templateEngine);
+
+		DocumentHeader resumeHeader = new DocumentHeader();
+		resumeHeader.setPhoneNumber("1234567899");
+
+		String styleName = null;
+
+		List<DocumentSection> sections = new ArrayList<>();
+
+		SkillsSection s1 = new SkillsSection();
+		s1.setDocumentId(0L);
+		s1.setLastModified(LocalDateTime.now());
+		s1.setNumberOfComments(1);
+		s1.setSectionId(1L);
+		s1.setSectionVersion(1L);
+		s1.setTitle("Skills");
+		s1.setType("SkillsSection");
+		s1.setTags(Arrays.asList("Skill1", "Skill2"));
+
+		sections.add(s1);
+
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generatePDFDocument(resumeHeader, sections, styleName);
+
+		assertNotNull(byteArrayOutputStream);
+
+	}
+
+	@Test
 	public void testGeneratePNGDocument() throws DocumentException {
 		ResumeExportService service = new ResumeExportService(templateEngine);
 
