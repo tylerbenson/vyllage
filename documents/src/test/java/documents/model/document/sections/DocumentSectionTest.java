@@ -23,6 +23,17 @@ public class DocumentSectionTest {
 
 	@Test
 	public void testEqualsAchievementsSection() {
+		AchievementsSection ds1 = new AchievementsSection();
+		ds1.setType(SectionType.ACHIEVEMENTS_SECTION.type());
+
+		AchievementsSection ds2 = new AchievementsSection();
+		ds2.setType(SectionType.ACHIEVEMENTS_SECTION.type());
+
+		assertTrue(ds1.equals(ds2));
+	}
+
+	@Test
+	public void testEqualsProjectsSection() {
 		ProjectsSection ds1 = new ProjectsSection();
 		ds1.setType(SectionType.PROJECTS_SECTION.type());
 
@@ -57,6 +68,17 @@ public class DocumentSectionTest {
 		ds1.setType(SectionType.EDUCATION_SECTION.type());
 
 		EducationSection ds2 = new EducationSection();
+		ds2.setType(SectionType.EDUCATION_SECTION.type());
+
+		assertTrue(ds1.equals(ds2));
+	}
+
+	@Test
+	public void testEqualsJobExperienceSection() {
+		JobExperienceSection ds1 = new JobExperienceSection();
+		ds1.setType(SectionType.EDUCATION_SECTION.type());
+
+		JobExperienceSection ds2 = new JobExperienceSection();
 		ds2.setType(SectionType.EDUCATION_SECTION.type());
 
 		assertTrue(ds1.equals(ds2));
@@ -105,4 +127,5 @@ public class DocumentSectionTest {
 
 		assertTrue(ds1.equals(ds2));
 	}
+
 }
