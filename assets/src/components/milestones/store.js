@@ -171,11 +171,18 @@ var MilestoneStore = Reflux.createStore({
         action: this.addSection.bind(this, 3)
       },
       {
+        text: 'Include projects you\'ve worked on by adding a Projects Section.',
+        icon: 'ion-folder',
+        isDone: this.hasProjectsSection(),
+        priority: 3,
+        action: this.addSection.bind(this, 4)
+      },
+      {
         text: 'What are the career fields that you find most interesting? Add the Career Interests Section and list them all.',
         icon: 'ion-heart',
         isDone: this.hasCareerInterestsSection(),
         priority: 3,
-        action: this.addSection.bind(this, 4)
+        action: this.addSection.bind(this, 5)
       },
       {
         text: 'Receive feedback. Share your resumé with your friends and mentors to get advice.',
@@ -208,6 +215,9 @@ var MilestoneStore = Reflux.createStore({
   },
   hasSkillsSection: function() {
     return filter(this.resume.sections, {type: "SkillsSection"}).length > 0;
+  },
+  hasProjectsSection: function() {
+    return filter(this.resume.sections, {type: "ProjectsSection"}).length > 0;
   },
   hasCareerInterestsSection: function() {
     return filter(this.resume.sections, {type: "CareerInterestsSection"}).length > 0;
