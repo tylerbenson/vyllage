@@ -2,6 +2,7 @@ package documents.model.document.sections;
 
 import java.time.LocalDateTime;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import util.dateSerialization.DocumentLocalDateTimeDeserializer;
 import util.dateSerialization.DocumentLocalDateTimeSerializer;
@@ -9,7 +10,10 @@ import util.dateSerialization.DocumentLocalDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import documents.model.constants.SectionType;
+
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class ProjectsSection extends DocumentSection {
 
 	private String projectTitle;
@@ -23,6 +27,11 @@ public class ProjectsSection extends DocumentSection {
 	private String projectDescription;
 	private String role;
 	private String roleDescription;
+
+	public ProjectsSection() {
+		super();
+		this.setType(SectionType.PROJECTS_SECTION.type());
+	}
 
 	public String getProjectTitle() {
 		return projectTitle;
