@@ -12,6 +12,8 @@ import util.dateSerialization.LocalDateSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import documents.model.constants.SectionType;
+
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class EducationSection extends DocumentSection {
@@ -35,6 +37,11 @@ public class EducationSection extends DocumentSection {
 	private boolean isCurrent;
 
 	private List<String> highlights = new LinkedList<>();
+
+	public EducationSection() {
+		super();
+		this.setType(SectionType.EDUCATION_SECTION.type());
+	}
 
 	public String getOrganizationName() {
 		return organizationName;

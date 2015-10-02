@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import documents.model.constants.SectionType;
-
 public class DocumentSectionTest {
 
 	@Test(expected = IllegalArgumentException.class)
@@ -24,10 +22,10 @@ public class DocumentSectionTest {
 	@Test
 	public void testEqualsAchievementsSection() {
 		AchievementsSection ds1 = new AchievementsSection();
-		ds1.setType(SectionType.ACHIEVEMENTS_SECTION.type());
+		ds1.setTitle("a");
 
 		AchievementsSection ds2 = new AchievementsSection();
-		ds2.setType(SectionType.ACHIEVEMENTS_SECTION.type());
+		ds2.setTitle("a");
 
 		assertTrue(ds1.equals(ds2));
 	}
@@ -35,10 +33,10 @@ public class DocumentSectionTest {
 	@Test
 	public void testEqualsProjectsSection() {
 		ProjectsSection ds1 = new ProjectsSection();
-		ds1.setType(SectionType.PROJECTS_SECTION.type());
+		ds1.setTitle("b");
 
 		ProjectsSection ds2 = new ProjectsSection();
-		ds2.setType(SectionType.PROJECTS_SECTION.type());
+		ds2.setTitle("b");
 
 		assertTrue(ds1.equals(ds2));
 	}
@@ -46,7 +44,6 @@ public class DocumentSectionTest {
 	@Test
 	public void testEqualsNullFalse() {
 		ProjectsSection ds1 = new ProjectsSection();
-		ds1.setType(SectionType.PROJECTS_SECTION.type());
 
 		assertFalse(ds1.equals(null));
 	}
@@ -54,10 +51,10 @@ public class DocumentSectionTest {
 	@Test
 	public void testEqualsCareerInterestsSection() {
 		CareerInterestsSection ds1 = new CareerInterestsSection();
-		ds1.setType(SectionType.CAREER_INTERESTS_SECTION.type());
+		ds1.setTitle("b");
 
 		CareerInterestsSection ds2 = new CareerInterestsSection();
-		ds2.setType(SectionType.CAREER_INTERESTS_SECTION.type());
+		ds2.setTitle("b");
 
 		assertTrue(ds1.equals(ds2));
 	}
@@ -65,10 +62,10 @@ public class DocumentSectionTest {
 	@Test
 	public void testEqualsEducationSection() {
 		EducationSection ds1 = new EducationSection();
-		ds1.setType(SectionType.EDUCATION_SECTION.type());
+		ds1.setTitle("b");
 
 		EducationSection ds2 = new EducationSection();
-		ds2.setType(SectionType.EDUCATION_SECTION.type());
+		ds2.setTitle("b");
 
 		assertTrue(ds1.equals(ds2));
 	}
@@ -76,10 +73,10 @@ public class DocumentSectionTest {
 	@Test
 	public void testEqualsJobExperienceSection() {
 		JobExperienceSection ds1 = new JobExperienceSection();
-		ds1.setType(SectionType.EDUCATION_SECTION.type());
+		ds1.setTitle("b");
 
 		JobExperienceSection ds2 = new JobExperienceSection();
-		ds2.setType(SectionType.EDUCATION_SECTION.type());
+		ds2.setTitle("b");
 
 		assertTrue(ds1.equals(ds2));
 	}
@@ -87,10 +84,10 @@ public class DocumentSectionTest {
 	@Test
 	public void testEqualsPersonalReferencesSection() {
 		PersonalReferencesSection ds1 = new PersonalReferencesSection();
-		ds1.setType(SectionType.PERSONAL_REFERENCES_SECTION.type());
+		ds1.setTitle("b");
 
 		PersonalReferencesSection ds2 = new PersonalReferencesSection();
-		ds2.setType(SectionType.PERSONAL_REFERENCES_SECTION.type());
+		ds2.setTitle("b");
 
 		assertTrue(ds1.equals(ds2));
 	}
@@ -98,10 +95,10 @@ public class DocumentSectionTest {
 	@Test
 	public void testEqualsProfessionalReferencesSection() {
 		ProfessionalReferencesSection ds1 = new ProfessionalReferencesSection();
-		ds1.setType(SectionType.PROFESSIONAL_REFERENCES_SECTION.type());
+		ds1.setTitle("b");
 
 		ProfessionalReferencesSection ds2 = new ProfessionalReferencesSection();
-		ds2.setType(SectionType.PROFESSIONAL_REFERENCES_SECTION.type());
+		ds2.setTitle("b");
 
 		assertTrue(ds1.equals(ds2));
 	}
@@ -109,10 +106,10 @@ public class DocumentSectionTest {
 	@Test
 	public void testEqualsSkillsSection() {
 		SkillsSection ds1 = new SkillsSection();
-		ds1.setType(SectionType.SKILLS_SECTION.type());
+		ds1.setTitle("b");
 
 		SkillsSection ds2 = new SkillsSection();
-		ds2.setType(SectionType.SKILLS_SECTION.type());
+		ds2.setTitle("b");
 
 		assertTrue(ds1.equals(ds2));
 	}
@@ -120,10 +117,10 @@ public class DocumentSectionTest {
 	@Test
 	public void testEqualsSummarySection() {
 		SummarySection ds1 = new SummarySection();
-		ds1.setType(SectionType.SUMMARY_SECTION.type());
+		ds1.setTitle("b");
 
 		SummarySection ds2 = new SummarySection();
-		ds2.setType(SectionType.SUMMARY_SECTION.type());
+		ds2.setTitle("b");
 
 		assertTrue(ds1.equals(ds2));
 	}
