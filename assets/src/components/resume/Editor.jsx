@@ -127,26 +127,26 @@ var ResumeEditor = React.createClass({
   },
   render: function () {
     var owner = this.state.resume.header.owner;
-    var allSection;
+    var allSections = this.state.resume.all_section;
+    var sections = filter(this.state.resume.sections, {isSupported: true});
+    var content;
 
-    if(this.state.resume.all_section !== undefined && this.state.resume.all_section.length > 0 ){
-      allSection = <SectionRender sections={this.state.resume.all_section} />
-    }
-    else if(owner === undefined) {
-      allSection = <Loading />;
-    }
-    else if(filter(this.state.resume.sections, {isSupported: true}).length === 0 &&
-        this.state.resume.all_section.length === 0) {
-      allSection = <Empty />
-    }
-    else {
-      allSection = <Loading />;
+    if(allSections !== undefined) {
+      if(allSections.length > 0) {
+        content = <SectionRender sections={allSections} />;
+      }
+      else if(owner === undefined || sections.length > 0) {
+        content = <Loading />;
+      }
+      else if(sections.length === 0 && allSections.length === 0) {
+        content = <Empty />;
+      }
     }
 
     return (
       <div>
-        <Banner header={this.state.resume.header} settings={this.state.settings} sections={this.state.resume.all_section} />
-        {allSection}
+        <Banner header={this.state.resume.header} settings={this.state.settings} sections={allSections} />
+        {content}
       </div>
     );
   }
