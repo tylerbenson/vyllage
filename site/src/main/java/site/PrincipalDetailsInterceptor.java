@@ -30,7 +30,7 @@ public class PrincipalDetailsInterceptor extends HandlerInterceptorAdapter {
 			NewRelic.addCustomParameter("email", userPrincipal.getName());
 
 			if (request.getSession() != null)
-				NewRelic.addCustomParameter("date-last-access", request
+				NewRelic.addCustomParameter("userLastAccess", request
 						.getSession(false).getCreationTime());
 
 			if (userPrincipal instanceof UsernamePasswordAuthenticationToken) {
