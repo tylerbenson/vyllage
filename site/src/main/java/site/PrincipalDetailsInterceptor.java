@@ -3,7 +3,6 @@ package site;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +19,6 @@ import com.newrelic.api.agent.NewRelic;
 
 @Component
 public class PrincipalDetailsInterceptor extends HandlerInterceptorAdapter {
-	private final DateTimeFormatter formatter = DateTimeFormatter
-			.ofPattern("dd MMM yyyy");
 
 	@Override
 	public boolean preHandle(HttpServletRequest request,
