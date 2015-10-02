@@ -42,12 +42,26 @@ module.exports = Reflux.createStore({
       isPrintModalOpen: false
     };
   },
+  /*Notifications*/
   remindToShare: function() {
     var message = <span>Your resumé has been updated!  Now, share  it to the world to <a href="/resume/get-feedback">get feedback.</a></span>;
     var timeout = 6000;
 
     PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
   },
+  notifyEditSubmission: function() {
+    var message = <span>Well done! We will notify {this.resume.header.firstName} of your edit suggestion.</span>;
+    var timeout = 6000;
+
+    PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
+  },
+  notifyEditMerge: function() {
+    var message = <span>Edit suggestion applied.</span>;
+    var timeout = 4000;
+
+    PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
+  },
+  /*End of Notifications*/
   getMaxSectionPostion: function () {
     var section = max(this.resume.sections, 'sectionPosition');
     // Return 0 if sections is empty
@@ -157,7 +171,7 @@ module.exports = Reflux.createStore({
           this.onGetComments(section.sectionId);
         }
         this.onGetAdvice( section.sectionId);
-      }.bind(this)); 
+      }.bind(this));
 
 
      this.resume.all_section = this.doProcessSection( this.resume.sections, header.owner);
@@ -281,7 +295,7 @@ module.exports = Reflux.createStore({
         this.resume.sections[index] = res.body;
         this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
         if( data.advices != undefined ){
-          this.resume.sections[index].advices = [];    
+          this.resume.sections[index].advices = [];
           this.resume.sections[index].advices = data.advices;
         }
         if( data.comments != undefined ){
@@ -417,9 +431,11 @@ module.exports = Reflux.createStore({
             this.resume.sections[index].advices = [res.body];
           }
           this.resume.sections[index].showComments = false;
-          this.resume.sections[index].showEdits = true;          
-          this.resume.sections[index].numberOfSuggestedEdits++;          
+          this.resume.sections[index].showEdits = true;
+          this.resume.sections[index].numberOfSuggestedEdits++;
           this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+
+          this.notifyEditSubmission();
           this.trigger(this.resume);
         }
       }.bind(this));
@@ -428,7 +444,7 @@ module.exports = Reflux.createStore({
     request
       .put('/resume/'+this.documentId+'/section/'+section.sectionId+'/advice/'+advice.sectionAdviceId)
       .set(this.tokenHeader, this.tokenValue)
-      .send(advice)      
+      .send(advice)
       .end(function (err, res) {
         if( res.status == 200){
           var newsection = clone(section);
@@ -440,10 +456,11 @@ module.exports = Reflux.createStore({
       }.bind(this));
   },
   onMergeAdvice : function( advice , section ){
+    console.log(advice, section);
     request
       .put('/resume/'+this.documentId+'/section/'+section.sectionId+'/advice/'+advice.sectionAdviceId)
       .set(this.tokenHeader, this.tokenValue)
-      .send(advice)      
+      .send(advice)
       .end(function (err, res) {
         if( res.status == 200){
           var newsection = res.body.documentSection;
@@ -455,7 +472,10 @@ module.exports = Reflux.createStore({
               }
             });
           }
-          if( advice_count > 1 ) advice_count = advice_count -1; // for the merge . 
+
+          this.notifyEditMerge();
+
+          if( advice_count > 1 ) advice_count = advice_count -1; // for the merge .
           newsection.numberOfSuggestedEdits = advice_count;
           this.onPutSectionForAdvice( newsection , section , res.body );
         }
@@ -481,14 +501,14 @@ module.exports = Reflux.createStore({
         this.resume.sections[index].advices = [];
         this.resume.sections[index].comments = [];
         if( section.advices != undefined ){
-          this.resume.sections[index].advices = clone(section.advices);  
+          this.resume.sections[index].advices = clone(section.advices);
           this.resume.sections[index].advices[adviceIndex] = advice;
         }
         if( section.comments != undefined ){
           this.resume.sections[index].comments = clone(section.comments);
         }
-        this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);          
-        this.trigger(this.resume); 
+        this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+        this.trigger(this.resume);
 
       }.bind(this));
   },
@@ -518,7 +538,7 @@ module.exports = Reflux.createStore({
     this.trigger(this.resume);
   },
   onToggleComments: function (sectionId) {
-    var index = findindex(this.resume.sections, {sectionId: sectionId}); 
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showEdits = false;
     this.resume.sections[index].showComments = !this.resume.sections[index].showComments;
   //  console.log(this.resume.sections[index].showComments);
