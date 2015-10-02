@@ -43,6 +43,8 @@ public class PackageUserAgentCallbackTest {
 		PackageUserAgentCallback call = new PackageUserAgentCallback(device,
 				Resource.class);
 
+		call.setImageResizePercent(52);
+
 		ImageResource imageResource = call.getImageResource("   ");
 
 		Assert.assertNotNull(imageResource);

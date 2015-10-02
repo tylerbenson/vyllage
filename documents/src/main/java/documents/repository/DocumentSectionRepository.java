@@ -1,6 +1,7 @@
 package documents.repository;
 
 import static documents.domain.tables.DocumentSections.DOCUMENT_SECTIONS;
+import static documents.domain.tables.Documents.DOCUMENTS;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -9,11 +10,12 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record4;
 import org.jooq.Result;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +23,7 @@ import com.newrelic.api.agent.NewRelic;
 
 import documents.domain.tables.DocumentSections;
 import documents.domain.tables.records.DocumentSectionsRecord;
+import documents.domain.tables.records.DocumentsRecord;
 import documents.model.Document;
 import documents.model.document.sections.DocumentSection;
 
@@ -30,8 +33,12 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 	private final Logger logger = Logger
 			.getLogger(DocumentSectionRepository.class.getName());
 
-	@Autowired
-	private DSLContext sql;
+	private final DSLContext sql;
+
+	@Inject
+	public DocumentSectionRepository(DSLContext sql) {
+		this.sql = sql;
+	}
 
 	@Override
 	public DocumentSection get(Long id) throws ElementNotFoundException {
@@ -175,6 +182,9 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 			newRecord.store(); // first to get the Id.
 			documentSection.setSectionId(newRecord.getId());
 
+			this.updateDocumentLastModified(documentSection.getDocumentId(),
+					newRecord.getLastmodified());
+
 			try {
 				newRecord.setJsondocument(documentSection.asJSON());
 			} catch (JsonProcessingException e) {
@@ -212,10 +222,33 @@ public class DocumentSectionRepository implements IRepository<DocumentSection> {
 
 			existingRecord.store();
 			documentSection.setSectionVersion(nextVersion);
+			this.updateDocumentLastModified(documentSection.getDocumentId(),
+					existingRecord.getLastmodified());
 
 		}
 
 		return documentSection;
+	}
+
+	protected void updateDocumentLastModified(Long documentId,
+			Timestamp lastModified) {
+
+		DocumentsRecord record = sql.fetchOne(DOCUMENTS,
+				DOCUMENTS.DOCUMENT_ID.eq(documentId));
+
+		if (record == null) {
+			ElementNotFoundException e = new ElementNotFoundException(
+					"Tried to update the lastModified date of document with id '"
+							+ documentId
+							+ "' but it was not found. This should never happen.");
+			logger.warning(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+			return;
+		}
+
+		record.setLastModified(lastModified);
+		record.store();
+
 	}
 
 	@Override

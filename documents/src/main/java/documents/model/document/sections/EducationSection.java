@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import util.dateSerialization.LocalDateDeserializer;
 import util.dateSerialization.LocalDateSerializer;
@@ -11,7 +12,10 @@ import util.dateSerialization.LocalDateSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import documents.model.constants.SectionType;
+
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class EducationSection extends DocumentSection {
 
 	private String organizationName;
@@ -33,6 +37,11 @@ public class EducationSection extends DocumentSection {
 	private boolean isCurrent;
 
 	private List<String> highlights = new LinkedList<>();
+
+	public EducationSection() {
+		super();
+		this.setType(SectionType.EDUCATION_SECTION.type());
+	}
 
 	public String getOrganizationName() {
 		return organizationName;

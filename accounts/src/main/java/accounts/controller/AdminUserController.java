@@ -45,6 +45,8 @@ import accounts.service.BatchAccountCreationService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
 
+import com.newrelic.api.agent.Trace;
+
 @Controller
 @RequestMapping("admin")
 public class AdminUserController {
@@ -155,6 +157,7 @@ public class AdminUserController {
 		return "redirect:/admin/user/roles";
 	}
 
+	@Trace
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String showUsers(final HttpServletRequest request,
