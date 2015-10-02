@@ -7,6 +7,9 @@ import org.togglz.core.context.FeatureContext;
 
 public enum Features implements Feature {
 
+	@Label("Advices")
+	ADVICES,
+
 	@Label("Dummy Suggestions")
 	DUMMY_SUGGESTIONS,
 
@@ -40,9 +43,6 @@ public enum Features implements Feature {
 	@EnabledByDefault
 	@Label("Suggestions")
 	SUGGESTIONS,
-
-	@Label("Advices")
-	ADVICES,
 
 	@EnabledByDefault
 	@Label("Zopim Message Client")
