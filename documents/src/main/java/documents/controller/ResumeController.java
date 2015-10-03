@@ -46,6 +46,7 @@ import user.common.web.UserInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
+import com.newrelic.api.agent.Trace;
 
 import documents.files.pdf.ResumeExportService;
 import documents.model.AccountNames;
@@ -253,6 +254,7 @@ public class ResumeController {
 		return this.pdfStyles;
 	}
 
+	@Trace
 	@RequestMapping(value = "{documentId}/file/pdf", method = RequestMethod.GET, produces = "application/pdf")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
@@ -299,6 +301,7 @@ public class ResumeController {
 				+ "report.pdf");
 	}
 
+	@Trace
 	@RequestMapping(value = "{documentId}/file/png", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess

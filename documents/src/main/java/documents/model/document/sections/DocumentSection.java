@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.logging.Logger;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -26,6 +27,7 @@ import documents.model.constants.SectionType;
 import documents.model.constants.Visibility;
 
 @ToString
+@EqualsAndHashCode
 @JsonIgnoreProperties(value = { "documentId" })
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
