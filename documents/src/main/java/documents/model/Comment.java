@@ -73,7 +73,7 @@ public class Comment {
 	}
 
 	/**
-	 * Sets the comment text, if the commemt was deleted it marks it as not
+	 * Sets the comment text, if the comment was deleted it marks it as not
 	 * deleted.
 	 * 
 	 * @param commentText
