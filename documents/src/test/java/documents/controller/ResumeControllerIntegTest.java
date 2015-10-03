@@ -1,5 +1,6 @@
 package documents.controller;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -57,6 +58,7 @@ import documents.model.constants.DocumentTypeEnum;
 import documents.model.constants.SectionType;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
+import documents.repository.CommentRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.UserNotificationRepository;
 import documents.services.DocumentService;
@@ -84,6 +86,9 @@ public class ResumeControllerIntegTest {
 
 	@Inject
 	private WebApplicationContext wContext;
+
+	@Inject
+	private CommentRepository commentRepository;
 
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -471,7 +476,7 @@ public class ResumeControllerIntegTest {
 
 	}
 
-	@Test
+	@Test(expected = ElementNotFoundException.class)
 	public void testCommentDeleteOwnComment() throws Exception {
 		Long documentId = 0L;
 		Long sectionId = 129L;
@@ -481,7 +486,7 @@ public class ResumeControllerIntegTest {
 		Comment comment = new Comment();
 		comment.setCommentId(null);
 		comment.setAvatarUrl(null);
-		comment.setCommentText("My own comment.");
+		comment.setCommentText("My own comment on another document.");
 		comment.setOtherCommentId(null);
 		comment.setLastModified(null);
 		comment.setSectionId(129L);
@@ -512,9 +517,11 @@ public class ResumeControllerIntegTest {
 						.content(mapper.writeValueAsString(savedComment)))
 				.andExpect(status().isAccepted());
 
+		commentRepository.get(savedComment.getCommentId());
+
 	}
 
-	@Test
+	@Test(expected = ElementNotFoundException.class)
 	public void testCommentDeleteOwnCommentFromOwnDocument() throws Exception {
 		Long documentId = 0L;
 		Long sectionId = 129L;
@@ -524,7 +531,7 @@ public class ResumeControllerIntegTest {
 		Comment comment = new Comment();
 		comment.setCommentId(null);
 		comment.setAvatarUrl(null);
-		comment.setCommentText("My own comment.");
+		comment.setCommentText("My own comment on my own document.");
 		comment.setOtherCommentId(null);
 		comment.setLastModified(null);
 		comment.setSectionId(129L);
@@ -554,6 +561,8 @@ public class ResumeControllerIntegTest {
 						.contentType(ContentType.APPLICATION_JSON.toString())
 						.content(mapper.writeValueAsString(savedComment)))
 				.andExpect(status().isAccepted());
+
+		commentRepository.get(savedComment.getCommentId());
 
 	}
 
@@ -568,7 +577,7 @@ public class ResumeControllerIntegTest {
 		Comment comment = new Comment();
 		comment.setCommentId(null);
 		comment.setAvatarUrl(null);
-		comment.setCommentText("My own comment.");
+		comment.setCommentText("Another user Comment.");
 		comment.setOtherCommentId(null);
 		comment.setLastModified(null);
 		comment.setSectionId(129L);
@@ -602,6 +611,121 @@ public class ResumeControllerIntegTest {
 						.contentType(ContentType.APPLICATION_JSON.toString())
 						.content(mapper.writeValueAsString(savedComment)))
 				.andExpect(status().isAccepted());
+
+	}
+
+	@Test
+	public void testCommentDeleteOwnCommentReferencingAnotherComment()
+			throws Exception {
+
+		// create first comment
+		Long documentId = 0L;
+		Long sectionId = 129L;
+		Long sectionVersion = 1L;
+		Long userId = 0L;
+
+		Comment comment = new Comment();
+		comment.setCommentId(null);
+		comment.setAvatarUrl(null);
+		comment.setCommentText("My own comment on my own document");
+		comment.setOtherCommentId(null);
+		comment.setLastModified(null);
+		comment.setSectionId(129L);
+		comment.setSectionVersion(sectionVersion);
+		comment.setUserId(userId);
+		comment.setUserName(null);
+
+		User user = generateAndLoginUser();
+		when(user.getUserId()).thenReturn(userId);
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						post(
+								"/resume/" + documentId + "/section/"
+										+ sectionId + "/comment").contentType(
+								ContentType.APPLICATION_JSON.toString())
+								.content(mapper.writeValueAsString(comment)))
+				.andExpect(status().isOk()).andReturn();
+
+		Comment savedComment = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), Comment.class);
+
+		assertTrue(savedComment != null);
+
+		// create second comment referencing the previous one
+
+		Comment referencingComment = new Comment();
+		referencingComment.setCommentId(null);
+		referencingComment.setAvatarUrl(null);
+		referencingComment.setCommentText("Referencing comment.");
+		referencingComment.setOtherCommentId(savedComment.getCommentId());
+		referencingComment.setLastModified(null);
+		referencingComment.setSectionId(129L);
+		referencingComment.setSectionVersion(sectionVersion);
+		referencingComment.setUserId(userId);
+		referencingComment.setUserName(null);
+
+		MvcResult mvcReferencingResult = mockMvc
+				.perform(
+						post(
+								"/resume/" + documentId + "/section/"
+										+ sectionId + "/comment")
+								.contentType(
+										ContentType.APPLICATION_JSON.toString())
+								.content(
+										mapper.writeValueAsString(referencingComment)))
+				.andExpect(status().isOk()).andReturn();
+
+		Comment savedReferencingComment = mapper.readValue(mvcReferencingResult
+				.getResponse().getContentAsString(), Comment.class);
+
+		assertTrue(savedReferencingComment != null);
+		assertTrue("Referencing comment.".equals(savedReferencingComment
+				.getCommentText()));
+
+		// delete the referencing comment
+		mockMvc.perform(
+				delete(
+						"/resume/" + documentId + "/section/" + sectionId
+								+ "/comment/"
+								+ savedReferencingComment.getCommentId())
+						.contentType(ContentType.APPLICATION_JSON.toString())
+						.content(
+								mapper.writeValueAsString(savedReferencingComment)))
+				.andExpect(status().isAccepted());
+
+		// get all comments
+		@SuppressWarnings("unchecked")
+		ResponseEntity<AccountContact[]> response = mock(ResponseEntity.class);
+
+		when(
+				restTemplate.exchange(Mockito.anyString(),
+						Mockito.eq(HttpMethod.GET), Mockito.any(),
+						Mockito.eq(AccountContact[].class))).thenReturn(
+				response);
+
+		when(response.getBody()).thenReturn(null);
+
+		MvcResult mvcAllComments = mockMvc
+				.perform(
+						get("/resume/" + documentId + "/section/" + sectionId
+								+ "/comment")).andExpect(status().isOk())
+				.andExpect(content().string(containsString("[deleted]")))
+				.andReturn();
+
+		assertTrue(mvcAllComments != null);
+
+		@SuppressWarnings("unchecked")
+		List<Comment> list = mapper.readValue(mvcAllComments.getResponse()
+				.getContentAsString(), List.class);
+
+		assertFalse(list == null);
+		assertFalse(list.isEmpty());
+
+		// this doesn't work, the list is actually a LinkedHashMap
+		// assertTrue(list.stream().anyMatch(
+		// c -> c.isDeleted() == true
+		// && "[deleted]".equals(c.getCommentText())));
 
 	}
 

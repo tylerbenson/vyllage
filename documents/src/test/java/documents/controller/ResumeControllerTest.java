@@ -169,26 +169,26 @@ public class ResumeControllerTest {
 				document));
 	}
 
-	// @Test
-	// public void testCanDeleteOwnComment() {
-	// Long commentId = 1L;
-	// Long userId = 1L;
-	// Long otherUserId = 52L;
-	//
-	// Comment comment = comments(5L).get(0);
-	// comment.setCommentId(commentId);
-	// comment.setUserId(userId);
-	//
-	// User user = Mockito.mock(User.class);
-	//
-	// Mockito.when(user.getUserId()).thenReturn(userId);
-	//
-	// Document document = new Document();
-	// document.setUserId(otherUserId);
-	//
-	// assertTrue(controller.canDeleteComment(commentId, comment, user,
-	// document));
-	// }
+	@Test
+	public void testCanDeleteOwnComment() {
+		Long commentId = 1L;
+		Long userId = 1L;
+		Long otherUserId = 52L;
+
+		Comment comment = comments(5L).get(0);
+		comment.setCommentId(commentId);
+		comment.setUserId(userId);
+
+		User user = Mockito.mock(User.class);
+
+		Mockito.when(user.getUserId()).thenReturn(userId);
+
+		Document document = new Document();
+		document.setUserId(otherUserId);
+
+		assertTrue(controller.canDeleteComment(commentId, comment, user,
+				document));
+	}
 
 	private List<Comment> comments(Long sectionId) {
 		Comment comment = new Comment();

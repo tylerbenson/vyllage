@@ -1,0 +1,1 @@
+alter table documents.comments add deleted boolean DEFAULT false;
