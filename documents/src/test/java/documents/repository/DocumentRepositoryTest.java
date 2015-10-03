@@ -103,8 +103,10 @@ public class DocumentRepositoryTest {
 				.get(savedDocument.getDocumentId());
 
 		assertNotNull(updatedDocument.getLastModified());
-		assertEquals(savedSummary.getLastModified(),
-				updatedDocument.getLastModified());
+		assertEquals(savedSummary.getLastModified().getHour(), updatedDocument
+				.getLastModified().getHour());
+		assertEquals(savedSummary.getLastModified().getMinute(),
+				updatedDocument.getLastModified().getMinute());
 	}
 
 	private Document generateDocument() {
