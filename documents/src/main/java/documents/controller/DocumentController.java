@@ -1,6 +1,7 @@
 package documents.controller;
 
 import java.nio.file.AccessDeniedException;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -193,5 +194,14 @@ public class DocumentController {
 	@RequestMapping(value = "{documentId}/export")
 	public String export(@PathVariable(value = "documentId") Long documentId) {
 		return "export";
+	}
+
+	@RequestMapping(value = "user/{userId}/modified-date", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody Long getUserDocumentLastModificationDate(
+			@PathVariable(value = "userId") Long userId) {
+		Document documentByUser = documentService.getDocumentByUser(userId);
+
+		return documentByUser.getLastModified().toInstant(ZoneOffset.UTC)
+				.toEpochMilli();
 	}
 }

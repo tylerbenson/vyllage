@@ -5,31 +5,32 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 
+import lombok.NonNull;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import org.xhtmlrenderer.util.FSImageWriter;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
 import com.sun.pdfview.PDFFile;
@@ -46,31 +47,21 @@ public class ResumeExportService {
 
 	private final TemplateEngine templateEngine;
 
+	private Cache<String, ByteArrayOutputStream> pdfs;
+
 	@Inject
 	public ResumeExportService(final TemplateEngine templateEngine) {
 		this.templateEngine = templateEngine;
+		pdfs = CacheBuilder.newBuilder().maximumSize(10)
+				.expireAfterAccess(15, TimeUnit.MINUTES).build();
 	}
 
 	public ByteArrayOutputStream generatePDFDocument(
-			DocumentHeader resumeHeader, List<DocumentSection> sections,
-			String styleName) throws DocumentException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+			@NonNull final DocumentHeader resumeHeader,
+			@NonNull final List<DocumentSection> sections,
+			@NonNull final String styleName) throws DocumentException {
 
-		try {
-
-			ITextRenderer renderer = preparePDF(resumeHeader, sections,
-					styleName);
-			renderer.createPDF(out);
-			renderer.finishPDF();
-
-			out.close();
-		} catch (IOException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
-
-		return out;
-
+		return this.getCachedDocument(resumeHeader, sections, styleName);
 	}
 
 	/**
@@ -96,42 +87,15 @@ public class ResumeExportService {
 			height = 98 * 2;
 		}
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		final ByteArrayOutputStream imageByteArrayOutputStream = new ByteArrayOutputStream();
 
-		ITextRenderer renderer = preparePDF(resumeHeader, sections, styleName);
-
-		File tempFile = null;
+		final ByteArrayOutputStream pdfBytes = this.getCachedDocument(
+				resumeHeader, sections, styleName);
 
 		try {
-			tempFile = File.createTempFile("document", ".pdf");
-		} catch (IOException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
 
-		Assert.notNull(tempFile);
+			ByteBuffer buf = ByteBuffer.wrap(pdfBytes.toByteArray());
 
-		// saving the pdf
-		try (FileOutputStream fop = new FileOutputStream(tempFile)) {
-			renderer.createPDF(fop);
-			renderer.finishPDF();
-			// if file doesn't exists, then create it
-			if (!tempFile.exists()) {
-				tempFile.createNewFile();
-			}
-
-			fop.flush();
-
-		} catch (IOException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
-
-		// loading the pdf and rendering an image of the first page
-		try (FileInputStream fis = new FileInputStream(tempFile)) {
-			FileChannel channel = fis.getChannel();
-			MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY,
-					0, channel.size());
 			PDFFile pdffile = new PDFFile(buf);
 
 			// draw the first page to an image
@@ -151,7 +115,7 @@ public class ResumeExportService {
 					true, // fill background with white
 					true // block until drawing is done
 					);
-			FSImageWriter w = new FSImageWriter("png");
+			FSImageWriter imageWritter = new FSImageWriter("png");
 
 			Image scaledInstance = image.getScaledInstance(width, height,
 					Image.SCALE_SMOOTH);
@@ -159,19 +123,52 @@ public class ResumeExportService {
 			Graphics2D bufImageGraphics = bufferedImage.createGraphics();
 			bufImageGraphics.drawImage(scaledInstance, 0, 0, null);
 
-			ImageIO.write(bufferedImage, "png", out);
-			w.write(bufferedImage, out);
-			tempFile.delete();
+			ImageIO.write(bufferedImage, "png", imageByteArrayOutputStream);
+			imageWritter.write(bufferedImage, imageByteArrayOutputStream);
 
-			out.close();
+			imageByteArrayOutputStream.close();
 
 		} catch (IOException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 		}
+		return imageByteArrayOutputStream;
 
-		return out;
+	}
 
+	protected ByteArrayOutputStream getCachedDocument(
+			final DocumentHeader resumeHeader,
+			final List<DocumentSection> sections, final String styleName) {
+
+		final String key = this.getCacheKey(resumeHeader, sections, styleName);
+
+		ByteArrayOutputStream pdfBytes = null;
+
+		try {
+			pdfBytes = pdfs
+					.get(key,
+							() -> {
+
+								final ITextRenderer renderer = preparePDF(
+										resumeHeader, sections, styleName);
+
+								ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+								renderer.createPDF(out);
+								renderer.finishPDF();
+								out.flush();
+
+								pdfs.put(key, out);
+
+								return out;
+							});
+
+		} catch (ExecutionException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+
+		return pdfBytes;
 	}
 
 	protected ITextRenderer preparePDF(DocumentHeader resumeHeader,
@@ -200,6 +197,29 @@ public class ResumeExportService {
 
 		renderer.layout();
 		return renderer;
+	}
+
+	/**
+	 * Generates a key based on the hash of the resume header, sections and
+	 * style name.
+	 * 
+	 * @param resumeHeader
+	 * @param sections
+	 * @param styleName
+	 * @return
+	 */
+	private String getCacheKey(DocumentHeader resumeHeader,
+			List<DocumentSection> sections, String styleName) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(resumeHeader.hashCode()).append("-");
+
+		if (!sections.isEmpty())
+			sb.append(sections.hashCode()).append("-");
+
+		sb.append(styleName);
+
+		return sb.toString();
 	}
 
 	/**
