@@ -50,13 +50,13 @@ module.exports = Reflux.createStore({
     PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
   },
   notifyEditSubmission: function() {
-    var message = <span>Well done! We will notify {this.resume.header.firstName} of your edit suggestion.</span>;
+    var message = <span>Well done! We will notify {this.resume.header.firstName} of your suggested edit.</span>;
     var timeout = 6000;
 
     PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
   },
   notifyEditMerge: function() {
-    var message = <span>Edit suggestion applied.</span>;
+    var message = <span>Suggested edit applied.</span>;
     var timeout = 4000;
 
     PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
