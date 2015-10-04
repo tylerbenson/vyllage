@@ -1,6 +1,6 @@
 var React = require('react');
 
-var SuggestedEditsCount = React.createClass({
+var AdvicesCount = React.createClass({
   render: function() {
   	var count = this.props.count;
     var showText;
@@ -19,4 +19,4 @@ var SuggestedEditsCount = React.createClass({
   }
 });
 
-module.exports = SuggestedEditsCount;
+module.exports = AdvicesCount;

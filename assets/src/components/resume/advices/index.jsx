@@ -7,7 +7,7 @@ var AcceptBtn = require('../../buttons/accept');
 var DeclineBtn = require('../../buttons/decline');
 var EditBtn = require('../../buttons/edit');
 
-var SuggestedEdits = React.createClass({
+var Advices = React.createClass({
   render: function () {
     var section = this.props.section || {};
 
@@ -24,7 +24,7 @@ var SuggestedEdits = React.createClass({
         )
       }.bind(this);
 
-      var SuggestedEditLists = this.props.section.advices.map(function(advice ,index){
+      var adviceList = this.props.section.advices.map(function(advice ,index){
         if(section.type === 'EducationSection' || section.type === 'JobExperienceSection') {
           var startDateA = section.startDate ? section.startDate : '';
           var startDateB = advice.documentSection.startDate ? advice.documentSection.startDate : '';
@@ -34,7 +34,7 @@ var SuggestedEdits = React.createClass({
 
         if( advice.status == 'pending' ) {
         return <div key={index} className='comment'>
-                <div className='suggestion-content'>
+                <div className='advice-content'>
                     { this.props.owner ? <div className="actions">
                       <AcceptBtn onClick={this._acceptHandler.bind(this, advice)} />
                       <DeclineBtn onClick={this._cancelHandler.bind(this, advice)} />
@@ -79,24 +79,24 @@ var SuggestedEdits = React.createClass({
     if (section.showEdits) {
       return (
         <div className='comments'>
-          { this.props.section.advices.length > 0 ?  SuggestedEditLists : null }
+          { this.props.section.advices.length > 0 ?  adviceList : null }
         </div>
       );
     } else {
       return null;
     }
   },
-  _acceptHandler : function( suggestion ){
-    suggestion.status = 'accepted';
-    actions.mergeAdvice( suggestion , this.props.section );
+  _acceptHandler : function(advice){
+    advice.status = 'accepted';
+    actions.mergeAdvice( advice , this.props.section );
   },
-  _cancelHandler : function( suggestion ){
-    suggestion.status = 'rejected';
-    actions.deleteAdvice( suggestion , this.props.section );
+  _cancelHandler : function( advice ){
+    advice.status = 'rejected';
+    actions.deleteAdvice(advice , this.props.section );
   },
-  _editHandler : function( suggestion ){
+  _editHandler : function( advice ){
 
   }
 });
 
-module.exports = SuggestedEdits;
+module.exports = Advices;

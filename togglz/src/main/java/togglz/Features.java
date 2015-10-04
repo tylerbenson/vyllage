@@ -33,6 +33,9 @@ public enum Features implements Feature {
 	@Label("Printing")
 	PRINTING,
 
+	@Label("Section Advice")
+	SECTION_ADVICE,
+
 	@EnabledByDefault
 	@Label("Share Resume")
 	SHARE_RESUME,
@@ -40,9 +43,6 @@ public enum Features implements Feature {
 	@EnabledByDefault
 	@Label("Suggestions")
 	SUGGESTIONS,
-
-	@Label("Suggested Edit")
-	SUGGESTED_EDIT,
 
 	@EnabledByDefault
 	@Label("Zopim Message Client")
