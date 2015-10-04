@@ -26,6 +26,7 @@ var urlTemplate = require('url-template');
   'saveSectionAdvice',
   'deleteAdvice',
   'mergeAdvice',
+  'toggleEdits',
   // Ui
   'enableEditMode',
   'disableEditMode',

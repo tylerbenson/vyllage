@@ -10,6 +10,10 @@
   font-size: 0.9em;
   width: 5em !important;
 
+  &.diff {
+    width: auto !important;
+  }
+
   &.start {
     margin-right: 0.25em;
   }

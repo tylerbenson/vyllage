@@ -57,6 +57,7 @@ import documents.model.DocumentHeader;
 import documents.model.LinkPermissions;
 import documents.model.SectionAdvice;
 import documents.model.UserNotification;
+import documents.model.constants.AdviceStatus;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.document.sections.DocumentSection;
 import documents.repository.DocumentAccessRepository;
@@ -662,7 +663,7 @@ public class ResumeController {
 		if (sectionAdvice.getUserId() == null)
 			sectionAdvice.setUserId(user.getUserId());
 
-		sectionAdvice.setStatus("pending");
+		sectionAdvice.setStatus(AdviceStatus.pending.name());
 
 		return documentService.saveSectionAdvice(request, sectionAdvice);
 
