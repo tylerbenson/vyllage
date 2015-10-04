@@ -75,6 +75,7 @@ public class CommentRepository implements IRepository<Comment> {
 			newRecord.setUserId(comment.getUserId());
 			newRecord.setLastModified(Timestamp.valueOf(LocalDateTime
 					.now(ZoneId.of("UTC"))));
+			newRecord.setDeleted(comment.isDeleted());
 
 			newRecord.store();
 			comment.setCommentId(newRecord.getCommentId());
@@ -88,6 +89,7 @@ public class CommentRepository implements IRepository<Comment> {
 			existingRecord.setUserId(comment.getUserId());
 			existingRecord.setLastModified(Timestamp.valueOf(LocalDateTime
 					.now(ZoneId.of("UTC"))));
+			existingRecord.setDeleted(comment.isDeleted());
 
 			existingRecord.update();
 		}
@@ -114,6 +116,7 @@ public class CommentRepository implements IRepository<Comment> {
 		comment.setSectionVersion(record.getSectionVersion());
 		comment.setLastModified(record.getLastModified().toLocalDateTime());
 		comment.setCommentText(record.getCommentText());
+		comment.setDeleted(record.getDeleted());
 		return comment;
 	}
 
@@ -144,6 +147,7 @@ public class CommentRepository implements IRepository<Comment> {
 			comment.setSectionId(sectionId);
 			comment.setSectionVersion(record.getValue(COMMENTS.SECTION_VERSION));
 			comment.setUserId(record.getValue(COMMENTS.USER_ID));
+			comment.setDeleted(record.getValue(COMMENTS.DELETED));
 			comments.add(comment);
 		}
 
@@ -175,6 +179,17 @@ public class CommentRepository implements IRepository<Comment> {
 		}
 
 		return sectionComments;
+	}
+
+	/**
+	 * Returns whether a given comment is referenced by another.
+	 * 
+	 * @param comment
+	 * @return
+	 */
+	public boolean isReferencedByOthers(final Comment comment) {
+		return sql.fetchExists(COMMENTS,
+				COMMENTS.OTHER_COMMENT_ID.eq(comment.getCommentId()));
 	}
 
 }

@@ -237,20 +237,25 @@ public class DocumentService {
 			return Arrays.asList();
 
 		List<AccountContact> names = accountService.getContactDataForUsers(
-				request,
-				comments.stream().map(c -> c.getUserId())
+				request, comments.stream() //
+						// filter deleted comments
+						.filter(c -> !c.isDeleted()) //
+						.map(c -> c.getUserId()) //
 						.collect(Collectors.toList()));
 
 		for (Comment comment : comments) {
-			Optional<AccountContact> accountContact = names.stream()
-					.filter(an -> an.getUserId().equals(comment.getUserId()))
-					.findFirst();
+			if (!comment.isDeleted()) {
+				Optional<AccountContact> accountContact = names
+						.stream()
+						.filter(an -> an.getUserId()
+								.equals(comment.getUserId())).findFirst();
 
-			accountContact.ifPresent(an -> comment.setUserName(an
-					.getFirstName() + " " + an.getLastName()));
+				accountContact.ifPresent(an -> comment.setUserName(an
+						.getFirstName() + " " + an.getLastName()));
 
-			accountContact.ifPresent(an -> comment.setAvatarUrl(an
-					.getAvatarUrl()));
+				accountContact.ifPresent(an -> comment.setAvatarUrl(an
+						.getAvatarUrl()));
+			}
 		}
 
 		return comments;
@@ -489,7 +494,26 @@ public class DocumentService {
 		return savedSection;
 	}
 
-	public void deleteComment(Comment comment) {
+	public void deleteComment(final Comment comment) {
+
+		// check if it's a comment that references another comment
+		if (comment.getOtherCommentId() != null) {
+			// change comment text and mark as deleted so we won't load the user
+			// name later
+			comment.markDeleted();
+			commentRepository.save(comment);
+
+			return;
+
+			// check if it's referenced by another comment
+		} else if (commentRepository.isReferencedByOthers(comment)) {
+			comment.markDeleted();
+			commentRepository.save(comment);
+
+			return;
+		}
+
+		// if not just delete normally.
 		commentRepository.delete(comment.getCommentId());
 	}
 

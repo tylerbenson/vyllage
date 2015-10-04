@@ -6,10 +6,12 @@ import lombok.ToString;
 import util.dateSerialization.DocumentLocalDateTimeDeserializer;
 import util.dateSerialization.DocumentLocalDateTimeSerializer;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @ToString
+@JsonIgnoreProperties(value = { "deleted" })
 public class Comment {
 	private Long commentId;
 	private Long otherCommentId;
@@ -30,6 +32,9 @@ public class Comment {
 
 	// not saved in the DB
 	private boolean canDeleteComment;
+
+	// to check if we need to load the user names.
+	private boolean deleted;
 
 	public Long getCommentId() {
 		return commentId;
@@ -67,7 +72,14 @@ public class Comment {
 		return commentText;
 	}
 
+	/**
+	 * Sets the comment text, if the comment was deleted it marks it as not
+	 * deleted.
+	 * 
+	 * @param commentText
+	 */
 	public void setCommentText(String commentText) {
+		this.deleted = false;
 		this.commentText = commentText;
 	}
 
@@ -116,6 +128,22 @@ public class Comment {
 
 	public void setCanDeleteComment(boolean canDeleteComment) {
 		this.canDeleteComment = canDeleteComment;
+	}
+
+	/**
+	 * Marks a comment as deleted and changes it's text to '[deleted]'
+	 */
+	public void markDeleted() {
+		this.commentText = "[deleted]";
+		this.deleted = true;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }
