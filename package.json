@@ -13,5 +13,8 @@
     "preinstall": "cd assets && npm install --no-optional",
     "postinstall": "cd assets && npm run build",
     "test": "cd assets && npm test"
+  },
+  "dependencies": {
+    "gulp": "^3.9.0"
   }
 }
