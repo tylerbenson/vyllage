@@ -33,6 +33,9 @@ public enum Features implements Feature {
 	@Label("Printing")
 	PRINTING,
 
+	@Label("Section Advice")
+	SECTION_ADVICE,
+
 	@EnabledByDefault
 	@Label("Share Resume")
 	SHARE_RESUME,

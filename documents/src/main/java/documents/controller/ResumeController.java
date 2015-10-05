@@ -57,6 +57,7 @@ import documents.model.DocumentHeader;
 import documents.model.LinkPermissions;
 import documents.model.SectionAdvice;
 import documents.model.UserNotification;
+import documents.model.constants.AdviceStatus;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.document.sections.DocumentSection;
 import documents.repository.DocumentAccessRepository;
@@ -597,9 +598,10 @@ public class ResumeController {
 		if (user.getUserId().equals(document.getUserId()))
 			return true;
 
-		if (!user.getUserId().equals(comment.getUserId())
-				|| !commentId.equals(comment.getCommentId()))
-			return false;
+		// allow the user to delete his own comments
+		if (user.getUserId().equals(comment.getUserId())
+				&& commentId.equals(comment.getCommentId()))
+			return true;
 
 		return false;
 	}
@@ -661,7 +663,7 @@ public class ResumeController {
 		if (sectionAdvice.getUserId() == null)
 			sectionAdvice.setUserId(user.getUserId());
 
-		sectionAdvice.setStatus("pending");
+		sectionAdvice.setStatus(AdviceStatus.pending.name());
 
 		return documentService.saveSectionAdvice(request, sectionAdvice);
 

@@ -14,6 +14,7 @@ var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 var cloneDeep = require('clone-deep');
+var FeatureToggle = require('../../util/FeatureToggle');
 
 var Organization = React.createClass({
   getInitialState: function () {
@@ -73,7 +74,7 @@ var Organization = React.createClass({
     });
   },
   render: function () {
-    var section = this.state.section;
+    var section = this.props.section;
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
 
@@ -105,10 +106,10 @@ var Organization = React.createClass({
             {this.props.owner? <div className="actions">
               {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
               {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
-            </div>:  <div className="actions">
+            </div>: <FeatureToggle name="SECTION_ADVICE"> <div className="actions">
                {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
                {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
-            </div>
+            </div></FeatureToggle>
             }
 
 
@@ -193,7 +194,7 @@ var Organization = React.createClass({
               </div>
             </section>
           </div>
-          <SectionFooter section={section} owner={this.props.owner} />
+          <SectionFooter section={this.props.section} owner={this.props.owner} />
         </div>
         {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>

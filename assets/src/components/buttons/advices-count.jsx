@@ -1,12 +1,15 @@
 var React = require('react');
 
-var CommentsCount = React.createClass({
-
-
+var AdvicesCount = React.createClass({
   render: function() {
   	var count = this.props.count;
     var showText;
-    showText = count + ' edit' + (count !== 1 && count !== 0 ? 's' : '');
+    if(this.props.showEdits ){
+      showText = 'Hide edit' + (count !== 1 ? 's' : '');
+    }else{
+      showText = count + ' edit' + (count !== 1 ? 's' : '');
+    }
+
     return (
       <button className="flat" onClick={this.props.onClick}>
         <i className="ion-edit"></i>
@@ -16,4 +19,4 @@ var CommentsCount = React.createClass({
   }
 });
 
-module.exports = CommentsCount;
+module.exports = AdvicesCount;

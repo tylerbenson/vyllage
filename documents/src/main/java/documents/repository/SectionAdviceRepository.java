@@ -29,6 +29,7 @@ import documents.domain.tables.DocumentSections;
 import documents.domain.tables.SectionAdvices;
 import documents.domain.tables.records.SectionAdvicesRecord;
 import documents.model.SectionAdvice;
+import documents.model.constants.AdviceStatus;
 import documents.model.document.sections.DocumentSection;
 
 @Repository
@@ -208,7 +209,8 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 				.on(s1.ID.eq(s2.ID).and(
 						s1.SECTIONVERSION.lessThan(s2.SECTIONVERSION)))
 				.join(sa).on(sa.SECTION_ID.eq(s1.ID))
-				.where(s2.ID.isNull().and(s1.ID.in(sectionIds))).groupBy(s1.ID)
+				.where(s2.ID.isNull().and(s1.ID.in(sectionIds)))
+				.and(sa.STATUS.eq(AdviceStatus.pending.name())).groupBy(s1.ID)
 				.fetch();
 
 		for (Record2<Long, Integer> record : fetch) {
