@@ -61,7 +61,7 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 
 		ConnectControllerWithRedirect connectController = new ConnectControllerWithRedirect(
 				connectionFactoryLocator, connectionRepository);
-
+		// test
 		connectController.setApplicationUrl("https://staging.vyllage.com");
 
 		connectController
