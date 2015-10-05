@@ -62,6 +62,8 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		ConnectControllerWithRedirect connectController = new ConnectControllerWithRedirect(
 				connectionFactoryLocator, connectionRepository);
 
+		connectController.setApplicationUrl("https://staging.vyllage.com");
+
 		connectController
 				.addInterceptor(new SendConfirmationEmailAfterConnectInterceptor(
 						confirmationEmailService));
