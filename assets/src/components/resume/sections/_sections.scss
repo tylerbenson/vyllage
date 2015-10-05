@@ -53,11 +53,13 @@
     padding: 1em 4em;
 
     .title {
+      @include user-select(initial);
       @include column(3/5);
       text-align: left;
       font-weight: 700;
 
       h1 {
+        @include user-select(initial);
         color: lighten($alternate-color-2, 12%);
         font-weight: 400;
         font-size: 1em;
@@ -65,6 +67,7 @@
       }
 
       h2, h3 {
+        @include user-select(initial);
         textarea {
           color: $alternate-color-2;
           font-weight: 400;
@@ -299,6 +302,7 @@
   }
 
   & > .content {
+    @include user-select(initial);
     margin-top: -0.5em;
     padding: 0.25em 4em;
   }
