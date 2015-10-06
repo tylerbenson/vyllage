@@ -27,6 +27,7 @@ var validator = require('validator');
   'saveSectionAdvice',
   'deleteAdvice',
   'mergeAdvice',
+  'toggleEdits',
   // Ui
   'enableEditMode',
   'disableEditMode',

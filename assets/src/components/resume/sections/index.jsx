@@ -8,13 +8,13 @@ var filter = require('lodash.filter');
 var Section = React.createClass({
 
   getPlaceholders: function () {
-    if (this.props.section.title === 'education') {
+    if (this.props.section.type === 'EducationSection') {
       return {
         role: "Degree",
         roleDescription: "Field of study",
         highlights: "Add at least three highlights of your education"
       };
-    } else if (this.props.section.title === 'experience') {
+    } else if (this.props.section.type === 'JobExperienceSection') {
       return {
         role: 'Position'
       };
