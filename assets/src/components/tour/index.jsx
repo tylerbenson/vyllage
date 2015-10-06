@@ -60,11 +60,12 @@ var Tour = React.createClass({
   },
   render: function() {
     var slide = slides[this.props.page][this.state.index];
+    var classes = classnames({
+      'visible': i === this.state.index,
+      'banner': true
+    });
     var bannerImages = slides[this.props.page].map(function(slide, i){
-      return <img key={i} className={classnames({
-        'visible': i === this.state.index,
-        'banner': true
-      })} src={slide.image} alt={slide.title} />;
+      return <img key={i} className={classes} src={slide.image} alt={slide.title} />;
     }.bind(this));
 
     return (
