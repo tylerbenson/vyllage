@@ -17,7 +17,7 @@ var Tour = React.createClass({
     var tour = parseInt(cookie.get(page + '_tour'));
 
     //no cookie yet
-    if(tour === NaN) {
+    if(isNaN(tour)) {
       this.setState({
         isOpen: true,
         index: 0
@@ -25,7 +25,7 @@ var Tour = React.createClass({
     }
     else {
       //finished tour
-      if(tour === '-1') {
+      if(tour === -1) {
         this.setState({
           isOpen: false
         });
