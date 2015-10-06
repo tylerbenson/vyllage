@@ -71,9 +71,14 @@ var Project = React.createClass({
     var placeholders = this.props.placeholders || {};
     var projectUrl = section.projectUrl ? section.projectUrl : '';
 
-    //Does not have protocol
-    if(projectUrl.match(/http/) === null){
-      projectUrl = 'http://' + projectUrl;
+    if(validator.isURL(projectUrl)) {
+      //Does not have protocol
+      if(projectUrl.match(/http/) === null){
+        projectUrl = '//' + projectUrl;
+      }
+    }
+    else {
+      projectUrl = null;
     }
 
     var classes = classnames({
@@ -103,7 +108,7 @@ var Project = React.createClass({
                   :
                   <span>
                     { section.projectTitle }
-                    { validator.isURL(projectUrl) ?
+                    { projectUrl !== null ?
                       <a className="flat secondary icon link button"
                         href={projectUrl}
                         target="_blank"
