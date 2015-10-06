@@ -28,9 +28,9 @@ module.exports = Reflux.createStore({
     }
     this.documentId = window.location.pathname.split('/')[2];
     if( validator.isNumeric(this.documentId) ){
-      window.localStorage.setItem('documentId' , this.documentId );  
+      window.localStorage.setItem('ownDocumentId' , this.documentId );  
     }else{
-      var tempDocumentId = window.localStorage.getItem('documentId');
+      var tempDocumentId = window.localStorage.getItem('ownDocumentId');
       if( tempDocumentId != undefined && validator.isNumeric(tempDocumentId ) ){
         this.documentId = tempDocumentId;
       }         

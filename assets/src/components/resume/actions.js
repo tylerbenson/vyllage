@@ -2,6 +2,7 @@ var Reflux = require('reflux');
 var request = require('superagent');
 var endpoints = require('../endpoints');
 var urlTemplate = require('url-template');
+var validator = require('validator');
 
  var EditorActions = Reflux.createActions([
   //
@@ -37,10 +38,14 @@ var urlTemplate = require('url-template');
 ]);
 
   EditorActions.getAllSections.preEmit = function(){
-    var documentId = window.location.pathname.split('/')[2];
-    console.log(documentId);
-    if( documentId != undefined ){
+  
+    var documentId;
+    var tempDocumentId = window.localStorage.getItem('ownDocumentId');
+    if( tempDocumentId != undefined && validator.isNumeric(tempDocumentId ) ){
+      documentId = tempDocumentId;
+    } 
 
+    if( documentId != undefined ){
       var header;
       var headerUrl = urlTemplate
                   .parse(endpoints.resumeHeader)
