@@ -256,7 +256,7 @@
                   "dependencies": {
                     "lodash._getnative": {
                       "version": "3.9.1",
-                      "from": "lodash._getnative@3.9.1"
+                      "from": "lodash._getnative@^3.0.0"
                     },
                     "lodash.isarguments": {
                       "version": "3.0.4",
@@ -778,7 +778,7 @@
                   "dependencies": {
                     "lodash._getnative": {
                       "version": "3.9.1",
-                      "from": "lodash._getnative@3.9.1"
+                      "from": "lodash._getnative@^3.0.0"
                     },
                     "lodash.isarguments": {
                       "version": "3.0.4",
@@ -862,7 +862,7 @@
                       "dependencies": {
                         "lodash._getnative": {
                           "version": "3.9.1",
-                          "from": "lodash._getnative@3.9.1"
+                          "from": "lodash._getnative@^3.0.0"
                         },
                         "lodash.isarguments": {
                           "version": "3.0.4",
@@ -924,7 +924,7 @@
           "dependencies": {
             "through": {
               "version": "2.3.8",
-              "from": "through@2.3.8"
+              "from": "through@~2.3.4"
             },
             "jstransform": {
               "version": "10.1.0",
@@ -956,11 +956,11 @@
     },
     "react-autolink": {
       "version": "0.2.0",
-      "from": "react-autolink@*",
+      "from": "react-autolink@0.2.0",
       "dependencies": {
         "object-assign": {
           "version": "2.1.1",
-          "from": "object-assign@>=2.0.0 <3.0.0"
+          "from": "object-assign@2.1.1"
         }
       }
     },
@@ -996,7 +996,7 @@
                   "dependencies": {
                     "lodash._isnative": {
                       "version": "2.4.1",
-                      "from": "lodash._isnative@2.4.1"
+                      "from": "lodash._isnative@~2.4.1"
                     }
                   }
                 }
@@ -1012,7 +1012,7 @@
               "dependencies": {
                 "lodash._objecttypes": {
                   "version": "2.4.1",
-                  "from": "lodash._objecttypes@2.4.1"
+                  "from": "lodash._objecttypes@~2.4.1"
                 }
               }
             }
@@ -1030,7 +1030,7 @@
           "dependencies": {
             "through": {
               "version": "2.3.8",
-              "from": "through@2.3.8"
+              "from": "through@~2.3.4"
             },
             "jstransform": {
               "version": "10.1.0",
@@ -1100,7 +1100,7 @@
         },
         "debug": {
           "version": "2.2.0",
-          "from": "debug@2.2.0",
+          "from": "debug@^2.1.0",
           "dependencies": {
             "ms": {
               "version": "0.7.1",
@@ -1142,7 +1142,7 @@
           "dependencies": {
             "core-util-is": {
               "version": "1.0.1",
-              "from": "core-util-is@1.0.1"
+              "from": "core-util-is@~1.0.0"
             },
             "isarray": {
               "version": "0.0.1",
@@ -1150,11 +1150,11 @@
             },
             "string_decoder": {
               "version": "0.10.31",
-              "from": "string_decoder@0.10.31"
+              "from": "string_decoder@~0.10.25"
             },
             "inherits": {
               "version": "2.0.1",
-              "from": "inherits@2.0.1"
+              "from": "inherits@~2.0.0"
             }
           }
         }
