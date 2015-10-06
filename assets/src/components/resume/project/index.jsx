@@ -14,10 +14,8 @@ var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 var cloneDeep = require('clone-deep');
 var validator = require('validator');
-var ReactAutolink = require('react-autolink');
 
 var Project = React.createClass({
-  mixins: [ReactAutolink],
   getInitialState: function () {
     return {
       section: this.props.section,
