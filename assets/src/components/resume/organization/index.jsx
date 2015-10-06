@@ -12,7 +12,7 @@ var assign = require('lodash.assign')
 var MoveButton = require('../../buttons/move');
 var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
-var cx = require('react/lib/cx');
+var classnames = require('classnames');
 var cloneDeep = require('clone-deep');
 var FeatureToggle = require('../../util/FeatureToggle');
 
@@ -78,7 +78,7 @@ var Organization = React.createClass({
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
 
-    var classes = cx({
+    var classes = classnames({
       'single': !this.props.isMultiple,
       'subsection': true
     });

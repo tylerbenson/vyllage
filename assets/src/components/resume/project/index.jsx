@@ -11,7 +11,7 @@ var assign = require('lodash.assign')
 var MoveButton = require('../../buttons/move');
 var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
-var cx = require('react/lib/cx');
+var classnames = require('classnames');
 var cloneDeep = require('clone-deep');
 var validator = require('validator');
 
@@ -76,7 +76,7 @@ var Project = React.createClass({
       projectUrl = 'http://' + projectUrl;
     }
 
-    var classes = cx({
+    var classes = classnames({
       'single': !this.props.isMultiple,
       'subsection': true
     });
