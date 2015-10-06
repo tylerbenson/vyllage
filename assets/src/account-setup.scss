@@ -126,6 +126,13 @@
           color: $tagline-color;
           margin-bottom: 2em;
         }
+        &.note {
+          margin-top: 0.5em;
+          color: $inverted-text-color;
+          opacity: 0.9;
+          font-size: 0.9em;
+          max-width: $small-landscape;
+        }
         &.error {
           color: darken($error-background, 20%);
         }
