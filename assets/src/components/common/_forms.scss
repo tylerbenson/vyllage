@@ -61,6 +61,12 @@ textarea {
       background: none;
       -webkit-text-fill-color: lighten($text-color, 10%);
     }
+
+    &.link {
+      font-size: 0.75em;
+      color: darken($alternate-color-1, 25%);
+      margin-bottom: 0.5em;
+    }
   }
 
   &.transparent {

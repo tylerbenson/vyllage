@@ -13,8 +13,11 @@ var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
 var cx = require('react/lib/cx');
 var cloneDeep = require('clone-deep');
+var validator = require('validator');
+var ReactAutolink = require('react-autolink');
 
 var Project = React.createClass({
+  mixins: [ReactAutolink],
   getInitialState: function () {
     return {
       section: this.props.section,
@@ -68,6 +71,12 @@ var Project = React.createClass({
     var section = this.state.section;
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
+    var projectUrl = section.projectUrl ? section.projectUrl : '';
+
+    //Does not have protocol
+    if(projectUrl.match(/http/) === null){
+      projectUrl = 'http://' + projectUrl;
+    }
 
     var classes = cx({
       'single': !this.props.isMultiple,
@@ -81,18 +90,42 @@ var Project = React.createClass({
           <div className='header'>
             <div className='title'>
               <h2>
-                <Textarea
-                  ref='projectTitle'
-                  disabled={!uiEditMode}
-                  className='flat'
-                  style={uiEditMode || section.projectTitle ? {}: {display: 'none'}}
-                  placeholder='Project Title'
-                  type='text'
-                  value={section.projectTitle}
-                  rows="1"
-                  onChange={this.handleChange.bind(this, 'projectTitle')}
-                />
+                { uiEditMode ?
+                  <Textarea
+                    ref='projectTitle'
+                    disabled={!uiEditMode}
+                    className='flat'
+                    style={uiEditMode || section.projectTitle ? {}: {display: 'none'}}
+                    placeholder='Project Title'
+                    type='text'
+                    value={section.projectTitle}
+                    rows="1"
+                    onChange={this.handleChange.bind(this, 'projectTitle')}
+                  />
+                  :
+                  <span>
+                    { section.projectTitle }
+                    { validator.isURL(projectUrl) ?
+                      <a className="flat secondary icon link button"
+                        href={projectUrl}
+                        target="_blank"
+                        title={section.projectUrl}>
+                          <i className="ion-link"></i>
+                      </a>
+                    : null }
+                  </span>
+                }
               </h2>
+              { uiEditMode ?
+                <input className="flat link"
+                  ref='projectUrl'
+                  disabled={!uiEditMode}
+                  placeholder='Project URL'
+                  type='text'
+                  value={section.projectUrl}
+                  onChange={this.handleChange.bind(this, 'projectUrl')}
+                />
+                : null }
             </div>
             {this.props.owner? <div className="actions">
               {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}

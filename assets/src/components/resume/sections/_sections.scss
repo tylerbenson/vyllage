@@ -65,9 +65,12 @@
       }
 
       h2, h3 {
-        textarea {
+        & > span,
+        & > textarea {
           color: $alternate-color-2;
           font-weight: 400;
+          font-size: 0.9em;
+          padding: 0 0.25em;
           -webkit-text-fill-color: $alternate-color-2;
         }
       }
