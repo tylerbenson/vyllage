@@ -40,7 +40,7 @@ var Permission = React.createClass({
                 Facebook
               </div>
                <input type="hidden" name="_csrf" value={metatoken} />
-               <input type="hidden" name="scope" value="email,publish_actions" />
+               <input type="hidden" name="scope" value="email" />
                {/*<input type="checkbox" className="social-checkbox" /> <span className="small-text"> Publish Vyllage updates on my timeline </span>*/}
             </form>
           </div>
