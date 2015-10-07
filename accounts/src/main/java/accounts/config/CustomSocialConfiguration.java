@@ -65,6 +65,7 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		connectController
 				.addInterceptor(new SendConfirmationEmailAfterConnectInterceptor(
 						confirmationEmailService));
+		//
 
 		// connectController.addInterceptor(new
 		// PostToWallAfterConnectInterceptor());
