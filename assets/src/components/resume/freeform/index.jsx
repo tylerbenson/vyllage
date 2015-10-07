@@ -52,7 +52,7 @@ var Freeform = React.createClass({
   cancelHandler: function(e) {
     var section = this.props.section;
     if (section.newSection) {
-      actions.deleteSection(section.sectionId);
+      actions.deleteNewSection();
     } else {
       this.setState({
         description:this.props.section.description,
@@ -88,7 +88,7 @@ var Freeform = React.createClass({
           </div></FeatureToggle>
         }
         </div>
-        {this.props.section.sectionId ? <div>
+        {this.props.section ? <div>
           <div className="content">
             <Textarea
               ref='description'

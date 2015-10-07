@@ -58,7 +58,7 @@ var Organization = React.createClass({
   cancelHandler: function(e) {
     var section = this.props.section;
     if (section.newSection) {
-      actions.deleteSection(section.sectionId);
+      actions.deleteNewSection();
     } else {
       this.setState({
         section: section,

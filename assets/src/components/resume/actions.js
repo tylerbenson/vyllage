@@ -16,6 +16,7 @@ var urlTemplate = require('url-template');
   'postSection',
   'putSection',
   'deleteSection',
+  'deleteNewSection',
   'moveGroupOrder',
   'moveSectionOrder',
   // comments

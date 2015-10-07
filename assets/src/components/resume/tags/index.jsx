@@ -39,11 +39,6 @@ var Tags = React.createClass({
       tags: nextProps.section.tags,
     });
   },
-
-  componentDidMount: function () {
-
-  },
-
   handleChange: function(e) {
     e.preventDefault();
     var input = e.target.value.trim().split(',');
@@ -82,7 +77,7 @@ var Tags = React.createClass({
   cancelHandler: function(e) {
     var section = this.props.section;
     if (section.newSection) {
-      actions.deleteSection(section.sectionId);
+      actions.deleteNewSection();
     } else {
       this.setState({
         tags:this.props.section.tags,
@@ -152,7 +147,7 @@ var Tags = React.createClass({
           </div></FeatureToggle>
         }
         </div>
-        {this.props.section.sectionId ? <div>
+        {this.props.section ? <div>
           { this.state.uiEditMode == undefined || this.state.uiEditMode == false ? <div className="tags content">{tags}</div> :
           <Sortable config={config} className="tags content move-tag">
             {tags}
