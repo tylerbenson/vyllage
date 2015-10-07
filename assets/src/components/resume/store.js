@@ -277,6 +277,11 @@ module.exports = Reflux.createStore({
     }
     data.newSection = true; 
     data.isSupported = this.isSupportedSection(data.type);
+    if( this.resume.sections.length > 0 ){
+      var all_section  = clone(this.resume.sections );
+      all_section = sortby( all_section ,'sectionPosition');
+      data.sectionPosition = all_section[all_section.length-1].sectionPosition + 1;
+    }
     this.resume.sections.push(data);
     this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
     this.trigger(this.resume);

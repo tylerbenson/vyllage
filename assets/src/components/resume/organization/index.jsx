@@ -105,7 +105,7 @@ var Organization = React.createClass({
             </div>
             {this.props.owner? <div className="actions">
               {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
-              {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
+              {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: this.props.section.newSection == true ? null : <DeleteSection sectionId={this.props.section.sectionId} />}
             </div>: <FeatureToggle name="SECTION_ADVICE"> <div className="actions"> 
                {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
                {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null } 
