@@ -956,11 +956,11 @@
     },
     "react-autolink": {
       "version": "0.2.0",
-      "from": "react-autolink@*",
+      "from": "react-autolink@0.2.0",
       "dependencies": {
         "object-assign": {
           "version": "2.1.1",
-          "from": "object-assign@>=2.0.0 <3.0.0"
+          "from": "object-assign@2.1.1"
         }
       }
     },
