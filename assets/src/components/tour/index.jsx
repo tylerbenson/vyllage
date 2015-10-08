@@ -1,5 +1,6 @@
 var React = require('react');
 var cookie = require('tiny-cookie');
+var classnames = require('classnames');
 
 var slides = require('./slides');
 var Modal = require('../modal');
@@ -13,10 +14,10 @@ var Tour = React.createClass({
 	},
 	componentWillMount: function(){
     var page = this.props.page;
-    var tour = cookie.get(page + '_tour');
+    var tour = parseInt(cookie.get(page + '_tour'));
 
     //no cookie yet
-    if(tour === null) {
+    if(isNaN(tour)) {
       this.setState({
         isOpen: true,
         index: 0
@@ -24,7 +25,7 @@ var Tour = React.createClass({
     }
     else {
       //finished tour
-      if(tour === '-1') {
+      if(tour === -1) {
         this.setState({
           isOpen: false
         });
@@ -60,6 +61,14 @@ var Tour = React.createClass({
   render: function() {
     var slide = slides[this.props.page][this.state.index];
 
+    var bannerImages = slides[this.props.page].map(function(slide, i){
+      var classes = classnames({
+        'visible': i === this.state.index,
+        'banner': true
+      });
+      return <img key={i} className={classes} src={slide.image} alt={slide.title} />;
+    }.bind(this));
+
     return (
     <Modal isOpen={this.state.isOpen} close={this.closeModal} className="medium tour">
       <div className="header">
@@ -68,7 +77,7 @@ var Tour = React.createClass({
         </div>
       </div>
       <div className="content">
-        {slide.image ? <img className="banner" src={slide.image} alt={slide.title} /> : null}
+        {bannerImages}
         <p>{slide.content}</p>
       </div>
       <div className="footer">

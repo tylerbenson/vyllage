@@ -52,9 +52,14 @@
       font-size: 1.15em;
 
       .banner {
+        display: none;
         background: none;
         height: 12em;
         padding: 1em;
+
+        &.visible {
+          display: inline-block;
+        }
       }
       p {
         max-width: $small-landscape;
