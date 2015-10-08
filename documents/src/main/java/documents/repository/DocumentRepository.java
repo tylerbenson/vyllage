@@ -143,7 +143,7 @@ public class DocumentRepository implements IRepository<Document> {
 			throws ElementNotFoundException {
 		DocumentsRecord record = sql.fetchOne(DOCUMENTS,
 				DOCUMENTS.USER_ID.eq(userId));
-		logger.info("Searching document with userid " + userId);
+		logger.fine("Searching document with userid " + userId);
 
 		if (record == null)
 			throw new ElementNotFoundException("Document for user id '"
