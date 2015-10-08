@@ -273,7 +273,7 @@ configure(bootProjects) {
 
     def profile = (project.gradle.startParameter.systemPropertiesArgs['spring.profiles.active'] != null) ?
         project.gradle.startParameter.systemPropertiesArgs['spring.profiles.active'] : ""
-
+		
     applicationDefaultJvmArgs = [
             // Set PROJECT_HOME env variable to the root. This allows to register an additional
             // resource handler location and serve static resources directly from the template module during dev.

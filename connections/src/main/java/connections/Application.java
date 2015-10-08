@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguratio
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-@PropertySource("classpath:/connections/application.properties")
+@PropertySource("classpath:/connections/application-${profile}.properties")
 @EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
 public class Application {
 

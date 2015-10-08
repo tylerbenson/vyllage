@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-@PropertySource("classpath:/oauth/application.properties")
+@PropertySource("classpath:/oauth/application-${profile}.properties")
 public class Application implements CommandLineRunner {
 
 	@Override
