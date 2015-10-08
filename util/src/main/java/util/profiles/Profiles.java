@@ -1,4 +1,4 @@
-package site;
+package util.profiles;
 
 /**
  * -Dspring.profiles.active=

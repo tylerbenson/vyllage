@@ -12,6 +12,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import util.profiles.Profiles;
+
 /**
  * Site-wide MVC infrastructure configuration. See also {@link SiteConfig} where
  * certain additional web infrastructure is configured.

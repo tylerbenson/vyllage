@@ -5,7 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
-@Profile({ "dev", "prod" })
+import util.profiles.Profiles;
+
+@Profile({ Profiles.DEV, Profiles.PROD })
 @SpringBootApplication
 @PropertySource("classpath:/documents/application-${profile}.properties")
 public class Application {

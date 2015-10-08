@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
+import util.profiles.Profiles;
+
 @SpringBootApplication
 @ComponentScan(basePackageClasses = { connections.Application.class,
 		documents.Application.class, accounts.Application.class,

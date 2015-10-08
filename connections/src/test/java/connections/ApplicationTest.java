@@ -10,7 +10,9 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
-@Profile("test")
+import util.profiles.Profiles;
+
+@Profile(Profiles.TEST)
 @SpringBootApplication
 @ComponentScan(basePackages = { "connections" }, excludeFilters = { @Filter(type = FilterType.ASSIGNABLE_TYPE, value = { Application.class }) })
 @PropertySource("classpath:/connections/application-test.properties")
