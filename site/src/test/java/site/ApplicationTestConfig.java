@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 @SpringBootApplication
 @ComponentScan(basePackages = { "site" }, excludeFilters = { @Filter(type = FilterType.ASSIGNABLE_TYPE, value = { Application.class }) })
 @EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
-@PropertySource("classpath:/site/application-dev.properties")
+@PropertySource("classpath:/application-dev.properties")
 public class ApplicationTestConfig implements CommandLineRunner {
 
 	@Override
