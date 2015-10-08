@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
+@PropertySource("classpath:/connections/application-${profile}.properties")
 public class Application {
 
 	public static void main(String[] args) {
