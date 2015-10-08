@@ -41,7 +41,7 @@ class MvcConfig extends WebMvcConfigurerAdapter {
 }
 
 @Configuration
-@Profile(Profiles.DEV)
+@Profile({ Profiles.DEV, Profiles.TEST })
 class ClientResourcesConfig extends WebMvcConfigurerAdapter {
 
 	@Value("${PROJECT_HOME:}")
