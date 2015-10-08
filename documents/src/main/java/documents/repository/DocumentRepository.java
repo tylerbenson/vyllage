@@ -53,7 +53,7 @@ public class DocumentRepository implements IRepository<Document> {
 	public Document get(Long id) throws ElementNotFoundException {
 		DocumentsRecord record = sql.fetchOne(DOCUMENTS,
 				DOCUMENTS.DOCUMENT_ID.eq(id));
-		logger.info("Searching document with id " + id);
+		logger.fine("Searching document with id " + id);
 
 		if (record == null)
 			throw new ElementNotFoundException("Document with id '" + id
