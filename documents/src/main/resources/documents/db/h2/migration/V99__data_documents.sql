@@ -63,14 +63,14 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(130, 1, 0, 8, '{
 	"type": "ProjectsSection",
-	"title": "projects",
+	"title": "Projects",
 	"sectionId": 130,
 	"sectionPosition": 8,
 	"state": "shown",
 	"projectTitle": "Rebellion Project",
 	"author":"Luke",
-	"projectDate":"2015-09-22T15:37:32",
-	"projectImageUrl":"http://img",
+	"projectDate":"Sep 2011",
+	"projectUrl":"http://img",
 	"role":"Leader",
 	"projectDescription":"Rebellion against the Empire.",
 	"roleDescription":"Rebellion Jedi Leader"

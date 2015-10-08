@@ -17,7 +17,7 @@ var Datepicker = React.createClass({
     if( date == undefined || date =='NaN' || date == 'Present' || date == '' ){
       active_year = parseInt(moment(new Date()).format('YYYY'))
     }else{
-      active_year = parseInt( date.split(' ')[1] );
+      active_year = parseInt(date.split(' ')[1]);
     }
 
     return {

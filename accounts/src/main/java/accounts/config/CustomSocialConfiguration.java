@@ -65,6 +65,7 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		connectController
 				.addInterceptor(new SendConfirmationEmailAfterConnectInterceptor(
 						confirmationEmailService));
+		connectController.setApplicationUrl("https://www.vyllage.com");
 
 		// connectController.addInterceptor(new
 		// PostToWallAfterConnectInterceptor());

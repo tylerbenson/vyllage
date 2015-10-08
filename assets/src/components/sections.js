@@ -31,14 +31,14 @@ var sections = [
 		description: 'List skills that you have been developing.',
 		isMultiple: false
 	},
-	// {
-	// 	title: 'Projects',
-	// 	type: 'ProjectsSection',
-	// 	component: 'Gallery',
-	// 	icon: 'ion-folder',
-	// 	description: 'Showcase your work by including projects.',
-	// 	isMultiple: false
-	// },
+	{
+		title: 'Projects',
+		type: 'ProjectsSection',
+		component: 'Project',
+		icon: 'ion-folder',
+		description: 'Showcase your skills and talent by including projects you\'ve worked on.',
+		isMultiple: true
+	},
 	// {
 	// 	title: 'Achievements',
 	// 	type: 'AchievementsSection',

@@ -8,6 +8,7 @@ var Header = require('./sections/Header');
 var Section = require('./sections');
 var Banner = require('./banner');
 var Empty = require('./sections/Empty');
+var Loading = require('./sections/Loading');
 var Sortable = require('../util/Sortable');
 var Tour = require('../tour');
 
@@ -129,21 +130,27 @@ var ResumeEditor = React.createClass({
   },
   render: function () {
     var owner = this.state.resume.header.owner;
-    var allSection;
+    var allSections = this.state.resume.all_section;
+    var sections = filter(this.state.resume.sections, {isSupported: true});
+    var content;
 
-    if( this.state.resume.all_section != undefined ){
-      if( this.state.resume.all_section.length > 0 ){
-        allSection = <SectionRender sections={this.state.resume.all_section} />
-      }else{
-        allSection = <Empty />
+    if(allSections !== undefined) {
+      if(allSections.length > 0) {
+        content = <SectionRender sections={allSections} />;
+      }
+      else if(owner === undefined || sections.length > 0) {
+        content = <Loading />;
+      }
+      else if(sections.length === 0 && allSections.length === 0) {
+        content = <Empty />;
       }
     }
 
     return (
       <div>
         <Tour page="resume" />
-        <Banner header={this.state.resume.header} settings={this.state.settings} sections={this.state.resume.all_section} />
-        {allSection}
+        <Banner header={this.state.resume.header} settings={this.state.settings} sections={allSections} />
+        {content}
       </div>
     );
   }
