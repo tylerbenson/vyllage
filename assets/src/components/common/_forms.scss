@@ -21,6 +21,7 @@ input[type="email"],
 input[type="number"],
 select,
 textarea {
+  @include user-select(initial);
   @extend .full-width;
   background: $inverted-text-color;
   border: lighten($secondary-color, 30%) solid 1px;
@@ -39,6 +40,7 @@ textarea {
   }
 
   &[disabled] {
+    @include user-select(initial);
     background: lighten($secondary-color, 43%);
     border-color: transparent;
     cursor: default;
@@ -156,6 +158,7 @@ table {
 .tags {
   @include cf();
   .tag {
+    @include user-select(initial);
     border-radius: 5px;
     background-color: lighten($secondary-color, 42%);
     border: lighten($secondary-color, 39%) solid 1px;
@@ -166,6 +169,10 @@ table {
     margin: 0.165em 0.15em;
     padding: 0.25em 0.75em;
     word-break: break-word;
+
+    span {
+      @include user-select(initial);
+    }
 
     &.ui-sortable-helper {
       height: auto !important;

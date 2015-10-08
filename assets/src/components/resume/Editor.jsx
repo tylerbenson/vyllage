@@ -33,6 +33,7 @@ var SubSection = React.createClass({
 
     actions.moveSectionOrder(subsection_order , type);
     jQuery('.banner .subheader').removeClass('dragging');
+    jQuery(ui.item).css('z-index','');
   },
   render: function(){
     var config = {
@@ -71,6 +72,7 @@ var SectionGroup = React.createClass({
     });
     actions.moveGroupOrder(order);
     jQuery('.banner .subheader').removeClass('dragging');
+    jQuery(ui.item).css('z-index','');
   },
   render: function(){
     var self = this;

@@ -43,13 +43,13 @@ var Alert = React.createClass({
       body.className = body.className.replace(/ alert-open/g,'');
     }
 
-    var className = classnames({
+    var classes = classnames({
       visible: this.state.isOpen,
       [this.props.className]: true
     });
 
     return (
-      <div className={className } >
+      <div className={classes } >
       	{this.state.message}
       	<button className='pull right small flat secondary icon button' onClick={this.closeHandler}>
       		<i className='ion-close'></i>
