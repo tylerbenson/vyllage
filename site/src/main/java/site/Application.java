@@ -32,6 +32,7 @@ public class Application implements CommandLineRunner {
 				System.exit(1);
 			}
 
+			application.setAdditionalProfiles(Profiles.DEV);
 			logger.info("\n** Setting thymeleaf prefix to: "
 					+ System.getProperty("PROJECT_HOME") + "/assets/public/\n");
 			System.setProperty("spring.thymeleaf.prefix",

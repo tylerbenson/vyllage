@@ -1,14 +1,12 @@
-package site;
+package connections;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
 @PropertySource("classpath:/connections/application-prod.properties")
-@PropertySource("classpath:/documents/application-prod.properties")
-@PropertySource("classpath:/accounts/application-prod.properties")
-@Configuration(value = "site.PropertyConfigProd")
-@Profile(Profiles.PROD)
+@Configuration(value = "connections.PropertyConfigProd")
+@Profile("prod")
 public class PropertyConfigProd {
 
 }

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 @SpringBootApplication
 @ComponentScan(basePackages = { "documents" }, excludeFilters = { @Filter(type = FilterType.ASSIGNABLE_TYPE, value = {
 		BeansConfiguration.class, Application.class }) })
-@PropertySource("classpath:/documents/application.properties")
+@PropertySource("classpath:/documents/application-dev.properties")
 public class ApplicationTestConfig implements CommandLineRunner {
 
 	@Override
