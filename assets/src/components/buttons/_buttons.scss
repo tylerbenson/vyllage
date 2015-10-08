@@ -76,7 +76,7 @@ input[type="reset"] {
       background: darken($google-color, 3%);
     }
   }
-  
+
   &.inverted {
     background: transparent;
     color: $primary-color;
@@ -216,6 +216,19 @@ input[type="reset"] {
 
     i {
       margin: 0;
+    }
+
+    &.link {
+      margin: 0;
+      opacity: 0.5;
+      position: relative;
+      padding: 0 0.4em;
+      top: 0.05em;
+      transition: opacity .2s ease;
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
 

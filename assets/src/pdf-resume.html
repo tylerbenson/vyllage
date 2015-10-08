@@ -85,7 +85,6 @@
         <th:block th:case="'ProjectsSection'">
           <h2 th:text="${section.title}"></h2>
           <h3 th:text="${section.projectTitle}"></h3>
-          <h5 class="location" th:text="${section.author}"></h5>
           <p th:text="${section.projectDescription}"></p>
           <div class="subsection">
             <h4 class="role" th:text="${section.role}"></h4>
@@ -97,13 +96,13 @@
         <th:block th:case="'SkillsSection'">
           <h2 th:text="${section.title}">
           </h2>
-          <p th:utext="${#strings.listJoin(section.tags,', ')} + ' .'"></p>
+          <p th:utext="${#strings.listJoin(section.tags,', ')}"></p>
         </th:block>
 
         <th:block th:case="'CareerInterestsSection'">
           <h2 th:text="${section.title}">
           </h2>
-          <p th:utext="${#strings.listJoin(section.tags,', ')} + ' .'"></p>
+          <p th:utext="${#strings.listJoin(section.tags,', ')}"></p>
         </th:block>
 
         <th:block th:case="'PersonalReferencesSection'">

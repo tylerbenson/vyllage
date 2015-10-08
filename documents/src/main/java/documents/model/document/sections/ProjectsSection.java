@@ -1,11 +1,12 @@
 package documents.model.document.sections;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import util.dateSerialization.DocumentLocalDateTimeDeserializer;
-import util.dateSerialization.DocumentLocalDateTimeSerializer;
+import util.dateSerialization.LocalDateDeserializer;
+import util.dateSerialization.LocalDateSerializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -19,11 +20,11 @@ public class ProjectsSection extends DocumentSection {
 	private String projectTitle;
 	private String author;
 
-	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
-	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
-	private LocalDateTime projectDate;
-	private String projectImageUrl;
+	@JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+	private LocalDate projectDate;
 
+	private String projectUrl;
 	private String projectDescription;
 	private String role;
 	private String roleDescription;
@@ -49,20 +50,20 @@ public class ProjectsSection extends DocumentSection {
 		this.author = author;
 	}
 
-	public LocalDateTime getProjectDate() {
+	public LocalDate getProjectDate() {
 		return projectDate;
 	}
 
-	public void setProjectDate(LocalDateTime projectDate) {
+	public void setProjectDate(LocalDate projectDate) {
 		this.projectDate = projectDate;
 	}
 
-	public String getProjectImageUrl() {
-		return projectImageUrl;
+	public String getProjectUrl() {
+		return projectUrl;
 	}
 
-	public void setProjectImageUrl(String projectImageUrl) {
-		this.projectImageUrl = projectImageUrl;
+	public void setProjectUrl(String projectUrl) {
+		this.projectUrl = projectUrl;
 	}
 
 	public String getProjectDescription() {
