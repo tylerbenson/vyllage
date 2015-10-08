@@ -3,6 +3,7 @@ package site;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -32,8 +33,9 @@ public class Application implements CommandLineRunner {
 				System.exit(1);
 			}
 
-			// this breaks prod
-			// application.setAdditionalProfiles(Profiles.DEV);
+			if (StringUtils.isBlank(System
+					.getProperty("spring.profiles.active")))
+				application.setAdditionalProfiles(Profiles.DEV);
 			logger.info("\n** Setting thymeleaf prefix to: "
 					+ System.getProperty("PROJECT_HOME") + "/assets/public/\n");
 			System.setProperty("spring.thymeleaf.prefix",
