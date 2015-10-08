@@ -7,16 +7,15 @@ var SuggestionBtn = require('../../buttons/suggestion');
 var CancelBtn = require('../../buttons/cancel');
 var Textarea = require('react-textarea-autosize');
 var Datepicker = require('../../datepicker');
-var Highlights = require('../highlights');
 var assign = require('lodash.assign')
 var MoveButton = require('../../buttons/move');
 var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
 var classnames = require('classnames');
 var cloneDeep = require('clone-deep');
-var FeatureToggle = require('../../util/FeatureToggle');
+var validator = require('validator');
 
-var Organization = React.createClass({
+var Project = React.createClass({
   getInitialState: function () {
     return {
       section: this.props.section,
@@ -24,15 +23,9 @@ var Organization = React.createClass({
       newSection: this.props.section.newSection
     };
   },
-
-  // componentWillReceiveProps: function (nextProps) {
-  //   this.setState({
-  //     section: nextProps.section
-  //   });
-  // },
   componentDidMount: function() {
     if (this.state.uiEditMode) {
-      this.refs.organizationName.getDOMNode().focus();
+      this.refs.projectTitle.getDOMNode().focus();
     }
   },
   handleChange: function(key, e) {
@@ -47,7 +40,6 @@ var Organization = React.createClass({
   },
   saveHandler: function(e) {
     var section = this.state.section;
-    section['highlights'] = this.refs.highlights.getHighlights();
     actions.putSection(section);
 
     this.setState({
@@ -70,13 +62,24 @@ var Organization = React.createClass({
     this.setState({
       uiEditMode: true
     }, function () {
-      this.refs.organizationName.getDOMNode().focus();
+      this.refs.projectTitle.getDOMNode().focus();
     });
   },
   render: function () {
-    var section = this.props.section;
+    var section = this.state.section;
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
+    var projectUrl = section.projectUrl ? section.projectUrl : '';
+
+    if(validator.isURL(projectUrl)) {
+      //Does not have protocol
+      if(projectUrl.match(/http/) === null){
+        projectUrl = '//' + projectUrl;
+      }
+    }
+    else {
+      projectUrl = null;
+    }
 
     var classes = classnames({
       'single': !this.props.isMultiple,
@@ -90,26 +93,50 @@ var Organization = React.createClass({
           <div className='header'>
             <div className='title'>
               <h2>
-                <Textarea
-                  ref='organizationName'
-                  disabled={!uiEditMode}
-                  className='flat'
-                  style={uiEditMode || section.organizationName ? {}: {display: 'none'}}
-                  placeholder='Organization Name'
-                  type='text'
-                  value={section.organizationName}
-                  rows="1"
-                  onChange={this.handleChange.bind(this, 'organizationName')}
-                />
+                { uiEditMode ?
+                  <Textarea
+                    ref='projectTitle'
+                    disabled={!uiEditMode}
+                    className='flat'
+                    style={uiEditMode || section.projectTitle ? {}: {display: 'none'}}
+                    placeholder='Project Title'
+                    type='text'
+                    value={section.projectTitle}
+                    rows="1"
+                    onChange={this.handleChange.bind(this, 'projectTitle')}
+                  />
+                  :
+                  <span>
+                    { section.projectTitle }
+                    { projectUrl !== null ?
+                      <a className="flat secondary icon link button"
+                        href={projectUrl}
+                        target="_blank"
+                        title={section.projectUrl}>
+                          <i className="ion-link"></i>
+                      </a>
+                    : null }
+                  </span>
+                }
               </h2>
+              { uiEditMode ?
+                <input className="flat link"
+                  ref='projectUrl'
+                  disabled={!uiEditMode}
+                  placeholder='Project URL'
+                  type='text'
+                  value={section.projectUrl}
+                  onChange={this.handleChange.bind(this, 'projectUrl')}
+                />
+                : null }
             </div>
             {this.props.owner? <div className="actions">
               {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
               {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
-            </div>: <FeatureToggle name="SECTION_ADVICE"> <div className="actions">
+            </div>:  <div className="actions">
                {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
                {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
-            </div></FeatureToggle>
+            </div>
             }
 
 
@@ -117,13 +144,13 @@ var Organization = React.createClass({
           <div className='content'>
             <Textarea
               disabled={!uiEditMode}
-              style={uiEditMode || section.organizationDescription ? {}: {display: 'none'}}
+              style={uiEditMode || section.projectDescription ? {}: {display: 'none'}}
               className="flat"
               rows="1"
               autoComplete="off"
-              placeholder="Organization Description"
-              value={section.organizationDescription}
-              onChange={this.handleChange.bind(this, 'organizationDescription')}
+              placeholder="Project Description"
+              value={section.projectDescription}
+              onChange={this.handleChange.bind(this, 'projectDescription')}
             />
             <section className="subsubsection">
               <div className="header">
@@ -134,7 +161,7 @@ var Organization = React.createClass({
                       className="flat"
                       style={uiEditMode || section.role ? {}: {display: 'none'}}
                       type="text"
-                      placeholder={placeholders.role || "Degree / Position"}
+                      placeholder={placeholders.role || "Role"}
                       rows="1"
                       value={section.role}
                       onChange={this.handleChange.bind(this, 'role')}
@@ -153,48 +180,22 @@ var Organization = React.createClass({
                   onChange={this.handleChange.bind(this, 'roleDescription')}
                 />
                 <Datepicker
-                  name='startDate'
-                  date={section.startDate}
+                  name='projectDate'
+                  date={section.projectDate}
                   setDate={this.handleChange}
                 >
                   <input
                     disabled={!uiEditMode}
-                    style={uiEditMode || section.startDate ? {}: {display: 'none'}}
+                    style={uiEditMode || section.projectDate ? {}: {display: 'none'}}
                     type="text"
-                    className="inline flat date"
-                    placeholder="Start Date"
+                    className="inline flat project date"
+                    placeholder="Project Date"
                   />
                 </Datepicker>
-                {(uiEditMode || (section.startDate && (section.endDate || section.isCurrent)))? '-': null}
-                <Datepicker
-                  name='endDate'
-                  date={section.isCurrent? "Present": section.endDate}
-                  setDate={this.handleChange}
-                  isCurrent={section.isCurrent}
-                  toggleCurrent={this.toggleCurrent}
-                >
-                  <input
-                    disabled={!uiEditMode}
-                    style={uiEditMode || section.endDate || section.isCurrent ? {}: {display: 'none'}}
-                    type="text"
-                    className="inline flat date"
-                    placeholder="End Date"
-                  />
-                </Datepicker>
-                <input
-                  disabled={!uiEditMode}
-                  type="text"
-                  className="flat location"
-                  style={uiEditMode || section.location ? {}: {display: 'none'}}
-                  placeholder="Location"
-                  value={section.location}
-                  onChange={this.handleChange.bind(this, 'location')}
-                />
-                <Highlights ref="highlights" highlights={section.highlights} uiEditMode={uiEditMode} />
               </div>
             </section>
           </div>
-          <SectionFooter section={this.props.section} owner={this.props.owner} />
+          <SectionFooter section={section} owner={this.props.owner} />
         </div>
         {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>
@@ -202,7 +203,6 @@ var Organization = React.createClass({
   },
   _saveSuggestionHandler : function(){
     var section = cloneDeep(this.state.section);
-    section['highlights'] = this.refs.highlights.getHighlights();
     actions.saveSectionAdvice(section);
 
     this.setState({
@@ -212,4 +212,4 @@ var Organization = React.createClass({
   }
 });
 
-module.exports = Organization;
+module.exports = Project;

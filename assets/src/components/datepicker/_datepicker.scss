@@ -10,6 +10,10 @@
   font-size: 0.9em;
   width: 5em !important;
 
+  &.project {
+    width: 6.5em !important;
+  }
+
   &.diff {
     width: auto !important;
   }

@@ -1,5 +1,5 @@
 var React = require('react');
-var cx = require('react/lib/cx');
+var classnames = require('classnames');
 var Actions = require('./actions');
 var isTouch = require('../isTouch');
 
@@ -41,7 +41,7 @@ var Autocomplete = React.createClass({
         'active': this.props.selectedSuggestion === index
       }
       return (
-        <li key={index} className={cx(classes)}>
+        <li key={index} className={classnames(classes)}>
           <div
             className='name'
             onClick={!isTouch? this.recentClick.bind(this, index): null}
@@ -60,7 +60,7 @@ var Autocomplete = React.createClass({
         'active': this.props.selectedSuggestion === this.props.suggestions.recent.length + index
       }
       return (
-        <li key={this.props.suggestions.recent.length + index} className={cx(classes)}>
+        <li key={this.props.suggestions.recent.length + index} className={classnames(classes)}>
           <div
             className='name'
             onClick={!isTouch? this.recommendedClick.bind(this, index): null}

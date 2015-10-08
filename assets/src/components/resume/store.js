@@ -142,7 +142,7 @@ module.exports = Reflux.createStore({
       }.bind(this))
   },
   isSupportedSection: function (type) {
-    var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection','CareerInterestsSection'];
+    var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection','CareerInterestsSection','ProjectsSection'];
     return supported.indexOf(type) > -1;
   },
   onGetSections: function () {
@@ -410,6 +410,7 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         var advices = [];
+
         if( res.body.length ){
           res.body.map(function(advice){
             if(advice.status == 'pending'){

@@ -1,5 +1,5 @@
 var React = require('react');
-var cx = require('react/lib/cx');
+var classnames = require('classnames');
 var Actions = require('./actions');
 
 var RecipentList = React.createClass({
@@ -22,7 +22,7 @@ var RecipentList = React.createClass({
         disabled: true
       };
       return (
-        <div key={index} className={cx(classes)}>
+        <div key={index} className={classnames(classes)}>
           <span className='name'>
             {recipient.firstName + " " + recipient.lastName}
           </span>
@@ -44,7 +44,7 @@ var RecipentList = React.createClass({
       };
       // nru prefix is used to create different keys compare to renderUserRecipients
       return (
-        <div key={'nru' + index} className={cx(classes)}>
+        <div key={'nru' + index} className={classnames(classes)}>
           <span className='name' onClick={this.editHandler.bind(this, index)}>
             {recipient.firstName + " " + recipient.lastName}
           </span>
