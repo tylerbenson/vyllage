@@ -6,14 +6,16 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 
+@Profile(Profiles.TEST)
 @SpringBootApplication
 @ComponentScan(basePackages = { "site" }, excludeFilters = { @Filter(type = FilterType.ASSIGNABLE_TYPE, value = { Application.class }) })
 @EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
-@PropertySource("classpath:/application-dev.properties")
+@PropertySource("classpath:/application-test.properties")
 public class ApplicationTestConfig implements CommandLineRunner {
 
 	@Override

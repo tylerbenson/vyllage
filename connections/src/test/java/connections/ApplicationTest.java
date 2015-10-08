@@ -7,11 +7,13 @@ import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguratio
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
+@Profile("test")
 @SpringBootApplication
 @ComponentScan(basePackages = { "connections" }, excludeFilters = { @Filter(type = FilterType.ASSIGNABLE_TYPE, value = { Application.class }) })
-@PropertySource("classpath:/connections/application-dev.properties")
+@PropertySource("classpath:/connections/application-test.properties")
 @EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
 public class ApplicationTest {
 	public static void main(String[] args) {
