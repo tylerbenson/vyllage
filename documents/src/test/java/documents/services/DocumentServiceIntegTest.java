@@ -36,7 +36,7 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SectionAdviceRepository;
-import documents.utilities.OrderSectionValidator;
+import documents.services.rules.OrderSectionValidator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)

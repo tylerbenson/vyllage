@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import documents.services.rules.OrderSectionValidator;
+
 public class OrderSectionValidatorTest {
 
 	@Test(expected = IllegalArgumentException.class)

@@ -37,8 +37,8 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SectionAdviceRepository;
+import documents.services.rules.OrderSectionValidator;
 import documents.services.rules.SetSectionPositionOnCreationUpdate;
-import documents.utilities.OrderSectionValidator;
 
 /**
  * This service takes care of saving, retrieving and manipulating documents.
@@ -230,7 +230,7 @@ public class DocumentService {
 
 		for (Comment comment : comments) {
 			if (!comment.isDeleted()) {
-				addContactDataToComment(comment, names, comment);
+				this.addContactDataToComment(names, comment);
 			}
 		}
 
@@ -255,23 +255,28 @@ public class DocumentService {
 		final Comment savedComment = commentRepository.save(comment);
 
 		if (names != null && !names.isEmpty()) {
-			addContactDataToComment(comment, names, savedComment);
+			this.addContactDataToComment(names, savedComment);
 		}
 
 		return savedComment;
 	}
 
-	protected void addContactDataToComment(final Comment comment,
-			List<AccountContact> names, final Comment savedComment) {
+	/**
+	 * Adds contact information about the user who created the comment.
+	 * 
+	 * @param namessaved
+	 * @param comment
+	 */
+	protected void addContactDataToComment(List<AccountContact> names,
+			final Comment comment) {
 		Optional<AccountContact> accountContact = names.stream()
 				.filter(an -> an.getUserId().equals(comment.getUserId()))
 				.findFirst();
 
-		accountContact.ifPresent(an -> savedComment.setUserName(an
-				.getFirstName() + " " + an.getLastName()));
+		accountContact.ifPresent(an -> comment.setUserName(an.getFirstName()
+				+ " " + an.getLastName()));
 
-		accountContact.ifPresent(an -> savedComment.setAvatarUrl(an
-				.getAvatarUrl()));
+		accountContact.ifPresent(an -> comment.setAvatarUrl(an.getAvatarUrl()));
 	}
 
 	/**
@@ -457,16 +462,7 @@ public class DocumentService {
 						.collect(Collectors.toList()));
 
 		for (SectionAdvice sectionAdvice : sectionAdvices) {
-			Optional<AccountContact> accountContact = names
-					.stream()
-					.filter(an -> an.getUserId().equals(
-							sectionAdvice.getUserId())).findFirst();
-
-			accountContact.ifPresent(an -> sectionAdvice.setUserName(an
-					.getFirstName() + " " + an.getLastName()));
-
-			accountContact.ifPresent(an -> sectionAdvice.setAvatarUrl(an
-					.getAvatarUrl()));
+			this.addContactDataToAdvice(names, sectionAdvice);
 		}
 
 		return sectionAdvices;
@@ -480,17 +476,28 @@ public class DocumentService {
 		List<AccountContact> names = accountService.getContactDataForUsers(
 				request, Arrays.asList(savedSection.getUserId()));
 
-		Optional<AccountContact> accountContact = names.stream()
-				.filter(an -> an.getUserId().equals(savedSection.getUserId()))
-				.findFirst();
-
-		accountContact.ifPresent(an -> savedSection.setUserName(an
-				.getFirstName() + " " + an.getLastName()));
-
-		accountContact.ifPresent(an -> savedSection.setAvatarUrl(an
-				.getAvatarUrl()));
+		this.addContactDataToAdvice(names, savedSection);
 
 		return savedSection;
+	}
+
+	/**
+	 * Adds contact information about the user who created the advice.
+	 * 
+	 * @param sectionAdvice
+	 * @param names
+	 */
+	protected void addContactDataToAdvice(final List<AccountContact> names,
+			final SectionAdvice sectionAdvice) {
+		Optional<AccountContact> accountContact = names.stream()
+				.filter(an -> an.getUserId().equals(sectionAdvice.getUserId()))
+				.findFirst();
+
+		accountContact.ifPresent(an -> sectionAdvice.setUserName(an
+				.getFirstName() + " " + an.getLastName()));
+
+		accountContact.ifPresent(an -> sectionAdvice.setAvatarUrl(an
+				.getAvatarUrl()));
 	}
 
 	public void deleteComment(final Comment comment) {
