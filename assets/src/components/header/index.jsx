@@ -28,10 +28,10 @@ var HeaderContainer = React.createClass({
     return (
       <div>
         <div className="content">
-          <div className="logo">
+          <a href="/" className="logo">
             <img src="images/logo-orange.png" alt="Vyllage" />
             <span>Vyllage</span>
-          </div>
+          </a>
           <span className="page-title">{title}</span>
           <nav>
             <NavToggle />

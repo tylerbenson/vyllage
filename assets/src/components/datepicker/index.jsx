@@ -218,13 +218,14 @@ var Datepicker = React.createClass({
       }
 
       var monthNodes = months.map(function (month, index) {
-        var className = classnames('month', {
-          active: activeMonth === month
+        var classes = classnames({
+          active: activeMonth === month,
+          month: true
         });
         return (
           <span
             key={index}
-            className={className}
+            className={classes}
             onClick={!isTouch ? this.selectMonth.bind(this, month, this.state.active_year): null}
             onTouchStart={isTouch ? this.selectMonth.bind(this, month, this.state.active_year): null}
           >

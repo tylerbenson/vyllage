@@ -8,4 +8,14 @@ $medium-landscape: 960px;
 $small-portrait: 270px;
 $small-landscape: 480px;
 
+// Mixins
+@mixin user-select($selectable) {
+  -webkit-touch-callout: $selectable;
+  -webkit-user-select: $selectable;
+  -khtml-user-select: $selectable;
+  -moz-user-select: $selectable;
+  -ms-user-select: $selectable;
+  user-select: $selectable;
+}
+
 @import "./colors";
