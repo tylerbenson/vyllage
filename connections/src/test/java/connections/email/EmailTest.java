@@ -1,21 +1,24 @@
 package connections.email;
 
+import javax.inject.Inject;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import connections.Application;
+import connections.ApplicationTest;
 import email.MailService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = ApplicationTest.class)
 @WebAppConfiguration
 public class EmailTest {
 
-	@Autowired
+	@Inject
+	@Qualifier("connections.MailService")
 	private MailService service;
 
 	// Replace this with your account to see the email.
@@ -26,13 +29,15 @@ public class EmailTest {
 
 	}
 
-	// Uncomment to test.
+	// Uncomment to test, sends real emails
 	// @Test
 	// public void simpleTextTest() throws EmailException {
 	// String from = "no-reply@vyllage.com";
 	// String subject = "TestMail";
 	// String msg = "This is a test mail ... :-)";
-	// EmailParameters parameters = new EmailParameters(from, subject, to);
+	// String userName = "user";
+	// EmailParameters parameters = new EmailParameters(from, userName,
+	// subject, to);
 	//
 	// EmailBody emailBody = new EmailBody(msg);
 	//
@@ -44,7 +49,9 @@ public class EmailTest {
 	// String from = "no-reply@vyllage.com";
 	// String subject = "TestMail";
 	// String msg = "This is a test mail ... :-)";
-	// EmailParameters parameters = new EmailParameters(from, subject, to);
+	// String userName = "user";
+	// EmailParameters parameters = new EmailParameters(from, userName,
+	// subject, to);
 	//
 	// EmailContext ctx = new EmailContext("email");
 	// ctx.setVariable("text", "World!");
