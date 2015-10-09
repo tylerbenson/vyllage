@@ -1,4 +1,4 @@
-package documents.services.rules;
+package documents.utilities;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import com.newrelic.api.agent.NewRelic;
 
 import documents.model.document.sections.DocumentSection;
-import documents.utilities.FindDuplicates;
 
 @Component
 public class OrderSectionValidator {
