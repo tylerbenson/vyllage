@@ -25,6 +25,7 @@ var Tags = React.createClass({
     return {
       tags: this.props.section.tags,
       uiEditMode: this.props.section.newSection,
+      error : false
     };
   },
   getDefaultProps: function () {
@@ -50,7 +51,6 @@ var Tags = React.createClass({
         tags.push(tag);
       }
     }
-
     this.setState({tags: tags});
   },
   saveHandler: function(e) {
@@ -67,12 +67,24 @@ var Tags = React.createClass({
     }
     var section = this.props.section;
     section.tags = tags;
-    actions.putSection(section);
 
-    this.setState({
-      tags: tags,
-      uiEditMode: false
-    })
+    if( this.validateSection( section ) == false ){
+      actions.putSection(section);
+      this.setState({
+        tags: tags,
+        uiEditMode: false
+      });     
+    }
+
+  },
+  validateSection : function( section ){
+    if( section.tags == undefined || section.tags.length <= 0 ){
+      this.setState({ error : true });
+      return true;
+    }else{
+      this.setState({ error : false });
+      return false;
+    }
   },
   cancelHandler: function(e) {
     var section = this.props.section;
@@ -108,6 +120,11 @@ var Tags = React.createClass({
 
       e.target.value = "";
     }
+
+    var section = {}
+    section.tags = this.state.tags.length > 0 ?  this.state.tags : temp ;
+    this.validateSection(section);
+
   },
   start: function(event, ui) {
     ui.placeholder.width(ui.item.width());
@@ -147,12 +164,15 @@ var Tags = React.createClass({
           </div></FeatureToggle>
         }
         </div>
-        {this.props.section ? <div>
+        {this.props.section ? <div>  
+
           { this.state.uiEditMode == undefined || this.state.uiEditMode == false ? <div className="tags content">{tags}</div> :
           <Sortable config={config} className="tags content move-tag">
             {tags}
             {this.state.uiEditMode ? <TagInput onKeyPress={this.onTagAdd} /> : null}
           </Sortable> }
+           <div className="content">{ this.state.error == true ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }</div>
+
 
           <SectionFooter section={this.props.section} owner={this.props.owner} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }

@@ -21,7 +21,8 @@ var Organization = React.createClass({
     return {
       section: this.props.section,
       uiEditMode: this.props.section.newSection,
-      newSection: this.props.section.newSection
+      newSection: this.props.section.newSection ,
+      error : false
     };
   },
 
@@ -38,7 +39,8 @@ var Organization = React.createClass({
   handleChange: function(key, e) {
     var section = this.state.section;
     section[key] = e.target.value;
-    this.setState({section: section});
+    this.setState({ section: section });
+    this.validateSection( section );    
   },
   toggleCurrent: function () {
     var section = this.state.section;
@@ -47,13 +49,24 @@ var Organization = React.createClass({
   },
   saveHandler: function(e) {
     var section = this.state.section;
-    section['highlights'] = this.refs.highlights.getHighlights();
-    actions.putSection(section);
+    section['highlights'] = this.refs.highlights.getHighlights();   
+    if( this.validateSection(section) == false ){
+      actions.putSection(section);
+      this.setState({
+        section: section,
+        uiEditMode: false
+      });
+    }
 
-    this.setState({
-      section: section,
-      uiEditMode: false
-    });
+  },
+  validateSection : function( section ){
+    if( section.organizationName == undefined || section.organizationName.length <= 0 ){
+      this.setState({ error : true });
+      return true;
+    }else{
+      this.setState({ error : false });
+      return false;
+    }
   },
   cancelHandler: function(e) {
     var section = this.props.section;
@@ -102,6 +115,7 @@ var Organization = React.createClass({
                   onChange={this.handleChange.bind(this, 'organizationName')}
                 />
               </h2>
+              { this.state.error == true ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }
             </div>
             {this.props.owner? <div className="actions">
               {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}

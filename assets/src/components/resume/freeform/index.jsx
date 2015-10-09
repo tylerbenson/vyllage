@@ -20,6 +20,7 @@ var Freeform = React.createClass({
     return {
       description: this.props.section.description,
       uiEditMode: this.props.section.newSection,
+      error : false
     };
   },
   getDefaultProps: function () {
@@ -40,14 +41,29 @@ var Freeform = React.createClass({
   handleChange: function(e) {
     e.preventDefault();
     this.setState({description: e.target.value});
+    var section = this.props.section;
+    section.description = e.target.value;
+    this.validateSection( section );
+
   },
   saveHandler: function(e) {
     var section = this.props.section;
     section.description = this.state.description;
-    actions.putSection(section);
-    this.setState({
-      uiEditMode: false
-    })
+    if( this.validateSection( section ) == false ){
+      actions.putSection(section);
+      this.setState({
+        uiEditMode: false
+      });
+    }
+  },
+  validateSection : function( section ){
+    if( section.description == undefined || section.description.length <= 0 ){
+      this.setState({ error : true });
+      return true;
+    }else{
+      this.setState({ error : false });
+      return false;
+    }
   },
   cancelHandler: function(e) {
     var section = this.props.section;
@@ -100,6 +116,7 @@ var Freeform = React.createClass({
               value={this.state.description}
               onChange={this.handleChange}
             ></Textarea>
+            { this.state.error == true ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }
           </div>
           <SectionFooter section={this.props.section} owner={this.props.owner} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }

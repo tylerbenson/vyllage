@@ -316,37 +316,11 @@ module.exports = Reflux.createStore({
         this.trigger(this.resume);
       }.bind(this));
   },
-  doCheckEmptyOrNot : function( data ){
-    switch( data.type ){
-      case 'SummarySection':
-        if( data.description == undefined || data.description.length <= 0 ){
-          return false;
-        }
-        break;
-      case 'JobExperienceSection':
-      case 'EducationSection':
-        if( data.organizationName == undefined || data.organizationName.length <= 0 ){
-          return false;
-        }
-        break;
-      case 'SkillsSection':
-      case 'CareerInterestsSection':
-        if( data.tags == undefined || data.tags.length <= 0 ){
-          return false;
-        }
-        break;
-    }
-    return true;
-  },
 
   onPutSection: function (data) {
+
     if( data.newSection ){
-      // need to check the data in here . 
-      if( this.doCheckEmptyOrNot( data ) ){
-        this.doPostSection( data );
-      }else{
-        this.notifySectionIsNotSubmitted();
-      }
+      this.doPostSection( data );   
     }else{
       var url = urlTemplate
                 .parse(endpoints.resumeSection)
@@ -354,28 +328,28 @@ module.exports = Reflux.createStore({
                   documentId: this.documentId,
                   sectionId: data.sectionId
                 });
-    request
-      .put(url)
-      .set(this.tokenHeader, this.tokenValue)
-      .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','showEdits']))
-      .end(function (err, res) {
-        var index = findindex(this.resume.sections, {sectionId: data.sectionId});
-        this.resume.sections[index] = res.body;
-        this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
-        if( data.advices != undefined ){
-          this.resume.sections[index].advices = [];
-          this.resume.sections[index].advices = data.advices;
-        }
-        if( data.comments != undefined ){
-          this.resume.sections[index].comments = [];
-          this.resume.sections[index].comments = data.comments;
-        }
-        this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-        this.remindToShare();
-        this.trigger(this.resume);
-      }.bind(this));
 
-    }
+      request
+        .put(url)
+        .set(this.tokenHeader, this.tokenValue)
+        .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','showEdits']))
+        .end(function (err, res) {
+          var index = findindex(this.resume.sections, {sectionId: data.sectionId});
+          this.resume.sections[index] = res.body;
+          this.resume.sections[index].isSupported = this.isSupportedSection(this.resume.sections[index].type);
+          if( data.advices != undefined ){
+            this.resume.sections[index].advices = [];
+            this.resume.sections[index].advices = data.advices;
+          }
+          if( data.comments != undefined ){
+            this.resume.sections[index].comments = [];
+            this.resume.sections[index].comments = data.comments;
+          }
+          this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+          this.remindToShare();
+          this.trigger(this.resume);
+        }.bind(this));
+    }   
   },
   onDeleteNewSection: function(){
     var tempSectionIndex = findindex( this.resume.sections , { newSection : true } );
