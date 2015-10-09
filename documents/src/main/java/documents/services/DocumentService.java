@@ -6,11 +6,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalLong;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+
+import lombok.NonNull;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,7 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SectionAdviceRepository;
+import documents.services.rules.SetSectionPositionOnCreationUpdate;
 import documents.utilities.OrderSectionValidator;
 
 /**
@@ -47,19 +51,21 @@ public class DocumentService {
 	private final Logger logger = Logger.getLogger(DocumentService.class
 			.getName());
 
-	private DocumentRepository documentRepository;
+	private final DocumentRepository documentRepository;
 
-	private DocumentSectionRepository documentSectionRepository;
+	private final DocumentSectionRepository documentSectionRepository;
 
-	private CommentRepository commentRepository;
+	private final CommentRepository commentRepository;
 
-	private SectionAdviceRepository sectionAdviceRepository;
+	private final SectionAdviceRepository sectionAdviceRepository;
 
-	private AccountService accountService;
+	private final AccountService accountService;
 
-	private OrderSectionValidator orderSectionValidator;
+	private final OrderSectionValidator orderSectionValidator;
 
-	private DocumentAccessRepository documentAccessRepository;
+	private final DocumentAccessRepository documentAccessRepository;
+
+	private final SetSectionPositionOnCreationUpdate setSectionPositionOnCreationUpdate;
 
 	@Inject
 	public DocumentService(DocumentRepository documentRepository,
@@ -77,6 +83,8 @@ public class DocumentService {
 		this.accountService = accountService;
 		this.orderSectionValidator = orderSectionValidator;
 		this.documentAccessRepository = documentAccessRepository;
+
+		setSectionPositionOnCreationUpdate = new SetSectionPositionOnCreationUpdate();
 	}
 
 	public Document saveDocument(Document document) {
@@ -92,54 +100,31 @@ public class DocumentService {
 	 * @return the saved document
 	 * @throws ElementNotFoundException
 	 */
-	public DocumentSection saveDocumentSection(DocumentSection documentSection)
-			throws ElementNotFoundException {
+	public DocumentSection saveDocumentSection(
+			@NonNull final DocumentSection documentSection) {
 
 		logger.info(documentSection.toString());
 		DocumentSection savedSection = null;
 
-		// if a section position has not been set by the client we set the
-		// section as the first one.
-		documentSection
-				.setSectionPosition(documentSection.getSectionPosition() == null
-						|| documentSection.getSectionPosition() <= 0 ? 1L
-						: documentSection.getSectionPosition());
-
 		try {
-			List<DocumentSection> documentSections = documentSectionRepository
+			final List<DocumentSection> documentSections = documentSectionRepository
 					.getDocumentSections(documentSection.getDocumentId());
 
-			// sort if the section does not exist.
-			if (documentSections.stream().noneMatch(
-					ds -> ds.getSectionId().equals(
-							documentSection.getSectionId()))) {
+			setSectionPositionOnCreationUpdate.apply(documentSection,
+					documentSections);
 
-				documentSections.stream().forEachOrdered(
-						s -> logger.info("Section " + s.getSectionId() + " P: "
-								+ s.getSectionPosition()));
+			// update their positions
+			documentSections.stream().forEach(
+					s -> documentSectionRepository.save(s));
 
-				// sort by position in case they are not sorted already and
-				// shift 1
+			savedSection = documentSectionRepository.save(documentSection);
 
-				documentSections
-						.stream()
-						.sorted((s1, s2) -> s1.getSectionPosition().compareTo(
-								s2.getSectionPosition())) //
-						.map(s -> {
-							s.setSectionPosition(s.getSectionPosition() + 1L);
-							return s;
-						}).forEach(s -> documentSectionRepository.save(s));
-
-				savedSection = documentSectionRepository.save(documentSection);
-
-				documentSections.stream().forEachOrdered(
-						s -> logger.info("Section " + s.getSectionId() + " P: "
-								+ s.getSectionPosition()));
-				return savedSection;
-			}
+			return savedSection;
 
 		} catch (ElementNotFoundException e) {
-			// do nothing just save normally
+			// there are none, therefore it's the first one
+			long first = 1L;
+			documentSection.setSectionPosition(first);
 		}
 
 		savedSection = documentSectionRepository.save(documentSection);
