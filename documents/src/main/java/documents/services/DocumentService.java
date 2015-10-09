@@ -245,16 +245,7 @@ public class DocumentService {
 
 		for (Comment comment : comments) {
 			if (!comment.isDeleted()) {
-				Optional<AccountContact> accountContact = names
-						.stream()
-						.filter(an -> an.getUserId()
-								.equals(comment.getUserId())).findFirst();
-
-				accountContact.ifPresent(an -> comment.setUserName(an
-						.getFirstName() + " " + an.getLastName()));
-
-				accountContact.ifPresent(an -> comment.setAvatarUrl(an
-						.getAvatarUrl()));
+				addContactDataToComment(comment, names, comment);
 			}
 		}
 
@@ -271,8 +262,31 @@ public class DocumentService {
 		return commentRepository.getNumberOfCommentsForSections(sectionIds);
 	}
 
-	public Comment saveComment(Comment comment) {
-		return commentRepository.save(comment);
+	public Comment saveComment(final HttpServletRequest request,
+			final Comment comment) {
+		List<AccountContact> names = accountService.getContactDataForUsers(
+				request, Arrays.asList(comment.getUserId()));
+
+		final Comment savedComment = commentRepository.save(comment);
+
+		if (names != null && !names.isEmpty()) {
+			addContactDataToComment(comment, names, savedComment);
+		}
+
+		return savedComment;
+	}
+
+	protected void addContactDataToComment(final Comment comment,
+			List<AccountContact> names, final Comment savedComment) {
+		Optional<AccountContact> accountContact = names.stream()
+				.filter(an -> an.getUserId().equals(comment.getUserId()))
+				.findFirst();
+
+		accountContact.ifPresent(an -> savedComment.setUserName(an
+				.getFirstName() + " " + an.getLastName()));
+
+		accountContact.ifPresent(an -> savedComment.setAvatarUrl(an
+				.getAvatarUrl()));
 	}
 
 	/**
