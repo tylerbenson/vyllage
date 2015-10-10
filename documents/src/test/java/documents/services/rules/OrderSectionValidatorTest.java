@@ -1,4 +1,4 @@
-package documents.utilities;
+package documents.services.rules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
