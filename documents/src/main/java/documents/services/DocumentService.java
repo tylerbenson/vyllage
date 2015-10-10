@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.OptionalLong;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -37,6 +36,7 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SectionAdviceRepository;
+import documents.services.rules.MergeOnSectionDuplicate;
 import documents.services.rules.OrderSectionValidator;
 import documents.services.rules.SetSectionPositionOnCreationUpdate;
 
@@ -67,6 +67,8 @@ public class DocumentService {
 
 	private final SetSectionPositionOnCreationUpdate setSectionPositionOnCreationUpdate;
 
+	private final MergeOnSectionDuplicate mergeOnSectionDuplicate;
+
 	@Inject
 	public DocumentService(DocumentRepository documentRepository,
 			DocumentSectionRepository documentSectionRepository,
@@ -84,7 +86,8 @@ public class DocumentService {
 		this.orderSectionValidator = orderSectionValidator;
 		this.documentAccessRepository = documentAccessRepository;
 
-		setSectionPositionOnCreationUpdate = new SetSectionPositionOnCreationUpdate();
+		this.setSectionPositionOnCreationUpdate = new SetSectionPositionOnCreationUpdate();
+		this.mergeOnSectionDuplicate = new MergeOnSectionDuplicate();
 	}
 
 	public Document saveDocument(Document document) {
@@ -107,17 +110,36 @@ public class DocumentService {
 		DocumentSection savedSection = null;
 
 		try {
-			final List<DocumentSection> documentSections = documentSectionRepository
+			final List<DocumentSection> documentSections = this.documentSectionRepository
 					.getDocumentSections(documentSection.getDocumentId());
 
-			setSectionPositionOnCreationUpdate.apply(documentSection,
+			// merge duplicate sections
+			this.mergeOnSectionDuplicate.apply(documentSection,
+					documentSections);
+
+			if (this.mergeOnSectionDuplicate.haveToDeleteSections()) {
+				this.mergeOnSectionDuplicate
+						.getSectionsToDelete()
+						.stream()
+						.forEach(
+								s -> this.documentSectionRepository.delete(s
+										.getSectionId()));
+
+				// removing deleted sections
+				documentSections.removeAll(this.mergeOnSectionDuplicate
+						.getSectionsToDelete());
+
+			}
+
+			// set section positions
+			this.setSectionPositionOnCreationUpdate.apply(documentSection,
 					documentSections);
 
 			// update their positions
 			documentSections.stream().forEach(
-					s -> documentSectionRepository.save(s));
+					s -> this.documentSectionRepository.save(s));
 
-			savedSection = documentSectionRepository.save(documentSection);
+			savedSection = this.documentSectionRepository.save(documentSection);
 
 			return savedSection;
 
