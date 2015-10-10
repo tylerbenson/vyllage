@@ -2,6 +2,7 @@ package documents.services.rules;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.logging.Logger;
 
@@ -39,6 +40,13 @@ public class SetSectionPositionOnCreationUpdate {
 			return documentSection;
 		}
 
+		if (documentSection.getType().equalsIgnoreCase(
+				SectionType.SUMMARY_SECTION.type())) {
+
+			documentSection.setSectionPosition(first);
+			return documentSection;
+		}
+
 		documentSections.stream().forEachOrdered(
 				s -> logger.info("Section " + s.getSectionId() + " P: "
 						+ s.getSectionPosition()));
@@ -48,11 +56,13 @@ public class SetSectionPositionOnCreationUpdate {
 				ds -> ds.getSectionId().equals(documentSection.getSectionId()));
 
 		// check if Summary section exists
-		final boolean hasSummarySection = documentSections.stream().anyMatch(
-				ds -> SectionType.SUMMARY_SECTION.type().equals(ds.getType()));
+		Optional<DocumentSection> summarySection = documentSections
+				.stream()
+				.filter(ds -> SectionType.SUMMARY_SECTION.type().equals(
+						ds.getType())).findFirst();
 
-		if (hasSummarySection) {
-			sectionPosition = 2;
+		if (summarySection.isPresent()) {
+			sectionPosition = summarySection.get().getSectionPosition() + 1;
 		} else {
 			sectionPosition = 1;
 		}
@@ -110,8 +120,8 @@ public class SetSectionPositionOnCreationUpdate {
 						});
 
 		documentSections.stream().forEachOrdered(
-				s -> logger.info("Section " + s.getSectionId() + " P: "
-						+ s.getSectionPosition()));
+				s -> logger.info("Sorted and Shifted Section "
+						+ s.getSectionId() + " P: " + s.getSectionPosition()));
 	}
 
 	/**
