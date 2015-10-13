@@ -3,7 +3,6 @@ package documents.services.rules;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 import java.util.logging.Logger;
 
 import lombok.NonNull;
@@ -15,10 +14,10 @@ import documents.model.document.sections.DocumentSection;
  * other section exists then it's set as the first one.
  * 
  * @author uh
- *
  */
 public class SetSectionPositionOnCreationUpdate {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger
 			.getLogger(SetSectionPositionOnCreationUpdate.class.getName());
 
@@ -44,56 +43,56 @@ public class SetSectionPositionOnCreationUpdate {
 				SectionType.SUMMARY_SECTION.type())) {
 
 			documentSection.setSectionPosition(first);
+
+			// shift others to be right behind summary
+
+			long afterFirst = first + 1;
+			this.sortAndShiftByOneFrom(documentSections, afterFirst);
+
 			return documentSection;
 		}
 
-		documentSections.stream().forEachOrdered(
-				s -> logger.info("Section " + s.getSectionId() + " P: "
-						+ s.getSectionPosition()));
-
 		// not present
-		final boolean notPresent = documentSections.stream().noneMatch(
-				ds -> ds.getSectionId().equals(documentSection.getSectionId()));
+		final boolean sectionIsNotPresent = documentSections.stream()
+				.noneMatch(
+						ds -> ds.getSectionId().equals(
+								documentSection.getSectionId()));
 
-		// check if Summary section exists
+		// Check if Summary section exists
 		Optional<DocumentSection> summarySection = documentSections
 				.stream()
 				.filter(ds -> SectionType.SUMMARY_SECTION.type().equals(
 						ds.getType())).findFirst();
 
-		if (summarySection.isPresent()) {
+		if (summarySection.isPresent())
 			sectionPosition = summarySection.get().getSectionPosition() + 1;
-		} else {
+		else
 			sectionPosition = 1;
-		}
 
-		if (notPresent) {
+		if (sectionIsNotPresent) {
 
-			// sort and shift by one all but Summary.
-			this.sortAndShiftByOne(documentSections);
+			// Sort and shift by one all but Summary after the new section.
+			this.sortAndShiftByOneFrom(documentSections, sectionPosition + 1);
 
+			// Insert the new section behind the Summary.
 			documentSection.setSectionPosition(sectionPosition);
 
 			return documentSection;
 		} else {
-			// check if anyone has the same position,
-			final Long currentPosition = documentSection.getSectionPosition();
+			/**
+			 * If the section already exists we change it's position back to the
+			 * one it previously had in case the client tried setting it to
+			 * another value.
+			 */
 
-			boolean anyMatch = documentSections.stream().anyMatch(
-					ds -> ds.getSectionPosition().equals(currentPosition));
+			documentSections
+					.stream()
+					.filter(ds -> ds.getSectionId().equals(
+							documentSection.getSectionId()))
+					.forEach(
+							ds -> documentSection.setSectionPosition(ds
+									.getSectionPosition()));
 
-			// at least one has the same position
-			if (anyMatch) {
-				this.moveToLast(documentSection, documentSections);
-				return documentSection;
-
-			}
-			// there's none with the same position, we can continue
-
-			// sort and shift by one all but Summary.
-			this.sortAndShiftByOne(documentSections);
-
-			documentSection.setSectionPosition(sectionPosition);
 			return documentSection;
 
 		}
@@ -103,48 +102,22 @@ public class SetSectionPositionOnCreationUpdate {
 	 * Sort sections and shift by one all except Summary.
 	 * 
 	 * @param documentSections
+	 * @param position
+	 *            the position to set from.
 	 */
-	protected void sortAndShiftByOne(
-			final List<DocumentSection> documentSections) {
-		documentSections
-				.stream()
-				.sorted(sort())
-				//
-				.forEach(
-						s -> {
+	protected void sortAndShiftByOneFrom(
+			final List<DocumentSection> documentSections, long position) {
+		documentSections.sort(sort());
 
-							if (!SectionType.SUMMARY_SECTION.type().equals(
-									s.getType()))
-								s.setSectionPosition(s.getSectionPosition() + 1L);
-
-						});
-
-		documentSections.stream().forEachOrdered(
-				s -> logger.info("Sorted and Shifted Section "
-						+ s.getSectionId() + " P: " + s.getSectionPosition()));
+		for (DocumentSection ds : documentSections)
+			// Summary is always first.
+			if (!ds.getType().equalsIgnoreCase(
+					SectionType.SUMMARY_SECTION.type()))
+				ds.setSectionPosition(position++);
 	}
 
 	/**
-	 * Sets the section position as the last one.
-	 */
-	protected long moveToLast(final DocumentSection documentSection,
-			final List<DocumentSection> documentSections) {
-		long sectionPosition = 1;
-
-		OptionalLong max = documentSections.stream()
-				.mapToLong(ds -> ds.getSectionPosition()).max();
-
-		// move it to the last place
-		if (max.isPresent()) {
-			sectionPosition = max.getAsLong() + 1;
-		}
-
-		documentSection.setSectionPosition(sectionPosition);
-		return sectionPosition;
-	}
-
-	/**
-	 * Sorts all sections by their position.
+	 * Sorts all sections by their position value.
 	 * 
 	 * @return
 	 */
