@@ -70,13 +70,6 @@ module.exports = Reflux.createStore({
 
     PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
   },
-  notifySectionIsNotSubmitted : function(){
-    var message = <span>It will not save as empty! please edit </span>;
-    var timeout = 4000;
-
-    PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
-  },
-
 
   /*End of Notifications*/
   getMaxSectionPostion: function () {
