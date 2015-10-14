@@ -1,9 +1,11 @@
-package documents.utilities;
+package documents.services.rules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.Test;
+
+import documents.services.rules.OrderSectionValidator;
 
 public class OrderSectionValidatorTest {
 
