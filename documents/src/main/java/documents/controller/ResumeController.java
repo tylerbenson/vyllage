@@ -572,7 +572,7 @@ public class ResumeController {
 			}
 		}
 
-		return documentService.saveComment(comment);
+		return documentService.saveComment(request, comment);
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.DELETE, consumes = "application/json")
@@ -609,7 +609,8 @@ public class ResumeController {
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
-	public void saveCommentsForComment(@PathVariable final Long documentId,
+	public void saveCommentsForComment(HttpServletRequest request,
+			@PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
 			@PathVariable final Long commentId,
 			@RequestBody final Comment comment,
@@ -628,7 +629,7 @@ public class ResumeController {
 		if (comment.getOtherCommentId() == null)
 			comment.setOtherCommentId(commentId);
 
-		documentService.saveComment(comment);
+		documentService.saveComment(request, comment);
 	}
 
 	// check read because this is for others

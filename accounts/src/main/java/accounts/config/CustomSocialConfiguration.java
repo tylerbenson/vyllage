@@ -3,6 +3,7 @@ package accounts.config;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -37,6 +38,9 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 	// https://github.com/spring-projects/spring-social-samples/blob/master/spring-social-showcase-sec/src/main/java/org/springframework/social/showcase/config/SocialConfig.java
 	// also SocialAutoConfigurationAdapter
 
+	@Value(value = "${social.base.url}")
+	private String SOCIAL_BASE_URL;
+
 	@Inject
 	private DataSource dataSource;
 
@@ -65,6 +69,8 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		connectController
 				.addInterceptor(new SendConfirmationEmailAfterConnectInterceptor(
 						confirmationEmailService));
+
+		connectController.setApplicationUrl(SOCIAL_BASE_URL);
 
 		// connectController.addInterceptor(new
 		// PostToWallAfterConnectInterceptor());
