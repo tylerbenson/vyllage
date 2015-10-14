@@ -12,7 +12,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -30,7 +29,8 @@ import documents.repository.DocumentAccessRepository;
 import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
-import documents.repository.IRepository;
+import documents.repository.SectionAdviceRepository;
+import documents.services.rules.OrderSectionValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DocumentServiceTest {
@@ -47,14 +47,13 @@ public class DocumentServiceTest {
 			+ "\"roleDescription\": \"Blah Blah Blah\","
 			+ "\"highlights\":[\"I was in charge of...\"" + "]}";
 
-	@InjectMocks
 	private DocumentService service;
 
 	@Mock
-	private DocumentSectionRepository dsRepository;
+	private DocumentRepository documentRepository;
 
 	@Mock
-	private IRepository<Document> dRepository;
+	private DocumentSectionRepository documentSectionRepository;
 
 	@Mock
 	private CommentRepository commentRepository;
@@ -63,7 +62,10 @@ public class DocumentServiceTest {
 	private AccountService accountService;
 
 	@Mock
-	private DocumentRepository documentRepository;
+	private SectionAdviceRepository sectionAdviceRepository;
+
+	@Mock
+	private OrderSectionValidator orderSectionValidator;
 
 	@Mock
 	private DocumentAccessRepository documentAccessRepository;
@@ -71,6 +73,10 @@ public class DocumentServiceTest {
 	@Before
 	public void initMocks() {
 		MockitoAnnotations.initMocks(this);
+		service = new DocumentService(documentRepository,
+				documentSectionRepository, commentRepository,
+				sectionAdviceRepository, accountService, orderSectionValidator,
+				documentAccessRepository);
 	}
 
 	@Test
@@ -85,7 +91,8 @@ public class DocumentServiceTest {
 		// standard type serializer for inclusion type: EXISTING_PROPERTY
 
 		DocumentSection fromJSON = DocumentSection.fromJSON(JSON);
-		Mockito.doReturn(fromJSON).when(dsRepository).get(sectionId);
+		Mockito.doReturn(fromJSON).when(documentSectionRepository)
+				.get(sectionId);
 
 		DocumentSection documentSection = service.getDocumentSection(sectionId);
 
@@ -106,7 +113,8 @@ public class DocumentServiceTest {
 
 		Mockito.doReturn(
 				Arrays.asList(DocumentSection.fromJSON(JSON),
-						DocumentSection.fromJSON(JSON))).when(dsRepository)
+						DocumentSection.fromJSON(JSON)))
+				.when(documentSectionRepository)
 				.getDocumentSections(documentId);
 
 		List<DocumentSection> documentSection = service

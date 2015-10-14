@@ -39,7 +39,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"type": "JobExperienceSection",
 	"title": "experience",
 	"sectionId": 127,
-	"sectionPosition": 5,
+	"sectionPosition": 6,
 	"state": "shown",
 	"organizationName": "Rebellion",
 	"organizationDescription": "An education group.",
@@ -56,7 +56,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"type": "SkillsSection",
 	"title": "skills",
 	"sectionId": 128,
-	"sectionPosition": 6,
+	"sectionPosition": 7,
 	"state": "shown",
 	"tags": ["X-Wing Pilot", "Force User"]
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
@@ -135,7 +135,7 @@ insert into DOCUMENTS.section_advices(section_Id, section_Version, user_id, json
 	"type": "JobExperienceSection",
 	"title": "experience",
 	"sectionId": 127,
-	"sectionPosition": 5,
+	"sectionPosition": 6,
 	"state": "shown",
 	"organizationName": "Rebellion",
 	"organizationDescription": "An education group.",
