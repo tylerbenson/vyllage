@@ -41,7 +41,7 @@ var Freeform = React.createClass({
   handleChange: function(e) {
     e.preventDefault();
     this.setState({description: e.target.value});
-    var section = this.props.section;
+    var section = cloneDeep(this.props.section);
     section.description = e.target.value;
     this.validateSection( section );
 
@@ -72,7 +72,8 @@ var Freeform = React.createClass({
     } else {
       this.setState({
         description:this.props.section.description,
-        uiEditMode: false
+        uiEditMode: false,
+        error : false
       });
     }
   },

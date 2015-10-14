@@ -18,7 +18,7 @@ var validator = require('validator');
 var Project = React.createClass({
   getInitialState: function () {
     return {
-      section: this.props.section,
+      section: cloneDeep(this.props.section),
       uiEditMode: this.props.section.newSection,
       newSection: this.props.section.newSection,
       error : false
@@ -60,13 +60,14 @@ var Project = React.createClass({
     }
   },
   cancelHandler: function(e) {
-    var section = this.props.section;
+    var section = cloneDeep(this.props.section);
     if (section.newSection) {
       actions.deleteSection(section.sectionId);
     } else {
       this.setState({
         section: section,
-        uiEditMode: false
+        uiEditMode: false,
+        error : false
       });
     }
   },

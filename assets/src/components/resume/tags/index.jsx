@@ -93,7 +93,8 @@ var Tags = React.createClass({
     } else {
       this.setState({
         tags:this.props.section.tags,
-        uiEditMode: false
+        uiEditMode: false,
+        error:false
       });
     }
   },

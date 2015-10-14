@@ -19,7 +19,7 @@ var FeatureToggle = require('../../util/FeatureToggle');
 var Organization = React.createClass({
   getInitialState: function () {
     return {
-      section: this.props.section,
+      section : cloneDeep(this.props.section),
       uiEditMode: this.props.section.newSection,
       newSection: this.props.section.newSection ,
       error : false
@@ -27,8 +27,9 @@ var Organization = React.createClass({
   },
 
   // componentWillReceiveProps: function (nextProps) {
+  //   if( nextProps.section != undefined )
   //   this.setState({
-  //     section: nextProps.section
+  //     section: cloneDeep(nextProps.section)
   //   });
   // },
   componentDidMount: function() {
@@ -69,13 +70,14 @@ var Organization = React.createClass({
     }
   },
   cancelHandler: function(e) {
-    var section = this.props.section;
+    var section = cloneDeep(this.props.section);
     if (section.newSection) {
       actions.deleteNewSection();
     } else {
       this.setState({
         section: section,
-        uiEditMode: false
+        uiEditMode: false,
+        error :false
       });
     }
   },
@@ -87,7 +89,7 @@ var Organization = React.createClass({
     });
   },
   render: function () {
-    var section = this.props.section;
+    var section = this.state.section;
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
 
