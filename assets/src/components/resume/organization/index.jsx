@@ -40,7 +40,7 @@ var Organization = React.createClass({
     var section = this.state.section;
     section[key] = e.target.value;
     this.setState({ section: section });
-    this.validateSection( section );    
+    this.validateSection( section );
   },
   toggleCurrent: function () {
     var section = this.state.section;
@@ -49,7 +49,7 @@ var Organization = React.createClass({
   },
   saveHandler: function(e) {
     var section = this.state.section;
-    section['highlights'] = this.refs.highlights.getHighlights();   
+    section['highlights'] = this.refs.highlights.getHighlights();
     if( this.validateSection(section) == false ){
       actions.putSection(section);
       this.setState({
@@ -106,7 +106,7 @@ var Organization = React.createClass({
                 <Textarea
                   ref='organizationName'
                   disabled={!uiEditMode}
-                  className='flat'
+                  className={(this.state.error == true ? "error " : "") + "flat"}
                   style={uiEditMode || section.organizationName ? {}: {display: 'none'}}
                   placeholder='Organization Name'
                   type='text'

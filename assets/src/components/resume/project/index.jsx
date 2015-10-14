@@ -33,7 +33,7 @@ var Project = React.createClass({
     var section = this.state.section;
     section[key] = e.target.value;
     this.setState({section: section});
-    this.validateSection(section); 
+    this.validateSection(section);
   },
   toggleCurrent: function () {
     var section = this.state.section;
@@ -58,7 +58,7 @@ var Project = React.createClass({
       this.setState({ error : false });
       return false;
     }
-  },  
+  },
   cancelHandler: function(e) {
     var section = this.props.section;
     if (section.newSection) {
@@ -109,7 +109,7 @@ var Project = React.createClass({
                   <Textarea
                     ref='projectTitle'
                     disabled={!uiEditMode}
-                    className='flat'
+                    className={(this.state.error == true ? "error " : "") + "flat"}
                     style={uiEditMode || section.projectTitle ? {}: {display: 'none'}}
                     placeholder='Project Title'
                     type='text'

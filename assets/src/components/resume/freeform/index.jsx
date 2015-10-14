@@ -109,7 +109,7 @@ var Freeform = React.createClass({
             <Textarea
               ref='description'
               disabled={!uiEditMode}
-              className="flat"
+              className={(this.state.error == true ? "error " : "") + "flat"}
               rows="1"
               autoComplete="off"
               placeholder="Tell us more.."

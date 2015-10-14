@@ -73,7 +73,7 @@ var Tags = React.createClass({
       this.setState({
         tags: tags,
         uiEditMode: false
-      });     
+      });
     }
 
   },
@@ -164,14 +164,14 @@ var Tags = React.createClass({
           </div></FeatureToggle>
         }
         </div>
-        {this.props.section ? <div>  
+        {this.props.section ? <div>
 
           { this.state.uiEditMode == undefined || this.state.uiEditMode == false ? <div className="tags content">{tags}</div> :
           <Sortable config={config} className="tags content move-tag">
             {tags}
-            {this.state.uiEditMode ? <TagInput onKeyPress={this.onTagAdd} /> : null}
+            {this.state.uiEditMode ? <TagInput className={(tags.length < 1 ? "error " : "") + "inline flat"} onKeyPress={this.onTagAdd} /> : null}
+            { tags.length < 1 ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }
           </Sortable> }
-           <div className="content">{ this.state.error == true ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }</div>
 
 
           <SectionFooter section={this.props.section} owner={this.props.owner} />

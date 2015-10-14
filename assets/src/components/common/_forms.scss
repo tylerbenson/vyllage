@@ -64,6 +64,11 @@ textarea {
       -webkit-text-fill-color: lighten($text-color, 10%);
     }
 
+    &.error {
+      background-color: $error-background;
+      color: inherit;
+    }
+
     &.link {
       font-size: 0.75em;
       color: darken($alternate-color-1, 25%);

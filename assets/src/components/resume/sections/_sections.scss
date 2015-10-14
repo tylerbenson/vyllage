@@ -30,9 +30,9 @@
     position: relative;
   }
 
-  .error {
+  p.error {
     color: $error-color;
-    font-size: 0.65em;
+    font-size: 12px;
     padding: 0.1em 0.2em;
     i {
       bottom: 1px;
