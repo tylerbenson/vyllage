@@ -315,8 +315,9 @@ public class DocumentService {
 	 * @param documentSectionIds
 	 * @throws ElementNotFoundException
 	 */
-	public void orderDocumentSections(Long documentId,
-			List<Long> documentSectionIds) throws ElementNotFoundException {
+	public void orderDocumentSections(final Long documentId,
+			final List<Long> documentSectionIds)
+			throws ElementNotFoundException {
 
 		orderSectionValidator.checkNullOrEmptyParameters(documentId,
 				documentSectionIds);
@@ -343,17 +344,31 @@ public class DocumentService {
 				s -> logger.info("Section " + s.getSectionId() + " Position: "
 						+ s.getSectionPosition()));
 
+		Optional<DocumentSection> summarySection = documentSections
+				.stream()
+				.filter(ds -> SectionType.SUMMARY_SECTION.type().equals(
+						ds.getType())).findFirst();
+
+		// copy the ids because we get an UnsupportedOperationException when we
+		// remove the id
+		final List<Long> copiedIds = new ArrayList<>();
+		copiedIds.addAll(documentSectionIds);
+		// keep summary first, set it's Id at the beginning of the array.
+		if (summarySection.isPresent()) {
+			copiedIds.removeIf(sectionId -> summarySection.get().getSectionId()
+					.equals(sectionId));
+
+			copiedIds.add(0, summarySection.get().getSectionId());
+
+		}
+
 		// set position according to the position of the id in the array.
 		// +1 because it starts at 0.
 		documentSections.stream().forEach(
-
-		ds -> {
-			if ((SectionType.SUMMARY_SECTION.equals(ds.getType())))
-				ds.setSectionPosition(1L);// leave it first
-			else
-				ds.setSectionPosition((long) documentSectionIds.indexOf(ds
-						.getSectionId()) + 1);
-		});
+				ds -> {
+					ds.setSectionPosition((long) copiedIds.indexOf(ds
+							.getSectionId()) + 1);
+				});
 
 		logger.info("--------");
 		documentSections.stream().forEachOrdered(

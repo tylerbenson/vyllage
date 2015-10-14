@@ -88,18 +88,24 @@ public class DocumentServiceIntegTest {
 				.getDocumentSections(documentId);
 
 		Assert.assertNotNull(resumeSections);
-		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(126L)
-						&& rs.getSectionPosition().equals(1L)));
-		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(131L)
-						&& rs.getSectionPosition().equals(2L)));
-		Assert.assertTrue(resumeSections.stream().anyMatch(
-				rs -> rs.getSectionId().equals(128L)
-						&& rs.getSectionPosition().equals(3L)));
+
+		// 129 Summary and always goes first
 		Assert.assertTrue(resumeSections.stream().anyMatch(
 				rs -> rs.getSectionId().equals(129L)
+						&& rs.getSectionPosition().equals(1L)));
+
+		Assert.assertTrue(resumeSections.stream().anyMatch(
+				rs -> rs.getSectionId().equals(126L)
+						&& rs.getSectionPosition().equals(2L)));
+		Assert.assertTrue(resumeSections.stream().anyMatch(
+				rs -> rs.getSectionId().equals(131L)
+						&& rs.getSectionPosition().equals(3L)));
+		Assert.assertTrue(resumeSections.stream().anyMatch(
+				rs -> rs.getSectionId().equals(128L)
 						&& rs.getSectionPosition().equals(4L)));
+		Assert.assertTrue(resumeSections.stream().anyMatch(
+				rs -> rs.getSectionId().equals(130L)
+						&& rs.getSectionPosition().equals(5L)));
 
 	}
 
