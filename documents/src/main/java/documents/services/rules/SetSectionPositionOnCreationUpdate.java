@@ -1,5 +1,6 @@
 package documents.services.rules;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class SetSectionPositionOnCreationUpdate {
 	 * 
 	 * @param documentSection
 	 */
-	public DocumentSection apply(
+	public List<DocumentSection> apply(
 			@NonNull final DocumentSection documentSection,
 			@NonNull final List<DocumentSection> documentSections) {
 
@@ -36,7 +37,7 @@ public class SetSectionPositionOnCreationUpdate {
 
 		if (documentSections.isEmpty()) {
 			documentSection.setSectionPosition(first);
-			return documentSection;
+			return Collections.emptyList();
 		}
 
 		if (documentSection.getType().equalsIgnoreCase(
@@ -47,9 +48,7 @@ public class SetSectionPositionOnCreationUpdate {
 			// shift others to be right behind summary
 
 			long afterFirst = first + 1;
-			this.sortAndShiftByOneFrom(documentSections, afterFirst);
-
-			return documentSection;
+			return this.sortAndShiftByOneFrom(documentSections, afterFirst);
 		}
 
 		// not present
@@ -71,13 +70,12 @@ public class SetSectionPositionOnCreationUpdate {
 
 		if (sectionIsNotPresent) {
 
-			// Sort and shift by one all but Summary after the new section.
-			this.sortAndShiftByOneFrom(documentSections, sectionPosition + 1);
-
 			// Insert the new section behind the Summary.
 			documentSection.setSectionPosition(sectionPosition);
 
-			return documentSection;
+			// Sort and shift by one all but Summary after the new section.
+			return this.sortAndShiftByOneFrom(documentSections,
+					sectionPosition + 1);
 		} else {
 			/**
 			 * If the section already exists we change it's position back to the
@@ -93,7 +91,7 @@ public class SetSectionPositionOnCreationUpdate {
 							ds -> documentSection.setSectionPosition(ds
 									.getSectionPosition()));
 
-			return documentSection;
+			return Collections.emptyList();
 
 		}
 	}
@@ -104,8 +102,9 @@ public class SetSectionPositionOnCreationUpdate {
 	 * @param documentSections
 	 * @param position
 	 *            the position to set from.
+	 * @return list of sections to update position
 	 */
-	protected void sortAndShiftByOneFrom(
+	protected List<DocumentSection> sortAndShiftByOneFrom(
 			final List<DocumentSection> documentSections, long position) {
 		documentSections.sort(sort());
 
@@ -114,6 +113,8 @@ public class SetSectionPositionOnCreationUpdate {
 			if (!ds.getType().equalsIgnoreCase(
 					SectionType.SUMMARY_SECTION.type()))
 				ds.setSectionPosition(position++);
+
+		return documentSections;
 	}
 
 	/**

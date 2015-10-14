@@ -36,22 +36,26 @@ public class CareerInterestsSection extends DocumentSection implements
 
 		final CareerInterestsSection other = (CareerInterestsSection) documentSection;
 
-		// nothing to do.
-		if (this.getTags() == null && other.getTags() == null)
-			return;
+		if (this.getTags() == null && other.getTags() == null) {
+			// nothing to do
 
-		// nothing to do.
-		if (other.getTags() == null || other.getTags().isEmpty())
-			return;
-
-		if (this.getTags() == null
-				&& (other.getTags() != null || !other.getTags().isEmpty())) {
+		} else if (this.getTags() == null && other.getTags() != null) {
 			this.tags = other.getTags();
-			return;
+
+		} else if (this.getTags() != null && other.getTags() != null) {
+
+			// remove duplicates and add tags.
+			this.tags.removeAll(other.getTags());
+			this.tags.addAll(other.getTags());
 		}
 
-		// remove duplicates and add tags.
-		this.tags.removeAll(other.getTags());
-		this.tags.addAll(other.getTags());
+		// copy all other properties.
+		this.setSectionId(other.getSectionId());
+		this.setSectionPosition(other.getSectionPosition());
+		this.setDocumentId(other.getDocumentId());
+		this.setLastModified(other.getLastModified());
+		this.setSectionVersion(other.getSectionVersion());
+		this.setState(other.getState());
+		this.setTitle(other.getTitle());
 	}
 }

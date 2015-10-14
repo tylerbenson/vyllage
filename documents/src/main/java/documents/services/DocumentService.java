@@ -114,30 +114,27 @@ public class DocumentService {
 					.getDocumentSections(documentSection.getDocumentId());
 
 			// merge duplicate sections
-			this.mergeOnSectionDuplicate.apply(documentSection,
-					documentSections);
+			final List<DocumentSection> toDelete = this.mergeOnSectionDuplicate
+					.apply(documentSection, documentSections);
 
-			if (this.mergeOnSectionDuplicate.haveToDeleteSections()) {
-				this.mergeOnSectionDuplicate
-						.getSectionsToDelete()
-						.stream()
-						.forEach(
-								s -> this.documentSectionRepository.delete(s
-										.getSectionId()));
+			if (toDelete != null && !toDelete.isEmpty()) {
+				toDelete.stream().forEach(
+						s -> this.documentSectionRepository.delete(s
+								.getSectionId()));
 
 				// removing deleted sections
-				documentSections.removeAll(this.mergeOnSectionDuplicate
-						.getSectionsToDelete());
+				documentSections.removeAll(toDelete);
 
 			}
 
 			// set section positions
-			this.setSectionPositionOnCreationUpdate.apply(documentSection,
-					documentSections);
+			final List<DocumentSection> sectionsToUpdate = this.setSectionPositionOnCreationUpdate
+					.apply(documentSection, documentSections);
 
 			// update their positions
-			documentSections.stream().forEach(
-					s -> this.documentSectionRepository.save(s));
+			if (sectionsToUpdate != null && !sectionsToUpdate.isEmpty())
+				sectionsToUpdate.stream().forEach(
+						s -> this.documentSectionRepository.save(s));
 
 			savedSection = this.documentSectionRepository.save(documentSection);
 

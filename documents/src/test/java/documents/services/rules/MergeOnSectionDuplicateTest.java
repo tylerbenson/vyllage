@@ -1,6 +1,7 @@
 package documents.services.rules;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,14 +31,14 @@ public class MergeOnSectionDuplicateTest {
 
 		List<DocumentSection> documentSections = Arrays.asList(other);
 
-		merger.apply(section, documentSections);
+		List<DocumentSection> toDelete = merger
+				.apply(section, documentSections);
 
-		assertTrue("Expected having to delete sections.",
-				merger.haveToDeleteSections());
+		assertTrue("Did not expect having to delete sections.",
+				toDelete != null && toDelete.isEmpty());
 
-		assertTrue(
-				"Expected: " + other + " got " + merger.getSectionsToDelete(),
-				merger.getSectionsToDelete().contains(other));
+		assertTrue("Expected: " + Collections.emptyList() + " got " + toDelete,
+				toDelete.equals(Collections.emptyList()));
 
 	}
 
@@ -51,15 +52,14 @@ public class MergeOnSectionDuplicateTest {
 
 		List<DocumentSection> documentSections = Collections.emptyList();
 
-		merger.apply(section, documentSections);
+		List<DocumentSection> toDelete = merger
+				.apply(section, documentSections);
 
-		assertFalse("Expected not having to delete sections.",
-				merger.haveToDeleteSections());
+		assertTrue("Expected not having to delete sections.", toDelete != null
+				&& toDelete.isEmpty());
 
-		assertTrue(
-				"Expected: " + Collections.emptyList() + " got "
-						+ merger.getSectionsToDelete(), merger
-						.getSectionsToDelete().equals(Collections.emptyList()));
+		assertTrue("Expected: " + Collections.emptyList() + " got " + toDelete,
+				toDelete.equals(Collections.emptyList()));
 
 	}
 
@@ -78,15 +78,14 @@ public class MergeOnSectionDuplicateTest {
 
 		List<DocumentSection> documentSections = Collections.emptyList();
 
-		merger.apply(section, documentSections);
+		List<DocumentSection> toDelete = merger
+				.apply(section, documentSections);
 
-		assertFalse("Expected not having to delete sections.",
-				merger.haveToDeleteSections());
+		assertTrue("Expected not having to delete sections.", toDelete != null
+				&& toDelete.isEmpty());
 
-		assertTrue(
-				"Expected: " + Collections.emptyList() + " got "
-						+ merger.getSectionsToDelete(), merger
-						.getSectionsToDelete().equals(Collections.emptyList()));
+		assertTrue("Expected: " + Collections.emptyList() + " got " + toDelete,
+				toDelete.equals(Collections.emptyList()));
 
 	}
 
@@ -120,7 +119,7 @@ public class MergeOnSectionDuplicateTest {
 	}
 
 	@Test
-	public void testIsSectionPresentTrue() {
+	public void testIsSectionTypePresentTrue() {
 		MergeOnSectionDuplicate merger = new MergeOnSectionDuplicate();
 
 		SkillsSection section = new SkillsSection();
@@ -128,18 +127,18 @@ public class MergeOnSectionDuplicateTest {
 
 		section.setTags(Lists.newArrayList("one", "two", "Java"));
 		other.setTags(Lists.newArrayList("one", "two", "three"));
-		Long otherSectionId = 42L;
-		other.setSectionId(otherSectionId);
+		Long sectionId = 42L;
+		section.setSectionId(sectionId);
 
 		List<DocumentSection> documentSections = Arrays.asList(other);
 
 		assertTrue("Expected to find another section of the same type.",
-				merger.isSectionPresent(section, documentSections));
+				merger.isSectionTypePresent(section, documentSections));
 
 	}
 
 	@Test
-	public void testIsSectionPresentFalse() {
+	public void testIsSectionTypePresentDifferentTypesFalse() {
 		MergeOnSectionDuplicate merger = new MergeOnSectionDuplicate();
 
 		SkillsSection section = new SkillsSection();
@@ -152,14 +151,34 @@ public class MergeOnSectionDuplicateTest {
 
 		List<DocumentSection> documentSections = Arrays.asList(other);
 
-		assertFalse(
-				"Did not expecte to find another section of the same type.",
-				merger.isSectionPresent(section, documentSections));
+		assertFalse("Did not expect to find another section of the same type.",
+				merger.isSectionTypePresent(section, documentSections));
 
 	}
 
+	// @Test
+	// public void testIsSectionTypePresentTrue() {
+	// MergeOnSectionDuplicate merger = new MergeOnSectionDuplicate();
+	//
+	// SkillsSection section = new SkillsSection();
+	// SkillsSection present = new SkillsSection();
+	//
+	// Long sectionId = 42L;
+	// section.setSectionId(sectionId);
+	// section.setTags(Lists.newArrayList("one", "two", "Java"));
+	//
+	// present.setSectionId(sectionId);
+	// present.setTags(Lists.newArrayList("one", "two"));
+	//
+	// List<DocumentSection> documentSections = Arrays.asList(present);
+	//
+	// assertFalse("Expected to find another section of the same type.",
+	// merger.isSectionTypePresent(section, documentSections));
+	//
+	// }
+
 	@Test(expected = IllegalArgumentException.class)
-	public void testIsSectionPresentSectionIsNull() {
+	public void testIsSectionTypePresentSectionIsNull() {
 		MergeOnSectionDuplicate merger = new MergeOnSectionDuplicate();
 
 		SkillsSection section = null;
@@ -171,18 +190,18 @@ public class MergeOnSectionDuplicateTest {
 
 		List<DocumentSection> documentSections = Arrays.asList(other);
 
-		merger.isSectionPresent(section, documentSections);
+		merger.isSectionTypePresent(section, documentSections);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testIsSectionPresentCollectionIsNull() {
+	public void testIsSectionTypePresentCollectionIsNull() {
 		MergeOnSectionDuplicate merger = new MergeOnSectionDuplicate();
 
 		SkillsSection section = new SkillsSection();
 
 		List<DocumentSection> documentSections = null;
 
-		merger.isSectionPresent(section, documentSections);
+		merger.isSectionTypePresent(section, documentSections);
 	}
 
 	@Test
@@ -199,14 +218,14 @@ public class MergeOnSectionDuplicateTest {
 
 		List<DocumentSection> documentSections = Arrays.asList(other);
 
-		merger.addSectionsToDelete(section, documentSections);
+		List<DocumentSection> toDelete = merger.addSectionsToDelete(section,
+				documentSections);
 
-		assertTrue("Expected having to delete sections.",
-				merger.haveToDeleteSections());
+		assertFalse("Expected having to delete sections.", toDelete != null
+				&& toDelete.isEmpty());
 
-		assertTrue(
-				"Expected: " + other + " got " + merger.getSectionsToDelete(),
-				merger.getSectionsToDelete().contains(other));
+		assertTrue("Expected: " + other + " got " + toDelete,
+				toDelete.contains(other));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -250,15 +269,14 @@ public class MergeOnSectionDuplicateTest {
 
 		List<DocumentSection> documentSections = Collections.emptyList();
 
-		merger.addSectionsToDelete(section, documentSections);
+		List<DocumentSection> toDelete = merger.addSectionsToDelete(section,
+				documentSections);
 
-		assertFalse("Expected not having to delete sections.",
-				merger.haveToDeleteSections());
+		assertTrue("Expected not having to delete sections.", toDelete != null
+				&& toDelete.isEmpty());
 
-		assertTrue(
-				"Expected: " + Collections.emptyList() + " got "
-						+ merger.getSectionsToDelete(), merger
-						.getSectionsToDelete().equals(Collections.emptyList()));
+		assertTrue("Expected: " + Collections.emptyList() + " got " + toDelete,
+				toDelete.equals(Collections.emptyList()));
 	}
 
 }
