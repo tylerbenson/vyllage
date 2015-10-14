@@ -48,15 +48,6 @@ public class SkillsSection extends DocumentSection implements Mergeable {
 			this.tags.addAll(other.getTags());
 		}
 
-		// copy all other properties.
-		this.setSectionId(other.getSectionId());
-		this.setSectionPosition(other.getSectionPosition());
-		this.setDocumentId(other.getDocumentId());
-		this.setLastModified(other.getLastModified());
-		this.setSectionVersion(other.getSectionVersion());
-		this.setState(other.getState());
-		this.setTitle(other.getTitle());
-
 	}
 
 }

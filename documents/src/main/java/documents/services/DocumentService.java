@@ -29,6 +29,7 @@ import documents.model.DocumentHeader;
 import documents.model.SectionAdvice;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
+import documents.model.constants.SectionType;
 import documents.model.document.sections.DocumentSection;
 import documents.repository.CommentRepository;
 import documents.repository.DocumentAccessRepository;
@@ -345,8 +346,14 @@ public class DocumentService {
 		// set position according to the position of the id in the array.
 		// +1 because it starts at 0.
 		documentSections.stream().forEach(
-				ds -> ds.setSectionPosition((long) documentSectionIds
-						.indexOf(ds.getSectionId()) + 1));
+
+		ds -> {
+			if ((SectionType.SUMMARY_SECTION.equals(ds.getType())))
+				ds.setSectionPosition(1L);// leave it first
+			else
+				ds.setSectionPosition((long) documentSectionIds.indexOf(ds
+						.getSectionId()) + 1);
+		});
 
 		logger.info("--------");
 		documentSections.stream().forEachOrdered(

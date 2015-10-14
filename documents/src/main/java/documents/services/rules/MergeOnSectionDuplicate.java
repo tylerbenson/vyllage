@@ -33,7 +33,8 @@ public class MergeOnSectionDuplicate {
 
 		// if we have other sections of the same type and can be merged
 		if (documentSection instanceof Mergeable
-				&& this.isSectionTypePresent(documentSection, documentSections)) {
+				&& this.isSectionTypePresent(documentSection, documentSections)
+				&& this.theresMoreThanOne(documentSection, documentSections)) {
 
 			Comparator<? super DocumentSection> minId = (DocumentSection ds1,
 					DocumentSection ds2) -> ds1.getSectionId().compareTo(
@@ -50,6 +51,16 @@ public class MergeOnSectionDuplicate {
 						.get());
 				documentSection.setSectionId(existingDocumentSection.get()
 						.getSectionId());
+
+				documentSection.setSectionVersion(existingDocumentSection.get()
+						.getSectionVersion());
+
+				documentSection.setDocumentId(existingDocumentSection.get()
+						.getDocumentId());
+
+				documentSection.setSectionPosition(existingDocumentSection
+						.get().getSectionPosition());
+
 			}
 
 			// merge with all other sections
@@ -58,7 +69,8 @@ public class MergeOnSectionDuplicate {
 				// don't merge existing sections with the same id since we
 				// already did.
 					if (documentSection.getType().equals(ds.getType())
-							&& !ds.getSectionId().equals(documentSection)) {
+							&& !ds.getSectionId().equals(
+									documentSection.getSectionId())) {
 						((Mergeable) documentSection).merge(ds);
 					}
 
@@ -71,6 +83,16 @@ public class MergeOnSectionDuplicate {
 		}
 
 		return sectionsToDelete;
+	}
+
+	protected boolean theresMoreThanOne(DocumentSection documentSection,
+			List<DocumentSection> documentSections) {
+
+		Predicate<? super DocumentSection> sameType = ds -> ds.getType()
+				.equals(documentSection.getType());
+
+		return documentSections.stream().filter(sameType)
+				.collect(Collectors.toList()).size() > 1;
 	}
 
 	/**

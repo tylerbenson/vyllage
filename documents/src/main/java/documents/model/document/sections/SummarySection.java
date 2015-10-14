@@ -43,13 +43,5 @@ public class SummarySection extends DocumentSection implements Mergeable {
 		else if (!StringUtils.isBlank(other.getDescription()))
 			this.description += LINE_SEPARATOR + other.getDescription();
 
-		// copy all other properties.
-		this.setSectionId(other.getSectionId());
-		this.setSectionPosition(other.getSectionPosition());
-		this.setDocumentId(other.getDocumentId());
-		this.setLastModified(other.getLastModified());
-		this.setSectionVersion(other.getSectionVersion());
-		this.setState(other.getState());
-		this.setTitle(other.getTitle());
 	}
 }
