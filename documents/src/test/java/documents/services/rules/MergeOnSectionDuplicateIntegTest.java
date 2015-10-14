@@ -43,7 +43,7 @@ import documents.model.document.sections.SkillsSection;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
-@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class MergeOnSectionDuplicateIntegTest {
 
 	private MockMvc mockMvc;
@@ -92,6 +92,7 @@ public class MergeOnSectionDuplicateIntegTest {
 		// save second Skill section.
 
 		SkillsSection skill2 = new SkillsSection();
+		skill2.setSectionId(52L);
 		skill2.setDocumentId(documentId);
 		skill2.setTags(Arrays.asList(tag2));
 
@@ -143,13 +144,93 @@ public class MergeOnSectionDuplicateIntegTest {
 
 		assertTrue(
 				"Retrieved all sections, checked skills and Tag1, Tag2 not found.",
-				existingSkillSection.getTags().containsAll(Arrays.asList(tag1, tag2)));
+				existingSkillSection.getTags().containsAll(
+						Arrays.asList(tag1, tag2)));
 
 		Long existingSkillSectionId = 128L;
 		assertTrue(
 				"Expected to find Skill section with id '128' from scripts. Got "
 						+ existingSkillSection.getSectionId(),
-				existingSkillSectionId.equals(existingSkillSection.getSectionId()));
+				existingSkillSectionId.equals(existingSkillSection
+						.getSectionId()));
+
+	}
+
+	@Test
+	public void testMergeSectionTheresOnlyOne() throws JsonProcessingException,
+			Exception {
+		generateAndLoginUser();
+		final Long documentId = 0L;
+		Long existingSkillSectionId = 128L;
+
+		final String tag1 = "skill1";
+
+		// save first Skill section.
+
+		SkillsSection skill1 = new SkillsSection();
+		skill1.setSectionId(540L);
+		skill1.setDocumentId(documentId);
+		skill1.setTags(Arrays.asList(tag1));
+
+		MvcResult section1Result = mockMvc
+				.perform(
+						post("/resume/" + documentId + "/section/")
+								.contentType(
+										ContentType.APPLICATION_JSON.toString())
+								.content(mapper.writeValueAsString(skill1)))
+				.andExpect(status().isOk()).andReturn();
+
+		assertNotNull("Expected saved section1, got null. ", section1Result);
+
+		SkillsSection savedSkill1 = mapper.readValue(section1Result
+				.getResponse().getContentAsString(), SkillsSection.class);
+
+		assertTrue("Tag1 not found.", savedSkill1.getTags().contains(tag1));
+
+		assertNotNull("Skill1 sectionId is null.", savedSkill1.getSectionId());
+		assertNotNull(
+				"Skill1 sectionId is not the same as the existing sectionId. Expected "
+						+ existingSkillSectionId + " got "
+						+ savedSkill1.getSectionId(),
+				existingSkillSectionId.equals(savedSkill1.getSectionId()));
+
+		// retrieve all sections.
+
+		MvcResult allSections = mockMvc
+				.perform(get("/resume/" + documentId + "/section/"))
+				.andExpect(status().isOk()).andReturn();
+
+		assertNotNull("No sections returned.", allSections);
+
+		DocumentSection[] sections = mapper.readValue(allSections.getResponse()
+				.getContentAsString(), DocumentSection[].class);
+
+		// assert we have only one skill section.
+		assertTrue(
+				"Found more than one Skill Section, sections not merged.",
+				Arrays.asList(sections)
+						.stream()
+						.filter(ds -> SectionType.SKILLS_SECTION.type().equals(
+								ds.getType())).collect(Collectors.toList())
+						.size() == 1);
+
+		SkillsSection existingSkillSection = (SkillsSection) Arrays
+				.asList(sections)
+				.stream()
+				.filter(ds -> SectionType.SKILLS_SECTION.type().equals(
+						ds.getType())).collect(Collectors.toList()).get(0);
+
+		// it contains our tags
+
+		assertTrue(
+				"Retrieved all sections, checked skills and Tag1, Tag2 not found.",
+				existingSkillSection.getTags().containsAll(Arrays.asList(tag1)));
+
+		assertTrue(
+				"Expected to find Skill section with id '128' from scripts. Got "
+						+ existingSkillSection.getSectionId(),
+				existingSkillSectionId.equals(existingSkillSection
+						.getSectionId()));
 
 	}
 

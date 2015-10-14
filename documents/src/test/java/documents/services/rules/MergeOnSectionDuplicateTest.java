@@ -279,4 +279,86 @@ public class MergeOnSectionDuplicateTest {
 				toDelete.equals(Collections.emptyList()));
 	}
 
+	@Test
+	public void testOnlyOneButDifferentIdsTrue() {
+		MergeOnSectionDuplicate merger = new MergeOnSectionDuplicate();
+
+		SkillsSection section = new SkillsSection();
+		SkillsSection other = new SkillsSection();
+
+		section.setSectionId(50L);
+		section.setTags(Lists.newArrayList("one", "two", "Java"));
+		other.setTags(Lists.newArrayList("one", "two", "three"));
+		Long otherSectionId = 42L;
+		other.setSectionId(otherSectionId);
+
+		List<DocumentSection> documentSections = Arrays.asList(other);
+
+		boolean onlyOneButDifferentIds = merger.onlyOneButDifferentIds(section,
+				documentSections);
+
+		assertTrue("Ids are different should have returned true.",
+				onlyOneButDifferentIds);
+
+	}
+
+	@Test
+	public void testOnlyOneButDifferentIdsFalse() {
+		MergeOnSectionDuplicate merger = new MergeOnSectionDuplicate();
+
+		SkillsSection section = new SkillsSection();
+		SkillsSection other = new SkillsSection();
+		Long sectionId = 42L;
+
+		section.setSectionId(sectionId);
+		other.setSectionId(sectionId);
+
+		section.setTags(Lists.newArrayList("one", "two", "Java"));
+		other.setTags(Lists.newArrayList("one", "two", "three"));
+
+		List<DocumentSection> documentSections = Arrays.asList(other);
+
+		boolean onlyOneButDifferentIds = merger.onlyOneButDifferentIds(section,
+				documentSections);
+
+		assertFalse("Ids are the smae should have returned false.",
+				onlyOneButDifferentIds);
+
+	}
+
+	@Test
+	public void testTheresMoreThanOneTrue() {
+		MergeOnSectionDuplicate merger = new MergeOnSectionDuplicate();
+
+		SkillsSection section = new SkillsSection();
+		SkillsSection other1 = new SkillsSection();
+		SkillsSection other2 = new SkillsSection();
+
+		List<DocumentSection> documentSections = Arrays.asList(other1, other2);
+
+		boolean theresMoreThanOne = merger.theresMoreThanOne(section,
+				documentSections);
+
+		assertTrue("There's more than one, should have returned true.",
+				theresMoreThanOne);
+
+	}
+
+	@Test
+	public void testTheresMoreThanOneFalse() {
+		MergeOnSectionDuplicate merger = new MergeOnSectionDuplicate();
+
+		SkillsSection section = new SkillsSection();
+		SkillsSection other1 = new SkillsSection();
+
+		List<DocumentSection> documentSections = Arrays.asList(other1);
+
+		boolean theresMoreThanOne = merger.theresMoreThanOne(section,
+				documentSections);
+
+		assertFalse("There's only one, should have returned false.",
+				theresMoreThanOne);
+
+	}
+
 }

@@ -34,7 +34,9 @@ public class MergeOnSectionDuplicate {
 		// if we have other sections of the same type and can be merged
 		if (documentSection instanceof Mergeable
 				&& this.isSectionTypePresent(documentSection, documentSections)
-				&& this.theresMoreThanOne(documentSection, documentSections)) {
+				&& (this.theresMoreThanOne(documentSection, documentSections) || this
+						.onlyOneButDifferentIds(documentSection,
+								documentSections))) {
 
 			Comparator<? super DocumentSection> minId = (DocumentSection ds1,
 					DocumentSection ds2) -> ds1.getSectionId().compareTo(
@@ -83,6 +85,19 @@ public class MergeOnSectionDuplicate {
 		}
 
 		return sectionsToDelete;
+	}
+
+	protected boolean onlyOneButDifferentIds(DocumentSection documentSection,
+			List<DocumentSection> documentSections) {
+
+		Predicate<? super DocumentSection> sameType = ds -> ds.getType()
+				.equals(documentSection.getType());
+
+		return documentSections.stream().filter(sameType)
+				.collect(Collectors.toList()).size() == 1
+				&& !documentSections.stream().filter(sameType).findAny().get()
+						.getSectionId().equals(documentSection.getSectionId());
+
 	}
 
 	protected boolean theresMoreThanOne(DocumentSection documentSection,
