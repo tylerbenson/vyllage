@@ -1,17 +1,9 @@
-package accounts.service;
+package accounts.validation;
 
 import org.junit.Test;
 import org.springframework.util.Assert;
 
 import accounts.model.account.settings.AccountSetting;
-import accounts.validation.EmailSettingValidator;
-import accounts.validation.FacebookValidator;
-import accounts.validation.LengthValidator;
-import accounts.validation.NotNullValidator;
-import accounts.validation.OnlyAlphanumericValidator;
-import accounts.validation.PhoneNumberValidator;
-import accounts.validation.TwitterValidator;
-import accounts.validation.URLValidator;
 
 public class AccountSettingValidatorTest {
 
