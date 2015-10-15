@@ -1,5 +1,9 @@
 package accounts.service.contactSuggestion;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +13,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -75,9 +78,9 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.backfill(guest,
 				new ArrayList<>(), 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		Assert.assertTrue(
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
+		assertTrue(
 				"No Admissions Advisor found.",
 				suggestions
 						.get(0)
@@ -97,9 +100,9 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				guest, null, 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		Assert.assertTrue(
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
+		assertTrue(
 				"No Admissions Advisor found.",
 				suggestions
 						.get(0)
@@ -119,8 +122,8 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				guest, null, 5);
 
-		Assert.assertNotNull("Should not be null.", suggestions);
-		Assert.assertFalse("Result not empty", suggestions.isEmpty());
+		assertNotNull("Should not be null.", suggestions);
+		assertFalse("Result not empty", suggestions.isEmpty());
 	}
 
 	@Test
@@ -131,8 +134,8 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				guest, null, 5);
 
-		Assert.assertNotNull("Should not be null.", suggestions);
-		Assert.assertTrue("Result not empty", suggestions.isEmpty());
+		assertNotNull("Should not be null.", suggestions);
+		assertTrue("Result not empty", suggestions.isEmpty());
 	}
 
 	@Test
@@ -143,9 +146,9 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		Assert.assertTrue(
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
+		assertTrue(
 				"No Academic Advisor found.",
 				suggestions
 						.get(0)
@@ -170,12 +173,11 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, filters, 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
 
-		Assert.assertTrue("Less than 5 suggestions found.",
-				suggestions.size() <= 5);
-		Assert.assertTrue(
+		assertTrue("Less than 5 suggestions found.", suggestions.size() <= 5);
+		assertTrue(
 				"No Advisor found.",
 				suggestions.stream().anyMatch(
 						u -> u.getUsername().equals(userName)));
@@ -195,9 +197,9 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		Assert.assertTrue(
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
+		assertTrue(
 				"No Academic Advisor found.",
 				suggestions
 						.get(0)
@@ -221,9 +223,9 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		Assert.assertTrue(
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
+		assertTrue(
 				"No Academic Advisor found.",
 				suggestions
 						.get(0)
@@ -238,18 +240,18 @@ public class UserContactSuggestionServiceTest {
 	@Test
 	public void alumniTest() {
 		User alumni = createTestUser("alumni-test", RolesEnum.ALUMNI);
-		Assert.assertNotNull(createTestUser("career2-test",
-				RolesEnum.CAREER_ADVISOR));
-		Assert.assertNotNull(createTestUser("transfer-test",
+
+		assertNotNull(createTestUser("career2-test", RolesEnum.CAREER_ADVISOR));
+		assertNotNull(createTestUser("transfer-test",
 				RolesEnum.TRANSFER_ADVISOR));
 
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				alumni, null, 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
 
-		Assert.assertTrue(
+		assertTrue(
 				"No Career Advisor found.",
 				suggestions
 						.stream()
@@ -263,7 +265,7 @@ public class UserContactSuggestionServiceTest {
 														.contains(
 																RolesEnum.CAREER_ADVISOR
 																		.name()))));
-		Assert.assertTrue(
+		assertTrue(
 				"No Transfer Advisor found.",
 				suggestions
 						.stream()
@@ -284,9 +286,9 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				staff, null, 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		Assert.assertTrue(
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
+		assertTrue(
 				"No staff member found.",
 				suggestions
 						.get(0)
@@ -306,9 +308,9 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				admin, null, 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		Assert.assertTrue(
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
+		assertTrue(
 				"No staff member found.",
 				suggestions
 						.get(0)
@@ -331,9 +333,9 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				academicAdvisor, null, 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		Assert.assertTrue(
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
+		assertTrue(
 				"No staff member found.",
 				suggestions
 						.get(0)
@@ -353,10 +355,10 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);
 
-		Assert.assertNotNull("No users found.", suggestions);
-		Assert.assertFalse("No users found.", suggestions.isEmpty());
-		Assert.assertFalse("Found disabled user.", suggestions.stream()
-				.anyMatch(u -> !u.isEnabled()));
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
+		assertFalse("Found disabled user.",
+				suggestions.stream().anyMatch(u -> !u.isEnabled()));
 
 	}
 
