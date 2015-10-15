@@ -136,10 +136,8 @@ public class AccountSettingsService {
 			return setLastName(user, setting);
 
 		case "email":
-			// don't change email if they are the same or the email already
-			// exists.
-			if (!user.getUsername().equalsIgnoreCase(setting.getValue())
-					&& !userService.userExists(setting.getValue())) {
+			// don't change email if they are the same!
+			if (!user.getUsername().equalsIgnoreCase(setting.getValue())) {
 				try {
 
 					userService.sendEmailChangeConfirmation(user,
