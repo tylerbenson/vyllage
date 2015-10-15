@@ -34,17 +34,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Order(11)
 public class OAuthSecurityConfigurer extends WebSecurityConfigurerAdapter {
+
 	private ZeroLeggedOAuthProviderProcessingFilter zeroLeggedOAuthProviderProcessingFilter;
+
 	@Inject
-	LMSConsumerDetailsService oauthConsumerDetailsService;
+	private LMSConsumerDetailsService oauthConsumerDetailsService;
+
 	@Inject
-	LMSOAuthNonceServices oauthNonceServices;
+	private LMSOAuthNonceServices oauthNonceServices;
+
 	@Inject
-	LMSAuthenticationHandler authenticationHandler;
+	private LMSAuthenticationHandler authenticationHandler;
+
 	@Inject
-	OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
+	private OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
+
 	@Inject
-	OAuthProviderTokenServices oauthProviderTokenServices;
+	private OAuthProviderTokenServices oauthProviderTokenServices;
 
 	@PostConstruct
 	public void init() {

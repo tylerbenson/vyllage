@@ -58,7 +58,7 @@ public class DocumentHeaderTest {
 		DocumentHeader dh1 = new DocumentHeader();
 		dh1.setAddress("address");
 
-		assertFalse(dh1.equals(null));
+		assertFalse(dh1 == null);
 
 	}
 

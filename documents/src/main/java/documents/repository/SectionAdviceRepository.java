@@ -103,16 +103,12 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 	public SectionAdvice save(SectionAdvice sectionAdvice) {
 
 		if (sectionAdvice.getSectionAdviceId() == null)
-			sectionAdvice = createNew(sectionAdvice);
+			return createNew(sectionAdvice);
 		else
-			sectionAdvice = update(sectionAdvice);
-
-		logger.info("Saved section advice: " + sectionAdvice);
-
-		return sectionAdvice;
+			return update(sectionAdvice);
 	}
 
-	private SectionAdvice createNew(SectionAdvice sectionAdvice) {
+	private SectionAdvice createNew(final SectionAdvice sectionAdvice) {
 		SectionAdvicesRecord newRecord = sql.newRecord(SECTION_ADVICES);
 
 		newRecord.setSectionId(sectionAdvice.getSectionId());
@@ -135,10 +131,11 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 		sectionAdvice.setLastModified(newRecord.getLastModified()
 				.toLocalDateTime());
 
+		logger.fine("Saved section advice: " + sectionAdvice);
 		return sectionAdvice;
 	}
 
-	private SectionAdvice update(SectionAdvice sectionAdvice) {
+	private SectionAdvice update(final SectionAdvice sectionAdvice) {
 		SectionAdvicesRecord existingRecord = sql.fetchOne(SECTION_ADVICES,
 				SECTION_ADVICES.SECTION_ADVICE_ID.eq(sectionAdvice
 						.getSectionAdviceId()));
@@ -167,6 +164,7 @@ public class SectionAdviceRepository implements IRepository<SectionAdvice> {
 		sectionAdvice.setLastModified(existingRecord.getLastModified()
 				.toLocalDateTime());
 
+		logger.fine("Updated section advice: " + sectionAdvice);
 		return sectionAdvice;
 	}
 

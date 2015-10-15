@@ -356,7 +356,7 @@ public class UserContactSuggestionServiceTest {
 		Assert.assertNotNull("No users found.", suggestions);
 		Assert.assertFalse("No users found.", suggestions.isEmpty());
 		Assert.assertFalse("Found disabled user.", suggestions.stream()
-				.anyMatch(u -> u.isEnabled() == false));
+				.anyMatch(u -> !u.isEnabled()));
 
 	}
 

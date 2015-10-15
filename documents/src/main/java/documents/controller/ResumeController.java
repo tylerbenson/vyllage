@@ -599,11 +599,8 @@ public class ResumeController {
 			return true;
 
 		// allow the user to delete his own comments
-		if (user.getUserId().equals(comment.getUserId())
-				&& commentId.equals(comment.getCommentId()))
-			return true;
-
-		return false;
+		return user.getUserId().equals(comment.getUserId())
+				&& commentId.equals(comment.getCommentId());
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
