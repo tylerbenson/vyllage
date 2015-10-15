@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import lombok.NonNull;
 
 import org.jooq.DSLContext;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
 
 import user.common.LMSUserCredentials;
@@ -24,14 +23,11 @@ import accounts.domain.tables.records.LmsUserCredentialsRecord;
 public class LMSUserCredentialsRepository {
 
 	private final DSLContext sql;
-	private final DataSourceTransactionManager txManager;
 
 	@Inject
-	public LMSUserCredentialsRepository(final DSLContext sql,
-			final DataSourceTransactionManager txManager) {
+	public LMSUserCredentialsRepository(final DSLContext sql) {
 		super();
 		this.sql = sql;
-		this.txManager = txManager;
 	}
 
 	public LMSUserCredentials get(String lmsUserId)
