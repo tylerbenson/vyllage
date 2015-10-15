@@ -1,13 +1,63 @@
-package accounts.validation;
-
-import static org.junit.Assert.assertTrue;
+package accounts.service;
 
 import org.junit.Test;
 import org.springframework.util.Assert;
 
 import accounts.model.account.settings.AccountSetting;
+import accounts.validation.EmailSettingValidator;
+import accounts.validation.FacebookValidator;
+import accounts.validation.LengthValidator;
+import accounts.validation.NotNullValidator;
+import accounts.validation.OnlyAlphanumericValidator;
+import accounts.validation.PhoneNumberValidator;
+import accounts.validation.TwitterValidator;
+import accounts.validation.URLValidator;
 
 public class AccountSettingValidatorTest {
+
+	@Test
+	public void testEmailSettingValidatorReturnsOk() {
+		EmailSettingValidator validator = new EmailSettingValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue("test@gmail.com");
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isNull(setting.getErrorMessage());
+	}
+
+	@Test
+	public void testEmailSettingValidatorReturnsWithErrorForInvalidEmail() {
+		EmailSettingValidator validator = new EmailSettingValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue("test");
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() != null);
+	}
+
+	@Test
+	public void testEmailSettingValidatorReturnsWithErrorForNullEmail() {
+		EmailSettingValidator validator = new EmailSettingValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue(null);
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() != null);
+	}
+
+	@Test
+	public void testEmailSettingValidatorReturnsWithErrorForEmptyValue() {
+		EmailSettingValidator validator = new EmailSettingValidator();
+		AccountSetting as = new AccountSetting();
+		as.setValue("");
+
+		AccountSetting setting = validator.validate(as);
+
+		Assert.isTrue(setting.getErrorMessage() != null);
+	}
 
 	@Test
 	public void testLengthSettingValidatorReturnsOk() {
@@ -30,7 +80,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 	@Test
@@ -42,8 +92,8 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
-		assertTrue(setting.getErrorMessage().equalsIgnoreCase(
+		Assert.isTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage().equalsIgnoreCase(
 				"Up to " + length + " characters allowed."));
 	}
 
@@ -56,7 +106,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() == null);
+		Assert.isTrue(setting.getErrorMessage() == null);
 	}
 
 	@Test
@@ -78,7 +128,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 	@Test
@@ -89,7 +139,7 @@ public class AccountSettingValidatorTest {
 		as.setValue(null);
 
 		AccountSetting setting = validator2.validate(validator1.validate(as));
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 	@Test
@@ -111,7 +161,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 	@Test
@@ -122,7 +172,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 	@Test
@@ -133,7 +183,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 	@Test
@@ -144,7 +194,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() == null);
+		Assert.isTrue(setting.getErrorMessage() == null);
 	}
 
 	@Test
@@ -155,7 +205,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() == null);
+		Assert.isTrue(setting.getErrorMessage() == null);
 	}
 
 	@Test
@@ -168,8 +218,8 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator2.validate(validator1.validate(as));
 
-		assertTrue(setting.getErrorMessage() != null);
-		assertTrue(setting.getErrorMessage().contains(","));
+		Assert.isTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage().contains(","));
 	}
 
 	@Test
@@ -182,7 +232,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() == null);
+		Assert.isTrue(setting.getErrorMessage() == null);
 	}
 
 	@Test
@@ -195,7 +245,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() == null);
+		Assert.isTrue(setting.getErrorMessage() == null);
 	}
 
 	@Test
@@ -208,7 +258,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 	@Test
@@ -285,7 +335,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 	@Test
@@ -337,7 +387,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 	@Test
@@ -389,7 +439,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 	@Test
@@ -402,7 +452,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		assertTrue(setting.getErrorMessage() != null);
+		Assert.isTrue(setting.getErrorMessage() != null);
 	}
 
 }
