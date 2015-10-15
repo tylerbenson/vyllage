@@ -23,8 +23,13 @@ var RecipientEdit = React.createClass({
   },
   changeHandler: function (key, e) {
     e.preventDefault();
-    Actions.changeRecipient(key, e.target.value)
-    Actions.openSuggestions();
+    if( e.target.value == '' ){
+      Actions.closeSuggestions();
+    }    
+    Actions.changeRecipient(key, e.target.value);
+    if( key !== 'email'){
+      Actions.openSuggestions();
+    }
   },
   keyPress: function (e) {
     if (e.key === 'Enter') {
@@ -78,7 +83,7 @@ var RecipientEdit = React.createClass({
   },
   focusHandler: function () {
     var recipient = this.props.recipient;
-    if (recipient.firstName || recipient.lastName || recipient.email) {
+    if (recipient.firstName || recipient.lastName ) {
       Actions.openSuggestions();
     }
   },
@@ -119,7 +124,6 @@ var RecipientEdit = React.createClass({
               value={recipient.email}
               onChange={this.changeHandler.bind(this, 'email')}
               onFocus={this.focusHandler}
-              onKeyDown={this.keyPress}
               autoComplete='off' />
             {this.state.emailError? <p className='error'><i className='ion-android-warning'></i>Invalid e-mail address.</p>: null}
           </div>
