@@ -54,15 +54,6 @@ public class DocumentHeaderTest {
 	}
 
 	@Test
-	public void testEqualsNull() {
-		DocumentHeader dh1 = new DocumentHeader();
-		dh1.setAddress("address");
-
-		assertFalse(dh1 == null);
-
-	}
-
-	@Test
 	public void testToString() {
 		DocumentHeader dh1 = new DocumentHeader();
 		dh1.setAddress("address");
