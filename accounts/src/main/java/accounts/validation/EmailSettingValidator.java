@@ -1,5 +1,8 @@
 package accounts.validation;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import user.common.User;
 import accounts.model.account.settings.AccountSetting;
 import accounts.service.UserService;
 
@@ -21,10 +24,22 @@ public class EmailSettingValidator extends SettingValidator {
 				|| !EmailValidator.isValid(setting.getValue()))
 			setErrorMessage(setting, INVALID_EMAIL_ADDRESS_MESSAGE);
 
-		if (userService.userExists(setting.getValue()))
+		/**
+		 * Only validate when the email changes, this is necessary because the
+		 * frontend saves all the values when there's a setting change.
+		 */
+		boolean emailHasChanged = !getUser().getUsername().equals(
+				setting.getValue());
+
+		if (emailHasChanged && userService.userExists(setting.getValue()))
 			setErrorMessage(setting, EMAIL_ALREADY_TAKEN_MESSAGE);
 
 		return setting;
+	}
+
+	protected User getUser() {
+		return (User) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
 	}
 
 }

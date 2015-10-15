@@ -2,87 +2,12 @@ package accounts.validation;
 
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.util.Assert;
 
 import accounts.model.account.settings.AccountSetting;
-import accounts.service.UserService;
 
 public class AccountSettingValidatorTest {
-
-	private UserService userService;
-
-	@Before
-	public void setUp() {
-		userService = Mockito.mock(UserService.class);
-		Mockito.when(userService.userExists(Mockito.anyString())).thenReturn(
-				false);
-	}
-
-	@Test
-	public void testEmailSettingValidatorReturnsOk() {
-
-		EmailSettingValidator validator = new EmailSettingValidator(userService);
-		AccountSetting as = new AccountSetting();
-		as.setValue("test@gmail.com");
-
-		AccountSetting setting = validator.validate(as);
-
-		assertTrue(setting.getErrorMessage() == null);
-	}
-
-	@Test
-	public void testEmailSettingValidatorReturnsWithErrorForInvalidEmail() {
-		EmailSettingValidator validator = new EmailSettingValidator(userService);
-		AccountSetting as = new AccountSetting();
-		as.setValue("test");
-
-		AccountSetting setting = validator.validate(as);
-
-		assertTrue(EmailSettingValidator.INVALID_EMAIL_ADDRESS_MESSAGE
-				.equals(setting.getErrorMessage()));
-	}
-
-	@Test
-	public void testEmailSettingValidatorReturnsWithErrorForNullEmail() {
-		EmailSettingValidator validator = new EmailSettingValidator(userService);
-		AccountSetting as = new AccountSetting();
-		as.setValue(null);
-
-		AccountSetting setting = validator.validate(as);
-
-		assertTrue(EmailSettingValidator.INVALID_EMAIL_ADDRESS_MESSAGE
-				.equals(setting.getErrorMessage()));
-	}
-
-	@Test
-	public void testEmailSettingValidatorReturnsWithErrorForEmptyValue() {
-		EmailSettingValidator validator = new EmailSettingValidator(userService);
-		AccountSetting as = new AccountSetting();
-		as.setValue("");
-
-		AccountSetting setting = validator.validate(as);
-
-		assertTrue(EmailSettingValidator.INVALID_EMAIL_ADDRESS_MESSAGE
-				.equals(setting.getErrorMessage()));
-	}
-
-	@Test
-	public void testEmailSettingValidatorReturnsWithErrorForExistingEmail() {
-		EmailSettingValidator validator = new EmailSettingValidator(userService);
-		AccountSetting as = new AccountSetting();
-		as.setValue("user@vyllage.com");
-
-		Mockito.when(userService.userExists(Mockito.anyString())).thenReturn(
-				true);
-
-		AccountSetting setting = validator.validate(as);
-
-		assertTrue(EmailSettingValidator.EMAIL_ALREADY_TAKEN_MESSAGE
-				.equals(setting.getErrorMessage()));
-	}
 
 	@Test
 	public void testLengthSettingValidatorReturnsOk() {
