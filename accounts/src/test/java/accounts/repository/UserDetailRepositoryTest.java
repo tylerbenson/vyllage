@@ -41,9 +41,6 @@ public class UserDetailRepositoryTest {
 	private UserOrganizationRoleRepository userOrganizationRoleRepository;
 
 	@Inject
-	private OrganizationRepository organizationRepository;
-
-	@Inject
 	private UserCredentialsRepository credentialsRepository;
 
 	@Inject
@@ -55,6 +52,10 @@ public class UserDetailRepositoryTest {
 	private ConfirmationEmailService confirmationEmailService = Mockito
 			.mock(ConfirmationEmailService.class);
 
+	// The method is deprecated to avoid others using it externally
+	// It's ok to test.
+
+	@SuppressWarnings("deprecation")
 	@Test(expected = IllegalArgumentException.class)
 	public void testNullUser() {
 		userDetailRepository.createUser(null);
@@ -65,6 +66,7 @@ public class UserDetailRepositoryTest {
 		userDetailRepository.createUser(null, false, false);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test(expected = PasswordResetWasForcedException.class)
 	public void testCreateUserThrowsPasswordResetException() {
 		String username = "email1@google.com";
@@ -85,6 +87,7 @@ public class UserDetailRepositoryTest {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test()
 	public void testCreateUser() {
 		String username = "email2@google.com";
@@ -112,6 +115,7 @@ public class UserDetailRepositoryTest {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test()
 	public void testDisableUser() {
 		String username = "email3@google.com";
@@ -148,9 +152,8 @@ public class UserDetailRepositoryTest {
 	@Test()
 	public void testCreatesUserDoesNotSendConfirmationEmail() {
 		UserDetailRepository repo = new UserDetailRepository(sql,
-				userOrganizationRoleRepository, organizationRepository,
-				credentialsRepository, accountSettingRepository, txManager,
-				confirmationEmailService);
+				userOrganizationRoleRepository, credentialsRepository,
+				accountSettingRepository, txManager, confirmationEmailService);
 
 		String username = "email3@google.com";
 		UserOrganizationRole uor = new UserOrganizationRole(null, 0L,
