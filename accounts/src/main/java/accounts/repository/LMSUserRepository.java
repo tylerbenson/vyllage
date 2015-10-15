@@ -54,13 +54,12 @@ public class LMSUserRepository implements LMSUserDetailsService {
 	private final DataSourceTransactionManager txManager;
 	private final LMSRepository lmsRepository;
 	private final LMSUserCredentialsRepository lmsUserCredentialsRepository;
-	private ConfirmationEmailService confirmationEmailService;
+	private final ConfirmationEmailService confirmationEmailService;
 
 	@Inject
 	public LMSUserRepository(
 			final DSLContext sql,
 			final UserOrganizationRoleRepository userOrganizationRoleRepository,
-			final OrganizationRepository organizationRepository,
 			final UserCredentialsRepository credentialsRepository,
 			final AccountSettingRepository accountSettingRepository,
 			final DataSourceTransactionManager txManager,

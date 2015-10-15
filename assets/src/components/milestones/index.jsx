@@ -43,7 +43,7 @@ var Milestone = React.createClass({
 		var numberOfTasksToShow = 3;
 
 		var done = filter(milestones, {isDone: true});
-		var percentage = (done.length / milestones.length) * 100;
+		var percentage = ((done.length / milestones.length) * 100).toFixed(2);
 
 		var key = 0;
 		var tasksShown = 0;

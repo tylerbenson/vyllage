@@ -37,6 +37,10 @@ import connections.service.AdviceService;
 @RequestMapping("resume")
 public class AdviceRequestController {
 
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger
+			.getLogger(AdviceRequestController.class.getName());
+
 	private final AdviceService adviceService;
 	private AccountService accountService;
 
@@ -46,10 +50,6 @@ public class AdviceRequestController {
 		this.adviceService = adviceService;
 		this.accountService = accountService;
 	}
-
-	@SuppressWarnings("unused")
-	private final Logger logger = Logger
-			.getLogger(AdviceRequestController.class.getName());
 
 	@ModelAttribute("accountName")
 	public AccountNames accountNames(@AuthenticationPrincipal User user) {
@@ -82,7 +82,7 @@ public class AdviceRequestController {
 	public String askAdvice(HttpServletRequest request,
 			@AuthenticationPrincipal User user) {
 
-		if (accountService.canIRequestFeedback(request, user) == true)
+		if (accountService.canIRequestFeedback(request, user))
 			return "getFeedback";
 
 		return "redirect:/account/email/"
@@ -144,17 +144,22 @@ public class AdviceRequestController {
 			@RequestParam(value = "lastNameFilter", required = false) String lastNameFilter,
 			@RequestParam(value = "emailFilter", required = false) String emailFilter,
 			@AuthenticationPrincipal User user) throws ElementNotFoundException {
-		Long userId = user.getUserId();
+
+		final Long userId = user.getUserId();
+
+		List<Long> listOfExcludedIds = new ArrayList<>();
 
 		// excluding logged in user
-		if (excludeIds == null)
-			excludeIds = new ArrayList<>();
-		excludeIds.add(userId);
+		if (excludeIds != null)
+			listOfExcludedIds.addAll(excludeIds);
+		listOfExcludedIds.add(userId);
 
-		Long documentId = adviceService.getUserDocumentId(request, userId);
+		final Long documentId = adviceService
+				.getUserDocumentId(request, userId);
 
-		return adviceService.getUsers(request, documentId, userId, excludeIds,
-				firstNameFilter, lastNameFilter, emailFilter);
+		return adviceService
+				.getUsers(request, documentId, userId, listOfExcludedIds,
+						firstNameFilter, lastNameFilter, emailFilter);
 	}
 
 	@ExceptionHandler(value = { IllegalArgumentException.class })

@@ -1,33 +1,18 @@
-var React = require('react');
-var request = require('superagent');
-var urlTemplate = require('url-template');
-var endpoints = require('../endpoints');
+var React = require('react/addons');
+var Reflux = require('reflux');
+var FeatureActions = require('./FeatureActions');
+var FeatureStore = require('./FeatureStore');
+var findindex = require('lodash.findindex');
 
 var FeatureToggle = React.createClass({
+	mixins: [Reflux.listenTo( FeatureStore,"onStatusChange")],
 	getInitialState: function(){
 		return {
 			isActive: false
 		}
 	},
 	componentWillMount: function() {
-		var url = urlTemplate
-			.parse(endpoints.togglz)
-			.expand({feature: this.props.name});
-
-		request
-			.get(url)
-			.end(function(err, res) {
-				if(res.ok) {
-					this.setState({
-						isActive: res.text === 'true'
-					});
-				}
-				else {
-					this.setState({
-						isActive: false
-					});
-				}
-			}.bind(this));
+		FeatureActions.featureCheck( this.props.name );
 	},
 	render: function() {
 		return (
@@ -35,6 +20,12 @@ var FeatureToggle = React.createClass({
 			{this.state.isActive? this.props.children : null}
 			</span>
 			);
+	},
+	onStatusChange : function( featureTogglz ){
+		var featureNameIndex = findindex(featureTogglz ,{item: this.props.name});
+		if( featureNameIndex != -1 ){
+			this.setState({isActive : featureTogglz[featureNameIndex].result });
+		}
 	}
 });
 

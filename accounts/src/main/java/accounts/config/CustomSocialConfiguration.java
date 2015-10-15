@@ -3,6 +3,7 @@ package accounts.config;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -25,7 +26,6 @@ import org.springframework.social.connect.web.ReconnectFilter;
 import org.springframework.social.facebook.web.DisconnectController;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
-import org.springframework.util.Assert;
 
 import accounts.config.beans.SendConfirmationEmailAfterConnectInterceptor;
 import accounts.controller.ConnectControllerWithRedirect;
@@ -34,8 +34,12 @@ import accounts.service.ConfirmationEmailService;
 @Configuration
 @EnableSocial
 public class CustomSocialConfiguration extends SocialConfigurerAdapter {
+
 	// https://github.com/spring-projects/spring-social-samples/blob/master/spring-social-showcase-sec/src/main/java/org/springframework/social/showcase/config/SocialConfig.java
 	// also SocialAutoConfigurationAdapter
+
+	@Value(value = "${social.base.url}")
+	private String SOCIAL_BASE_URL;
 
 	@Inject
 	private DataSource dataSource;
@@ -65,7 +69,8 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		connectController
 				.addInterceptor(new SendConfirmationEmailAfterConnectInterceptor(
 						confirmationEmailService));
-		connectController.setApplicationUrl("https://www.vyllage.com");
+
+		connectController.setApplicationUrl(SOCIAL_BASE_URL);
 
 		// connectController.addInterceptor(new
 		// PostToWallAfterConnectInterceptor());
@@ -94,8 +99,11 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 	public DisconnectController disconnectController(
 			UsersConnectionRepository usersConnectionRepository,
 			Environment environment) {
+		String facebookAppSecret = environment
+				.getRequiredProperty("spring.social.facebook.appSecret");
+
 		return new DisconnectController(usersConnectionRepository,
-				environment.getProperty("facebook.appSecret"));
+				facebookAppSecret);
 	}
 
 	@Bean
@@ -115,14 +123,16 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 
 	@Override
 	public void addConnectionFactories(ConnectionFactoryConfigurer cfConfig,
-			Environment env) {
-		super.addConnectionFactories(cfConfig, env);
+			Environment environment) {
+		super.addConnectionFactories(cfConfig, environment);
 
-		Assert.notNull(env.getProperty("spring.social.google.appId"));
-		Assert.notNull(env.getProperty("spring.social.google.appSecret"));
+		String googleAppId = environment
+				.getRequiredProperty("spring.social.google.appId");
 
-		cfConfig.addConnectionFactory(new GoogleConnectionFactory(env
-				.getProperty("spring.social.google.appId"), env
-				.getProperty("spring.social.google.appSecret")));
+		String googleAppSecret = environment
+				.getRequiredProperty("spring.social.google.appId");
+
+		cfConfig.addConnectionFactory(new GoogleConnectionFactory(googleAppId,
+				googleAppSecret));
 	}
 }

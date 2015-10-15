@@ -8,7 +8,7 @@
 .error {
   header {
     background: none;
-    padding: 3em 1em;
+    padding: 2em 1em;
     position: static;
     text-align: center;
 
@@ -34,7 +34,7 @@
     color: $secondary-color;
     font-size: 2.5em;
     font-weight: bold;
-    margin: 0.5em auto;
+    margin: 0 auto 0.5em auto;
   }
 
   p {

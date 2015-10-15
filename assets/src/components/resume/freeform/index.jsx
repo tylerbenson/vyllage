@@ -11,7 +11,7 @@ var MoveButton = require('../../buttons/move');
 var SectionFooter = require('../sections/Footer');
 var DeleteSection = require('../Delete');
 var ConfirmUnload = require('../ConfirmUnload');
-var cx = require('react/lib/cx');
+var classnames = require('classnames');
 var cloneDeep = require('clone-deep');
 var FeatureToggle = require('../../util/FeatureToggle');
 
@@ -31,8 +31,8 @@ var Freeform = React.createClass({
   },
   componentWillReceiveProps: function (nextProps) {
     if( nextProps.section != undefined){
-      this.setState({ description : nextProps.section.description });  
-    } 
+      this.setState({ description : nextProps.section.description });
+    }
   },
   componentDidMount: function() {
     this.refs.description.getDOMNode().focus();
@@ -70,7 +70,7 @@ var Freeform = React.createClass({
   render: function () {
     var uiEditMode = this.state.uiEditMode;
 
-    var classes = cx({
+    var classes = classnames({
       'single': !this.props.isMultiple,
       'subsection': true
     });
@@ -82,7 +82,7 @@ var Freeform = React.createClass({
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
             {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
-          </div>: <FeatureToggle name="SECTION_ADVICE"><div className="actions"> 
+          </div>: <FeatureToggle name="SECTION_ADVICE"><div className="actions">
             {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
             {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
           </div></FeatureToggle>

@@ -39,7 +39,7 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"type": "JobExperienceSection",
 	"title": "experience",
 	"sectionId": 127,
-	"sectionPosition": 5,
+	"sectionPosition": 6,
 	"state": "shown",
 	"organizationName": "Rebellion",
 	"organizationDescription": "An education group.",
@@ -56,21 +56,21 @@ insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position
 	"type": "SkillsSection",
 	"title": "skills",
 	"sectionId": 128,
-	"sectionPosition": 6,
+	"sectionPosition": 7,
 	"state": "shown",
 	"tags": ["X-Wing Pilot", "Force User"]
 }',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 insert into DOCUMENTS.document_sections(id, sectionVersion, documentId, position, jsonDocument, dateCreated, lastModified) values(130, 1, 0, 8, '{
 	"type": "ProjectsSection",
-	"title": "projects",
+	"title": "Projects",
 	"sectionId": 130,
 	"sectionPosition": 8,
 	"state": "shown",
 	"projectTitle": "Rebellion Project",
 	"author":"Luke",
-	"projectDate":"2015-09-22T15:37:32",
-	"projectImageUrl":"http://img",
+	"projectDate":"Sep 2011",
+	"projectUrl":"http://img",
 	"role":"Leader",
 	"projectDescription":"Rebellion against the Empire.",
 	"roleDescription":"Rebellion Jedi Leader"
@@ -135,7 +135,7 @@ insert into DOCUMENTS.section_advices(section_Id, section_Version, user_id, json
 	"type": "JobExperienceSection",
 	"title": "experience",
 	"sectionId": 127,
-	"sectionPosition": 5,
+	"sectionPosition": 6,
 	"state": "shown",
 	"organizationName": "Rebellion",
 	"organizationDescription": "An education group.",

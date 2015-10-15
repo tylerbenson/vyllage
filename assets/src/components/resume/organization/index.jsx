@@ -12,7 +12,7 @@ var assign = require('lodash.assign')
 var MoveButton = require('../../buttons/move');
 var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
-var cx = require('react/lib/cx');
+var classnames = require('classnames');
 var cloneDeep = require('clone-deep');
 var FeatureToggle = require('../../util/FeatureToggle');
 
@@ -78,7 +78,7 @@ var Organization = React.createClass({
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
 
-    var classes = cx({
+    var classes = classnames({
       'single': !this.props.isMultiple,
       'subsection': true
     });
@@ -106,9 +106,9 @@ var Organization = React.createClass({
             {this.props.owner? <div className="actions">
               {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
               {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
-            </div>: <FeatureToggle name="SECTION_ADVICE"> <div className="actions"> 
+            </div>: <FeatureToggle name="SECTION_ADVICE"> <div className="actions">
                {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
-               {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null } 
+               {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
             </div></FeatureToggle>
             }
 
@@ -204,7 +204,7 @@ var Organization = React.createClass({
     var section = cloneDeep(this.state.section);
     section['highlights'] = this.refs.highlights.getHighlights();
     actions.saveSectionAdvice(section);
-    
+
     this.setState({
       section : this.props.section,
       uiEditMode: false

@@ -2,6 +2,7 @@ var React = require('react');
 var Freeform = require('../freeform');
 var Tags = require('../tags');
 var Organization = require('../organization');
+var Project = require('../project');
 var sections = require('../../sections');
 var filter = require('lodash.filter');
 
@@ -53,6 +54,14 @@ var Section = React.createClass({
             index={this.props.section.sectionId}
             section={this.props.section}
             placeholders={this.getPlaceholders()}
+            owner={this.props.owner}
+            isMultiple={isMultiple} />
+        );
+      case 'ProjectsSection':
+        return (
+          <Project
+            index={this.props.section.sectionId}
+            section={this.props.section}
             owner={this.props.owner}
             isMultiple={isMultiple} />
         );

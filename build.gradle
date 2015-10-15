@@ -257,7 +257,8 @@ configure(javaProjects) {
         // Set PROJECT_HOME env variable to the root. This allows to register an additional
         // resource handler location and serve static resources directly from the template module during dev.
         // See ClientResourcesConfig
-        jvmArgs "-DPROJECT_HOME=${rootProject.rootDir}"
+        systemProperty 'PROJECT_HOME', rootProject.rootDir
+        systemProperty 'spring.profiles.active', 'test'
     }
 }
 

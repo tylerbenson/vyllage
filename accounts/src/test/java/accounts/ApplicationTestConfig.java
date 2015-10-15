@@ -8,15 +8,18 @@ import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguratio
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
+import util.profiles.Profiles;
 import accounts.config.BeansConfiguration;
 
+@Profile(Profiles.TEST)
 @SpringBootApplication
 @ComponentScan(basePackages = { "accounts" }, excludeFilters = { @Filter(type = FilterType.ASSIGNABLE_TYPE, value = {
 		BeansConfiguration.class, Application.class }) })
 @EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
-@PropertySource("classpath:/accounts/application.properties")
+@PropertySource("classpath:/accounts/application-test.properties")
 public class ApplicationTestConfig implements CommandLineRunner {
 
 	@Override

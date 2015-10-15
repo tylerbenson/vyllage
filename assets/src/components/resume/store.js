@@ -13,6 +13,7 @@ var sortby = require('lodash.sortby');
 var filter = require('lodash.filter');
 var PubSub = require('pubsub-js');
 var clone = require('clone-deep');
+var validator = require('validator');
 
 module.exports = Reflux.createStore({
   listenables: require('./actions'),
@@ -26,7 +27,15 @@ module.exports = Reflux.createStore({
       this.tokenValue = metaToken.content;
     }
     this.documentId = window.location.pathname.split('/')[2];
-    this.onGetDocumentId();
+    if( validator.isNumeric(this.documentId) ){
+      window.localStorage.setItem('ownDocumentId' , this.documentId );  
+    }else{
+      var tempDocumentId = window.localStorage.getItem('ownDocumentId');
+      if( tempDocumentId != undefined && validator.isNumeric(tempDocumentId ) ){
+        this.documentId = tempDocumentId;
+      }         
+    } 
+    //this.onGetDocumentId();
     this.resume = {
       ownDocumentId: this.documentId,
       documentId: this.documentId,
@@ -133,7 +142,7 @@ module.exports = Reflux.createStore({
       }.bind(this))
   },
   isSupportedSection: function (type) {
-    var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection','CareerInterestsSection'];
+    var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection','CareerInterestsSection','ProjectsSection'];
     return supported.indexOf(type) > -1;
   },
   onGetSections: function () {
@@ -401,6 +410,7 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {
         var index = findindex(this.resume.sections, {sectionId: sectionId});
         var advices = [];
+
         if( res.body.length ){
           res.body.map(function(advice){
             if(advice.status == 'pending'){
