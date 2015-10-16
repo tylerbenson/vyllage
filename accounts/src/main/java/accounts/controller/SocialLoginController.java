@@ -24,11 +24,16 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import user.common.User;
+import user.common.constants.AccountSettingsEnum;
 import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
+import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.AvatarSourceEnum;
+import accounts.model.account.settings.Privacy;
 import accounts.model.form.RegisterForm;
 import accounts.model.link.SocialDocumentLink;
 import accounts.repository.SharedDocumentRepository;
+import accounts.service.AccountSettingsService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
 import accounts.service.utilities.RandomPasswordGenerator;
@@ -53,19 +58,23 @@ public class SocialLoginController {
 
 	private final ConnectionRepository connectionRepository;
 
+	private final AccountSettingsService accountSettingsService;
+
 	@Inject
 	public SocialLoginController(final SignInUtil signInUtil,
 			final UserService userService,
 			final SharedDocumentRepository sharedDocumentRepository,
 			final RandomPasswordGenerator randomPasswordGenerator,
 			final ConnectionRepository connectionRepository,
-			final ProviderSignInUtils providerSignInUtils) {
+			final ProviderSignInUtils providerSignInUtils,
+			final AccountSettingsService accountSettingsService) {
 		this.signInUtil = signInUtil;
 		this.userService = userService;
 		this.sharedDocumentRepository = sharedDocumentRepository;
 		this.randomPasswordGenerator = randomPasswordGenerator;
 		this.connectionRepository = connectionRepository;
 		this.providerSignInUtils = providerSignInUtils;
+		this.accountSettingsService = accountSettingsService;
 	}
 
 	@RequestMapping(value = "/social-login", method = RequestMethod.GET)
@@ -74,7 +83,7 @@ public class SocialLoginController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public String signup(HttpServletRequest request, WebRequest webRequest,
+	public String signUp(HttpServletRequest request, WebRequest webRequest,
 			Model model) {
 
 		logger.info("Signup with social account");
@@ -133,7 +142,7 @@ public class SocialLoginController {
 			registerForm.setPassword(password);
 
 			// create user
-			createUser(request, webRequest, registerForm, doclink.get());
+			this.createUser(request, webRequest, registerForm, doclink.get());
 
 		}
 
@@ -160,7 +169,7 @@ public class SocialLoginController {
 					.getSocialDocumentLink((String) request.getSession(false)
 							.getAttribute(SocialSessionEnum.LINK_KEY.name()));
 
-			createUser(request, webRequest, registerForm, doclink.get());
+			this.createUser(request, webRequest, registerForm, doclink.get());
 
 			return "redirect:" + "/" + doclink.get().getDocumentType() + "/"
 					+ doclink.get().getDocumentId();
@@ -183,11 +192,26 @@ public class SocialLoginController {
 		// user that will have his permissions created
 		doclink.setUserId(newUser.getUserId());
 
+		this.saveUserAvatarSetting(newUser);
+
 		// login
 		signInUtil.signIn(request, newUser, registerForm.getPassword());
 
 		// saves social account information
 		providerSignInUtils.doPostSignUp(registerForm.getEmail(), webRequest);
+	}
+
+	/**
+	 * Sets the origin of the avatar as Facebook.
+	 * 
+	 * @param userImageUrl
+	 * @param user
+	 */
+	protected void saveUserAvatarSetting(User user) {
+
+		accountSettingsService.setAccountSetting(user, new AccountSetting(null,
+				user.getUserId(), AccountSettingsEnum.avatar.name(),
+				AvatarSourceEnum.FACEBOOK.name(), Privacy.PUBLIC.name()));
 	}
 
 	/**

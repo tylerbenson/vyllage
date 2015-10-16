@@ -18,6 +18,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -30,7 +31,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import user.common.Organization;
 import user.common.User;
+import user.common.UserOrganizationRole;
 import user.common.constants.AccountSettingsEnum;
 import user.common.constants.RolesEnum;
 import user.common.web.UserInfo;
@@ -95,7 +98,7 @@ public class AccountSettingsController {
 
 		validators.put("phoneNumber", new PhoneNumberValidator());
 		validators.put("firstName", new NotNullValidator());
-		validators.put("email", new EmailSettingValidator());
+		validators.put("email", new EmailSettingValidator(userService));
 
 		validators.put("facebook", new FacebookValidator());
 		validators.put("linkedIn", new URLValidator());
@@ -150,6 +153,8 @@ public class AccountSettingsController {
 		List<AccountSetting> settings = accountSettingsService
 				.getAccountSettings(user);
 
+		this.addUserRolesAndOrganizations(user, settings);
+
 		/**
 		 * To prevent Chrome from showing the json object rather than the actual
 		 * page. Firefox and others seem to ignore the cache, (odd) and display
@@ -157,7 +162,7 @@ public class AccountSettingsController {
 		 */
 		response.setHeader("Cache-Control", "no-cache,no-store");
 
-		return addSocialNetworkConnected(user, settings);
+		return this.addSocialNetworkConnected(user, settings);
 	}
 
 	@RequestMapping(value = "setting", method = RequestMethod.PUT, produces = "application/json")
@@ -219,6 +224,13 @@ public class AccountSettingsController {
 		if (AccountSettingsEnum.google_connected.name().equalsIgnoreCase(
 				parameter))
 			return this.addGoogleConnected(user,
+					new ArrayList<AccountSetting>());
+
+		if (AccountSettingsEnum.role.name().equalsIgnoreCase(parameter))
+			return this.addUserRole(user, new ArrayList<AccountSetting>());
+
+		if (AccountSettingsEnum.organization.name().equalsIgnoreCase(parameter))
+			return this.addUserOrganization(user,
 					new ArrayList<AccountSetting>());
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
@@ -287,6 +299,7 @@ public class AccountSettingsController {
 					.anyMatch(
 							ur -> ur.getAuthority().equalsIgnoreCase(
 									RolesEnum.STUDENT.name()))) {
+
 				return Arrays.asList(RolesEnum.STUDENT.name(),
 						RolesEnum.ALUMNI.name());
 			} else {
@@ -381,6 +394,65 @@ public class AccountSettingsController {
 				AccountSettingsEnum.google_connected.name(), String
 						.valueOf(facebookConnected), Privacy.PRIVATE.name()));
 		return settings;
+	}
+
+	protected void addUserRolesAndOrganizations(User user,
+			List<AccountSetting> settings) {
+
+		/**
+		 * Note: right now the frontend only displays the first one found in the
+		 * list. This is probably ok for now since most users won't have more
+		 * than one pair.
+		 */
+		for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
+			UserOrganizationRole uor = (UserOrganizationRole) grantedAuthority;
+
+			settings.add(this.createUserOrganizationAccountSetting(uor));
+			settings.add(this.createUserRoleAccountSetting(uor));
+		}
+	}
+
+	protected List<AccountSetting> addUserOrganization(User user,
+			List<AccountSetting> settings) {
+
+		for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
+			UserOrganizationRole uor = (UserOrganizationRole) grantedAuthority;
+
+			settings.add(this.createUserOrganizationAccountSetting(uor));
+		}
+
+		return settings;
+	}
+
+	protected List<AccountSetting> addUserRole(User user,
+			List<AccountSetting> settings) {
+
+		for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
+			UserOrganizationRole uor = (UserOrganizationRole) grantedAuthority;
+
+			settings.add(this.createUserRoleAccountSetting(uor));
+		}
+
+		return settings;
+	}
+
+	protected AccountSetting createUserOrganizationAccountSetting(
+			UserOrganizationRole uor) {
+
+		Organization organization = this.organizationRepository.get(uor
+				.getOrganizationId());
+
+		return new AccountSetting(null, uor.getUserId(),
+				AccountSettingsEnum.organization.name(),
+				organization.getOrganizationName(), Privacy.PRIVATE.name());
+	}
+
+	protected AccountSetting createUserRoleAccountSetting(
+			UserOrganizationRole uor) {
+
+		return new AccountSetting(null, uor.getUserId(),
+				AccountSettingsEnum.role.name(), uor.getAuthority(),
+				Privacy.PRIVATE.name());
 	}
 
 	@ExceptionHandler(value = { IllegalArgumentException.class })

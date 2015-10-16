@@ -12,19 +12,17 @@ import user.common.User;
 import user.common.lms.LMSUser;
 import accounts.repository.LMSUserCredentialsRepository;
 import accounts.repository.LMSUserRepository;
-import accounts.repository.OrganizationRepository;
 
 public class LMSServiceTest {
 
 	private LMSService lmsService;
-	private OrganizationRepository organizationRepository = mock(OrganizationRepository.class);
 	private LMSUserRepository lmsUserRepository = mock(LMSUserRepository.class);
 	private LMSUserCredentialsRepository lmsUserCredentialsRepository = mock(LMSUserCredentialsRepository.class);
 	private LTIKeyRepository ltiKeyRepository = mock(LTIKeyRepository.class);
 
 	@Before
 	public void setUp() {
-		lmsService = new LMSService(organizationRepository, lmsUserRepository,
+		lmsService = new LMSService(lmsUserRepository,
 				lmsUserCredentialsRepository, ltiKeyRepository);
 	}
 

@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.NonNull;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ import documents.model.DocumentHeader;
 import documents.model.SectionAdvice;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.constants.DocumentTypeEnum;
+import documents.model.constants.SectionType;
 import documents.model.document.sections.DocumentSection;
 import documents.repository.CommentRepository;
 import documents.repository.DocumentAccessRepository;
@@ -34,7 +37,9 @@ import documents.repository.DocumentRepository;
 import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.repository.SectionAdviceRepository;
-import documents.utilities.OrderSectionValidator;
+import documents.services.rules.MergeOnSectionDuplicate;
+import documents.services.rules.OrderSectionValidator;
+import documents.services.rules.SetSectionPositionOnCreationUpdate;
 
 /**
  * This service takes care of saving, retrieving and manipulating documents.
@@ -47,19 +52,23 @@ public class DocumentService {
 	private final Logger logger = Logger.getLogger(DocumentService.class
 			.getName());
 
-	private DocumentRepository documentRepository;
+	private final DocumentRepository documentRepository;
 
-	private DocumentSectionRepository documentSectionRepository;
+	private final DocumentSectionRepository documentSectionRepository;
 
-	private CommentRepository commentRepository;
+	private final CommentRepository commentRepository;
 
-	private SectionAdviceRepository sectionAdviceRepository;
+	private final SectionAdviceRepository sectionAdviceRepository;
 
-	private AccountService accountService;
+	private final AccountService accountService;
 
-	private OrderSectionValidator orderSectionValidator;
+	private final OrderSectionValidator orderSectionValidator;
 
-	private DocumentAccessRepository documentAccessRepository;
+	private final DocumentAccessRepository documentAccessRepository;
+
+	private final SetSectionPositionOnCreationUpdate setSectionPositionOnCreationUpdate;
+
+	private final MergeOnSectionDuplicate mergeOnSectionDuplicate;
 
 	@Inject
 	public DocumentService(DocumentRepository documentRepository,
@@ -77,6 +86,9 @@ public class DocumentService {
 		this.accountService = accountService;
 		this.orderSectionValidator = orderSectionValidator;
 		this.documentAccessRepository = documentAccessRepository;
+
+		this.setSectionPositionOnCreationUpdate = new SetSectionPositionOnCreationUpdate();
+		this.mergeOnSectionDuplicate = new MergeOnSectionDuplicate();
 	}
 
 	public Document saveDocument(Document document) {
@@ -92,54 +104,47 @@ public class DocumentService {
 	 * @return the saved document
 	 * @throws ElementNotFoundException
 	 */
-	public DocumentSection saveDocumentSection(DocumentSection documentSection)
-			throws ElementNotFoundException {
+	public DocumentSection saveDocumentSection(
+			@NonNull final DocumentSection documentSection) {
 
 		logger.info(documentSection.toString());
 		DocumentSection savedSection = null;
 
-		// if a section position has not been set by the client we set the
-		// section as the first one.
-		documentSection
-				.setSectionPosition(documentSection.getSectionPosition() == null
-						|| documentSection.getSectionPosition() <= 0 ? 1L
-						: documentSection.getSectionPosition());
-
 		try {
-			List<DocumentSection> documentSections = documentSectionRepository
+			final List<DocumentSection> documentSections = this.documentSectionRepository
 					.getDocumentSections(documentSection.getDocumentId());
 
-			// sort if the section does not exist.
-			if (documentSections.stream().noneMatch(
-					ds -> ds.getSectionId().equals(
-							documentSection.getSectionId()))) {
+			// merge duplicate sections
+			final List<DocumentSection> toDelete = this.mergeOnSectionDuplicate
+					.apply(documentSection, documentSections);
 
-				documentSections.stream().forEachOrdered(
-						s -> logger.info("Section " + s.getSectionId() + " P: "
-								+ s.getSectionPosition()));
+			if (toDelete != null && !toDelete.isEmpty()) {
+				toDelete.stream().forEach(
+						s -> this.documentSectionRepository.delete(s
+								.getSectionId()));
 
-				// sort by position in case they are not sorted already and
-				// shift 1
+				// removing deleted sections
+				documentSections.removeAll(toDelete);
 
-				documentSections
-						.stream()
-						.sorted((s1, s2) -> s1.getSectionPosition().compareTo(
-								s2.getSectionPosition())) //
-						.map(s -> {
-							s.setSectionPosition(s.getSectionPosition() + 1L);
-							return s;
-						}).forEach(s -> documentSectionRepository.save(s));
-
-				savedSection = documentSectionRepository.save(documentSection);
-
-				documentSections.stream().forEachOrdered(
-						s -> logger.info("Section " + s.getSectionId() + " P: "
-								+ s.getSectionPosition()));
-				return savedSection;
 			}
 
+			// set section positions
+			final List<DocumentSection> sectionsToUpdate = this.setSectionPositionOnCreationUpdate
+					.apply(documentSection, documentSections);
+
+			// update their positions
+			if (sectionsToUpdate != null && !sectionsToUpdate.isEmpty())
+				sectionsToUpdate.stream().forEach(
+						s -> this.documentSectionRepository.save(s));
+
+			savedSection = this.documentSectionRepository.save(documentSection);
+
+			return savedSection;
+
 		} catch (ElementNotFoundException e) {
-			// do nothing just save normally
+			// there are none, therefore it's the first one
+			long first = 1L;
+			documentSection.setSectionPosition(first);
 		}
 
 		savedSection = documentSectionRepository.save(documentSection);
@@ -245,16 +250,7 @@ public class DocumentService {
 
 		for (Comment comment : comments) {
 			if (!comment.isDeleted()) {
-				Optional<AccountContact> accountContact = names
-						.stream()
-						.filter(an -> an.getUserId()
-								.equals(comment.getUserId())).findFirst();
-
-				accountContact.ifPresent(an -> comment.setUserName(an
-						.getFirstName() + " " + an.getLastName()));
-
-				accountContact.ifPresent(an -> comment.setAvatarUrl(an
-						.getAvatarUrl()));
+				this.addContactDataToComment(names, comment);
 			}
 		}
 
@@ -271,8 +267,36 @@ public class DocumentService {
 		return commentRepository.getNumberOfCommentsForSections(sectionIds);
 	}
 
-	public Comment saveComment(Comment comment) {
-		return commentRepository.save(comment);
+	public Comment saveComment(final HttpServletRequest request,
+			final Comment comment) {
+		List<AccountContact> names = accountService.getContactDataForUsers(
+				request, Arrays.asList(comment.getUserId()));
+
+		final Comment savedComment = commentRepository.save(comment);
+
+		if (names != null && !names.isEmpty()) {
+			this.addContactDataToComment(names, savedComment);
+		}
+
+		return savedComment;
+	}
+
+	/**
+	 * Adds contact information about the user who created the comment.
+	 * 
+	 * @param namessaved
+	 * @param comment
+	 */
+	protected void addContactDataToComment(List<AccountContact> names,
+			final Comment comment) {
+		Optional<AccountContact> accountContact = names.stream()
+				.filter(an -> an.getUserId().equals(comment.getUserId()))
+				.findFirst();
+
+		accountContact.ifPresent(an -> comment.setUserName(an.getFirstName()
+				+ " " + an.getLastName()));
+
+		accountContact.ifPresent(an -> comment.setAvatarUrl(an.getAvatarUrl()));
 	}
 
 	/**
@@ -291,8 +315,9 @@ public class DocumentService {
 	 * @param documentSectionIds
 	 * @throws ElementNotFoundException
 	 */
-	public void orderDocumentSections(Long documentId,
-			List<Long> documentSectionIds) throws ElementNotFoundException {
+	public void orderDocumentSections(final Long documentId,
+			final List<Long> documentSectionIds)
+			throws ElementNotFoundException {
 
 		orderSectionValidator.checkNullOrEmptyParameters(documentId,
 				documentSectionIds);
@@ -319,11 +344,31 @@ public class DocumentService {
 				s -> logger.info("Section " + s.getSectionId() + " Position: "
 						+ s.getSectionPosition()));
 
+		Optional<DocumentSection> summarySection = documentSections
+				.stream()
+				.filter(ds -> SectionType.SUMMARY_SECTION.type().equals(
+						ds.getType())).findFirst();
+
+		// copy the ids because we get an UnsupportedOperationException when we
+		// remove the id
+		final List<Long> copiedIds = new ArrayList<>();
+		copiedIds.addAll(documentSectionIds);
+		// keep summary first, set it's Id at the beginning of the array.
+		if (summarySection.isPresent()) {
+			copiedIds.removeIf(sectionId -> summarySection.get().getSectionId()
+					.equals(sectionId));
+
+			copiedIds.add(0, summarySection.get().getSectionId());
+
+		}
+
 		// set position according to the position of the id in the array.
 		// +1 because it starts at 0.
 		documentSections.stream().forEach(
-				ds -> ds.setSectionPosition((long) documentSectionIds
-						.indexOf(ds.getSectionId()) + 1));
+				ds -> {
+					ds.setSectionPosition((long) copiedIds.indexOf(ds
+							.getSectionId()) + 1);
+				});
 
 		logger.info("--------");
 		documentSections.stream().forEachOrdered(
@@ -458,16 +503,7 @@ public class DocumentService {
 						.collect(Collectors.toList()));
 
 		for (SectionAdvice sectionAdvice : sectionAdvices) {
-			Optional<AccountContact> accountContact = names
-					.stream()
-					.filter(an -> an.getUserId().equals(
-							sectionAdvice.getUserId())).findFirst();
-
-			accountContact.ifPresent(an -> sectionAdvice.setUserName(an
-					.getFirstName() + " " + an.getLastName()));
-
-			accountContact.ifPresent(an -> sectionAdvice.setAvatarUrl(an
-					.getAvatarUrl()));
+			this.addContactDataToAdvice(names, sectionAdvice);
 		}
 
 		return sectionAdvices;
@@ -481,17 +517,28 @@ public class DocumentService {
 		List<AccountContact> names = accountService.getContactDataForUsers(
 				request, Arrays.asList(savedSection.getUserId()));
 
-		Optional<AccountContact> accountContact = names.stream()
-				.filter(an -> an.getUserId().equals(savedSection.getUserId()))
-				.findFirst();
-
-		accountContact.ifPresent(an -> savedSection.setUserName(an
-				.getFirstName() + " " + an.getLastName()));
-
-		accountContact.ifPresent(an -> savedSection.setAvatarUrl(an
-				.getAvatarUrl()));
+		this.addContactDataToAdvice(names, savedSection);
 
 		return savedSection;
+	}
+
+	/**
+	 * Adds contact information about the user who created the advice.
+	 * 
+	 * @param sectionAdvice
+	 * @param names
+	 */
+	protected void addContactDataToAdvice(final List<AccountContact> names,
+			final SectionAdvice sectionAdvice) {
+		Optional<AccountContact> accountContact = names.stream()
+				.filter(an -> an.getUserId().equals(sectionAdvice.getUserId()))
+				.findFirst();
+
+		accountContact.ifPresent(an -> sectionAdvice.setUserName(an
+				.getFirstName() + " " + an.getLastName()));
+
+		accountContact.ifPresent(an -> sectionAdvice.setAvatarUrl(an
+				.getAvatarUrl()));
 	}
 
 	public void deleteComment(final Comment comment) {
