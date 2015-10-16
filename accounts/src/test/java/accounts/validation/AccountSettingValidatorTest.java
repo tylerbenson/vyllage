@@ -1,9 +1,9 @@
 package accounts.validation;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.springframework.util.Assert;
 
 import accounts.model.account.settings.AccountSetting;
 
@@ -18,7 +18,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -100,7 +100,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -221,7 +221,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -234,7 +234,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -247,7 +247,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -260,7 +260,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -272,7 +272,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -298,7 +298,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -311,7 +311,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -324,7 +324,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -350,7 +350,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -363,7 +363,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
@@ -376,7 +376,7 @@ public class AccountSettingValidatorTest {
 
 		AccountSetting setting = validator.validate(as);
 
-		Assert.isNull(setting.getErrorMessage());
+		assertNull(setting.getErrorMessage());
 	}
 
 	@Test
