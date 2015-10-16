@@ -106,11 +106,15 @@ var MilestoneStore = Reflux.createStore({
   },
   addSection: function(index) {
     var option = sections[index];
-    ResumeActions.postSection({
-      title: option.title,
-      type: option.type,
-      sectionPosition: 1
-    });
+    var tempSection = {
+        title: option.title,
+        type: option.type
+    };
+    if(window.location.pathname.indexOf('/resume/') > -1) {
+      ResumeActions.postSection(tempSection);
+    }else{
+      window.location.href = 'resume/' + this.resume.ownDocumentId + '#add-section=' + JSON.stringify(tempSection);
+    }
   },
   getMilestones: function() {
     return [
