@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -53,9 +52,9 @@ public class LoginTest {
 		UserDetails loadUserByUsername = userDetailRepository
 				.loadUserByUsername(username);
 
-		Assert.assertNotNull(loadUserByUsername);
-		Assert.assertEquals(username, loadUserByUsername.getUsername());
-		Assert.assertNotNull(loadUserByUsername.getPassword());
+		assertNotNull(loadUserByUsername);
+		assertEquals(username, loadUserByUsername.getUsername());
+		assertNotNull(loadUserByUsername.getPassword());
 	}
 
 	@Test(expected = UsernameNotFoundException.class)
@@ -111,9 +110,9 @@ public class LoginTest {
 
 		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
-		Assert.assertNotNull(loadedUser);
-		Assert.assertNotNull(loadedUser.getPassword());
-		Assert.assertTrue(new BCryptPasswordEncoder().matches(newPassword,
+		assertNotNull(loadedUser);
+		assertNotNull(loadedUser.getPassword());
+		assertTrue(new BCryptPasswordEncoder().matches(newPassword,
 				loadedUser.getPassword()));
 	}
 
@@ -145,11 +144,11 @@ public class LoginTest {
 
 		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
-		Assert.assertNotNull(loadedUser);
-		Assert.assertNotNull(loadedUser.getPassword());
+		assertNotNull(loadedUser);
+		assertNotNull(loadedUser.getPassword());
 		System.out.println(loadedUser.getUserId() + " "
 				+ loadedUser.getPassword());
-		Assert.assertTrue(new BCryptPasswordEncoder().matches(newPassword,
+		assertTrue(new BCryptPasswordEncoder().matches(newPassword,
 				loadedUser.getPassword()));
 	}
 
@@ -175,9 +174,9 @@ public class LoginTest {
 
 		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
-		Assert.assertNotNull(loadedUser);
-		Assert.assertNotNull(loadedUser.getPassword());
-		Assert.assertTrue(new BCryptPasswordEncoder().matches(newPassword,
+		assertNotNull(loadedUser);
+		assertNotNull(loadedUser.getPassword());
+		assertTrue(new BCryptPasswordEncoder().matches(newPassword,
 				loadedUser.getPassword()));
 	}
 
@@ -205,7 +204,7 @@ public class LoginTest {
 		assertEquals("User is different.", user, loadedUser);
 		assertTrue("Authorities not found.", loadedUser.getAuthorities()
 				.contains(auth));
-		Assert.assertTrue(new BCryptPasswordEncoder().matches(oldPassword,
+		assertTrue(new BCryptPasswordEncoder().matches(oldPassword,
 				loadedUser.getPassword()));
 
 		String userName2 = "test2";
@@ -225,7 +224,7 @@ public class LoginTest {
 		assertEquals("User is different.", user2, loadedUser2);
 		assertTrue("Authorities not found.", loadedUser2.getAuthorities()
 				.contains(auth));
-		Assert.assertTrue(new BCryptPasswordEncoder().matches(oldPassword,
+		assertTrue(new BCryptPasswordEncoder().matches(oldPassword,
 				loadedUser.getPassword()));
 	}
 
@@ -254,7 +253,7 @@ public class LoginTest {
 		assertEquals("User is different.", user, loadedUser);
 		assertTrue("Authorities not found.", loadedUser.getAuthorities()
 				.contains(auth));
-		Assert.assertTrue(new BCryptPasswordEncoder().matches(password,
+		assertTrue(new BCryptPasswordEncoder().matches(password,
 				loadedUser.getPassword()));
 
 	}
