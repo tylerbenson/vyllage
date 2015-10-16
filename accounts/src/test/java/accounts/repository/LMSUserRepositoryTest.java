@@ -1,6 +1,7 @@
 package accounts.repository;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -108,7 +109,7 @@ public class LMSUserRepositoryTest {
 
 	@Test
 	public void testUserExists() {
-		repository.userExists("canvas@example.edu");
+		assertTrue(repository.userExists("canvas@example.edu"));
 	}
 
 	@Test

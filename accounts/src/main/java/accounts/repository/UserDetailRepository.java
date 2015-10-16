@@ -71,8 +71,6 @@ public class UserDetailRepository implements UserDetailsManager,
 
 	private final UserOrganizationRoleRepository userOrganizationRoleRepository;
 
-	private final OrganizationRepository organizationRepository;
-
 	private final UserCredentialsRepository credentialsRepository;
 
 	private final AccountSettingRepository accountSettingRepository;
@@ -87,14 +85,12 @@ public class UserDetailRepository implements UserDetailsManager,
 	public UserDetailRepository(
 			DSLContext sql,
 			final UserOrganizationRoleRepository userOrganizationRoleRepository,
-			final OrganizationRepository organizationRepository,
 			final UserCredentialsRepository credentialsRepository,
 			final AccountSettingRepository accountSettingRepository,
 			final DataSourceTransactionManager txManager,
 			final ConfirmationEmailService confirmationEmailService) {
 		this.sql = sql;
 		this.userOrganizationRoleRepository = userOrganizationRoleRepository;
-		this.organizationRepository = organizationRepository;
 		this.credentialsRepository = credentialsRepository;
 		this.accountSettingRepository = accountSettingRepository;
 		this.txManager = txManager;
@@ -556,27 +552,6 @@ public class UserDetailRepository implements UserDetailsManager,
 									.getOrganizationId(),
 							Timestamp.valueOf(LocalDateTime.now(ZoneId
 									.of("UTC"))), loggedInUser.getUserId()));
-
-					// role setting
-					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
-							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
-							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
-							.values(user.getUserId(),
-									AccountSettingsEnum.role.name(),
-									authority.getAuthority(),
-									Privacy.PRIVATE.name().toLowerCase()));
-
-					// organization setting
-					otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
-							ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
-							ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY)
-							.values(user.getUserId(),
-									AccountSettingsEnum.organization.name(),
-									organizationRepository.get(
-											((UserOrganizationRole) authority)
-													.getOrganizationId())
-											.getOrganizationName(),
-									Privacy.PRIVATE.name().toLowerCase()));
 
 				}
 
