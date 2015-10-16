@@ -226,6 +226,13 @@ public class AccountSettingsController {
 			return this.addGoogleConnected(user,
 					new ArrayList<AccountSetting>());
 
+		if (AccountSettingsEnum.role.name().equalsIgnoreCase(parameter))
+			return this.addUserRole(user, new ArrayList<AccountSetting>());
+
+		if (AccountSettingsEnum.organization.name().equalsIgnoreCase(parameter))
+			return this.addUserOrganization(user,
+					new ArrayList<AccountSetting>());
+
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, parameter);
 
@@ -400,18 +407,52 @@ public class AccountSettingsController {
 		for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
 			UserOrganizationRole uor = (UserOrganizationRole) grantedAuthority;
 
-			Organization organization = organizationRepository.get(uor
-					.getOrganizationId());
+			settings.add(this.createUserOrganizationAccountSetting(uor));
+			settings.add(this.createUserRoleAccountSetting(uor));
+		}
+	}
 
-			settings.add(new AccountSetting(null, user.getUserId(),
-					AccountSettingsEnum.role.name(), uor.getAuthority(),
-					Privacy.PRIVATE.name()));
+	protected List<AccountSetting> addUserOrganization(User user,
+			List<AccountSetting> settings) {
 
-			settings.add(new AccountSetting(null, user.getUserId(),
-					AccountSettingsEnum.organization.name(), organization
-							.getOrganizationName(), Privacy.PRIVATE.name()));
+		for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
+			UserOrganizationRole uor = (UserOrganizationRole) grantedAuthority;
+
+			settings.add(this.createUserOrganizationAccountSetting(uor));
 		}
 
+		return settings;
+	}
+
+	protected List<AccountSetting> addUserRole(User user,
+			List<AccountSetting> settings) {
+
+		for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
+			UserOrganizationRole uor = (UserOrganizationRole) grantedAuthority;
+
+			settings.add(this.createUserRoleAccountSetting(uor));
+		}
+
+		return settings;
+	}
+
+	protected AccountSetting createUserOrganizationAccountSetting(
+			UserOrganizationRole uor) {
+
+		Organization organization = this.organizationRepository.get(uor
+				.getOrganizationId());
+
+		return new AccountSetting(null, uor.getUserId(),
+				AccountSettingsEnum.organization.name(),
+				organization.getOrganizationName(), Privacy.PRIVATE.name());
+	}
+
+	protected AccountSetting createUserRoleAccountSetting(
+			UserOrganizationRole uor) {
+
+		return new AccountSetting(null, uor.getUserId(),
+				AccountSettingsEnum.role.name(), uor.getAuthority(),
+				Privacy.PRIVATE.name());
 	}
 
 	@ExceptionHandler(value = { IllegalArgumentException.class })
