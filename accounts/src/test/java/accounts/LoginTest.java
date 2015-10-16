@@ -146,8 +146,6 @@ public class LoginTest {
 
 		assertNotNull(loadedUser);
 		assertNotNull(loadedUser.getPassword());
-		System.out.println(loadedUser.getUserId() + " "
-				+ loadedUser.getPassword());
 		assertTrue(new BCryptPasswordEncoder().matches(newPassword,
 				loadedUser.getPassword()));
 	}

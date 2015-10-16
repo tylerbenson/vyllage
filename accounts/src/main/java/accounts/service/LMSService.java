@@ -24,20 +24,19 @@ import user.common.constants.RolesEnum;
 import user.common.lms.LMSUser;
 import accounts.repository.LMSUserCredentialsRepository;
 import accounts.repository.LMSUserRepository;
-import accounts.repository.OrganizationRepository;
 import accounts.repository.UserNotFoundException;
 
 @Service
 public class LMSService {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
 	private final LMSUserRepository lmsUserRepository;
 	private final LMSUserCredentialsRepository lmsUserCredentialsRepository;
 	private final LTIKeyRepository ltiKeyRepository;
 
 	@Inject
-	public LMSService(final OrganizationRepository organizationRepository,
-			final LMSUserRepository lmsUserRepository,
+	public LMSService(final LMSUserRepository lmsUserRepository,
 			final LMSUserCredentialsRepository lmsUserCredentialsRepository,
 			final LTIKeyRepository ltiKeyRepository) {
 		super();

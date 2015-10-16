@@ -23,6 +23,8 @@ insert into ACCOUNTS.users ( user_name, first_Name, last_name, enabled, date_cre
 --	constraint fk_account_setting_users foreign key(user_id) references ACCOUNTS.users(user_id));
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'emailUpdates', 'weekly', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'address', 'Avenida Siempreviva 123', 'public');
+
+-- these two should be deleted by V24.
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'organization', 'Vyllage', 'public');
 insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'role', 'ADMIN', 'public');
 --insert into ACCOUNTS.account_setting(user_id, name, value, privacy) values (0, 'email', 'user@vyllage.com', 'public');

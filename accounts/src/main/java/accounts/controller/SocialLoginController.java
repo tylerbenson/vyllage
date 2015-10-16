@@ -83,7 +83,7 @@ public class SocialLoginController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public String signup(HttpServletRequest request, WebRequest webRequest,
+	public String signUp(HttpServletRequest request, WebRequest webRequest,
 			Model model) {
 
 		logger.info("Signup with social account");

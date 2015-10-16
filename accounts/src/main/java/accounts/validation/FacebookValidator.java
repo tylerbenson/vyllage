@@ -8,12 +8,11 @@ import accounts.model.account.settings.AccountSetting;
 public class FacebookValidator extends SettingValidator {
 	private final String message = "Not a valid Facebook name.";
 
-	private String alphanumericWithDotRegex = "^[a-zA-Z0-9\\.]*$";
-	final Pattern pattern;
-
-	private Matcher matcher;
+	private final Pattern pattern;
 
 	public FacebookValidator() {
+		String alphanumericWithDotRegex = "^[a-zA-Z0-9\\.]*$";
+
 		pattern = Pattern.compile(alphanumericWithDotRegex);
 	}
 
@@ -23,7 +22,7 @@ public class FacebookValidator extends SettingValidator {
 		if (setting.getValue() == null || setting.getValue().isEmpty())
 			return setting;
 
-		matcher = pattern.matcher(setting.getValue());
+		Matcher matcher = pattern.matcher(setting.getValue());
 
 		if (!matcher.matches())
 			setErrorMessage(setting, message);
