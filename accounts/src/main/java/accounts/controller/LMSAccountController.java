@@ -26,11 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
-import user.common.constants.AccountSettingsEnum;
 import user.common.lms.LMSUser;
 import accounts.model.account.settings.AccountSetting;
-import accounts.model.account.settings.AvatarSourceEnum;
-import accounts.model.account.settings.Privacy;
 import accounts.model.form.RegisterForm;
 import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
@@ -225,15 +222,9 @@ public class LMSAccountController {
 
 		final String cleanUserImageUrl = url.get();
 
-		accountSettingsService.setAccountSetting(newUser, new AccountSetting(
-				null, newUser.getUserId(), AccountSettingsEnum.avatar.name(),
-				AvatarSourceEnum.LTI.name(), Privacy.PUBLIC.name()));
-
-		accountSettingsService.setAccountSetting(newUser,
-				new AccountSetting(null, newUser.getUserId(),
-						AccountSettingsEnum.lti_avatar.name(),
-						cleanUserImageUrl, Privacy.PUBLIC.name()));
-
+		AccountSetting.createLTIAvatarSetting(newUser.getUserId(),
+				cleanUserImageUrl).forEach(
+				as -> accountSettingsService.setAccountSetting(newUser, as));
 	}
 
 	protected Optional<String> cleanUrl(final String userImageUrl) {

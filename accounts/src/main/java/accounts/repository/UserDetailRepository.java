@@ -259,7 +259,7 @@ public class UserDetailRepository implements UserDetailsManager,
 			accountSettingRepository.set(emailUpdatesSetting);
 
 			AccountSetting avatarSetting = AccountSetting
-					.createAvatarSetting(newRecord.getUserId());
+					.createGravatarAvatarSetting(newRecord.getUserId());
 
 			accountSettingRepository.set(avatarSetting);
 
@@ -538,14 +538,6 @@ public class UserDetailRepository implements UserDetailsManager,
 									.of("UTC"))), loggedInUser.getUserId()));
 
 				}
-
-				// create other user settings
-				// email
-				// otherInserts.add(sql.insertInto(ACCOUNT_SETTING,
-				// ACCOUNT_SETTING.USER_ID, ACCOUNT_SETTING.NAME,
-				// ACCOUNT_SETTING.VALUE, ACCOUNT_SETTING.PRIVACY).values(
-				// user.getUserId(), "email", user.getUsername(),
-				// Privacy.PRIVATE.name().toLowerCase()));
 
 				// email frequency updates
 				otherInserts.add(sql.insertInto(ACCOUNT_SETTING,

@@ -198,7 +198,7 @@ public class AccountSettingsServiceTest {
 		String settingName = "some";
 		String settingValue = "Zelda";
 		Long userId = 5L;
-		AccountSetting setting = new AccountSetting(null, null, settingName,
+		AccountSetting setting = new AccountSetting(null, userId, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
 		User user = Mockito.mock(User.class);
@@ -225,7 +225,7 @@ public class AccountSettingsServiceTest {
 		String settingName = "middleName";
 		String settingValue = "";
 		Long userId = 5L;
-		AccountSetting setting = new AccountSetting(null, null, settingName,
+		AccountSetting setting = new AccountSetting(null, userId, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
 		User user = Mockito.mock(User.class);
@@ -250,7 +250,7 @@ public class AccountSettingsServiceTest {
 		String settingName = "lastName";
 		String settingValue = null;
 		Long userId = 5L;
-		AccountSetting setting = new AccountSetting(null, null, settingName,
+		AccountSetting setting = new AccountSetting(null, userId, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
 		User user = Mockito.mock(User.class);

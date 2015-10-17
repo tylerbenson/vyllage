@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import lombok.NonNull;
 import oauth.model.LMSAccount;
 
 import org.jooq.tools.StringUtils;
@@ -16,11 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import user.common.User;
-import user.common.constants.AccountSettingsEnum;
 import user.common.lms.LMSUser;
 import accounts.model.account.settings.AccountSetting;
-import accounts.model.account.settings.AvatarSourceEnum;
-import accounts.model.account.settings.Privacy;
 import accounts.model.form.LTILoginForm;
 import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
@@ -119,18 +117,12 @@ public class LMSLoginController {
 		return "redirect:/resume";
 	}
 
-	protected void saveUserImage(String userImageUrl, User user) {
+	protected void saveUserImage(@NonNull final String userImageUrl,
+			@NonNull final User user) {
 
-		if (userImageUrl != null && !StringUtils.isBlank(userImageUrl)) {
-
-			accountSettingsService.setAccountSetting(user, new AccountSetting(
-					null, user.getUserId(), AccountSettingsEnum.avatar.name(),
-					AvatarSourceEnum.LTI.name(), Privacy.PUBLIC.name()));
-
-			accountSettingsService.setAccountSetting(user,
-					new AccountSetting(null, user.getUserId(),
-							AccountSettingsEnum.lti_avatar.name(),
-							userImageUrl, Privacy.PUBLIC.name()));
-		}
+		if (!StringUtils.isBlank(userImageUrl))
+			AccountSetting.createLTIAvatarSetting(user.getUserId(),
+					userImageUrl).forEach(
+					as -> accountSettingsService.setAccountSetting(user, as));
 	}
 }

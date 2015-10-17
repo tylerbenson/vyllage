@@ -202,7 +202,7 @@ public class AccountSettingsServiceIntegrationTest {
 		String settingValue = "some@email.com";
 		String previousEmail = "old@email.com";
 		Long userId = 3L;
-		AccountSetting setting = new AccountSetting(null, null, settingName,
+		AccountSetting setting = new AccountSetting(null, userId, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
 		// AccountSettingRepository accountSettingRepository = Mockito
@@ -246,7 +246,7 @@ public class AccountSettingsServiceIntegrationTest {
 		Long userId = 1L;
 		User user = userService.getUser(userId);
 
-		AccountSetting setting = new AccountSetting(null, null, settingName,
+		AccountSetting setting = new AccountSetting(null, userId, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
 		accountSettingsService.setAccountSetting(user, setting);
@@ -261,7 +261,7 @@ public class AccountSettingsServiceIntegrationTest {
 		Long userId = 1L;
 		User user = userService.getUser(userId);
 
-		AccountSetting setting = new AccountSetting(null, null, settingName,
+		AccountSetting setting = new AccountSetting(null, userId, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
 		accountSettingsService.setAccountSetting(user, setting);
@@ -273,13 +273,13 @@ public class AccountSettingsServiceIntegrationTest {
 		String settingValue = "some@email.com";
 		Long userId = 1L;
 
-		AccountSetting setting = new AccountSetting(null, null, settingName,
+		AccountSetting setting = new AccountSetting(null, userId, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
-		AccountSetting org = new AccountSetting(null, null, "organization",
+		AccountSetting org = new AccountSetting(null, userId, "organization",
 				"organization", Privacy.PUBLIC.name());
 
-		AccountSetting role = new AccountSetting(null, null, "role", "role",
+		AccountSetting role = new AccountSetting(null, userId, "role", "role",
 				Privacy.PUBLIC.name());
 
 		List<AccountSetting> settings = Arrays.asList(setting, org, role);

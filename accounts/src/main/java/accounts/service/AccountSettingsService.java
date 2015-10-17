@@ -11,8 +11,8 @@ import javax.inject.Inject;
 import lombok.NonNull;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.mail.EmailException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -128,9 +128,10 @@ public class AccountSettingsService {
 		return settings;
 	}
 
-	public AccountSetting setAccountSetting(final User user,
-			final AccountSetting setting) {
-		Assert.notNull(setting);
+	public AccountSetting setAccountSetting(@NonNull final User user,
+			@NonNull final AccountSetting setting) {
+
+		Assert.isTrue(!StringUtils.isBlank(setting.getName()));
 
 		if (setting.getUserId() == null)
 			setting.setUserId(user.getUserId());
@@ -154,7 +155,7 @@ public class AccountSettingsService {
 
 					userService.sendEmailChangeConfirmation(user,
 							setting.getValue());
-				} catch (EmailException | JsonProcessingException e) {
+				} catch (JsonProcessingException e) {
 					logger.severe(ExceptionUtils.getStackTrace(e));
 					NewRelic.noticeError(e);
 				}
