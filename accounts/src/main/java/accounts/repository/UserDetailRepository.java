@@ -44,6 +44,7 @@ import org.springframework.util.Assert;
 import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.AccountSettingsEnum;
+import user.common.constants.RolesEnum;
 import user.common.social.SocialUser;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.Email;
@@ -252,31 +253,14 @@ public class UserDetailRepository implements UserDetailsManager,
 
 			}
 
-			// AccountSetting emailSetting = new AccountSetting();
-			// emailSetting.setName("email");
-			// emailSetting.setUserId(newRecord.getUserId());
-			// emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-			// emailSetting.setValue(user.getUsername());
-			// accountSettingRepository.set(emailSetting);
+			AccountSetting emailUpdatesSetting = AccountSetting
+					.createEmailUpdatesSetting(newRecord.getUserId());
 
-			AccountSetting emailUpdatesSetting = new AccountSetting();
-			emailUpdatesSetting
-					.setName(AccountSettingsEnum.emailUpdates.name());
-			emailUpdatesSetting.setUserId(newRecord.getUserId());
-			emailUpdatesSetting
-					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-			emailUpdatesSetting.setValue(EmailFrequencyUpdates.NEVER.name()
-					.toLowerCase());
 			accountSettingRepository.set(emailUpdatesSetting);
 
-			AccountSetting avatarSetting = new AccountSetting();
-			avatarSetting.setName(AccountSettingsEnum.avatar.name());
-			avatarSetting.setUserId(newRecord.getUserId());
-			avatarSetting.setPrivacy(Privacy.PUBLIC.name().toLowerCase());
-			avatarSetting.setValue(AvatarSourceEnum.GRAVATAR.name()
-					.toLowerCase());
+			AccountSetting avatarSetting = AccountSetting
+					.createAvatarSetting(newRecord.getUserId());
 
-			logger.info("About to save new avatar setting :" + avatarSetting);
 			accountSettingRepository.set(avatarSetting);
 
 		} catch (Exception e) {
@@ -704,6 +688,26 @@ public class UserDetailRepository implements UserDetailsManager,
 	protected void setForcePasswordReset(String userName, boolean value) {
 		sql.update(USERS).set(USERS.RESET_PASSWORD_ON_NEXT_LOGIN, value)
 				.where(USERS.USER_NAME.eq(userName)).execute();
+	}
+
+	/**
+	 * Returns whether a given user has any of the roles.
+	 * 
+	 * @param userId
+	 * @param roles
+	 * @return true, has any of the roles. | false, doesn't have any of the
+	 *         roles
+	 */
+	public boolean userHasRoles(Long userId, List<RolesEnum> roles) {
+
+		List<String> rolesAsStrings = roles.stream().map(r -> r.name())
+				.collect(Collectors.toList());
+
+		return sql.fetchExists(sql
+				.select()
+				.from(USER_ORGANIZATION_ROLES)
+				.where(USER_ORGANIZATION_ROLES.USER_ID.eq(userId).and(
+						USER_ORGANIZATION_ROLES.ROLE.in(rolesAsStrings))));
 	}
 
 }

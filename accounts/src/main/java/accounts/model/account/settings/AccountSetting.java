@@ -1,6 +1,8 @@
 package accounts.model.account.settings;
 
+import lombok.NonNull;
 import lombok.ToString;
+import user.common.constants.AccountSettingsEnum;
 
 @ToString
 public class AccountSetting {
@@ -71,6 +73,25 @@ public class AccountSetting {
 
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+
+	public static AccountSetting createEmailUpdatesSetting(@NonNull final Long userId) {
+		AccountSetting emailUpdatesSetting = new AccountSetting();
+		emailUpdatesSetting.setName(AccountSettingsEnum.emailUpdates.name());
+		emailUpdatesSetting.setUserId(userId);
+		emailUpdatesSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+		emailUpdatesSetting.setValue(EmailFrequencyUpdates.NEVER.name()
+				.toLowerCase());
+		return emailUpdatesSetting;
+	}
+
+	public static AccountSetting createAvatarSetting(@NonNull final Long userId) {
+		AccountSetting avatarSetting = new AccountSetting();
+		avatarSetting.setName(AccountSettingsEnum.avatar.name());
+		avatarSetting.setUserId(userId);
+		avatarSetting.setPrivacy(Privacy.PUBLIC.name().toLowerCase());
+		avatarSetting.setValue(AvatarSourceEnum.GRAVATAR.name().toLowerCase());
+		return avatarSetting;
 	}
 
 }

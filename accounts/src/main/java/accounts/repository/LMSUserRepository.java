@@ -29,15 +29,12 @@ import org.springframework.util.Assert;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
-import user.common.constants.AccountSettingsEnum;
 import user.common.lms.LMSUser;
 import user.common.lms.LMSUserDetails;
 import accounts.domain.tables.records.UsersRecord;
 import accounts.model.Email;
 import accounts.model.UserCredential;
 import accounts.model.account.settings.AccountSetting;
-import accounts.model.account.settings.EmailFrequencyUpdates;
-import accounts.model.account.settings.Privacy;
 import accounts.service.ConfirmationEmailService;
 
 import com.newrelic.api.agent.NewRelic;
@@ -130,22 +127,10 @@ public class LMSUserRepository implements LMSUserDetailsService {
 						.create((UserOrganizationRole) role);
 			}
 
-			// AccountSetting emailSetting = new AccountSetting();
-			// emailSetting.setName("email");
-			// emailSetting.setUserId(newRecord.getUserId());
-			// emailSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-			// emailSetting.setValue(user.getUsername());
-			// accountSettingRepository.set(emailSetting);
+			AccountSetting emailUpdatesSetting = AccountSetting
+					.createEmailUpdatesSetting(newRecord.getUserId());
 
-			AccountSetting emailUpdatesSetting = new AccountSetting();
-			emailUpdatesSetting
-					.setName(AccountSettingsEnum.emailUpdates.name());
-			emailUpdatesSetting.setUserId(newRecord.getUserId());
-			emailUpdatesSetting
-					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-			emailUpdatesSetting.setValue(EmailFrequencyUpdates.NEVER.name()
-					.toLowerCase());
-			accountSettingRepository.set(emailUpdatesSetting);
+			this.accountSettingRepository.set(emailUpdatesSetting);
 
 			// Add LMS details if doesn't exist
 			Long lmsId = null;

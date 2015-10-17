@@ -393,7 +393,7 @@ public class AccountController {
 	public @ResponseBody String getAvatar(@PathVariable Long userId)
 			throws UserNotFoundException {
 
-		return userService.getAvatar(userId);
+		return accountSettingsService.getAvatar(userId);
 	}
 
 	@RequestMapping(value = "change-email", method = RequestMethod.GET)

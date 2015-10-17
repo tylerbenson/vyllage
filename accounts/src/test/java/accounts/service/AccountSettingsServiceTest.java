@@ -7,29 +7,39 @@ import java.util.Optional;
 import org.jooq.tools.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import user.common.User;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.AccountSettingRepository;
+import accounts.repository.AvatarRepository;
 
+@RunWith(MockitoJUnitRunner.class)
 public class AccountSettingsServiceTest {
+
+	@Mock
+	private AvatarRepository avatarRepository;
+
+	@Mock
+	private AccountSettingRepository accountSettingRepository;
+
+	@Mock
+	private UserService userService;
 
 	@Test
 	public void getUserNamesNull() {
 		List<Long> userIds = Arrays.asList(1L);
 		List<AccountNames> accountNames = Arrays.asList();
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		Mockito.when(userService.getNames(userIds)).thenReturn(accountNames);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
 				.getUserNamesAndEmail(userIds);
@@ -40,14 +50,10 @@ public class AccountSettingsServiceTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void getAccoutSettingSettingNameIsNull() {
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		String settingName = null;
 		accountSettingsService.getAccountSetting(user, settingName);
@@ -60,14 +66,10 @@ public class AccountSettingsServiceTest {
 		User names = Mockito.mock(User.class);
 		List<User> accountNames = Arrays.asList(names);
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		Mockito.when(userService.getUsers(userIds)).thenReturn(accountNames);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
 				.getUserNamesAndEmail(userIds);
@@ -87,17 +89,13 @@ public class AccountSettingsServiceTest {
 		User names = Mockito.mock(User.class);
 		List<User> accountNames = Arrays.asList(names);
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		Mockito.when(userService.getUsers(userIds)).thenReturn(accountNames);
 		Mockito.when(names.getFirstName()).thenReturn("Mario");
 		Mockito.when(names.getMiddleName()).thenReturn(null);
 		Mockito.when(names.getLastName()).thenReturn("Luigi");
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
 				.getUserNamesAndEmail(userIds);
@@ -126,16 +124,12 @@ public class AccountSettingsServiceTest {
 		String settingName = "firstName";
 		String firstName = "Zelda";
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
 		Mockito.when(user.getFirstName()).thenReturn(firstName);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
@@ -153,16 +147,12 @@ public class AccountSettingsServiceTest {
 		String settingName = "middleName";
 		String middleName = "Zelda";
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
 		Mockito.when(user.getMiddleName()).thenReturn(middleName);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
@@ -180,16 +170,12 @@ public class AccountSettingsServiceTest {
 		String settingName = "lastName";
 		String lastName = "Zelda";
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
 		Mockito.when(user.getLastName()).thenReturn(lastName);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
@@ -210,10 +196,6 @@ public class AccountSettingsServiceTest {
 		AccountSetting setting = new AccountSetting(null, null, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
 		Mockito.when(user.getUserId()).thenReturn(userId);
@@ -221,7 +203,7 @@ public class AccountSettingsServiceTest {
 		Mockito.when(accountSettingRepository.set(setting)).thenReturn(setting);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);
@@ -241,16 +223,12 @@ public class AccountSettingsServiceTest {
 		AccountSetting setting = new AccountSetting(null, null, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
 		Mockito.when(user.getUserId()).thenReturn(userId);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);
@@ -270,16 +248,12 @@ public class AccountSettingsServiceTest {
 		AccountSetting setting = new AccountSetting(null, null, settingName,
 				settingValue, Privacy.PUBLIC.name());
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
 		Mockito.when(user.getUserId()).thenReturn(userId);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);

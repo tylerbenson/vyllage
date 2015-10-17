@@ -1,7 +1,5 @@
 package accounts.service;
 
-import static accounts.domain.tables.UserOrganizationRoles.USER_ORGANIZATION_ROLES;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -15,15 +13,14 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import lombok.NonNull;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
-import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
@@ -44,11 +41,9 @@ import user.common.web.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.settings.AccountSetting;
-import accounts.model.account.settings.AvatarSourceEnum;
 import accounts.model.account.settings.Privacy;
 import accounts.model.form.RegisterForm;
 import accounts.model.link.DocumentLinkRequest;
-import accounts.repository.AvatarRepository;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
@@ -66,8 +61,6 @@ import email.EmailBuilder;
 @Service
 public class UserService {
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
-
-	private static final String GRAVATAR_URL = "https://secure.gravatar.com/avatar/";
 
 	@Autowired
 	private DocumentService documentService;
@@ -99,13 +92,7 @@ public class UserService {
 	private ExecutorService executorService;
 
 	@Autowired
-	private AvatarRepository avatarRepository;
-
-	@Autowired
 	private AccountSettingsService accountSettingsService;
-
-	@Autowired
-	private DSLContext sql;
 
 	@Autowired
 	private ObjectMapper mapper;
@@ -115,6 +102,12 @@ public class UserService {
 
 	@Autowired
 	private SignInUtil signInUtil;
+
+	@Inject
+	private RegistrationEmailService registrationEmailService;
+
+	// TODO: add constructor and solve cycle between UserService and
+	// AccountSettingsService
 
 	public User getUser(Long userId) throws UserNotFoundException {
 		return userRepository.get(userId);
@@ -126,35 +119,6 @@ public class UserService {
 
 	public boolean userExists(String userName) {
 		return this.userRepository.userExists(userName);
-	}
-
-	protected void sendUserRegisteredEmail(String email, String password,
-			String firstName) {
-
-		Runnable run = () -> {
-
-			try {
-				emailBuilder
-						.to(email)
-						.from(environment.getProperty("email.from",
-								"no-reply@vyllage.com"))
-						.fromUserName(
-								environment.getProperty("email.from.userName",
-										"Chief of Vyllage"))
-						.subject("Account Creation - Vyllage.com")
-						.setNoHtmlMessage(
-								"Your account has been created successfuly. \\n Your password is: "
-										+ password)
-						.templateName("email-user-registered")
-						.addTemplateVariable("password", password)
-						.addTemplateVariable("firstName", firstName).send();
-			} catch (EmailException e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
-			}
-		};
-
-		executorService.execute(run);
 	}
 
 	protected void updateUserRolesByOrganization(
@@ -264,12 +228,8 @@ public class UserService {
 	private Function<? super AccountContact, ? extends AccountContact> addIsAdvisor() {
 		return ac -> {
 
-			boolean isAdvisor = sql.fetchExists(sql
-					.select()
-					.from(USER_ORGANIZATION_ROLES)
-					.where(USER_ORGANIZATION_ROLES.USER_ID.eq(ac.getUserId())
-							.and(USER_ORGANIZATION_ROLES.ROLE
-									.contains(RolesEnum.ADVISOR.name()))));
+			boolean isAdvisor = userRepository.userHasRoles(ac.getUserId(),
+					Arrays.asList(RolesEnum.ADVISOR));
 
 			ac.setAdvisor(isAdvisor);
 
@@ -281,7 +241,8 @@ public class UserService {
 		return ac -> {
 
 			try {
-				ac.setAvatarUrl(getAvatar(ac.getUserId()));
+				ac.setAvatarUrl(this.accountSettingsService.getAvatar(ac
+						.getUserId()));
 			} catch (UserNotFoundException e) {
 				// this should never happen since we found them previously
 				logger.severe(ExceptionUtils.getStackTrace(e));
@@ -520,8 +481,9 @@ public class UserService {
 
 		createReceiveAdviceSetting(registerForm.getReceiveAdvice(), newUser);
 
-		sendUserRegisteredEmail(newUser.getUsername(),
-				registerForm.getPassword(), newUser.getFirstName());
+		this.registrationEmailService.sendUserRegisteredEmail(
+				newUser.getUsername(), registerForm.getPassword(),
+				newUser.getFirstName());
 
 		return newUser;
 	}
@@ -578,8 +540,9 @@ public class UserService {
 
 		createReceiveAdviceSetting(registerForm.getReceiveAdvice(), newUser);
 
-		sendUserRegisteredEmail(newUser.getUsername(),
-				registerForm.getPassword(), newUser.getFirstName());
+		this.registrationEmailService.sendUserRegisteredEmail(
+				newUser.getUsername(), registerForm.getPassword(),
+				newUser.getFirstName());
 		return newUser;
 	}
 
@@ -662,99 +625,10 @@ public class UserService {
 
 			this.changePassword(existingUser.getUserId(), newPassword);
 
-			executorService.execute(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						emailBuilder
-								.to(existingUser.getUsername())
-								.from(environment.getProperty("email.from",
-										"no-reply@vyllage.com"))
-								.fromUserName(
-										environment.getProperty(
-												"email.from.userName",
-												"Chief of Vyllage"))
-								.subject("Account Creation - Vyllage.com")
-								.setNoHtmlMessage(
-										"Your account has been created successfuly. \\n Your password is: "
-												+ newPassword)
-								.templateName("email-account-created")
-								.addTemplateVariable("password", newPassword)
-								.addTemplateVariable("firstName",
-										existingUser.getFirstName()).send();
-					} catch (EmailException e) {
-						logger.severe(ExceptionUtils.getStackTrace(e));
-						NewRelic.noticeError(e);
-					}
-
-				}
-			});
-
+			this.registrationEmailService.sendAutomatedAccountCreationEmail(
+					existingUser.getUsername(), newPassword,
+					existingUser.getFirstName());
 		}
-	}
-
-	/**
-	 * Returns the user's avatar based on the user's social networks profile or
-	 * avatar setting, if it can't find any returns a gravatar url.
-	 *
-	 * @param userId
-	 * @return avatar url
-	 * @throws UserNotFoundException
-	 */
-	public String getAvatar(Long userId) throws UserNotFoundException {
-
-		User user = this.getUser(userId);
-		Optional<AccountSetting> avatarSetting = accountSettingsService
-				.getAccountSetting(user, AccountSettingsEnum.avatar.name());
-
-		if (!avatarSetting.isPresent())
-			return getDefaultAvatar(user);
-
-		boolean avatarSettingPresent_gravatar = avatarSetting.isPresent()
-				&& avatarSetting.get().getValue()
-						.equalsIgnoreCase(AvatarSourceEnum.GRAVATAR.name());
-
-		boolean avatarSettingPresent_lti = avatarSetting.isPresent()
-				&& avatarSetting.get().getValue()
-						.equalsIgnoreCase(AvatarSourceEnum.LTI.name());
-
-		boolean avatarSettingPresent_facebook = avatarSetting.isPresent()
-				&& avatarSetting.get().getValue()
-						.equalsIgnoreCase(AvatarSourceEnum.FACEBOOK.name());
-
-		if (avatarSettingPresent_gravatar) {
-			return getDefaultAvatar(user);
-		} else {
-
-			if (avatarSettingPresent_lti) {
-				// get avatar url
-				Optional<AccountSetting> ltiAvatarUrl = accountSettingsService
-						.getAccountSetting(user,
-								AccountSettingsEnum.lti_avatar.name());
-				if (ltiAvatarUrl.isPresent())
-					return ltiAvatarUrl.get().getValue();
-
-			} else {
-
-				// we only have facebook right now
-				if (avatarSettingPresent_facebook) {
-					// social
-					Optional<String> avatarUrl = avatarRepository.getAvatar(
-							userId, avatarSetting.get().getValue());
-
-					if (avatarUrl.isPresent())
-						return avatarUrl.get();
-				}
-			}
-		}
-
-		// nothing found, defaulting to gravatar
-		return getDefaultAvatar(user);
-	}
-
-	private String getDefaultAvatar(User user) {
-		return GRAVATAR_URL
-				+ new String(DigestUtils.md5Hex(user.getUsername()));
 	}
 
 	/**

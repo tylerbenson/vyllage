@@ -18,10 +18,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import user.common.User;
+import user.common.constants.AccountSettingsEnum;
 import accounts.ApplicationTestConfig;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.AccountSettingRepository;
+import accounts.repository.AvatarRepository;
 import accounts.repository.ElementNotFoundException;
 import accounts.repository.UserNotFoundException;
 
@@ -39,6 +41,9 @@ public class AccountSettingsServiceIntegrationTest {
 
 	@Inject
 	private AccountSettingRepository accountSettingRepository;
+
+	@Inject
+	private AvatarRepository avatarRepository;
 
 	@Test
 	public void saveAccountSetting() {
@@ -209,7 +214,7 @@ public class AccountSettingsServiceIntegrationTest {
 		// setting);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);
@@ -222,7 +227,7 @@ public class AccountSettingsServiceIntegrationTest {
 		Assert.assertEquals(userId, savedAccountSetting.getUserId());
 
 		Optional<AccountSetting> newEmailSetting = accountSettingsService
-				.getAccountSetting(user, "newEmail");
+				.getAccountSetting(user, AccountSettingsEnum.newEmail.name());
 
 		Assert.assertTrue(newEmailSetting.isPresent());
 
