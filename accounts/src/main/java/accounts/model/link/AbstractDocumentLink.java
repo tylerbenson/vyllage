@@ -12,7 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 @ToString
 @EqualsAndHashCode
-public class AbstractDocumentLink {
+public abstract class AbstractDocumentLink {
 
 	private Long userId;
 	private Long documentId;

@@ -9,13 +9,9 @@ import lombok.ToString;
  * get information about the user who created the link later.
  *
  * @author uh
- *
  */
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class SocialDocumentLink extends AbstractDocumentLink {
-
-	public SocialDocumentLink() {
-	}
 
 }

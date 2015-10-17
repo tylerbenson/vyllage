@@ -54,6 +54,7 @@ public class ConfirmationEmailServiceTest {
 				emailBuilder, mapper, encryptor, emailRepository,
 				executorService);
 
+		// Mocks the executor service call
 		Mockito.doAnswer(new Answer<Void>() {
 
 			@Override

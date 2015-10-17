@@ -243,3 +243,32 @@ table {
     }
   }
 }
+
+.ui-autocomplete {
+  border-color: rgba(0,0,0,0.05);
+  border-radius: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-height: 9em;
+  max-width: 14em;
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 0;
+
+  .ui-menu-item {
+    padding: 0;
+
+    a {
+      border-radius: 0;
+      color: $text-color;
+      display: block;
+      font-size: 0.85em;
+      padding: 0.7em 1em;
+
+      &.ui-state-focus {
+        background: lighten($primary-color, 42%);
+        border: none;
+        margin: 0;
+      }
+    }
+  }
+}

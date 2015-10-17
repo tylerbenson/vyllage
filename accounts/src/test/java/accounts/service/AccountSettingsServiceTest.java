@@ -1,53 +1,64 @@
 package accounts.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.jooq.tools.StringUtils;
-import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import user.common.User;
 import accounts.model.account.AccountNames;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.AccountSettingRepository;
+import accounts.repository.AvatarRepository;
 
+@RunWith(MockitoJUnitRunner.class)
 public class AccountSettingsServiceTest {
+
+	@Mock
+	private AvatarRepository avatarRepository;
+
+	@Mock
+	private AccountSettingRepository accountSettingRepository;
+
+	@Mock
+	private UserService userService;
 
 	@Test
 	public void getUserNamesNull() {
 		List<Long> userIds = Arrays.asList(1L);
 		List<AccountNames> accountNames = Arrays.asList();
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
-		Mockito.when(userService.getNames(userIds)).thenReturn(accountNames);
+		when(userService.getNames(userIds)).thenReturn(accountNames);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
 				.getUserNamesAndEmail(userIds);
 
-		Assert.assertTrue(userNamesSettings.isEmpty());
+		assertTrue(userNamesSettings.isEmpty());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void getAccoutSettingSettingNameIsNull() {
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		String settingName = null;
 		accountSettingsService.getAccountSetting(user, settingName);
@@ -60,24 +71,20 @@ public class AccountSettingsServiceTest {
 		User names = Mockito.mock(User.class);
 		List<User> accountNames = Arrays.asList(names);
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
-		Mockito.when(userService.getUsers(userIds)).thenReturn(accountNames);
+		when(userService.getUsers(userIds)).thenReturn(accountNames);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
 				.getUserNamesAndEmail(userIds);
 
-		Assert.assertNotNull(userNamesSettings);
+		assertNotNull(userNamesSettings);
 
-		Assert.assertFalse(userNamesSettings.stream().anyMatch(
+		assertFalse(userNamesSettings.stream().anyMatch(
 				as -> as.getValue() != null));
 
-		Assert.assertTrue(userNamesSettings.stream().anyMatch(
+		assertTrue(userNamesSettings.stream().anyMatch(
 				as -> StringUtils.isEmpty(as.getValue())));
 	}
 
@@ -87,36 +94,32 @@ public class AccountSettingsServiceTest {
 		User names = Mockito.mock(User.class);
 		List<User> accountNames = Arrays.asList(names);
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
-		Mockito.when(userService.getUsers(userIds)).thenReturn(accountNames);
-		Mockito.when(names.getFirstName()).thenReturn("Mario");
-		Mockito.when(names.getMiddleName()).thenReturn(null);
-		Mockito.when(names.getLastName()).thenReturn("Luigi");
+		when(userService.getUsers(userIds)).thenReturn(accountNames);
+		when(names.getFirstName()).thenReturn("Mario");
+		when(names.getMiddleName()).thenReturn(null);
+		when(names.getLastName()).thenReturn("Luigi");
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
 				.getUserNamesAndEmail(userIds);
 
-		Assert.assertNotNull(userNamesSettings);
+		assertNotNull(userNamesSettings);
 
-		Assert.assertTrue(userNamesSettings.stream().anyMatch(
+		assertTrue(userNamesSettings.stream().anyMatch(
 				as -> names.getFirstName().equals(as.getValue())));
 
-		Assert.assertTrue(userNamesSettings.stream().anyMatch(
+		assertTrue(userNamesSettings.stream().anyMatch(
 				as -> names.getLastName().equals(as.getValue())));
 
-		Assert.assertTrue(userNamesSettings.stream().anyMatch(
+		assertTrue(userNamesSettings.stream().anyMatch(
 				as -> "Mario".equals(as.getValue())));
 
-		Assert.assertTrue(userNamesSettings.stream().anyMatch(
+		assertTrue(userNamesSettings.stream().anyMatch(
 				as -> "Luigi".equals(as.getValue())));
 
-		Assert.assertTrue(userNamesSettings.stream()
+		assertTrue(userNamesSettings.stream()
 				.filter(as -> "middleName".equals(as.getName()))
 				.allMatch(as -> as.getValue() == null));
 	}
@@ -126,25 +129,21 @@ public class AccountSettingsServiceTest {
 		String settingName = "firstName";
 		String firstName = "Zelda";
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
-		Mockito.when(user.getFirstName()).thenReturn(firstName);
+		when(user.getFirstName()).thenReturn(firstName);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
 
-		Assert.assertNotNull(accountSetting);
+		assertNotNull(accountSetting);
 
-		Assert.assertTrue(accountSetting.isPresent());
+		assertTrue(accountSetting.isPresent());
 
-		Assert.assertEquals(firstName, accountSetting.get().getValue());
+		assertEquals(firstName, accountSetting.get().getValue());
 
 	}
 
@@ -153,25 +152,21 @@ public class AccountSettingsServiceTest {
 		String settingName = "middleName";
 		String middleName = "Zelda";
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
-		Mockito.when(user.getMiddleName()).thenReturn(middleName);
+		when(user.getMiddleName()).thenReturn(middleName);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
 
-		Assert.assertNotNull(accountSetting);
+		assertNotNull(accountSetting);
 
-		Assert.assertTrue(accountSetting.isPresent());
+		assertTrue(accountSetting.isPresent());
 
-		Assert.assertEquals(middleName, accountSetting.get().getValue());
+		assertEquals(middleName, accountSetting.get().getValue());
 
 	}
 
@@ -180,25 +175,21 @@ public class AccountSettingsServiceTest {
 		String settingName = "lastName";
 		String lastName = "Zelda";
 
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
-
 		User user = Mockito.mock(User.class);
 
-		Mockito.when(user.getLastName()).thenReturn(lastName);
+		when(user.getLastName()).thenReturn(lastName);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
 
-		Assert.assertNotNull(accountSetting);
+		assertNotNull(accountSetting);
 
-		Assert.assertTrue(accountSetting.isPresent());
+		assertTrue(accountSetting.isPresent());
 
-		Assert.assertEquals(lastName, accountSetting.get().getValue());
+		assertEquals(lastName, accountSetting.get().getValue());
 
 	}
 
@@ -207,29 +198,25 @@ public class AccountSettingsServiceTest {
 		String settingName = "some";
 		String settingValue = "Zelda";
 		Long userId = 5L;
-		AccountSetting setting = new AccountSetting(null, null, settingName,
+		AccountSetting setting = new AccountSetting(null, userId, settingName,
 				settingValue, Privacy.PUBLIC.name());
-
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
 
 		User user = Mockito.mock(User.class);
 
-		Mockito.when(user.getUserId()).thenReturn(userId);
+		when(user.getUserId()).thenReturn(userId);
 
-		Mockito.when(accountSettingRepository.set(setting)).thenReturn(setting);
+		when(accountSettingRepository.set(setting)).thenReturn(setting);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);
 
-		Assert.assertNotNull(savedAccountSetting);
+		assertNotNull(savedAccountSetting);
 
-		Assert.assertEquals(settingValue, savedAccountSetting.getValue());
-		Assert.assertEquals(userId, savedAccountSetting.getUserId());
+		assertEquals(settingValue, savedAccountSetting.getValue());
+		assertEquals(userId, savedAccountSetting.getUserId());
 
 	}
 
@@ -238,27 +225,23 @@ public class AccountSettingsServiceTest {
 		String settingName = "middleName";
 		String settingValue = "";
 		Long userId = 5L;
-		AccountSetting setting = new AccountSetting(null, null, settingName,
+		AccountSetting setting = new AccountSetting(null, userId, settingName,
 				settingValue, Privacy.PUBLIC.name());
-
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
 
 		User user = Mockito.mock(User.class);
 
-		Mockito.when(user.getUserId()).thenReturn(userId);
+		when(user.getUserId()).thenReturn(userId);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);
 
-		Assert.assertNotNull(savedAccountSetting);
+		assertNotNull(savedAccountSetting);
 
-		Assert.assertEquals(settingValue, savedAccountSetting.getValue());
-		Assert.assertEquals(userId, savedAccountSetting.getUserId());
+		assertEquals(settingValue, savedAccountSetting.getValue());
+		assertEquals(userId, savedAccountSetting.getUserId());
 
 	}
 
@@ -267,27 +250,23 @@ public class AccountSettingsServiceTest {
 		String settingName = "lastName";
 		String settingValue = null;
 		Long userId = 5L;
-		AccountSetting setting = new AccountSetting(null, null, settingName,
+		AccountSetting setting = new AccountSetting(null, userId, settingName,
 				settingValue, Privacy.PUBLIC.name());
-
-		AccountSettingRepository accountSettingRepository = Mockito
-				.mock(AccountSettingRepository.class);
-		UserService userService = Mockito.mock(UserService.class);
 
 		User user = Mockito.mock(User.class);
 
-		Mockito.when(user.getUserId()).thenReturn(userId);
+		when(user.getUserId()).thenReturn(userId);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository);
+				userService, accountSettingRepository, avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);
 
-		Assert.assertNotNull(savedAccountSetting);
+		assertNotNull(savedAccountSetting);
 
-		Assert.assertEquals(settingValue, savedAccountSetting.getValue());
-		Assert.assertEquals(userId, savedAccountSetting.getUserId());
+		assertEquals(settingValue, savedAccountSetting.getValue());
+		assertEquals(userId, savedAccountSetting.getUserId());
 
 	}
 }

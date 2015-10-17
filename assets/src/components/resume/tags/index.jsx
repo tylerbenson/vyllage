@@ -18,6 +18,8 @@ var Sortable = require('../../util/Sortable');
 var resumeActions = require('../actions');
 var cloneDeep = require('clone-deep');
 var FeatureToggle = require('../../util/FeatureToggle');
+var TagSuggestions = require('../../tags');
+require('jquery-ui/autocomplete');
 
 
 var Tags = React.createClass({
@@ -67,6 +69,7 @@ var Tags = React.createClass({
     }
     var section = this.props.section;
     section.tags = tags;
+    actions.putSection(section);
 
     if( this.validateSection( section ) == false ){
       actions.putSection(section);
@@ -111,14 +114,33 @@ var Tags = React.createClass({
     });
   },
   onTagAdd: function(e) {
-    if(e.which === 13) {
+    var self = this;
+    var suggestions = [];
+    if( this.props.section.type == "SkillsSection"){
+      suggestions = TagSuggestions.skills;
+    }else{
+      suggestions = TagSuggestions.careerInterest;
+    }
+    jQuery(e.target).autocomplete({
+      source: suggestions,
+      select: function( event, ui ) {
+        if( ui.item != undefined ){
+          var temp = self.state.tags.slice();          
+          temp.push(ui.item.value);
+          self.setState({
+            tags: temp
+          });
+          ui.item.value = "";
+        }
+      }
+    });
+
+    if(e.which === 13 ) {
       var temp = this.state.tags.slice();
       temp.push(e.target.value);
-
       this.setState({
         tags: temp
       });
-
       e.target.value = "";
     }
 
