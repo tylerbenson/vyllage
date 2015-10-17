@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import lombok.NonNull;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -46,8 +48,9 @@ public class BatchAccountCreationService {
 		this.batchParser = batchParser;
 	}
 
-	public BatchResult batchCreateUsers(BatchAccount batchAccount,
-			User loggedInUser, boolean forcePasswordChange) throws IOException {
+	public BatchResult batchCreateUsers(@NonNull BatchAccount batchAccount,
+			@NonNull User loggedInUser, boolean forcePasswordChange)
+			throws IOException {
 
 		final boolean enabled = true;
 		final boolean accountNonExpired = true;

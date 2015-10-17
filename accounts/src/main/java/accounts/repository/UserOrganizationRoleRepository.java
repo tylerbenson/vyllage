@@ -15,8 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import user.common.UserOrganizationRole;
 import accounts.domain.tables.records.UserOrganizationRolesRecord;
-import accounts.model.account.settings.AccountSetting;
-import accounts.model.account.settings.Privacy;
 
 @Repository
 public class UserOrganizationRoleRepository {
@@ -68,22 +66,6 @@ public class UserOrganizationRoleRepository {
 					.of("UTC"))));
 			auth.setAuditUserId(role.getAuditUserId());
 			auth.insert();
-
-			AccountSetting roleSetting = new AccountSetting();
-			roleSetting.setName("role");
-			roleSetting.setUserId(role.getUserId());
-			roleSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-			roleSetting.setValue(role.getAuthority());
-			accountSettingRepository.set(roleSetting);
-
-			AccountSetting organizationSetting = new AccountSetting();
-			organizationSetting.setName("organization");
-			organizationSetting.setUserId(role.getUserId());
-			organizationSetting
-					.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
-			organizationSetting.setValue(organizationRepository.get(
-					role.getOrganizationId()).getOrganizationName());
-			accountSettingRepository.set(organizationSetting);
 		}
 	}
 

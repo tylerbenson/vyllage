@@ -31,6 +31,7 @@ import accounts.service.UserService;
 @Controller
 public class LMSLoginController {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(LMSLoginController.class
 			.getName());
 	private final SignInUtil signInUtil;

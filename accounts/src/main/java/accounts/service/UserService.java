@@ -434,7 +434,7 @@ public class UserService {
 		User guestUser = userRepository.createUser(user, forcePasswordChange,
 				sendConfirmationEmail);
 
-		createReceiveAdviceSetting(false, guestUser);
+		this.createReceiveAdviceSetting(false, guestUser);
 
 		return guestUser;
 	}
@@ -444,7 +444,6 @@ public class UserService {
 	 *
 	 * @param registerForm
 	 * @return user
-	 * @throws EmailException
 	 */
 	public User createUser(RegisterForm registerForm) {
 
@@ -479,7 +478,8 @@ public class UserService {
 		// get id
 		newUser = this.getUser(registerForm.getEmail());
 
-		createReceiveAdviceSetting(registerForm.getReceiveAdvice(), newUser);
+		this.createReceiveAdviceSetting(registerForm.getReceiveAdvice(),
+				newUser);
 
 		this.registrationEmailService.sendUserRegisteredEmail(
 				newUser.getUsername(), registerForm.getPassword(),
@@ -533,12 +533,11 @@ public class UserService {
 				defaultAuthoritiesForNewUser, null, null);
 
 		boolean sendConfirmationEmail = false;
-		userRepository.createUser(user, forcePasswordChange,
+		User newUser = userRepository.createUser(user, forcePasswordChange,
 				sendConfirmationEmail);
 
-		User newUser = this.getUser(user.getUsername());
-
-		createReceiveAdviceSetting(registerForm.getReceiveAdvice(), newUser);
+		this.createReceiveAdviceSetting(registerForm.getReceiveAdvice(),
+				newUser);
 
 		this.registrationEmailService.sendUserRegisteredEmail(
 				newUser.getUsername(), registerForm.getPassword(),
@@ -609,7 +608,6 @@ public class UserService {
 	 *
 	 * @param userId
 	 * @throws UserNotFoundException
-	 * @throws EmailException
 	 */
 	public void activateUser(Long userId, Long organizationId, User loggedInUser)
 			throws UserNotFoundException {
@@ -638,12 +636,10 @@ public class UserService {
 	 *
 	 * @param user
 	 * @param email
-	 * @throws EmailException
 	 * @throws JsonProcessingException
 	 */
 	public void sendEmailChangeConfirmation(@NonNull User user,
-			@NonNull String email) throws EmailException,
-			JsonProcessingException {
+			@NonNull String email) throws JsonProcessingException {
 		Assert.isTrue(!email.isEmpty());
 
 		ChangeEmailLink link = new ChangeEmailLink(user.getUserId(), email);

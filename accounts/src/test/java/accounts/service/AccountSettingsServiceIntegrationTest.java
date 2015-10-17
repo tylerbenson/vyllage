@@ -1,12 +1,17 @@
 package accounts.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -58,15 +63,15 @@ public class AccountSettingsServiceIntegrationTest {
 		as.setValue(value);
 		as.setPrivacy(Privacy.PUBLIC.name());
 
-		Mockito.when(u.getUserId()).thenReturn(userId);
+		when(u.getUserId()).thenReturn(userId);
 
 		accountSettingsService.setAccountSetting(u, as);
 
 		Optional<AccountSetting> setting = accountSettingsService
 				.getAccountSetting(u, emailUpdates);
-		Assert.assertTrue(setting.isPresent());
-		Assert.assertEquals(emailUpdates, setting.get().getName());
-		Assert.assertEquals(value, setting.get().getValue());
+		assertTrue(setting.isPresent());
+		assertEquals(emailUpdates, setting.get().getName());
+		assertEquals(value, setting.get().getValue());
 	}
 
 	@Test
@@ -87,12 +92,12 @@ public class AccountSettingsServiceIntegrationTest {
 
 		Optional<AccountSetting> savedSetting = accountSettingsService
 				.getAccountSetting(u, fieldName);
-		Assert.assertTrue(savedSetting.isPresent());
-		Assert.assertEquals(fieldName, savedSetting.get().getName());
-		Assert.assertEquals(value, savedSetting.get().getValue());
+		assertTrue(savedSetting.isPresent());
+		assertEquals(fieldName, savedSetting.get().getName());
+		assertEquals(value, savedSetting.get().getValue());
 
 		User u2 = userService.getUser(userId);
-		Assert.assertEquals(value, u2.getFirstName());
+		assertEquals(value, u2.getFirstName());
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
@@ -101,7 +106,7 @@ public class AccountSettingsServiceIntegrationTest {
 		AccountSetting as = new AccountSetting();
 		User u = Mockito.mock(User.class);
 
-		Mockito.when(u.getUserId()).thenReturn(userId);
+		when(u.getUserId()).thenReturn(userId);
 		as.setName("data-integrity");
 		as.setUserId(userId);
 		as.setValue("data-integrity");
@@ -120,11 +125,11 @@ public class AccountSettingsServiceIntegrationTest {
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
 
-		Assert.assertNotNull(accountSetting);
+		assertNotNull(accountSetting);
 
-		Assert.assertTrue(accountSetting.isPresent());
+		assertTrue(accountSetting.isPresent());
 
-		Assert.assertEquals(user.getUsername(), accountSetting.get().getValue());
+		assertEquals(user.getUsername(), accountSetting.get().getValue());
 
 	}
 
@@ -145,12 +150,11 @@ public class AccountSettingsServiceIntegrationTest {
 		Optional<AccountSetting> accountSetting2 = accountSettingsService
 				.getAccountSetting(user, settingName);
 
-		Assert.assertNotNull(accountSetting2);
+		assertNotNull(accountSetting2);
 
-		Assert.assertTrue(accountSetting2.isPresent());
+		assertTrue(accountSetting2.isPresent());
 
-		Assert.assertEquals(user.getUsername(), accountSetting2.get()
-				.getValue());
+		assertEquals(user.getUsername(), accountSetting2.get().getValue());
 
 	}
 
@@ -163,8 +167,8 @@ public class AccountSettingsServiceIntegrationTest {
 		List<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSettings(userIds);
 
-		Assert.assertNotNull(accountSetting);
-		Assert.assertFalse(accountSetting.isEmpty());
+		assertNotNull(accountSetting);
+		assertFalse(accountSetting.isEmpty());
 	}
 
 	@Test
@@ -175,8 +179,8 @@ public class AccountSettingsServiceIntegrationTest {
 		List<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSettings(user);
 
-		Assert.assertNotNull(accountSetting);
-		Assert.assertFalse(accountSetting.isEmpty());
+		assertNotNull(accountSetting);
+		assertFalse(accountSetting.isEmpty());
 	}
 
 	@Test
@@ -185,10 +189,10 @@ public class AccountSettingsServiceIntegrationTest {
 
 		User user = Mockito.mock(User.class);
 
-		Mockito.when(user.getUserId()).thenReturn(999999999999L);
+		when(user.getUserId()).thenReturn(999999999999L);
 
-		Assert.assertFalse(accountSettingsService.getAccountSetting(user,
-				settingName).isPresent());
+		assertFalse(accountSettingsService.getAccountSetting(user, settingName)
+				.isPresent());
 
 	}
 
@@ -207,9 +211,9 @@ public class AccountSettingsServiceIntegrationTest {
 
 		User user = Mockito.mock(User.class);
 
-		Mockito.when(user.getUsername()).thenReturn(previousEmail);
-		Mockito.when(user.getUserId()).thenReturn(userId);
-		// Mockito.when(accountSettingRepository.set(userId,
+		when(user.getUsername()).thenReturn(previousEmail);
+		when(user.getUserId()).thenReturn(userId);
+		// when(accountSettingRepository.set(userId,
 		// setting)).thenReturn(
 		// setting);
 
@@ -219,19 +223,19 @@ public class AccountSettingsServiceIntegrationTest {
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);
 
-		Assert.assertNotNull(savedAccountSetting);
+		assertNotNull(savedAccountSetting);
 
 		// email can only be changed after confirmation, we return the previous
 		// value until then
-		Assert.assertEquals(previousEmail, savedAccountSetting.getValue());
-		Assert.assertEquals(userId, savedAccountSetting.getUserId());
+		assertEquals(previousEmail, savedAccountSetting.getValue());
+		assertEquals(userId, savedAccountSetting.getUserId());
 
 		Optional<AccountSetting> newEmailSetting = accountSettingsService
 				.getAccountSetting(user, AccountSettingsEnum.newEmail.name());
 
-		Assert.assertTrue(newEmailSetting.isPresent());
+		assertTrue(newEmailSetting.isPresent());
 
-		Assert.assertEquals(settingValue, newEmailSetting.get().getValue());
+		assertEquals(settingValue, newEmailSetting.get().getValue());
 
 	}
 
@@ -282,17 +286,17 @@ public class AccountSettingsServiceIntegrationTest {
 
 		User user = Mockito.mock(User.class);
 
-		Mockito.when(user.getUserId()).thenReturn(userId);
+		when(user.getUserId()).thenReturn(userId);
 
 		List<AccountSetting> savedAccountSettings = accountSettingsService
 				.setAccountSettings(user, settings);
 
 		savedAccountSettings.forEach(System.out::println);
 
-		Assert.assertNotNull(savedAccountSettings);
-		Assert.assertTrue(savedAccountSettings.contains(setting));
-		Assert.assertFalse(savedAccountSettings.contains(org));
-		Assert.assertFalse(savedAccountSettings.contains(role));
+		assertNotNull(savedAccountSettings);
+		assertTrue(savedAccountSettings.contains(setting));
+		assertFalse(savedAccountSettings.contains(org));
+		assertFalse(savedAccountSettings.contains(role));
 
 	}
 }
