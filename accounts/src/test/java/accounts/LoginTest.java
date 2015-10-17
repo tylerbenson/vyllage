@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -203,7 +202,7 @@ public class LoginTest {
 		assertEquals("User is different.", user, loadedUser);
 		assertTrue("Authorities not found.", loadedUser.getAuthorities()
 				.contains(auth));
-		Assert.assertTrue(new BCryptPasswordEncoder().matches(oldPassword,
+		assertTrue(new BCryptPasswordEncoder().matches(oldPassword,
 				loadedUser.getPassword()));
 
 		String userName2 = "test2";

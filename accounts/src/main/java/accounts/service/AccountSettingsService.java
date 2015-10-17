@@ -10,16 +10,20 @@ import javax.inject.Inject;
 
 import lombok.NonNull;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.mail.EmailException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import user.common.User;
 import user.common.constants.AccountSettingsEnum;
 import accounts.model.account.settings.AccountSetting;
+import accounts.model.account.settings.AvatarSourceEnum;
 import accounts.model.account.settings.Privacy;
 import accounts.repository.AccountSettingRepository;
+import accounts.repository.AvatarRepository;
+import accounts.repository.UserNotFoundException;
 import accounts.service.aspects.CheckPrivacy;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,19 +32,25 @@ import com.newrelic.api.agent.NewRelic;
 @Service
 public class AccountSettingsService {
 
-	private final Logger logger = Logger.getLogger(AccountSettingsService.class
-			.getName());
+	private static final Logger logger = Logger
+			.getLogger(AccountSettingsService.class.getName());
+
+	private static final String GRAVATAR_URL = "https://secure.gravatar.com/avatar/";
 
 	private final UserService userService;
 
 	private final AccountSettingRepository accountSettingRepository;
 
+	private final AvatarRepository avatarRepository;
+
 	@Inject
 	public AccountSettingsService(final UserService userService,
-			final AccountSettingRepository accountSettingRepository) {
+			final AccountSettingRepository accountSettingRepository,
+			final AvatarRepository avatarRepository) {
 		super();
 		this.userService = userService;
 		this.accountSettingRepository = accountSettingRepository;
+		this.avatarRepository = avatarRepository;
 	}
 
 	@CheckPrivacy
@@ -118,9 +128,10 @@ public class AccountSettingsService {
 		return settings;
 	}
 
-	public AccountSetting setAccountSetting(final User user,
-			final AccountSetting setting) {
-		Assert.notNull(setting);
+	public AccountSetting setAccountSetting(@NonNull final User user,
+			@NonNull final AccountSetting setting) {
+
+		Assert.isTrue(!StringUtils.isBlank(setting.getName()));
 
 		if (setting.getUserId() == null)
 			setting.setUserId(user.getUserId());
@@ -144,7 +155,7 @@ public class AccountSettingsService {
 
 					userService.sendEmailChangeConfirmation(user,
 							setting.getValue());
-				} catch (EmailException | JsonProcessingException e) {
+				} catch (JsonProcessingException e) {
 					logger.severe(ExceptionUtils.getStackTrace(e));
 					NewRelic.noticeError(e);
 				}
@@ -224,6 +235,69 @@ public class AccountSettingsService {
 		userService.update(user);
 
 		return setting;
+	}
+
+	/**
+	 * Returns the user's avatar based on the user's social networks profile or
+	 * avatar setting, if it can't find any returns a gravatar url.
+	 *
+	 * @param userId
+	 * @return avatar url
+	 * @throws UserNotFoundException
+	 */
+	public String getAvatar(Long userId) throws UserNotFoundException {
+
+		User user = this.userService.getUser(userId);
+		Optional<AccountSetting> avatarSetting = this.getAccountSetting(user,
+				AccountSettingsEnum.avatar.name());
+
+		if (!avatarSetting.isPresent())
+			return getDefaultAvatar(user);
+
+		boolean avatarSettingPresent_gravatar = avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.GRAVATAR.name());
+
+		boolean avatarSettingPresent_lti = avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.LTI.name());
+
+		boolean avatarSettingPresent_facebook = avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.FACEBOOK.name());
+
+		if (avatarSettingPresent_gravatar) {
+			return getDefaultAvatar(user);
+		} else {
+
+			if (avatarSettingPresent_lti) {
+				// get avatar url
+				Optional<AccountSetting> ltiAvatarUrl = this.getAccountSetting(
+						user, AccountSettingsEnum.lti_avatar.name());
+				if (ltiAvatarUrl.isPresent())
+					return ltiAvatarUrl.get().getValue();
+
+			} else {
+
+				// we only have facebook right now
+				if (avatarSettingPresent_facebook) {
+					// social
+					Optional<String> avatarUrl = avatarRepository.getAvatar(
+							userId, avatarSetting.get().getValue());
+
+					if (avatarUrl.isPresent())
+						return avatarUrl.get();
+				}
+			}
+		}
+
+		// nothing found, defaulting to gravatar
+		return getDefaultAvatar(user);
+	}
+
+	private String getDefaultAvatar(User user) {
+		return GRAVATAR_URL
+				+ new String(DigestUtils.md5Hex(user.getUsername()));
 	}
 
 }

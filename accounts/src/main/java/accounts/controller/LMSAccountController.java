@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -17,11 +16,7 @@ import oauth.model.LMSAccount;
 import oauth.utilities.CsrfTokenUtility;
 import oauth.utilities.LMSConstants;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.mail.EmailException;
 import org.jooq.tools.StringUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.env.Environment;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -31,20 +26,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import user.common.User;
-import user.common.constants.AccountSettingsEnum;
 import user.common.lms.LMSUser;
 import accounts.model.account.settings.AccountSetting;
-import accounts.model.account.settings.AvatarSourceEnum;
-import accounts.model.account.settings.Privacy;
 import accounts.model.form.RegisterForm;
 import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
+import accounts.service.RegistrationEmailService;
 import accounts.service.SignInUtil;
-
-import com.newrelic.api.agent.NewRelic;
-
-import email.EmailBuilder;
 
 @Controller
 public class LMSAccountController {
@@ -56,26 +45,19 @@ public class LMSAccountController {
 	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
-	private final EmailBuilder emailBuilder;
-	private final Environment environment;
-	private final ExecutorService executorService;
 	private final AccountSettingsService accountSettingsService;
+	private final RegistrationEmailService registrationEmailService;
 
 	@Inject
-	public LMSAccountController(
-			final Environment environment,
-			final SignInUtil signInUtil,
+	public LMSAccountController(final SignInUtil signInUtil,
 			final LMSService lmsService,
-			@Qualifier("accounts.emailBuilder") final EmailBuilder emailBuilder,
-			@Qualifier(value = "accounts.ExecutorService") ExecutorService executorService,
-			final AccountSettingsService accountSettingsService) {
+			final AccountSettingsService accountSettingsService,
+			final RegistrationEmailService registrationEmailService) {
 		super();
-		this.environment = environment;
 		this.signInUtil = signInUtil;
 		this.lmsService = lmsService;
-		this.emailBuilder = emailBuilder;
-		this.executorService = executorService;
 		this.accountSettingsService = accountSettingsService;
+		this.registrationEmailService = registrationEmailService;
 	}
 
 	@RequestMapping(value = "/lti/account", method = { RequestMethod.GET,
@@ -164,8 +146,8 @@ public class LMSAccountController {
 					lmsRequest.getLmsUser());
 
 			this.saveUserImage(userImageUrl, newUser);
-			this.sendUserRegisteredEmail(registerForm.getEmail(), password,
-					firstName);
+			this.registrationEmailService.sendUserRegisteredEmail(
+					registerForm.getEmail(), password, firstName);
 
 			// Set user name in Session
 			session.setAttribute("user_name", newUser.getUsername());
@@ -208,8 +190,9 @@ public class LMSAccountController {
 
 			this.saveUserImage(registerForm.getUserImage(), newUser);
 
-			this.sendUserRegisteredEmail(registerForm.getEmail(),
-					registerForm.getPassword(), registerForm.getFirstName());
+			this.registrationEmailService.sendUserRegisteredEmail(
+					registerForm.getEmail(), registerForm.getPassword(),
+					registerForm.getFirstName());
 
 			session.setAttribute("user_name", newUser.getUsername());
 			session.removeAttribute(LMSAccount.class.getName());
@@ -239,15 +222,9 @@ public class LMSAccountController {
 
 		final String cleanUserImageUrl = url.get();
 
-		accountSettingsService.setAccountSetting(newUser, new AccountSetting(
-				null, newUser.getUserId(), AccountSettingsEnum.avatar.name(),
-				AvatarSourceEnum.LTI.name(), Privacy.PUBLIC.name()));
-
-		accountSettingsService.setAccountSetting(newUser,
-				new AccountSetting(null, newUser.getUserId(),
-						AccountSettingsEnum.lti_avatar.name(),
-						cleanUserImageUrl, Privacy.PUBLIC.name()));
-
+		AccountSetting.createLTIAvatarSetting(newUser.getUserId(),
+				cleanUserImageUrl).forEach(
+				as -> accountSettingsService.setAccountSetting(newUser, as));
 	}
 
 	protected Optional<String> cleanUrl(final String userImageUrl) {
@@ -315,41 +292,4 @@ public class LMSAccountController {
 		return token;
 	}
 
-	/**
-	 * Sends an email with the password to the user.
-	 * 
-	 * @param email
-	 * @param password
-	 * @param firstName
-	 * @throws EmailException
-	 */
-	protected void sendUserRegisteredEmail(String email, String password,
-			String firstName) {
-
-		Runnable run = () -> {
-			try {
-
-				String from = environment.getProperty("email.from",
-						"no-reply@vyllage.com");
-
-				String fromUserName = environment.getProperty(
-						"email.from.userName", "Chief of Vyllage");
-
-				String noHTMLMessage = "Your account has been created successfuly. \\n Your password is: "
-						+ password;
-
-				emailBuilder.to(email).from(from).fromUserName(fromUserName)
-						.subject("Account Creation - Vyllage.com")
-						.setNoHtmlMessage(noHTMLMessage)
-						.templateName("email-user-registered")
-						.addTemplateVariable("password", password)
-						.addTemplateVariable("firstName", firstName).send();
-			} catch (Exception e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
-			}
-		};
-
-		executorService.execute(run);
-	}
 }
