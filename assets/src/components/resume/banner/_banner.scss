@@ -143,11 +143,9 @@
     &.off-view {
       position: fixed;
       top: -5em;
-      z-index: 0;
       opacity: 0;
       transition: opacity 0.2s ease 0.15s,
-        top 0.4s ease,
-        z-index 0s linear 0s;
+        top 0.4s ease;
     }
 
     &.visible {
@@ -156,8 +154,7 @@
       z-index: 2;
       opacity: 1;
       transition: opacity 0.2s ease 0.1s,
-        top 0.3s ease,
-        z-index 0s linear 0.3s;
+        top 0.3s ease;
     }
 
     button,
@@ -183,11 +180,9 @@
       }
     }
 
-    .options {
-      button,
-      .button {
-        float: left;
-      }
+    .print,
+    .reorder {
+      float: left;
     }
 
     .profile {

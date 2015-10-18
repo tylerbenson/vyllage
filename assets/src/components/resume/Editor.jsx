@@ -148,6 +148,9 @@ var ResumeEditor = React.createClass({
         content = <Empty />;
       }
     }
+    else {
+      content = <Empty />
+    }
 
     return (
       <div>

@@ -10,7 +10,8 @@ var Reorder = React.createClass({
 	render: function() {
 		var classes = classnames({
 			'secondary': !this.state.resume.isSorting,
-			'flat': true
+			'flat': true,
+			'reorder': true
 		});
 
 		return (
