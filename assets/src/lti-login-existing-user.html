@@ -37,7 +37,8 @@
             <div class="content">
               <h1 class="centered">Log In</h1>
               <div th:if="not ${form.error}">
-                <p class="centered note">This appears to be your first time logging on through this LMS but your email address matches an existing account. For security please log into your Vyllage account to link with this LMS account</p>
+                <p class="centered note">This appears to be your first time logging on through this LMS but your email address matches an existing
+                  account. For security please log into your Vyllage account to link with this LMS account</p>
               </div>
               <div th:if="${form.error}">
                 <p class="centered error">E-mail or Password invalid.</p>

@@ -30,7 +30,17 @@
     position: relative;
   }
 
-
+  p.error {
+    color: $error-color;
+    font-size: 12px;
+    padding: 0.1em 0.2em;
+    i {
+      bottom: 1px;
+      color: $error-color;
+      margin-right: 0.5em;
+      position: relative;
+    }
+  }
 
   &.mini {
     max-width: 720px;

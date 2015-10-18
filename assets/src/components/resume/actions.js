@@ -17,6 +17,7 @@ var validator = require('validator');
   'postSection',
   'putSection',
   'deleteSection',
+  'deleteNewSection',
   'moveGroupOrder',
   'moveSectionOrder',
   // comments

@@ -20,6 +20,7 @@ var Freeform = React.createClass({
     return {
       description: this.props.section.description,
       uiEditMode: this.props.section.newSection,
+      error : false
     };
   },
   getDefaultProps: function () {
@@ -40,23 +41,39 @@ var Freeform = React.createClass({
   handleChange: function(e) {
     e.preventDefault();
     this.setState({description: e.target.value});
+    var section = cloneDeep(this.props.section);
+    section.description = e.target.value;
+    this.validateSection( section );
+
   },
   saveHandler: function(e) {
     var section = this.props.section;
     section.description = this.state.description;
-    actions.putSection(section);
-    this.setState({
-      uiEditMode: false
-    })
+    if( this.validateSection( section ) == false ){
+      actions.putSection(section);
+      this.setState({
+        uiEditMode: false
+      });
+    }
+  },
+  validateSection : function( section ){
+    if( section.description == undefined || section.description.length <= 0 ){
+      this.setState({ error : true });
+      return true;
+    }else{
+      this.setState({ error : false });
+      return false;
+    }
   },
   cancelHandler: function(e) {
     var section = this.props.section;
     if (section.newSection) {
-      actions.deleteSection(section.sectionId);
+      actions.deleteNewSection();
     } else {
       this.setState({
         description:this.props.section.description,
-        uiEditMode: false
+        uiEditMode: false,
+        error : false
       });
     }
   },
@@ -81,25 +98,26 @@ var Freeform = React.createClass({
         <div className='header'>
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
-            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
+            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: this.props.section.newSection == true ? null : <DeleteSection sectionId={this.props.section.sectionId} />}
           </div>: <FeatureToggle name="SECTION_ADVICE"><div className="actions">
             {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
             {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
           </div></FeatureToggle>
         }
         </div>
-        {this.props.section.sectionId ? <div>
+        {this.props.section ? <div>
           <div className="content">
             <Textarea
               ref='description'
               disabled={!uiEditMode}
-              className="flat"
+              className={(this.state.error == true ? "error " : "") + "flat"}
               rows="1"
               autoComplete="off"
               placeholder="Tell us more.."
               value={this.state.description}
               onChange={this.handleChange}
             ></Textarea>
+            { this.state.error == true ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }
           </div>
           <SectionFooter section={this.props.section} owner={this.props.owner} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }
