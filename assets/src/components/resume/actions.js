@@ -23,7 +23,7 @@ var validator = require('validator');
   'getComments',
   'postComment',
   'deleteComment',
-  // advice 
+  // advice
   'saveSectionAdvice',
   'deleteAdvice',
   'mergeAdvice',
@@ -35,18 +35,15 @@ var validator = require('validator');
   'hideComments',
   'toggleComments',
   'toggleNav',
+  'toggleSorting',
   'togglePrintModal'
 ]);
 
   EditorActions.getAllSections.preEmit = function(){
-  
-    var documentId;
-    var tempDocumentId = window.localStorage.getItem('ownDocumentId');
-    if( tempDocumentId != undefined && validator.isNumeric(tempDocumentId ) ){
-      documentId = tempDocumentId;
-    } 
 
-    if( documentId != undefined ){
+    var documentId = window.location.pathname.split('/')[2];
+
+    if( documentId !== undefined ){
       var header;
       var headerUrl = urlTemplate
                   .parse(endpoints.resumeHeader)
@@ -70,7 +67,6 @@ var validator = require('validator');
                 }
               });
           }
-
         });
     }
   }

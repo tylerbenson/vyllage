@@ -86,7 +86,7 @@ var Organization = React.createClass({
     return (
       <div>
         <div className={classes}>
-          { this.props.owner? <MoveButton />: null }
+          { this.props.owner && this.props.isSorting ? <MoveButton />: null }
           <div className='header'>
             <div className='title'>
               <h2>

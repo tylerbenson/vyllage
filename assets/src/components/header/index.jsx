@@ -40,9 +40,6 @@ var HeaderContainer = React.createClass({
                 <i className="ion-document"></i>
                 <span>Resume</span>
               </a></li>
-              <FeatureToggle name="PRINTING">
-                <li><ExportButton documentId={resume.ownDocumentId} sections={resume.sections}  /></li>
-              </FeatureToggle>
               <li>
               	<AdminLink />
               </li>
