@@ -336,16 +336,14 @@
       &.visible {
         top: 2.7em;
       }
-      .avatar {
-        height: 1.75em !important;
-        width: 1.75em !important;
-      }
-      .avatar-container {
-        margin-top: 0;
-      }
-      .info {
-        margin-top: 0.2em;
-        text-align: left;
+      .print,
+      .reorder {
+        & > span {
+          display: none;
+        }
+        & > i {
+          padding: 0.3em;
+        }
       }
     }
   }
@@ -369,6 +367,14 @@
           }
         }
       }
+    }
+  }
+}
+
+.modal-open {
+  .banner {
+    .subheader {
+      z-index: 4;
     }
   }
 }

@@ -11,7 +11,7 @@
 }
 
 .section {
-  margin: 1.75em auto;
+  margin: 1.5em auto;
   position: relative;
 
   &:first-child:last-child {
@@ -385,7 +385,7 @@
 
 @media (max-width: $medium-portrait) {
   .section-holder {
-    margin: 0.5em auto;
+    margin: 2.5em auto 0.5em auto;
     width: 96%;
   }
   .section {
