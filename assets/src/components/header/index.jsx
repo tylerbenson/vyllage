@@ -18,6 +18,11 @@ var HeaderContainer = React.createClass({
     var re = new RegExp(/\/resume\/[0-9]+$/)
     this.isResumePage = re.test(path);
   },
+  handleListClick: function(e) {
+    if(e.target.className.indexOf("milestone-toggle") < 0){
+      resumeActions.toggleNav();
+    }
+  },
   render: function() {
     var name = this.props.name || 'user';
     var title = this.props.title;
@@ -35,7 +40,8 @@ var HeaderContainer = React.createClass({
           <span className="page-title">{title}</span>
           <nav>
             <NavToggle />
-            <ul className={this.state.resume.isNavOpen?'active':''}>
+            <ul onClick={this.handleListClick} className={this.state.resume.isNavOpen?'active':''}>
+              <div className="wrapper">
               <li><a href='/resume' className='flat button'>
                 <i className="ion-document"></i>
                 <span>Resume</span>
@@ -50,13 +56,12 @@ var HeaderContainer = React.createClass({
               <li className="milestone-toggle">
                 <Milestone />
               </li>
-              <li><a href='/account/setting' className='flat settings button'>
+              <li>
+                <a href='/account/setting' className='flat settings button'>
                 <i className="ion-gear-a"></i>
                 <span>Settings</span>
               </a></li>
-              {/*<li className="dropdown-trigger user">
-                <a><i className="avatar ion-person"></i><span className="name">{name?name:'User'}</span></a>
-              </li>*/}
+              </div>
             </ul>
           </nav>
         </div>
