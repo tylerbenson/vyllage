@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.AccessDeniedException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
@@ -167,7 +168,12 @@ public class AccountController {
 			throws UserNotFoundException {
 		User user = userService.getUser(userId);
 
-		excludeIds.add(user.getUserId());
+		final List<Long> excludedIdsCopy = new ArrayList<>();
+		// adding self
+		excludedIdsCopy.add(user.getUserId());
+
+		if (excludeIds != null && !excludeIds.isEmpty())
+			excludedIdsCopy.addAll(excludeIds);
 
 		Map<String, String> filters = new HashMap<>();
 
