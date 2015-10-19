@@ -188,7 +188,7 @@ public class AccountController {
 
 		List<User> users = userContactSuggestionService
 				.getSuggestions(user, filters, limitForEmptyFilter).stream()
-				.filter(u -> !excludeIds.contains(u.getUserId()))
+				.filter(u -> !excludedIdsCopy.contains(u.getUserId()))
 				.collect(Collectors.toList());
 
 		return userService.getAccountContacts(
