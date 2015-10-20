@@ -69,7 +69,9 @@ var ShareableLink = React.createClass({
 									<span>OR</span>
 								</div>
 								<p className="tip">Click the following buttons to share:</p>
-				        <FacebookInvite url={this.state.shareableLink} />
+				        <FacebookInvite url={this.state.shareableLink}>
+				        	<button className="facebook"><i className="ion-social-facebook"></i> Facebook</button>
+				        </FacebookInvite>
 			        </FeatureToggle>
 						</div>
 					</div>

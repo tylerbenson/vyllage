@@ -1,6 +1,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var ExportButton = require('../export/ExportButton');
+var ShareButton = require('../getFeedback/share');
 var Milestone = require('../milestones');
 var NavToggle = require('./NavToggle');
 var resumeStore = require('../resume/store');
@@ -43,6 +44,7 @@ var HeaderContainer = React.createClass({
               <FeatureToggle name="PRINTING">
                 <li><ExportButton documentId={resume.ownDocumentId} sections={resume.sections}  /></li>
               </FeatureToggle>
+              <li><ShareButton documentId={resume.ownDocumentId} sections={resume.sections}  /></li>
               <li>
               	<AdminLink />
               </li>
