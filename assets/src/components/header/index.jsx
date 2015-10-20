@@ -44,7 +44,7 @@ var HeaderContainer = React.createClass({
               <FeatureToggle name="PRINTING">
                 <li><ExportButton documentId={resume.ownDocumentId} sections={resume.sections}  /></li>
               </FeatureToggle>
-              <li><ShareButton documentId={resume.ownDocumentId} sections={resume.sections}  /></li>
+              <li><ShareButton /></li>
               <li>
               	<AdminLink />
               </li>
