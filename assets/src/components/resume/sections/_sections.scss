@@ -5,13 +5,13 @@
 
 .section-holder {
   @include center();
-  margin: 1em auto;
+  margin: 3em auto 1em auto;
   max-width: 720px;
   width: 80%;
 }
 
 .section {
-  margin: 1.75em auto;
+  margin: 1.5em auto;
   position: relative;
 
   &:first-child:last-child {
@@ -395,7 +395,7 @@
 
 @media (max-width: $medium-portrait) {
   .section-holder {
-    margin: 0.5em auto;
+    margin: 3em auto 0.5em auto;
     width: 96%;
   }
   .section {
@@ -475,7 +475,7 @@ $muted-text: lighten($secondary-color, 25%);
 
 .empty-sections {
   font-size: 1.25em;
-  margin: 4em auto;
+  margin: 6em auto 4em auto;
   height: 2.5em;
   text-align: center;
 

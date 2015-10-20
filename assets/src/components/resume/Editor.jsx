@@ -11,6 +11,7 @@ var Empty = require('./sections/Empty');
 var Loading = require('./sections/Loading');
 var Sortable = require('../util/Sortable');
 var Tour = require('../tour');
+var isSorting = false;
 
 var SubSection = React.createClass({
   start: function(event, ui){
@@ -50,6 +51,7 @@ var SubSection = React.createClass({
           key={this.props.data.sectionId}
           section={this.props.data}
           owner={this.props.owner}
+          isSorting={isSorting}
          />
        </Sortable>
     );
@@ -90,7 +92,7 @@ var SectionGroup = React.createClass({
     return (
       <Sortable config={config} className="section" rel={this.props.section.type}>
         <div className="container">
-          { this.props.section.owner ?
+          { this.props.section.owner && isSorting ?
             <span className="inverted secondary button small move move-section" {...this.props}>
               <i className="ion-arrow-move"></i>
               Move
@@ -133,6 +135,7 @@ var ResumeEditor = React.createClass({
     var allSections = this.state.resume.all_section;
     var sections = filter(this.state.resume.sections, {isSupported: true});
     var content;
+    isSorting = this.state.resume.isSorting;
 
     if(allSections !== undefined) {
       if(allSections.length > 0) {
@@ -145,11 +148,14 @@ var ResumeEditor = React.createClass({
         content = <Empty />;
       }
     }
+    else {
+      content = <Empty />
+    }
 
     return (
       <div>
         <Tour page="resume" />
-        <Banner header={this.state.resume.header} settings={this.state.settings} sections={allSections} />
+        <Banner header={this.state.resume.header} ownDocumentId={this.state.resume.ownDocumentId} settings={this.state.settings} sections={sections} />
         {content}
       </div>
     );
