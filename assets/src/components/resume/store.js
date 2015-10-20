@@ -26,18 +26,17 @@ module.exports = Reflux.createStore({
     if (metaToken) {
       this.tokenValue = metaToken.content;
     }
+
     this.documentId = window.location.pathname.split('/')[2];
-    if( validator.isNumeric(this.documentId) ){
-      window.localStorage.setItem('ownDocumentId' , this.documentId );  
-    }else{
-      var tempDocumentId = window.localStorage.getItem('ownDocumentId');
-      if( tempDocumentId != undefined && validator.isNumeric(tempDocumentId ) ){
-        this.documentId = tempDocumentId;
-      }         
-    } 
-    //this.onGetDocumentId();
+    this.onGetDocumentId();
+
+    var tempDocumentId = window.localStorage.getItem('ownDocumentId');
+    if(tempDocumentId !== undefined && validator.isNumeric(tempDocumentId)){
+      this.ownDocumentId = tempDocumentId;
+    }
+
     this.resume = {
-      ownDocumentId: this.documentId,
+      ownDocumentId: this.ownDocumentId !== undefined ? this.ownDocumentId : this.documentId,
       documentId: this.documentId,
       header: {
         firstName: '',
@@ -48,7 +47,8 @@ module.exports = Reflux.createStore({
       all_section:[],
       sectionOrder: ['summary', 'experience', 'education', 'skills'],
       isNavOpen: false,
-      isPrintModalOpen: false
+      isPrintModalOpen: false,
+      isSorting: false
     };
   },
   /*Notifications*/
@@ -102,8 +102,11 @@ module.exports = Reflux.createStore({
         if(res) {
           if(res.ok && res.body.RESUME.length > 0) {
             this.resume.ownDocumentId = res.body.RESUME[0];
-            this.resume.documentId = parseInt(this.resume.documentId) === NaN ? this.resume.documentId : this.resume.ownDocumentId;
+            this.resume.documentId = isNaN(parseInt(this.resume.documentId)) ? this.resume.ownDocumentId : this.resume.documentId;
             this.documentId = this.resume.documentId;
+
+            window.localStorage.setItem('ownDocumentId', this.resume.ownDocumentId);
+
             this.trigger(this.resume);
           }
         }
@@ -501,7 +504,7 @@ module.exports = Reflux.createStore({
       }.bind(this));
   },
   onMergeAdvice : function( advice , section ){
-    console.log(advice, section);
+    // console.log(advice, section);
     request
       .put('/resume/'+this.documentId+'/section/'+section.sectionId+'/advice/'+advice.sectionAdviceId)
       .set(this.tokenHeader, this.tokenValue)
@@ -597,9 +600,12 @@ module.exports = Reflux.createStore({
     this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
     this.trigger(this.resume);
   },
-
   onToggleNav: function() {
     this.resume.isNavOpen = !this.resume.isNavOpen;
+    this.trigger(this.resume);
+  },
+  onToggleSorting: function() {
+    this.resume.isSorting = !this.resume.isSorting;
     this.trigger(this.resume);
   },
   onTogglePrintModal: function(flag) {

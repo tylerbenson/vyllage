@@ -5,7 +5,7 @@
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 4;
+  z-index: 5;
   overflow-y: auto;
 }
 
@@ -213,10 +213,10 @@
         margin: 0 0.25em 0 0;
       }
 
-      .title {
-        float: left;
-        width: 50%;
-      }
+        .title {
+          float: left;
+          width: 75%;
+        }
 
       .description {
         float: left;
