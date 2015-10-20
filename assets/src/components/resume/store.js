@@ -12,7 +12,7 @@ var update = require('react/lib/update');
 var sortby = require('lodash.sortby');
 var filter = require('lodash.filter');
 var PubSub = require('pubsub-js');
-var clone = require('clone-deep');
+var clone = require('clone');
 var validator = require('validator');
 
 module.exports = Reflux.createStore({
