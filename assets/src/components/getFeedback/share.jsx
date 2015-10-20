@@ -54,7 +54,7 @@ var ShareButton = React.createClass({
           			"ion-android-clipboard";
 		return (
 			<span className="wrapper">
-			<a onClick={this.openModal} className="flat print button">
+			<a onClick={this.openModal} className="flat secondary print button">
           <i className="ion-android-share-alt"></i>
           <span>Share</span>
         </a>

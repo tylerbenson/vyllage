@@ -1,7 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
 var ExportButton = require('../export/ExportButton');
-var ShareButton = require('../getFeedback/share');
 var Milestone = require('../milestones');
 var NavToggle = require('./NavToggle');
 var resumeStore = require('../resume/store');
@@ -47,7 +46,6 @@ var HeaderContainer = React.createClass({
                 <i className="ion-document"></i>
                 <span>Resume</span>
               </a></li>
-              <li><ShareButton /></li>
               <li>
               	<AdminLink />
               </li>
