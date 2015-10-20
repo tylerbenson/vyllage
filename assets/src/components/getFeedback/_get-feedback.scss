@@ -101,10 +101,14 @@
 
     .copy {
       background-color: $banner-background;
+      border: 0;
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
-      margin-left: 0.3em;
-      min-width: 8.5em;
+      margin: 0;
+      min-width: 5.5em;
+      padding: 0.85em 1em;
+      position: relative;
+      text-align: center;
       transition: background-color .2s ease;
 
       &.copied {

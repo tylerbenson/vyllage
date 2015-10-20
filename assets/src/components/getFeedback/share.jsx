@@ -46,6 +46,12 @@ var ShareButton = React.createClass({
     });
   },
 	render: function(){
+		var message = !this.state.isReady ? "Generating Link.." :
+            			this.state.isCopied ? "Link Copied!" :
+            			"Copy to Clipboard";
+    var icon = !this.state.isReady ? "ion-load-d" :
+          			this.state.isCopied ? "ion-checkmark" :
+          			"ion-android-clipboard";
 		return (
 			<span className="wrapper">
 			<a onClick={this.openModal} className="flat print button">
@@ -65,17 +71,16 @@ var ShareButton = React.createClass({
           </div>
           <div className="content">
             <div className="subheading">Choose from the following sharing options.</div>
-            <Clipboard text={this.state.shareableLink} onCopyError={function(e){console.log(e);}} onAfterCopy={this.copyHandler} onReady={this.readyHandler}>
 	            <div className="option">
-	            	<i className="ion-android-clipboard"></i>
+		            <Clipboard text={this.state.shareableLink} onAfterCopy={this.copyHandler} onReady={this.readyHandler}>
+		            	<button className="invisible"></button>
+	            	</Clipboard>
+	            	<i className={icon}></i>
 	            	<h2 className="title">
-	            		{!this.state.isReady ? "Generating Link.." :
-	            			this.state.isCopied ? "Link Copied!" :
-	            			"Copy to Clipboard"}
+	            		{message}
 	            	</h2>
-	            	<p className="description">Paste the link anywhere in the web.</p>
+	            	<p className="description">Paste this link anywhere on the web to share.</p>
 	          	</div>
-            </Clipboard>
             <FeatureToggle name="FACEBOOK_SDK">
 	            <FacebookInvite url={this.state.shareableLink}>
 	            	<div className="option">
