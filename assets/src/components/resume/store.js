@@ -104,31 +104,9 @@ module.exports = Reflux.createStore({
             this.resume.ownDocumentId = res.body.RESUME[0];
             this.resume.documentId = isNaN(parseInt(this.resume.documentId)) ? this.resume.ownDocumentId : this.resume.documentId;
             this.documentId = this.resume.documentId;
-
             window.localStorage.setItem('ownDocumentId', this.resume.ownDocumentId);
-
             this.trigger(this.resume);
           }
-        }
-      }.bind(this));
-  },
-  onGetResume: function () {
-    this.onGetHeader();
-    this.onGetSections();
-
-  },
-  onGetHeader: function () {
-    var url = urlTemplate
-                .parse(endpoints.resumeHeader)
-                .expand({documentId: this.documentId});
-    request
-      .get(url)
-      .set('Accept', 'application/json')
-      .end(function (err, res) {
-        if (res.ok) {
-          this.resume.header = res.body;
-
-          this.trigger(this.resume);
         }
       }.bind(this));
   },
@@ -149,47 +127,25 @@ module.exports = Reflux.createStore({
     var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection','CareerInterestsSection','ProjectsSection'];
     return supported.indexOf(type) > -1;
   },
-  onGetSections: function () {
-    var url = urlTemplate
-                .parse(endpoints.resumeSections)
-                .expand({documentId: this.documentId});
-    request
-      .get(url)
-      .set('Accept', 'application/json')
-      .end(function (err, res) {
-        if (res.ok) {
-          this.resume.sections = res.body;
-          this.resume.sections = sortby(this.resume.sections, 'sectionPosition');
-          // Fetching comments here instead of comments component to avoid infinite loop of api calls to comments
-          this.resume.sections.forEach(function (section) {
-            section.isSupported = this.isSupportedSection(section.type);
-            if (section.numberOfComments != undefined ) {
-              this.onGetComments(section.sectionId);
-            }
-          }.bind(this));
-          this.trigger(this.resume);
-        }
-
-      }.bind(this));
-  },
-
-
   onPublishSections : function( sections , header ){
-
+    var self = this;
       this.resume.header = header;
-      this.resume.sections = sections;
+      if( this.resume.sections.length > 0 ){
+        this.resume.sections = this.resume.sections.concat(sections);
+      }else{
+        this.resume.sections = sections;  
+      }
       this.resume.sections.forEach(function (section) {
         section.isSupported = this.isSupportedSection(section.type);
-        if (section.numberOfComments > 0) {
-          this.onGetComments(section.sectionId);
+        if( section.sectionId ){
+          if (section.numberOfComments > 0) {
+            this.onGetComments(section.sectionId);
+          }
+          this.onGetAdvice( section.sectionId);         
         }
-        this.onGetAdvice( section.sectionId);
       }.bind(this));
-
-
      this.resume.all_section = this.doProcessSection( this.resume.sections, header.owner);
      this.trigger(this.resume);
-
   },
 
   doProcessSection : function(sections , owner ){
@@ -273,7 +229,7 @@ module.exports = Reflux.createStore({
   },
 
   onPostSection: function (data) {
-    
+
     if( data.type == 'SummarySection'){
       data.description = null;
     }
@@ -282,11 +238,13 @@ module.exports = Reflux.createStore({
     }
     data.newSection = true; 
     data.isSupported = this.isSupportedSection(data.type);
-    if( this.resume.sections.length > 0 ){
-      var all_section  = clone(this.resume.sections );
-      all_section = sortby( all_section ,'sectionPosition');
-      data.sectionPosition = all_section[all_section.length-1].sectionPosition + 1;
-    }
+    data.sectionPosition = 1;
+    
+    //   if( this.resume.sections.length > 0 ){
+    //     var all_section  = clone(this.resume.sections );
+    //     all_section = sortby( all_section ,'sectionPosition');
+    //     data.sectionPosition = all_section[all_section.length-1].sectionPosition + 1;
+    //   }      
     this.resume.sections.push(data);
     this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
     this.trigger(this.resume);

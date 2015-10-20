@@ -11,7 +11,8 @@ var AdminLink = require('../admin/AdminLink');
 var HeaderContainer = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
   componentWillMount: function(){
-    resumeActions.getResume();
+    //resumeActions.getResume();
+    resumeActions.getAllSections(); 
   },
   componentDidMount: function () {
     var path = window.location.href;

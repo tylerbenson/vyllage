@@ -8,6 +8,7 @@ var endpoints = require('../endpoints');
 var sections = require('../sections');
 var ResumeStore = require('../resume/store');
 var ResumeActions = require('../resume/actions');
+var validator = require('validator');
 
 var MilestoneStore = Reflux.createStore({
   listenables: require('./actions'),
@@ -86,7 +87,7 @@ var MilestoneStore = Reflux.createStore({
   },
   editBannerField: function(field) {
     //in resume page
-    if(window.location.pathname.indexOf('/resume/') > -1) {
+    if(window.location.pathname.indexOf('/resume/') > -1 && validator.isNumeric( window.location.pathname.split('/')[2]) ) {
       var banner = document.querySelector('.banner');
       var editBtn = banner.querySelector('.edit');
       var txtField = banner.querySelector('.' + field);
@@ -104,16 +105,28 @@ var MilestoneStore = Reflux.createStore({
       window.location.href = 'resume/' + this.resume.ownDocumentId + '#edit-banner=' + field;
     }
   },
+  serialize : function(obj) {
+     var str = [];
+     for(var p in obj){
+         if (obj.hasOwnProperty(p)) {
+             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+         }
+     }
+     return str.join("&");
+  },
+
   addSection: function(index) {
     var option = sections[index];
+    
     var tempSection = {
-        title: option.title,
+        title : option.title,
         type: option.type
     };
-    if(window.location.pathname.indexOf('/resume/') > -1) {
+    
+    if(window.location.pathname.indexOf('/resume/') > -1 && validator.isNumeric( window.location.pathname.split('/')[2]) ) {
       ResumeActions.postSection(tempSection);
     }else{
-      window.location.href = 'resume/' + this.resume.ownDocumentId + '#add-section=' + JSON.stringify(tempSection);
+      window.location.href = 'resume/' + this.resume.ownDocumentId + '#' + this.serialize(tempSection);
     }
   },
   getMilestones: function() {
