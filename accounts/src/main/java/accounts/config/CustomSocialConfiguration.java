@@ -1,5 +1,7 @@
 package accounts.config;
 
+import java.util.logging.Logger;
+
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
@@ -35,6 +37,8 @@ import accounts.service.ConfirmationEmailService;
 @EnableSocial
 public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 
+	private final Logger logger = Logger
+			.getLogger(CustomSocialConfiguration.class.getName());
 	// https://github.com/spring-projects/spring-social-samples/blob/master/spring-social-showcase-sec/src/main/java/org/springframework/social/showcase/config/SocialConfig.java
 	// also SocialAutoConfigurationAdapter
 
@@ -129,8 +133,15 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		String googleAppId = environment
 				.getRequiredProperty("spring.social.google.appId");
 
+		String facebookAppId = environment
+				.getRequiredProperty("spring.social.facebook.appId");
+
+		logger.info("Google appId" + googleAppId);
+
+		logger.info("Facebook appId" + facebookAppId);
+
 		String googleAppSecret = environment
-				.getRequiredProperty("spring.social.google.appId");
+				.getRequiredProperty("spring.social.google.appSecret");
 
 		cfConfig.addConnectionFactory(new GoogleConnectionFactory(googleAppId,
 				googleAppSecret));
