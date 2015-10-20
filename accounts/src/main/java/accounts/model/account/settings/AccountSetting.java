@@ -1,6 +1,11 @@
 package accounts.model.account.settings;
 
+import java.util.Arrays;
+import java.util.List;
+
+import lombok.NonNull;
 import lombok.ToString;
+import user.common.constants.AccountSettingsEnum;
 
 @ToString
 public class AccountSetting {
@@ -15,8 +20,8 @@ public class AccountSetting {
 	public AccountSetting() {
 	}
 
-	public AccountSetting(Long accountSettingId, Long userId, String name,
-			String value, String privacy) {
+	public AccountSetting(Long accountSettingId, @NonNull Long userId,
+			@NonNull String name, String value, @NonNull String privacy) {
 		super();
 		this.accountSettingId = accountSettingId;
 		this.userId = userId;
@@ -71,6 +76,66 @@ public class AccountSetting {
 
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+
+	public static AccountSetting createEmailUpdatesSetting(
+			@NonNull final Long userId) {
+
+		AccountSetting emailUpdatesSetting = new AccountSetting();
+
+		emailUpdatesSetting.setName(AccountSettingsEnum.emailUpdates.name());
+		emailUpdatesSetting.setUserId(userId);
+		emailUpdatesSetting.setPrivacy(Privacy.PRIVATE.name().toLowerCase());
+		emailUpdatesSetting.setValue(EmailFrequencyUpdates.NEVER.name()
+				.toLowerCase());
+
+		return emailUpdatesSetting;
+	}
+
+	public static AccountSetting createGravatarAvatarSetting(
+			@NonNull final Long userId) {
+
+		AccountSetting avatarSourceSetting = new AccountSetting();
+
+		avatarSourceSetting.setName(AccountSettingsEnum.avatar.name());
+		avatarSourceSetting.setUserId(userId);
+		avatarSourceSetting.setPrivacy(Privacy.PUBLIC.name().toLowerCase());
+		avatarSourceSetting.setValue(AvatarSourceEnum.GRAVATAR.name()
+				.toLowerCase());
+		return avatarSourceSetting;
+	}
+
+	public static List<AccountSetting> createLTIAvatarSetting(
+			@NonNull final Long userId, @NonNull final String imageUrl) {
+
+		AccountSetting avatarSourceSetting = new AccountSetting();
+
+		avatarSourceSetting.setName(AccountSettingsEnum.avatar.name());
+		avatarSourceSetting.setUserId(userId);
+		avatarSourceSetting.setPrivacy(Privacy.PUBLIC.name());
+		avatarSourceSetting.setValue(AvatarSourceEnum.LTI.name());
+
+		AccountSetting avatarSetting = new AccountSetting();
+
+		avatarSetting.setName(AccountSettingsEnum.lti_avatar.name());
+		avatarSetting.setUserId(userId);
+		avatarSetting.setPrivacy(Privacy.PUBLIC.name());
+		avatarSetting.setValue(imageUrl);
+
+		return Arrays.asList(avatarSourceSetting, avatarSetting);
+	}
+
+	public static AccountSetting createFacebookAvatarSetting(
+			@NonNull final Long userId) {
+
+		AccountSetting avatarSourceSetting = new AccountSetting();
+
+		avatarSourceSetting.setName(AccountSettingsEnum.avatar.name());
+		avatarSourceSetting.setUserId(userId);
+		avatarSourceSetting.setPrivacy(Privacy.PUBLIC.name());
+		avatarSourceSetting.setValue(AvatarSourceEnum.FACEBOOK.name());
+
+		return avatarSourceSetting;
 	}
 
 }

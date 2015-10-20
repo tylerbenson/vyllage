@@ -11,7 +11,7 @@ var ExportButton = React.createClass({
   },
   print: function(e) {
     e.preventDefault();
-    if(filter(this.props.sections, {isSupported: true}).length > 0) {
+    if(this.props.sections.length > 0) {
       window.location = "/document/"+this.props.documentId+"/export";
     }
     else {
@@ -29,7 +29,7 @@ var ExportButton = React.createClass({
 	render: function() {
 		return (
       <span className="wrapper">
-			<a onClick={this.print} className="flat print button">
+			  <a onClick={this.print} className="flat secondary print button">
           <i className="ion-printer"></i>
           <span>Export</span>
         </a>

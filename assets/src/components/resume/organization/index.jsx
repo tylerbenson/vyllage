@@ -19,15 +19,17 @@ var FeatureToggle = require('../../util/FeatureToggle');
 var Organization = React.createClass({
   getInitialState: function () {
     return {
-      section: this.props.section,
+      section : cloneDeep(this.props.section),
       uiEditMode: this.props.section.newSection,
-      newSection: this.props.section.newSection
+      newSection: this.props.section.newSection ,
+      error : false
     };
   },
 
   // componentWillReceiveProps: function (nextProps) {
+  //   if( nextProps.section != undefined )
   //   this.setState({
-  //     section: nextProps.section
+  //     section: cloneDeep(nextProps.section)
   //   });
   // },
   componentDidMount: function() {
@@ -38,7 +40,8 @@ var Organization = React.createClass({
   handleChange: function(key, e) {
     var section = this.state.section;
     section[key] = e.target.value;
-    this.setState({section: section});
+    this.setState({ section: section });
+    this.validateSection( section );
   },
   toggleCurrent: function () {
     var section = this.state.section;
@@ -48,21 +51,33 @@ var Organization = React.createClass({
   saveHandler: function(e) {
     var section = this.state.section;
     section['highlights'] = this.refs.highlights.getHighlights();
-    actions.putSection(section);
-
-    this.setState({
-      section: section,
-      uiEditMode: false
-    });
-  },
-  cancelHandler: function(e) {
-    var section = this.props.section;
-    if (section.newSection) {
-      actions.deleteSection(section.sectionId);
-    } else {
+    if( this.validateSection(section) == false ){
+      actions.putSection(section);
       this.setState({
         section: section,
         uiEditMode: false
+      });
+    }
+
+  },
+  validateSection : function( section ){
+    if( section.organizationName == undefined || section.organizationName.length <= 0 ){
+      this.setState({ error : true });
+      return true;
+    }else{
+      this.setState({ error : false });
+      return false;
+    }
+  },
+  cancelHandler: function(e) {
+    var section = cloneDeep(this.props.section);
+    if (section.newSection) {
+      actions.deleteNewSection();
+    } else {
+      this.setState({
+        section: section,
+        uiEditMode: false,
+        error :false
       });
     }
   },
@@ -74,7 +89,7 @@ var Organization = React.createClass({
     });
   },
   render: function () {
-    var section = this.props.section;
+    var section = this.state.section;
     var uiEditMode = this.state.uiEditMode;
     var placeholders = this.props.placeholders || {};
 
@@ -86,14 +101,14 @@ var Organization = React.createClass({
     return (
       <div>
         <div className={classes}>
-          { this.props.owner? <MoveButton />: null }
+          { this.props.owner && this.props.isSorting ? <MoveButton />: null }
           <div className='header'>
             <div className='title'>
               <h2>
                 <Textarea
                   ref='organizationName'
                   disabled={!uiEditMode}
-                  className='flat'
+                  className={(this.state.error == true ? "error " : "") + "flat"}
                   style={uiEditMode || section.organizationName ? {}: {display: 'none'}}
                   placeholder='Organization Name'
                   type='text'
@@ -102,10 +117,11 @@ var Organization = React.createClass({
                   onChange={this.handleChange.bind(this, 'organizationName')}
                 />
               </h2>
+              { this.state.error == true ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }
             </div>
             {this.props.owner? <div className="actions">
               {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/>}
-              {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
+              {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: this.props.section.newSection == true ? null : <DeleteSection sectionId={this.props.section.sectionId} />}
             </div>: <FeatureToggle name="SECTION_ADVICE"> <div className="actions">
                {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
                {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }

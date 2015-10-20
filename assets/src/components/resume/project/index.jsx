@@ -18,9 +18,10 @@ var validator = require('validator');
 var Project = React.createClass({
   getInitialState: function () {
     return {
-      section: this.props.section,
+      section: cloneDeep(this.props.section),
       uiEditMode: this.props.section.newSection,
-      newSection: this.props.section.newSection
+      newSection: this.props.section.newSection,
+      error : false
     };
   },
   componentDidMount: function() {
@@ -32,6 +33,7 @@ var Project = React.createClass({
     var section = this.state.section;
     section[key] = e.target.value;
     this.setState({section: section});
+    this.validateSection(section);
   },
   toggleCurrent: function () {
     var section = this.state.section;
@@ -40,21 +42,32 @@ var Project = React.createClass({
   },
   saveHandler: function(e) {
     var section = this.state.section;
-    actions.putSection(section);
-
-    this.setState({
-      section: section,
-      uiEditMode: false
-    });
+    if( this.validateSection( section ) == false ){
+      actions.putSection(section);
+      this.setState({
+        section: section,
+        uiEditMode: false
+      });
+    }
+  },
+  validateSection : function( section ){
+    if( section.projectTitle == undefined || section.projectTitle.length <= 0 ){
+      this.setState({ error : true });
+      return true;
+    }else{
+      this.setState({ error : false });
+      return false;
+    }
   },
   cancelHandler: function(e) {
-    var section = this.props.section;
+    var section = cloneDeep(this.props.section);
     if (section.newSection) {
       actions.deleteSection(section.sectionId);
     } else {
       this.setState({
         section: section,
-        uiEditMode: false
+        uiEditMode: false,
+        error : false
       });
     }
   },
@@ -89,7 +102,7 @@ var Project = React.createClass({
     return (
       <div>
         <div className={classes}>
-          { this.props.owner? <MoveButton />: null }
+          { this.props.owner && this.props.isSorting ? <MoveButton />: null }
           <div className='header'>
             <div className='title'>
               <h2>
@@ -97,7 +110,7 @@ var Project = React.createClass({
                   <Textarea
                     ref='projectTitle'
                     disabled={!uiEditMode}
-                    className='flat'
+                    className={(this.state.error == true ? "error " : "") + "flat"}
                     style={uiEditMode || section.projectTitle ? {}: {display: 'none'}}
                     placeholder='Project Title'
                     type='text'
@@ -119,6 +132,7 @@ var Project = React.createClass({
                   </span>
                 }
               </h2>
+               { this.state.error == true ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }
               { uiEditMode ?
                 <input className="flat link"
                   ref='projectUrl'

@@ -37,7 +37,8 @@ var Section = React.createClass({
             index={this.props.section.sectionId}
             section={this.props.section}
             owner={this.props.owner}
-            isMultiple={isMultiple} />
+            isMultiple={isMultiple}
+            isSorting={this.props.isSorting} />
         );
       case 'SummarySection':
         return (
@@ -45,7 +46,8 @@ var Section = React.createClass({
             index={this.props.section.sectionId}
             section={this.props.section}
             owner={this.props.owner}
-            isMultiple={isMultiple} />
+            isMultiple={isMultiple}
+            isSorting={this.props.isSorting} />
         );
       case 'EducationSection':
       case 'JobExperienceSection':
@@ -55,7 +57,8 @@ var Section = React.createClass({
             section={this.props.section}
             placeholders={this.getPlaceholders()}
             owner={this.props.owner}
-            isMultiple={isMultiple} />
+            isMultiple={isMultiple}
+            isSorting={this.props.isSorting} />
         );
       case 'ProjectsSection':
         return (
@@ -63,7 +66,8 @@ var Section = React.createClass({
             index={this.props.section.sectionId}
             section={this.props.section}
             owner={this.props.owner}
-            isMultiple={isMultiple} />
+            isMultiple={isMultiple}
+            isSorting={this.props.isSorting} />
         );
       default:
         return null; //does not render unsupported section

@@ -18,8 +18,6 @@ public class RequestMatcherDisable implements RequestMatcher {
 	private Pattern allowedMethods = Pattern
 			.compile("^(GET|HEAD|TRACE|OPTIONS)$");
 
-	private RegexRequestMatcher unprotectedTogglzMatcher = new RegexRequestMatcher(
-			"/togglz/edit", null);
 	private RegexRequestMatcher unprotectedRegisterLTIMatcher = new RegexRequestMatcher(
 			"/register-from-LTI", null);
 
@@ -29,9 +27,6 @@ public class RequestMatcherDisable implements RequestMatcher {
 	@Override
 	public boolean matches(HttpServletRequest request) {
 		if (allowedMethods.matcher(request.getMethod()).matches())
-			return false;
-
-		if (unprotectedTogglzMatcher.matches(request))
 			return false;
 
 		if (unprotectedRegisterLTIMatcher.matches(request))
