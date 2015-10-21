@@ -2,6 +2,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var request = require('superagent');
 var endpoints = require('../endpoints');
+var sections = require('../sections');
 var urlTemplate = require('url-template');
 var where = require('lodash.where');
 var findindex = require('lodash.findindex');
@@ -133,7 +134,7 @@ module.exports = Reflux.createStore({
       if( this.resume.sections.length > 0 ){
         this.resume.sections = this.resume.sections.concat(sections);
       }else{
-        this.resume.sections = sections;  
+        this.resume.sections = sections;
       }
       this.resume.sections.forEach(function (section) {
         section.isSupported = this.isSupportedSection(section.type);
@@ -141,14 +142,14 @@ module.exports = Reflux.createStore({
           if (section.numberOfComments > 0) {
             this.onGetComments(section.sectionId);
           }
-          this.onGetAdvice( section.sectionId);         
+          this.onGetAdvice( section.sectionId);
         }
       }.bind(this));
      this.resume.all_section = this.doProcessSection( this.resume.sections, header.owner);
      this.trigger(this.resume);
   },
 
-  doProcessSection : function(sections , owner ){
+  doProcessSection: function(sections , owner ){
     var tmp_section = [];
     var all_section = clone( sections );
     all_section = sortby(all_section ,'sectionPosition');
@@ -229,19 +230,29 @@ module.exports = Reflux.createStore({
   },
 
   onPostSection: function (data) {
+    var sectionMeta = filter(sections, {type: data.type});
+    var isMultiple = sectionMeta.length > 0 ? sectionMeta[0].isMultiple : false;
+    var hasSection = filter(this.resume.sections, {type: data.type}).length > 0;
 
-    if( data.type == 'SummarySection'){
-      data.description = null;
+    if((!isMultiple) && hasSection) {
+      var $section = jQuery('.section[rel="' + data.type + '"]');
+      $section.find('.edit').click();
+      $section.find('textarea, input').focus();
     }
-    if( data.type == 'SkillsSection' || data.type == 'CareerInterestsSection' ){
-      data.tags = [];
+    else {
+      if( data.type == 'SummarySection'){
+        data.description = null;
+      }
+      if( data.type == 'SkillsSection' || data.type == 'CareerInterestsSection' ){
+        data.tags = [];
+      }
+      data.newSection = true;
+      data.isSupported = this.isSupportedSection(data.type);
+      data.sectionPosition = 1;
+      this.resume.sections.push(data);
+      this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+      this.trigger(this.resume);
     }
-    data.newSection = true; 
-    data.isSupported = this.isSupportedSection(data.type);
-    data.sectionPosition = 1;    
-    this.resume.sections.push(data);
-    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-    this.trigger(this.resume);
   },
 
   doPostSection: function( data ){
@@ -268,7 +279,7 @@ module.exports = Reflux.createStore({
   onPutSection: function (data) {
 
     if( data.newSection ){
-      this.doPostSection( data );   
+      this.doPostSection( data );
     }else{
       var url = urlTemplate
                 .parse(endpoints.resumeSection)
@@ -297,7 +308,7 @@ module.exports = Reflux.createStore({
           this.remindToShare();
           this.trigger(this.resume);
         }.bind(this));
-    }   
+    }
   },
   onDeleteNewSection: function(){
     var tempSectionIndex = findindex( this.resume.sections , { newSection : true } );

@@ -22,27 +22,12 @@ var AddSection = React.createClass({
     e.preventDefault();
     this.setState({isOpen: true});
   },
-  addSection: function (index) {
-    var option = sections[index];
+  addSection: function (option) {
     actions.postSection({
       title: option.title,
       type: option.type,
       sectionPosition: 1
     });
-  },
-  editSection: function(type) {
-    jQuery('.section[rel="' + type + '"] .edit').click();
-  },
-  handleClick: function(option) {
-    if(option.isMultiple) {
-      this.addSection(option.index);
-    }
-    else if(option.isAlreadyAdded) {
-      this.editSection(option.type);
-    }
-    else {
-      this.addSection(option.index);
-    }
 
     jQuery('.banner .subheader').removeClass('visible');
     this.setState({isOpen: false});
@@ -56,7 +41,7 @@ var AddSection = React.createClass({
       option.index = index++;
 
       return (
-        <AddSectionOption key={index} option={option} onClick={this.handleClick.bind(this, option)} />
+        <AddSectionOption key={index} option={option} onClick={this.addSection.bind(this, option)} />
       );
     }.bind(this));
 
