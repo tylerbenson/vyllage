@@ -224,7 +224,7 @@ public class DocumentLinkController {
 		SocialDocumentLink documentLink = documentLinkService.createSocialLink(
 				linkRequest, loggedInUser);
 
-		return new ResponseEntity<>(environment.getProperty("vyllage.domain",
+		return new ResponseEntity<>(environment.getProperty("social.base.url",
 				"www.vyllage.com") + "/link/s/" + documentLink.getLinkKey(),
 				HttpStatus.OK);
 	}
