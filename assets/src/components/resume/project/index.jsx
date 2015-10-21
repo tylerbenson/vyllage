@@ -12,7 +12,7 @@ var MoveButton = require('../../buttons/move');
 var SectionFooter = require('../sections/Footer');
 var ConfirmUnload = require('../ConfirmUnload');
 var classnames = require('classnames');
-var cloneDeep = require('clone-deep');
+var cloneDeep = require('clone');
 var validator = require('validator');
 
 var Project = React.createClass({

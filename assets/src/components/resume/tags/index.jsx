@@ -16,7 +16,7 @@ var ConfirmUnload = require('../ConfirmUnload');
 var classnames = require('classnames');
 var Sortable = require('../../util/Sortable');
 var resumeActions = require('../actions');
-var cloneDeep = require('clone-deep');
+var cloneDeep = require('clone');
 var FeatureToggle = require('../../util/FeatureToggle');
 var TagSuggestions = require('../../tags');
 require('jquery-ui/autocomplete');

@@ -12,7 +12,7 @@ var SectionFooter = require('../sections/Footer');
 var DeleteSection = require('../Delete');
 var ConfirmUnload = require('../ConfirmUnload');
 var classnames = require('classnames');
-var cloneDeep = require('clone-deep');
+var cloneDeep = require('clone');
 var FeatureToggle = require('../../util/FeatureToggle');
 
 var Freeform = React.createClass({
