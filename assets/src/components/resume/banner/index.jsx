@@ -71,9 +71,13 @@ var Banner = React.createClass({
     });
 
     urlParams = args;
-
+    
     if('edit-banner' in urlParams) {
       this.setState({'editMode': true});
+    }
+    if('type' in urlParams ){
+      actions.postSection(urlParams);
+      window.location.hash = ' ';
     }
   },
   onScroll: function(){

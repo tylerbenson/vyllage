@@ -126,10 +126,6 @@ var SectionRender =  React.createClass({
 
 var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
-  componentWillMount: function () {
-    actions.getResume();
-    actions.getAllSections(); //preEmit
-  },
   render: function () {
     var owner = this.state.resume.header.owner;
     var allSections = this.state.resume.all_section;
