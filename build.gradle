@@ -170,6 +170,9 @@ configure(javaProjects) {
 
     repositories {
         mavenCentral()
+        flatDir {
+            dirs "$rootProject.projectDir/lib"
+        }
     }
 
     dependencies {
@@ -195,7 +198,7 @@ configure(javaProjects) {
 
 
             def spring = '4.1.8.RELEASE'
-            def springSocial = '1.1.2.RELEASE'
+            def springSocial = '1.1.3.BUILD-SNAPSHOT'
             def springSecurity = '3.2.8.RELEASE'
             def jackson = '2.5.4'
             def aspectjrt = '1.8.7'
@@ -241,7 +244,17 @@ configure(javaProjects) {
 
             force "org.aspectj:aspectjrt:$aspectjrt"
             force "org.aspectj:aspectjweaver:$aspectjrt"
+
+            dependencySubstitution {
+                substitute project("org.springframework.social:spring-social-core:1.1.2.RELEASE") with module("org.springframework.social:spring-social-core:1.1.3.BUILD-SNAPSHOT")
+                substitute project("org.springframework.social:spring-social-config:1.1.2.RELEASE") with module("org.springframework.social:spring-social-config:1.1.3.BUILD-SNAPSHOT")
+                substitute project("org.springframework.social:spring-social-web:1.1.2.RELEASE") with module("org.springframework.social:spring-social-web:1.1.3.BUILD-SNAPSHOT")
+                substitute project("org.springframework.social:spring-social-security:1.1.2.RELEASE") with module("org.springframework.social:spring-social-security:1.1.3.BUILD-SNAPSHOT")
+
+            }
         }
+
+
     }
 
 
