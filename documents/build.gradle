@@ -13,6 +13,9 @@ dependencies {
     compile project(':togglz')
     compile project(':util')
 
+    //this is no longer present
+    compile 'javax.inject:javax.inject:1'
+
     compile 'com.google.guava:guava:18.0'
 
     //https://java.net/projects/pdf-renderer
