@@ -24,7 +24,9 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ConnectController;
+import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.connect.web.ReconnectFilter;
+import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.social.facebook.web.DisconnectController;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
@@ -80,6 +82,18 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		// PostToWallAfterConnectInterceptor());
 		// connectController.addInterceptor(new TweetAfterConnectInterceptor());
 		return connectController;
+	}
+
+	@Bean
+	public ProviderSignInController providerSignInController(
+			ConnectionFactoryLocator connectionFactoryLocator,
+			UsersConnectionRepository usersConnectionRepository,
+			SignInAdapter signInAdapter) {
+		ProviderSignInController providerSignInController = new ProviderSignInController(
+				connectionFactoryLocator, usersConnectionRepository,
+				signInAdapter);
+		providerSignInController.setApplicationUrl(SOCIAL_BASE_URL);
+		return providerSignInController;
 	}
 
 	@Override
