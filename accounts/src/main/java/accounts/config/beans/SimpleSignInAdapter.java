@@ -1,4 +1,6 @@
-package user.common.social;
+package accounts.config.beans;
+
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,17 +18,24 @@ import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import user.common.User;
+import user.common.social.SocialSessionEnum;
+import accounts.model.link.SocialDocumentLink;
+import accounts.repository.SharedDocumentRepository;
 
 public class SimpleSignInAdapter implements SignInAdapter {
 
 	private final RequestCache requestCache;
 
-	private UserDetailsService userDetailsService;
+	private final UserDetailsService userDetailsService;
+
+	private final SharedDocumentRepository sharedDocumentRepository;
 
 	public SimpleSignInAdapter(UserDetailsService userDetailsService,
-			RequestCache requestCache) {
+			RequestCache requestCache,
+			SharedDocumentRepository sharedDocumentRepository) {
 		this.userDetailsService = userDetailsService;
 		this.requestCache = requestCache;
+		this.sharedDocumentRepository = sharedDocumentRepository;
 	}
 
 	@Override
@@ -41,12 +50,33 @@ public class SimpleSignInAdapter implements SignInAdapter {
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
 
-		String originalUrl = extractOriginalUrl(request);
+		String originalUrl = this.extractOriginalUrl(request);
 
-		if (originalUrl == null)
+		String linkKey = this.getLinkKey(request);
+
+		Optional<SocialDocumentLink> socialDocumentLink = sharedDocumentRepository
+				.getSocialDocumentLink(linkKey);
+
+		if (originalUrl == null && socialDocumentLink.isPresent())
+			return "/resume/" + socialDocumentLink.get().getDocumentId();
+
+		else if (originalUrl == null)
 			return "/resume";
 
 		return originalUrl;
+	}
+
+	protected String getLinkKey(NativeWebRequest request) {
+		HttpServletRequest nativeReq = request
+				.getNativeRequest(HttpServletRequest.class);
+
+		if (nativeReq == null)
+			return "";
+
+		String linkKey = (String) nativeReq.getSession(false).getAttribute(
+				SocialSessionEnum.LINK_KEY.name());
+
+		return linkKey;
 	}
 
 	private String extractOriginalUrl(NativeWebRequest request) {
