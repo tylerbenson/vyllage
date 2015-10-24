@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jooq.tools.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -164,11 +165,11 @@ public class ResumeController {
 			throws ElementNotFoundException {
 
 		// if the user entered using a link get the key from the session
-		String documentLinkKey = (String) request.getSession().getAttribute(
-				SocialSessionEnum.LINK_KEY.name());
+		String documentLinkKey = getdocumentLinkKey(request);
 
-		createUserPermissionsForLinks(request, documentId, user,
-				documentLinkKey);
+		if (!StringUtils.isBlank(documentLinkKey))
+			setUserPermissionsForLinks(request, documentId, user,
+					documentLinkKey);
 
 		// if document has no sections and I'm not the owner throw exception...
 		if (!documentService.existsForUser(user, documentId))
@@ -184,7 +185,28 @@ public class ResumeController {
 		return "resume";
 	}
 
-	protected void createUserPermissionsForLinks(HttpServletRequest request,
+	/**
+	 * Retrieves and removes the document link key from the session.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	protected String getdocumentLinkKey(HttpServletRequest request) {
+		String documentLinkKey = (String) request.getSession().getAttribute(
+				SocialSessionEnum.LINK_KEY.name());
+		request.getSession().removeAttribute(SocialSessionEnum.LINK_KEY.name());
+		return documentLinkKey;
+	}
+
+	/**
+	 * Sets or updates the user permissions for a given document.
+	 * 
+	 * @param request
+	 * @param documentId
+	 * @param user
+	 * @param documentLinkKey
+	 */
+	protected void setUserPermissionsForLinks(HttpServletRequest request,
 			final Long documentId, final User user, String documentLinkKey) {
 
 		if (documentLinkKey != null && !documentLinkKey.isEmpty()) {
