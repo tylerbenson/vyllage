@@ -14,9 +14,6 @@ dependencies {
     compile project(':togglz')
     compile project(':util')
 
-    //this is no longer present
-    compile 'javax.inject:javax.inject:1'
-
     compile 'org.apache.commons:commons-lang3:3.3.2'
 
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'

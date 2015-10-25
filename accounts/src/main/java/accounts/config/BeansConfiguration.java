@@ -25,9 +25,10 @@ import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.togglz.console.TogglzConsoleServlet;
 
-import user.common.social.SimpleSignInAdapter;
 import accounts.config.beans.ApplicationContextProvider;
+import accounts.config.beans.SimpleSignInAdapter;
 import accounts.repository.EmailRepository;
+import accounts.repository.SharedDocumentRepository;
 import accounts.service.ConfirmationEmailService;
 import accounts.service.utilities.BatchParser;
 
@@ -91,9 +92,10 @@ public class BeansConfiguration {
 	}
 
 	@Bean
-	public SignInAdapter signInAdapter(UserDetailsService userDetailsService) {
+	public SignInAdapter signInAdapter(UserDetailsService userDetailsService,
+			SharedDocumentRepository sharedDocumentRepository) {
 		return new SimpleSignInAdapter(userDetailsService,
-				new HttpSessionRequestCache());
+				new HttpSessionRequestCache(), sharedDocumentRepository);
 	}
 
 	@Bean
