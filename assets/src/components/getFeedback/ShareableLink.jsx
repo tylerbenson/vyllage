@@ -6,12 +6,13 @@ var SuggestionSidebar = require('./suggestions/SuggestionSidebar');
 var FeatureToggle = require('../util/FeatureToggle');
 var FacebookInvite = require('./FacebookInvite');
 var actions = require('./actions');
+var Clipboard = require('clipboard-tool');
 
 var ShareableLink = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
 	getInitialState: function(){
 		return {
-			isReady: false,
+			isReady: true,
 			isCopied: false
 		}
 	},
@@ -19,6 +20,9 @@ var ShareableLink = React.createClass({
 		actions.getShareableLink();
 	},
 	copyHandler: function(){
+
+		Clipboard.write(this.props.url);
+
 		this.setState({
 			isCopied: true
 		});
@@ -28,15 +32,10 @@ var ShareableLink = React.createClass({
 			});
 		}.bind(this), 2500);
 	},
-	readyHandler: function(){
-		this.setState({
-			isReady: true
-		});
-	},
 	render: function(){
 		var isCopied = this.state.isCopied;
 		var isReady = this.state.isReady;
-		var classes = 'padded copy';
+		var classes = 'copyBtn padded copy';
 		var message = 'Copy';
 		var icon = 'ion-android-clipboard';
 
@@ -58,12 +57,10 @@ var ShareableLink = React.createClass({
 						<div className="content">
 							<p className="tip">Paste this link anywhere on the web to share.</p>
 							<input id="shareable-link" className="padded" type="text" value={this.props.url} readOnly />
-							<Clipboard text={this.state.shareableLink} onAfterCopy={this.copyHandler} onReady={this.readyHandler}>
-								<button className={classes}>
+								<button className={classes} onClick={this.copyHandler}>
 									<i className={icon}></i>
 									{message}
 								</button>
-	            </Clipboard>
 							<FeatureToggle name="FACEBOOK_SDK">
 								<div className="or">
 									<span>OR</span>

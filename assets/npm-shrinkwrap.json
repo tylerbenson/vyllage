@@ -6,6 +6,10 @@
       "version": "1.2.2",
       "from": "classnames@1.2.2"
     },
+    "clipboard-tool": {
+      "version": "1.0.6",
+      "from": "clipboard-tool@*"
+    },
     "clone": {
       "version": "1.0.2",
       "from": "clone@*"
