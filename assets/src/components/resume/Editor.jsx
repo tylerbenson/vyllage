@@ -1,5 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
+var classnames = require('classnames');
 var actions = require('./actions');
 var resumeStore = require('./store');
 var settingStore = require('../settings/store');
@@ -115,11 +116,15 @@ var SectionGroup = React.createClass({
 
 
 var SectionRender =  React.createClass({
-    render: function () {
+    render: function (){
       var render_section = function(section , index ){
          return <SectionGroup key={index} section={section} />
-      }
-      return (<div className="section-holder">{this.props.sections.map(render_section)}</div>);
+      };
+      var classes = classnames({
+        "section-holder": true,
+        "owner": this.props.isOwner
+      });
+      return (<div className={classes}>{this.props.sections.map(render_section)}</div>);
     }
 });
 
@@ -135,7 +140,7 @@ var ResumeEditor = React.createClass({
 
     if(allSections !== undefined) {
       if(allSections.length > 0) {
-        content = <SectionRender sections={allSections} />;
+        content = <SectionRender sections={allSections} isOwner={owner} />;
       }
       else if(owner === undefined || sections.length > 0) {
         content = <Loading />;

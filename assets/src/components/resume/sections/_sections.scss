@@ -5,9 +5,13 @@
 
 .section-holder {
   @include center();
-  margin: 3em auto 1em auto;
+  margin: 0.5em auto;
   max-width: 720px;
   width: 80%;
+
+  &.owner {
+    margin-top: 3em;
+  }
 }
 
 .section {
