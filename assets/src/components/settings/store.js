@@ -75,7 +75,7 @@ module.exports = Reflux.createStore({
         break;
       case 'siteUrl':
         if( setting.value.length != 0 ){
-          setting.errorMessage = validator.isEmail(setting.value) ? null: "Invalid Url";          
+          setting.errorMessage = validator.isURL(setting.value) ? null: "Invalid URL";          
         }else{
           setting.errorMessage = null;
         }

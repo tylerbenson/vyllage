@@ -35,7 +35,7 @@ var ShareableLink = React.createClass({
 	render: function(){
 		var isCopied = this.state.isCopied;
 		var isReady = this.state.isReady;
-		var classes = 'copyBtn padded copy';
+		var classes = 'padded copy button';
 		var message = 'Copy';
 		var icon = 'ion-android-clipboard';
 
@@ -57,16 +57,23 @@ var ShareableLink = React.createClass({
 						<div className="content">
 							<p className="tip">Paste this link anywhere on the web to share.</p>
 							<input id="shareable-link" className="padded" type="text" value={this.props.url} readOnly />
-								<button className={classes} onClick={this.copyHandler}>
-									<i className={icon}></i>
-									{message}
-								</button>
+
+							<div className={classes}>
+								<Clipboard text={this.state.shareableLink} onAfterCopy={this.copyHandler} onReady={this.readyHandler}>
+									<button className="invisible"></button>
+		            </Clipboard>
+		            <i className={icon}></i>
+								{message}
+							</div>
+
 							<FeatureToggle name="FACEBOOK_SDK">
 								<div className="or">
 									<span>OR</span>
 								</div>
 								<p className="tip">Click the following buttons to share:</p>
-				        <FacebookInvite url={this.state.shareableLink} />
+				        <FacebookInvite url={this.state.shareableLink}>
+				        	<button className="facebook"><i className="ion-social-facebook"></i> Facebook</button>
+				        </FacebookInvite>
 			        </FeatureToggle>
 						</div>
 					</div>

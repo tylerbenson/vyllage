@@ -226,7 +226,9 @@ module.exports = Reflux.createStore({
             linear_section.push(section);
           }
       });
-     this.postSectionOrder( linear_section );
+      this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+      this.trigger(this.resume);
+      this.postSectionOrder( linear_section );
   },
 
   onPostSection: function (data) {

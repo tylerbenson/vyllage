@@ -3,8 +3,15 @@ var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
 describe('banner', function() {
+  beforeEach(function () {
+    this.server = sinon.fakeServer.create();
+    this.server.respondWith("POST", "/link//share-document.json", [200, { "Content-Type": "application/json" }, 'local.vyllage.com']);
+  });
+
   it('should render properly', function() {
-    var header = {"firstName":"Luke","middleName":"V","lastName":"Skywalker","tagline":"My tagline.","address":"Avenida Siempreviva 1234","email":"user@vyllage.com","phoneNumber":"1234567890","twitter":"on","linkedIn":null,"owner":true};
+    var header = {
+      tagline: 'my tagline'
+    };
     var banner = TestUtils.renderIntoDocument(<Banner header={header}/>)
     expect(TestUtils.isCompositeComponent(banner)).toBe(true);
   });
@@ -13,7 +20,7 @@ describe('banner', function() {
     var header = {
       firstName: 'John',
       lastName: 'Doe'
-    }
+    };
     var banner = TestUtils.renderIntoDocument(<Banner header={header}/>)
     expect(banner.getDOMNode().textContent).toMatch(/John  Doe/)
   });
@@ -21,7 +28,7 @@ describe('banner', function() {
   it('should render tagline', function() {
     var header = {
       tagline: 'my tagline'
-    }
+    };
     var banner = TestUtils.renderIntoDocument(<Banner header={header}/>)
     expect(banner.getDOMNode().textContent).toMatch(/my tagline/)
   });
@@ -29,7 +36,7 @@ describe('banner', function() {
   it('should render address', function() {
     var header = {
       address: 'united states'
-    }
+    };
     var banner = TestUtils.renderIntoDocument(<Banner header={header}/>)
     expect(banner.getDOMNode().textContent).toMatch(/united states/)
   });

@@ -9,7 +9,9 @@ var FacebookInvite = React.createClass({
 	},
 	render: function() {
 		return (
-			<button onClick={this.shareOnFacebook} className="facebook"><i className="ion-social-facebook"></i> Facebook</button>
+			<span onClick={this.shareOnFacebook}>
+				{this.props.children}
+			</span>
 		);
 	}
 
