@@ -1,11 +1,12 @@
 package documents.services;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.logging.Logger;
+
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ import user.common.web.AccountContact;
 import com.newrelic.api.agent.NewRelic;
 
 import documents.model.Comment;
-import documents.model.UserNotification;
-import documents.repository.UserNotificationRepository;
+import documents.model.notifications.CommentNotification;
+import documents.repository.CommentNotificationRepository;
 import email.EmailBuilder;
 
 @Service
@@ -28,30 +29,59 @@ public class NotificationService {
 
 	private static final String EMAIL_RESUME_COMMENT_NOTIFICATION = "email-resume-comment-notification";
 
-	@Autowired
-	private Environment environment;
+	private final Environment environment;
 
-	@Autowired
-	private UserNotificationRepository userNotificationRepository;
+	private final CommentNotificationRepository userNotificationRepository;
 
-	@Autowired
-	@Qualifier(value = "documents.emailBuilder")
-	private EmailBuilder emailBuilder;
+	private final EmailBuilder emailBuilder;
 
-	private String SUBJECT = "Vyllage notification";
+	private final String SUBJECT = "Vyllage notification";
 
-	/**
-	 * Retrieves a single user notification.
-	 *
-	 * @param userId
-	 * @return
-	 */
-	public Optional<UserNotification> getNotification(Long userId) {
-		return userNotificationRepository.get(userId);
+	@Inject
+	public NotificationService(
+			Environment environment,
+			CommentNotificationRepository userNotificationRepository,
+			@Qualifier(value = "documents.emailBuilder") EmailBuilder emailBuilder) {
+		this.environment = environment;
+		this.userNotificationRepository = userNotificationRepository;
+		this.emailBuilder = emailBuilder;
+
 	}
 
 	/**
-	 * Notifies a user that someone has commented his resume.
+	 * Saves a notification about a new comment for the given user.
+	 * 
+	 * @param user
+	 * @param comment
+	 */
+	public void saveCommentNotification(User user, Comment comment) {
+		userNotificationRepository.save(new CommentNotification(user
+				.getUserId(), comment));
+	}
+
+	/**
+	 * Verifies if we need to send an email notification to the user.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public boolean needsToSendEmailNotification(Long userId) {
+		// check that we have not sent a message today
+		List<CommentNotification> notifications = getNotifications(userId);
+
+		boolean notPresent = notifications == null;
+
+		boolean noneWereSentToday = notifications != null
+				&& notifications.stream().noneMatch(n -> n.wasSentToday());
+
+		return notPresent && noneWereSentToday;
+
+		// return !notification.isPresent() ||
+		// !notification.get().wasSentToday();
+	}
+
+	/**
+	 * Notifies a user that someone has commented on his resume.
 	 *
 	 * @param user
 	 *            the user originating the notification
@@ -59,31 +89,14 @@ public class NotificationService {
 	 *            the user we are notifying
 	 * @param comment
 	 *            the comment
-	 *
 	 */
 	public void sendEmailNewCommentNotification(User user,
 			AccountContact accountContact, Comment comment) {
 
 		try {
 			logger.info("Sending notification email.");
-			emailBuilder
-					.from(environment.getProperty("email.from",
-							"no-reply@vyllage.com"))
-					.fromUserName(
-							environment.getProperty("email.from.userName",
-									"Chief of Vyllage"))
-					.to(accountContact.getEmail())
-					.subject(SUBJECT)
-					.addTemplateVariable("comment", comment.getCommentText())
-					.addTemplateVariable("recipientName",
-							accountContact.getFirstName())
-					.addTemplateVariable("senderName", user.getFirstName())
-					.templateName(EMAIL_RESUME_COMMENT_NOTIFICATION)
-					.setNoHtmlMessage("A user has commented your resume.")
-					.send();
 
-			userNotificationRepository.save(new UserNotification(accountContact
-					.getUserId()));
+			generateEmail(user, accountContact, comment).send();
 
 		} catch (EmailException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
@@ -91,4 +104,33 @@ public class NotificationService {
 		}
 
 	}
+
+	protected EmailBuilder generateEmail(User user,
+			AccountContact accountContact, Comment comment) {
+		return emailBuilder
+				.from(environment.getProperty("email.from",
+						"no-reply@vyllage.com"))
+				.fromUserName(
+						environment.getProperty("email.from.userName",
+								"Chief of Vyllage"))
+				.to(accountContact.getEmail())
+				.subject(SUBJECT)
+				.addTemplateVariable("comment", comment.getCommentText())
+				.addTemplateVariable("recipientName",
+						accountContact.getFirstName())
+				.addTemplateVariable("senderName", user.getFirstName())
+				.templateName(EMAIL_RESUME_COMMENT_NOTIFICATION)
+				.setNoHtmlMessage("A user has commented your resume.");
+	}
+
+	/**
+	 * Retrieves all comment notifications.
+	 *
+	 * @param userId
+	 * @return
+	 */
+	protected List<CommentNotification> getNotifications(Long userId) {
+		return userNotificationRepository.get(userId);
+	}
+
 }

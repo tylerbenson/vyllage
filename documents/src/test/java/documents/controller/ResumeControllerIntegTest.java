@@ -54,14 +54,12 @@ import documents.ApplicationTestConfig;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
-import documents.model.UserNotification;
 import documents.model.constants.DocumentTypeEnum;
 import documents.model.constants.SectionType;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
 import documents.repository.CommentRepository;
 import documents.repository.ElementNotFoundException;
-import documents.repository.UserNotificationRepository;
 import documents.services.DocumentService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -77,9 +75,6 @@ public class ResumeControllerIntegTest {
 
 	@Inject
 	private DocumentService documentService;
-
-	@Inject
-	private UserNotificationRepository userNotificationRepository;
 
 	// this is a mock from the mock beans configuration
 	@Inject
@@ -371,7 +366,7 @@ public class ResumeControllerIntegTest {
 
 		Comment comment = comments(sectionId).get(0);
 		comment.setUserId(userId);
-		comment.setCommentId(null);
+		comment.setCommentId(18L);
 		comment.setSectionVersion(1L);
 		comment.setCommentText("Some comment.");
 
@@ -587,10 +582,6 @@ public class ResumeControllerIntegTest {
 
 		User user = generateAndLoginUser();
 		when(user.getUserId()).thenReturn(userId);
-
-		// we cannot access the other projects so we don't send any
-		// notifications, just save one instead
-		userNotificationRepository.save(new UserNotification(userId));
 
 		MvcResult mvcResult = mockMvc
 				.perform(

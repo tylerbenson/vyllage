@@ -8,12 +8,14 @@ import java.time.ZoneId;
 
 import org.junit.Test;
 
+import documents.model.notifications.CommentNotification;
+
 public class UserNotificationTest {
 
 	@Test
 	public void testWasSentToday() {
-		UserNotification un = new UserNotification(0L, LocalDateTime.now(ZoneId
-				.of("UTC")));
+		CommentNotification un = new CommentNotification(0L,
+				LocalDateTime.now(ZoneId.of("UTC")), 0L);
 
 		assertTrue(un.wasSentToday());
 
@@ -21,8 +23,8 @@ public class UserNotificationTest {
 
 	@Test
 	public void testWasSentYesterday() {
-		UserNotification un = new UserNotification(0L, LocalDateTime.now(
-				ZoneId.of("UTC")).minusDays(1L));
+		CommentNotification un = new CommentNotification(0L, LocalDateTime.now(
+				ZoneId.of("UTC")).minusDays(1L), 0L);
 
 		assertFalse(un.wasSentToday());
 

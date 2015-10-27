@@ -57,7 +57,6 @@ import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
 import documents.model.LinkPermissions;
 import documents.model.SectionAdvice;
-import documents.model.UserNotification;
 import documents.model.constants.AdviceStatus;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.document.sections.DocumentSection;
@@ -549,7 +548,7 @@ public class ResumeController {
 	public @ResponseBody Comment saveCommentsForSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
-			@RequestBody final Comment comment,
+			@RequestBody final Comment newComment,
 			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
 		Optional<DocumentAccess> documentAccess = documentAccessRepository.get(
@@ -572,29 +571,32 @@ public class ResumeController {
 			throw e;
 		}
 
-		setCommentData(sectionId, comment, user);
+		setCommentData(sectionId, newComment, user);
 
 		// Check user ids before going to DB...
 		// don't notify if the user commenting is the owner of the document...
-		if (!comment.getUserId().equals(user.getUserId())) {
+		final Comment savedComment = documentService.saveComment(request,
+				newComment);
 
-			// check that we have not sent a message today
-			Optional<UserNotification> notification = notificationService
-					.getNotification(document.getUserId());
+		notificationService.saveCommentNotification(user, savedComment);
 
-			if (!notification.isPresent() || !notification.get().wasSentToday()) {
-				List<AccountContact> recipient = accountService
-						.getContactDataForUsers(request,
-								Arrays.asList(document.getUserId()));
+		boolean isOwner = savedComment.getUserId().equals(user.getUserId());
 
-				// if we have not, send it
-				if (recipient != null && !recipient.isEmpty())
-					notificationService.sendEmailNewCommentNotification(user,
-							recipient.get(0), comment);
-			}
+		if (!isOwner
+				&& notificationService.needsToSendEmailNotification(document
+						.getUserId())) {
+
+			List<AccountContact> recipient = accountService
+					.getContactDataForUsers(request,
+							Arrays.asList(document.getUserId()));
+
+			// if we have not, send it
+			if (recipient != null && !recipient.isEmpty())
+				notificationService.sendEmailNewCommentNotification(user,
+						recipient.get(0), savedComment);
 		}
 
-		return documentService.saveComment(request, comment);
+		return savedComment;
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.DELETE, consumes = "application/json")
