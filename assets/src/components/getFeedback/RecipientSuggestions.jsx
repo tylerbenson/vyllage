@@ -40,6 +40,7 @@ var Autocomplete = React.createClass({
       var classes = {
         'active': this.props.selectedSuggestion === index
       }
+
       return (
         <li key={index} className={classnames(classes)}>
           <div
@@ -77,8 +78,10 @@ var Autocomplete = React.createClass({
     var recommended = this.props.suggestions.recommended || [];
     var suggestionCount = recent.length + recommended.length;
     if ((this.props.show || this.state.isFocused) && (suggestionCount > 0)) {
+
       var style = {
-        position: 'absolute'
+        position: 'absolute',
+        left : this.props.position == "left" ? '5em' : '15em'
       };
       return (
         <div

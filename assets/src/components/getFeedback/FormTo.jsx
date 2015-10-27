@@ -18,6 +18,7 @@ var FormTo = React.createClass({
         />
         <Suggestions
           show={this.props.showSuggestions}
+          position={this.props.suggestionPosition}
           suggestions={this.props.suggestions}
           selectedSuggestion={this.props.selectedSuggestion}
         />
