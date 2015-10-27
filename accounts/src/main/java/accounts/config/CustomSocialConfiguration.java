@@ -1,5 +1,7 @@
 package accounts.config;
 
+import java.util.logging.Logger;
+
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
@@ -22,7 +24,9 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ConnectController;
+import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.connect.web.ReconnectFilter;
+import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.social.facebook.web.DisconnectController;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
@@ -35,6 +39,8 @@ import accounts.service.ConfirmationEmailService;
 @EnableSocial
 public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 
+	private final Logger logger = Logger
+			.getLogger(CustomSocialConfiguration.class.getName());
 	// https://github.com/spring-projects/spring-social-samples/blob/master/spring-social-showcase-sec/src/main/java/org/springframework/social/showcase/config/SocialConfig.java
 	// also SocialAutoConfigurationAdapter
 
@@ -76,6 +82,18 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		// PostToWallAfterConnectInterceptor());
 		// connectController.addInterceptor(new TweetAfterConnectInterceptor());
 		return connectController;
+	}
+
+	@Bean
+	public ProviderSignInController providerSignInController(
+			ConnectionFactoryLocator connectionFactoryLocator,
+			UsersConnectionRepository usersConnectionRepository,
+			SignInAdapter signInAdapter) {
+		ProviderSignInController providerSignInController = new ProviderSignInController(
+				connectionFactoryLocator, usersConnectionRepository,
+				signInAdapter);
+		providerSignInController.setApplicationUrl(SOCIAL_BASE_URL);
+		return providerSignInController;
 	}
 
 	@Override
@@ -129,8 +147,15 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 		String googleAppId = environment
 				.getRequiredProperty("spring.social.google.appId");
 
+		String facebookAppId = environment
+				.getRequiredProperty("spring.social.facebook.appId");
+
+		logger.info("Google appId" + googleAppId);
+
+		logger.info("Facebook appId" + facebookAppId);
+
 		String googleAppSecret = environment
-				.getRequiredProperty("spring.social.google.appId");
+				.getRequiredProperty("spring.social.google.appSecret");
 
 		cfConfig.addConnectionFactory(new GoogleConnectionFactory(googleAppId,
 				googleAppSecret));

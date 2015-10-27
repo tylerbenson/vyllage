@@ -71,7 +71,7 @@ public class AccountControllerTest {
 		String gravatarUrl = "https://secure.gravatar.com/avatar/"
 				+ new String(DigestUtils.md5Hex("user@vyllage.com"));
 
-		when(userService.getAvatar(userId)).thenReturn(gravatarUrl);
+		when(accountSettingsService.getAvatar(userId)).thenReturn(gravatarUrl);
 
 		String avatarUrl = controller.getAvatar(userId);
 
@@ -88,7 +88,7 @@ public class AccountControllerTest {
 
 		User user = mock(User.class);
 
-		when(userService.getAvatar(userId)).thenReturn(facebookUrl);
+		when(accountSettingsService.getAvatar(userId)).thenReturn(facebookUrl);
 		when(userService.getUser(userId)).thenReturn(user);
 
 		String avatarUrl = controller.getAvatar(userId);
@@ -107,7 +107,7 @@ public class AccountControllerTest {
 
 		User user = mock(User.class);
 
-		when(userService.getAvatar(userId)).thenReturn(gravatarUrl);
+		when(accountSettingsService.getAvatar(userId)).thenReturn(gravatarUrl);
 		when(userService.getUser(userId)).thenReturn(user);
 
 		String avatarUrl = controller.getAvatar(userId);

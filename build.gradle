@@ -13,7 +13,7 @@ wrapper.gradleVersion = '2.5'
 
 buildscript {
     ext {
-        springBootVersion = '1.2.6.RELEASE'
+        springBootVersion = '1.2.7.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -21,9 +21,9 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath 'org.flywaydb:flyway-gradle-plugin:3.1'
+        classpath 'org.flywaydb:flyway-gradle-plugin:3.2.1'
         classpath 'com.h2database:h2:1.4.185'
-        classpath 'org.jooq:jooq-codegen:3.5.0'
+        classpath 'org.jooq:jooq-codegen:3.7.0'
         classpath 'nu.studer:gradle-jooq-plugin:1.0.5'
         classpath 'com.palantir:jacoco-coverage:0.3.0'
         classpath 'com.google.guava:guava:18.0' // Used by palantir jacoco-coverage but not properly declared.
@@ -170,6 +170,9 @@ configure(javaProjects) {
 
     repositories {
         mavenCentral()
+        flatDir {
+            dirs "$rootProject.projectDir/lib"
+        }
     }
 
     dependencies {
@@ -194,10 +197,11 @@ configure(javaProjects) {
             failOnVersionConflict()
 
 
-            def spring = '4.1.7.RELEASE'
-            def springSession = '1.1.2.RELEASE'
-            def springSecurity = '3.2.7.RELEASE'
+            def spring = '4.1.8.RELEASE'
+            def springSocial = '1.1.2.RELEASE'
+            def springSecurity = '3.2.8.RELEASE'
             def jackson = '2.5.4'
+            def aspectjrt = '1.8.7'
 
             // force certain versions of dependencies (including transitive)
             //  *append new forced modules:
@@ -217,10 +221,10 @@ configure(javaProjects) {
             force "org.springframework:spring-webmvc:$spring"
 
             //conflicts with 1.1.0 dragged by something...
-            force "org.springframework.social:spring-social-core:$springSession"
-            force "org.springframework.social:spring-social-config:$springSession"
-            force "org.springframework.social:spring-social-web:$springSession"
-            force "org.springframework.social:spring-social-security:$springSession"
+            force "org.springframework.social:spring-social-core:$springSocial"
+            force "org.springframework.social:spring-social-config:$springSocial"
+            force "org.springframework.social:spring-social-web:$springSocial"
+            force "org.springframework.social:spring-social-security:$springSocial"
 
             force "org.springframework.security:spring-security-core:$springSecurity"
             force "org.springframework.security:spring-security-config:$springSecurity"
@@ -237,6 +241,10 @@ configure(javaProjects) {
             // from Swagger
             // conflicts with 1.0.0 at testRuntime on task ':documents:flywayMigrate'. and during runtime
             force 'com.fasterxml:classmate:1.2.0'
+
+            force "org.aspectj:aspectjrt:$aspectjrt"
+            force "org.aspectj:aspectjweaver:$aspectjrt"
+
         }
     }
 
@@ -289,12 +297,12 @@ configure(bootProjects) {
 configure(dbProjects) {
 
     dependencies {
-        compile 'com.h2database:h2:1.3.176'
+        compile 'com.h2database:h2:1.4.185'
         compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
         compile 'org.flywaydb:flyway-core:3.1'
-        compile 'org.jooq:jooq:3.5.0'
+        compile 'org.jooq:jooq:3.7.0'
     }
-    apply plugin: 'flyway'
+    apply plugin: 'org.flywaydb.flyway'
 
     flyway {
         url = "jdbc:h2:$buildDir/db/local"

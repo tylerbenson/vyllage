@@ -1,5 +1,6 @@
 var React = require('react');
 var Reflux = require('reflux');
+var classnames = require('classnames');
 var actions = require('./actions');
 var resumeStore = require('./store');
 var settingStore = require('../settings/store');
@@ -11,6 +12,7 @@ var Empty = require('./sections/Empty');
 var Loading = require('./sections/Loading');
 var Sortable = require('../util/Sortable');
 var Tour = require('../tour');
+var isSorting = false;
 
 var SubSection = React.createClass({
   start: function(event, ui){
@@ -50,6 +52,7 @@ var SubSection = React.createClass({
           key={this.props.data.sectionId}
           section={this.props.data}
           owner={this.props.owner}
+          isSorting={isSorting}
          />
        </Sortable>
     );
@@ -90,7 +93,7 @@ var SectionGroup = React.createClass({
     return (
       <Sortable config={config} className="section" rel={this.props.section.type}>
         <div className="container">
-          { this.props.section.owner ?
+          { this.props.section.owner && isSorting ?
             <span className="inverted secondary button small move move-section" {...this.props}>
               <i className="ion-arrow-move"></i>
               Move
@@ -113,30 +116,31 @@ var SectionGroup = React.createClass({
 
 
 var SectionRender =  React.createClass({
-    render: function () {
+    render: function (){
       var render_section = function(section , index ){
          return <SectionGroup key={index} section={section} />
-      }
-      return (<div className="section-holder">{this.props.sections.map(render_section)}</div>);
+      };
+      var classes = classnames({
+        "section-holder": true,
+        "owner": this.props.isOwner
+      });
+      return (<div className={classes}>{this.props.sections.map(render_section)}</div>);
     }
 });
 
 
 var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
-  componentWillMount: function () {
-    actions.getResume();
-    actions.getAllSections(); //preEmit
-  },
   render: function () {
     var owner = this.state.resume.header.owner;
     var allSections = this.state.resume.all_section;
     var sections = filter(this.state.resume.sections, {isSupported: true});
     var content;
+    isSorting = this.state.resume.isSorting;
 
     if(allSections !== undefined) {
       if(allSections.length > 0) {
-        content = <SectionRender sections={allSections} />;
+        content = <SectionRender sections={allSections} isOwner={owner} />;
       }
       else if(owner === undefined || sections.length > 0) {
         content = <Loading />;
@@ -145,11 +149,14 @@ var ResumeEditor = React.createClass({
         content = <Empty />;
       }
     }
+    else {
+      content = <Empty />
+    }
 
     return (
       <div>
         <Tour page="resume" />
-        <Banner header={this.state.resume.header} settings={this.state.settings} sections={allSections} />
+        <Banner header={this.state.resume.header} ownDocumentId={this.state.resume.ownDocumentId} settings={this.state.settings} sections={sections} />
         {content}
       </div>
     );

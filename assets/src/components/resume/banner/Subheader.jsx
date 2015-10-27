@@ -1,6 +1,10 @@
 var React = require('react');
 var Avatar = require('../../avatar');
 var AddSection = require('../AddSection');
+var FeatureToggle = require('../../util/FeatureToggle');
+var ExportButton = require('../../export/ExportButton');
+var ReorderButton = require('../../buttons/reorder');
+var ShareButton = require('../../getFeedback/share');
 
 var Subheader = React.createClass({
   shouldComponentUpdate: function(nextProps, nextState) {
@@ -12,18 +16,17 @@ var Subheader = React.createClass({
     return (
       <section className="subheader">
         <div className="content">
-          <div className="avatar-container">
-            <Avatar src={this.props.avatar} size="32" />
-          </div>
-          <div className="info">
-            <div className="name">{name}</div>
-            <button className="flat small" onClick={this.props.onEditProfile}>
-            	<i className="ion-edit"></i>
-            	<span>Edit Profile</span>
-            </button>
+          <div className="options">
+            <FeatureToggle name="PRINTING">
+              <ExportButton documentId={this.props.ownDocumentId} sections={this.props.sections}  />
+            </FeatureToggle>
+            <ShareButton />
+            <ReorderButton />
           </div>
 
-          <AddSection sections={this.props.sections} />
+          <div className="add-container">
+            <AddSection sections={this.props.sections} />
+          </div>
         </div>
       </section>
     );

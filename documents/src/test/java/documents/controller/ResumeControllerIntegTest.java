@@ -4,6 +4,7 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -117,8 +118,7 @@ public class ResumeControllerIntegTest {
 		Document document2 = documentService.getDocument(document
 				.getDocumentId());
 
-		Assert.assertEquals("Taglines are different.", tagline,
-				document2.getTagline());
+		assertEquals("Taglines are different.", tagline, document2.getTagline());
 	}
 
 	@Test
@@ -127,8 +127,8 @@ public class ResumeControllerIntegTest {
 
 		List<DocumentSection> resumeSections = controller.getResumeSections(0L);
 
-		Assert.assertNotNull(resumeSections);
-		Assert.assertFalse(resumeSections.isEmpty());
+		assertNotNull(resumeSections);
+		assertFalse(resumeSections.isEmpty());
 	}
 
 	@Test
@@ -151,7 +151,7 @@ public class ResumeControllerIntegTest {
 		DocumentSection resumeSection = controller.getResumeSection(documentId,
 				sectionId);
 
-		Assert.assertNotNull(resumeSection);
+		assertNotNull(resumeSection);
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -164,7 +164,7 @@ public class ResumeControllerIntegTest {
 		DocumentSection resumeSection = controller.getResumeSection(documentId,
 				sectionId);
 
-		Assert.assertNull(resumeSection);
+		assertNull(resumeSection);
 	}
 
 	@Test
@@ -178,10 +178,10 @@ public class ResumeControllerIntegTest {
 		EducationSection createdSection = (EducationSection) controller
 				.createSection(documentId, documentSection);
 
-		Assert.assertNotNull(createdSection);
-		Assert.assertNotNull(createdSection.getDocumentId());
-		Assert.assertNotNull(createdSection.getSectionId());
-		Assert.assertNotNull(createdSection.getSectionPosition());
+		assertNotNull(createdSection);
+		assertNotNull(createdSection.getDocumentId());
+		assertNotNull(createdSection.getSectionId());
+		assertNotNull(createdSection.getSectionPosition());
 		notNullNotEmpty(createdSection.getTitle());
 		notNullNotEmpty(createdSection.getHighlights());
 		notNullNotEmpty(createdSection.getOrganizationDescription());
@@ -218,13 +218,13 @@ public class ResumeControllerIntegTest {
 				.saveSection(documentId, createdSection.getSectionId(),
 						createdSection);
 
-		Assert.assertNotNull(updatedSection);
-		Assert.assertNotNull(updatedSection.getDocumentId());
-		Assert.assertNotNull(updatedSection.getSectionId());
-		Assert.assertNotNull(updatedSection.getSectionPosition());
+		assertNotNull(updatedSection);
+		assertNotNull(updatedSection.getDocumentId());
+		assertNotNull(updatedSection.getSectionId());
+		assertNotNull(updatedSection.getSectionPosition());
 
 		notNullNotEmpty(updatedSection.getRoleDescription());
-		Assert.assertEquals(newDescription, updatedSection.getRoleDescription());
+		assertEquals(newDescription, updatedSection.getRoleDescription());
 		notNullNotEmpty(updatedSection.getTitle());
 		notNullNotEmpty(updatedSection.getHighlights());
 		notNullNotEmpty(updatedSection.getOrganizationDescription());
@@ -338,7 +338,7 @@ public class ResumeControllerIntegTest {
 		DocumentSection createdSection = controller.createSection(documentId,
 				documentSection);
 
-		Assert.assertNotNull(createdSection);
+		assertNotNull(createdSection);
 
 		Long sectionId = documentSection.getSectionId();
 		controller.deleteSection(documentId, sectionId);
@@ -937,11 +937,11 @@ public class ResumeControllerIntegTest {
 	}
 
 	private void notNullNotEmpty(String value) {
-		Assert.assertTrue(value != null && !value.isEmpty());
+		assertTrue(value != null && !value.isEmpty());
 	}
 
 	private void notNullNotEmpty(List<String> value) {
-		Assert.assertTrue(value != null && !value.isEmpty());
+		assertTrue(value != null && !value.isEmpty());
 	}
 
 	private List<Comment> comments(Long sectionId) {

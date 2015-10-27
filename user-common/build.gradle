@@ -3,17 +3,18 @@ jar {
 }
 
 dependencies {
-    compile 'org.springframework.social:spring-social-core:1.1.2.RELEASE'
-    compile 'org.springframework.social:spring-social-config:1.1.2.RELEASE'
-    compile 'org.springframework.social:spring-social-web:1.1.2.RELEASE'
-    compile 'org.springframework.social:spring-social-security:1.1.2.RELEASE'
+    compile 'org.springframework.social:spring-social-core'
+    compile 'org.springframework.social:spring-social-config'
+    compile 'org.springframework.social:spring-social-web'
+    compile 'org.springframework.social:spring-social-security'
     compile 'org.springframework.social:spring-social-facebook:2.0.1.RELEASE'
     compile 'org.springframework.social:spring-social-facebook-web:2.0.1.RELEASE'
     compile 'org.springframework.social:spring-social-google:1.0.0.RELEASE'
 
-    compile 'org.springframework.security:spring-security-core:3.2.7.RELEASE'
+    compile 'org.springframework.security:spring-security-core:3.2.8.RELEASE'
+    compile 'org.springframework.security:spring-security-web:3.2.8.RELEASE'
 //	compile 'org.springframework:spring-core:4.1.6.RELEASE'
-    compile 'org.springframework:spring-tx:4.1.7.RELEASE'
+    compile 'org.springframework:spring-tx:4.1.8.RELEASE'
 //	compile 'org.springframework:spring-web:4.1.6.RELEASE'
 
     compile "javax.servlet:javax.servlet-api:3.1.0"

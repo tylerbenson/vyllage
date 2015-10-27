@@ -16,8 +16,10 @@ var ConfirmUnload = require('../ConfirmUnload');
 var classnames = require('classnames');
 var Sortable = require('../../util/Sortable');
 var resumeActions = require('../actions');
-var cloneDeep = require('clone-deep');
+var cloneDeep = require('clone');
 var FeatureToggle = require('../../util/FeatureToggle');
+var TagSuggestions = require('../../tags');
+require('jquery-ui/autocomplete');
 
 
 var Tags = React.createClass({
@@ -25,6 +27,7 @@ var Tags = React.createClass({
     return {
       tags: this.props.section.tags,
       uiEditMode: this.props.section.newSection,
+      error : false
     };
   },
   getDefaultProps: function () {
@@ -39,11 +42,6 @@ var Tags = React.createClass({
       tags: nextProps.section.tags,
     });
   },
-
-  componentDidMount: function () {
-
-  },
-
   handleChange: function(e) {
     e.preventDefault();
     var input = e.target.value.trim().split(',');
@@ -55,7 +53,6 @@ var Tags = React.createClass({
         tags.push(tag);
       }
     }
-
     this.setState({tags: tags});
   },
   saveHandler: function(e) {
@@ -74,19 +71,33 @@ var Tags = React.createClass({
     section.tags = tags;
     actions.putSection(section);
 
-    this.setState({
-      tags: tags,
-      uiEditMode: false
-    })
+    if( this.validateSection( section ) == false ){
+      actions.putSection(section);
+      this.setState({
+        tags: tags,
+        uiEditMode: false
+      });
+    }
+
+  },
+  validateSection : function( section ){
+    if( section.tags == undefined || section.tags.length <= 0 ){
+      this.setState({ error : true });
+      return true;
+    }else{
+      this.setState({ error : false });
+      return false;
+    }
   },
   cancelHandler: function(e) {
     var section = this.props.section;
     if (section.newSection) {
-      actions.deleteSection(section.sectionId);
+      actions.deleteNewSection();
     } else {
       this.setState({
         tags:this.props.section.tags,
-        uiEditMode: false
+        uiEditMode: false,
+        error:false
       });
     }
   },
@@ -103,16 +114,40 @@ var Tags = React.createClass({
     });
   },
   onTagAdd: function(e) {
-    if(e.which === 13) {
+    var self = this;
+    var suggestions = [];
+    if( this.props.section.type == "SkillsSection"){
+      suggestions = TagSuggestions.skills;
+    }else{
+      suggestions = TagSuggestions.careerInterest;
+    }
+    jQuery(e.target).autocomplete({
+      source: suggestions,
+      select: function( event, ui ) {
+        if( ui.item != undefined ){
+          var temp = self.state.tags.slice();          
+          temp.push(ui.item.value);
+          self.setState({
+            tags: temp
+          });
+          ui.item.value = "";
+        }
+      }
+    });
+
+    if(e.which === 13 ) {
       var temp = this.state.tags.slice();
       temp.push(e.target.value);
-
       this.setState({
         tags: temp
       });
-
       e.target.value = "";
     }
+
+    var section = {}
+    section.tags = this.state.tags.length > 0 ?  this.state.tags : temp ;
+    this.validateSection(section);
+
   },
   start: function(event, ui) {
     ui.placeholder.width(ui.item.width());
@@ -141,23 +176,26 @@ var Tags = React.createClass({
 
     return (
       <div ref="tags" className={classes}>
-        { this.props.owner ? <MoveButton />: null }
+        { this.props.owner && this.props.isSorting ? <MoveButton />: null }
         <div className='header'>
           {this.props.owner ? <div className="actions">
             {uiEditMode? <SaveBtn onClick={this.saveHandler}/>: <EditBtn onClick={this.editHandler}/> }
-            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: <DeleteSection sectionId={this.props.section.sectionId} />}
+            {uiEditMode? <CancelBtn onClick={this.cancelHandler}/>: this.props.section.newSection == true ? null : <DeleteSection sectionId={this.props.section.sectionId} />}
           </div>: <FeatureToggle name="SECTION_ADVICE"> <div className="actions">
             {uiEditMode? <SuggestionBtn onClick={this._saveSuggestionHandler}/>: <EditBtn onClick={this.editHandler}/>}
             {uiEditMode?  <CancelBtn onClick={this.cancelHandler}/>: null }
           </div></FeatureToggle>
         }
         </div>
-        {this.props.section.sectionId ? <div>
+        {this.props.section ? <div>
+
           { this.state.uiEditMode == undefined || this.state.uiEditMode == false ? <div className="tags content">{tags}</div> :
           <Sortable config={config} className="tags content move-tag">
             {tags}
-            {this.state.uiEditMode ? <TagInput onKeyPress={this.onTagAdd} /> : null}
+            {this.state.uiEditMode ? <TagInput className={(tags.length < 1 ? "error " : "") + "inline flat"} onKeyPress={this.onTagAdd} /> : null}
+            { tags.length < 1 ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }
           </Sortable> }
+
 
           <SectionFooter section={this.props.section} owner={this.props.owner} />
           </div>: <p className='content empty'>No {this.props.section.title.toLowerCase()} added yet</p> }

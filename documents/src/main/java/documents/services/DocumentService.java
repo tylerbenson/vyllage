@@ -382,14 +382,23 @@ public class DocumentService {
 
 	/**
 	 * Checks if a given document id exists for a given user. A document will
-	 * exist if, it exists, has sections and the user owns the document.
+	 * exist if, it exists, has sections, the user owns the document or has
+	 * permission to access it.
 	 *
 	 * @param user
 	 * @param documentId
 	 * @return true | false
 	 */
-	public boolean existsForUser(User user, Long documentId) {
-		return documentRepository.existsForUser(user, documentId);
+	public boolean existsForUser(User user, final Long documentId) {
+		List<DocumentAccess> documentPermissions = this
+				.getDocumentPermissions(documentId);
+
+		boolean hasAccess = documentPermissions.stream().anyMatch(
+				p -> p.checkAccess(DocumentAccessEnum.READ)
+						&& documentId.equals(p.getDocumentId())
+						&& user.getUserId().equals(p.getUserId()));
+
+		return documentRepository.existsForUser(user, documentId) || hasAccess;
 	}
 
 	public boolean exists(Long documentId) {

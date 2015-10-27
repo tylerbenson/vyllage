@@ -24,12 +24,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import user.common.User;
-import user.common.constants.AccountSettingsEnum;
 import user.common.social.FaceBookErrorsEnum;
 import user.common.social.SocialSessionEnum;
 import accounts.model.account.settings.AccountSetting;
-import accounts.model.account.settings.AvatarSourceEnum;
-import accounts.model.account.settings.Privacy;
 import accounts.model.form.RegisterForm;
 import accounts.model.link.SocialDocumentLink;
 import accounts.repository.SharedDocumentRepository;
@@ -83,7 +80,7 @@ public class SocialLoginController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public String signup(HttpServletRequest request, WebRequest webRequest,
+	public String signUp(HttpServletRequest request, WebRequest webRequest,
 			Model model) {
 
 		logger.info("Signup with social account");
@@ -209,9 +206,8 @@ public class SocialLoginController {
 	 */
 	protected void saveUserAvatarSetting(User user) {
 
-		accountSettingsService.setAccountSetting(user, new AccountSetting(null,
-				user.getUserId(), AccountSettingsEnum.avatar.name(),
-				AvatarSourceEnum.FACEBOOK.name(), Privacy.PUBLIC.name()));
+		accountSettingsService.setAccountSetting(user,
+				AccountSetting.createFacebookAvatarSetting(user.getUserId()));
 	}
 
 	/**

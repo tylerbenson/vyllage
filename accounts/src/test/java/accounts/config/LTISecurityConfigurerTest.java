@@ -15,7 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.security.Principal;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
@@ -25,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
@@ -44,11 +42,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import accounts.ApplicationTestConfig;
 import accounts.controller.LMSAccountController;
-import accounts.mocks.SelfReturningAnswer;
 import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
+import accounts.service.RegistrationEmailService;
 import accounts.service.SignInUtil;
-import email.EmailBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
@@ -58,15 +55,8 @@ public class LTISecurityConfigurerTest {
 	private LMSAccountController lmsAccountcontoller;
 	private SignInUtil signInUtil = mock(SignInUtil.class);
 	private LMSService lmsService = mock(LMSService.class);
-	private EmailBuilder emailBuilder = mock(EmailBuilder.class,
-			new SelfReturningAnswer());
-
-	private ExecutorService executorService = mock(ExecutorService.class);
 
 	private MockMvc springMvc;
-
-	@Inject
-	private Environment environment;
 
 	@Inject
 	private WebApplicationContext wContext;
@@ -79,6 +69,9 @@ public class LTISecurityConfigurerTest {
 
 	@Inject
 	private AccountSettingsService accountSettingsService;
+
+	@Inject
+	private RegistrationEmailService registrationEmailService;
 
 	private static final String LTI_INSTANCE_GUID = "2c2d9edb89c64a6ca77ed459866925b1";
 	private static final String LTI_INSTANCE_TYPE = "Blackboard";
@@ -100,9 +93,8 @@ public class LTISecurityConfigurerTest {
 	@Before
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
-		lmsAccountcontoller = new LMSAccountController(environment, signInUtil,
-				lmsService, emailBuilder, executorService,
-				accountSettingsService);
+		lmsAccountcontoller = new LMSAccountController(signInUtil, lmsService,
+				accountSettingsService, registrationEmailService);
 	}
 
 	@Test
@@ -132,6 +124,7 @@ public class LTISecurityConfigurerTest {
 
 	@Test
 	public void testLTIAuthentication() throws Exception {
+		@SuppressWarnings("deprecation")
 		ResultActions result = springMvc
 				.perform(
 						post("/lti/account")

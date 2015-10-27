@@ -10,7 +10,7 @@ var settingActions = require('../../settings/actions');
 var filter = require('lodash.filter');
 var phoneFormatter = require('phone-formatter');
 var validator = require('validator');
-var clone = require('clone-deep');
+var clone = require('clone');
 var foreach = require('lodash.foreach');
 var OnScroll = require('react-window-mixins').OnScroll;
 var PubSub = require('pubsub-js');
@@ -71,9 +71,13 @@ var Banner = React.createClass({
     });
 
     urlParams = args;
-
+    
     if('edit-banner' in urlParams) {
       this.setState({'editMode': true});
+    }
+    if('type' in urlParams ){
+      actions.postSection(urlParams);
+      window.location.hash = ' ';
     }
   },
   onScroll: function(){
@@ -197,20 +201,25 @@ var Banner = React.createClass({
     this.setState({editMode: flag});
   },
   toggleSubheader: function(lastScrollTop){
+    var height = this.refs.banner.getDOMNode().offsetHeight;
+    var subheader = this.refs.subheader.getDOMNode();
     var scrollTop = window.scrollY;
     var scrollDirection = scrollTop - lastScrollTop;
+    var offViewClass = ' off-view';
+
+    subheader.className = subheader.className.replace(offViewClass, '');
+    if(scrollTop !== undefined && scrollTop > height + subheader.offsetHeight) {
+      subheader.className += offViewClass;
+    }
 
     if(scrollDirection != 0) {
-      var height = this.refs.banner.getDOMNode().offsetHeight;
-      var subheader;
       if( this.refs.subheader != undefined ){
-        subheader = this.refs.subheader.getDOMNode();
         var dragging = subheader.className.indexOf('dragging') > -1;
-        var className = ' visible';
+        var visibleClass = ' visible';
 
-        subheader.className = subheader.className.replace(className, '');
+        subheader.className = subheader.className.replace(visibleClass, '');
         if(scrollTop > height && scrollDirection < 0 && !dragging) {
-          subheader.className += className;
+          subheader.className += visibleClass;
         }
       }
     }
@@ -346,8 +355,6 @@ var Banner = React.createClass({
                   <i className="ion-edit"></i>
                   <span>Edit Profile</span>
                 </button>
-
-                <AddSection sections={this.props.sections} />
               </div>
             )}
           </div>
@@ -356,7 +363,7 @@ var Banner = React.createClass({
         <Alert id='banner-alert' />
 
         {(header.owner?
-          <Subheader ref="subheader" avatar={header.avatarUrl} name={name} onEditProfile={this.toggleEditable.bind(this, true)} sections={this.props.sections} />
+          <Subheader ref="subheader" ownDocumentId={this.props.ownDocumentId} avatar={header.avatarUrl} name={name} onEditProfile={this.toggleEditable.bind(this, true)} sections={this.props.sections} />
         :null)}
       </section>
     );

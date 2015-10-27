@@ -17,13 +17,14 @@ var validator = require('validator');
   'postSection',
   'putSection',
   'deleteSection',
+  'deleteNewSection',
   'moveGroupOrder',
   'moveSectionOrder',
   // comments
   'getComments',
   'postComment',
   'deleteComment',
-  // advice 
+  // advice
   'saveSectionAdvice',
   'deleteAdvice',
   'mergeAdvice',
@@ -35,18 +36,23 @@ var validator = require('validator');
   'hideComments',
   'toggleComments',
   'toggleNav',
+  'toggleSorting',
   'togglePrintModal'
 ]);
 
   EditorActions.getAllSections.preEmit = function(){
-  
-    var documentId;
-    var tempDocumentId = window.localStorage.getItem('ownDocumentId');
-    if( tempDocumentId != undefined && validator.isNumeric(tempDocumentId ) ){
-      documentId = tempDocumentId;
-    } 
 
-    if( documentId != undefined ){
+    //Load resumé based on current URL
+    var documentId = window.location.pathname.split('/')[2];
+    if(!validator.isNumeric(documentId)){
+      var tempDocumentId = window.localStorage.getItem('ownDocumentId');
+      //Load own resumé
+      if(tempDocumentId != undefined && validator.isNumeric(tempDocumentId)){
+        documentId = tempDocumentId;
+      }
+    }
+
+    if( documentId !== undefined ){
       var header;
       var headerUrl = urlTemplate
                   .parse(endpoints.resumeHeader)
@@ -70,7 +76,6 @@ var validator = require('validator');
                 }
               });
           }
-
         });
     }
   }

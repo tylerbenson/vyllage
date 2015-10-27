@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
@@ -25,7 +24,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.core.env.Environment;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -38,13 +36,12 @@ import org.springframework.web.context.WebApplicationContext;
 import user.common.User;
 import user.common.constants.AccountSettingsEnum;
 import accounts.ApplicationTestConfig;
-import accounts.mocks.SelfReturningAnswer;
 import accounts.model.account.settings.AccountSetting;
 import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
+import accounts.service.RegistrationEmailService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
-import email.EmailBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
@@ -53,9 +50,6 @@ public class LMSAccountControllerTest {
 	private LMSAccountController lmsAccountcontoller;
 	private SignInUtil signInUtil = mock(SignInUtil.class);
 	private LMSService lmsService = mock(LMSService.class);
-
-	private EmailBuilder emailBuilder = mock(EmailBuilder.class,
-			new SelfReturningAnswer());
 
 	private MockMvc springMvc;
 
@@ -69,16 +63,13 @@ public class LMSAccountControllerTest {
 	private MockHttpServletRequest request;
 
 	@Inject
-	private Environment environment;
-
-	@Inject
-	private ExecutorService executorService;
-
-	@Inject
 	private AccountSettingsService accountSettingsService;
 
 	@Inject
 	private UserService userService;
+
+	@Inject
+	private RegistrationEmailService registrationEmailService;
 
 	private static final String LTI_INSTANCE_GUID = "2c2d9edb89c64a6ca77ed459866925b1";
 	private static final String LTI_INSTANCE_TYPE = "Blackboard";
@@ -105,9 +96,8 @@ public class LMSAccountControllerTest {
 	@Before
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
-		lmsAccountcontoller = new LMSAccountController(environment, signInUtil,
-				lmsService, emailBuilder, executorService,
-				accountSettingsService);
+		lmsAccountcontoller = new LMSAccountController(signInUtil, lmsService,
+				accountSettingsService, registrationEmailService);
 	}
 
 	@Test

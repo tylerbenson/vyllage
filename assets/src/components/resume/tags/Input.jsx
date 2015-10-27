@@ -6,7 +6,7 @@ var TagInput = React.createClass({
 	},
 	render: function() {
 		return (
-			<input className="inline flat" ref="tagInput" placeholder="Type to add.." type="text" onKeyPress={this.props.onKeyPress} />
+			<input className={this.props.className} ref="tagInput" placeholder="Type to add.." type="text" onKeyPress={this.props.onKeyPress} />
 		);
 	}
 });
