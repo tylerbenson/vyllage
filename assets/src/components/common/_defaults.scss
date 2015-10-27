@@ -32,6 +32,10 @@ body {
   height: 100%;
 }
 
+table * {
+  @include user-select(initial);
+}
+
 #container {
   min-height: 100%;
   height: auto !important;
