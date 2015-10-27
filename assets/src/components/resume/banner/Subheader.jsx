@@ -4,6 +4,7 @@ var AddSection = require('../AddSection');
 var FeatureToggle = require('../../util/FeatureToggle');
 var ExportButton = require('../../export/ExportButton');
 var ReorderButton = require('../../buttons/reorder');
+var ShareButton = require('../../getFeedback/share');
 
 var Subheader = React.createClass({
   shouldComponentUpdate: function(nextProps, nextState) {
@@ -19,6 +20,7 @@ var Subheader = React.createClass({
             <FeatureToggle name="PRINTING">
               <ExportButton documentId={this.props.ownDocumentId} sections={this.props.sections}  />
             </FeatureToggle>
+            <ShareButton />
             <ReorderButton />
           </div>
 
