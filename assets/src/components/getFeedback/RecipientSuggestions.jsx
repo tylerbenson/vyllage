@@ -39,7 +39,7 @@ var Autocomplete = React.createClass({
     return suggestions.map(function (recipient, index) {
       var classes = {
         'active': this.props.selectedSuggestion === index
-      }
+      };
 
       return (
         <li key={index} className={classnames(classes)}>
@@ -59,7 +59,7 @@ var Autocomplete = React.createClass({
     return suggestions.map(function (recipient, index) {
       var classes = {
         'active': this.props.selectedSuggestion === this.props.suggestions.recent.length + index
-      }
+      };
       return (
         <li key={this.props.suggestions.recent.length + index} className={classnames(classes)}>
           <div
@@ -77,21 +77,19 @@ var Autocomplete = React.createClass({
     var recent = this.props.suggestions.recent || [];
     var recommended = this.props.suggestions.recommended || [];
     var suggestionCount = recent.length + recommended.length;
+    var classes = classnames({
+      "autocomplete": true,
+      "last-name": this.props.position !== "left"
+    });
     if ((this.props.show || this.state.isFocused) && (suggestionCount > 0)) {
-
-      var style = {
-        position: 'absolute',
-        left : this.props.position == "left" ? '5em' : '15em'
-      };
       return (
         <div
           onMouseDown={!isTouch? this.enterHandler: null}
           onMouseUp={!isTouch? this.leaveHanlder: null}
           onTouchStart={isTouch? this.enterHandler: null}
           onTouchEnd={isTouch? this.leaveHanlder: null}
-          style={{marginTop: '100px'}}
         >
-          <ul id='suggested-users-list' style={style} className="autocomplete">
+          <ul id='suggested-users-list' className={classes}>
             {(recent.length > 0) ? <li className="title">
               Recent
             </li>: null}

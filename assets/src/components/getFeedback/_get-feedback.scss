@@ -262,12 +262,6 @@
           &.email {
             width: 16em;
           }
-
-          &:focus {
-            & + .autocomplete {
-              display: inline-block;
-            }
-          }
         }
         .error {
           color: $error-color;
