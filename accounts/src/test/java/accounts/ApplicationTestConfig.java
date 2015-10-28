@@ -27,6 +27,10 @@ public class ApplicationTestConfig implements CommandLineRunner {
 	}
 
 	public static void main(String[] args) {
+		System.setProperty("spring.thymeleaf.prefix",
+				"file:///" + System.getProperty("PROJECT_HOME")
+						+ "/assets/src/");
+
 		SpringApplication.run(Application.class, args);
 	}
 }
