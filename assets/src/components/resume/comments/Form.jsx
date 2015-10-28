@@ -18,6 +18,7 @@ var CommentForm = React.createClass({
     if (this.state.value) {
       actions.postComment({
         sectionId: this.props.sectionId,
+        sectionVersion: this.props.sectionVersion,
         commentText: this.state.value
       });
       this.setState({value: ''});
