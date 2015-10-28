@@ -26,6 +26,16 @@ header {
         }
       }
 
+      &.support {
+        display: none;
+        i {
+          font-size: 1.15em;
+          position: relative;
+          top: -0.15em;
+          left: -0.15em;
+        }
+      }
+
       span,
       i {
         color: $inverted-text-color;
@@ -325,6 +335,10 @@ header {
       overflow: hidden;
     }
   }
+  //Hide Zopim
+  .zopim {
+    display: none;
+  }
   header {
     nav{
       .nav-toggle {
@@ -382,6 +396,9 @@ header {
               span {
                 display: inline !important;
               }
+            }
+            &.support {
+              display: inline-block;
             }
           }
         }
