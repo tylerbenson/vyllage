@@ -8,7 +8,8 @@ header {
   z-index: 4;
 
   nav {
-    .flat.button {
+    .button.flat,
+    button.flat {
       cursor: pointer;
       opacity: 0.85;
       padding: 0.425em;
@@ -379,27 +380,26 @@ header {
           display: block;
         }
 
-        a {
-          &.flat.button {
-            &.milestones {
-              margin-top: 0.75em;
-              & > .avatar {
-                height: 1.25em !important;
-                width: 1.25em !important;
-                margin: 0 0.5em 0 0;
-              }
-              span {
-                display: inline !important;
-              }
+        .button.flat,
+        button.flat {
+          &.milestones {
+            margin-top: 0.75em;
+            & > .avatar {
+              height: 1.25em !important;
+              width: 1.25em !important;
+              margin: 0 0.5em 0 0;
             }
-            &.settings {
-              span {
-                display: inline !important;
-              }
+            span {
+              display: inline !important;
             }
-            &.support {
-              display: inline-block;
+          }
+          &.settings {
+            span {
+              display: inline !important;
             }
+          }
+          &.support {
+            display: inline-block;
           }
         }
       }
