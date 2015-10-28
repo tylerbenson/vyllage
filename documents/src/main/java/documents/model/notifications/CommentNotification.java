@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import lombok.NonNull;
+import documents.domain.tables.records.CommentNotificationRecord;
 import documents.model.Comment;
 
 /**
@@ -14,20 +15,28 @@ import documents.model.Comment;
  */
 public class CommentNotification {
 	private final Long userId;
+	private final Long commentUserId;
+
 	private LocalDateTime dateCreated;
 	private final Long commentId;
 
-	public CommentNotification(@NonNull Long userId, @NonNull Comment comment) {
+	private final String sectionTitle;
+
+	public CommentNotification(@NonNull Long userId, @NonNull Comment comment,
+			String sectionTitle) {
 		this.userId = userId;
+		this.commentUserId = comment.getUserId();
 		this.commentId = comment.getCommentId();
+		this.sectionTitle = sectionTitle;
 
 	}
 
-	public CommentNotification(@NonNull Long userId,
-			@NonNull LocalDateTime dateCreated, @NonNull Long commentId) {
-		this.userId = userId;
-		this.dateCreated = dateCreated;
-		this.commentId = commentId;
+	public CommentNotification(CommentNotificationRecord record) {
+		this.userId = record.getUserId();
+		this.commentUserId = record.getCommentUserId();
+		this.dateCreated = record.getDateCreated().toLocalDateTime();
+		this.commentId = record.getCommentId();
+		this.sectionTitle = record.getSectionTitle();
 	}
 
 	public Long getUserId() {
@@ -42,8 +51,17 @@ public class CommentNotification {
 		return commentId;
 	}
 
+	public Long getCommentUserId() {
+		return commentUserId;
+	}
+
 	public boolean wasSentToday() {
 		return LocalDateTime.now(ZoneId.of("UTC")).getDayOfMonth() == getDateCreated()
 				.atZone(ZoneId.of("UTC")).getDayOfMonth();
 	}
+
+	public String getSectionTitle() {
+		return sectionTitle;
+	}
+
 }

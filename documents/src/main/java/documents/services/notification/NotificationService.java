@@ -1,4 +1,4 @@
-package documents.services;
+package documents.services.notification;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -51,12 +51,15 @@ public class NotificationService {
 	/**
 	 * Saves a notification about a new comment for the given user.
 	 * 
-	 * @param user
+	 * @param userId
+	 *            the user owning the document
 	 * @param comment
+	 * @param sectionTitle
 	 */
-	public void saveCommentNotification(User user, Comment comment) {
-		userNotificationRepository.save(new CommentNotification(user
-				.getUserId(), comment));
+	public void saveCommentNotification(Long userId, Comment comment,
+			String sectionTitle) {
+		userNotificationRepository.save(new CommentNotification(userId,
+				comment, sectionTitle));
 	}
 
 	/**
@@ -67,14 +70,14 @@ public class NotificationService {
 	 */
 	public boolean needsToSendEmailNotification(Long userId) {
 		// check that we have not sent a message today
-		List<CommentNotification> notifications = getNotifications(userId);
+		List<CommentNotification> notifications = getCommentNotifications(userId);
 
-		boolean notPresent = notifications == null;
+		boolean present = notifications != null;
 
-		boolean noneWereSentToday = notifications != null
+		boolean noneWereSentToday = present
 				&& notifications.stream().noneMatch(n -> n.wasSentToday());
 
-		return notPresent && noneWereSentToday;
+		return noneWereSentToday;
 
 		// return !notification.isPresent() ||
 		// !notification.get().wasSentToday();
@@ -129,7 +132,7 @@ public class NotificationService {
 	 * @param userId
 	 * @return
 	 */
-	protected List<CommentNotification> getNotifications(Long userId) {
+	public List<CommentNotification> getCommentNotifications(Long userId) {
 		return userNotificationRepository.get(userId);
 	}
 

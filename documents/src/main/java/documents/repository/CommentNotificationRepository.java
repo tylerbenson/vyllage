@@ -36,13 +36,8 @@ public class CommentNotificationRepository {
 				|| commentNotificationRecords.isEmpty())
 			return Collections.emptyList();
 		else
-			return commentNotificationRecords
-					.stream()
-					.map(record -> new CommentNotification(
-							record.getUserId(),
-							record.getDateCreated()
-									.toLocalDateTime(),
-							record.getCommentId()))
+			return commentNotificationRecords.stream()
+					.map(record -> new CommentNotification(record))
 					.collect(Collectors.toList());
 
 	}
@@ -69,7 +64,9 @@ public class CommentNotificationRepository {
 					.newRecord(COMMENT_NOTIFICATION);
 
 			newRecord.setUserId(commentNotification.getUserId());
+			newRecord.setCommentUserId(commentNotification.getCommentUserId());
 			newRecord.setCommentId(commentNotification.getCommentId());
+			newRecord.setSectionTitle(commentNotification.getSectionTitle());
 			newRecord.setDateCreated(Timestamp.valueOf(LocalDateTime.now(ZoneId
 					.of("UTC"))));
 			newRecord.store();

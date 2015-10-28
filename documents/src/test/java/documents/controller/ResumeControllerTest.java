@@ -24,7 +24,7 @@ import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
-import documents.services.NotificationService;
+import documents.services.notification.NotificationService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ResumeControllerTest {

@@ -64,9 +64,9 @@ import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
-import documents.services.NotificationService;
 import documents.services.aspect.CheckReadAccess;
 import documents.services.aspect.CheckWriteAccess;
+import documents.services.notification.NotificationService;
 
 @Controller
 @RequestMapping("resume")
@@ -561,9 +561,11 @@ public class ResumeController {
 
 		// notification
 		Document document = null;
+		DocumentSection documentSection = null;
 
 		try {
 			document = documentService.getDocument(documentId);
+			documentSection = documentService.getDocumentSection(sectionId);
 
 		} catch (ElementNotFoundException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
@@ -578,9 +580,20 @@ public class ResumeController {
 		final Comment savedComment = documentService.saveComment(request,
 				newComment);
 
-		notificationService.saveCommentNotification(user, savedComment);
+		notifyOfNewComment(request, user, document, documentSection,
+				savedComment);
 
-		boolean isOwner = savedComment.getUserId().equals(user.getUserId());
+		return savedComment;
+	}
+
+	protected void notifyOfNewComment(HttpServletRequest request, User user,
+			Document document, DocumentSection documentSection,
+			final Comment savedComment) {
+
+		notificationService.saveCommentNotification(document.getUserId(),
+				savedComment, documentSection.getTitle());
+
+		boolean isOwner = document.getUserId().equals(user.getUserId());
 
 		if (!isOwner
 				&& notificationService.needsToSendEmailNotification(document
@@ -595,8 +608,6 @@ public class ResumeController {
 				notificationService.sendEmailNewCommentNotification(user,
 						recipient.get(0), savedComment);
 		}
-
-		return savedComment;
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.DELETE, consumes = "application/json")
