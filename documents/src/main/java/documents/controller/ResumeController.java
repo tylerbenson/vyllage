@@ -575,8 +575,6 @@ public class ResumeController {
 
 		setCommentData(sectionId, newComment, user);
 
-		// Check user ids before going to DB...
-		// don't notify if the user commenting is the owner of the document...
 		final Comment savedComment = documentService.saveComment(request,
 				newComment);
 
@@ -595,6 +593,8 @@ public class ResumeController {
 
 		boolean isOwner = document.getUserId().equals(user.getUserId());
 
+		// Check user ids before going to DB...
+		// don't notify if the user commenting is the owner of the document...
 		if (!isOwner
 				&& notificationService.needsToSendEmailNotification(document
 						.getUserId())) {

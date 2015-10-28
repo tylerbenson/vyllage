@@ -366,7 +366,7 @@ public class ResumeControllerIntegTest {
 
 		Comment comment = comments(sectionId).get(0);
 		comment.setUserId(userId);
-		comment.setCommentId(18L);
+		comment.setCommentId(null);
 		comment.setSectionVersion(1L);
 		comment.setCommentText("Some comment.");
 
