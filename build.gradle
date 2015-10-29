@@ -267,7 +267,10 @@ configure(javaProjects) {
         // See ClientResourcesConfig
         systemProperty 'PROJECT_HOME', rootProject.rootDir
         systemProperty 'spring.profiles.active', 'test'
-        systemProperty 'spring.thymeleaf.prefix', "/home/ubuntu/vyllage/assets/src"
+
+        //This is the correct path, checked with ls, but it doesn't work.
+        //It's cursed.
+        //systemProperty 'spring.thymeleaf.prefix', '/home/ubuntu/vyllage/assets/src'
     }
 }
 

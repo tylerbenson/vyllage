@@ -17,6 +17,13 @@ public class ApplicationTests {
 	@Inject
 	private Environment environment;
 
+	// @BeforeClass
+	// public static void init() {
+	// System.setProperty("spring.thymeleaf.prefix",
+	// "file:///" + System.getProperty("PROJECT_HOME")
+	// + "/assets/src/");
+	// }
+
 	@Test
 	public void contextLoads() {
 		environment.getRequiredProperty("flyway.locations");
