@@ -2,7 +2,6 @@ package connections.email;
 
 import javax.inject.Inject;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,12 +25,12 @@ public class EmailTest {
 	@SuppressWarnings("unused")
 	private String to = "no-reply@vyllage.com";
 
-	@BeforeClass
-	public static void init() {
-		System.setProperty("spring.thymeleaf.prefix",
-				"file:///" + System.getProperty("PROJECT_HOME")
-						+ "/assets/src/");
-	}
+	// @BeforeClass
+	// public static void init() {
+	// System.setProperty("spring.thymeleaf.prefix",
+	// "file:///" + System.getProperty("PROJECT_HOME")
+	// + "/assets/src/");
+	// }
 
 	@Test
 	public void test() {

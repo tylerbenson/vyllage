@@ -9,7 +9,7 @@ ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site
 ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') , project(':oauth-provider')  ]
 ext.dbProjects = [ project(':accounts'), project(':documents'), project(':togglz') ]
 
-wrapper.gradleVersion = '2.5'
+wrapper.gradleVersion = '2.8'
 
 buildscript {
     ext {
@@ -270,7 +270,7 @@ configure(javaProjects) {
 
         //This is the correct path, checked with ls, but it doesn't work.
         //It's cursed.
-        //systemProperty 'spring.thymeleaf.prefix', '/home/ubuntu/vyllage/assets/src'
+        systemProperty 'spring.thymeleaf.prefix', "${rootProject.rootDir}/assets/src"
     }
 }
 
