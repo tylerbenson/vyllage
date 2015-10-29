@@ -266,8 +266,8 @@ configure(javaProjects) {
         // resource handler location and serve static resources directly from the template module during dev.
         // See ClientResourcesConfig
         systemProperty 'PROJECT_HOME', rootProject.rootDir
-//        systemProperty 'SPRING_PROFILES_ACTIVE', 'test'
-        systemProperty 'SPRING_THYMELEAF_PREFIX', "${rootProject.rootDir}/assets/src"
+        systemProperty 'spring.profiles.active', 'test'
+        systemProperty 'spring.thymeleaf.prefix', "/home/ubuntu/vyllage/assets/src"
     }
 }
 
