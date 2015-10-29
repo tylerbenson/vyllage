@@ -14,7 +14,6 @@
 }
 
 * {
-  @include user-select(none);
   color: $text-color;
   font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
@@ -30,10 +29,6 @@ body {
   background: $body-background;
   font-size: 18px;
   height: 100%;
-}
-
-table * {
-  @include user-select(initial);
 }
 
 #container {
