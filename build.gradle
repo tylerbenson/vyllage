@@ -267,7 +267,7 @@ configure(javaProjects) {
         // See ClientResourcesConfig
         systemProperty 'PROJECT_HOME', rootProject.rootDir
         systemProperty 'spring.profiles.active', 'test'
-        systemProperty 'spring.thymeleaf.prefix', "${rootProject.rootDir}/assets/src/"
+        systemProperty 'spring.thymeleaf.prefix', "${rootProject.rootDir}/assets/src"
     }
 }
 
