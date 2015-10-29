@@ -1,18 +1,18 @@
 var React = require('react');
 var Reflux = require('reflux');
 var GetFeedbackStore = require('./store');
-var Clipboard = require('react-zeroclipboard');
 var Modal = require('../modal');
 var FeatureToggle = require('../util/FeatureToggle');
 var FacebookInvite = require('./FacebookInvite');
 var actions = require('./actions');
+var Clipboard = require('../util/clipboard');
 
 var ShareButton = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
 	getInitialState: function(){
 		return {
 			isShareModalOpen: false,
-			isReady: false,
+			isReady: true,
 			isCopied: false
 		}
 	},
@@ -20,6 +20,9 @@ var ShareButton = React.createClass({
 		actions.getShareableLink();
 	},
 	copyHandler: function(){
+		
+		Clipboard.write(this.state.shareableLink , true);
+
 		this.setState({
 			isCopied: true
 		});
@@ -72,9 +75,9 @@ var ShareButton = React.createClass({
           <div className="content">
             <div className="subheading">Choose from the following sharing options.</div>
 	            <div className="option">
-		            <Clipboard text={this.state.shareableLink} onAfterCopy={this.copyHandler} onReady={this.readyHandler}>
-		            	<button className="invisible"></button>
-	            	</Clipboard>
+		           
+		            	<button className="invisible" onClick={this.copyHandler}></button>
+	            	
 	            	<i className={icon}></i>
 	            	<h2 className="title">
 	            		{message}
