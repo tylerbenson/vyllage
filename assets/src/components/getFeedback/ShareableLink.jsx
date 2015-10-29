@@ -1,17 +1,17 @@
 var React = require('react');
 var Reflux = require('reflux');
 var GetFeedbackStore = require('./store');
-var Clipboard = require('react-zeroclipboard');
 var SuggestionSidebar = require('./suggestions/SuggestionSidebar');
 var FeatureToggle = require('../util/FeatureToggle');
 var FacebookInvite = require('./FacebookInvite');
 var actions = require('./actions');
+var Clipboard = require('../util/clipboard');
 
 var ShareableLink = React.createClass({
 	mixins: [Reflux.connect(GetFeedbackStore)],
 	getInitialState: function(){
 		return {
-			isReady: false,
+			isReady: true,
 			isCopied: false
 		}
 	},
@@ -19,6 +19,9 @@ var ShareableLink = React.createClass({
 		actions.getShareableLink();
 	},
 	copyHandler: function(){
+
+		Clipboard.write(this.props.url , true);
+
 		this.setState({
 			isCopied: true
 		});
@@ -27,11 +30,6 @@ var ShareableLink = React.createClass({
 				isCopied: false
 			});
 		}.bind(this), 2500);
-	},
-	readyHandler: function(){
-		this.setState({
-			isReady: true
-		});
 	},
 	render: function(){
 		var isCopied = this.state.isCopied;
@@ -58,13 +56,13 @@ var ShareableLink = React.createClass({
 						<div className="content">
 							<p className="tip">Paste this link anywhere on the web to share.</p>
 							<input id="shareable-link" className="padded" type="text" value={this.props.url} readOnly />
+
 							<div className={classes}>
-								<Clipboard text={this.state.shareableLink} onAfterCopy={this.copyHandler} onReady={this.readyHandler}>
-									<button className="invisible"></button>
-		            </Clipboard>
-		            <i className={icon}></i>
+								<button className="invisible" onClick={this.copyHandler}></button>				            
+					            <i className={icon}></i>
 								{message}
 							</div>
+
 							<FeatureToggle name="FACEBOOK_SDK">
 								<div className="or">
 									<span>OR</span>
