@@ -157,7 +157,7 @@ var ResumeEditor = React.createClass({
       <div>
         <Tour page="resume" />
         {
-          this.state.resume.status === 200 ?
+          this.state.resume.status === 200 && 'email' in this.state.resume.header ?
           <Banner header={this.state.resume.header} ownDocumentId={this.state.resume.ownDocumentId} settings={this.state.settings} sections={sections} />
           : null
         }
