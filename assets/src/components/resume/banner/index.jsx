@@ -17,6 +17,7 @@ var PubSub = require('pubsub-js');
 var Alert = require('../../alert');
 var uniq = require('lodash.uniq');
 var ReactAutolink = require('react-autolink');
+var classnames = require('classnames');
 
 var urlParams = {};
 
@@ -71,7 +72,7 @@ var Banner = React.createClass({
     });
 
     urlParams = args;
-    
+
     if('edit-banner' in urlParams) {
       this.setState({'editMode': true});
     }
@@ -247,6 +248,10 @@ var Banner = React.createClass({
     var isReadOnly = (!header.owner) || (header.owner && !this.state.editMode);
     var name = (header.firstName ? header.firstName : '') + ' '
              + (header.lastName ? header.lastName : '');
+    var detailClasses = classnames({
+      'edit-mode': this.state.editMode,
+      'detail': true
+    });
 
 
     return (
@@ -284,7 +289,15 @@ var Banner = React.createClass({
           </div>
           {(header.owner?
           <div className="contact">
-            <div className='detail'>
+            {
+              this.state.editMode ?
+              <div className="reminder">
+                <i className="ion-information-circled"></i>
+                <span>Your contact details are kept confidential.</span>
+              </div>
+              : null
+            }
+            <div className={detailClasses}>
               <i className="ion-email"></i>
               <input
                 required
@@ -300,7 +313,7 @@ var Banner = React.createClass({
               />
               <p className='error'>{emailSetting.errorMessage}</p>
             </div>
-            <div className='detail'>
+            <div className={detailClasses}>
               <i className="ion-ios-telephone"></i>
               <input
                 required
@@ -315,7 +328,7 @@ var Banner = React.createClass({
               />
               <p className='error'>{phoneNumberSetting.errorMessage}</p>
             </div>
-            <div className='detail'>
+            <div className={detailClasses}>
               <i className="ion-link"></i>
               { isReadOnly && fields.siteUrl ? this.autolink(fields.siteUrl, { target: "_blank" }) :
                 <input
