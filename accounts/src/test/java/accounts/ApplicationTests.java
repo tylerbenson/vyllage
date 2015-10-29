@@ -1,5 +1,6 @@
 package accounts;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,13 @@ public class ApplicationTests {
 
 	@Autowired
 	private Environment env;
+
+	@BeforeClass
+	public static void init() {
+		System.setProperty("spring.thymeleaf.prefix",
+				"file:///" + System.getProperty("PROJECT_HOME")
+						+ "/assets/src/");
+	}
 
 	@Test
 	public void contextLoads() {
