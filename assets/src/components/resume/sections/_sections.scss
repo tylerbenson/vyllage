@@ -485,6 +485,7 @@ $muted-text: lighten($secondary-color, 25%);
 
   * {
     color: $muted-text;
+    text-align: center;
     text-shadow: 0 1px 0 $inverted-text-color;
   }
 
@@ -495,8 +496,7 @@ $muted-text: lighten($secondary-color, 25%);
   }
 
   div {
-    display: inline-block;
-    text-align: left;
+    display: block;
 
     strong {
       display: block;

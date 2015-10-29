@@ -37,7 +37,7 @@ module.exports = Reflux.createStore({
     }
 
     this.resume = {
-      status: 403,
+      status: null,
       ownDocumentId: this.ownDocumentId !== undefined ? this.ownDocumentId : this.documentId,
       documentId: this.documentId,
       header: {
