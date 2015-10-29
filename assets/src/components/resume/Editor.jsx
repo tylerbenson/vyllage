@@ -156,7 +156,11 @@ var ResumeEditor = React.createClass({
     return (
       <div>
         <Tour page="resume" />
-        <Banner header={this.state.resume.header} ownDocumentId={this.state.resume.ownDocumentId} settings={this.state.settings} sections={sections} />
+        {
+          this.state.resume.status === 200 ?
+          <Banner header={this.state.resume.header} ownDocumentId={this.state.resume.ownDocumentId} settings={this.state.settings} sections={sections} />
+          : null
+        }
         {content}
       </div>
     );
