@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.jooq.DSLContext;
 import org.jooq.Result;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import documents.domain.tables.records.FeedbackRequestNotificationRecord;
@@ -24,7 +25,7 @@ public class FeedbackRequestNotificationRepository {
 	private final Logger logger = Logger
 			.getLogger(FeedbackRequestNotificationRepository.class.getName());
 
-	@Autowired
+	@Inject
 	private DSLContext sql;
 
 	public List<FeedbackRequestNotification> get(Long userId) {

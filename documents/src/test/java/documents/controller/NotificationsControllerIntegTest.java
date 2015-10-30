@@ -38,6 +38,7 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
 import user.common.web.AccountContact;
+import user.common.web.NotifyFeedbackRequest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +46,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import documents.ApplicationTestConfig;
 import documents.model.Comment;
 import documents.model.notifications.WebCommentNotification;
+import documents.model.notifications.WebFeedbackRequestNotification;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
@@ -117,7 +119,6 @@ public class NotificationsControllerIntegTest {
 
 		when(response.getBody()).thenReturn(null);
 
-		// asList.add(a);
 		MvcResult commentResult = mockMvc
 				.perform(
 						post(
@@ -145,6 +146,80 @@ public class NotificationsControllerIntegTest {
 
 		assertNotNull(webCommentNotifications);
 		assertTrue(webCommentNotifications.length > 0);
+		assertNotNull(webCommentNotifications[0].getCommentId());
+		assertTrue(webCommentNotifications[0].getCommentUserId()
+				.equals(userId1));
+		assertTrue(webCommentNotifications[0].getUserId().equals(userId2));
+
+	}
+
+	@Test
+	public void postFeedbackNotification() throws JsonProcessingException,
+			Exception {
+		long userId1 = 0L;
+		long organizationId = 0L;
+		long auditUserId = 0L;
+
+		UserOrganizationRole uor = new UserOrganizationRole(userId1,
+				organizationId, RolesEnum.ADMIN.name(), auditUserId);
+
+		User user1 = new User("a", "b", true, true, true, true,
+				Arrays.asList(uor));
+
+		Authentication authentication = mock(Authentication.class);
+		when(authentication.getPrincipal()).thenReturn(user1);
+		SecurityContext securityContext = mock(SecurityContext.class);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		SecurityContextHolder.setContext(securityContext);
+
+		long userId2 = 1L;
+
+		long resumeId = 0L;
+		long resumeUserId = userId1;
+
+		NotifyFeedbackRequest notifyFeedbackRequest = new NotifyFeedbackRequest(
+				userId2, resumeId, resumeUserId);
+
+		mockMvc.perform(
+				post("/notification/request-feedback")
+						.contentType(ContentType.APPLICATION_JSON.toString())
+						//
+						.content(
+								mapper.writeValueAsString(notifyFeedbackRequest)) //
+		) //
+				.andExpect(status().isAccepted());
+
+		@SuppressWarnings("unchecked")
+		ResponseEntity<AccountContact[]> response = mock(ResponseEntity.class);
+
+		when(
+				restTemplate.exchange(Mockito.anyString(),
+						Mockito.eq(HttpMethod.GET), Mockito.any(),
+						Mockito.eq(AccountContact[].class))).thenReturn(
+				response);
+
+		when(response.getBody()).thenReturn(null);
+
+		User user2 = generateAndLoginUser();
+		when(user2.getUserId()).thenReturn(userId2);
+
+		MvcResult feedbackNotifications = mockMvc
+				.perform(get("/notification/request-feedback"))
+				.andExpect(status().isOk()).andReturn();
+
+		assertNotNull(feedbackNotifications);
+
+		WebFeedbackRequestNotification[] webFeedbackNotifications = mapper
+				.readValue(feedbackNotifications.getResponse()
+						.getContentAsString(),
+						WebFeedbackRequestNotification[].class);
+
+		assertNotNull(webFeedbackNotifications);
+		assertTrue(webFeedbackNotifications.length > 0);
+		assertTrue(webFeedbackNotifications[0].getUserId().equals(userId2));
+		assertTrue(webFeedbackNotifications[0].getResumeUserId()
+				.equals(userId1));
+		assertTrue(webFeedbackNotifications[0].getResumeId().equals(resumeId));
 
 	}
 

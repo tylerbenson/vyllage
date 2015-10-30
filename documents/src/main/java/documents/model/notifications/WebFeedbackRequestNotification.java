@@ -9,24 +9,27 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class WebFeedbackRequestNotification {
-	private final Long userId;
+	private Long userId;
 
 	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
 	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
-	private final LocalDateTime dateCreated;
+	private LocalDateTime dateCreated;
 
 	private String userName;
 
-	private final Long resumeId;
+	private Long resumeId;
 
-	private final Long resumeUserId;
+	private Long resumeUserId;
+
+	public WebFeedbackRequestNotification() {
+	}
 
 	public WebFeedbackRequestNotification(
 			FeedbackRequestNotification feedbackRequestNotification) {
 		this.userId = feedbackRequestNotification.getUserId();
 		this.dateCreated = feedbackRequestNotification.getDateCreated();
 		this.resumeId = feedbackRequestNotification.getResumeId();
-		resumeUserId = feedbackRequestNotification.getResumeUserId();
+		this.resumeUserId = feedbackRequestNotification.getResumeUserId();
 	}
 
 	public Long getUserId() {

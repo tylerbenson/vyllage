@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.jooq.DSLContext;
 import org.jooq.Result;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import documents.domain.tables.records.CommentNotificationRecord;
@@ -24,7 +25,7 @@ public class CommentNotificationRepository {
 	private final Logger logger = Logger
 			.getLogger(CommentNotificationRepository.class.getName());
 
-	@Autowired
+	@Inject
 	private DSLContext sql;
 
 	public List<CommentNotification> get(Long userId) {
