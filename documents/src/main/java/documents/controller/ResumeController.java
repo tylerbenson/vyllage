@@ -555,7 +555,8 @@ public class ResumeController {
 				user.getUserId(), documentId);
 
 		if (documentAccess.isPresent()
-				&& !documentAccess.get().getAllowGuestComments())
+				&& !documentAccess.get().getAllowGuestComments()
+				&& !user.isVyllageAdmin())
 			throw new AccessDeniedException(
 					"You are not allowed to comment on this document.");
 
@@ -652,7 +653,8 @@ public class ResumeController {
 				user.getUserId(), documentId);
 
 		if (documentAccess.isPresent()
-				&& !documentAccess.get().getAllowGuestComments())
+				&& !documentAccess.get().getAllowGuestComments()
+				&& !user.isVyllageAdmin())
 			throw new AccessDeniedException(
 					"You are not allowed to comment on this document.");
 
