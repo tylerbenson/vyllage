@@ -10,12 +10,12 @@ import org.mockito.Mockito;
 
 import user.common.User;
 import user.common.web.AccountContact;
-import connections.controller.AdviceRequestController;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
 import connections.model.NotRegisteredUser;
 import connections.service.AccountService;
 import connections.service.AdviceService;
+import connections.service.DocumentService;
 
 public class AdviceRequestControllerTest {
 
@@ -23,10 +23,13 @@ public class AdviceRequestControllerTest {
 
 	private AccountService accountService = Mockito.mock(AccountService.class);
 
+	private DocumentService documentService = Mockito
+			.mock(DocumentService.class);
+
 	@Test
 	public void testAccountNames() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService, accountService);
+				adviceService, accountService, documentService);
 
 		User user = Mockito.mock(User.class);
 		Long userId = 0L;
@@ -55,7 +58,7 @@ public class AdviceRequestControllerTest {
 	@Test
 	public void testAccountNamesNoUserLogin() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService, accountService);
+				adviceService, accountService, documentService);
 
 		AccountNames accountNames = controller.accountNames(null);
 
@@ -70,7 +73,7 @@ public class AdviceRequestControllerTest {
 	@Test
 	public void testAskAdviceHttpServletRequestUser() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService, accountService);
+				adviceService, accountService, documentService);
 
 		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
 		User user = Mockito.mock(User.class);
@@ -84,7 +87,7 @@ public class AdviceRequestControllerTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testValidateAdviceRequestAllNull() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService, accountService);
+				adviceService, accountService, documentService);
 
 		AdviceRequest adviceRequest = new AdviceRequest();
 
@@ -94,7 +97,7 @@ public class AdviceRequestControllerTest {
 	@Test
 	public void testValidateAdviceRequestNotRegisteredNull() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService, accountService);
+				adviceService, accountService, documentService);
 
 		AccountContact contact = new AccountContact();
 		AdviceRequest adviceRequest = new AdviceRequest();
@@ -107,7 +110,7 @@ public class AdviceRequestControllerTest {
 	@Test
 	public void testValidateAdviceRequestUsersNull() {
 		AdviceRequestController controller = new AdviceRequestController(
-				adviceService, accountService);
+				adviceService, accountService, documentService);
 
 		NotRegisteredUser user = new NotRegisteredUser();
 		AdviceRequest adviceRequest = new AdviceRequest();
