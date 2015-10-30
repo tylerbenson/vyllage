@@ -10,18 +10,21 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class WebCommentNotification {
 
-	private final Long userId;
-	private final Long commentUserId;
+	private Long userId;
+	private Long commentUserId;
 
 	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
 	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
-	private final LocalDateTime dateCreated;
+	private LocalDateTime dateCreated;
 
-	private final Long commentId;
+	private Long commentId;
 
-	private final String sectionTitle;
+	private String sectionTitle;
 
 	private String userName;
+
+	public WebCommentNotification() {
+	}
 
 	public WebCommentNotification(CommentNotification commentNotification) {
 		this.userId = commentNotification.getUserId();

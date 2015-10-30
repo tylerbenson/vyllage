@@ -18,7 +18,9 @@ import com.newrelic.api.agent.NewRelic;
 
 import documents.model.Comment;
 import documents.model.notifications.CommentNotification;
+import documents.model.notifications.FeedbackRequestNotification;
 import documents.repository.CommentNotificationRepository;
+import documents.repository.FeedbackRequestNotificationRepository;
 import email.EmailBuilder;
 
 @Service
@@ -31,7 +33,9 @@ public class NotificationService {
 
 	private final Environment environment;
 
-	private final CommentNotificationRepository userNotificationRepository;
+	private final CommentNotificationRepository commentNotificationRepository;
+
+	private final FeedbackRequestNotificationRepository feedbackRequestNotificationRepository;
 
 	private final EmailBuilder emailBuilder;
 
@@ -41,9 +45,11 @@ public class NotificationService {
 	public NotificationService(
 			Environment environment,
 			CommentNotificationRepository userNotificationRepository,
+			FeedbackRequestNotificationRepository feedbackRequestNotificationRepository,
 			@Qualifier(value = "documents.emailBuilder") EmailBuilder emailBuilder) {
 		this.environment = environment;
-		this.userNotificationRepository = userNotificationRepository;
+		this.commentNotificationRepository = userNotificationRepository;
+		this.feedbackRequestNotificationRepository = feedbackRequestNotificationRepository;
 		this.emailBuilder = emailBuilder;
 
 	}
@@ -58,7 +64,7 @@ public class NotificationService {
 	 */
 	public void saveCommentNotification(Long userId, Comment comment,
 			String sectionTitle) {
-		userNotificationRepository.save(new CommentNotification(userId,
+		commentNotificationRepository.save(new CommentNotification(userId,
 				comment, sectionTitle));
 	}
 
@@ -133,7 +139,17 @@ public class NotificationService {
 	 * @return
 	 */
 	public List<CommentNotification> getCommentNotifications(Long userId) {
-		return userNotificationRepository.get(userId);
+		return commentNotificationRepository.get(userId);
+	}
+
+	public void saveFeedBackRequestNotification(
+			FeedbackRequestNotification feedbackRequestNotification) {
+		feedbackRequestNotificationRepository.save(feedbackRequestNotification);
+	}
+
+	public List<FeedbackRequestNotification> getFeedbackRequestNotifications(
+			Long userId) {
+		return feedbackRequestNotificationRepository.get(userId);
 	}
 
 }
