@@ -23,8 +23,13 @@ var RecipientEdit = React.createClass({
   },
   changeHandler: function (key, e) {
     e.preventDefault();
-    Actions.changeRecipient(key, e.target.value)
-    Actions.openSuggestions();
+    if( e.target.value == '' ){
+      Actions.closeSuggestions();
+    }    
+    Actions.changeRecipient(key, e.target.value);
+    if( key !== 'email'){
+      Actions.openSuggestions(key);
+    }
   },
   keyPress: function (e) {
     if (e.key === 'Enter') {
@@ -76,16 +81,10 @@ var RecipientEdit = React.createClass({
   blurHandler: function () {
     Actions.closeSuggestions();
   },
-  focusHandler: function () {
-    var recipient = this.props.recipient;
-    if (recipient.firstName || recipient.lastName || recipient.email) {
-      Actions.openSuggestions();
-    }
-  },
   render: function () {
     var recipient = this.props.recipient;
     return (
-      <div onBlur={this.blurHandler}>
+      <div>
         <div className='form'>
           <div className='field'>
             <label>First Name</label>
@@ -94,8 +93,7 @@ var RecipientEdit = React.createClass({
               className='name'
               value={recipient.firstName}
               onChange={this.changeHandler.bind(this, 'firstName')}
-              onFocus={this.focusHandler}
-              onKeyDown={this.keyPress}
+              onBlur={this.blurHandler}
               autoComplete='off' />
             {this.state.firstNameError? <p className='error'><i className='ion-android-warning'></i>Required field.</p>: null}
           </div>
@@ -107,7 +105,7 @@ var RecipientEdit = React.createClass({
               value={recipient.lastName}
               onChange={this.changeHandler.bind(this, 'lastName')}
               onFocus={this.focusHandler}
-              onKeyDown={this.keyPress}
+              onBlur={this.blurHandler}
               autoComplete='off' />
             {this.state.lastNameError? <p className='error'><i className='ion-android-warning'></i>Required field.</p>: null}
           </div>
@@ -119,7 +117,6 @@ var RecipientEdit = React.createClass({
               value={recipient.email}
               onChange={this.changeHandler.bind(this, 'email')}
               onFocus={this.focusHandler}
-              onKeyDown={this.keyPress}
               autoComplete='off' />
             {this.state.emailError? <p className='error'><i className='ion-android-warning'></i>Invalid e-mail address.</p>: null}
           </div>
