@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import lombok.NonNull;
 import user.common.web.NotifyFeedbackRequest;
+import documents.domain.tables.records.FeedbackRequestNotificationRecord;
 
 public class FeedbackRequestNotification {
 	// owner of the notification
@@ -16,13 +17,12 @@ public class FeedbackRequestNotification {
 
 	private final Long resumeId;
 
-	public FeedbackRequestNotification(@NonNull Long userId,
-			@NonNull Long resumeUserId, @NonNull LocalDateTime dateCreated,
-			@NonNull Long resumeId) {
-		this.resumeUserId = resumeUserId;
-		this.userId = userId;
-		this.dateCreated = dateCreated;
-		this.resumeId = resumeId;
+	public FeedbackRequestNotification(
+			@NonNull FeedbackRequestNotificationRecord record) {
+		this.resumeUserId = record.getResumeUserId();
+		this.userId = record.getUserId();
+		this.dateCreated = record.getDateCreated().toLocalDateTime();
+		this.resumeId = record.getResumeId();
 
 	}
 
