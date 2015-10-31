@@ -29,7 +29,6 @@
     "react-layer-mixin": "^0.2.1",
     "react-textarea-autosize": "^1.1.0",
     "react-window-mixins": "0.0.6",
-    "react-zeroclipboard": "^0.4.1",
     "reflux": "0.3.0",
     "superagent": "^0.21.0",
     "tether": "^0.6.5",

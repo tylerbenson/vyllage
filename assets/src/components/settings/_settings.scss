@@ -8,6 +8,7 @@
     }
 
     .sidebar {
+      @include user-select(none);
       @include column(2/7);
       margin-right: 0;
 

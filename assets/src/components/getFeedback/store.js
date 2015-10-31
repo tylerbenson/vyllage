@@ -28,6 +28,7 @@ var GetFeedbackStore = Reflux.createStore({
     this.suggestions = {};
     this.selectedSuggestion = null;
     this.showSuggestions = false;
+    this.suggestionPosition ="left";
     this.selectedRecipient = null;
     this.recipient = {firstName: "", lastName: "", email: ""};
     this.subject = "Could you provide me some feedback on my resume?";
@@ -187,7 +188,12 @@ var GetFeedbackStore = Reflux.createStore({
     this.recipient = {firstName: "", lastName: "", email: ""};
     this.update();
   },
-  onOpenSuggestions: function () {
+  onOpenSuggestions: function (key) {
+    if( key == 'lastName'){
+      this.suggestionPosition = "right";
+    }else{
+      this.suggestionPosition = "left";
+    }
     this.showSuggestions = (this.selectedRecipient === null);
     this.update();
   },
@@ -316,6 +322,7 @@ var GetFeedbackStore = Reflux.createStore({
       suggestions: this.suggestions,
       selectedSuggestion: this.selectedSuggestion,
       showSuggestions: this.showSuggestions,
+      suggestionPosition : this.suggestionPosition,
       selectedRecipient: this.selectedRecipient,
       recipient: this.recipient,
       subject: this.subject,
@@ -335,6 +342,7 @@ var GetFeedbackStore = Reflux.createStore({
       suggestions: this.suggestions,
       selectedSuggestion: this.selectedSuggestion,
       showSuggestions: this.showSuggestions,
+      suggestionPosition : this.suggestionPosition,
       selectedRecipient: this.selectedRecipient,
       recipient: this.recipient,
       subject: this.subject,
