@@ -1,5 +1,7 @@
 package documents.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import user.common.User;
 import user.common.web.AccountContact;
 import user.common.web.NotifyFeedbackRequest;
+import documents.model.notifications.AbstractWebNotification;
 import documents.model.notifications.CommentNotification;
 import documents.model.notifications.FeedbackRequestNotification;
 import documents.model.notifications.WebCommentNotification;
@@ -42,12 +45,29 @@ public class NotificationsController {
 		this.accountService = accountService;
 	}
 
+	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<AbstractWebNotification> getAll(
+			HttpServletRequest request, @AuthenticationPrincipal User user) {
+
+		List<AbstractWebNotification> notifications = new ArrayList<>();
+
+		notifications.addAll(this.getCommentNotifications(request, user));
+		notifications.addAll(this
+				.getFeedbackRequestNotifications(request, user));
+
+		return notifications;
+
+	}
+
 	@RequestMapping(value = "/comment", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<WebCommentNotification> getCommentNotifications(
 			HttpServletRequest request, @AuthenticationPrincipal User user) {
 
 		List<CommentNotification> commentNotifications = notificationService
 				.getCommentNotifications(user.getUserId());
+
+		if (commentNotifications == null || commentNotifications.isEmpty())
+			return Collections.emptyList();
 
 		List<Long> commentUserIds = commentNotifications.stream()
 				.map(n -> n.getCommentUserId()).collect(Collectors.toList());
@@ -92,6 +112,10 @@ public class NotificationsController {
 		List<FeedbackRequestNotification> feedbackRequestNotifications = notificationService
 				.getFeedbackRequestNotifications(user.getUserId());
 
+		if (feedbackRequestNotifications == null
+				|| feedbackRequestNotifications.isEmpty())
+			return Collections.emptyList();
+
 		List<Long> resumeUserIds = feedbackRequestNotifications.stream()
 				.map(n -> n.getResumeUserId()).collect(Collectors.toList());
 
@@ -113,5 +137,10 @@ public class NotificationsController {
 								+ contact.get().getLastName());
 					return wfrn;
 				}).collect(Collectors.toList());
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	public void deleteAll(@AuthenticationPrincipal User user) {
+		notificationService.deleteAll(user.getUserId());
 	}
 }
