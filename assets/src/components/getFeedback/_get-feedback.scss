@@ -126,6 +126,7 @@
       border-right-width: 0;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
+      cursor: text;
       max-width: 19em;
       margin-right: -0.275em;
     }
@@ -261,12 +262,6 @@
 
           &.email {
             width: 16em;
-          }
-
-          &:focus {
-            & + .autocomplete {
-              display: inline-block;
-            }
           }
         }
         .error {

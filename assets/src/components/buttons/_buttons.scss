@@ -3,6 +3,7 @@ button,
 input[type="submit"],
 input[type="button"],
 input[type="reset"] {
+  @include user-select(none);
   background: $primary-color;
   border: transparent solid 2px;
   border-radius: 6px;
