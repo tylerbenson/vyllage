@@ -152,4 +152,9 @@ public class NotificationService {
 		return feedbackRequestNotificationRepository.get(userId);
 	}
 
+	public void deleteAll(Long userId) {
+		commentNotificationRepository.deleteAll(userId);
+		feedbackRequestNotificationRepository.deleteAll(userId);
+	}
+
 }

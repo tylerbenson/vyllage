@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import lombok.NonNull;
+
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.springframework.stereotype.Repository;
@@ -28,7 +30,7 @@ public class CommentNotificationRepository {
 	@Inject
 	private DSLContext sql;
 
-	public List<CommentNotification> get(Long userId) {
+	public List<CommentNotification> get(@NonNull Long userId) {
 		Result<CommentNotificationRecord> commentNotificationRecords = sql
 				.fetch(COMMENT_NOTIFICATION,
 						COMMENT_NOTIFICATION.USER_ID.eq(userId));
@@ -43,12 +45,8 @@ public class CommentNotificationRepository {
 
 	}
 
-	public void save(CommentNotification commentNotification) {
+	public void save(@NonNull CommentNotification commentNotification) {
 		// they will be deleted when the user acknowledges them
-
-		// sql.delete(COMMENT_NOTIFICATION)
-		// .where(COMMENT_NOTIFICATION.USER_ID.eq(commentNotification
-		// .getUserId())).execute();
 
 		final CommentNotificationRecord commentNotificationRecord = sql
 				.fetchOne(
@@ -72,5 +70,10 @@ public class CommentNotificationRepository {
 					.of("UTC"))));
 			newRecord.store();
 		}
+	}
+
+	public void deleteAll(@NonNull Long userId) {
+		sql.delete(COMMENT_NOTIFICATION)
+				.where(COMMENT_NOTIFICATION.USER_ID.eq(userId)).execute();
 	}
 }

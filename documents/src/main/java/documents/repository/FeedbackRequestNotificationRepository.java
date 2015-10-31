@@ -70,4 +70,10 @@ public class FeedbackRequestNotificationRepository {
 
 	}
 
+	public void deleteAll(Long userId) {
+		sql.delete(FEEDBACK_REQUEST_NOTIFICATION)
+				.where(FEEDBACK_REQUEST_NOTIFICATION.USER_ID.eq(userId))
+				.execute();
+	}
+
 }
