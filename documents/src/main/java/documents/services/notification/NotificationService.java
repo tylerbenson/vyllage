@@ -19,6 +19,8 @@ import com.newrelic.api.agent.NewRelic;
 import documents.model.Comment;
 import documents.model.notifications.CommentNotification;
 import documents.model.notifications.FeedbackRequestNotification;
+import documents.model.notifications.WebCommentNotification;
+import documents.model.notifications.WebFeedbackRequestNotification;
 import documents.repository.CommentNotificationRepository;
 import documents.repository.FeedbackRequestNotificationRepository;
 import email.EmailBuilder;
@@ -52,20 +54,6 @@ public class NotificationService {
 		this.feedbackRequestNotificationRepository = feedbackRequestNotificationRepository;
 		this.emailBuilder = emailBuilder;
 
-	}
-
-	/**
-	 * Saves a notification about a new comment for the given user.
-	 * 
-	 * @param userId
-	 *            the user owning the document
-	 * @param comment
-	 * @param sectionTitle
-	 */
-	public void saveCommentNotification(Long userId, Comment comment,
-			String sectionTitle) {
-		commentNotificationRepository.save(new CommentNotification(userId,
-				comment, sectionTitle));
 	}
 
 	/**
@@ -132,16 +120,35 @@ public class NotificationService {
 				.setNoHtmlMessage("A user has commented your resume.");
 	}
 
-	/**
-	 * Retrieves all comment notifications.
-	 *
-	 * @param userId
-	 * @return
-	 */
 	public List<CommentNotification> getCommentNotifications(Long userId) {
 		return commentNotificationRepository.get(userId);
 	}
 
+	/**
+	 * Saves a notification about a new comment for a given user.
+	 * 
+	 * @param userId
+	 *            the user owning the document
+	 * @param comment
+	 * @param sectionTitle
+	 */
+	public void saveCommentNotification(CommentNotification commentNotification) {
+		commentNotificationRepository.save(commentNotification);
+	}
+
+	public void deleteCommentNotification(
+			WebCommentNotification webCommentNotification) {
+		commentNotificationRepository.delete(
+				webCommentNotification.getUserId(),
+				webCommentNotification.getCommentUserId());
+	}
+
+	/**
+	 * Saves a notification indicating someone requested feedback to a given
+	 * user.
+	 * 
+	 * @param feedbackRequestNotification
+	 */
 	public void saveFeedBackRequestNotification(
 			FeedbackRequestNotification feedbackRequestNotification) {
 		feedbackRequestNotificationRepository.save(feedbackRequestNotification);
@@ -150,6 +157,13 @@ public class NotificationService {
 	public List<FeedbackRequestNotification> getFeedbackRequestNotifications(
 			Long userId) {
 		return feedbackRequestNotificationRepository.get(userId);
+	}
+
+	public void deleteFeedbackNotification(
+			WebFeedbackRequestNotification webFeedbackRequestNotification) {
+		feedbackRequestNotificationRepository.delete(
+				webFeedbackRequestNotification.getUserId(),
+				webFeedbackRequestNotification.getResumeId());
 	}
 
 	public void deleteAll(Long userId) {

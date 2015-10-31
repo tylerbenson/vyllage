@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import lombok.NonNull;
+
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.springframework.stereotype.Repository;
@@ -28,7 +30,7 @@ public class FeedbackRequestNotificationRepository {
 	@Inject
 	private DSLContext sql;
 
-	public List<FeedbackRequestNotification> get(Long userId) {
+	public List<FeedbackRequestNotification> get(@NonNull Long userId) {
 		Result<FeedbackRequestNotificationRecord> feedbackNotificationRecords = sql
 				.fetch(FEEDBACK_REQUEST_NOTIFICATION,
 						FEEDBACK_REQUEST_NOTIFICATION.USER_ID.eq(userId));
@@ -42,7 +44,8 @@ public class FeedbackRequestNotificationRepository {
 					.collect(Collectors.toList());
 	}
 
-	public void save(FeedbackRequestNotification feedbackRequestNotification) {
+	public void save(
+			@NonNull FeedbackRequestNotification feedbackRequestNotification) {
 
 		final FeedbackRequestNotificationRecord feedbackNotificationRecord = sql
 				.fetchOne(
@@ -70,9 +73,16 @@ public class FeedbackRequestNotificationRepository {
 
 	}
 
-	public void deleteAll(Long userId) {
+	public void deleteAll(@NonNull Long userId) {
 		sql.delete(FEEDBACK_REQUEST_NOTIFICATION)
 				.where(FEEDBACK_REQUEST_NOTIFICATION.USER_ID.eq(userId))
+				.execute();
+	}
+
+	public void delete(@NonNull Long userId, @NonNull Long resumeId) {
+		sql.delete(FEEDBACK_REQUEST_NOTIFICATION)
+				.where(FEEDBACK_REQUEST_NOTIFICATION.USER_ID.eq(userId))
+				.and(FEEDBACK_REQUEST_NOTIFICATION.RESUME_ID.eq(resumeId))
 				.execute();
 	}
 

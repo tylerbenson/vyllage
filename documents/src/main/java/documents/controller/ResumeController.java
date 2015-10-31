@@ -60,6 +60,7 @@ import documents.model.SectionAdvice;
 import documents.model.constants.AdviceStatus;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.document.sections.DocumentSection;
+import documents.model.notifications.CommentNotification;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
@@ -589,8 +590,9 @@ public class ResumeController {
 			Document document, DocumentSection documentSection,
 			final Comment savedComment) {
 
-		notificationService.saveCommentNotification(document.getUserId(),
-				savedComment, documentSection.getTitle());
+		notificationService
+				.saveCommentNotification(new CommentNotification(document
+						.getUserId(), savedComment, documentSection.getTitle()));
 
 		boolean isOwner = document.getUserId().equals(user.getUserId());
 

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -92,6 +93,17 @@ public class NotificationsController {
 
 	}
 
+	@RequestMapping(value = "/comment", method = RequestMethod.DELETE, consumes = "application/json")
+	public void deleteCommentNotification(
+			@RequestBody WebCommentNotification webCommentNotification,
+			@AuthenticationPrincipal User user) {
+
+		Assert.isTrue(user.getUserId().equals(
+				webCommentNotification.getUserId()));
+
+		notificationService.deleteCommentNotification(webCommentNotification);
+	}
+
 	@RequestMapping(value = "/request-feedback", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public void requestFeedbackNotify(
@@ -137,6 +149,19 @@ public class NotificationsController {
 								+ contact.get().getLastName());
 					return wfrn;
 				}).collect(Collectors.toList());
+	}
+
+	@RequestMapping(value = "/request-feedback", method = RequestMethod.DELETE, consumes = "application/json")
+	public void deleteFeedbackNotifications(
+			@RequestBody final WebFeedbackRequestNotification webFeedbackRequestNotification,
+			@AuthenticationPrincipal User user) {
+
+		Assert.isTrue(user.getUserId().equals(
+				webFeedbackRequestNotification.getUserId()));
+
+		notificationService
+				.deleteFeedbackNotification(webFeedbackRequestNotification);
+
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)

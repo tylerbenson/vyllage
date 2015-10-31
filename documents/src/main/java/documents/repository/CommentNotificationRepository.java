@@ -76,4 +76,11 @@ public class CommentNotificationRepository {
 		sql.delete(COMMENT_NOTIFICATION)
 				.where(COMMENT_NOTIFICATION.USER_ID.eq(userId)).execute();
 	}
+
+	public void delete(@NonNull Long userId, @NonNull Long commentUserId) {
+		sql.delete(COMMENT_NOTIFICATION)
+				.where(COMMENT_NOTIFICATION.USER_ID.eq(userId))
+				.and(COMMENT_NOTIFICATION.COMMENT_USER_ID.eq(commentUserId))
+				.execute();
+	}
 }
