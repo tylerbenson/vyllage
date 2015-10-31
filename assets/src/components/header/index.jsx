@@ -6,12 +6,13 @@ var NavToggle = require('./NavToggle');
 var resumeStore = require('../resume/store');
 var resumeActions = require('../resume/actions');
 var FeatureToggle = require('../util/FeatureToggle');
+var SupportButton = require('../buttons/support');
 var AdminLink = require('../admin/AdminLink');
 
 var HeaderContainer = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume')],
   componentWillMount: function(){
-    resumeActions.getAllSections(); 
+    resumeActions.getAllSections();
   },
   componentDidMount: function () {
     var path = window.location.href;
@@ -58,9 +59,15 @@ var HeaderContainer = React.createClass({
               </li>
               <li>
                 <a href='/account/setting' className='flat settings button'>
-                <i className="ion-gear-a"></i>
-                <span>Settings</span>
-              </a></li>
+                  <i className="ion-gear-a"></i>
+                  <span>Settings</span>
+                </a>
+              </li>
+              <FeatureToggle name="ZOPIM_MESSAGE_CLIENT">
+                <li>
+                  <SupportButton />
+                </li>
+              </FeatureToggle>
               </div>
             </ul>
           </nav>
