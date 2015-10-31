@@ -234,6 +234,11 @@ table {
       width: 93%;
       float: left;
     }
+    span.flat{
+      padding-left: 0.2em;
+      color: #6e6e6e;
+      font-size: .9em;
+    }
     button {
       bottom: 0.3em;
       float: right;
@@ -242,6 +247,14 @@ table {
       width: 3%;
     }
   }
+}
+
+.boxed{
+  padding: 0.3em 1.5em;
+  background : #f0f2f3;
+}
+.greyarea{
+  background : #f0f2f3;
 }
 
 .ui-autocomplete {

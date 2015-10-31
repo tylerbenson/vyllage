@@ -1,6 +1,7 @@
 var React = require('react');
 var Highlight = require('../highlights/Highlight');
 var HighlightInput = require('../highlights/Input');
+var Sortable = require('../../util/Sortable');
 
 var Highlights = React.createClass({
 	getInitialState: function() {
@@ -32,6 +33,18 @@ var Highlights = React.createClass({
 	getHighlights: function() {
 		return this.state.highlights;
 	},
+
+	stop: function(e, ui){
+		var temp = [];
+    jQuery(e.target).children('li').each(function(index) {
+      var tempText= jQuery(this).text();
+      if( tempText != "")
+      	temp.push(tempText);
+    });
+  	this.setState({
+      highlights: temp
+    });
+	},
 	render: function() {
 		var uiEditMode = this.props.uiEditMode;
 		var highlights = this.state.highlights.map(function(highlight, index){
@@ -40,11 +53,21 @@ var Highlights = React.createClass({
       );
     }.bind(this));
 
+    var classes = "highlights";
+    if(uiEditMode){
+    	classes += " boxed";
+    }
+
+    var config = {
+    	list : ".highlights",
+      items: "li.highlight",
+      stop: this.stop
+    };
 		return (
-			<ul className="highlights">
-				{this.state.highlights != undefined ? highlights : null }
-				{uiEditMode ? <HighlightInput onAdd={this.onHighlightAdd} /> : null}
-			</ul>
+			<Sortable className={classes} config={config}>
+					{this.state.highlights != undefined ? highlights : null }
+					{uiEditMode ? <HighlightInput onAdd={this.onHighlightAdd} /> : null}
+			</Sortable>
 		);
 	}
 

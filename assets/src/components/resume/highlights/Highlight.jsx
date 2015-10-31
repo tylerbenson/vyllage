@@ -8,7 +8,7 @@ var Highlight = React.createClass({
     }
 		return (
 			<li className="highlight">
-				<Textarea disabled="disabled" rows="1" className="flat" value={this.props.text.replace(/\n{3,}/,'\n\n')} />
+				<span className="flat">{this.props.text.replace(/\n{3,}/,'\n\n')}</span>
 				{this.props.uiEditMode ?
 					<button className="flat icon small secondary" onClick={this.props.onDelete}>
 						<i className="ion-trash-a"></i>

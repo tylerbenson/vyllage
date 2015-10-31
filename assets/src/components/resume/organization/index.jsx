@@ -25,13 +25,6 @@ var Organization = React.createClass({
       error : false
     };
   },
-
-  // componentWillReceiveProps: function (nextProps) {
-  //   if( nextProps.section != undefined )
-  //   this.setState({
-  //     section: cloneDeep(nextProps.section)
-  //   });
-  // },
   componentDidMount: function() {
     if (this.state.uiEditMode) {
       this.refs.organizationName.getDOMNode().focus();
