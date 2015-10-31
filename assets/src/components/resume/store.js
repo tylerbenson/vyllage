@@ -27,15 +27,12 @@ module.exports = Reflux.createStore({
     if (metaToken) {
       this.tokenValue = metaToken.content;
     }
-
     this.documentId = window.location.pathname.split('/')[2];
     this.onGetDocumentId();
-
     var tempDocumentId = window.localStorage.getItem('ownDocumentId');
     if(tempDocumentId !== undefined && validator.isNumeric(tempDocumentId)){
       this.ownDocumentId = tempDocumentId;
     }
-
     this.resume = {
       ownDocumentId: this.ownDocumentId !== undefined ? this.ownDocumentId : this.documentId,
       documentId: this.documentId,
@@ -71,8 +68,9 @@ module.exports = Reflux.createStore({
 
     PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
   },
-
   /*End of Notifications*/
+
+  /* Helper functions */
   getMaxSectionPostion: function () {
     var section = max(this.resume.sections, 'sectionPosition');
     // Return 0 if sections is empty
@@ -90,9 +88,9 @@ module.exports = Reflux.createStore({
       .put(url)
       .set(this.tokenHeader, this.tokenValue)
       .send(order)
-      .end(function (err, res) {
-      }.bind(this))
+      .end(function (err, res) {}.bind(this))
   },
+
   onGetDocumentId: function() {
     var url = urlTemplate
               .parse(endpoints.documentId)
@@ -111,42 +109,11 @@ module.exports = Reflux.createStore({
         }
       }.bind(this));
   },
-  onUpdateTagline: function (tagline) {
-    var url = urlTemplate
-                .parse(endpoints.resumeHeader)
-                .expand({documentId: this.documentId});
-    request
-      .put(url)
-      .set(this.tokenHeader, this.tokenValue)
-      .send({tagline: tagline})
-      .end(function (err, res) {
-        this.resume.header.tagline = tagline;
-        this.trigger(this.resume);
-      }.bind(this))
-  },
+
+
   isSupportedSection: function (type) {
     var supported = ['SummarySection','JobExperienceSection','EducationSection','SkillsSection','CareerInterestsSection','ProjectsSection'];
     return supported.indexOf(type) > -1;
-  },
-  onPublishSections : function( sections , header ){
-    var self = this;
-      this.resume.header = header;
-      if( this.resume.sections.length > 0 ){
-        this.resume.sections = this.resume.sections.concat(sections);
-      }else{
-        this.resume.sections = sections;
-      }
-      this.resume.sections.forEach(function (section) {
-        section.isSupported = this.isSupportedSection(section.type);
-        if( section.sectionId ){
-          if (section.numberOfComments > 0) {
-            this.onGetComments(section.sectionId);
-          }
-          this.onGetAdvice( section.sectionId);
-        }
-      }.bind(this));
-     this.resume.all_section = this.doProcessSection( this.resume.sections, header.owner);
-     this.trigger(this.resume);
   },
 
   doProcessSection: function(sections , owner ){
@@ -188,6 +155,85 @@ module.exports = Reflux.createStore({
       return [];
     }
   },
+
+  makeItLinear: function(all_section){
+    var linear_section = [];
+    all_section.map(function(group , index ){
+          if( group.child.length ){
+            group.child.map(function(section , section_index){
+               section.sectionPosition = linear_section.length;
+               linear_section.push(section);
+            });
+          }
+      });
+      this.resume.sections.map(function(section,index){
+          var exist = filter( linear_section ,{ 'sectionId': section.sectionId });
+          if( !exist.length ){
+            section.sectionPosition = linear_section.length;
+            linear_section.push(section);
+          }
+      });
+      this.update();
+      this.postSectionOrder( linear_section );
+  },
+
+  doPostSection: function( data ){
+    var url = urlTemplate
+                .parse(endpoints.resumeSections)
+                .expand({
+                  documentId: this.documentId,
+                });
+    request
+      .post(url)
+      .set(this.tokenHeader, this.tokenValue)
+      .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','showEdits']))
+      .end(function (err, res) {
+        var section = assign({}, res.body);
+        section.isSupported = this.isSupportedSection(section.type);
+        var tempSectionIndex = findindex( this.resume.sections , { newSection : true } );
+        this.resume.sections.splice( tempSectionIndex , 1);
+        this.resume.sections.push(section);
+        this.update();
+      }.bind(this));
+  },
+
+
+  /* End of Helper functions */
+
+  onUpdateTagline: function (tagline) {
+    var url = urlTemplate
+                .parse(endpoints.resumeHeader)
+                .expand({documentId: this.documentId});
+    request
+      .put(url)
+      .set(this.tokenHeader, this.tokenValue)
+      .send({tagline: tagline})
+      .end(function (err, res) {
+        this.resume.header.tagline = tagline;
+        this.update();
+      }.bind(this))
+  },
+
+  onPublishSections : function( sections , header ){
+    var self = this;
+      this.resume.header = header;
+      if( this.resume.sections.length > 0 ){
+        this.resume.sections = this.resume.sections.concat(sections);
+      }else{
+        this.resume.sections = sections;
+      }
+      this.resume.sections.forEach(function (section) {
+        section.isSupported = this.isSupportedSection(section.type);
+        if( section.sectionId ){
+          if (section.numberOfComments > 0) {
+            this.onGetComments(section.sectionId);
+          }
+          this.onGetAdvice(section.sectionId);
+        }
+      }.bind(this));
+      this.update();
+  },
+
   onMoveGroupOrder: function( order ){
     var all_section = [];
     order.map(function( section , index ){
@@ -208,27 +254,6 @@ module.exports = Reflux.createStore({
         }
      });
      this.makeItLinear( this.resume.all_section );
-  },
-  makeItLinear: function(all_section){
-    var linear_section = [];
-    all_section.map(function(group , index ){
-          if( group.child.length ){
-            group.child.map(function(section , section_index){
-               section.sectionPosition = linear_section.length;
-               linear_section.push(section);
-            });
-          }
-      });
-      this.resume.sections.map(function(section,index){
-          var exist = filter( linear_section ,{ 'sectionId': section.sectionId });
-          if( !exist.length ){
-            section.sectionPosition = linear_section.length;
-            linear_section.push(section);
-          }
-      });
-      this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-      this.trigger(this.resume);
-      this.postSectionOrder( linear_section );
   },
 
   onPostSection: function (data) {
@@ -257,26 +282,6 @@ module.exports = Reflux.createStore({
     }
   },
 
-  doPostSection: function( data ){
-    var url = urlTemplate
-                .parse(endpoints.resumeSections)
-                .expand({
-                  documentId: this.documentId,
-                });
-    request
-      .post(url)
-      .set(this.tokenHeader, this.tokenValue)
-      .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','showEdits']))
-      .end(function (err, res) {
-        var section = assign({}, res.body);
-        section.isSupported = this.isSupportedSection(section.type);
-        var tempSectionIndex = findindex( this.resume.sections , { newSection : true } );
-        this.resume.sections.splice( tempSectionIndex , 1);
-        this.resume.sections.push(section);
-        this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-        this.trigger(this.resume);
-      }.bind(this));
-  },
 
   onPutSection: function (data) {
 
@@ -446,10 +451,8 @@ module.exports = Reflux.createStore({
           this.resume.sections[index].showComments = false;
           this.resume.sections[index].showEdits = true;
           this.resume.sections[index].numberOfSuggestedEdits++;
-          this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-
           this.notifyEditSubmission();
-          this.trigger(this.resume);
+          this.update();
         }
       }.bind(this));
   },
@@ -469,7 +472,6 @@ module.exports = Reflux.createStore({
       }.bind(this));
   },
   onMergeAdvice : function( advice , section ){
-    // console.log(advice, section);
     request
       .put('/resume/'+this.documentId+'/section/'+section.sectionId+'/advice/'+advice.sectionAdviceId)
       .set(this.tokenHeader, this.tokenValue)
@@ -485,9 +487,7 @@ module.exports = Reflux.createStore({
               }
             });
           }
-
           this.notifyEditMerge();
-
           if( advice_count > 1 ) advice_count = advice_count -1; // for the merge .
           newsection.numberOfSuggestedEdits = advice_count;
           this.onPutSectionForAdvice( newsection , section , res.body );
@@ -520,50 +520,41 @@ module.exports = Reflux.createStore({
         if( section.comments != undefined ){
           this.resume.sections[index].comments = clone(section.comments);
         }
-        this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-        this.trigger(this.resume);
-
+        this.update();
       }.bind(this));
   },
 
   onEnableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].uiEditMode = true;
-    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-    this.trigger(this.resume);
+    this.update();
   },
   onDisableEditMode: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].uiEditMode = false;
-    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-    this.trigger(this.resume);
+    this.update();
   },
   onShowComments: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showComments = true;
-    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-    this.trigger(this.resume);
+    this.update();
   },
   onHideComments: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showComments = false;
-    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-    this.trigger(this.resume);
+    this.update();
   },
   onToggleComments: function (sectionId) {
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showEdits = false;
     this.resume.sections[index].showComments = !this.resume.sections[index].showComments;
-  //  console.log(this.resume.sections[index].showComments);
-    this.resume.all_section = this.doProcessSection( this.resume.sections , this.resume.header.owner);
-    this.trigger(this.resume);
+    this.update();
   },
   onToggleEdits: function( sectionId ){
     var index = findindex(this.resume.sections, {sectionId: sectionId});
     this.resume.sections[index].showComments = false;
     this.resume.sections[index].showEdits = !this.resume.sections[index].showEdits;
-    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-    this.trigger(this.resume);
+    this.update();
   },
   onToggleNav: function() {
     this.resume.isNavOpen = !this.resume.isNavOpen;
@@ -577,6 +568,12 @@ module.exports = Reflux.createStore({
     this.resume.isPrintModalOpen = flag;
     this.trigger(this.resume);
   },
+
+  update: function(){
+    this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
+    this.trigger(this.resume);
+  },
+
   getInitialState: function () {
     return this.resume;
   },
