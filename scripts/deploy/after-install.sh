@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 sudo chmod 777 /opt/vyllage/newrelic
 ln -s /opt/vyllage/site-*.jar /opt/vyllage/site.jar
