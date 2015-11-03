@@ -147,8 +147,7 @@ public class NotificationsControllerIntegTest {
 		assertNotNull(webCommentNotifications);
 		assertTrue(webCommentNotifications.length > 0);
 		assertNotNull(webCommentNotifications[0].getCommentId());
-		assertTrue(webCommentNotifications[0].getCommentUserId()
-				.equals(userId1));
+		assertTrue(webCommentNotifications[0].getOtherUserId().equals(userId1));
 		assertTrue(webCommentNotifications[0].getUserId().equals(userId2));
 
 	}
@@ -217,8 +216,7 @@ public class NotificationsControllerIntegTest {
 		assertNotNull(webFeedbackNotifications);
 		assertTrue(webFeedbackNotifications.length > 0);
 		assertTrue(webFeedbackNotifications[0].getUserId().equals(userId2));
-		assertTrue(webFeedbackNotifications[0].getResumeUserId()
-				.equals(userId1));
+		assertTrue(webFeedbackNotifications[0].getOtherUserId().equals(userId1));
 		assertTrue(webFeedbackNotifications[0].getResumeId().equals(resumeId));
 
 	}

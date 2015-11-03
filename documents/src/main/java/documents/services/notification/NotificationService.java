@@ -19,10 +19,13 @@ import com.newrelic.api.agent.NewRelic;
 import documents.model.Comment;
 import documents.model.notifications.CommentNotification;
 import documents.model.notifications.FeedbackRequestNotification;
+import documents.model.notifications.ReferenceRequestNotification;
 import documents.model.notifications.WebCommentNotification;
 import documents.model.notifications.WebFeedbackRequestNotification;
+import documents.model.notifications.WebReferenceRequestNotification;
 import documents.repository.CommentNotificationRepository;
 import documents.repository.FeedbackRequestNotificationRepository;
+import documents.repository.ReferenceRequestNotificationRepository;
 import email.EmailBuilder;
 
 @Service
@@ -39,6 +42,8 @@ public class NotificationService {
 
 	private final FeedbackRequestNotificationRepository feedbackRequestNotificationRepository;
 
+	private final ReferenceRequestNotificationRepository referenceRequestNotificationRepository;
+
 	private final EmailBuilder emailBuilder;
 
 	private final String SUBJECT = "Vyllage notification";
@@ -48,10 +53,12 @@ public class NotificationService {
 			Environment environment,
 			CommentNotificationRepository userNotificationRepository,
 			FeedbackRequestNotificationRepository feedbackRequestNotificationRepository,
+			ReferenceRequestNotificationRepository referenceRequestNotificationRepository,
 			@Qualifier(value = "documents.emailBuilder") EmailBuilder emailBuilder) {
 		this.environment = environment;
 		this.commentNotificationRepository = userNotificationRepository;
 		this.feedbackRequestNotificationRepository = feedbackRequestNotificationRepository;
+		this.referenceRequestNotificationRepository = referenceRequestNotificationRepository;
 		this.emailBuilder = emailBuilder;
 
 	}
@@ -132,15 +139,14 @@ public class NotificationService {
 	 * @param comment
 	 * @param sectionTitle
 	 */
-	public void saveCommentNotification(CommentNotification commentNotification) {
+	public void save(CommentNotification commentNotification) {
 		commentNotificationRepository.save(commentNotification);
 	}
 
-	public void deleteCommentNotification(
-			WebCommentNotification webCommentNotification) {
+	public void delete(WebCommentNotification webCommentNotification) {
 		commentNotificationRepository.delete(
 				webCommentNotification.getUserId(),
-				webCommentNotification.getCommentUserId());
+				webCommentNotification.getOtherUserId());
 	}
 
 	/**
@@ -149,8 +155,7 @@ public class NotificationService {
 	 * 
 	 * @param feedbackRequestNotification
 	 */
-	public void saveFeedBackRequestNotification(
-			FeedbackRequestNotification feedbackRequestNotification) {
+	public void save(FeedbackRequestNotification feedbackRequestNotification) {
 		feedbackRequestNotificationRepository.save(feedbackRequestNotification);
 	}
 
@@ -159,11 +164,33 @@ public class NotificationService {
 		return feedbackRequestNotificationRepository.get(userId);
 	}
 
-	public void deleteFeedbackNotification(
+	public void delete(
 			WebFeedbackRequestNotification webFeedbackRequestNotification) {
 		feedbackRequestNotificationRepository.delete(
 				webFeedbackRequestNotification.getUserId(),
 				webFeedbackRequestNotification.getResumeId());
+	}
+
+	public List<ReferenceRequestNotification> getReferenceRequestNotifications(
+			Long userId) {
+		return referenceRequestNotificationRepository.get(userId);
+	}
+
+	/**
+	 * Saves a reference request someone did to a given user.
+	 * 
+	 * @param referenceRequestNotification
+	 */
+	public void save(ReferenceRequestNotification referenceRequestNotification) {
+		referenceRequestNotificationRepository
+				.save(referenceRequestNotification);
+	}
+
+	public void delete(
+			WebReferenceRequestNotification webReferenceRequestNotification) {
+		referenceRequestNotificationRepository.delete(
+				webReferenceRequestNotification.getUserId(),
+				webReferenceRequestNotification.getOtherUserId());
 	}
 
 	public void deleteAll(Long userId) {

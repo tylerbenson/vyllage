@@ -591,7 +591,7 @@ public class ResumeController {
 			final Comment savedComment) {
 
 		notificationService
-				.saveCommentNotification(new CommentNotification(document
+				.save(new CommentNotification(document
 						.getUserId(), savedComment, documentSection.getTitle()));
 
 		boolean isOwner = document.getUserId().equals(user.getUserId());

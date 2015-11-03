@@ -25,8 +25,10 @@ import user.common.web.NotifyFeedbackRequest;
 import documents.model.notifications.AbstractWebNotification;
 import documents.model.notifications.CommentNotification;
 import documents.model.notifications.FeedbackRequestNotification;
+import documents.model.notifications.ReferenceRequestNotification;
 import documents.model.notifications.WebCommentNotification;
 import documents.model.notifications.WebFeedbackRequestNotification;
+import documents.model.notifications.WebReferenceRequestNotification;
 import documents.services.AccountService;
 import documents.services.notification.NotificationService;
 
@@ -61,7 +63,7 @@ public class NotificationsController {
 	}
 
 	@RequestMapping(value = "/comment", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<WebCommentNotification> getCommentNotifications(
+	public @ResponseBody List<AbstractWebNotification> getCommentNotifications(
 			HttpServletRequest request, @AuthenticationPrincipal User user) {
 
 		List<CommentNotification> commentNotifications = notificationService
@@ -79,16 +81,8 @@ public class NotificationsController {
 		return commentNotifications
 				.stream()
 				.map(cn -> {
-					WebCommentNotification wcn = new WebCommentNotification(cn);
-
-					Optional<AccountContact> contact = contacts
-							.stream()
-							.filter(c -> wcn.getCommentUserId().equals(
-									c.getUserId())).findFirst();
-					if (contact.isPresent())
-						wcn.setUserName(contact.get().getFirstName() + " "
-								+ contact.get().getLastName());
-					return wcn;
+					return this.addContactName(contacts,
+							new WebCommentNotification(cn));
 				}).collect(Collectors.toList());
 
 	}
@@ -101,7 +95,7 @@ public class NotificationsController {
 		Assert.isTrue(user.getUserId().equals(
 				webCommentNotification.getUserId()));
 
-		notificationService.deleteCommentNotification(webCommentNotification);
+		notificationService.delete(webCommentNotification);
 	}
 
 	@RequestMapping(value = "/request-feedback", method = RequestMethod.POST, consumes = "application/json")
@@ -112,13 +106,12 @@ public class NotificationsController {
 		FeedbackRequestNotification feedbackRequestNotification = new FeedbackRequestNotification(
 				notifyFeedbackRequest);
 
-		notificationService
-				.saveFeedBackRequestNotification(feedbackRequestNotification);
+		notificationService.save(feedbackRequestNotification);
 
 	}
 
 	@RequestMapping(value = "/request-feedback", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<WebFeedbackRequestNotification> getFeedbackRequestNotifications(
+	public @ResponseBody List<AbstractWebNotification> getFeedbackRequestNotifications(
 			HttpServletRequest request, @AuthenticationPrincipal User user) {
 
 		List<FeedbackRequestNotification> feedbackRequestNotifications = notificationService
@@ -137,17 +130,9 @@ public class NotificationsController {
 		return feedbackRequestNotifications
 				.stream()
 				.map(frn -> {
-					WebFeedbackRequestNotification wfrn = new WebFeedbackRequestNotification(
-							frn);
 
-					Optional<AccountContact> contact = contacts
-							.stream()
-							.filter(c -> wfrn.getResumeUserId().equals(
-									c.getUserId())).findFirst();
-					if (contact.isPresent())
-						wfrn.setUserName(contact.get().getFirstName() + " "
-								+ contact.get().getLastName());
-					return wfrn;
+					return this.addContactName(contacts,
+							new WebFeedbackRequestNotification(frn));
 				}).collect(Collectors.toList());
 	}
 
@@ -159,13 +144,65 @@ public class NotificationsController {
 		Assert.isTrue(user.getUserId().equals(
 				webFeedbackRequestNotification.getUserId()));
 
-		notificationService
-				.deleteFeedbackNotification(webFeedbackRequestNotification);
+		notificationService.delete(webFeedbackRequestNotification);
 
+	}
+
+	@RequestMapping(value = "/request-reference", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<AbstractWebNotification> getReferenceRequests(
+			HttpServletRequest request, @AuthenticationPrincipal User user) {
+
+		List<ReferenceRequestNotification> referenceRequestNotifications = notificationService
+				.getReferenceRequestNotifications(user.getUserId());
+
+		if (referenceRequestNotifications == null
+				|| referenceRequestNotifications.isEmpty())
+			return Collections.emptyList();
+
+		List<Long> resumeUserIds = referenceRequestNotifications.stream()
+				.map(n -> n.getReferenceRequestUserId())
+				.collect(Collectors.toList());
+
+		List<AccountContact> contacts = accountService.getContactDataForUsers(
+				request, resumeUserIds);
+
+		return referenceRequestNotifications
+				.stream()
+				.map(rrn -> {
+					return this.addContactName(contacts,
+							new WebReferenceRequestNotification(rrn));
+				}).collect(Collectors.toList());
+	}
+
+	@RequestMapping(value = "/request-reference", method = RequestMethod.DELETE, consumes = "application/json")
+	public void deleteReferenceRequestNotifications(
+			@RequestBody final WebReferenceRequestNotification webReferenceRequestNotification,
+			@AuthenticationPrincipal User user) {
+
+		Assert.isTrue(user.getUserId().equals(
+				webReferenceRequestNotification.getUserId()));
+
+		notificationService.delete(webReferenceRequestNotification);
+
+	}
+
+	protected AbstractWebNotification addContactName(
+			List<AccountContact> contacts,
+			AbstractWebNotification webNotification) {
+
+		Optional<AccountContact> contact = contacts
+				.stream()
+				.filter(c -> webNotification.getOtherUserId().equals(
+						c.getUserId())).findFirst();
+		if (contact.isPresent())
+			webNotification.setUserName(contact.get().getFirstName() + " "
+					+ contact.get().getLastName());
+		return webNotification;
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	public void deleteAll(@AuthenticationPrincipal User user) {
 		notificationService.deleteAll(user.getUserId());
 	}
+
 }

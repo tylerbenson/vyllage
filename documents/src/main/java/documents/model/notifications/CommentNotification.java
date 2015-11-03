@@ -13,18 +13,16 @@ import documents.model.Comment;
  *
  * @author uh
  */
-public class CommentNotification {
-	private final Long userId;
+public class CommentNotification extends AbstractNotification {
 	private final Long commentUserId;
 
-	private LocalDateTime dateCreated;
 	private final Long commentId;
 
 	private final String sectionTitle;
 
 	public CommentNotification(@NonNull Long userId, @NonNull Comment comment,
 			String sectionTitle) {
-		this.userId = userId;
+		super(userId);
 		this.commentUserId = comment.getUserId();
 		this.commentId = comment.getCommentId();
 		this.sectionTitle = sectionTitle;
@@ -32,19 +30,11 @@ public class CommentNotification {
 	}
 
 	public CommentNotification(CommentNotificationRecord record) {
-		this.userId = record.getUserId();
+		super(record.getUserId(), record.getDateCreated().toLocalDateTime());
+
 		this.commentUserId = record.getCommentUserId();
-		this.dateCreated = record.getDateCreated().toLocalDateTime();
 		this.commentId = record.getCommentId();
 		this.sectionTitle = record.getSectionTitle();
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public LocalDateTime getDateCreated() {
-		return dateCreated;
 	}
 
 	public Long getCommentId() {
