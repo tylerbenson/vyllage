@@ -136,12 +136,16 @@ public class ResumeController {
 	}
 
 	// @ModelAttribute("userInfo")
-	public UserInfo userInfo(User user) {
+	public UserInfo userInfo(HttpServletRequest request, User user) {
 		if (user == null) {
 			return null;
 		}
 
-		return new UserInfo(user);
+		UserInfo userInfo = new UserInfo(user);
+		userInfo.setEmailConfirmed(accountService.isEmailVerified(request,
+				user.getUserId()));
+
+		return userInfo;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -179,7 +183,7 @@ public class ResumeController {
 		Document document = documentService.getDocument(documentId);
 
 		model.addAttribute("accountName", accountName(request, user));
-		model.addAttribute("userInfo", userInfo(user));
+		model.addAttribute("userInfo", userInfo(request, user));
 		model.addAttribute("documentCreationDate", document.getDateCreated());
 
 		return "resume";

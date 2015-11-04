@@ -2,6 +2,7 @@ package accounts.controller;
 
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import user.common.User;
 import user.common.web.UserInfo;
+import accounts.service.ConfirmationEmailService;
 
 @Controller
 public class IndexController {
@@ -21,9 +23,12 @@ public class IndexController {
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(IndexController.class
 			.getName());
+	private ConfirmationEmailService confirmationEmailService;
 
-	public IndexController() {
+	@Inject
+	public IndexController(ConfirmationEmailService confirmationEmailService) {
 		super();
+		this.confirmationEmailService = confirmationEmailService;
 	}
 
 	@ModelAttribute("userInfo")
@@ -33,7 +38,11 @@ public class IndexController {
 			return null;
 		}
 
-		return new UserInfo(user);
+		UserInfo userInfo = new UserInfo(user);
+		userInfo.setEmailConfirmed(confirmationEmailService
+				.isEmailConfirmed(user.getUserId()));
+
+		return userInfo;
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)

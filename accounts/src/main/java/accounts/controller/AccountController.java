@@ -55,6 +55,7 @@ import accounts.model.account.settings.AccountSetting;
 import accounts.repository.EmailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
+import accounts.service.ConfirmationEmailService;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
 import accounts.service.contactSuggestion.UserContactSuggestionService;
@@ -94,6 +95,8 @@ public class AccountController {
 
 	private final ObjectMapper mapper;
 
+	private final ConfirmationEmailService confirmationEmailService;
+
 	@Inject
 	public AccountController(
 			final Environment environment,
@@ -101,6 +104,7 @@ public class AccountController {
 			final DocumentLinkService documentLinkService,
 			final UserContactSuggestionService userContactSuggestionService,
 			final AccountSettingsService accountSettingsService,
+			final ConfirmationEmailService confirmationEmailService,
 			final EmailRepository emailRepository,
 			@Qualifier(value = "accounts.emailBuilder") final EmailBuilder emailBuilder,
 			final TextEncryptor encryptor,
@@ -111,6 +115,7 @@ public class AccountController {
 		this.documentLinkService = documentLinkService;
 		this.userContactSuggestionService = userContactSuggestionService;
 		this.accountSettingsService = accountSettingsService;
+		this.confirmationEmailService = confirmationEmailService;
 		this.emailRepository = emailRepository;
 		this.emailBuilder = emailBuilder;
 		this.encryptor = encryptor;
@@ -123,7 +128,11 @@ public class AccountController {
 			return null;
 		}
 
-		return new UserInfo(user);
+		UserInfo userInfo = new UserInfo(user);
+		userInfo.setEmailConfirmed(confirmationEmailService
+				.isEmailConfirmed(user.getUserId()));
+
+		return userInfo;
 	}
 
 	@RequestMapping(value = "roles", method = RequestMethod.GET, produces = "application/json")
@@ -454,4 +463,13 @@ public class AccountController {
 				&& !noPhoneNumber;
 
 	}
+
+	@RequestMapping(value = "{userId}/email-confirmed", method = RequestMethod.GET)
+	public @ResponseBody Boolean emailConfirmed(
+			@PathVariable(value = "userId") Long userId) {
+
+		return confirmationEmailService.isEmailConfirmed(userId);
+
+	}
+
 }

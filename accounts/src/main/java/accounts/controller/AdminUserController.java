@@ -42,6 +42,7 @@ import accounts.repository.OrganizationRepository;
 import accounts.repository.RoleRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.service.BatchAccountCreationService;
+import accounts.service.ConfirmationEmailService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
 
@@ -65,17 +66,21 @@ public class AdminUserController {
 
 	private final BatchAccountCreationService batchAccountCreationService;
 
+	private final ConfirmationEmailService confirmationEmailService;
+
 	@Inject
 	public AdminUserController(final UserService userService,
 			final RoleRepository roleRepository,
 			final OrganizationRepository organizationRepository,
 			final DocumentService documentService,
-			final BatchAccountCreationService batchAccountCreationService) {
+			final BatchAccountCreationService batchAccountCreationService,
+			final ConfirmationEmailService confirmationEmailService) {
 		this.userService = userService;
 		this.roleRepository = roleRepository;
 		this.organizationRepository = organizationRepository;
 		this.documentService = documentService;
 		this.batchAccountCreationService = batchAccountCreationService;
+		this.confirmationEmailService = confirmationEmailService;
 	}
 
 	@ModelAttribute("accountName")
@@ -91,7 +96,11 @@ public class AdminUserController {
 			return null;
 		}
 
-		return new UserInfo(user);
+		UserInfo userInfo = new UserInfo(user);
+		userInfo.setEmailConfirmed(confirmationEmailService
+				.isEmailConfirmed(user.getUserId()));
+
+		return userInfo;
 	}
 
 	@RequestMapping(value = "/user/roles", method = RequestMethod.GET)

@@ -22,6 +22,7 @@ import accounts.model.account.settings.AccountSetting;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.SocialRepository;
 import accounts.service.AccountSettingsService;
+import accounts.service.ConfirmationEmailService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
 
@@ -39,11 +40,14 @@ public class AccountSettingControllerTest {
 
 	private SocialRepository socialRepository = mock(SocialRepository.class);
 
+	private ConfirmationEmailService confirmationEmailService = mock(ConfirmationEmailService.class);
+
 	@Before
 	public void setUp() throws Exception {
 		accountSettingsController = new AccountSettingsController(userService,
 				accountSettingsService, documentService,
-				organizationRepository, socialRepository);
+				confirmationEmailService, organizationRepository,
+				socialRepository);
 	}
 
 	@Test
