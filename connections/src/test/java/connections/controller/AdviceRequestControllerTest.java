@@ -1,16 +1,22 @@
 package connections.controller;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.springframework.ui.Model;
 
 import user.common.User;
 import user.common.web.AccountContact;
-import connections.controller.AdviceRequestController;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
 import connections.model.NotRegisteredUser;
@@ -19,36 +25,36 @@ import connections.service.AdviceService;
 
 public class AdviceRequestControllerTest {
 
-	private AdviceService adviceService = Mockito.mock(AdviceService.class);
+	private AdviceService adviceService = mock(AdviceService.class);
 
-	private AccountService accountService = Mockito.mock(AccountService.class);
+	private AccountService accountService = mock(AccountService.class);
 
 	@Test
 	public void testAccountNames() {
 		AdviceRequestController controller = new AdviceRequestController(
 				adviceService, accountService);
 
-		User user = Mockito.mock(User.class);
+		User user = mock(User.class);
 		Long userId = 0L;
 		String firstName = "firstName";
 		String middleName = "middleName";
 		String lastName = "lastName";
 
-		Mockito.when(user.getUserId()).thenReturn(userId);
+		when(user.getUserId()).thenReturn(userId);
 
-		Mockito.when(user.getFirstName()).thenReturn(firstName);
+		when(user.getFirstName()).thenReturn(firstName);
 
-		Mockito.when(user.getMiddleName()).thenReturn(middleName);
+		when(user.getMiddleName()).thenReturn(middleName);
 
-		Mockito.when(user.getLastName()).thenReturn(lastName);
+		when(user.getLastName()).thenReturn(lastName);
 
 		AccountNames accountNames = controller.accountNames(user);
 
-		Assert.assertNotNull(accountNames);
-		Assert.assertEquals(userId, accountNames.getUserId());
-		Assert.assertEquals(firstName, accountNames.getFirstName());
-		Assert.assertEquals(middleName, accountNames.getMiddleName());
-		Assert.assertEquals(lastName, accountNames.getLastName());
+		assertNotNull(accountNames);
+		assertEquals(userId, accountNames.getUserId());
+		assertEquals(firstName, accountNames.getFirstName());
+		assertEquals(middleName, accountNames.getMiddleName());
+		assertEquals(lastName, accountNames.getLastName());
 
 	}
 
@@ -59,11 +65,11 @@ public class AdviceRequestControllerTest {
 
 		AccountNames accountNames = controller.accountNames(null);
 
-		Assert.assertNotNull(accountNames);
-		Assert.assertNull(accountNames.getUserId());
-		Assert.assertEquals("", accountNames.getFirstName());
-		Assert.assertEquals("", accountNames.getMiddleName());
-		Assert.assertEquals("", accountNames.getLastName());
+		assertNotNull(accountNames);
+		assertNull(accountNames.getUserId());
+		assertEquals("", accountNames.getFirstName());
+		assertEquals("", accountNames.getMiddleName());
+		assertEquals("", accountNames.getLastName());
 
 	}
 
@@ -72,13 +78,15 @@ public class AdviceRequestControllerTest {
 		AdviceRequestController controller = new AdviceRequestController(
 				adviceService, accountService);
 
-		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-		User user = Mockito.mock(User.class);
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		User user = mock(User.class);
 
-		Mockito.when(accountService.canIRequestFeedback(request, user))
+		when(accountService.canIRequestFeedback(request, user))
 				.thenReturn(true);
+		when(user.getDateCreated()).thenReturn(LocalDateTime.now());
 
-		Assert.assertEquals("getFeedback", controller.askAdvice(request, user));
+		Assert.assertEquals("getFeedback",
+				controller.askAdvice(request, user, mock(Model.class)));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
