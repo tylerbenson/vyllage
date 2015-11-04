@@ -24,3 +24,11 @@ create table if not exists documents.reference_request_notification(
   	date_created timestamp not null
   	);
 
+-- to see notifications easily without having to create them uncomment these.   	
+-- uncommenting these might cause some of the tests to fail, comment them back after using them.
+--insert into documents.comment_notification values(0, 0, 3, 0, 'experience', CURRENT_TIMESTAMP());
+
+--insert into documents.feedback_request_notification values(0, 8, 0, 0, CURRENT_TIMESTAMP());
+
+--insert into documents.reference_request_notification values(0, 0, 8, CURRENT_TIMESTAMP());
+

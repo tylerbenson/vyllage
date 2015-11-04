@@ -15,6 +15,7 @@ public class WebCommentNotification extends AbstractWebNotification {
 
 		this.commentId = commentNotification.getCommentId();
 		this.sectionTitle = commentNotification.getSectionTitle();
+		this.setType("WebCommentNotification");
 	}
 
 	public Long getCommentId() {

@@ -57,6 +57,10 @@ public class NotificationsController {
 		notifications.addAll(this.getCommentNotifications(request, user));
 		notifications.addAll(this
 				.getFeedbackRequestNotifications(request, user));
+		notifications.addAll(this.getReferenceRequests(request, user));
+
+		// return notifications.stream().collect(
+		// Collectors.groupingBy(n -> n.getClass().getSimpleName()));
 
 		return notifications;
 
@@ -88,6 +92,7 @@ public class NotificationsController {
 	}
 
 	@RequestMapping(value = "/comment", method = RequestMethod.DELETE, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteCommentNotification(
 			@RequestBody WebCommentNotification webCommentNotification,
 			@AuthenticationPrincipal User user) {
@@ -137,6 +142,7 @@ public class NotificationsController {
 	}
 
 	@RequestMapping(value = "/request-feedback", method = RequestMethod.DELETE, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteFeedbackNotifications(
 			@RequestBody final WebFeedbackRequestNotification webFeedbackRequestNotification,
 			@AuthenticationPrincipal User user) {
@@ -175,9 +181,16 @@ public class NotificationsController {
 	}
 
 	@RequestMapping(value = "/request-reference", method = RequestMethod.DELETE, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteReferenceRequestNotifications(
 			@RequestBody final WebReferenceRequestNotification webReferenceRequestNotification,
 			@AuthenticationPrincipal User user) {
+
+		/*
+		 * TODO: Currently this is the same as
+		 * ReferenceController.rejectAndDelete, the difference might be in the
+		 * future notifying the user of the rejection on the other method.
+		 */
 
 		Assert.isTrue(user.getUserId().equals(
 				webReferenceRequestNotification.getUserId()));

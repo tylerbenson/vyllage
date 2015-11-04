@@ -14,10 +14,11 @@ Request Body
 ```
 {
     "userId": 0,
-    "dateCreated": "2015-11-03T11:43:29",
+    "dateCreated": "2015-11-03T21:33:50",
     "userName": "Mailinator Email",
-    "otherUserId": 8
- }
+    "otherUserId": 8,
+    "type": "WebReferenceRequestNotification"
+}
 ```
 
 Response 202.
@@ -32,10 +33,11 @@ Request Body
 ```
 {
     "userId": 0,
-    "dateCreated": "2015-11-03T11:43:29",
+    "dateCreated": "2015-11-03T21:33:50",
     "userName": "Mailinator Email",
-    "otherUserId": 8
- }
+    "otherUserId": 8,
+    "type": "WebReferenceRequestNotification"
+}
 ```
 
 Response 204.

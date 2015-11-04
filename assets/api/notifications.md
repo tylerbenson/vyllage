@@ -4,35 +4,32 @@ Note: notifications, currently once created can only be deleted by the recipient
 ## GET /notification/all
 
 ```
-{
-  "WebReferenceRequestNotification": [
-    {
-      "userId": 0,
-      "dateCreated": "2015-11-03T11:43:29",
-      "userName": "Mailinator Email",
-      "otherUserId": 8
-    }
-  ],
-  "WebCommentNotification": [
-    {
-      "userId": 0,
-      "dateCreated": "2015-11-03T11:43:29",
-      "userName": "Mario Mario",
-      "otherUserId": 3,
-      "commentId": 0,
-      "sectionTitle": "experience"
-    }
-  ],
-  "WebFeedbackRequestNotification": [
-    {
-	    "userId": 8,
-    	"dateCreated": "2015-11-03T11:43:29",
-    	"userName": "Luke Skywalker",
-    	"otherUserId": 0,
-    	"resumeId": 0
-    }
-  ]
-}
+[
+  {
+    "userId": 0,
+    "dateCreated": "2015-11-03T21:33:50",
+    "userName": "Mario Mario",
+    "otherUserId": 3,
+    "type": "WebCommentNotification",
+    "commentId": 0,
+    "sectionTitle": "experience"
+  },
+  {
+    "userId": 0,
+    "dateCreated": "2015-11-03T21:33:50",
+    "userName": "Mailinator Email",
+    "otherUserId": 8,
+    "type": "WebReferenceRequestNotification"
+  },
+  {
+  	"userId": 8,
+  	"dateCreated": "2015-11-03T21:33:50",
+  	"userName": "Luke Skywalker",
+  	"otherUserId": 0,
+  	"type": "WebFeedbackRequestNotification",
+  	"resumeId": 0
+  }
+]
 ```
 
 # Retrieve all comment notifications
@@ -44,9 +41,10 @@ Comment notifications are generated whenever a user posts a comment.
 [
   {
     "userId": 0,
-    "dateCreated": "2015-11-03T11:43:29",
+    "dateCreated": "2015-11-03T21:33:50",
     "userName": "Mario Mario",
     "otherUserId": 3,
+    "type": "WebCommentNotification",
     "commentId": 0,
     "sectionTitle": "experience"
   }
@@ -60,9 +58,10 @@ Body (application/json):
 [
   {
     "userId": 0,
-    "dateCreated": "2015-11-03T11:43:29",
+    "dateCreated": "2015-11-03T21:33:50",
     "userName": "Mario Mario",
     "otherUserId": 3,
+    "type": "WebCommentNotification",
     "commentId": 0,
     "sectionTitle": "experience"
   }
@@ -79,11 +78,12 @@ These are generated automatically when a user request feedback from an existing 
 ```
 [
   {
-    "userId": 8,
-    "dateCreated": "2015-11-03T11:43:29",
-    "userName": "Luke Skywalker",
-    "otherUserId": 0,
-    "resumeId": 0
+  	"userId": 8,
+  	"dateCreated": "2015-11-03T21:33:50",
+  	"userName": "Luke Skywalker",
+  	"otherUserId": 0,
+  	"type": "WebFeedbackRequestNotification",
+  	"resumeId": 0
   }
 ]
 ```
@@ -94,11 +94,12 @@ These are generated automatically when a user request feedback from an existing 
 ```
 [
   {
-    "userId": 8,
-    "dateCreated": "2015-11-03T11:43:29",
-    "userName": "Luke Skywalker",
-    "otherUserId": 0,
-    "resumeId": 0
+  	"userId": 8,
+  	"dateCreated": "2015-11-03T21:33:50",
+  	"userName": "Luke Skywalker",
+  	"otherUserId": 0,
+  	"type": "WebFeedbackRequestNotification",
+  	"resumeId": 0
   }
 ]
 ```
@@ -111,9 +112,10 @@ Response 204.
 [
   {
     "userId": 0,
-    "dateCreated": "2015-11-03T11:43:29",
+    "dateCreated": "2015-11-03T21:33:50",
     "userName": "Mailinator Email",
-    "otherUserId": 8
+    "otherUserId": 8,
+    "type": "WebReferenceRequestNotification"
   }
 ]
 ```
@@ -126,9 +128,10 @@ Deletes a reference request.
 [
   {
     "userId": 0,
-    "dateCreated": "2015-11-03T11:43:29",
+    "dateCreated": "2015-11-03T21:33:50",
     "userName": "Mailinator Email",
-    "otherUserId": 8
+    "otherUserId": 8,
+    "type": "WebReferenceRequestNotification"
   }
 ]
 ```

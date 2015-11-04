@@ -14,6 +14,7 @@ public class WebFeedbackRequestNotification extends AbstractWebNotification {
 				feedbackRequestNotification.getResumeUserId());
 
 		this.resumeId = feedbackRequestNotification.getResumeId();
+		this.setType("WebFeedbackRequestNotification");
 	}
 
 	public Long getResumeId() {

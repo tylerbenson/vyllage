@@ -136,7 +136,8 @@ public class ReferenceController {
 
 	}
 
-	protected ContactReference createContactReferece(HttpServletRequest request,
+	protected ContactReference createContactReferece(
+			HttpServletRequest request,
 			WebReferenceRequestNotification webReferenceRequestNotification) {
 
 		ContactReference contactReference = new ContactReference();
@@ -157,7 +158,8 @@ public class ReferenceController {
 		return contactReference;
 	}
 
-	@RequestMapping(value = "/reject-request-reference", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/reject-request-reference", method = RequestMethod.DELETE, consumes = "application/json")
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void rejectAndDelete(
 			@RequestBody WebReferenceRequestNotification webReferenceRequestNotification,
 			@AuthenticationPrincipal User user) {

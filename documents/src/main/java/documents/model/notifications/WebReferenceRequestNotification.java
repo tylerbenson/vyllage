@@ -6,7 +6,9 @@ public class WebReferenceRequestNotification extends AbstractWebNotification {
 	}
 
 	public WebReferenceRequestNotification(ReferenceRequestNotification rrn) {
-		super(rrn.getUserId(), rrn.getDateCreated(), rrn.getReferenceRequestUserId());
+		super(rrn.getUserId(), rrn.getDateCreated(), rrn
+				.getReferenceRequestUserId());
+		this.setType("WebReferenceRequestNotification");
 	}
 
 }
