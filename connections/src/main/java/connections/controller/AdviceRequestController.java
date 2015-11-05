@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ import connections.model.UserFilterResponse;
 import connections.repository.ElementNotFoundException;
 import connections.service.AccountService;
 import connections.service.AdviceService;
+import connections.service.DocumentService;
 
 @Controller
 @RequestMapping("resume")
@@ -43,13 +45,18 @@ public class AdviceRequestController {
 			.getLogger(AdviceRequestController.class.getName());
 
 	private final AdviceService adviceService;
-	private AccountService accountService;
+	private final AccountService accountService;
+
+	private final DocumentService documentService;
 
 	@Inject
-	public AdviceRequestController(AdviceService adviceService,
-			AccountService accountService) {
+	public AdviceRequestController(
+			AdviceService adviceService,
+			AccountService accountService,
+			@Qualifier(value = "connections.DocumentService") DocumentService documentService) {
 		this.adviceService = adviceService;
 		this.accountService = accountService;
+		this.documentService = documentService;
 	}
 
 	@ModelAttribute("accountName")
@@ -109,7 +116,7 @@ public class AdviceRequestController {
 		Long userId = user.getUserId();
 		String firstName = user.getFirstName();
 
-		Long documentId = adviceService.getUserDocumentId(request, userId);
+		Long documentId = documentService.getUserDocumentId(request, userId);
 
 		AdviceRequestParameter adviceRequestParameters = new AdviceRequestParameter();
 		adviceRequestParameters.setDocumentId(documentId);
@@ -162,8 +169,8 @@ public class AdviceRequestController {
 			listOfExcludedIds.addAll(excludeIds);
 		listOfExcludedIds.add(userId);
 
-		final Long documentId = adviceService
-				.getUserDocumentId(request, userId);
+		final Long documentId = documentService.getUserDocumentId(request,
+				userId);
 
 		return adviceService
 				.getUsers(request, documentId, userId, listOfExcludedIds,

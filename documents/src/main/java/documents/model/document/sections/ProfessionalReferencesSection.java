@@ -1,5 +1,6 @@
 package documents.model.document.sections;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
@@ -10,7 +11,7 @@ import documents.model.constants.SectionType;
 @EqualsAndHashCode(callSuper = true)
 public class ProfessionalReferencesSection extends DocumentSection {
 
-	private List<ContactReference> references;
+	private List<ContactReference> references = new ArrayList<>();
 
 	public ProfessionalReferencesSection() {
 		super();
