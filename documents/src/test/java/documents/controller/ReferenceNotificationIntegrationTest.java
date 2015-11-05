@@ -104,7 +104,7 @@ public class ReferenceNotificationIntegrationTest {
 		Long otherUserId = 0L;
 
 		mockMvc.perform(
-				post("/reference/request-reference?otherUserId=" + otherUserId)
+				post("/reference/request?otherUserId=" + otherUserId)
 						.contentType(ContentType.APPLICATION_JSON.toString()))
 				.andExpect(status().isAccepted());
 
@@ -138,7 +138,7 @@ public class ReferenceNotificationIntegrationTest {
 
 		// accept
 		mockMvc.perform(
-				post("/reference/accept-request-reference")
+				post("/reference/accept")
 						.contentType(ContentType.APPLICATION_JSON.toString())
 						.content(
 								mapper.writeValueAsString(webReferenceRequestNotifications[0])))

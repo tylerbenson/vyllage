@@ -52,7 +52,7 @@ public class ReferenceController {
 
 	// we have no page to send this from, keeping it simple for now.
 
-	@RequestMapping(value = "/request-reference", method = RequestMethod.POST)
+	@RequestMapping(value = "/request", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public void postReferenceRequest(
 			@RequestParam(value = "otherUserId", required = true) Long otherUserId,
@@ -68,7 +68,7 @@ public class ReferenceController {
 
 	}
 
-	@RequestMapping(value = "/accept-request-reference", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "/accept", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public void acceptAndDelete(
 			HttpServletRequest request,
@@ -158,7 +158,7 @@ public class ReferenceController {
 		return contactReference;
 	}
 
-	@RequestMapping(value = "/reject-request-reference", method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = "/reject", method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void rejectAndDelete(
 			@RequestBody WebReferenceRequestNotification webReferenceRequestNotification,

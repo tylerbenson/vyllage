@@ -1,12 +1,12 @@
 # Create a reference request.
-## POST /reference/request-reference?otherUserId=1
+## POST /reference/request?otherUserId=1
 + Parameters
   + otherUserId (string, `1`) - The id of the user we want to add as reference.
   
 Response 202.
 
 # Accept a reference request from another user
-## POST /reference/accept-request-reference
+## POST /reference/accept
 Accepts a reference request from another user and creates the reference in the other user's resume.
 
 Request Body
@@ -24,7 +24,7 @@ Request Body
 Response 202.
 
 # Reject and delete a reference request.
-## DELETE /reference/reject-request-reference
+## DELETE /reference/reject
 
 Currently, this is the same as *DELETE /notification/request-reference*, in the future it could be used to send an explanation to the requesting user about the rejection. 
 
