@@ -15,8 +15,6 @@ public class AdviceRequestParameter {
 
 	private String senderName;
 
-	private Long userId;
-
 	private Long documentId;
 
 	private LocalDateTime linkExpirationDate;
@@ -50,14 +48,6 @@ public class AdviceRequestParameter {
 
 	public String getSenderName() {
 		return this.senderName;
-	}
-
-	public Long getUserId() {
-		return this.userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
 	}
 
 	public Long getDocumentId() {
