@@ -30,8 +30,7 @@ public class AdviceRequestControllerTest {
 
 	private AccountService accountService = mock(AccountService.class);
 
-	private DocumentService documentService = Mockito
-			.mock(DocumentService.class);
+	private DocumentService documentService = mock(DocumentService.class);
 
 	@Test
 	public void testAccountNames() {
