@@ -36,6 +36,10 @@ public class DocumentAccess {
 
 	private boolean allowGuestComments;
 
+	private String userName;
+
+	private String tagline;
+
 	public DocumentAccess() {
 	}
 
@@ -116,6 +120,22 @@ public class DocumentAccess {
 
 	public void setAllowGuestComments(boolean allowGuestComments) {
 		this.allowGuestComments = allowGuestComments;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getTagline() {
+		return tagline;
+	}
+
+	public void setTagline(String tagline) {
+		this.tagline = tagline;
 	}
 
 }
