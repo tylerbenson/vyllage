@@ -152,13 +152,6 @@ public class DocumentController {
 		return documents;
 	}
 
-	// @RequestMapping(value = "permissions", method = RequestMethod.GET,
-	// produces = "application/json")
-	// public @ResponseBody List<DocumentAccess> getUserDocumentsPermissions(
-	// @AuthenticationPrincipal User user) {
-	// return documentService.getUserDocumentsPermissions(user);
-	// }
-
 	@RequestMapping(value = "{documentId}/export")
 	public String export(HttpServletRequest request,
 			@PathVariable(value = "documentId") Long documentId,

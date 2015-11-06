@@ -1,5 +1,6 @@
 package documents.controller;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,6 +29,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
 import user.common.User;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import documents.ApplicationTestConfig;
 import documents.model.AccountNames;
 
@@ -46,16 +50,18 @@ public class DocumentControllerIntegTest {
 	@Inject
 	private RestTemplate restTemplate;
 
+	private ObjectMapper mapper = new ObjectMapper();
+
 	@Before
 	public void setUp() throws Exception {
 		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
 	}
 
 	@Test
-	public void testGetPermissions() throws Exception {
+	public void testGetDocumentLastModifiedDate() throws Exception {
 
 		User user = generateAndLoginUser();
-		Long userId = 3L;
+		Long userId = 0L;
 		when(user.getUserId()).thenReturn(userId);
 
 		@SuppressWarnings("unchecked")
@@ -70,11 +76,44 @@ public class DocumentControllerIntegTest {
 
 		MvcResult mvcResult = mockMvc
 				.perform(
-						get("/document/permissions").contentType(
+						get("/document/user/" + userId + "/modified-date")
+								.contentType(
+										ContentType.APPLICATION_JSON.toString()))
+				.andExpect(status().isOk()).andReturn();
+
+		assertNotNull(mvcResult);
+	}
+
+	@Test
+	public void testGetDocumentIds() throws Exception {
+
+		User user = generateAndLoginUser();
+		Long userId = 0L;
+		when(user.getUserId()).thenReturn(userId);
+
+		@SuppressWarnings("unchecked")
+		ResponseEntity<AccountNames[]> response = mock(ResponseEntity.class);
+
+		when(
+				restTemplate.exchange(Mockito.anyString(),
+						Mockito.eq(HttpMethod.GET), Mockito.any(),
+						Mockito.eq(AccountNames[].class))).thenReturn(response);
+
+		when(response.getBody()).thenReturn(null);
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						get("/document/user/?userId=" + userId).contentType(
 								ContentType.APPLICATION_JSON.toString()))
 				.andExpect(status().isOk()).andReturn();
 
 		assertNotNull(mvcResult);
+
+		Long[] longs = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), Long[].class);
+
+		assertEquals(new Long(0), longs[0]);
+
 	}
 
 	private User generateAndLoginUser() {
