@@ -37,18 +37,24 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class LTISecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	private LMSOAuthProviderProcessingFilter ltioAuthProviderProcessingFilter;
+
 	@Inject
-	LMSConsumerDetailsService lmsConsumerDetailsService;
+	private LMSConsumerDetailsService lmsConsumerDetailsService;
+
 	@Inject
-	LMSOAuthNonceServices lmsOauthNonceServices;
+	private LMSOAuthNonceServices lmsOauthNonceServices;
+
 	@Inject
-	LMSOAuthAuthenticationHandler lmsOauthAuthenticationHandler;
+	private LMSOAuthAuthenticationHandler lmsOauthAuthenticationHandler;
+
 	@Inject
-	OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
+	private OAuthProcessingFilterEntryPoint oauthProcessingFilterEntryPoint;
+
 	@Inject
-	OAuthProviderTokenServices oauthProviderTokenServices;
+	private OAuthProviderTokenServices oauthProviderTokenServices;
+
 	@Inject
-	Environment env;
+	private Environment env;
 
 	@PostConstruct
 	public void init() {
