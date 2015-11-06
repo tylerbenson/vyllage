@@ -404,7 +404,7 @@ public class ResumeControllerIntegTest {
 								+ "/comment")).andExpect(status().isOk())
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 		@SuppressWarnings("unchecked")
 		List<Comment> list = mapper.readValue(mvcResult.getResponse()
@@ -438,7 +438,7 @@ public class ResumeControllerIntegTest {
 								+ "/comment")).andExpect(status().isOk())
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 		@SuppressWarnings("unchecked")
 		List<Comment> list = mapper.readValue(mvcResult.getResponse()
@@ -710,7 +710,7 @@ public class ResumeControllerIntegTest {
 		List<Comment> list = mapper.readValue(mvcAllComments.getResponse()
 				.getContentAsString(), List.class);
 
-		assertFalse(list == null);
+		assertNotNull(list);
 		assertFalse(list.isEmpty());
 
 		// this doesn't work, the list is actually a LinkedHashMap
@@ -803,7 +803,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType("application/pdf"))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -821,7 +821,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType("application/pdf"))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -836,7 +836,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -853,7 +853,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -870,7 +870,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
