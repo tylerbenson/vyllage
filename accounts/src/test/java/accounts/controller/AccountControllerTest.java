@@ -25,6 +25,7 @@ import accounts.repository.ElementNotFoundException;
 import accounts.repository.EmailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
+import accounts.service.ConfirmationEmailService;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
 import accounts.service.contactSuggestion.UserContactSuggestionService;
@@ -49,6 +50,8 @@ public class AccountControllerTest {
 
 	private EmailRepository emailRepository = mock(EmailRepository.class);
 
+	private ConfirmationEmailService confirmationEmailService = mock(ConfirmationEmailService.class);
+
 	private EmailBuilder emailBuilder = mock(EmailBuilder.class,
 			new SelfReturningAnswer());
 
@@ -61,8 +64,8 @@ public class AccountControllerTest {
 
 		controller = new AccountController(environment, userService,
 				documentLinkService, userContactSuggestionService,
-				accountSettingsService, emailRepository, emailBuilder,
-				encryptor, mapper);
+				accountSettingsService, confirmationEmailService,
+				emailRepository, emailBuilder, encryptor, mapper);
 	}
 
 	@Test

@@ -1,6 +1,7 @@
 package accounts.service;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
@@ -198,6 +199,17 @@ public class ConfirmationEmailService {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 		}
+	}
+
+	public Boolean isEmailConfirmed(Long userId) {
+		List<Email> byUserId = emailRepository.getByUserId(userId);
+
+		boolean noEmails = byUserId == null || byUserId.isEmpty();
+
+		if (noEmails)
+			return false;
+
+		return byUserId.stream().allMatch(e -> e.isConfirmed());
 	}
 
 }

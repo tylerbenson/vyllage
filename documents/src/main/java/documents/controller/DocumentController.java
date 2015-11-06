@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
+import user.common.web.UserInfo;
 import documents.model.AccountNames;
 import documents.model.Document;
 import documents.model.DocumentAccess;
@@ -77,6 +79,19 @@ public class DocumentController {
 		}
 
 		return namesForUsers.get(0);
+	}
+
+	// @ModelAttribute("userInfo")
+	public UserInfo userInfo(HttpServletRequest request, User user) {
+		if (user == null) {
+			return null;
+		}
+
+		UserInfo userInfo = new UserInfo(user);
+		userInfo.setEmailConfirmed(accountService.isEmailVerified(request,
+				user.getUserId()));
+
+		return userInfo;
 	}
 
 	@RequestMapping(value = "delete", method = RequestMethod.DELETE, consumes = "application/json")
@@ -192,7 +207,11 @@ public class DocumentController {
 	}
 
 	@RequestMapping(value = "{documentId}/export")
-	public String export(@PathVariable(value = "documentId") Long documentId) {
+	public String export(HttpServletRequest request,
+			@PathVariable(value = "documentId") Long documentId,
+			@AuthenticationPrincipal User user, Model model) {
+
+		model.addAttribute("userInfo", userInfo(request, user));
 		return "export";
 	}
 

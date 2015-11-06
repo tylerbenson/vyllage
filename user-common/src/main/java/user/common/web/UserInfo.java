@@ -26,6 +26,8 @@ public class UserInfo {
 	private Long registeredOn;
 
 	private Set<Long> organizationIds = new HashSet<>();
+	
+	private boolean emailConfirmed;
 
 	public UserInfo(User user) {
 		this.email = user.getUsername();
@@ -70,6 +72,14 @@ public class UserInfo {
 
 	public void setOrganizationIds(Set<Long> organizationIds) {
 		this.organizationIds = organizationIds;
+	}
+
+	public boolean isEmailConfirmed() {
+		return emailConfirmed;
+	}
+
+	public void setEmailConfirmed(boolean emailConfirmed) {
+		this.emailConfirmed = emailConfirmed;
 	}
 
 }
