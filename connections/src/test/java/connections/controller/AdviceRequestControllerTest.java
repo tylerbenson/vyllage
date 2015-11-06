@@ -3,15 +3,19 @@ package connections.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+<<<<<<< Upstream, based on master
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+=======
+import static org.mockito.Mockito.when;
+
+>>>>>>> 4e648bc Forgot this one.
 import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.ui.Model;
 
@@ -88,8 +92,12 @@ public class AdviceRequestControllerTest {
 				.thenReturn(true);
 		when(user.getDateCreated()).thenReturn(LocalDateTime.now());
 
+<<<<<<< Upstream, based on master
 		Assert.assertEquals("getFeedback",
 				controller.askAdvice(request, user, mock(Model.class)));
+=======
+		assertEquals("getFeedback", controller.askAdvice(request, user));
+>>>>>>> 4e648bc Forgot this one.
 	}
 
 	@Test(expected = IllegalArgumentException.class)
