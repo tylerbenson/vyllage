@@ -8,6 +8,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -22,7 +23,6 @@ import oauth.utilities.LMSConstants;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
@@ -161,8 +161,8 @@ public class LMSAccountControllerTest {
 
 	@Test
 	public void testDuplicateHttps() {
-		User user = Mockito.mock(User.class);
-		Mockito.when(user.getUserId()).thenReturn(0L);
+		User user = mock(User.class);
+		when(user.getUserId()).thenReturn(0L);
 		String badUrl = "https://blackboard.ccu.eduhttps://my.url.with.img";
 		final String goodUrl = "https://my.url.with.img";
 
@@ -180,8 +180,8 @@ public class LMSAccountControllerTest {
 
 	@Test
 	public void testDuplicateHttp() {
-		User user = Mockito.mock(User.class);
-		Mockito.when(user.getUserId()).thenReturn(0L);
+		User user = mock(User.class);
+		when(user.getUserId()).thenReturn(0L);
 		String badUrl = "http://blackboard.ccu.eduhttp://my.url.with.img";
 		final String goodUrl = "http://my.url.with.img";
 
@@ -204,7 +204,7 @@ public class LMSAccountControllerTest {
 
 		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
 
-		assertFalse(url == null);
+		assertNotNull(url);
 		assertTrue(url.isPresent());
 		assertTrue(goodUrl.equals(url.get()));
 	}
@@ -216,7 +216,7 @@ public class LMSAccountControllerTest {
 
 		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
 
-		assertFalse(url == null);
+		assertNotNull(url);
 		assertTrue(url.isPresent());
 		assertTrue(goodUrl.equals(url.get()));
 	}
@@ -228,7 +228,7 @@ public class LMSAccountControllerTest {
 
 		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
 
-		assertFalse(url == null);
+		assertNotNull(url);
 		assertTrue(url.isPresent());
 		assertTrue(goodUrl.equals(url.get()));
 	}
@@ -240,7 +240,7 @@ public class LMSAccountControllerTest {
 
 		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
 
-		assertFalse(url == null);
+		assertNotNull(url);
 		assertTrue(url.isPresent());
 		assertTrue(goodUrl.equals(url.get()));
 	}
@@ -252,7 +252,7 @@ public class LMSAccountControllerTest {
 
 		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
 
-		assertFalse(url == null);
+		assertNotNull(url);
 		assertTrue(url.isPresent());
 		assertTrue(goodUrl.equals(url.get()));
 	}
@@ -264,7 +264,7 @@ public class LMSAccountControllerTest {
 
 		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
 
-		assertFalse(url == null);
+		assertNotNull(url);
 		assertTrue(url.isPresent());
 		assertTrue(goodUrl.equals(url.get()));
 	}
@@ -275,7 +275,7 @@ public class LMSAccountControllerTest {
 
 		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
 
-		assertFalse(url == null);
+		assertNotNull(url);
 		assertFalse(url.isPresent());
 	}
 
@@ -285,7 +285,7 @@ public class LMSAccountControllerTest {
 
 		Optional<String> url = lmsAccountcontoller.cleanUrl(userImageUrl);
 
-		assertFalse(url == null);
+		assertNotNull(url);
 		assertFalse(url.isPresent());
 	}
 

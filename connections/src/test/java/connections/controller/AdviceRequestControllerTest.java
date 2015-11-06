@@ -11,7 +11,6 @@ import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.ui.Model;
 
@@ -88,7 +87,7 @@ public class AdviceRequestControllerTest {
 				.thenReturn(true);
 		when(user.getDateCreated()).thenReturn(LocalDateTime.now());
 
-		Assert.assertEquals("getFeedback",
+		assertEquals("getFeedback",
 				controller.askAdvice(request, user, mock(Model.class)));
 	}
 
