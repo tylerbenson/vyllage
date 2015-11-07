@@ -45,7 +45,6 @@ import accounts.controller.LMSAccountController;
 import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
 import accounts.service.RegistrationEmailService;
-import accounts.service.SignInUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
@@ -53,7 +52,6 @@ import accounts.service.SignInUtil;
 public class LTISecurityConfigurerTest {
 
 	private LMSAccountController lmsAccountcontoller;
-	private SignInUtil signInUtil = mock(SignInUtil.class);
 	private LMSService lmsService = mock(LMSService.class);
 
 	private MockMvc springMvc;
@@ -93,13 +91,12 @@ public class LTISecurityConfigurerTest {
 	@Before
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
-		lmsAccountcontoller = new LMSAccountController(signInUtil, lmsService,
+		lmsAccountcontoller = new LMSAccountController(lmsService,
 				accountSettingsService, registrationEmailService);
 	}
 
 	@Test
 	public void testObject() throws Exception {
-		assertNotNull(signInUtil);
 		assertNotNull(lmsService);
 		assertNotNull(wContext);
 		assertNotNull(session);
@@ -116,8 +113,8 @@ public class LTISecurityConfigurerTest {
 		ResultActions result = springMvc.perform(post(invalidRequestUrl));
 
 		// Expecting Method Not Allowed message - Status Code - 405
-		assertEquals((result.andExpect(status().isMethodNotAllowed())
-				.andReturn().getResponse().getStatus()),
+		assertEquals(result.andExpect(status().isMethodNotAllowed())
+				.andReturn().getResponse().getStatus(),
 				HttpStatus.valueOf(HttpStatus.METHOD_NOT_ALLOWED.name())
 						.value());
 	}

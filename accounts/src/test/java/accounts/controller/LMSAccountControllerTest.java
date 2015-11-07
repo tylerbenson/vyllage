@@ -40,7 +40,6 @@ import accounts.model.account.settings.AccountSetting;
 import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
 import accounts.service.RegistrationEmailService;
-import accounts.service.SignInUtil;
 import accounts.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,7 +47,6 @@ import accounts.service.UserService;
 @WebAppConfiguration
 public class LMSAccountControllerTest {
 	private LMSAccountController lmsAccountcontoller;
-	private SignInUtil signInUtil = mock(SignInUtil.class);
 	private LMSService lmsService = mock(LMSService.class);
 
 	private MockMvc springMvc;
@@ -96,14 +94,13 @@ public class LMSAccountControllerTest {
 	@Before
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
-		lmsAccountcontoller = new LMSAccountController(signInUtil, lmsService,
+		lmsAccountcontoller = new LMSAccountController(lmsService,
 				accountSettingsService, registrationEmailService);
 	}
 
 	@Test
 	public void testLTIAuthentication() throws Exception {
 
-		assertNotNull(signInUtil);
 		assertNotNull(lmsService);
 		assertNotNull(wContext);
 		assertNotNull(session);

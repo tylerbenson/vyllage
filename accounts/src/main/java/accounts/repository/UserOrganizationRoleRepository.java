@@ -8,9 +8,10 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import org.jooq.DSLContext;
 import org.jooq.Result;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import user.common.UserOrganizationRole;
@@ -19,14 +20,8 @@ import accounts.domain.tables.records.UserOrganizationRolesRecord;
 @Repository
 public class UserOrganizationRoleRepository {
 
-	@Autowired
+	@Inject
 	private DSLContext sql;
-
-	@Autowired
-	private AccountSettingRepository accountSettingRepository;
-
-	@Autowired
-	private OrganizationRepository organizationRepository;
 
 	public List<UserOrganizationRole> getByUserId(Long userId) {
 		Result<UserOrganizationRolesRecord> records = sql.fetch(
