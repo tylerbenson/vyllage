@@ -68,7 +68,7 @@ public class DocumentPermissionsIntegTest {
 	}
 
 	@After
-	public void rest_assured_is_reset_after_each_test() {
+	public void after() {
 		RestAssuredMockMvc.reset();
 	}
 
