@@ -44,6 +44,9 @@ public enum Features implements Feature {
 	@Label("Suggestions")
 	SUGGESTIONS,
 
+	@Label("Twitter")
+	TWITTER,
+
 	@EnabledByDefault
 	@Label("Zopim Message Client")
 	ZOPIM_MESSAGE_CLIENT;
