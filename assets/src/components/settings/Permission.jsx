@@ -15,22 +15,28 @@ var Permission = React.createClass({
     var settings = this.props.settings || [];
     var metatoken = document.getElementById('meta_token').content;
 
-    if( this.props.facebook == false){
-        var fbConnectButton = <button name="facebook-connect" type="submit" className='small inverted' value="connect">Connect</button>;
-    }else{
-        var fbConnectButton = <button name="facebook-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectFacebook}>Connected</button>;
-    }
+	var fbConnectButton;
 
- 	if( this.props.google == false){
-        var ggConnectButton = <button name="google-connect" type="submit" className='small inverted' value="connect">Connect</button>;
+    if( this.props.facebook == false){
+        fbConnectButton = <button name="facebook-connect" type="submit" className='small inverted' value="connect">Connect</button>;
     }else{
-        var ggConnectButton = <button name="google-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectGoogle}>Connected</button>;
+        fbConnectButton = <button name="facebook-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectFacebook}>Connected</button>;
     }
     
-    if( this.props.twitter == false){
-        var twConnectButton = <button name="twitter-connect" type="submit" className='small inverted' value="connect">Connect</button>;
+	var ggConnectButton;
+ 	
+ 	if( this.props.google == false){
+        ggConnectButton = <button name="google-connect" type="submit" className='small inverted' value="connect">Connect</button>;
     }else{
-        var twConnectButton = <button name="twitter-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectTwitter}>Connected</button>;
+        ggConnectButton = <button name="google-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectGoogle}>Connected</button>;
+    }
+    
+    var twConnectButton;
+    
+    if( this.props.twitter == false){
+        twConnectButton = <button name="twitter-connect" type="submit" className='small inverted' value="connect">Connect</button>;
+    }else{
+        twConnectButton = <button name="twitter-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectTwitter}>Connected</button>;
     }
 
     if (settings.length > 0) {
