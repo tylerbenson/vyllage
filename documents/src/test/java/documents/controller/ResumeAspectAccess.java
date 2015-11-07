@@ -8,6 +8,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,6 +45,7 @@ public class ResumeAspectAccess {
 
 	private static final String YOU_ARE_NOT_AUTHORIZED_TO_ACCESS_THIS_DOCUMENT = "You are not authorized to access this document.";
 
+	@SuppressWarnings("unused")
 	private MockMvc mockMvc;
 
 	@Autowired
@@ -55,7 +57,12 @@ public class ResumeAspectAccess {
 	@Before
 	public void setUp() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-		RestAssuredMockMvc.mockMvc = mockMvc;
+		RestAssuredMockMvc.webAppContextSetup(context);
+	}
+
+	@After
+	public void rest_assured_is_reset_after_each_test() {
+		RestAssuredMockMvc.reset();
 	}
 
 	// since we need the user to be able to access this endpoint to create

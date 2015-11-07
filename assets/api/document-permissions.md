@@ -1,19 +1,51 @@
 # Returns all the document permissions the currently logged in user has
-## GET /document/permissions
+## GET /account/document/permissions
 
 ```
-	[
-		{
-			"documentId":0,
-			"userId":3,
-			"dateCreated":"2015-07-15T21:18:38",
-			"lastModified":"2015-07-15T21:18:38",
-			"expirationDate":null,
-			"userName":"Luke Skywalkwer",
-			"tagline":"My tagline."
-			"allowGuestComments":true
-		}
-	]
+[
+  {
+    "documentId": 0,
+    "userId": 3,
+    "firstName": "Mario",
+    "middleName": null,
+    "lastName": "Mario",
+    "tagline": "Awesome adventurous plumber.",
+    "dateCreated": "2015-11-07T00:28:06"
+  }
+]
+```
+
+# Returns all the document permissions the currently logged in user has
+## GET /document/permissions
+For internal use from Accounts.
+
+```
+[
+  {
+    "documentId": 0,
+    "userId": 3,
+    "dateCreated": [
+      2015,
+      11,
+      7,
+      0,
+      28,
+      6,
+      7000000
+    ],
+    "lastModified": [
+      2015,
+      11,
+      7,
+      0,
+      28,
+      6,
+      7000000
+    ],
+    "expirationDate": null,
+    "allowGuestComments": true
+  }
+]
 ```
 
 # Creates new permission for the document and user

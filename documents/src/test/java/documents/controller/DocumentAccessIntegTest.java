@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import javax.inject.Inject;
 
 import org.apache.http.entity.ContentType;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -71,7 +72,12 @@ public class DocumentAccessIntegTest {
 	@Before
 	public void setUp() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-		RestAssuredMockMvc.mockMvc = mockMvc;
+		RestAssuredMockMvc.webAppContextSetup(context);
+	}
+
+	@After
+	public void rest_assured_is_reset_after_each_test() {
+		RestAssuredMockMvc.reset();
 	}
 
 	@Test

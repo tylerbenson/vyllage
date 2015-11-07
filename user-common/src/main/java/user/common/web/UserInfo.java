@@ -26,14 +26,16 @@ public class UserInfo {
 	private Long registeredOn;
 
 	private Set<Long> organizationIds = new HashSet<>();
-	
+
 	private boolean emailConfirmed;
 
 	public UserInfo(User user) {
 		this.email = user.getUsername();
 		this.userId = user.getUserId();
-		this.registeredOn = user.getDateCreated().toInstant(ZoneOffset.UTC)
-				.getEpochSecond();
+
+		if (user.getDateCreated() != null)
+			this.registeredOn = user.getDateCreated().toInstant(ZoneOffset.UTC)
+					.getEpochSecond();
 
 		for (GrantedAuthority grantedAuthority : user.getAuthorities())
 			getOrganizationIds().add(

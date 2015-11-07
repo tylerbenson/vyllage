@@ -1,7 +1,6 @@
 package documents.controller;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -18,11 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
-import user.common.web.AccountContact;
 import documents.model.DocumentAccess;
 import documents.model.LinkPermissions;
 import documents.model.constants.DocumentAccessEnum;
-import documents.services.AccountService;
 import documents.services.DocumentService;
 import documents.services.aspect.CheckWriteAccess;
 
@@ -31,13 +28,10 @@ import documents.services.aspect.CheckWriteAccess;
 public class DocumentAccessController {
 
 	private DocumentService documentService;
-	private AccountService accountService;
 
 	@Inject
-	public DocumentAccessController(DocumentService documentService,
-			final AccountService accountService) {
+	public DocumentAccessController(DocumentService documentService) {
 		this.documentService = documentService;
-		this.accountService = accountService;
 
 	}
 
@@ -45,30 +39,7 @@ public class DocumentAccessController {
 	public @ResponseBody List<DocumentAccess> getUserDocumentsPermissions(
 			HttpServletRequest request, @AuthenticationPrincipal User user) {
 
-		List<DocumentAccess> userDocumentsPermissions = documentService
-				.getUserDocumentsPermissions(user);
-
-		List<Long> userIds = userDocumentsPermissions.stream()
-				.map(dp -> dp.getUserId()).collect(Collectors.toList());
-
-		List<AccountContact> contactDataForUsers = accountService
-				.getContactDataForUsers(request, userIds);
-
-		userDocumentsPermissions.forEach(dp -> {
-			Optional<AccountContact> optionalContactData = contactDataForUsers
-					.stream()
-					.filter(ac -> dp.getUserId().equals(ac.getUserId()))
-					.findFirst();
-
-			if (optionalContactData.isPresent()) {
-				dp.setUserName(optionalContactData.get().getFirstName() + " "
-						+ optionalContactData.get().getLastName());
-
-				dp.setTagline(optionalContactData.get().getTagline());
-			}
-		});
-
-		return userDocumentsPermissions;
+		return documentService.getUserDocumentsPermissions(user);
 	}
 
 	@RequestMapping(value = "{documentId}/permissions/user/{userId}", method = RequestMethod.POST, consumes = "application/json")
