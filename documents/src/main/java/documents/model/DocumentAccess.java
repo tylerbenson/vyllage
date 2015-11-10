@@ -3,12 +3,12 @@ package documents.model;
 import java.time.LocalDateTime;
 
 import lombok.ToString;
-import util.dateSerialization.DocumentLocalDateTimeDeserializer;
-import util.dateSerialization.DocumentLocalDateTimeSerializer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import documents.domain.tables.records.DocumentAccessRecord;
 import documents.model.constants.DocumentAccessEnum;
@@ -22,23 +22,19 @@ public class DocumentAccess {
 	@JsonIgnore
 	private DocumentAccessEnum access;
 
-	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
-	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime dateCreated;
 
-	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
-	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime lastModified;
 
-	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
-	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
 	private LocalDateTime expirationDate;
 
 	private boolean allowGuestComments;
-
-	private String userName;
-
-	private String tagline;
 
 	public DocumentAccess() {
 	}
@@ -120,22 +116,6 @@ public class DocumentAccess {
 
 	public void setAllowGuestComments(boolean allowGuestComments) {
 		this.allowGuestComments = allowGuestComments;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getTagline() {
-		return tagline;
-	}
-
-	public void setTagline(String tagline) {
-		this.tagline = tagline;
 	}
 
 }
