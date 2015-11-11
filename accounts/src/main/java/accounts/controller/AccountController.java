@@ -200,10 +200,8 @@ public class AccountController {
 				.filter(u -> !excludedIdsCopy.contains(u.getUserId()))
 				.collect(Collectors.toList());
 
-		return userService.getAccountContacts(
-				request,
-				users.stream().map(u -> u.getUserId())
-						.collect(Collectors.toList()));
+		return accountSettingsService.getAccountContacts(request, users
+				.stream().map(u -> u.getUserId()).collect(Collectors.toList()));
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,
@@ -365,7 +363,7 @@ public class AccountController {
 			HttpServletRequest request,
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {
 
-		return userService.getAccountContacts(request, userIds);
+		return accountSettingsService.getAccountContacts(request, userIds);
 	}
 
 	@RequestMapping(value = "ping", method = RequestMethod.GET)
