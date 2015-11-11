@@ -278,6 +278,10 @@ public class AccountSettingsService {
 				&& avatarSetting.get().getValue()
 						.equalsIgnoreCase(AvatarSourceEnum.FACEBOOK.name());
 
+		boolean avatarSettingPresent_google = avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.GOOGLE.name());
+
 		if (avatarSettingPresent_gravatar) {
 			return getDefaultAvatar(user);
 		} else {
@@ -300,6 +304,15 @@ public class AccountSettingsService {
 					if (avatarUrl.isPresent())
 						return avatarUrl.get();
 				}
+
+				if (avatarSettingPresent_google) {
+					Optional<String> avatarUrl = avatarRepository.getAvatar(
+							userId, avatarSetting.get().getValue());
+
+					if (avatarUrl.isPresent())
+						return avatarUrl.get();
+				}
+
 			}
 		}
 
