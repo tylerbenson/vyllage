@@ -45,6 +45,7 @@ import user.common.UserOrganizationRole;
 import user.common.constants.AccountSettingsEnum;
 import user.common.web.AccountContact;
 import user.common.web.UserInfo;
+import util.web.account.AccountUrlConstants;
 import accounts.model.Email;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
@@ -212,23 +213,23 @@ public class AccountController {
 
 		userService.delete(request, user.getUserId());
 
-		return "user-deleted";
+		return AccountUrlConstants.USER_DELETED;
 	}
 
-	@RequestMapping(value = "reset-password", method = RequestMethod.GET)
+	@RequestMapping(value = AccountUrlConstants.RESET_PASSWORD, method = RequestMethod.GET)
 	public String getResetPassword(Model model) {
 		model.addAttribute("resetPasswordForm", new ResetPasswordForm());
-		return "reset-password";
+		return AccountUrlConstants.RESET_PASSWORD;
 	}
 
-	@RequestMapping(value = "reset-password", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded;charset=UTF-8")
+	@RequestMapping(value = AccountUrlConstants.RESET_PASSWORD, method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded;charset=UTF-8")
 	public String postResetPassword(ResetPasswordForm resetPassword)
 			throws JsonProcessingException, UnsupportedEncodingException,
 			EmailException {
 
 		// validate email and return error if not in the database.
 		if (!isEmailValid(resetPassword))
-			return "reset-password";
+			return AccountUrlConstants.RESET_PASSWORD;
 
 		// If submit success:
 		// generate a new password reset link (similar to document share link)
@@ -255,10 +256,10 @@ public class AccountController {
 
 		// Link should log the user in and direct them to the password change
 		// page.
-		return "reset-password-success";
+		return AccountUrlConstants.RESET_PASSWORD_SUCCESS;
 	}
 
-	@RequestMapping(value = "/reset-password-change", method = RequestMethod.GET)
+	@RequestMapping(value = AccountUrlConstants.RESET_PASSWORD_CHANGE, method = RequestMethod.GET)
 	public String resetPassword(
 			@RequestParam(value = "resetPassword", required = true) String resetPassword,
 			Model model) throws JsonParseException, JsonMappingException,
@@ -279,10 +280,10 @@ public class AccountController {
 
 		model.addAttribute("changePasswordForm", new ChangePasswordForm());
 
-		return "reset-password-change";
+		return AccountUrlConstants.RESET_PASSWORD_CHANGE;
 	}
 
-	@RequestMapping(value = "/reset-password-change", method = RequestMethod.POST)
+	@RequestMapping(value = AccountUrlConstants.RESET_PASSWORD_CHANGE, method = RequestMethod.POST)
 	@PreAuthorize("isAuthenticated()")
 	public String postResetPassword(HttpServletRequest request,
 			ChangePasswordForm form, Model model) throws ServletException {
@@ -290,26 +291,26 @@ public class AccountController {
 		if (!form.isValid()) {
 			form.setError(true);
 			model.addAttribute("changePasswordForm", form);
-			return "reset-password-change";
+			return AccountUrlConstants.RESET_PASSWORD_CHANGE;
 		}
 
 		userService.changePassword(form.getNewPassword());
 
 		request.logout();
 
-		return "password-change-success";
+		return AccountUrlConstants.PASSWORD_CHANGE_SUCCESS;
 	}
 
-	@RequestMapping(value = "reset-password-forced", method = RequestMethod.GET)
+	@RequestMapping(value = AccountUrlConstants.RESET_PASSWORD_FORCED, method = RequestMethod.GET)
 	@PreAuthorize("isAuthenticated()")
 	public String resetPasswordForced(Model model) {
 		logger.info("Reset password was forced.");
 		model.addAttribute("changePasswordForm", new ChangePasswordForm());
 
-		return "reset-password-forced";
+		return AccountUrlConstants.RESET_PASSWORD_FORCED;
 	}
 
-	@RequestMapping(value = "reset-password-forced", method = RequestMethod.POST)
+	@RequestMapping(value = AccountUrlConstants.RESET_PASSWORD_FORCED, method = RequestMethod.POST)
 	@PreAuthorize("isAuthenticated()")
 	public String postResetPasswordForced(HttpServletRequest request,
 			@AuthenticationPrincipal User user, ChangePasswordForm form,
@@ -320,7 +321,7 @@ public class AccountController {
 		if (!form.isValid()) {
 			form.setError(true);
 			model.addAttribute("changePasswordForm", form);
-			return "reset-password-forced";
+			return AccountUrlConstants.RESET_PASSWORD_FORCED;
 		}
 
 		userService.forcedPasswordChange(user.getUserId(), user.getUsername(),
@@ -328,7 +329,7 @@ public class AccountController {
 
 		request.logout();
 
-		return "password-change-success";
+		return AccountUrlConstants.PASSWORD_CHANGE_SUCCESS;
 	}
 
 	protected void sendResetPasswordEmail(String email, String encodedString,
@@ -409,7 +410,7 @@ public class AccountController {
 		return accountSettingsService.getAvatar(userId);
 	}
 
-	@RequestMapping(value = "change-email", method = RequestMethod.GET)
+	@RequestMapping(value = AccountUrlConstants.CHANGE_EMAIL, method = RequestMethod.GET)
 	public String confirmChangeEmailAddress(
 			@RequestParam(value = "changeEmail", required = true) String encodedString,
 			@AuthenticationPrincipal User user) throws JsonParseException,
@@ -429,7 +430,7 @@ public class AccountController {
 
 		userService.changeEmail(user, changeEmailLink.getNewEmail());
 
-		return "email-change-success";
+		return AccountUrlConstants.EMAIL_CHANGE_SUCCESS;
 	}
 
 	@RequestMapping(value = "{userId}/can-request-feedback", method = RequestMethod.GET)

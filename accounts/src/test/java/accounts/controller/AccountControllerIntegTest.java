@@ -89,6 +89,7 @@ public class AccountControllerIntegTest {
 				.contains("gravatar"));
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testGetContactInformation() throws Exception {
 
@@ -120,6 +121,7 @@ public class AccountControllerIntegTest {
 		assertTrue("Luke".equals(contacts[0].getFirstName()));
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testGetAdvisorsForUser() throws Exception {
 
