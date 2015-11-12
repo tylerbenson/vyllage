@@ -18,7 +18,6 @@ import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.security.access.AccessDeniedException;
@@ -39,8 +38,8 @@ import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.model.form.RegisterForm;
 import accounts.model.link.DocumentLinkRequest;
+import accounts.repository.AccountSettingRepository;
 import accounts.repository.OrganizationRepository;
-import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.repository.UserOrganizationRoleRepository;
@@ -57,52 +56,60 @@ import email.EmailBuilder;
 public class UserService {
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
 
-	@Autowired
-	private DocumentService documentService;
+	private final DocumentService documentService;
 
-	@Autowired
-	private OrganizationRepository organizationRepository;
+	private final RegistrationEmailService registrationEmailService;
 
-	@Autowired
-	private UserOrganizationRoleRepository userOrganizationRoleRepository;
+	private final ExecutorService executorService;
 
-	@Autowired
-	private RoleRepository roleRepository;
+	private final OrganizationRepository organizationRepository;
 
-	@Autowired
-	private UserDetailRepository userRepository;
+	private final UserOrganizationRoleRepository userOrganizationRoleRepository;
 
-	@Autowired
-	private RandomPasswordGenerator randomPasswordGenerator;
+	private final UserDetailRepository userRepository;
 
-	@Autowired
-	@Qualifier(value = "accounts.emailBuilder")
-	private EmailBuilder emailBuilder;
+	private final AccountSettingRepository accountSettingRepository;
 
-	@Autowired
-	private Environment environment;
+	private final RandomPasswordGenerator randomPasswordGenerator;
 
-	@Autowired
-	@Qualifier(value = "accounts.ExecutorService")
-	private ExecutorService executorService;
+	private final EmailBuilder emailBuilder;
 
-	@Autowired
-	private AccountSettingsService accountSettingsService;
+	private final Environment environment;
 
-	@Autowired
-	private ObjectMapper mapper;
+	private final ObjectMapper mapper;
 
-	@Autowired
-	private TextEncryptor encryptor;
+	private final TextEncryptor encryptor;
 
-	@Autowired
+	@Inject
 	private SignInUtil signInUtil;
 
 	@Inject
-	private RegistrationEmailService registrationEmailService;
+	public UserService(
+			DocumentService documentService,
+			RegistrationEmailService registrationEmailService,
+			@Qualifier(value = "accounts.ExecutorService") ExecutorService executorService,
+			OrganizationRepository organizationRepository,
+			UserOrganizationRoleRepository userOrganizationRoleRepository,
+			UserDetailRepository userRepository,
+			AccountSettingRepository accountSettingRepository,
+			RandomPasswordGenerator randomPasswordGenerator,
+			@Qualifier(value = "accounts.emailBuilder") EmailBuilder emailBuilder,
+			final Environment environment, final ObjectMapper mapper,
+			final TextEncryptor encryptor) {
+		this.documentService = documentService;
+		this.registrationEmailService = registrationEmailService;
+		this.executorService = executorService;
+		this.organizationRepository = organizationRepository;
+		this.userOrganizationRoleRepository = userOrganizationRoleRepository;
+		this.userRepository = userRepository;
+		this.accountSettingRepository = accountSettingRepository;
+		this.randomPasswordGenerator = randomPasswordGenerator;
+		this.emailBuilder = emailBuilder;
+		this.environment = environment;
+		this.mapper = mapper;
+		this.encryptor = encryptor;
 
-	// TODO: add constructor and solve cycle between UserService and
-	// AccountSettingsService
+	}
 
 	public User getUser(Long userId) throws UserNotFoundException {
 		return userRepository.get(userId);
@@ -515,8 +522,8 @@ public class UserService {
 	public void changeEmail(@NonNull User user, @NonNull String email) {
 		Assert.isTrue(!StringUtils.isBlank(email));
 
-		Optional<AccountSetting> accountSetting = accountSettingsService
-				.getAccountSetting(user, "newEmail");
+		Optional<AccountSetting> accountSetting = accountSettingRepository.get(
+				user.getUserId(), "newEmail");
 
 		if (!accountSetting.isPresent())
 			throw new AccessDeniedException("Invalid link provided.");
@@ -536,7 +543,7 @@ public class UserService {
 				"receiveAdvice", String.valueOf(receiveAdvice), Privacy.PRIVATE
 						.name().toLowerCase());
 
-		accountSettingsService.setAccountSetting(newUser, setting);
+		accountSettingRepository.set(setting);
 	}
 
 	public boolean userHasRoles(Long userId, List<RolesEnum> roles) {
