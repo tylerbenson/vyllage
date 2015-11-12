@@ -72,7 +72,6 @@ public class DocumentAccessIntegTest {
 	@Before
 	public void setUp() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-		RestAssuredMockMvc.webAppContextSetup(context);
 	}
 
 	@After

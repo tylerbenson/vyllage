@@ -2,8 +2,10 @@ package accounts.service.contactSuggestion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -89,7 +91,7 @@ public class UserContactSuggestionService {
 
 		users = backfill(user, users, limit);
 
-		return users;
+		return new HashSet<User>(users).stream().collect(Collectors.toList());
 	}
 
 	/**
