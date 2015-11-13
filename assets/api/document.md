@@ -63,3 +63,12 @@ Returns
 ```
 {"resume":[0, 1, 2, n]}
 ```
+
+# Returns the last modification date of the user's document.
+## GET /document/user/{userId}/modified-date
++ Parameters
+	++ userId (string, `1`) - The id of the user.
+	
+Returns: the number of milliseconds since the epoch of 1970-01-01T00:00:00Z.
+	
+
