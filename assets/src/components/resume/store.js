@@ -37,6 +37,7 @@ module.exports = Reflux.createStore({
     }
 
     this.resume = {
+      status: null,
       ownDocumentId: this.ownDocumentId !== undefined ? this.ownDocumentId : this.documentId,
       documentId: this.documentId,
       header: {
@@ -574,6 +575,10 @@ module.exports = Reflux.createStore({
   },
   onTogglePrintModal: function(flag) {
     this.resume.isPrintModalOpen = flag;
+    this.trigger(this.resume);
+  },
+  onSetStatus(status) {
+    this.resume.status = status;
     this.trigger(this.resume);
   },
   getInitialState: function () {
