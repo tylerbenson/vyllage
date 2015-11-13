@@ -57,17 +57,17 @@ import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
 import documents.model.LinkPermissions;
 import documents.model.SectionAdvice;
-import documents.model.UserNotification;
 import documents.model.constants.AdviceStatus;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.document.sections.DocumentSection;
+import documents.model.notifications.CommentNotification;
 import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
-import documents.services.NotificationService;
 import documents.services.aspect.CheckReadAccess;
 import documents.services.aspect.CheckWriteAccess;
+import documents.services.notification.NotificationService;
 
 @Controller
 @RequestMapping("resume")
@@ -136,12 +136,16 @@ public class ResumeController {
 	}
 
 	// @ModelAttribute("userInfo")
-	public UserInfo userInfo(User user) {
+	public UserInfo userInfo(HttpServletRequest request, User user) {
 		if (user == null) {
 			return null;
 		}
 
-		return new UserInfo(user);
+		UserInfo userInfo = new UserInfo(user);
+		userInfo.setEmailConfirmed(accountService.isEmailVerified(request,
+				user.getUserId()));
+
+		return userInfo;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -179,7 +183,7 @@ public class ResumeController {
 		Document document = documentService.getDocument(documentId);
 
 		model.addAttribute("accountName", accountName(request, user));
-		model.addAttribute("userInfo", userInfo(user));
+		model.addAttribute("userInfo", userInfo(request, user));
 		model.addAttribute("documentCreationDate", document.getDateCreated());
 
 		return "resume";
@@ -549,22 +553,25 @@ public class ResumeController {
 	public @ResponseBody Comment saveCommentsForSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
-			@RequestBody final Comment comment,
+			@RequestBody final Comment newComment,
 			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
 		Optional<DocumentAccess> documentAccess = documentAccessRepository.get(
 				user.getUserId(), documentId);
 
 		if (documentAccess.isPresent()
-				&& !documentAccess.get().getAllowGuestComments())
+				&& !documentAccess.get().getAllowGuestComments()
+				&& !user.isVyllageAdmin())
 			throw new AccessDeniedException(
 					"You are not allowed to comment on this document.");
 
 		// notification
 		Document document = null;
+		DocumentSection documentSection = null;
 
 		try {
 			document = documentService.getDocument(documentId);
+			documentSection = documentService.getDocumentSection(sectionId);
 
 		} catch (ElementNotFoundException e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
@@ -572,29 +579,42 @@ public class ResumeController {
 			throw e;
 		}
 
-		setCommentData(sectionId, comment, user);
+		setCommentData(sectionId, newComment, user);
+
+		final Comment savedComment = documentService.saveComment(request,
+				newComment);
+
+		notifyOfNewComment(request, user, document, documentSection,
+				savedComment);
+
+		return savedComment;
+	}
+
+	protected void notifyOfNewComment(HttpServletRequest request, User user,
+			Document document, DocumentSection documentSection,
+			final Comment savedComment) {
+
+		notificationService
+				.save(new CommentNotification(document
+						.getUserId(), savedComment, documentSection.getTitle()));
+
+		boolean isOwner = document.getUserId().equals(user.getUserId());
 
 		// Check user ids before going to DB...
 		// don't notify if the user commenting is the owner of the document...
-		if (!comment.getUserId().equals(user.getUserId())) {
+		if (!isOwner
+				&& notificationService.needsToSendEmailNotification(document
+						.getUserId())) {
 
-			// check that we have not sent a message today
-			Optional<UserNotification> notification = notificationService
-					.getNotification(document.getUserId());
+			List<AccountContact> recipient = accountService
+					.getContactDataForUsers(request,
+							Arrays.asList(document.getUserId()));
 
-			if (!notification.isPresent() || !notification.get().wasSentToday()) {
-				List<AccountContact> recipient = accountService
-						.getContactDataForUsers(request,
-								Arrays.asList(document.getUserId()));
-
-				// if we have not, send it
-				if (recipient != null && !recipient.isEmpty())
-					notificationService.sendEmailNewCommentNotification(user,
-							recipient.get(0), comment);
-			}
+			// if we have not, send it
+			if (recipient != null && !recipient.isEmpty())
+				notificationService.sendEmailNewCommentNotification(user,
+						recipient.get(0), savedComment);
 		}
-
-		return documentService.saveComment(request, comment);
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.DELETE, consumes = "application/json")
@@ -639,7 +659,8 @@ public class ResumeController {
 				user.getUserId(), documentId);
 
 		if (documentAccess.isPresent()
-				&& !documentAccess.get().getAllowGuestComments())
+				&& !documentAccess.get().getAllowGuestComments()
+				&& !user.isVyllageAdmin())
 			throw new AccessDeniedException(
 					"You are not allowed to comment on this document.");
 

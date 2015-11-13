@@ -10,9 +10,11 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.mail.EmailException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +34,7 @@ import connections.model.UserFilterResponse;
 import connections.repository.ElementNotFoundException;
 import connections.service.AccountService;
 import connections.service.AdviceService;
+import connections.service.DocumentService;
 
 @Controller
 @RequestMapping("resume")
@@ -42,13 +45,18 @@ public class AdviceRequestController {
 			.getLogger(AdviceRequestController.class.getName());
 
 	private final AdviceService adviceService;
-	private AccountService accountService;
+	private final AccountService accountService;
+
+	private final DocumentService documentService;
 
 	@Inject
-	public AdviceRequestController(AdviceService adviceService,
-			AccountService accountService) {
+	public AdviceRequestController(
+			AdviceService adviceService,
+			AccountService accountService,
+			@Qualifier(value = "connections.DocumentService") DocumentService documentService) {
 		this.adviceService = adviceService;
 		this.accountService = accountService;
+		this.documentService = documentService;
 	}
 
 	@ModelAttribute("accountName")
@@ -69,21 +77,28 @@ public class AdviceRequestController {
 		return an;
 	}
 
-	@ModelAttribute("userInfo")
-	public UserInfo userInfo(@AuthenticationPrincipal User user) {
+	// @ModelAttribute("userInfo")
+	public UserInfo userInfo(HttpServletRequest request,
+			@AuthenticationPrincipal User user) {
 		if (user == null) {
 			return null;
 		}
 
-		return new UserInfo(user);
+		UserInfo userInfo = new UserInfo(user);
+		userInfo.setEmailConfirmed(accountService.isEmailVerified(request,
+				user.getUserId()));
+
+		return userInfo;
 	}
 
 	@RequestMapping(value = "get-feedback", method = RequestMethod.GET)
 	public String askAdvice(HttpServletRequest request,
-			@AuthenticationPrincipal User user) {
+			@AuthenticationPrincipal User user, Model model) {
 
-		if (accountService.canIRequestFeedback(request, user))
+		if (accountService.canIRequestFeedback(request, user)) {
+			model.addAttribute("userInfo", userInfo(request, user));
 			return "getFeedback";
+		}
 
 		return "redirect:/account/email/"
 				+ AccountUrlConstants.NEEDS_EMAIL_CONFIRMATION_VALID_PHONE_NUMBER;
@@ -101,7 +116,7 @@ public class AdviceRequestController {
 		Long userId = user.getUserId();
 		String firstName = user.getFirstName();
 
-		Long documentId = adviceService.getUserDocumentId(request, userId);
+		Long documentId = documentService.getUserDocumentId(request, userId);
 
 		AdviceRequestParameter adviceRequestParameters = new AdviceRequestParameter();
 		adviceRequestParameters.setDocumentId(documentId);
@@ -154,8 +169,8 @@ public class AdviceRequestController {
 			listOfExcludedIds.addAll(excludeIds);
 		listOfExcludedIds.add(userId);
 
-		final Long documentId = adviceService
-				.getUserDocumentId(request, userId);
+		final Long documentId = documentService.getUserDocumentId(request,
+				userId);
 
 		return adviceService
 				.getUsers(request, documentId, userId, listOfExcludedIds,

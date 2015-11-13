@@ -25,7 +25,9 @@ public class Application implements CommandLineRunner {
 	public static void main(String[] args) {
 		SpringApplication application = new SpringApplication(Application.class);
 
-		// this seems to be ignored
+		// https://github.com/jOOQ/jOOQ/issues/4019
+		System.setProperty("org.jooq.no-logo", Boolean.TRUE.toString());
+
 		System.setProperty("spring.profiles.default", Profiles.DEV);
 
 		if (Application.class.getResource("Application.class").getProtocol()

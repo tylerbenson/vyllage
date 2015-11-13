@@ -48,6 +48,7 @@ import accounts.repository.ElementNotFoundException;
 import accounts.repository.OrganizationRepository;
 import accounts.repository.SocialRepository;
 import accounts.service.AccountSettingsService;
+import accounts.service.ConfirmationEmailService;
 import accounts.service.DocumentService;
 import accounts.service.UserService;
 import accounts.service.aspects.CheckWriteAccess;
@@ -83,16 +84,20 @@ public class AccountSettingsController {
 
 	private Map<String, List<String>> settingValues = new HashMap<>();
 
+	private ConfirmationEmailService confirmationEmailService;
+
 	@Inject
 	public AccountSettingsController(final UserService userService,
 			final AccountSettingsService accountSettingsService,
 			final DocumentService documentService,
+			final ConfirmationEmailService confirmationEmailService,
 			final OrganizationRepository organizationRepository,
 			final SocialRepository socialRepository) {
 		super();
 		this.userService = userService;
 		this.accountSettingsService = accountSettingsService;
 		this.documentService = documentService;
+		this.confirmationEmailService = confirmationEmailService;
 		this.organizationRepository = organizationRepository;
 		this.socialRepository = socialRepository;
 
@@ -130,7 +135,11 @@ public class AccountSettingsController {
 			return null;
 		}
 
-		return new UserInfo(user);
+		UserInfo userInfo = new UserInfo(user);
+		userInfo.setEmailConfirmed(confirmationEmailService
+				.isEmailConfirmed(user.getUserId()));
+
+		return userInfo;
 	}
 
 	// for header
@@ -338,6 +347,7 @@ public class AccountSettingsController {
 					DocumentPermission dp = new DocumentPermission();
 					dp.setUserId(da.getUserId());
 					dp.setDocumentId(da.getDocumentId());
+					dp.setDateCreated(da.getDateCreated());
 					// mapped by id, only has one object
 					dp.setFirstName(names.get(da.getUserId()).get(0)
 							.getFirstName());

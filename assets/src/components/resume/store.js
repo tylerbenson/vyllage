@@ -35,6 +35,7 @@ module.exports = Reflux.createStore({
       this.ownDocumentId = tempDocumentId;
     }
     this.resume = {
+      status: null,
       ownDocumentId: this.ownDocumentId !== undefined ? this.ownDocumentId : this.documentId,
       documentId: this.documentId,
       header: {
@@ -145,6 +146,7 @@ module.exports = Reflux.createStore({
       EditorActions.postSectionOrder( linear_section );
   },
   /* End of Helper functions */
+ 
   onPublishDocumentId: function(id) {
     this.resume.ownDocumentId = id;
     this.resume.documentId = isNaN(parseInt(this.resume.documentId)) ? this.resume.ownDocumentId : this.resume.documentId;
@@ -410,12 +412,14 @@ module.exports = Reflux.createStore({
     this.resume.isPrintModalOpen = flag;
     this.trigger(this.resume);
   },
-
   update: function(){
     this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
     this.trigger(this.resume);
   },
-
+  onSetStatus: function(status) {
+    this.resume.status = status;
+    this.trigger(this.resume);
+  },
   getInitialState: function () {
     return this.resume;
   },

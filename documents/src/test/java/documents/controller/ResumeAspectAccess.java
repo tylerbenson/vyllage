@@ -1,11 +1,14 @@
 package documents.controller;
 
 import static com.jayway.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,6 +16,11 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,10 +40,12 @@ import documents.repository.ElementNotFoundException;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class ResumeAspectAccess {
 
 	private static final String YOU_ARE_NOT_AUTHORIZED_TO_ACCESS_THIS_DOCUMENT = "You are not authorized to access this document.";
 
+	@SuppressWarnings("unused")
 	private MockMvc mockMvc;
 
 	@Autowired
@@ -47,7 +57,12 @@ public class ResumeAspectAccess {
 	@Before
 	public void setUp() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-		RestAssuredMockMvc.mockMvc = mockMvc;
+		RestAssuredMockMvc.webAppContextSetup(context);
+	}
+
+	@After
+	public void after() {
+		RestAssuredMockMvc.reset();
 	}
 
 	// since we need the user to be able to access this endpoint to create
@@ -82,7 +97,7 @@ public class ResumeAspectAccess {
 			throws ElementNotFoundException {
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
-		Long userId = 2L;
+		Long userId = 28L;
 
 		builder.scheme("http").port(8080).host("localhost")
 				.path("/resume/0/section/124");
@@ -92,14 +107,21 @@ public class ResumeAspectAccess {
 		List<UserOrganizationRole> userOrganizationRole = new ArrayList<>();
 		userOrganizationRole.add(new UserOrganizationRole(userId, 1L,
 				RolesEnum.STUDENT.name(), 0L));
-		User authentication = new User("a", "b", true, true, true, true,
+		User user = new User("a", "b", true, true, true, true,
 				userOrganizationRole);
-		authentication.setUserId(userId);
+		user.setUserId(userId);
 
 		// the actual exception is wrapped in a
 		// org.springframework.web.util.NestedServletException here, bah
 		exception.expectMessage(YOU_ARE_NOT_AUTHORIZED_TO_ACCESS_THIS_DOCUMENT);
-		given().auth().principal(authentication).get(url);
+
+		Authentication authentication = mock(Authentication.class);
+		when(authentication.getPrincipal()).thenReturn(user);
+		SecurityContext securityContext = mock(SecurityContext.class);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		SecurityContextHolder.setContext(securityContext);
+
+		given().get(url);
 
 	}
 
@@ -108,7 +130,7 @@ public class ResumeAspectAccess {
 			throws ElementNotFoundException {
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
-		Long userId = 2L;
+		Long userId = 28L;
 
 		builder.scheme("http").port(8080).host("localhost")
 				.path("/resume/0/section");
@@ -118,14 +140,21 @@ public class ResumeAspectAccess {
 		List<UserOrganizationRole> userOrganizationRole = new ArrayList<>();
 		userOrganizationRole.add(new UserOrganizationRole(userId, 1L,
 				RolesEnum.STUDENT.name(), 0L));
-		User authentication = new User("a", "b", true, true, true, true,
+		User user = new User("a", "b", true, true, true, true,
 				userOrganizationRole);
-		authentication.setUserId(userId);
+		user.setUserId(userId);
 
 		// the actual exception is wrapped in a
 		// org.springframework.web.util.NestedServletException here, bah
 		exception.expectMessage(YOU_ARE_NOT_AUTHORIZED_TO_ACCESS_THIS_DOCUMENT);
-		given().auth().principal(authentication).get(url);
+
+		Authentication authentication = mock(Authentication.class);
+		when(authentication.getPrincipal()).thenReturn(user);
+		SecurityContext securityContext = mock(SecurityContext.class);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		SecurityContextHolder.setContext(securityContext);
+
+		given().get(url);
 
 	}
 
@@ -134,7 +163,7 @@ public class ResumeAspectAccess {
 			throws ElementNotFoundException {
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
-		Long userId = 2L;
+		Long userId = 28L;
 
 		builder.scheme("http").port(8080).host("localhost")
 				.path("/resume/0/header");
@@ -144,14 +173,21 @@ public class ResumeAspectAccess {
 		List<UserOrganizationRole> userOrganizationRole = new ArrayList<>();
 		userOrganizationRole.add(new UserOrganizationRole(userId, 1L,
 				RolesEnum.STUDENT.name(), 0L));
-		User authentication = new User("a", "b", true, true, true, true,
+		User user = new User("a", "b", true, true, true, true,
 				userOrganizationRole);
-		authentication.setUserId(userId);
+		user.setUserId(userId);
 
 		// the actual exception is wrapped in a
 		// org.springframework.web.util.NestedServletException here, bah
 		exception.expectMessage(YOU_ARE_NOT_AUTHORIZED_TO_ACCESS_THIS_DOCUMENT);
-		given().auth().principal(authentication).get(url);
+
+		Authentication authentication = mock(Authentication.class);
+		when(authentication.getPrincipal()).thenReturn(user);
+		SecurityContext securityContext = mock(SecurityContext.class);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		SecurityContextHolder.setContext(securityContext);
+
+		given().get(url);
 
 	}
 
@@ -170,14 +206,21 @@ public class ResumeAspectAccess {
 		List<UserOrganizationRole> userOrganizationRole = new ArrayList<>();
 		userOrganizationRole.add(new UserOrganizationRole(userId, 1L,
 				RolesEnum.STUDENT.name(), 0L));
-		User authentication = new User("a", "b", true, true, true, true,
+		User user = new User("a", "b", true, true, true, true,
 				userOrganizationRole);
-		authentication.setUserId(userId);
+		user.setUserId(userId);
 
 		// the actual exception is wrapped in a
 		// org.springframework.web.util.NestedServletException here, bah
 		exception.expectMessage(YOU_ARE_NOT_AUTHORIZED_TO_ACCESS_THIS_DOCUMENT);
-		given().auth().principal(authentication).get(url);
+
+		Authentication authentication = mock(Authentication.class);
+		when(authentication.getPrincipal()).thenReturn(user);
+		SecurityContext securityContext = mock(SecurityContext.class);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		SecurityContextHolder.setContext(securityContext);
+
+		given().get(url);
 
 	}
 }

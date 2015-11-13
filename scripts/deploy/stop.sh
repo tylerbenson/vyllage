@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 # If this instance is in the ELB and healty:
 # Increase auto scale count
