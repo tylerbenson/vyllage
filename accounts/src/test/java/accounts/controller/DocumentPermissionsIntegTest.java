@@ -58,10 +58,11 @@ public class DocumentPermissionsIntegTest {
 	@Inject
 	private RestTemplate restTemplate;
 
+	@Inject
+	private ObjectMapper mapper;
+
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
-
-	private ObjectMapper mapper = new ObjectMapper();
 
 	@Before
 	public void setUp() {
