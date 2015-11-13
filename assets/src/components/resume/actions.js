@@ -9,7 +9,9 @@ var validator = require('validator');
   'getResume',
   'getHeader',
   'getDocumentId',
+  'publishDocumentId',
   'updateTagline',
+  'publishTagLine',
   // sections
   'getAllSections',
   'publishSections',
@@ -22,9 +24,12 @@ var validator = require('validator');
   'moveSectionOrder',
   // comments
   'getComments',
+  'publishComments',
   'postComment',
   'deleteComment',
   // advice
+  'getAdvices',
+  'publishAdvices',
   'saveSectionAdvice',
   'deleteAdvice',
   'mergeAdvice',
@@ -40,44 +45,119 @@ var validator = require('validator');
   'togglePrintModal'
 ]);
 
-  EditorActions.getAllSections.preEmit = function(){
 
-    //Load resumé based on current URL
-    var documentId = window.location.pathname.split('/')[2];
-    if(!validator.isNumeric(documentId)){
-      var tempDocumentId = window.localStorage.getItem('ownDocumentId');
-      //Load own resumé
-      if(tempDocumentId != undefined && validator.isNumeric(tempDocumentId)){
-        documentId = tempDocumentId;
-      }
-    }
-
-    if( documentId !== undefined ){
-      var header;
-      var headerUrl = urlTemplate
-                  .parse(endpoints.resumeHeader)
-                  .expand({documentId: documentId});
-      request
-        .get(headerUrl)
-        .set('Accept', 'application/json')
-        .end(function (err, res) {
-          if (res.ok) {
-            // needed to make multi ajax
-            header = res.body;
-            var url = urlTemplate
-                        .parse(endpoints.resumeSections)
-                        .expand({documentId: documentId });
-            request
-              .get(url)
-              .set('Accept', 'application/json')
-              .end(function (err, res) {
-                if (res.ok) {
-                  EditorActions.publishSections( res.body , header );
-                }
-              });
-          }
-        });
+  var documentId = window.location.pathname.split('/')[2];
+  if(!validator.isNumeric(documentId)){
+    var tempDocumentId = window.localStorage.getItem('ownDocumentId');
+    //Load own resumé
+    if(tempDocumentId != undefined && validator.isNumeric(tempDocumentId)){
+      documentId = tempDocumentId;
     }
   }
+
+  var metaHeader = document.getElementById('meta_header');
+  if (metaHeader) {
+    var tokenHeader = metaHeader.content;
+  }
+  var metaToken = document.getElementById('meta_token');
+  if (metaToken) {
+    var tokenValue = metaToken.content;
+  }
+
+
+
+  // Get document id 
+  EditorActions.getDocumentId.preEmit = function(){
+
+    var url = urlTemplate
+              .parse(endpoints.documentId)
+              .expand({documentType: 'RESUME'});
+    request
+      .get(url)
+      .end(function (err, res) {
+        if(res) {
+          if(res.ok && res.body.RESUME.length > 0) {
+            EditorActions.publishDocumentId(res.body.RESUME[0]);
+          }
+        }
+      });
+  }
+
+
+  // Update tagline
+  EditorActions.updateTagline.preEmit = function( tagline ){
+
+    var url = urlTemplate
+                .parse(endpoints.resumeHeader)
+                .expand({documentId: documentId});
+    request
+      .put(url)
+      .set( tokenHeader, tokenValue )
+      .send({tagline: tagline})
+      .end(function (err, res) {
+        EditorActions.publishTagLine(tagline);
+      });
+  }
+
+
+  // Get all sections with header 
+  EditorActions.getAllSections.preEmit = function(){
+    var header;
+    var headerUrl = urlTemplate
+                .parse(endpoints.resumeHeader)
+                .expand({documentId: documentId});
+    request
+      .get(headerUrl)
+      .set('Accept', 'application/json')
+      .end(function (err, res) {
+        if (res.ok) {
+          // needed to make multi ajax
+          header = res.body;
+          var url = urlTemplate
+                      .parse(endpoints.resumeSections)
+                      .expand({documentId: documentId });
+          request
+            .get(url)
+            .set('Accept', 'application/json')
+            .end(function (err, res) {
+              if (res.ok) {
+                EditorActions.publishSections( res.body , header );
+              }
+            });
+        }
+      });
+  }
+
+
+
+  // Get Comments 
+  EditorActions.getComments.preEmit = function( sectionId ){
+    var url = urlTemplate
+                .parse(endpoints.resumeComments)
+                .expand({
+                  documentId: documentId,
+                  sectionId: sectionId
+                });
+    request
+      .get(url)
+      .end(function (err, res) {
+        if( res.body )
+          EditorActions.publishComments( res.body , sectionId);
+      }.bind(this));
+  }
+
+
+  // Get Advices 
+  EditorActions.getAdvices.preEmit = function( sectionId ){
+    request
+      .get('/resume/'+documentId+'/section/'+sectionId+'/advice')
+      .set('Accept', 'application/json')
+      .end(function (err, res) {
+        if( res.body )
+          EditorActions.publishAdvices(res.body , sectionId );
+      }.bind(this));
+  }
+
+
 
   module.exports = EditorActions;

@@ -15,9 +15,10 @@ var filter = require('lodash.filter');
 var PubSub = require('pubsub-js');
 var clone = require('clone');
 var validator = require('validator');
+var EditorActions = require('./actions');
 
 module.exports = Reflux.createStore({
-  listenables: require('./actions'),
+  listenables: EditorActions,
   init: function () {
     var metaHeader = document.getElementById('meta_header');
     if (metaHeader) {
@@ -28,7 +29,7 @@ module.exports = Reflux.createStore({
       this.tokenValue = metaToken.content;
     }
     this.documentId = window.location.pathname.split('/')[2];
-    this.onGetDocumentId();
+    EditorActions.getDocumentId();
     var tempDocumentId = window.localStorage.getItem('ownDocumentId');
     if(tempDocumentId !== undefined && validator.isNumeric(tempDocumentId)){
       this.ownDocumentId = tempDocumentId;
@@ -49,6 +50,7 @@ module.exports = Reflux.createStore({
       isSorting: false
     };
   },
+
   /*Notifications*/
   remindToShare: function() {
     var message = <span>Your resumé has been updated!  Now, share  it to the world to <a href="/resume/get-feedback">get feedback.</a></span>;
@@ -91,24 +93,6 @@ module.exports = Reflux.createStore({
       .end(function (err, res) {}.bind(this))
   },
 
-  onGetDocumentId: function() {
-    var url = urlTemplate
-              .parse(endpoints.documentId)
-              .expand({documentType: 'RESUME'});
-    request
-      .get(url)
-      .end(function (err, res) {
-        if(res) {
-          if(res.ok && res.body.RESUME.length > 0) {
-            this.resume.ownDocumentId = res.body.RESUME[0];
-            this.resume.documentId = isNaN(parseInt(this.resume.documentId)) ? this.resume.ownDocumentId : this.resume.documentId;
-            this.documentId = this.resume.documentId;
-            window.localStorage.setItem('ownDocumentId', this.resume.ownDocumentId);
-            this.trigger(this.resume);
-          }
-        }
-      }.bind(this));
-  },
 
 
   isSupportedSection: function (type) {
@@ -156,7 +140,7 @@ module.exports = Reflux.createStore({
     }
   },
 
-  makeItLinear: function(all_section){
+  makeSectionsLinear: function(all_section){
     var linear_section = [];
     all_section.map(function(group , index ){
           if( group.child.length ){
@@ -200,18 +184,18 @@ module.exports = Reflux.createStore({
 
   /* End of Helper functions */
 
-  onUpdateTagline: function (tagline) {
-    var url = urlTemplate
-                .parse(endpoints.resumeHeader)
-                .expand({documentId: this.documentId});
-    request
-      .put(url)
-      .set(this.tokenHeader, this.tokenValue)
-      .send({tagline: tagline})
-      .end(function (err, res) {
-        this.resume.header.tagline = tagline;
-        this.update();
-      }.bind(this))
+
+  onPublishDocumentId: function(id) {
+    this.resume.ownDocumentId = id;
+    this.resume.documentId = isNaN(parseInt(this.resume.documentId)) ? this.resume.ownDocumentId : this.resume.documentId;
+    this.documentId = this.resume.documentId;
+    window.localStorage.setItem('ownDocumentId', this.resume.ownDocumentId);
+    this.trigger(this.resume);
+  },
+
+  onPublishTagLine: function (tagline) {
+    this.resume.header.tagline = tagline;
+    this.update();
   },
 
   onPublishSections : function( sections , header ){
@@ -226,12 +210,19 @@ module.exports = Reflux.createStore({
         section.isSupported = this.isSupportedSection(section.type);
         if( section.sectionId ){
           if (section.numberOfComments > 0) {
-            this.onGetComments(section.sectionId);
+            EditorActions.getComments( section.sectionId);
           }
-          this.onGetAdvice(section.sectionId);
+          EditorActions.getAdvices( section.sectionId );
         }
       }.bind(this));
       this.update();
+  },
+
+  onPublishComments : function( comments , sectionId ){
+    
+    var index = findindex( this.resume.sections, {sectionId: sectionId});
+    this.resume.sections[index].comments = comments;
+    this.trigger(this.resume);
   },
 
   onMoveGroupOrder: function( order ){
@@ -240,7 +231,7 @@ module.exports = Reflux.createStore({
         all_section.push( filter(this.resume.all_section,{'type':section.type } )[0] );
     }.bind(this));
     this.resume.all_section = all_section;
-    this.makeItLinear( all_section );
+    this.makeSectionsLinear( all_section );
   },
 
   onMoveSectionOrder:function( order , type ){
@@ -253,7 +244,7 @@ module.exports = Reflux.createStore({
             sectionGroup.child = section_order;
         }
      });
-     this.makeItLinear( this.resume.all_section );
+     this.makeSectionsLinear( this.resume.all_section );
   },
 
   onPostSection: function (data) {
@@ -343,21 +334,7 @@ module.exports = Reflux.createStore({
         this.trigger(this.resume);
       }.bind(this));
   },
-  onGetComments: function (sectionId) {
-    var url = urlTemplate
-                .parse(endpoints.resumeComments)
-                .expand({
-                  documentId: this.documentId,
-                  sectionId: sectionId
-                });
-    request
-      .get(url)
-      .end(function (err, res) {
-        var index = findindex(this.resume.sections, {sectionId: sectionId});
-        this.resume.sections[index].comments = res.body;
-        this.trigger(this.resume);
-      }.bind(this))
-  },
+
   onPostComment: function (data) {
     var url = urlTemplate
                 .parse(endpoints.resumeComments)
@@ -411,25 +388,22 @@ module.exports = Reflux.createStore({
          }
       }.bind(this));
   },
-  onGetAdvice : function(sectionId){
-    request
-      .get('/resume/'+this.documentId+'/section/'+sectionId+'/advice')
-      .set('Accept', 'application/json')
-      .end(function (err, res) {
-        var index = findindex(this.resume.sections, {sectionId: sectionId});
-        var advices = [];
 
-        if( res.body.length ){
-          res.body.map(function(advice){
-            if(advice.status == 'pending'){
-              advices.push(advice);
-            }
-          });
-          this.resume.sections[index].advices = advices;
-          this.trigger(this.resume);
+  onPublishAdvices : function( advices , sectionId ){
+    var index = findindex(this.resume.sections, {sectionId: sectionId});
+    var allAdvices = [];
+
+    if( advices.length ){
+      advices.map(function(advice){
+        if(advice.status == 'pending'){
+          allAdvices.push(advice);
         }
-      }.bind(this));
+      });
+      this.resume.sections[index].advices = allAdvices;
+      this.trigger(this.resume);
+    }
   },
+
   onSaveSectionAdvice: function( section ){
     request
       .post('/resume/'+this.documentId+'/section/'+section.sectionId+'/advice')
