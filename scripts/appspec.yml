@@ -78,7 +78,7 @@ hooks:
 #   revision's file bundle.
   ApplicationStop:
     - location: scripts/elb/deregister_from_elb.sh
-      # timeout: 30
+      # timeout: 420
       runas: ubuntu
     - location: scripts/deploy/stop.sh
       timeout: 30

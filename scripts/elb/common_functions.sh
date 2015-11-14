@@ -103,32 +103,49 @@ autoscaling_enter_standby() {
         return 0
     fi
 
-    msg "Checking to see if ASG $asg_name will let us decrease desired capacity"
-    local min_desired=$($AWS_CLI autoscaling describe-auto-scaling-groups \
+    msg "Checking to see if ASG $asg_name will let us adjust desired capacity"
+    local asg_info=$($AWS_CLI autoscaling describe-auto-scaling-groups \
         --auto-scaling-group-name $asg_name \
-        --query 'AutoScalingGroups[0].[MinSize, DesiredCapacity]' \
+        --query 'AutoScalingGroups[0].[MinSize, DesiredCapacity, MaxSize]' \
         --output text)
 
-    local min_cap=$(echo $min_desired | awk '{print $1}')
-    local desired_cap=$(echo $min_desired | awk '{print $2}')
+    local min_cap=$(echo $asg_info | awk '{print $1}')
+    local desired_cap=$(echo $asg_info | awk '{print $2}')
+    local max_cap=$(echo $asg_info | awk '{print $3}')
 
-    if [ -z "$min_cap" -o -z "$desired_cap" ]; then
-        msg "Unable to determine minimum and desired capacity for ASG $asg_name."
+    if [ -z "$min_cap" -o -z "$desired_cap" -o -z "$max_cap" ]; then
+        msg "Unable to determine minimum ($min_cap), desired ($desired_cap), or maximum ($max_cap) capacity for ASG $asg_name."
+        return 1
+    fi
+
+    if [ $min_cap == $max_cap ]; then
+        msg "MinSize is equal to MaxSize, so no room to adjust."
         msg "Attempting to put this instance into standby regardless."
-    elif [ $min_cap == $desired_cap -a $min_cap -gt 0 ]; then
-        local new_min=$(($min_cap - 1))
-        msg "Decrementing ASG $asg_name's minimum size to $new_min"
+    elif [ $min_cap -le $desired_cap ]; then
+        msg "ASG $asg_name already has extra capacity. Setting this instance into Standby."
+    else
+        local new_desired=$(($desired_cap + 1))
+        msg "Incrementing ASG $asg_name's desired size to $new_desired"
         msg $($AWS_CLI autoscaling update-auto-scaling-group \
             --auto-scaling-group-name $asg_name \
-            --min-size $new_min)
+            --desired-capacity $new_desired)
         if [ $? != 0 ]; then
-            msg "Failed to reduce ASG $asg_name's minimum size to $new_min. Cannot put this instance into Standby."
+            msg "Failed to increase ASG $asg_name's desired size to $new_desired. Cannot put this instance into Standby."
             return 1
         else
-            msg "ASG $asg_name's minimum size has been decremented, creating flag file /tmp/asgmindecremented"
-            # Create a "flag" file to denote that the ASG min has been decremented
-            touch /tmp/asgmindecremented
+            msg "ASG $asg_name's desired size has been incremented, creating flag file /tmp/asgdesiredincremented"
+            # Create a "flag" file to denote that the ASG desired has been incremented
+            touch /tmp/asgdesiredincremented
         fi
+
+        local ELB_HEALTHY_COUNT=0
+        local AS_UNHEALTHY_COUNT=-1
+        while [ $ELB_HEALTHY_COUNT < $new_desired ] && [ $AS_UNHEALTHY_COUNT != 0 ]; do
+           # Keep checking until everything is healthy.
+          sleep 20
+          msg $($AWS_CLI elb describe-instance-health --load-balancer-name vyllage | jq '.InstanceStates | map(select(.State == "InService")) | length')
+          msg $($AWS_CLI autoscaling describe-auto-scaling-instances | jq '.AutoScalingInstances | map(select(.HealthStatus == "InService")) | length')
+        done
     fi
 
     msg "Putting instance $instance_id into Standby"
@@ -194,29 +211,29 @@ autoscaling_exit_standby() {
         return 1
     fi
 
-    if [ -a /tmp/asgmindecremented ]; then
-        local min_desired=$($AWS_CLI autoscaling describe-auto-scaling-groups \
+    if [ -a /tmp/asgdesiredincremented ]; then
+        local desired=$($AWS_CLI autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name $asg_name \
-            --query 'AutoScalingGroups[0].[MinSize, DesiredCapacity]' \
+            --query 'AutoScalingGroups[0].[DesiredCapacity]' \
             --output text)
 
-        local min_cap=$(echo $min_desired | awk '{print $1}')
+        local desired_cap=$(echo $desired | awk '{print $1}')
 
-        local new_min=$(($min_cap + 1))
-        msg "Incrementing ASG $asg_name's minimum size to $new_min"
+        local new_desired=$(($desired_cap - 1))
+        msg "Decrementing ASG $asg_name's desired size to $new_desired"
         msg $($AWS_CLI autoscaling update-auto-scaling-group \
             --auto-scaling-group-name $asg_name \
-            --min-size $new_min)
+            --desired-size $new_desired)
         if [ $? != 0 ]; then
-            msg "Failed to increase ASG $asg_name's minimum size to $new_min."
+            msg "Failed to decrease ASG $asg_name's desired size to $new_desired."
             return 1
         else
-            msg "Successfully incremented ASG $asg_name's minimum size"
-            msg "Removing /tmp/asgmindecremented flag file"
-            rm -f /tmp/asgmindecremented
+            msg "Successfully decremented ASG $asg_name's desired size"
+            msg "Removing /tmp/asgdesiredincremented flag file"
+            rm -f /tmp/asgdesiredincremented
         fi
     else
-        msg "Auto scaling group was not decremented previously, not incrementing min value"
+        msg "Auto scaling group was not incremented previously, not decrementing desired value"
     fi
 
     return 0
