@@ -24,16 +24,19 @@ echo '*** Installing awscli ***'
 apt-get -y install python-pip
 pip install awscli
 
+echo '*** Installing jq ***'
+apt-get install jq
+
 echo '*** Init environment ***'
 echo "JAVA_HOME='/usr/lib/jvm/java-8-oracle/jre/'" >> /etc/environment
 source /etc/environment
 service supervisor start || true
 chmod 766 /var/run/supervisor.sock
 
-echo '*** Installing NR server monitoring ***'
-apt-get -y install newrelic-sysmond
-nrsysmond-config --set license_key=8e5b87f1e9001ae664607d18625c81d5727eda0e
-/etc/init.d/newrelic-sysmond start
+# echo '*** Installing NR server monitoring ***'
+# apt-get -y install newrelic-sysmond
+# nrsysmond-config --set license_key=8e5b87f1e9001ae664607d18625c81d5727eda0e
+# /etc/init.d/newrelic-sysmond start
 
 echo '*** Installing NGINX Redirector ***'
 apt-get -y install nginx
