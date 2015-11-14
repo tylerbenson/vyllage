@@ -77,7 +77,7 @@ hooks:
 #   in the script specified in "location" starting from the root of the
 #   revision's file bundle.
   ApplicationStop:
-    - location: elb/deregister_from_elb.sh
+    - location: scripts/elb/deregister_from_elb.sh
       # timeout: 30
       runas: ubuntu
     - location: scripts/deploy/stop.sh
@@ -101,7 +101,7 @@ hooks:
     - location: scripts/deploy/start.sh
       timeout: 120
       runas: ubuntu
-    - location: elb/register_with_elb.sh
+    - location: scripts/elb/register_with_elb.sh
       # timeout: 120
       runas: ubuntu
 # During the ValidateService deployment lifecycle event, run the commands
