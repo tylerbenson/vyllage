@@ -21,7 +21,7 @@ aws autoscaling create-auto-scaling-group \
 	--auto-scaling-group-name $AUTOSCALING_GROUP_NAME \
 	--launch-configuration-name $LAUNCH_CONFIG_NAME \
 	--availability-zones us-west-2a \
-	--min-size 0 --desired-capacity 0 --max-size 1 \
+	--min-size 1 --desired-capacity 1 --max-size 2 \
 	--load-balancer-names "vyllage" --health-check-type ELB --health-check-grace-period 120
 
 # Update CodeDeploy

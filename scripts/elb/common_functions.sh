@@ -121,7 +121,7 @@ autoscaling_enter_standby() {
     if [ $min_cap == $max_cap ]; then
         msg "MinSize is equal to MaxSize, so no room to adjust."
         msg "Attempting to put this instance into standby regardless."
-    elif [ $min_cap -le $desired_cap ]; then
+    elif [ $min_cap -lt $desired_cap ]; then
         msg "ASG $asg_name already has extra capacity. Setting this instance into Standby."
     else
         local new_desired=$(($desired_cap + 1))
