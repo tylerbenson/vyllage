@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import user.common.User;
 import user.common.web.AccountContact;
 import user.common.web.NotifyFeedbackRequest;
+import util.web.account.DocumentUrlConstants;
 import documents.model.notifications.AbstractWebNotification;
 import documents.model.notifications.CommentNotification;
 import documents.model.notifications.FeedbackRequestNotification;
@@ -35,20 +36,20 @@ import documents.services.notification.NotificationService;
 // @RestController doesn't work :(
 @Controller
 @RequestMapping("notification")
-public class NotificationsController {
+public class NotificationController {
 
 	private final NotificationService notificationService;
 
 	private final AccountService accountService;
 
 	@Inject
-	public NotificationsController(NotificationService notificationService,
+	public NotificationController(NotificationService notificationService,
 			AccountService accountService) {
 		this.notificationService = notificationService;
 		this.accountService = accountService;
 	}
 
-	@RequestMapping(value = "/all", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = DocumentUrlConstants.NOTIFICATION_ALL, method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AbstractWebNotification> getAll(
 			HttpServletRequest request, @AuthenticationPrincipal User user) {
 
@@ -66,7 +67,7 @@ public class NotificationsController {
 
 	}
 
-	@RequestMapping(value = "/comment", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = DocumentUrlConstants.NOTIFICATION_COMMENT, method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AbstractWebNotification> getCommentNotifications(
 			HttpServletRequest request, @AuthenticationPrincipal User user) {
 
@@ -91,7 +92,7 @@ public class NotificationsController {
 
 	}
 
-	@RequestMapping(value = "/comment", method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = DocumentUrlConstants.NOTIFICATION_COMMENT, method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteCommentNotification(
 			@RequestBody WebCommentNotification webCommentNotification,
@@ -103,7 +104,7 @@ public class NotificationsController {
 		notificationService.delete(webCommentNotification);
 	}
 
-	@RequestMapping(value = "/request-feedback", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = DocumentUrlConstants.NOTIFICATION_REQUEST_FEEDBACK, method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public void requestFeedbackNotify(
 			@RequestBody final NotifyFeedbackRequest notifyFeedbackRequest) {
@@ -115,7 +116,7 @@ public class NotificationsController {
 
 	}
 
-	@RequestMapping(value = "/request-feedback", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = DocumentUrlConstants.NOTIFICATION_REQUEST_FEEDBACK, method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AbstractWebNotification> getFeedbackRequestNotifications(
 			HttpServletRequest request, @AuthenticationPrincipal User user) {
 
@@ -141,7 +142,7 @@ public class NotificationsController {
 				}).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/request-feedback", method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = DocumentUrlConstants.NOTIFICATION_REQUEST_FEEDBACK, method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteFeedbackNotifications(
 			@RequestBody final WebFeedbackRequestNotification webFeedbackRequestNotification,
@@ -154,7 +155,7 @@ public class NotificationsController {
 
 	}
 
-	@RequestMapping(value = "/request-reference", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = DocumentUrlConstants.NOTIFICATION_REQUEST_REFERENCE, method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<AbstractWebNotification> getReferenceRequests(
 			HttpServletRequest request, @AuthenticationPrincipal User user) {
 
@@ -180,7 +181,7 @@ public class NotificationsController {
 				}).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/request-reference", method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = DocumentUrlConstants.NOTIFICATION_REQUEST_REFERENCE, method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void deleteReferenceRequestNotifications(
 			@RequestBody final WebReferenceRequestNotification webReferenceRequestNotification,
@@ -213,7 +214,7 @@ public class NotificationsController {
 		return webNotification;
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	@RequestMapping(value = DocumentUrlConstants.NOTIFICATION_DELETE_ALL, method = RequestMethod.DELETE)
 	public void deleteAll(@AuthenticationPrincipal User user) {
 		notificationService.deleteAll(user.getUserId());
 	}

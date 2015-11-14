@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.web.AccountContact;
+import util.web.account.DocumentUrlConstants;
 import documents.model.Document;
 import documents.model.constants.SectionType;
 import documents.model.constants.Visibility;
@@ -52,7 +53,7 @@ public class ReferenceController {
 
 	// we have no page to send this from, keeping it simple for now.
 
-	@RequestMapping(value = "/request", method = RequestMethod.POST)
+	@RequestMapping(value = DocumentUrlConstants.REFERENCE_REQUEST, method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public void postReferenceRequest(
 			@RequestParam(value = "otherUserId", required = true) Long otherUserId,
@@ -68,7 +69,7 @@ public class ReferenceController {
 
 	}
 
-	@RequestMapping(value = "/accept", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = DocumentUrlConstants.REFERENCE_ACCEPT, method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	public void acceptAndDelete(
 			HttpServletRequest request,
@@ -158,7 +159,7 @@ public class ReferenceController {
 		return contactReference;
 	}
 
-	@RequestMapping(value = "/reject", method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = DocumentUrlConstants.REFERENCE_REJECT, method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void rejectAndDelete(
 			@RequestBody WebReferenceRequestNotification webReferenceRequestNotification,
