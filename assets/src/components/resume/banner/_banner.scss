@@ -71,11 +71,26 @@
   .contact {
     @include column(3/7);
     @extend .inverted;
+    .reminder {
+      font-size: 0.8em;
+      margin: 0 1.35em;
+      i {
+        color: $warning-color;
+        margin-right: 0.5em;
+      }
+      span {
+        color: $warning-background;
+      }
+    }
     .detail {
       display: block;
       margin: 1.15em 1em;
       position: relative;
       white-space: nowrap;
+
+      &.edit-mode {
+        margin: 0.915em 1em;
+      }
 
       i {
         display: inline-block;
@@ -303,6 +318,7 @@
       .name,
       textarea {
         text-align: center;
+        margin-top: 0.75em;
       }
     }
     .contact {
@@ -315,6 +331,12 @@
       width: auto;
       margin: auto;
       padding: 0 1em;
+
+      .reminder {
+        margin-top: 1.5em;
+        font-size: 0.9em;
+      }
+
       .detail {
         text-align: center;
         margin: 0.75em 1em;

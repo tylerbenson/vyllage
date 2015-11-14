@@ -133,6 +133,7 @@ var ResumeEditor = React.createClass({
   mixins: [Reflux.connect(resumeStore, 'resume'), Reflux.connect(settingStore)],
   render: function () {
     var owner = this.state.resume.header.owner;
+    var status = this.state.resume.status;
     var allSections = this.state.resume.all_section;
     var sections = filter(this.state.resume.sections, {isSupported: true});
     var content;
@@ -143,10 +144,15 @@ var ResumeEditor = React.createClass({
         content = <SectionRender sections={allSections} isOwner={owner} />;
       }
       else if(owner === undefined || sections.length > 0) {
-        content = <Loading />;
+        if(status === 403) {
+          content = <Empty status="403" />;
+        }
+        else {
+          content = <Loading />;
+        }
       }
       else if(sections.length === 0 && allSections.length === 0) {
-        content = <Empty />;
+        content = <Empty status="200" />;
       }
     }
     else {
@@ -156,7 +162,11 @@ var ResumeEditor = React.createClass({
     return (
       <div>
         <Tour page="resume" />
-        <Banner header={this.state.resume.header} ownDocumentId={this.state.resume.ownDocumentId} settings={this.state.settings} sections={sections} />
+        {
+          this.state.resume.status === 200 && 'email' in this.state.resume.header ?
+          <Banner header={this.state.resume.header} ownDocumentId={this.state.resume.ownDocumentId} settings={this.state.settings} sections={sections} />
+          : null
+        }
         {content}
       </div>
     );

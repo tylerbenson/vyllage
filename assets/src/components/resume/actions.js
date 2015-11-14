@@ -34,6 +34,7 @@ var validator = require('validator');
   'disableEditMode',
   'showComments',
   'hideComments',
+  'setStatus',
   'toggleComments',
   'toggleNav',
   'toggleSorting',
@@ -61,6 +62,7 @@ var validator = require('validator');
         .get(headerUrl)
         .set('Accept', 'application/json')
         .end(function (err, res) {
+          EditorActions.setStatus(res.status);
           if (res.ok) {
             // needed to make multi ajax
             header = res.body;
