@@ -39,7 +39,6 @@ import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
 import accounts.service.RegistrationEmailService;
-import accounts.service.SignInUtil;
 import accounts.service.UserService;
 
 /**
@@ -51,7 +50,6 @@ import accounts.service.UserService;
 public class LMSRequestTest {
 
 	private LMSAccountController lmsAccountcontoller;
-	private SignInUtil signInUtil = mock(SignInUtil.class);
 	private LMSService lmsService = mock(LMSService.class);
 	private LTIKeyRepository ltiKeyRepository = mock(LTIKeyRepository.class);
 
@@ -96,14 +94,13 @@ public class LMSRequestTest {
 	@Before
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
-		lmsAccountcontoller = new LMSAccountController(signInUtil, lmsService,
+		lmsAccountcontoller = new LMSAccountController(lmsService,
 				accountSettingsService, registrationEmailService);
 
 	}
 
 	@Test
 	public void testLMSRequest() {
-		assertNotNull(signInUtil);
 		assertNotNull(lmsService);
 		assertNotNull(wContext);
 		assertNotNull(session);

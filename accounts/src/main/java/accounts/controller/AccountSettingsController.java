@@ -181,12 +181,14 @@ public class AccountSettingsController {
 			@AuthenticationPrincipal User user) {
 
 		/**
-		 * Removing facebook connection since they will likely send it along and
-		 * we don't want to save that
+		 * Removing facebook, google and twitter's connection since they will
+		 * likely send it along and we don't want to save that
 		 */
 		settings.removeIf(ac -> AccountSettingsEnum.facebook_connected.name()
 				.equalsIgnoreCase(ac.getName())
 				|| AccountSettingsEnum.google_connected.name()
+						.equalsIgnoreCase(ac.getName())
+				|| AccountSettingsEnum.twitter_connected.name()
 						.equalsIgnoreCase(ac.getName()));
 
 		for (AccountSetting accountSetting : settings) {
@@ -235,6 +237,11 @@ public class AccountSettingsController {
 			return this.addGoogleConnected(user,
 					new ArrayList<AccountSetting>());
 
+		if (AccountSettingsEnum.twitter_connected.name().equalsIgnoreCase(
+				parameter))
+			return this.addTwitterConnected(user,
+					new ArrayList<AccountSetting>());
+
 		if (AccountSettingsEnum.role.name().equalsIgnoreCase(parameter))
 			return this.addUserRole(user, new ArrayList<AccountSetting>());
 
@@ -258,6 +265,18 @@ public class AccountSettingsController {
 			@PathVariable String parameter,
 			@Valid @RequestBody final AccountSetting setting,
 			@AuthenticationPrincipal User user, BindingResult result) {
+
+		// do not let the frontend save this...
+		if (AccountSettingsEnum.facebook_connected.name().equalsIgnoreCase(
+				setting.getName())
+				|| AccountSettingsEnum.google_connected.name()
+						.equalsIgnoreCase(setting.getName())
+				|| AccountSettingsEnum.twitter_connected.name()
+						.equalsIgnoreCase(setting.getName())) {
+			return new ResponseEntity<AccountSetting>(
+					accountSettingsService.setAccountSetting(user, setting),
+					HttpStatus.OK);
+		}
 
 		// clean error
 		setting.setErrorMessage(null);
@@ -380,6 +399,7 @@ public class AccountSettingsController {
 
 		this.addFacebookConnected(user, settings);
 		this.addGoogleConnected(user, settings);
+		this.addTwitterConnected(user, settings);
 
 		return settings;
 	}
@@ -404,6 +424,18 @@ public class AccountSettingsController {
 				AccountSettingsEnum.google_connected.name(), String
 						.valueOf(facebookConnected), Privacy.PRIVATE.name()));
 		return settings;
+	}
+
+	private List<AccountSetting> addTwitterConnected(User user,
+			List<AccountSetting> settings) {
+
+		boolean twitterConnected = this.isSocialNetworkConnected(
+				AccountSettingsEnum.twitter.name(), user);
+
+		settings.add(new AccountSetting(null, user.getUserId(),
+				AccountSettingsEnum.twitter_connected.name(), String
+						.valueOf(twitterConnected), Privacy.PRIVATE.name()));
+		return null;
 	}
 
 	protected void addUserRolesAndOrganizations(User user,
