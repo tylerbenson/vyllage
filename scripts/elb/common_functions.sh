@@ -103,6 +103,15 @@ autoscaling_enter_standby() {
         return 0
     fi
 
+    local AS_UNHEALTHY_COUNT=-1
+    while [ $AS_UNHEALTHY_COUNT != 0 ]; do
+        msg "Waiting for environment to stablize."
+        # Keep checking until everything is healthy.
+        sleep 5
+        AS_UNHEALTHY_COUNT=$($AWS_CLI autoscaling describe-auto-scaling-instances | jq '.AutoScalingInstances | map(select(.LifecycleState != "InService")) | length')
+        msg "ASG Unhealthy Count = $AS_UNHEALTHY_COUNT"
+    done
+
     msg "Checking to see if ASG $asg_name will let us adjust desired capacity"
     local asg_info=$($AWS_CLI autoscaling describe-auto-scaling-groups \
         --auto-scaling-group-name $asg_name \
@@ -138,13 +147,13 @@ autoscaling_enter_standby() {
             touch /tmp/asgdesiredincremented
         fi
 
-        local ELB_HEALTHY_COUNT=0
         local AS_UNHEALTHY_COUNT=-1
-        while [ $ELB_HEALTHY_COUNT < $new_desired ] && [ $AS_UNHEALTHY_COUNT != 0 ]; do
-           # Keep checking until everything is healthy.
-          sleep 20
-          msg $($AWS_CLI elb describe-instance-health --load-balancer-name vyllage | jq '.InstanceStates | map(select(.State == "InService")) | length')
-          msg $($AWS_CLI autoscaling describe-auto-scaling-instances | jq '.AutoScalingInstances | map(select(.HealthStatus == "InService")) | length')
+        while [ $AS_UNHEALTHY_COUNT != 0 ]; do
+            msg "Waiting for new instance to come online"
+            # Keep checking until everything is healthy.
+            sleep 20
+            AS_UNHEALTHY_COUNT=$($AWS_CLI autoscaling describe-auto-scaling-instances | jq '.AutoScalingInstances | map(select(.LifecycleState != "InService")) | length')
+            msg "ASG Unhealthy Count = $AS_UNHEALTHY_COUNT"
         done
     fi
 
@@ -223,7 +232,7 @@ autoscaling_exit_standby() {
         msg "Decrementing ASG $asg_name's desired size to $new_desired"
         msg $($AWS_CLI autoscaling update-auto-scaling-group \
             --auto-scaling-group-name $asg_name \
-            --desired-size $new_desired)
+            --desired-capacity $new_desired)
         if [ $? != 0 ]; then
             msg "Failed to decrease ASG $asg_name's desired size to $new_desired."
             return 1
