@@ -4,6 +4,7 @@ var GetFeedbackStore = require('./store');
 var SuggestionSidebar = require('./suggestions/SuggestionSidebar');
 var FeatureToggle = require('../util/FeatureToggle');
 var FacebookInvite = require('./FacebookInvite');
+var TwitterInvite = require('./TwitterInvite');
 var actions = require('./actions');
 var Clipboard = require('../util/clipboard');
 
@@ -62,17 +63,21 @@ var ShareableLink = React.createClass({
 					            <i className={icon}></i>
 								{message}
 							</div>
-
-							<FeatureToggle name="FACEBOOK_SDK">
-								<div className="or">
-									<span>OR</span>
-								</div>
+							<div className="or">
+								<span>OR</span>
+							</div>
 								<p className="tip">Click the following buttons to share:</p>
-				        <FacebookInvite url={this.state.shareableLink}>
-				        	<button className="facebook"><i className="ion-social-facebook"></i> Facebook</button>
-				        </FacebookInvite>
-			        </FeatureToggle>
-						</div>
+							<FeatureToggle name="FACEBOOK_SDK">
+						        <FacebookInvite url={this.state.shareableLink}>
+						        	<button className="facebook"><i className="ion-social-facebook"></i> Facebook</button>
+						        </FacebookInvite>
+						    </FeatureToggle>
+					        <FeatureToggle name="TWITTER">
+						        <TwitterInvite url={this.state.shareableLink}>
+						        	<button className="twitter"><i className="ion-social-twitter"></i> Twitter</button>
+						        </TwitterInvite>
+					        </FeatureToggle>
+							</div>
 					</div>
 				</div>
 				<FeatureToggle name="SUGGESTIONS">
