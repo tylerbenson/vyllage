@@ -26,6 +26,7 @@ var Banner = React.createClass({
   getInitialState: function () {
     return {
       editMode: false,
+      emailVerfied : false,
       lastScroll: {
         scrollY: window.scrollY,
         timestamp: new Date(),
@@ -79,6 +80,12 @@ var Banner = React.createClass({
     if('type' in urlParams ){
       actions.postSection(urlParams);
       window.location.hash = ' ';
+    }
+  },
+  componentDidMount : function() {
+    var emailVerifiedMeta = document.getElementById('meta_userInfo_email_confirmed');
+    if( emailVerifiedMeta ){
+      this.setState({ 'emailVerified' : emailVerifiedMeta.content });
     }
   },
   onScroll: function(){
@@ -253,7 +260,6 @@ var Banner = React.createClass({
       'detail': true
     });
 
-
     return (
       <section className={(header.owner?'':'guest ') + 'banner'} ref="banner">
         <div className ="content">
@@ -291,11 +297,17 @@ var Banner = React.createClass({
           <div className="contact">
             {
               this.state.editMode ?
-              <div className="reminder">
-                <i className="ion-information-circled"></i>
-                <span>Your contact details are kept confidential.</span>
-              </div>
+                <div className="reminder">
+                  <i className="ion-information-circled"></i>
+                  <span>Your contact details are kept confidential.</span>
+                </div>
               : null
+            }
+            { this.state.editMode && this.state.emailVerified == 'false' ? 
+            <div className="reminder">
+              <i className="ion-android-warning"></i>
+              <span>Please verify your email.</span>
+            </div> : null
             }
             <div className={detailClasses}>
               <i className="ion-email"></i>
