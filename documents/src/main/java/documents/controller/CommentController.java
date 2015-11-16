@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.web.AccountContact;
-import util.web.account.DocumentUrlConstants;
 
 import com.newrelic.api.agent.NewRelic;
 
@@ -66,7 +65,7 @@ public class CommentController {
 		this.documentAccessRepository = documentAccessRepository;
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_SECTION_ID_COMMENT, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody List<Comment> getCommentsForSection(
 			HttpServletRequest request, @PathVariable final Long documentId,
 			@PathVariable final Long sectionId,
@@ -83,7 +82,7 @@ public class CommentController {
 		return commentsForSection;
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_SECTION_ID_COMMENT, method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
 	public @ResponseBody Comment saveCommentsForSection(
@@ -152,7 +151,7 @@ public class CommentController {
 		}
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_SECTION_ID_COMMENT_COMMENT_ID, method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.ACCEPTED)
 	@CheckReadAccess
 	public void deleteCommentsForSection(HttpServletRequest request,
@@ -180,7 +179,7 @@ public class CommentController {
 				&& commentId.equals(comment.getCommentId());
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_SECTION_ID_COMMENT_COMMENT_ID, method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
 	public void saveCommentsForComment(HttpServletRequest request,

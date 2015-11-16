@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
-import util.web.account.DocumentUrlConstants;
 
 import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.Trace;
@@ -64,14 +63,14 @@ public class FileController {
 			pdfStyles.add("default");
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.FILE_PDF_STYLES, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/file/pdf/styles", method = RequestMethod.GET, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody List<String> getPdfStyles() {
 		return this.pdfStyles;
 	}
 
 	@Trace
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_FILE_PDF, method = RequestMethod.GET, produces = "application/pdf")
+	@RequestMapping(value = "{documentId}/file/pdf", method = RequestMethod.GET, produces = "application/pdf")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
 	public void resumePdf(
@@ -118,7 +117,7 @@ public class FileController {
 	}
 
 	@Trace
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_FILE_PNG, method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+	@RequestMapping(value = "{documentId}/file/png", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckReadAccess
 	public void resumePNG(

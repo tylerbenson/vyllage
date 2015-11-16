@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.web.UserInfo;
-import util.web.account.DocumentUrlConstants;
+import util.web.constants.DocumentUrlConstants;
 import documents.model.AccountNames;
 import documents.model.Document;
 import documents.model.constants.DocumentTypeEnum;
@@ -90,7 +90,7 @@ public class DocumentController {
 		return userInfo;
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.RESUME_DELETE, method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = "delete", method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(HttpServletRequest request,
 			@RequestParam(value = "userIds") List<Long> userIds)

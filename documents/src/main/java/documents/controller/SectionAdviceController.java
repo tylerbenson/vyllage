@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
-import util.web.account.DocumentUrlConstants;
 import documents.model.SectionAdvice;
 import documents.model.constants.AdviceStatus;
 import documents.services.DocumentService;
@@ -35,7 +34,7 @@ public class SectionAdviceController {
 	}
 
 	// check read because this is for others
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_SECTION_ID_ADVICE, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/advice", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody List<SectionAdvice> getSectionAdvices(
@@ -48,7 +47,7 @@ public class SectionAdviceController {
 	}
 
 	// check read because this is for others
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_SECTION_ID_ADVICE, method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/advice", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@CheckReadAccess
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody SectionAdvice saveSectionAdvice(
@@ -73,7 +72,7 @@ public class SectionAdviceController {
 	}
 
 	// check read because this is for others
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_SECTION_ID_ADVICE_SECTION_ADVICE_ID, method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}/advice/{sectionAdviceId}", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
 	@CheckReadAccess
 	@ResponseStatus(value = HttpStatus.OK)
 	public @ResponseBody SectionAdvice updateSectionAdvice(

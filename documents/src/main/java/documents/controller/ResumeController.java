@@ -33,7 +33,7 @@ import user.common.User;
 import user.common.social.SocialSessionEnum;
 import user.common.web.AccountContact;
 import user.common.web.UserInfo;
-import util.web.account.DocumentUrlConstants;
+import util.web.constants.DocumentUrlConstants;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.newrelic.api.agent.NewRelic;
@@ -117,8 +117,7 @@ public class ResumeController {
 		Document documentByUser = documentService.getDocumentByUser(user
 				.getUserId());
 
-		return DocumentUrlConstants.REDIRECT_RESUME
-				+ documentByUser.getDocumentId();
+		return "redirect:/resume/" + documentByUser.getDocumentId();
 	}
 
 	@RequestMapping(value = "{documentId}", method = RequestMethod.GET, produces = "text/html")
@@ -193,7 +192,7 @@ public class ResumeController {
 		}
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/section", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	public @ResponseBody List<DocumentSection> getResumeSections(
 			@PathVariable final Long documentId) throws JsonProcessingException {
@@ -234,7 +233,7 @@ public class ResumeController {
 		return documentSections;
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_SECTION_ID, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	public @ResponseBody DocumentSection getResumeSection(
 			@PathVariable final Long documentId,
@@ -255,7 +254,7 @@ public class ResumeController {
 		return documentSection;
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_HEADER, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/header", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	public @ResponseBody DocumentHeader getResumeHeader(
 			HttpServletRequest request, @PathVariable final Long documentId,
@@ -271,7 +270,7 @@ public class ResumeController {
 		return documentService.getTaglines(userIds);
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION, method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckWriteAccess
 	public @ResponseBody DocumentSection createSection(
@@ -291,7 +290,7 @@ public class ResumeController {
 		return documentService.saveDocumentSection(documentSection);
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_SECTION_ID, method = RequestMethod.PUT, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	// @PreAuthorize("hasPermission(#documentId, 'WRITE')")
 	@CheckWriteAccess
@@ -330,7 +329,7 @@ public class ResumeController {
 		return documentService.saveDocumentSection(documentSection);
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_ORDER, method = RequestMethod.PUT, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section-order", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckWriteAccess
 	public void saveSectionPositions(@PathVariable final Long documentId,
@@ -339,7 +338,7 @@ public class ResumeController {
 		documentService.orderDocumentSections(documentId, documentSectionIds);
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_SECTION_SECTION_ID, method = RequestMethod.DELETE, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.DELETE, consumes = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckWriteAccess
 	public void deleteSection(@PathVariable final Long documentId,
@@ -349,7 +348,7 @@ public class ResumeController {
 		documentService.deleteSection(documentId, sectionId);
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_RECENT_USERS, method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{documentId}/recent-users", method = RequestMethod.GET, produces = "application/json")
 	@CheckReadAccess
 	public @ResponseBody List<AccountContact> getRecentUsers(
 			HttpServletRequest request,
@@ -371,7 +370,7 @@ public class ResumeController {
 				recentUsersForDocument);
 	}
 
-	@RequestMapping(value = DocumentUrlConstants.DOCUMENT_ID_HEADER, method = RequestMethod.PUT, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/header", method = RequestMethod.PUT, consumes = "application/json")
 	@CheckWriteAccess
 	public @ResponseBody ResponseEntity<DocumentHeader> updateHeader(
 			@PathVariable final Long documentId,
