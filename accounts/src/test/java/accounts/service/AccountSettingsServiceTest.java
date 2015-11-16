@@ -36,6 +36,9 @@ public class AccountSettingsServiceTest {
 	@Mock
 	private UserService userService;
 
+	@Mock
+	private DocumentService documentService;
+
 	@Test
 	public void getUserNamesNull() {
 		List<Long> userIds = Arrays.asList(1L);
@@ -44,7 +47,8 @@ public class AccountSettingsServiceTest {
 		when(userService.getNames(userIds)).thenReturn(accountNames);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
 				.getUserNamesAndEmail(userIds);
@@ -58,7 +62,8 @@ public class AccountSettingsServiceTest {
 		User user = Mockito.mock(User.class);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		String settingName = null;
 		accountSettingsService.getAccountSetting(user, settingName);
@@ -74,7 +79,8 @@ public class AccountSettingsServiceTest {
 		when(userService.getUsers(userIds)).thenReturn(accountNames);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
 				.getUserNamesAndEmail(userIds);
@@ -100,7 +106,8 @@ public class AccountSettingsServiceTest {
 		when(names.getLastName()).thenReturn("Luigi");
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		List<AccountSetting> userNamesSettings = accountSettingsService
 				.getUserNamesAndEmail(userIds);
@@ -134,7 +141,8 @@ public class AccountSettingsServiceTest {
 		when(user.getFirstName()).thenReturn(firstName);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
@@ -157,7 +165,8 @@ public class AccountSettingsServiceTest {
 		when(user.getMiddleName()).thenReturn(middleName);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
@@ -180,7 +189,8 @@ public class AccountSettingsServiceTest {
 		when(user.getLastName()).thenReturn(lastName);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		Optional<AccountSetting> accountSetting = accountSettingsService
 				.getAccountSetting(user, settingName);
@@ -208,7 +218,8 @@ public class AccountSettingsServiceTest {
 		when(accountSettingRepository.set(setting)).thenReturn(setting);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);
@@ -233,7 +244,8 @@ public class AccountSettingsServiceTest {
 		when(user.getUserId()).thenReturn(userId);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);
@@ -258,7 +270,8 @@ public class AccountSettingsServiceTest {
 		when(user.getUserId()).thenReturn(userId);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);

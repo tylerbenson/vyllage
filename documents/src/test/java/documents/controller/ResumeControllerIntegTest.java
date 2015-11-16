@@ -21,6 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.http.entity.ContentType;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,6 +50,7 @@ import user.common.web.AccountContact;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 
 import documents.ApplicationTestConfig;
 import documents.model.Comment;
@@ -91,6 +93,11 @@ public class ResumeControllerIntegTest {
 	@Before
 	public void setUp() throws Exception {
 		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
+	}
+
+	@After
+	public void after() {
+		RestAssuredMockMvc.reset();
 	}
 
 	@Test

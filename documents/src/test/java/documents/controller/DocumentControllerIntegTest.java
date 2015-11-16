@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import javax.inject.Inject;
 
 import org.apache.http.entity.ContentType;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 import user.common.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 
 import documents.ApplicationTestConfig;
 import documents.model.AccountNames;
@@ -55,6 +57,11 @@ public class DocumentControllerIntegTest {
 	@Before
 	public void setUp() throws Exception {
 		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
+	}
+
+	@After
+	public void after() {
+		RestAssuredMockMvc.reset();
 	}
 
 	@Test
