@@ -33,7 +33,6 @@ import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
 import accounts.service.RegistrationEmailService;
-import accounts.service.SignInUtil;
 
 @Controller
 public class LMSAccountController {
@@ -41,20 +40,16 @@ public class LMSAccountController {
 	private final Logger logger = Logger.getLogger(LMSAccountController.class
 			.getName());
 
-	@SuppressWarnings("unused")
-	private final SignInUtil signInUtil;
 	private final LMSService lmsService;
 	private CsrfTokenUtility csrfTokenUtility;
 	private final AccountSettingsService accountSettingsService;
 	private final RegistrationEmailService registrationEmailService;
 
 	@Inject
-	public LMSAccountController(final SignInUtil signInUtil,
-			final LMSService lmsService,
+	public LMSAccountController(final LMSService lmsService,
 			final AccountSettingsService accountSettingsService,
 			final RegistrationEmailService registrationEmailService) {
 		super();
-		this.signInUtil = signInUtil;
 		this.lmsService = lmsService;
 		this.accountSettingsService = accountSettingsService;
 		this.registrationEmailService = registrationEmailService;

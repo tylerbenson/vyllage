@@ -15,16 +15,28 @@ var Permission = React.createClass({
     var settings = this.props.settings || [];
     var metatoken = document.getElementById('meta_token').content;
 
-    if( this.props.facebook == false){
-        var fbConnectButton = <button name="facebook-connect" type="submit" className='small inverted' value="connect">Connect</button>;
-    }else{
-        var fbConnectButton = <button name="facebook-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectFacebook}>Connected</button>;
-    }
+	var fbConnectButton;
 
- 	if( this.props.google == false){
-        var ggConnectButton = <button name="google-connect" type="submit" className='small inverted' value="connect">Connect</button>;
+    if( this.props.facebook == false){
+        fbConnectButton = <button name="facebook-connect" type="submit" className='small inverted' value="connect">Connect</button>;
     }else{
-        var ggConnectButton = <button name="google-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectGoogle}>Connected</button>;
+        fbConnectButton = <button name="facebook-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectFacebook}>Connected</button>;
+    }
+    
+	var ggConnectButton;
+ 	
+ 	if( this.props.google == false){
+        ggConnectButton = <button name="google-connect" type="submit" className='small inverted' value="connect">Connect</button>;
+    }else{
+        ggConnectButton = <button name="google-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectGoogle}>Connected</button>;
+    }
+    
+    var twConnectButton;
+    
+    if( this.props.twitter == false){
+        twConnectButton = <button name="twitter-connect" type="submit" className='small inverted' value="connect">Connect</button>;
+    }else{
+        twConnectButton = <button name="twitter-disconnect" type="button" className='small' value="disconnect" onClick={this.disconnectTwitter}>Connected</button>;
     }
 
     if (settings.length > 0) {
@@ -59,18 +71,22 @@ var Permission = React.createClass({
               </form>
            </FeatureToggle>
           </div>
-          { /*
           <div className="content">
+           <FeatureToggle name="TWITTER">
+             <form action="/connect/twitter" method="POST">
               <div className="right-part">
-                 <button className='small inverted' onClick={this.connectWithTwitter}>CONNECT</button>
+                  {twConnectButton}
               </div>
               <div className="left-part">
                 <i className="ion-social-twitter icon-twitter"></i>
-                Twitter
+                 Twitter
               </div>
-
-              <input className="social-checkbox"   type="checkbox" /> <span className="small-text">Tweet Vyllage updates on my timeline</span>
+               <input type="hidden" name="_csrf" value={metatoken} />
+              </form>
+           </FeatureToggle>
           </div>
+          { /*
+         
 
 
           <div className="content">
@@ -116,6 +132,10 @@ var Permission = React.createClass({
   
   disconnectGoogle : function(){
       Actions.makeGoogleDisconnect();
+  },
+  
+  disconnectTwitter : function(){
+      Actions.makeTwitterDisconnect();
   }
 
 

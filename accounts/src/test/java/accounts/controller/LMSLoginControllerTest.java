@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import oauth.utilities.LMSConstants;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,9 +39,12 @@ import accounts.service.LMSService;
 import accounts.service.SignInUtil;
 import accounts.service.UserService;
 
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class LMSLoginControllerTest {
 
 	private LMSLoginController lmsLoginController;
@@ -49,11 +55,11 @@ public class LMSLoginControllerTest {
 
 	private MockMvc springMvc;
 	@Autowired
-	WebApplicationContext wContext;
+	private WebApplicationContext wContext;
 	@Autowired
-	MockHttpSession mockSession;
+	private MockHttpSession mockSession;
 	@Autowired
-	MockHttpServletRequest request;
+	private MockHttpServletRequest request;
 
 	private static final String LTI_INSTANCE_GUID = "2c2d9edb89c64a6ca77ed459866925b1";
 	private static final String LTI_INSTANCE_TYPE = "Blackboard";
@@ -66,10 +72,14 @@ public class LMSLoginControllerTest {
 	private static final String LIS_PERSON_PREFIX_GIVEN = "Kunal";
 	private static final String LIS_PERSON_PREFIX_FAMILY = "Shankar";
 	private static final String LTI_USER_ROLES = "urn%3Alti%3Arole%3Aims%2Flis%2FLearner";
+	@SuppressWarnings("unused")
 	private static final String LTI_OUATH_NONCE = String.valueOf(System
 			.currentTimeMillis());
+	@SuppressWarnings("unused")
 	private static final String LTI_OUATH_SIGNATURE = "k2HzozMnUGRDpYzvO6W7RMg5CFM%3D";
+	@SuppressWarnings("unused")
 	private static final String LTI_OUATH_SIGNATURE_METHOD = "HMAC-SHA1";
+	@SuppressWarnings("unused")
 	private static final String LTI_OUATH_TIMESTAMP = time();
 
 	@BeforeClass
@@ -88,6 +98,12 @@ public class LMSLoginControllerTest {
 				.randomUUID().toString());
 	}
 
+	@After
+	public void after() {
+		RestAssuredMockMvc.reset();
+	}
+
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testLMSLogin() throws Exception {
 		assertNotNull(signInUtil);

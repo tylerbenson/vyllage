@@ -10,13 +10,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import lombok.ToString;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -39,7 +39,6 @@ import connections.model.AdviceRequestParameter;
 import connections.model.DocumentLinkRequest;
 import connections.model.NotRegisteredUser;
 import connections.model.UserFilterResponse;
-import connections.repository.ElementNotFoundException;
 import email.EmailContext;
 import email.EmailHTMLBody;
 import email.EmailParameters;
@@ -51,15 +50,15 @@ public class AdviceService {
 	private final Logger logger = Logger.getLogger(AdviceService.class
 			.getName());
 
-	@Autowired
-	private Environment environment;
+	private final Environment environment;
 
-	@Autowired
-	private RestTemplate restTemplate;
+	private final RestTemplate restTemplate;
 
-	@Autowired
-	@Qualifier(value = "connections.MailService")
-	private MailService mailService;
+	private final MailService mailService;
+
+	private final ExecutorService executorService;
+
+	private final DocumentService documentService;
 
 	@Value("${accounts.host:localhost}")
 	private final String ACCOUNTS_HOST = null;
@@ -67,15 +66,20 @@ public class AdviceService {
 	@Value("${accounts.port:8080}")
 	private final Integer ACCOUNTS_PORT = null;
 
-	@Value("${documents.host:localhost}")
-	private final String DOCUMENTS_HOST = null;
+	@Inject
+	public AdviceService(
+			Environment environment,
+			RestTemplate restTemplate,
+			@Qualifier(value = "connections.DocumentService") DocumentService documentService,
+			@Qualifier(value = "connections.MailService") MailService mailService,
+			@Qualifier(value = "connections.ExecutorService") ExecutorService executorService) {
+		this.environment = environment;
+		this.restTemplate = restTemplate;
+		this.documentService = documentService;
+		this.mailService = mailService;
+		this.executorService = executorService;
 
-	@Value("${documents.port:8080}")
-	private final Integer DOCUMENTS_PORT = null;
-
-	@Autowired
-	@Qualifier(value = "connections.ExecutorService")
-	private ExecutorService executorService;
+	}
 
 	public UserFilterResponse getUsers(HttpServletRequest request,
 			Long documentId, Long userId, List<Long> excludeIds,
@@ -188,18 +192,21 @@ public class AdviceService {
 		// generate document links
 		if (!adviceRequest.getRegisteredUsersContactData().isEmpty()) {
 			Map<String, String> linksForRegisteredUsers = generateLinksForRegisteredUsers(
-					request, adviceRequest.getUserId(), adviceRequest);
+					request, adviceRequest);
 
 			// prepare emails
 			List<Email> mailsForRegisteredUsers = prepareMailsForRegisteredUsers(
 					linksForRegisteredUsers, noHTMLmsg, adviceRequest);
 
 			sendAsyncEmail(from, fromUser, subject, mailsForRegisteredUsers);
+
+			createFeedbackNotification(request, loggedInUser.getUserId(),
+					adviceRequest);
 		}
 
 		if (!adviceRequest.getNotRegisteredUsers().isEmpty()) {
 			Map<String, String> linksForNonRegisteredUsers = generateLinksForNonRegisteredUsers(
-					request, adviceRequest.getUserId(), adviceRequest);
+					request, adviceRequest);
 
 			List<Email> prepareMailsForNonRegisteredUsers = prepareMailsForNonRegisteredUsers(
 					linksForNonRegisteredUsers, noHTMLmsg, adviceRequest);
@@ -210,32 +217,56 @@ public class AdviceService {
 		}
 	}
 
-	private void sendAsyncEmail(final String from, final String fromUser,
-			final String subject,
-			final List<Email> prepareMailsForNonRegisteredUsers) {
+	/**
+	 * Creates a notification saying that the user requested feedback.
+	 * 
+	 * @param request
+	 * @param requestingUserId
+	 * @param adviceRequest
+	 */
+	protected void createFeedbackNotification(final HttpServletRequest request,
+			final Long requestingUserId,
+			final AdviceRequestParameter adviceRequest) {
 
-		executorService.execute(new Runnable() {
+		executorService.execute(() -> {
 
-			@Override
-			public void run() {
-				for (Email email : prepareMailsForNonRegisteredUsers) {
-					EmailParameters parameters = new EmailParameters(from,
-							fromUser, subject, email.getTo());
-					try {
-						mailService.sendEmail(parameters, email.getBody());
-					} catch (EmailException e) {
-						logger.severe(ExceptionUtils.getStackTrace(e));
-						NewRelic.noticeError(e);
-					}
-				}
+			try {
 
+				for (AccountContact accountContact : adviceRequest
+						.getRegisteredUsersContactData())
+					documentService.notifyFeedbackRequest(request,
+							requestingUserId, accountContact.getUserId(),
+							adviceRequest.getDocumentId());
+
+			} catch (Exception e1) {
+				logger.severe(ExceptionUtils.getStackTrace(e1));
+				NewRelic.noticeError(e1);
 			}
 		});
 	}
 
+	protected void sendAsyncEmail(final String from, final String fromUser,
+			final String subject,
+			final List<Email> prepareMailsForNonRegisteredUsers) {
+
+		executorService.execute(() -> {
+
+			for (Email email : prepareMailsForNonRegisteredUsers) {
+				EmailParameters parameters = new EmailParameters(from,
+						fromUser, subject, email.getTo());
+				try {
+					mailService.sendEmail(parameters, email.getBody());
+				} catch (EmailException e) {
+					logger.severe(ExceptionUtils.getStackTrace(e));
+					NewRelic.noticeError(e);
+				}
+			}
+
+		});
+	}
+
 	protected Map<String, String> generateLinksForRegisteredUsers(
-			HttpServletRequest request, Long userId,
-			AdviceRequestParameter adviceRequest) {
+			HttpServletRequest request, AdviceRequestParameter adviceRequest) {
 
 		List<DocumentLinkRequest> requestBody = new ArrayList<>();
 
@@ -274,8 +305,7 @@ public class AdviceService {
 	}
 
 	protected Map<String, String> generateLinksForNonRegisteredUsers(
-			HttpServletRequest request, Long userId,
-			AdviceRequestParameter adviceRequest) {
+			HttpServletRequest request, AdviceRequestParameter adviceRequest) {
 
 		List<DocumentLinkRequest> requestBody = new ArrayList<>();
 
@@ -418,39 +448,6 @@ public class AdviceService {
 
 		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
 		return entity;
-	}
-
-	/**
-	 * Returns the user document Id.
-	 *
-	 * @param request
-	 *
-	 * @param userId
-	 * @return
-	 * @throws ElementNotFoundException
-	 */
-	public Long getUserDocumentId(HttpServletRequest request, Long userId)
-			throws ElementNotFoundException {
-
-		HttpEntity<Object> entity = createHeader(request);
-
-		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
-
-		builder.scheme("http").port(DOCUMENTS_PORT).host(DOCUMENTS_HOST)
-				.path("/document/user").queryParam("userId", userId);
-
-		@SuppressWarnings("unchecked")
-		List<Integer> responseBody = restTemplate.exchange(
-				builder.build().toUriString(), HttpMethod.GET, entity,
-				List.class).getBody();
-
-		if (responseBody.isEmpty())
-			throw new ElementNotFoundException(
-					"No documents found for user with id '" + userId + "'");
-
-		// TODO: currently the user only has one document, this might change in
-		// the future but for now we return the first document id he has
-		return new Long(responseBody.get(0));
 	}
 
 	@ToString

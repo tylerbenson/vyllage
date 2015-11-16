@@ -37,6 +37,7 @@ module.exports = Reflux.createStore({
     }
 
     this.resume = {
+      status: null,
       ownDocumentId: this.ownDocumentId !== undefined ? this.ownDocumentId : this.documentId,
       documentId: this.documentId,
       header: {
@@ -358,11 +359,10 @@ module.exports = Reflux.createStore({
                 .parse(endpoints.resumeComments)
                 .expand({
                   documentId: this.documentId,
-                  sectionId: data.sectionId
+                  sectionId: data.sectionId,
+                  sectionVersion: data.sectionVersion
                 });
-    data = assign({}, data, {
-      sectionVersion: 1
-    })
+    data = assign({}, data);
     request
       .post(url)
       .set(this.tokenHeader, this.tokenValue)
@@ -575,6 +575,10 @@ module.exports = Reflux.createStore({
   },
   onTogglePrintModal: function(flag) {
     this.resume.isPrintModalOpen = flag;
+    this.trigger(this.resume);
+  },
+  onSetStatus(status) {
+    this.resume.status = status;
     this.trigger(this.resume);
   },
   getInitialState: function () {

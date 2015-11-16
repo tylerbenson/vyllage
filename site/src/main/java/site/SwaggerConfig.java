@@ -27,8 +27,10 @@ public class SwaggerConfig {
 				.select().paths(documentsPaths()).build().apiInfo(apiInfo());
 	}
 
+	@SuppressWarnings("unchecked")
 	protected Predicate<String> documentsPaths() {
-		return or(regex("/resume/.*"), regex("/document/.*"));
+		return or(regex("/resume/.*"), regex("/document/.*"),
+				regex("/reference/.*"), regex("/notification/.*"));
 	}
 
 	@Bean

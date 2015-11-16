@@ -21,6 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.http.entity.ContentType;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,19 +50,18 @@ import user.common.web.AccountContact;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 
 import documents.ApplicationTestConfig;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
-import documents.model.UserNotification;
 import documents.model.constants.DocumentTypeEnum;
 import documents.model.constants.SectionType;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
 import documents.repository.CommentRepository;
 import documents.repository.ElementNotFoundException;
-import documents.repository.UserNotificationRepository;
 import documents.services.DocumentService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -78,9 +78,6 @@ public class ResumeControllerIntegTest {
 	@Inject
 	private DocumentService documentService;
 
-	@Inject
-	private UserNotificationRepository userNotificationRepository;
-
 	// this is a mock from the mock beans configuration
 	@Inject
 	private RestTemplate restTemplate;
@@ -96,6 +93,11 @@ public class ResumeControllerIntegTest {
 	@Before
 	public void setUp() throws Exception {
 		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
+	}
+
+	@After
+	public void after() {
+		RestAssuredMockMvc.reset();
 	}
 
 	@Test
@@ -409,7 +411,7 @@ public class ResumeControllerIntegTest {
 								+ "/comment")).andExpect(status().isOk())
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 		@SuppressWarnings("unchecked")
 		List<Comment> list = mapper.readValue(mvcResult.getResponse()
@@ -443,7 +445,7 @@ public class ResumeControllerIntegTest {
 								+ "/comment")).andExpect(status().isOk())
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 		@SuppressWarnings("unchecked")
 		List<Comment> list = mapper.readValue(mvcResult.getResponse()
@@ -588,10 +590,6 @@ public class ResumeControllerIntegTest {
 		User user = generateAndLoginUser();
 		when(user.getUserId()).thenReturn(userId);
 
-		// we cannot access the other projects so we don't send any
-		// notifications, just save one instead
-		userNotificationRepository.save(new UserNotification(userId));
-
 		MvcResult mvcResult = mockMvc
 				.perform(
 						post(
@@ -719,7 +717,7 @@ public class ResumeControllerIntegTest {
 		List<Comment> list = mapper.readValue(mvcAllComments.getResponse()
 				.getContentAsString(), List.class);
 
-		assertFalse(list == null);
+		assertNotNull(list);
 		assertFalse(list.isEmpty());
 
 		// this doesn't work, the list is actually a LinkedHashMap
@@ -812,7 +810,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType("application/pdf"))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -830,7 +828,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType("application/pdf"))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -845,7 +843,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -862,7 +860,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -879,7 +877,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 

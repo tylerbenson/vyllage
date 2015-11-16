@@ -13,6 +13,8 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.google.api.Google;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
@@ -189,7 +192,7 @@ public class SocialLoginController {
 		// user that will have his permissions created
 		doclink.setUserId(newUser.getUserId());
 
-		this.saveUserAvatarSetting(newUser);
+		this.saveUserAvatarSetting(newUser, webRequest);
 
 		// login
 		signInUtil.signIn(request, newUser, registerForm.getPassword());
@@ -203,11 +206,25 @@ public class SocialLoginController {
 	 * 
 	 * @param userImageUrl
 	 * @param user
+	 * @param webRequest
 	 */
-	protected void saveUserAvatarSetting(User user) {
+	protected void saveUserAvatarSetting(User user, RequestAttributes webRequest) {
 
-		accountSettingsService.setAccountSetting(user,
-				AccountSetting.createFacebookAvatarSetting(user.getUserId()));
+		Connection<?> connection = providerSignInUtils
+				.getConnectionFromSession(webRequest);
+
+		if (connection.getApi() instanceof Facebook)
+			accountSettingsService.setAccountSetting(user, AccountSetting
+					.createFacebookAvatarSetting(user.getUserId()));
+
+		if (connection.getApi() instanceof Google)
+			accountSettingsService.setAccountSetting(user,
+					AccountSetting.createGoogleAvatarSetting(user.getUserId()));
+
+		// if (connection.getApi() instanceof Twitter)
+		// accountSettingsService.setAccountSetting(user, AccountSetting
+		// .createTwitterAvatarSetting(user.getUserId()));
+
 	}
 
 	/**

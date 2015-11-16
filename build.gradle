@@ -9,7 +9,7 @@ ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site
 ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') , project(':oauth-provider')  ]
 ext.dbProjects = [ project(':accounts'), project(':documents'), project(':togglz') ]
 
-wrapper.gradleVersion = '2.5'
+wrapper.gradleVersion = '2.8'
 
 buildscript {
     ext {
@@ -244,6 +244,11 @@ configure(javaProjects) {
 
             force "org.aspectj:aspectjrt:$aspectjrt"
             force "org.aspectj:aspectjweaver:$aspectjrt"
+
+            //from Accounts, spring-mock-mvc:2.7.0, conflicts with httpclient 4.3.3
+            force "org.apache.httpcomponents:httpclient:4.5.1"
+            //from Accounts, spring-mock-mvc:2.7.0, conflicts with commons-codec 1.6
+            force "commons-codec:commons-codec:1.9"
 
         }
     }

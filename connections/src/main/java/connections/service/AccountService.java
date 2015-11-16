@@ -74,6 +74,21 @@ public class AccountService {
 		return body;
 	}
 
+	public boolean isEmailVerified(HttpServletRequest request, Long userId) {
+
+		HttpEntity<Object> entity = createHeader(request);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
+				.path("/account/" + userId + "/email-confirmed");
+
+		boolean body = restTemplate.exchange(builder.build().toUriString(),
+				HttpMethod.GET, entity, Boolean.class).getBody();
+
+		return body;
+	}
+
 	protected HttpEntity<Object> createHeader(HttpServletRequest request) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Cookie", request.getHeader("Cookie"));
@@ -82,4 +97,5 @@ public class AccountService {
 		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
 		return entity;
 	}
+
 }
