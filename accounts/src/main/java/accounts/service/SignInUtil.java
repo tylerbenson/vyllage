@@ -1,8 +1,8 @@
 package accounts.service;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,11 +17,16 @@ import accounts.repository.UserNotFoundException;
 @Service
 public class SignInUtil {
 
-	@Autowired
 	private UserService userService;
 
-	@Autowired
 	private AuthenticationManager authenticationManager;
+
+	@Inject
+	public SignInUtil(UserService userService,
+			AuthenticationManager authenticationManager) {
+		this.userService = userService;
+		this.authenticationManager = authenticationManager;
+	}
 
 	/**
 	 * Looks up the user and logs him in.
@@ -57,7 +62,6 @@ public class SignInUtil {
 	 * Signs in the user.
 	 *
 	 * @param request
-	 *
 	 * @param user
 	 * @param password
 	 */

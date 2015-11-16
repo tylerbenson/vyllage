@@ -20,6 +20,7 @@ module.exports = Reflux.createStore({
     this.activeSettingsType = 'profile';
     this.facebook;
     this.google;
+    this.twitter;
   },
   onGetSettings: function () {
     request
@@ -27,6 +28,7 @@ module.exports = Reflux.createStore({
     .set('Accept', 'application/json')
     .end(function (err, res) {
       this.settings = res.body;
+      
       var fbIndex = findindex(this.settings, {name: 'facebook_connected'});
       if( fbIndex > -1 ){
         this.facebook = this.settings[fbIndex].value == "true" ? true : false;
@@ -36,7 +38,12 @@ module.exports = Reflux.createStore({
       if( ggIndex > -1 ){
         this.google = this.settings[ggIndex].value == "true" ? true : false;
       }
-
+      
+      var twIndex = findindex(this.settings, {name: 'twitter_connected'});
+      if( twIndex > -1 ){
+        this.twitter = this.settings[twIndex].value == "true" ? true : false;
+      }
+      
       this.update();
     }.bind(this));
   },
@@ -109,14 +116,23 @@ module.exports = Reflux.createStore({
     }.bind(this));
   },
   onMakeGoogleDisconnect : function(){
-	    request
-	    .del('/disconnect/google')
-	    .set(this.tokenHeader, this.tokenValue)
-	    .end(function (err, res) {
-	      this.google = res.body;
-	      this.update();
-	    }.bind(this));
-	  },
+	request
+	.del('/disconnect/google')
+	.set(this.tokenHeader, this.tokenValue)
+	.end(function (err, res) {
+	  this.google = res.body;
+	  this.update();
+	}.bind(this));
+  },
+  onMakeTwitterDisconnect : function(){
+	request
+	.del('/disconnect/twitter')
+	.set(this.tokenHeader, this.tokenValue)
+	.end(function (err, res) {
+	  this.twitter = res.body;
+	  this.update();
+	}.bind(this));
+  },
   onDoPing: function(){
     request
       .get('/account/ping')
@@ -131,16 +147,17 @@ module.exports = Reflux.createStore({
       settings: this.settings,
       activeSettingsType: this.activeSettingsType,
       facebook : this.facebook,
-      google : this.google
-
+      google : this.google,
+      twitter : this.twitter
     });
   },
   getInitialState: function () {
     return {
       settings: this.settings,
-      activeSettingsType: this.activeSettingsType ,
+      activeSettingsType: this.activeSettingsType,
       facebook : this.facebook,
-      google : this.google
+      google : this.google,
+      twitter : this.twitter
     } ;
   }
 })

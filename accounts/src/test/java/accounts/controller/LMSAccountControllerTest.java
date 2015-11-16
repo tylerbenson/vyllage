@@ -20,12 +20,15 @@ import javax.inject.Inject;
 
 import oauth.utilities.LMSConstants;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,15 +43,16 @@ import accounts.model.account.settings.AccountSetting;
 import accounts.service.AccountSettingsService;
 import accounts.service.LMSService;
 import accounts.service.RegistrationEmailService;
-import accounts.service.SignInUtil;
 import accounts.service.UserService;
+
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class LMSAccountControllerTest {
 	private LMSAccountController lmsAccountcontoller;
-	private SignInUtil signInUtil = mock(SignInUtil.class);
 	private LMSService lmsService = mock(LMSService.class);
 
 	private MockMvc springMvc;
@@ -96,14 +100,18 @@ public class LMSAccountControllerTest {
 	@Before
 	public void setUp() {
 		springMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
-		lmsAccountcontoller = new LMSAccountController(signInUtil, lmsService,
+		lmsAccountcontoller = new LMSAccountController(lmsService,
 				accountSettingsService, registrationEmailService);
+	}
+
+	@After
+	public void after() {
+		RestAssuredMockMvc.reset();
 	}
 
 	@Test
 	public void testLTIAuthentication() throws Exception {
 
-		assertNotNull(signInUtil);
 		assertNotNull(lmsService);
 		assertNotNull(wContext);
 		assertNotNull(session);
