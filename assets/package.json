@@ -97,7 +97,7 @@
   "license": "Commercial",
   "private": true,
   "engines": {
-    "node": "0.12.x",
-    "npm": "2.12.x"
+    "node": "4.2.1",
+    "npm": "2.14.x"
   }
 }
