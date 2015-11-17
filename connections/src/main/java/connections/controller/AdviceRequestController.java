@@ -26,7 +26,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.web.UserInfo;
-import util.web.account.AccountUrlConstants;
+import util.web.constants.AccountUrlConstants;
+import util.web.constants.ConnectionsUrlConstants;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
 import connections.model.AdviceRequestParameter;
@@ -97,7 +98,7 @@ public class AdviceRequestController {
 
 		if (accountService.canIRequestFeedback(request, user)) {
 			model.addAttribute("userInfo", userInfo(request, user));
-			return "getFeedback";
+			return ConnectionsUrlConstants.GET_FEEDBACK;
 		}
 
 		return "redirect:/account/email/"
