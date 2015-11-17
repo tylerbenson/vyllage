@@ -35,14 +35,14 @@ import documents.services.notification.NotificationService;
 // @RestController doesn't work :(
 @Controller
 @RequestMapping("notification")
-public class NotificationsController {
+public class NotificationController {
 
 	private final NotificationService notificationService;
 
 	private final AccountService accountService;
 
 	@Inject
-	public NotificationsController(NotificationService notificationService,
+	public NotificationController(NotificationService notificationService,
 			AccountService accountService) {
 		this.notificationService = notificationService;
 		this.accountService = accountService;
