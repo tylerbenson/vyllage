@@ -26,7 +26,7 @@ var Banner = React.createClass({
   getInitialState: function () {
     return {
       editMode: false,
-      emailVerfied : false,
+      emailVerified : false,
       lastScroll: {
         scrollY: window.scrollY,
         timestamp: new Date(),
