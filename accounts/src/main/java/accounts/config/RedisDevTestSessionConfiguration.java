@@ -13,7 +13,6 @@ import redis.embedded.RedisServer;
 import util.profiles.Profiles;
 
 @Configuration
-// @EnableRedisHttpSession
 @Profile({ Profiles.DEV, Profiles.TEST })
 public class RedisDevTestSessionConfiguration {
 
