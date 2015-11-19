@@ -16,7 +16,7 @@ public class ResumeAccessRequestNotification extends AbstractNotification {
 
 	public ResumeAccessRequestNotification(
 			ResumeAccessRequestNotificationRecord record) {
-		super(record.getUserId());
+		super(record.getUserId(), record.getDateCreated().toLocalDateTime());
 		this.resumeRequestUserId = record.getResumeRequestUserId();
 	}
 

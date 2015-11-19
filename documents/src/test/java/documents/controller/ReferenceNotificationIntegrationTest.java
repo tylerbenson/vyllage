@@ -64,7 +64,8 @@ public class ReferenceNotificationIntegrationTest {
 
 	private MockMvc mockMvc;
 
-	private ObjectMapper mapper = new ObjectMapper();
+	@Inject
+	private ObjectMapper mapper;
 
 	@Inject
 	private WebApplicationContext wContext;
@@ -120,7 +121,6 @@ public class ReferenceNotificationIntegrationTest {
 		when(user2.getUserId()).thenReturn(otherUserId);
 
 		// load reference requests
-
 		// for account contact in the other project
 		mockRestTemplate();
 
