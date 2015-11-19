@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 
 import lombok.NonNull;
 
@@ -26,6 +27,7 @@ import documents.model.notifications.ResumeAccessRequestNotification;
 import documents.model.notifications.WebCommentNotification;
 import documents.model.notifications.WebFeedbackRequestNotification;
 import documents.model.notifications.WebReferenceRequestNotification;
+import documents.model.notifications.WebResumeAccessRequestNotification;
 import documents.repository.CommentNotificationRepository;
 import documents.repository.FeedbackRequestNotificationRepository;
 import documents.repository.ReferenceRequestNotificationRepository;
@@ -77,7 +79,7 @@ public class NotificationService {
 	 * @param userId
 	 * @return
 	 */
-	public boolean needsToSendEmailNotification(Long userId) {
+	public boolean needsToSendEmailNotification(@NotNull Long userId) {
 		// check that we have not sent a message today
 		List<CommentNotification> notifications = getCommentNotifications(userId);
 
@@ -102,8 +104,8 @@ public class NotificationService {
 	 * @param comment
 	 *            the comment
 	 */
-	public void sendEmailNewCommentNotification(User user,
-			AccountContact accountContact, Comment comment) {
+	public void sendEmailNewCommentNotification(@NotNull User user,
+			@NotNull AccountContact accountContact, @NotNull Comment comment) {
 
 		try {
 			logger.info("Sending notification email.");
@@ -117,8 +119,8 @@ public class NotificationService {
 
 	}
 
-	protected EmailBuilder generateEmail(User user,
-			AccountContact accountContact, Comment comment) {
+	protected EmailBuilder generateEmail(@NotNull User user,
+			@NotNull AccountContact accountContact, @NotNull Comment comment) {
 		return emailBuilder
 				.from(environment.getProperty("email.from",
 						"no-reply@vyllage.com"))
@@ -204,10 +206,11 @@ public class NotificationService {
 				webReferenceRequestNotification.getOtherUserId());
 	}
 
-	public void deleteAll(Long userId) {
+	public void deleteAll(@NotNull Long userId) {
 		commentNotificationRepository.deleteAll(userId);
 		feedbackRequestNotificationRepository.deleteAll(userId);
 		referenceRequestNotificationRepository.deleteAll(userId);
+		resumeAccessRequestNotificationRepository.deleteAll(userId);
 	}
 
 	/**
@@ -218,6 +221,18 @@ public class NotificationService {
 	public void save(
 			@NonNull ResumeAccessRequestNotification resumeAccessRequest) {
 		resumeAccessRequestNotificationRepository.save(resumeAccessRequest);
+	}
+
+	public List<ResumeAccessRequestNotification> getResumeAccessRequestNotifications(
+			@NotNull Long userId) {
+		return resumeAccessRequestNotificationRepository.get(userId);
+	}
+
+	public void delete(
+			@NotNull WebResumeAccessRequestNotification webResumeAccessRequestNotification) {
+		resumeAccessRequestNotificationRepository.delete(
+				webResumeAccessRequestNotification.getUserId(),
+				webResumeAccessRequestNotification.getOtherUserId());
 	}
 
 }
