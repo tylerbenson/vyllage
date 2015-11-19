@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +69,9 @@ public class RequestResumeAccessController {
 			@RequestBody WebResumeAccessRequestNotification webResumeAccessRequestNotification,
 			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
+		Assert.isTrue(user.getUserId().equals(
+				webResumeAccessRequestNotification.getUserId()));
+
 		// get own document
 		Document document = documentService.getDocumentByUser(user.getUserId());
 
@@ -91,6 +95,10 @@ public class RequestResumeAccessController {
 	public void rejectResumeAccess(
 			@RequestBody WebResumeAccessRequestNotification webResumeAccessRequestNotification,
 			@AuthenticationPrincipal User user) throws ElementNotFoundException {
+
+		Assert.isTrue(user.getUserId().equals(
+				webResumeAccessRequestNotification.getUserId()));
+
 		notificationService.delete(webResumeAccessRequestNotification);
 	}
 }
