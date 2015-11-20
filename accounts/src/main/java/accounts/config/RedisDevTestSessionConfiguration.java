@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 
-import redis.clients.jedis.Protocol;
 import redis.embedded.RedisServer;
 import util.profiles.Profiles;
 
@@ -40,7 +39,7 @@ public class RedisDevTestSessionConfiguration {
 
 		@Override
 		public void afterPropertiesSet() throws Exception {
-			redisServer = new RedisServer(Protocol.DEFAULT_PORT);
+			redisServer = new RedisServer(6378);
 			redisServer.start();
 		}
 
