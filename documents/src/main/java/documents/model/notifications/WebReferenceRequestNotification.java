@@ -1,5 +1,8 @@
 package documents.model.notifications;
 
+import lombok.ToString;
+
+@ToString
 public class WebReferenceRequestNotification extends AbstractWebNotification {
 
 	public WebReferenceRequestNotification() {
