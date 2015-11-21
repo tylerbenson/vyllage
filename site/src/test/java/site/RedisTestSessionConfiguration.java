@@ -18,7 +18,7 @@ public class RedisTestSessionConfiguration {
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
 		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-		jedisConnectionFactory.setPort(6378);
+		jedisConnectionFactory.setPort(6377);
 		return jedisConnectionFactory;
 	}
 
@@ -41,7 +41,7 @@ public class RedisTestSessionConfiguration {
 
 		@Override
 		public void afterPropertiesSet() throws Exception {
-			redisServer = new RedisServer(6378);
+			redisServer = new RedisServer(6377);
 			redisServer.start();
 		}
 
