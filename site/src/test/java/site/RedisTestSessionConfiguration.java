@@ -17,7 +17,9 @@ public class RedisTestSessionConfiguration {
 
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		return new JedisConnectionFactory();
+		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
+		jedisConnectionFactory.setPort(6378);
+		return jedisConnectionFactory;
 	}
 
 	@Bean
