@@ -96,7 +96,7 @@ input[type="reset"] {
       background: darken($google-color, 3%);
     }
   }
-  
+
   &.twitter {
     @extend .normal-caps;
     background: $twitter-color;
@@ -169,6 +169,43 @@ input[type="reset"] {
 
       i,span {
         color: $secondary-color;
+      }
+    }
+  }
+
+  &.alternate {
+    background: $alternate-color-1;
+
+    &:hover,&:focus {
+      background: lighten($alternate-color-1, 8%);
+    }
+
+    &:hover,&:focus {
+      background: darken($alternate-color-1, 3%);
+    }
+
+    &.inverted {
+      background: transparent;
+      color: $alternate-color-1;
+      border-color: $alternate-color-1;
+
+      &:hover,&:focus {
+        background: $alternate-color-1;
+        color: $inverted-text-color;
+
+        i,span {
+          color: $inverted-text-color;
+        }
+      }
+
+      &:active {
+        background: darken($alternate-color-1, 3%);
+        border-color: darken($alternate-color-1, 3%);
+        color: $inverted-text-color !important;
+      }
+
+      i,span {
+        color: $alternate-color-1;
       }
     }
   }
