@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.web.UserInfo;
+import util.web.constants.DocumentUrlConstants;
 import documents.model.AccountNames;
 import documents.model.Document;
 import documents.model.constants.DocumentTypeEnum;
@@ -158,7 +159,7 @@ public class DocumentController {
 			@AuthenticationPrincipal User user, Model model) {
 
 		model.addAttribute("userInfo", userInfo(request, user));
-		return "export";
+		return DocumentUrlConstants.RESUME_EXPORT;
 	}
 
 	@RequestMapping(value = "user/{userId}/modified-date", method = RequestMethod.GET, produces = "application/json")

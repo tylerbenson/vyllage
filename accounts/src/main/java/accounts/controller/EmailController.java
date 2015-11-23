@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import user.common.User;
-import util.web.account.AccountUrlConstants;
+import util.web.constants.AccountUrlConstants;
 import accounts.model.Email;
 import accounts.model.account.ConfirmEmailLink;
 import accounts.repository.EmailRepository;

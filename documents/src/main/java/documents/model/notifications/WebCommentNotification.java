@@ -1,5 +1,8 @@
 package documents.model.notifications;
 
+import lombok.ToString;
+
+@ToString
 public class WebCommentNotification extends AbstractWebNotification {
 
 	private Long commentId;
