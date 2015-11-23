@@ -111,13 +111,6 @@ footer {
         box-sizing: border-box;
         padding: 1.25em 1em;
       }
-      @media (max-width: $large-portrait) {
-        .image {
-          & > div {
-
-          }
-        }
-      }
     }
 
     &.second {
@@ -241,5 +234,46 @@ label {
   .actions {
     margin-top: 1em;
     text-align: right;
+  }
+}
+
+@media (max-width: $large-portrait) {
+  .overview {
+    section {
+      padding: 2em 3em;
+
+      &.second {
+        .text {
+          @include unshift();
+        }
+        .planes {
+          background-position: center;
+          height: 15em;
+        }
+      }
+    }
+
+    .text,
+    .image {
+      @include column(1);
+      text-align: center;
+    }
+
+    .text {
+      float: none;
+      margin: auto;
+      max-width: 25em;
+    }
+
+    .image {
+      & > div {
+        position: static;
+        width: 100%;
+        height: 15em;
+      }
+      .resume {
+        margin-bottom: -3em;
+      }
+    }
   }
 }
