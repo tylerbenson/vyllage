@@ -16,12 +16,15 @@ var RegisterButton = React.createClass({
     this.setState({isOpen: true});
   },
   render: function () {
+    var token = document.getElementById("meta_token").content || "";
+
     return (
       <div style={{display: 'inline-block'}}>
         <button className="landing" onClick={this.openModal}>Join Us Now</button>
         <Modal isOpen={this.state.isOpen} close={this.closeModal}>
           <div className="content">
           <form action="/register" method="post">
+            <input type="hidden" name="_csrf" value={token} />
             <div className="content">
               <h1 className="centered">Register</h1>
               <p className="centered">Fill out the fields below to proceed. </p>

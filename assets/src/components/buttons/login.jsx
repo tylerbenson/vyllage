@@ -16,6 +16,7 @@ var LoginButton = React.createClass({
     this.setState({isOpen: true});
   },
   render: function () {
+    var token = document.getElementById("meta_token").content || "";
 
     return (
       <div style={{display: 'inline-block'}}>
@@ -23,6 +24,7 @@ var LoginButton = React.createClass({
         <Modal isOpen={this.state.isOpen} close={this.closeModal}>
           <div className="content">
           <form action="/login" method="post">
+            <input type="hidden" name="_csrf" value={token} />
             <h1 className="centered">Sign In</h1>
             <p className="centered">Welcome back to Vyllage!</p>
             <label>E-mail</label>
