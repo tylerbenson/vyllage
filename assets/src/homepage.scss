@@ -10,7 +10,8 @@
 }
 
 .container {
-  background: url(../images/bg.png);
+  background-color: $alternate-color-2;
+  background-image: url(../images/bg.png);
   background-size: cover;
 }
 

@@ -125,6 +125,22 @@
       color: $text-color;
     }
 
+    a {
+      color: $primary-color;
+
+      &.forgot {
+        display: inline-block;
+        font-size: 0.8em;
+        margin: 0.75em 0;
+        text-decoration: none;
+        text-transform: uppercase;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
     .subheading {
       margin-bottom: 1em;
       margin-top: -0.25em;
