@@ -56,14 +56,11 @@ task npmBuild(dependsOn: npmInstall, type:Exec) {
     commandLine 'npm', 'run', 'build'
 }
 
-task checkPublic (dependsOn: npmBuild, type:Exec) {
-
-    doFirst {
-        println("Checking if /public exists.")
-        def folder = new File( 'assets/public' )
-        if(!folder.exists())
-            throw new IllegalArgumentException("Directory /public not found.")
-    }
+task checkPublic (dependsOn: npmBuild, type:Exec) << {
+    println("Checking if /public exists.")
+    def folder = new File( 'assets/public' )
+    if(!folder.exists())
+        throw new IllegalArgumentException("Directory /public not found.")
 }
 
 checkPublic.shouldRunAfter npmBuild
