@@ -3,6 +3,8 @@ package accounts.service.contactSuggestion;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,12 +18,16 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.web.client.RestTemplate;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
@@ -41,6 +47,10 @@ public class UserContactSuggestionServiceTest {
 	private static final boolean FORCE_PASSWORD_CHANGE = false;
 
 	private static final boolean SEND_CONFIRMATION_EMAIL = false;
+
+	// mock
+	@Inject
+	private RestTemplate restTemplate;
 
 	@Inject
 	private UserContactSuggestionService userContactSuggestionService;
@@ -145,6 +155,8 @@ public class UserContactSuggestionServiceTest {
 		User student = createTestUser("student-test", RolesEnum.STUDENT);
 		createTestUser("academic-test", RolesEnum.ACADEMIC_ADVISOR);
 
+		restTemplateHasGraduatedMock(false);
+
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);
 
@@ -168,6 +180,8 @@ public class UserContactSuggestionServiceTest {
 		String userName = "academic-test";
 
 		createTestUser(userName, RolesEnum.ACADEMIC_ADVISOR);
+
+		restTemplateHasGraduatedMock(false);
 
 		Map<String, String> filters = new HashMap<>();
 		filters.put("email", userName);
@@ -220,6 +234,29 @@ public class UserContactSuggestionServiceTest {
 		AccountSetting setting = new AccountSetting(null, student.getUserId(),
 				"graduationDate", "Aug 2015", Privacy.PUBLIC.name());
 		accountSettingRepository.set(setting);
+
+		List<User> suggestions = userContactSuggestionService.getSuggestions(
+				student, null, 5);
+
+		Predicate<GrantedAuthority> isCareerAdvisor = a -> a.getAuthority()
+				.contains(RolesEnum.CAREER_ADVISOR.name());
+
+		assertNotNull("No users found.", suggestions);
+		assertFalse("No users found.", suggestions.isEmpty());
+		assertTrue(
+				"No Career Advisor found.",
+				suggestions.stream().anyMatch(
+						u -> u.getAuthorities().stream()
+								.anyMatch(isCareerAdvisor)));
+
+	}
+
+	@Test
+	public void studentNextToGraduationDateWithDateDeterminedByServiceTest() {
+		User student = createTestUser("student-test", RolesEnum.STUDENT);
+		createTestUser("career-test", RolesEnum.CAREER_ADVISOR);
+
+		restTemplateHasGraduatedMock(true);
 
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);
@@ -340,6 +377,8 @@ public class UserContactSuggestionServiceTest {
 		User student = createTestUser("aStudent", RolesEnum.STUDENT);
 		createTestUser("advisor-test2", RolesEnum.ADVISOR, false);
 
+		restTemplateHasGraduatedMock(false);
+
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);
 
@@ -413,6 +452,19 @@ public class UserContactSuggestionServiceTest {
 		User loadedUser = userDetailRepository.loadUserByUsername(userName);
 
 		return loadedUser;
+	}
+
+	protected void restTemplateHasGraduatedMock(boolean hasGraduated) {
+		@SuppressWarnings("unchecked")
+		ResponseEntity<Boolean> hasGraduatedResponse = mock(ResponseEntity.class);
+
+		when(
+				restTemplate.exchange(Mockito.anyString(),
+						Mockito.eq(HttpMethod.GET), Mockito.any(),
+						Mockito.eq(Boolean.class))).thenReturn(
+				hasGraduatedResponse);
+
+		when(hasGraduatedResponse.getBody()).thenReturn(hasGraduated);
 	}
 
 }
