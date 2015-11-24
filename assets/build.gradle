@@ -55,7 +55,20 @@ task npmBuild(dependsOn: npmInstall, type:Exec) {
     outputs.dir "public"
     commandLine 'npm', 'run', 'build'
 }
-jar.dependsOn npmBuild
+
+task checkPublic (dependsOn: npmBuild, type:Exec) {
+
+    doFirst {
+        println("Checking if /public exists.")
+        def folder = new File( 'assets/public' )
+        if(!folder.exists())
+            throw new IllegalArgumentException("Directory /public not found.")
+    }
+}
+
+checkPublic.shouldRunAfter npmBuild
+
+jar.dependsOn checkPublic
 npmBuild.shouldRunAfter clean
 npmBuild.dependsOn checkNPM
 npmBuild.onlyIf { "true".equals(System.getProperty('hasNPM')) }
