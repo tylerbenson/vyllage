@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.jooq.Condition;
@@ -23,20 +24,28 @@ import accounts.domain.tables.Users;
 import accounts.model.account.settings.AccountSetting;
 import accounts.repository.UserOrganizationRoleRepository;
 import accounts.service.AccountSettingsService;
+import accounts.service.DocumentService;
+import constants.DateConstants;
 
 public class CurrentStudentContactSelector extends AbstractContactSelector {
 
-	public static final int DAYS_NEAR_GRADUATION_DATE = 35;
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger
+			.getLogger(CurrentStudentContactSelector.class.getName());
 
 	private static final String MMM_YYYY_DD = "MMM yyyy dd";
 
-	private AccountSettingsService accountSettingsService;
+	private final AccountSettingsService accountSettingsService;
+
+	private final DocumentService documentService;
 
 	public CurrentStudentContactSelector(DSLContext sql,
 			UserOrganizationRoleRepository userOrganizationRoleRepository,
-			AccountSettingsService accountSettingsService) {
+			AccountSettingsService accountSettingsService,
+			DocumentService documentService) {
 		super(sql, userOrganizationRoleRepository);
 		this.accountSettingsService = accountSettingsService;
+		this.documentService = documentService;
 	}
 
 	@Override
@@ -111,8 +120,17 @@ public class CurrentStudentContactSelector extends AbstractContactSelector {
 						.getValue());
 			}
 
-			isWithinGraduationDateRange = LocalDate.now().isAfter(
-					graduationDate.minusDays(DAYS_NEAR_GRADUATION_DATE));
+			isWithinGraduationDateRange = LocalDate
+					.now()
+					.isAfter(
+							graduationDate
+									.minusDays(DateConstants.DAYS_NEAR_GRADUATION_DATE));
+		} else {
+			// try to determine from resume
+
+			isWithinGraduationDateRange = documentService.hasGraduated(user
+					.getUserId());
+
 		}
 
 		return isWithinGraduationDateRange;
