@@ -138,4 +138,28 @@ public class AccountSetting {
 		return avatarSourceSetting;
 	}
 
+	public static AccountSetting createGoogleAvatarSetting(
+			@NonNull final Long userId) {
+		AccountSetting avatarSourceSetting = new AccountSetting();
+
+		avatarSourceSetting.setName(AccountSettingsEnum.avatar.name());
+		avatarSourceSetting.setUserId(userId);
+		avatarSourceSetting.setPrivacy(Privacy.PUBLIC.name());
+		avatarSourceSetting.setValue(AvatarSourceEnum.GOOGLE.name());
+
+		return avatarSourceSetting;
+	}
+
+	public static AccountSetting createTwitterAvatarSetting(
+			@NonNull final Long userId) {
+		AccountSetting avatarSourceSetting = new AccountSetting();
+
+		avatarSourceSetting.setName(AccountSettingsEnum.avatar.name());
+		avatarSourceSetting.setUserId(userId);
+		avatarSourceSetting.setPrivacy(Privacy.PUBLIC.name());
+		avatarSourceSetting.setValue(AvatarSourceEnum.TWITTER.name());
+
+		return avatarSourceSetting;
+	}
+
 }

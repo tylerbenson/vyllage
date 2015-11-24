@@ -26,6 +26,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,7 +47,7 @@ import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
-// @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class DocumentPermissionsIntegTest {
 
 	private MockMvc mockMvc;
@@ -56,15 +58,15 @@ public class DocumentPermissionsIntegTest {
 	@Inject
 	private RestTemplate restTemplate;
 
+	@Inject
+	private ObjectMapper mapper;
+
 	@Rule
 	public final ExpectedException exception = ExpectedException.none();
-
-	private ObjectMapper mapper = new ObjectMapper();
 
 	@Before
 	public void setUp() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-		RestAssuredMockMvc.webAppContextSetup(context);
 	}
 
 	@After

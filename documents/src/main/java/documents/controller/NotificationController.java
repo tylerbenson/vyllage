@@ -8,9 +8,10 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,23 +27,25 @@ import documents.model.notifications.AbstractWebNotification;
 import documents.model.notifications.CommentNotification;
 import documents.model.notifications.FeedbackRequestNotification;
 import documents.model.notifications.ReferenceRequestNotification;
+import documents.model.notifications.ResumeAccessRequestNotification;
 import documents.model.notifications.WebCommentNotification;
 import documents.model.notifications.WebFeedbackRequestNotification;
 import documents.model.notifications.WebReferenceRequestNotification;
+import documents.model.notifications.WebResumeAccessRequestNotification;
 import documents.services.AccountService;
 import documents.services.notification.NotificationService;
 
 // @RestController doesn't work :(
 @Controller
 @RequestMapping("notification")
-public class NotificationsController {
+public class NotificationController {
 
 	private final NotificationService notificationService;
 
 	private final AccountService accountService;
 
 	@Inject
-	public NotificationsController(NotificationService notificationService,
+	public NotificationController(NotificationService notificationService,
 			AccountService accountService) {
 		this.notificationService = notificationService;
 		this.accountService = accountService;
@@ -58,9 +61,8 @@ public class NotificationsController {
 		notifications.addAll(this
 				.getFeedbackRequestNotifications(request, user));
 		notifications.addAll(this.getReferenceRequests(request, user));
-
-		// return notifications.stream().collect(
-		// Collectors.groupingBy(n -> n.getClass().getSimpleName()));
+		notifications.addAll(this.getResumeAccessRequestNotifications(request,
+				user));
 
 		return notifications;
 
@@ -199,9 +201,38 @@ public class NotificationsController {
 
 	}
 
+	@RequestMapping(value = "/resume-access-request", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody List<AbstractWebNotification> getResumeAccessRequestNotifications(
+			HttpServletRequest request, @AuthenticationPrincipal User user) {
+
+		List<ResumeAccessRequestNotification> resumeAccessRequestNotifications = notificationService
+				.getResumeAccessRequestNotifications(user.getUserId());
+
+		if (resumeAccessRequestNotifications == null
+				|| resumeAccessRequestNotifications.isEmpty())
+			return Collections.emptyList();
+
+		List<Long> resumeUserIds = resumeAccessRequestNotifications.stream()
+				.map(n -> n.getResumeRequestUserId())
+				.collect(Collectors.toList());
+
+		List<AccountContact> contacts = accountService.getContactDataForUsers(
+				request, resumeUserIds);
+
+		return resumeAccessRequestNotifications
+				.stream()
+				.map(rarn -> {
+					return this.addContactName(contacts,
+							new WebResumeAccessRequestNotification(rarn));
+				}).collect(Collectors.toList());
+	}
+
 	protected AbstractWebNotification addContactName(
 			List<AccountContact> contacts,
-			AbstractWebNotification webNotification) {
+			@NotNull AbstractWebNotification webNotification) {
+
+		if (contacts == null || contacts.isEmpty())
+			return webNotification;
 
 		Optional<AccountContact> contact = contacts
 				.stream()
@@ -211,11 +242,6 @@ public class NotificationsController {
 			webNotification.setUserName(contact.get().getFirstName() + " "
 					+ contact.get().getLastName());
 		return webNotification;
-	}
-
-	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-	public void deleteAll(@AuthenticationPrincipal User user) {
-		notificationService.deleteAll(user.getUserId());
 	}
 
 }

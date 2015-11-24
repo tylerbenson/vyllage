@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,6 +29,7 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import user.common.constants.RolesEnum;
 import user.common.web.UserInfo;
+import util.web.constants.AccountUrlConstants;
 import accounts.model.BatchAccount;
 import accounts.model.BatchResult;
 import accounts.model.account.AccountNames;
@@ -69,12 +70,12 @@ public class AdminUserController {
 	private final ConfirmationEmailService confirmationEmailService;
 
 	@Inject
-	public AdminUserController(final UserService userService,
-			final RoleRepository roleRepository,
-			final OrganizationRepository organizationRepository,
-			final DocumentService documentService,
-			final BatchAccountCreationService batchAccountCreationService,
-			final ConfirmationEmailService confirmationEmailService) {
+	public AdminUserController(UserService userService,
+			RoleRepository roleRepository,
+			OrganizationRepository organizationRepository,
+			DocumentService documentService,
+			BatchAccountCreationService batchAccountCreationService,
+			ConfirmationEmailService confirmationEmailService) {
 		this.userService = userService;
 		this.roleRepository = roleRepository;
 		this.organizationRepository = organizationRepository;
@@ -92,9 +93,9 @@ public class AdminUserController {
 
 	@ModelAttribute("userInfo")
 	public UserInfo userInfo(@AuthenticationPrincipal User user) {
-		if (user == null) {
+
+		if (user == null)
 			return null;
-		}
 
 		UserInfo userInfo = new UserInfo(user);
 		userInfo.setEmailConfirmed(confirmationEmailService
@@ -116,7 +117,7 @@ public class AdminUserController {
 		model.addAttribute("roles", roleRepository.getAll());
 		model.addAttribute("userRoleManagementForm",
 				new UserRoleManagementForm());
-		return "adminUserRoleManagement";
+		return AccountUrlConstants.ADMIN_USER_ROLE_MANAGEMENT;
 	}
 
 	@RequestMapping(value = "/user/roles", method = RequestMethod.POST)
@@ -134,7 +135,7 @@ public class AdminUserController {
 			model.addAttribute("roles", roleRepository.getAll());
 			model.addAttribute("userRoleManagementForm", form);
 
-			return "adminUserRoleManagement";
+			return AccountUrlConstants.ADMIN_USER_ROLE_MANAGEMENT;
 		}
 
 		User selectedUser = userService.getUser(form.getUserId());
@@ -225,7 +226,7 @@ public class AdminUserController {
 		model.addAttribute("organizations", organizationOptions);
 		model.addAttribute("users", usersFromOrganization);
 
-		return "adminUsers";
+		return AccountUrlConstants.ADMIN_USERS;
 	}
 
 	@RequestMapping(value = "/users/roles", method = RequestMethod.GET)
@@ -242,7 +243,7 @@ public class AdminUserController {
 		model.addAttribute("roles", roleRepository.getAll());
 		model.addAttribute("accountRolesManagementForm",
 				new AccountsRoleManagementForm());
-		return "adminAccountRoleManagement";
+		return AccountUrlConstants.ADMIN_ACCOUNT_ROLE_MANAGEMENT;
 	}
 
 	@RequestMapping(value = "/users/roles", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
@@ -260,7 +261,7 @@ public class AdminUserController {
 			model.addAttribute("roles", roleRepository.getAll());
 			model.addAttribute("accountRolesManagementForm", form);
 			System.out.println(form);
-			return "adminAccountRoleManagement";
+			return AccountUrlConstants.ADMIN_ACCOUNT_ROLE_MANAGEMENT;
 		}
 
 		List<UserOrganizationRole> userOrganizationRoles = new ArrayList<>();
@@ -307,7 +308,7 @@ public class AdminUserController {
 		model.addAttribute("roles", roleRepository.getAll());
 		model.addAttribute("userOrganizationForm", new UserOrganizationForm());
 
-		return "adminUserOrganizationManagement";
+		return AccountUrlConstants.ADMIN_USER_ORGANIZATION_MANAGEMENT;
 	}
 
 	@RequestMapping(value = "/user/{userId}/organizations", method = RequestMethod.POST)
@@ -340,7 +341,7 @@ public class AdminUserController {
 			model.addAttribute("roles", roleRepository.getAll());
 			model.addAttribute("userOrganizationForm", form);
 
-			return "adminUserOrganizationManagement";
+			return AccountUrlConstants.ADMIN_USER_ORGANIZATION_MANAGEMENT;
 		}
 
 		List<UserOrganizationRole> newUserOrganizationRoles = new ArrayList<>();
@@ -380,7 +381,7 @@ public class AdminUserController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String admin(@AuthenticationPrincipal User user, Model model) {
 		prepareBatch(model, user);
-		return "adminBatchAccountCreation";
+		return AccountUrlConstants.ADMIN_BATCH_ACCOUNT_CREATION;
 	}
 
 	@RequestMapping(value = "/user/batch/createBatch", method = RequestMethod.POST)
@@ -394,7 +395,7 @@ public class AdminUserController {
 					model,
 					"Please provide ',' or line separated emails and select the Organization the users will belong to.",
 					user);
-			return "adminBatchAccountCreation";
+			return AccountUrlConstants.ADMIN_BATCH_ACCOUNT_CREATION;
 		}
 
 		final BatchResult batchResult = batchAccountCreationService
@@ -409,7 +410,7 @@ public class AdminUserController {
 									.collect(Collectors.joining(",")), user);
 		else
 			prepareBatch(model, user);
-		return "adminBatchAccountCreation";
+		return AccountUrlConstants.ADMIN_BATCH_ACCOUNT_CREATION;
 	}
 
 	@RequestMapping(value = "/user/{userId}/enable-disable", method = RequestMethod.GET)

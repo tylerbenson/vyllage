@@ -14,6 +14,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.http.entity.ContentType;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +43,7 @@ import user.common.web.NotifyFeedbackRequest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 
 import documents.ApplicationTestConfig;
 import documents.model.Comment;
@@ -77,6 +79,11 @@ public class NotificationsControllerIntegTest {
 	public void setUp() throws Exception {
 		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
 
+	}
+
+	@After
+	public void after() {
+		RestAssuredMockMvc.reset();
 	}
 
 	@Test

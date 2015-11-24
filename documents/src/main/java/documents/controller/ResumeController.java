@@ -1,36 +1,26 @@
 package documents.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import lombok.NonNull;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.tools.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,31 +33,23 @@ import user.common.User;
 import user.common.social.SocialSessionEnum;
 import user.common.web.AccountContact;
 import user.common.web.UserInfo;
+import util.web.constants.DocumentUrlConstants;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
-import com.newrelic.api.agent.Trace;
 
-import documents.files.pdf.ResumeExportService;
 import documents.model.AccountNames;
-import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentAccess;
 import documents.model.DocumentHeader;
 import documents.model.LinkPermissions;
-import documents.model.SectionAdvice;
-import documents.model.constants.AdviceStatus;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.document.sections.DocumentSection;
-import documents.model.notifications.CommentNotification;
-import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
 import documents.services.aspect.CheckReadAccess;
 import documents.services.aspect.CheckWriteAccess;
-import documents.services.notification.NotificationService;
 
 @Controller
 @RequestMapping("resume")
@@ -80,35 +62,12 @@ public class ResumeController {
 
 	private final AccountService accountService;
 
-	private final NotificationService notificationService;
-
-	private final ResumeExportService resumePdfService;
-
-	private final DocumentAccessRepository documentAccessRepository;
-
-	private final Environment environment;
-
-	private List<String> pdfStyles = new LinkedList<>();
-
-	@Autowired
+	@Inject
 	public ResumeController(final DocumentService documentService,
-			final AccountService accountService,
-			final NotificationService notificationService,
-			final ResumeExportService resumePdfService,
-			final DocumentAccessRepository documentAccessRepository,
-			final Environment environment) {
+			final AccountService accountService, final Environment environment) {
 		this.documentService = documentService;
 		this.accountService = accountService;
-		this.notificationService = notificationService;
-		this.resumePdfService = resumePdfService;
-		this.documentAccessRepository = documentAccessRepository;
-		this.environment = environment;
 
-		if (environment.containsProperty("pdf.styles"))
-			pdfStyles.addAll(Arrays.asList(this.environment.getProperty(
-					"pdf.styles").split(",")));
-		else
-			pdfStyles.add("default");
 	}
 
 	// ModelAttributes execute for every request, even REST ones, since they are
@@ -186,7 +145,7 @@ public class ResumeController {
 		model.addAttribute("userInfo", userInfo(request, user));
 		model.addAttribute("documentCreationDate", document.getDateCreated());
 
-		return "resume";
+		return DocumentUrlConstants.RESUME;
 	}
 
 	/**
@@ -272,108 +231,6 @@ public class ResumeController {
 								.get(ds.getSectionId())));
 
 		return documentSections;
-	}
-
-	@RequestMapping(value = "/file/pdf/styles", method = RequestMethod.GET, produces = "application/json")
-	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody List<String> getPdfStyles() {
-		return this.pdfStyles;
-	}
-
-	@Trace
-	@RequestMapping(value = "{documentId}/file/pdf", method = RequestMethod.GET, produces = "application/pdf")
-	@ResponseStatus(value = HttpStatus.OK)
-	@CheckReadAccess
-	public void resumePdf(
-			HttpServletRequest request,
-			HttpServletResponse response,
-			@PathVariable final Long documentId,
-			@RequestParam(value = "style", required = false, defaultValue = "default") final String styleName,
-			@AuthenticationPrincipal User user)
-			throws ElementNotFoundException, DocumentException, IOException {
-
-		DocumentHeader resumeHeader = documentService.getDocumentHeader(
-				request, documentId, user);
-
-		List<DocumentSection> documentSections = documentService
-				.getDocumentSections(documentId);
-
-		String style = styleName != null && !styleName.isEmpty()
-				&& this.pdfStyles.contains(styleName) ? styleName
-				: this.pdfStyles.get(0);
-
-		copyPDF(response, resumePdfService.generatePDFDocument(resumeHeader,
-				documentSections, style));
-		response.setStatus(HttpStatus.OK.value());
-		response.flushBuffer();
-
-	}
-
-	/**
-	 * Writes the PDF document to the response.
-	 *
-	 * @param response
-	 * @param report
-	 * @throws DocumentException
-	 * @throws IOException
-	 */
-	private void copyPDF(HttpServletResponse response,
-			ByteArrayOutputStream report) throws DocumentException, IOException {
-		InputStream in = new ByteArrayInputStream(report.toByteArray());
-		FileCopyUtils.copy(in, response.getOutputStream());
-
-		response.setContentType("application/pdf");
-		response.setHeader("Content-Disposition", "attachment; filename="
-				+ "report.pdf");
-	}
-
-	@Trace
-	@RequestMapping(value = "{documentId}/file/png", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
-	@ResponseStatus(value = HttpStatus.OK)
-	@CheckReadAccess
-	public void resumePNG(
-			HttpServletRequest request,
-			HttpServletResponse response,
-			@PathVariable final Long documentId,
-			@RequestParam(value = "style", required = false, defaultValue = "default") final String styleName,
-			@RequestParam(value = "width", required = false, defaultValue = "64") final int width,
-			@RequestParam(value = "height", required = false, defaultValue = "98") final int height,
-			@AuthenticationPrincipal User user)
-			throws ElementNotFoundException, DocumentException, IOException {
-
-		DocumentHeader resumeHeader = documentService.getDocumentHeader(
-				request, documentId, user);
-
-		List<DocumentSection> documentSections = documentService
-				.getDocumentSections(documentId);
-
-		String style = styleName != null && !styleName.isEmpty()
-				&& this.pdfStyles.contains(styleName) ? styleName
-				: this.pdfStyles.get(0);
-
-		copyPNG(response, resumePdfService.generatePNGDocument(resumeHeader,
-				documentSections, style, width, height));
-		response.setStatus(HttpStatus.OK.value());
-		response.flushBuffer();
-
-	}
-
-	/**
-	 * Writes the PNG thumbnail to the response.
-	 *
-	 * @param response
-	 * @param report
-	 * @throws DocumentException
-	 * @throws IOException
-	 */
-	private void copyPNG(HttpServletResponse response,
-			ByteArrayOutputStream report) throws DocumentException, IOException {
-		InputStream in = new ByteArrayInputStream(report.toByteArray());
-		FileCopyUtils.copy(in, response.getOutputStream());
-
-		response.setContentType(MediaType.IMAGE_PNG_VALUE);
-		response.setHeader("Content-Disposition", "attachment; filename="
-				+ "report.png");
 	}
 
 	@RequestMapping(value = "{documentId}/section/{sectionId}", method = RequestMethod.GET, produces = "application/json")
@@ -528,225 +385,6 @@ public class ResumeController {
 		documentService.saveDocument(document);
 
 		return new ResponseEntity<>(documentHeader, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody List<Comment> getCommentsForSection(
-			HttpServletRequest request, @PathVariable final Long documentId,
-			@PathVariable final Long sectionId,
-			final @AuthenticationPrincipal User user)
-			throws ElementNotFoundException {
-		final Document document = this.documentService.getDocument(documentId);
-
-		List<Comment> commentsForSection = documentService
-				.getCommentsForSection(request, sectionId);
-
-		commentsForSection.forEach(c -> c.setCanDeleteComment(canDeleteComment(
-				c.getCommentId(), c, user, document)));
-
-		return commentsForSection;
-	}
-
-	@RequestMapping(value = "{documentId}/section/{sectionId}/comment", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	@ResponseStatus(value = HttpStatus.OK)
-	@CheckReadAccess
-	public @ResponseBody Comment saveCommentsForSection(
-			HttpServletRequest request, @PathVariable final Long documentId,
-			@PathVariable final Long sectionId,
-			@RequestBody final Comment newComment,
-			@AuthenticationPrincipal User user) throws ElementNotFoundException {
-
-		Optional<DocumentAccess> documentAccess = documentAccessRepository.get(
-				user.getUserId(), documentId);
-
-		if (documentAccess.isPresent()
-				&& !documentAccess.get().getAllowGuestComments()
-				&& !user.isVyllageAdmin())
-			throw new AccessDeniedException(
-					"You are not allowed to comment on this document.");
-
-		// notification
-		Document document = null;
-		DocumentSection documentSection = null;
-
-		try {
-			document = documentService.getDocument(documentId);
-			documentSection = documentService.getDocumentSection(sectionId);
-
-		} catch (ElementNotFoundException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-			throw e;
-		}
-
-		setCommentData(sectionId, newComment, user);
-
-		final Comment savedComment = documentService.saveComment(request,
-				newComment);
-
-		notifyOfNewComment(request, user, document, documentSection,
-				savedComment);
-
-		return savedComment;
-	}
-
-	protected void notifyOfNewComment(HttpServletRequest request, User user,
-			Document document, DocumentSection documentSection,
-			final Comment savedComment) {
-
-		notificationService
-				.save(new CommentNotification(document
-						.getUserId(), savedComment, documentSection.getTitle()));
-
-		boolean isOwner = document.getUserId().equals(user.getUserId());
-
-		// Check user ids before going to DB...
-		// don't notify if the user commenting is the owner of the document...
-		if (!isOwner
-				&& notificationService.needsToSendEmailNotification(document
-						.getUserId())) {
-
-			List<AccountContact> recipient = accountService
-					.getContactDataForUsers(request,
-							Arrays.asList(document.getUserId()));
-
-			// if we have not, send it
-			if (recipient != null && !recipient.isEmpty())
-				notificationService.sendEmailNewCommentNotification(user,
-						recipient.get(0), savedComment);
-		}
-	}
-
-	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.DELETE, consumes = "application/json")
-	@ResponseStatus(value = HttpStatus.ACCEPTED)
-	@CheckReadAccess
-	public void deleteCommentsForSection(HttpServletRequest request,
-			@PathVariable final Long documentId,
-			@PathVariable final Long sectionId,
-			@PathVariable final Long commentId,
-			@RequestBody final Comment comment,
-			@AuthenticationPrincipal User user) throws ElementNotFoundException {
-
-		Document document = this.documentService.getDocument(documentId);
-
-		if (canDeleteComment(commentId, comment, user, document))
-			documentService.deleteComment(comment);
-	}
-
-	protected boolean canDeleteComment(final Long commentId,
-			final Comment comment, final User user, final Document document) {
-
-		// allow the document owner to delete all comments
-		if (user.getUserId().equals(document.getUserId()))
-			return true;
-
-		// allow the user to delete his own comments
-		return user.getUserId().equals(comment.getUserId())
-				&& commentId.equals(comment.getCommentId());
-	}
-
-	@RequestMapping(value = "{documentId}/section/{sectionId}/comment/{commentId}", method = RequestMethod.POST, consumes = "application/json")
-	@ResponseStatus(value = HttpStatus.OK)
-	@CheckReadAccess
-	public void saveCommentsForComment(HttpServletRequest request,
-			@PathVariable final Long documentId,
-			@PathVariable final Long sectionId,
-			@PathVariable final Long commentId,
-			@RequestBody final Comment comment,
-			@AuthenticationPrincipal User user) {
-
-		Optional<DocumentAccess> documentAccess = documentAccessRepository.get(
-				user.getUserId(), documentId);
-
-		if (documentAccess.isPresent()
-				&& !documentAccess.get().getAllowGuestComments()
-				&& !user.isVyllageAdmin())
-			throw new AccessDeniedException(
-					"You are not allowed to comment on this document.");
-
-		setCommentData(sectionId, comment, user);
-
-		if (comment.getOtherCommentId() == null)
-			comment.setOtherCommentId(commentId);
-
-		documentService.saveComment(request, comment);
-	}
-
-	// check read because this is for others
-	@RequestMapping(value = "{documentId}/section/{sectionId}/advice", method = RequestMethod.GET, produces = "application/json")
-	@CheckReadAccess
-	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody List<SectionAdvice> getSectionAdvices(
-			HttpServletRequest request, @PathVariable final Long documentId,
-			@PathVariable final Long sectionId,
-			@AuthenticationPrincipal User user) {
-
-		return documentService.getSectionAdvices(request, sectionId);
-
-	}
-
-	// check read because this is for others
-	@RequestMapping(value = "{documentId}/section/{sectionId}/advice", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	@CheckReadAccess
-	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody SectionAdvice saveSectionAdvice(
-			HttpServletRequest request, @PathVariable final Long documentId,
-			@PathVariable final Long sectionId,
-			@AuthenticationPrincipal final User user,
-			@RequestBody final SectionAdvice sectionAdvice) {
-
-		// some assertions, if these are not present something's wrong with the
-		// client
-		Assert.isTrue(sectionAdvice.getSectionVersion() != null);
-		Assert.isTrue(sectionAdvice.getDocumentSection() != null);
-		Assert.isTrue(sectionAdvice.getSectionId().equals(sectionId));
-
-		if (sectionAdvice.getUserId() == null)
-			sectionAdvice.setUserId(user.getUserId());
-
-		sectionAdvice.setStatus(AdviceStatus.pending.name());
-
-		return documentService.saveSectionAdvice(request, sectionAdvice);
-
-	}
-
-	// check read because this is for others
-	@RequestMapping(value = "{documentId}/section/{sectionId}/advice/{sectionAdviceId}", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
-	@CheckReadAccess
-	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody SectionAdvice updateSectionAdvice(
-			HttpServletRequest request, @PathVariable final Long documentId,
-			@PathVariable final Long sectionId,
-			@PathVariable final Long sectionAdviceId,
-			@AuthenticationPrincipal final User user,
-			@RequestBody final SectionAdvice sectionAdvice) {
-
-		// some assertions, if these are not present something's wrong with the
-		// client
-		Assert.isTrue(sectionAdvice.getSectionId() != null);
-		Assert.isTrue(sectionAdvice.getSectionVersion() != null);
-		Assert.isTrue(sectionAdvice.getDocumentSection() != null);
-		Assert.isTrue(sectionAdvice.getSectionId().equals(sectionId));
-		Assert.isTrue(sectionAdvice.getSectionAdviceId()
-				.equals(sectionAdviceId));
-
-		if (sectionAdvice.getUserId() == null)
-			sectionAdvice.setUserId(user.getUserId());
-
-		return documentService.saveSectionAdvice(request, sectionAdvice);
-
-	}
-
-	protected void setCommentData(@NonNull final Long sectionId,
-			@NonNull final Comment comment, @NonNull User user) {
-		if (comment.getUserId() == null)
-			comment.setUserId(user.getUserId());
-
-		if (comment.getSectionId() == null)
-			comment.setSectionId(sectionId);
-
-		if (comment.getUserName() == null || comment.getUserName().isEmpty())
-			comment.setUserName(user.getFirstName() + " " + user.getLastName());
 	}
 
 }

@@ -28,6 +28,13 @@ Note: notifications, currently once created can only be deleted by the recipient
   	"otherUserId": 0,
   	"type": "WebFeedbackRequestNotification",
   	"resumeId": 0
+  },
+  {
+    "userId": 0,
+    "dateCreated": "2015-11-03T21:33:50",
+    "userName": "Mailinator Email",
+    "otherUserId": 8,
+    "type": "WebResumeAccessRequestNotification"
   }
 ]
 ```
@@ -137,3 +144,18 @@ Deletes a reference request.
 ```
 
 Response 204.
+
+# Get resume access requests
+## GET /notification/resume-access-request
+
+```
+[
+  {
+    "userId": 0,
+    "dateCreated": "2015-11-03T21:33:50",
+    "userName": "Mailinator Email",
+    "otherUserId": 8,
+    "type": "WebResumeAccessRequestNotification"
+  }
+]
+```

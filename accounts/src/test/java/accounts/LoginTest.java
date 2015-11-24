@@ -85,7 +85,7 @@ public class LoginTest {
 
 	@Test
 	public void userChangesPassword() {
-		String userName = "changePassword";
+		String userName = "changePassword1";
 		String oldPassword = "password";
 		String newPassword = "newPassword";
 		boolean enabled = true;
@@ -152,7 +152,7 @@ public class LoginTest {
 
 	@Test(expected = AccessDeniedException.class)
 	public void userChangesPasswordNotLoggedInTest() {
-		String userName = "changePassword";
+		String userName = "changePassword2";
 		String oldPassword = "password";
 		String newPassword = "newPassword";
 		boolean enabled = true;
