@@ -19,6 +19,7 @@ import user.common.User;
 import user.common.constants.RolesEnum;
 import accounts.repository.UserOrganizationRoleRepository;
 import accounts.service.AccountSettingsService;
+import accounts.service.DocumentService;
 
 @Service
 public class UserContactSuggestionService {
@@ -28,14 +29,16 @@ public class UserContactSuggestionService {
 	@Inject
 	public UserContactSuggestionService(DSLContext sql,
 			UserOrganizationRoleRepository userOrganizationRoleRepository,
-			AccountSettingsService accountSettingsService) {
+			AccountSettingsService accountSettingsService,
+			DocumentService documentService) {
 
 		roleToSelector.put(RolesEnum.GUEST, new GuestContactSelector(sql,
 				userOrganizationRoleRepository));
 
-		roleToSelector
-				.put(RolesEnum.STUDENT, new CurrentStudentContactSelector(sql,
-						userOrganizationRoleRepository, accountSettingsService));
+		roleToSelector.put(RolesEnum.STUDENT,
+				new CurrentStudentContactSelector(sql,
+						userOrganizationRoleRepository, accountSettingsService,
+						documentService));
 
 		roleToSelector.put(RolesEnum.ALUMNI, new AlumniContactSelector(sql,
 				userOrganizationRoleRepository));

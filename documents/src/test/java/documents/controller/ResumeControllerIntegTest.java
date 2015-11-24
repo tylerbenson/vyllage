@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -100,9 +101,13 @@ public class ResumeControllerIntegTest {
 			NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 
-		Document document = generateDocument();
+		Long userId = 1245L;
 
-		generateAndLoginUser();
+		Document document = generateDocument();
+		document.setUserId(userId);
+
+		User generateAndLoginUser = generateAndLoginUser();
+		when(generateAndLoginUser.getUserId()).thenReturn(userId);
 
 		document = documentService.saveDocument(document);
 
@@ -347,6 +352,9 @@ public class ResumeControllerIntegTest {
 	public void deleteNonExistingSection() throws JsonProcessingException,
 			ElementNotFoundException {
 		Long documentId = 0L;
+
+		User user = generateAndLoginUser();
+		when(user.getUserId()).thenReturn(0L);
 
 		controller.deleteSection(documentId, 99999L);
 	}
@@ -621,6 +629,69 @@ public class ResumeControllerIntegTest {
 
 		assertFalse(result.isEmpty());
 
+	}
+
+	@Test
+	public void hasGraduatedTrue() throws Exception {
+
+		Long userId = 0L;
+		Long documentId = 0L;
+
+		EducationSection documentSection = new EducationSection();
+		documentSection.setDocumentId(documentId);
+		documentSection.setEndDate(LocalDate.now());
+
+		mockMvc.perform(
+				post("/resume/" + documentId + "/section").content(
+						documentSection.asJSON()).contentType(
+						MediaType.APPLICATION_JSON_VALUE))
+				//
+				.andExpect(status().isOk())
+				.andExpect(
+						content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andReturn();
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						get("/resume/has-graduated").param("userId",
+								userId.toString()).contentType(
+								MediaType.APPLICATION_JSON_VALUE))
+				//
+				.andExpect(status().isOk())
+				.andExpect(
+						content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andReturn();
+
+		assertNotNull(mvcResult);
+
+		Boolean hasGraduated = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), Boolean.class);
+
+		assertTrue(hasGraduated);
+	}
+
+	@Test
+	public void hasGraduatedFalseNoSections() throws Exception {
+
+		Long userId = 8L;
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						get("/resume/has-graduated").param("userId",
+								userId.toString()).contentType(
+								MediaType.APPLICATION_JSON_VALUE))
+				//
+				.andExpect(status().isOk())
+				.andExpect(
+						content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andReturn();
+
+		assertNotNull(mvcResult);
+
+		Boolean hasGraduated = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), Boolean.class);
+
+		assertFalse(hasGraduated);
 	}
 
 	private User generateAndLoginUser() {

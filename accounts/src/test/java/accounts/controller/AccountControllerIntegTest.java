@@ -138,6 +138,16 @@ public class AccountControllerIntegTest {
 
 		when(taglineResponse.getBody()).thenReturn(taglines);
 
+		ResponseEntity<Boolean> hasGraduatedResponse = mock(ResponseEntity.class);
+
+		when(
+				restTemplate.exchange(Mockito.anyString(),
+						Mockito.eq(HttpMethod.GET), Mockito.any(),
+						Mockito.eq(Boolean.class))).thenReturn(
+				hasGraduatedResponse);
+
+		when(hasGraduatedResponse.getBody()).thenReturn(false);
+
 		MvcResult mvcResult = mockMvc
 				.perform(get("/account/0/advisors?firstNameFilter=Deana2"))
 				.andExpect(status().isOk()).andReturn();

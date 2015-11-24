@@ -1,6 +1,7 @@
 package documents.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +39,7 @@ import util.web.constants.DocumentUrlConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.newrelic.api.agent.NewRelic;
 
+import constants.DateConstants;
 import documents.model.AccountNames;
 import documents.model.Document;
 import documents.model.DocumentAccess;
@@ -45,6 +47,7 @@ import documents.model.DocumentHeader;
 import documents.model.LinkPermissions;
 import documents.model.constants.DocumentAccessEnum;
 import documents.model.document.sections.DocumentSection;
+import documents.model.document.sections.EducationSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
@@ -270,7 +273,7 @@ public class ResumeController {
 		return documentService.getTaglines(userIds);
 	}
 
-	@RequestMapping(value = "{documentId}/section", method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "{documentId}/section", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
 	@CheckWriteAccess
 	public @ResponseBody DocumentSection createSection(
@@ -385,6 +388,36 @@ public class ResumeController {
 		documentService.saveDocument(document);
 
 		return new ResponseEntity<>(documentHeader, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/has-graduated", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Boolean hasGraduated(@RequestParam Long userId) {
+
+		Document documentByUser = documentService.getDocumentByUser(userId);
+
+		try {
+			List<DocumentSection> documentSections = documentService
+					.getDocumentSections(documentByUser.getDocumentId());
+			return documentSections
+					.stream()
+					.anyMatch(
+							ds -> {
+
+								if (ds instanceof EducationSection) {
+									LocalDate endDate = ((EducationSection) ds)
+											.getEndDate();
+									return endDate != null
+											&& LocalDate
+													.now()
+													.isAfter(
+															endDate.minusDays(DateConstants.DAYS_NEAR_GRADUATION_DATE));
+								}
+								return false;
+							});
+
+		} catch (ElementNotFoundException e) {
+			return false;
+		}
 	}
 
 }

@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.NonNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -19,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import accounts.model.account.settings.DocumentAccess;
@@ -68,7 +72,6 @@ public class DocumentService {
 	 * Returns the user document Id.
 	 *
 	 * @param request
-	 *
 	 * @param userId
 	 * @return
 	 * @throws ElementNotFoundException
@@ -195,6 +198,30 @@ public class DocumentService {
 
 		HttpEntity<Object> entity = new HttpEntity<Object>(object, headers);
 		return entity;
+	}
+
+	/**
+	 * Checks if a user has graduated from any University.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public boolean hasGraduated(@NonNull Long userId) {
+
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+				.getRequestAttributes()).getRequest();
+
+		HttpEntity<Object> entity = createHeader(request, null);
+
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+
+		builder.scheme("http").port(DOCUMENTS_PORT).host(DOCUMENTS_HOST)
+				.path("/resume/has-graduated").queryParam("userId", userId);
+
+		Boolean response = restTemplate.exchange(builder.build().toUriString(),
+				HttpMethod.GET, entity, Boolean.class).getBody();
+
+		return response;
 	}
 
 }
