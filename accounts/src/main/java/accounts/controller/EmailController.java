@@ -9,15 +9,15 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import user.common.User;
-import util.web.account.AccountUrlConstants;
+import util.web.constants.AccountUrlConstants;
 import accounts.model.Email;
 import accounts.model.account.ConfirmEmailLink;
 import accounts.repository.EmailRepository;

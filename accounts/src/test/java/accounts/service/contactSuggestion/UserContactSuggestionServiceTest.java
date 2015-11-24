@@ -10,12 +10,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -148,15 +150,15 @@ public class UserContactSuggestionServiceTest {
 
 		assertNotNull("No users found.", suggestions);
 		assertFalse("No users found.", suggestions.isEmpty());
+
+		Predicate<GrantedAuthority> isAcademicAdvisor = a -> a.getAuthority()
+				.contains(RolesEnum.ACADEMIC_ADVISOR.name());
+
 		assertTrue(
 				"No Academic Advisor found.",
-				suggestions
-						.get(0)
-						.getAuthorities()
-						.stream()
-						.anyMatch(
-								a -> a.getAuthority().contains(
-										RolesEnum.ACADEMIC_ADVISOR.name())));
+				suggestions.stream().anyMatch(
+						u -> u.getAuthorities().stream()
+								.anyMatch(isAcademicAdvisor)));
 
 	}
 
@@ -197,17 +199,16 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);
 
+		Predicate<GrantedAuthority> isCareerAdvisor = a -> a.getAuthority()
+				.contains(RolesEnum.CAREER_ADVISOR.name());
+
 		assertNotNull("No users found.", suggestions);
 		assertFalse("No users found.", suggestions.isEmpty());
 		assertTrue(
-				"No Academic Advisor found.",
-				suggestions
-						.get(0)
-						.getAuthorities()
-						.stream()
-						.anyMatch(
-								a -> a.getAuthority().contains(
-										RolesEnum.CAREER_ADVISOR.name())));
+				"No Career Advisor found.",
+				suggestions.stream().anyMatch(
+						u -> u.getAuthorities().stream()
+								.anyMatch(isCareerAdvisor)));
 
 	}
 
@@ -223,17 +224,16 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				student, null, 5);
 
+		Predicate<GrantedAuthority> isCareerAdvisor = a -> a.getAuthority()
+				.contains(RolesEnum.CAREER_ADVISOR.name());
+
 		assertNotNull("No users found.", suggestions);
 		assertFalse("No users found.", suggestions.isEmpty());
 		assertTrue(
-				"No Academic Advisor found.",
-				suggestions
-						.get(0)
-						.getAuthorities()
-						.stream()
-						.anyMatch(
-								a -> a.getAuthority().contains(
-										RolesEnum.CAREER_ADVISOR.name())));
+				"No Career Advisor found.",
+				suggestions.stream().anyMatch(
+						u -> u.getAuthorities().stream()
+								.anyMatch(isCareerAdvisor)));
 
 	}
 
@@ -248,33 +248,26 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				alumni, null, 5);
 
+		Predicate<GrantedAuthority> isCareerAdvisor = a -> a.getAuthority()
+				.contains(RolesEnum.CAREER_ADVISOR.name());
+
+		Predicate<GrantedAuthority> isTransferAdvisor = a -> a.getAuthority()
+				.contains(RolesEnum.TRANSFER_ADVISOR.name());
+
 		assertNotNull("No users found.", suggestions);
 		assertFalse("No users found.", suggestions.isEmpty());
 
 		assertTrue(
 				"No Career Advisor found.",
-				suggestions
-						.stream()
-						.map(u -> u.getAuthorities())
-						.anyMatch(
-								auths -> auths
-										.stream()
-										.anyMatch(
-												uor -> uor
-														.getAuthority()
-														.contains(
-																RolesEnum.CAREER_ADVISOR
-																		.name()))));
+				suggestions.stream().anyMatch(
+						u -> u.getAuthorities().stream()
+								.anyMatch(isCareerAdvisor)));
+
 		assertTrue(
 				"No Transfer Advisor found.",
-				suggestions
-						.stream()
-						.map(u -> u.getAuthorities())
-						.anyMatch(
-								auths -> auths.stream().anyMatch(
-										uor -> uor.getAuthority().contains(
-												RolesEnum.TRANSFER_ADVISOR
-														.name()))));
+				suggestions.stream().anyMatch(
+						u -> u.getAuthorities().stream()
+								.anyMatch(isTransferAdvisor)));
 
 	}
 
@@ -286,17 +279,15 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				staff, null, 5);
 
+		Predicate<GrantedAuthority> isStaff = a -> a.getAuthority().contains(
+				RolesEnum.STAFF.name());
+
 		assertNotNull("No users found.", suggestions);
 		assertFalse("No users found.", suggestions.isEmpty());
 		assertTrue(
 				"No staff member found.",
-				suggestions
-						.get(0)
-						.getAuthorities()
-						.stream()
-						.anyMatch(
-								a -> a.getAuthority().contains(
-										RolesEnum.STAFF.name())));
+				suggestions.stream().anyMatch(
+						u -> u.getAuthorities().stream().anyMatch(isStaff)));
 
 	}
 
@@ -308,19 +299,17 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				admin, null, 5);
 
+		Predicate<GrantedAuthority> isAdminOrStaff = a -> a.getAuthority()
+				.contains(RolesEnum.ADMIN.name())
+				|| a.getAuthority().contains(RolesEnum.STAFF.name());
+
 		assertNotNull("No users found.", suggestions);
 		assertFalse("No users found.", suggestions.isEmpty());
 		assertTrue(
-				"No staff member found.",
-				suggestions
-						.get(0)
-						.getAuthorities()
-						.stream()
-						.anyMatch(
-								a -> a.getAuthority().contains(
-										RolesEnum.ADMIN.name())
-										|| a.getAuthority().contains(
-												RolesEnum.STAFF.name())));
+				"No staff/admin member found.",
+				suggestions.stream().anyMatch(
+						u -> u.getAuthorities().stream()
+								.anyMatch(isAdminOrStaff)));
 
 	}
 
@@ -333,17 +322,16 @@ public class UserContactSuggestionServiceTest {
 		List<User> suggestions = userContactSuggestionService.getSuggestions(
 				academicAdvisor, null, 5);
 
+		Predicate<GrantedAuthority> isAdvisor = a -> a.getAuthority().contains(
+				RolesEnum.ADVISOR.name());
+
 		assertNotNull("No users found.", suggestions);
 		assertFalse("No users found.", suggestions.isEmpty());
+
 		assertTrue(
 				"No staff member found.",
-				suggestions
-						.get(0)
-						.getAuthorities()
-						.stream()
-						.anyMatch(
-								a -> a.getAuthority().contains(
-										RolesEnum.ADVISOR.name())));
+				suggestions.stream().anyMatch(
+						u -> u.getAuthorities().stream().anyMatch(isAdvisor)));
 
 	}
 

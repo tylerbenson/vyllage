@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,7 +26,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import user.common.User;
 import user.common.web.UserInfo;
-import util.web.account.AccountUrlConstants;
+import util.web.constants.AccountUrlConstants;
+import util.web.constants.ConnectionsUrlConstants;
 import connections.model.AccountNames;
 import connections.model.AdviceRequest;
 import connections.model.AdviceRequestParameter;
@@ -97,7 +98,7 @@ public class AdviceRequestController {
 
 		if (accountService.canIRequestFeedback(request, user)) {
 			model.addAttribute("userInfo", userInfo(request, user));
-			return "getFeedback";
+			return ConnectionsUrlConstants.GET_FEEDBACK;
 		}
 
 		return "redirect:/account/email/"
