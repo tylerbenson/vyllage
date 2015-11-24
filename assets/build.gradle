@@ -54,13 +54,6 @@ task npmBuild(dependsOn: npmInstall, type:Exec) {
     inputs.file "gulpfile.js"
     outputs.dir "public"
     commandLine 'npm', 'run', 'build'
-    
-    doLast() {
-        println("Checking if /public exists.")
-        def folder = new File( 'assets/public' )
-        if(!folder.exists())
-            throw new IllegalArgumentException("Directory /public not found.")
-    }
 }
 
 //task checkPublic (dependsOn: npmBuild, type:Exec) << {
@@ -78,6 +71,13 @@ npmBuild.dependsOn checkNPM
 npmBuild.onlyIf { "true".equals(System.getProperty('hasNPM')) }
 
 jar {
+    doFirst() {
+        println("Checking if /public exists.")
+        def folder = new File( 'assets/public' )
+        if(!folder.exists())
+            throw new IllegalArgumentException("Directory /public not found.")
+    }
+
     from 'public'
 
     eachFile { details ->
