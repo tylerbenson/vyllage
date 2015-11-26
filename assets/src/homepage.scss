@@ -21,7 +21,7 @@ header {
   background-position: bottom;
   background-size: cover;
   text-align: center;
-  padding: 3em 2em 12em 2em;
+  padding: 4.5em 2em 12em 2em;
   position: static;
 
   .logo {
@@ -232,9 +232,25 @@ label {
 
 .modal {
   padding: 1em 2.5em;
+  p.centered {
+    margin: auto;
+    max-width: 20em;
+  }
   .actions {
     margin-top: 1em;
     text-align: right;
+  }
+  .social-login {
+    margin-top: 1em;
+
+    button {
+      padding: 0.5em 1em;
+    }
+  }
+  #login-form,
+  #register-form {
+    border-top: lighten($secondary-color, 30%) solid 1px;
+    margin-top: 1.5em;
   }
 }
 
