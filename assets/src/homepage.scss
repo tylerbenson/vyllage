@@ -255,6 +255,11 @@ label {
 }
 
 @media (max-width: $large-portrait) {
+  header {
+    .logo {
+      margin: 0 0 1.5em 0;
+    }
+  }
   .overview {
     section {
       padding: 2em 3em;
