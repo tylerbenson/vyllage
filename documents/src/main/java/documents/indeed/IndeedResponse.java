@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.ToString;
 
 @ToString
-// @JsonDeserialize(using = IndeedResponseDeserializer.class)
 public class IndeedResponse {
 	public IndeedResponse() {
 	}
@@ -25,9 +24,13 @@ public class IndeedResponse {
 
 	private int end;
 
+	private String radius;
+
 	private int totalResults;
 
 	private int pageNumber;
+
+	private String error;
 
 	private List<IndeedResult> results = new ArrayList<>();
 
@@ -87,6 +90,14 @@ public class IndeedResponse {
 		this.end = end;
 	}
 
+	public String getRadius() {
+		return radius;
+	}
+
+	public void setRadius(String radius) {
+		this.radius = radius;
+	}
+
 	public int getTotalResults() {
 		return totalResults;
 	}
@@ -109,5 +120,13 @@ public class IndeedResponse {
 
 	public void setResults(List<IndeedResult> results) {
 		this.results = results;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
 	}
 }
