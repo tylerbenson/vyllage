@@ -232,6 +232,17 @@ table {
       color: #6e6e6e;
       font-size: .9em;
     }
+    input.highlightInput {
+      background: #f0f2f3;
+      border: none;
+      font-size: .9em;
+      color: #6e6e6e;
+      width: 100%;
+
+      &:focus{
+        outline: 0;
+      }
+    }
     button {
       bottom: 0.3em;
       float: right;

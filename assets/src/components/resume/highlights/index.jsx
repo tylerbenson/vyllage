@@ -2,6 +2,7 @@ var React = require('react');
 var Highlight = require('../highlights/Highlight');
 var HighlightInput = require('../highlights/Input');
 var Sortable = require('../../util/Sortable');
+var clone = require('clone');
 
 var Highlights = React.createClass({
 	getInitialState: function() {
@@ -15,12 +16,11 @@ var Highlights = React.createClass({
 		});
 	},
   onHighlightDelete: function(i) {
-    var temp = this.state.highlights.slice();
-    temp.splice(i,1);
-
-    this.setState({
-      highlights: temp
-    });
+     var temp = clone( this.state.highlights);
+     temp.splice(i,1);
+	   this.setState({
+	      highlights: temp
+	   });
   },
   onHighlightAdd: function(value) {
   	var temp = this.state.highlights.slice();
@@ -49,7 +49,7 @@ var Highlights = React.createClass({
 		var uiEditMode = this.props.uiEditMode;
 		var highlights = this.state.highlights.map(function(highlight, index){
       return (
-        <Highlight key={index} text={highlight} onDelete={this.onHighlightDelete.bind(this, index)} uiEditMode={uiEditMode} />
+        <Highlight key={index} text={highlight} onDelete={this.onHighlightDelete.bind(this, index)} onEdit={this.onHighlightEdit.bind(this , index)} uiEditMode={uiEditMode} />
       );
     }.bind(this));
 
@@ -69,8 +69,14 @@ var Highlights = React.createClass({
 					{uiEditMode ? <HighlightInput onAdd={this.onHighlightAdd} /> : null}
 			</Sortable>
 		);
+	},
+	onHighlightEdit : function(index , data){
+		var allHighlights = this.state.highlights;
+		if(allHighlights.length){
+			allHighlights[index] = data;
+		}
+		this.setState({ 'highlights' : allHighlights });
 	}
-
 });
 
 module.exports = Highlights;

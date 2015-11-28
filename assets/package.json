@@ -26,7 +26,6 @@
     "pubsub-js": "^1.5.2",
     "react": "0.13.3",
     "react-autolink": "^0.2.0",
-    "react-contenteditable": "0.0.2",
     "react-layer-mixin": "^0.2.1",
     "react-textarea-autosize": "^1.1.0",
     "react-window-mixins": "0.0.6",
