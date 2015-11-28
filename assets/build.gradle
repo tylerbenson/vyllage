@@ -65,7 +65,7 @@ jar {
     doFirst() {
         println("Checking if /public exists.")
         def folder = new File( 'assets/public' )
-        if(!folder.exists())
+        if(folder == null ||  !folder.exists() || !folder.isDirectory() || folder.list().length <= 0)
             throw new IllegalArgumentException("Directory /public not found.")
     }
 
