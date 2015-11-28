@@ -96,6 +96,19 @@ input[type="reset"] {
       background: darken($google-color, 3%);
     }
   }
+  
+  &.twitter {
+    @extend .normal-caps;
+    background: $twitter-color;
+
+    &:hover,&:focus {
+      background: lighten($twitter-color, 8%);
+    }
+
+    &:active {
+      background: darken($twitter-color, 3%);
+    }
+  }
 
   &.inverted {
     background: transparent;

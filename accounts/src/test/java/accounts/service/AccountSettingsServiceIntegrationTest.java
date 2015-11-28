@@ -50,6 +50,9 @@ public class AccountSettingsServiceIntegrationTest {
 	@Inject
 	private AvatarRepository avatarRepository;
 
+	@Inject
+	private DocumentService documentService;
+
 	@Test
 	public void saveAccountSetting() {
 		Long userId = 1L;
@@ -218,7 +221,8 @@ public class AccountSettingsServiceIntegrationTest {
 		// setting);
 
 		AccountSettingsService accountSettingsService = new AccountSettingsService(
-				userService, accountSettingRepository, avatarRepository);
+				userService, documentService, accountSettingRepository,
+				avatarRepository);
 
 		AccountSetting savedAccountSetting = accountSettingsService
 				.setAccountSetting(user, setting);

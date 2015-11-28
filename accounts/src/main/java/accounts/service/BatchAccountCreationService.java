@@ -17,6 +17,7 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import accounts.model.BatchAccount;
 import accounts.model.BatchResult;
+import accounts.repository.BatchAccountCreationRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.service.utilities.BatchParser;
 import accounts.service.utilities.BatchParser.ParsedAccount;
@@ -28,7 +29,9 @@ public class BatchAccountCreationService {
 	private final Logger logger = Logger
 			.getLogger(BatchAccountCreationService.class.getName());
 
-	private final UserDetailRepository userRepository;
+	private final BatchAccountCreationRepository batchAccountCreationRepository;
+
+	private final UserDetailRepository userDetailRepository;
 
 	private final RegistrationEmailService registrationEmailService;
 
@@ -39,11 +42,13 @@ public class BatchAccountCreationService {
 	@Inject
 	public BatchAccountCreationService(
 			RegistrationEmailService registrationEmailService,
-			UserDetailRepository userRepository,
+			BatchAccountCreationRepository batchAccountCreationRepository,
+			UserDetailRepository userDetailRepository,
 			RandomPasswordGenerator randomPasswordGenerator,
 			BatchParser batchParser) {
 		this.registrationEmailService = registrationEmailService;
-		this.userRepository = userRepository;
+		this.batchAccountCreationRepository = batchAccountCreationRepository;
+		this.userDetailRepository = userDetailRepository;
 		this.randomPasswordGenerator = randomPasswordGenerator;
 		this.batchParser = batchParser;
 	}
@@ -85,15 +90,15 @@ public class BatchAccountCreationService {
 
 		// check if the user already exists and remove.
 		final List<User> filteredUsers = users.stream().filter(u -> {
-			if (this.userRepository.userExists(u.getUsername())) {
+			if (this.userDetailRepository.userExists(u.getUsername())) {
 				result.addUserNameExists(u.getUsername());
 				return false; // remove them
 			}
 			return true;
 		}).collect(Collectors.toList());
 
-		this.userRepository.addUsers(filteredUsers, loggedInUser,
-				forcePasswordChange);
+		this.batchAccountCreationRepository.createUsers(filteredUsers,
+				loggedInUser, forcePasswordChange);
 
 		// send mails
 		for (User user : filteredUsers) {

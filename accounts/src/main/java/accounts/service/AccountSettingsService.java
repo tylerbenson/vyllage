@@ -1,12 +1,18 @@
 package accounts.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import lombok.NonNull;
 
@@ -18,6 +24,8 @@ import org.springframework.util.Assert;
 
 import user.common.User;
 import user.common.constants.AccountSettingsEnum;
+import user.common.constants.RolesEnum;
+import user.common.web.AccountContact;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.AvatarSourceEnum;
 import accounts.model.account.settings.Privacy;
@@ -39,16 +47,20 @@ public class AccountSettingsService {
 
 	private final UserService userService;
 
+	private final DocumentService documentService;
+
 	private final AccountSettingRepository accountSettingRepository;
 
 	private final AvatarRepository avatarRepository;
 
 	@Inject
-	public AccountSettingsService(final UserService userService,
-			final AccountSettingRepository accountSettingRepository,
-			final AvatarRepository avatarRepository) {
+	public AccountSettingsService(UserService userService,
+			DocumentService documentService,
+			AccountSettingRepository accountSettingRepository,
+			AvatarRepository avatarRepository) {
 		super();
 		this.userService = userService;
+		this.documentService = documentService;
 		this.accountSettingRepository = accountSettingRepository;
 		this.avatarRepository = avatarRepository;
 	}
@@ -266,6 +278,10 @@ public class AccountSettingsService {
 				&& avatarSetting.get().getValue()
 						.equalsIgnoreCase(AvatarSourceEnum.FACEBOOK.name());
 
+		boolean avatarSettingPresent_google = avatarSetting.isPresent()
+				&& avatarSetting.get().getValue()
+						.equalsIgnoreCase(AvatarSourceEnum.GOOGLE.name());
+
 		if (avatarSettingPresent_gravatar) {
 			return getDefaultAvatar(user);
 		} else {
@@ -288,6 +304,15 @@ public class AccountSettingsService {
 					if (avatarUrl.isPresent())
 						return avatarUrl.get();
 				}
+
+				if (avatarSettingPresent_google) {
+					Optional<String> avatarUrl = avatarRepository.getAvatar(
+							userId, avatarSetting.get().getValue());
+
+					if (avatarUrl.isPresent())
+						return avatarUrl.get();
+				}
+
 			}
 		}
 
@@ -298,6 +323,172 @@ public class AccountSettingsService {
 	private String getDefaultAvatar(User user) {
 		return GRAVATAR_URL
 				+ new String(DigestUtils.md5Hex(user.getUsername()));
+	}
+
+	/**
+	 * Returns account contact information for several users.
+	 *
+	 * @param request
+	 */
+	public List<AccountContact> getAccountContacts(HttpServletRequest request,
+			@NonNull List<Long> userIds) {
+
+		if (userIds.isEmpty())
+			return Collections.emptyList();
+
+		// getting settings
+		List<AccountSetting> accountSettings = this.getAccountSettings(userIds);
+
+		// mapping settings by user
+		Map<Long, List<AccountSetting>> map = accountSettings.stream().collect(
+				Collectors.groupingBy((AccountSetting as) -> as.getUserId(),
+						Collectors.mapping((AccountSetting as) -> as,
+								Collectors.toList())));
+
+		// generating account contact
+		List<AccountContact> accountContacts = map.entrySet().stream()
+				.map(e -> this.mapAccountContact(e)).map(addAvatarUrl())
+				.map(addIsAdvisor()).collect(Collectors.toList());
+
+		// getting taglines
+		Map<String, String> taglines = documentService
+				.getDocumentHeaderTagline(request, accountContacts.stream()
+						.map(ac -> ac.getUserId()).collect(Collectors.toList()));
+
+		// adding taglines to each user
+		if (taglines != null && !taglines.isEmpty())
+			accountContacts.forEach(ac -> ac.setTagline(taglines.getOrDefault(
+					ac.getUserId().toString(), "")));
+
+		return accountContacts;
+	}
+
+	private Function<? super AccountContact, ? extends AccountContact> addIsAdvisor() {
+		return ac -> {
+
+			boolean isAdvisor = userService.userHasRoles(ac.getUserId(),
+					Arrays.asList(RolesEnum.ADVISOR));
+
+			ac.setAdvisor(isAdvisor);
+
+			return ac;
+		};
+	}
+
+	private Function<? super AccountContact, ? extends AccountContact> addAvatarUrl() {
+		return ac -> {
+
+			try {
+				ac.setAvatarUrl(this.getAvatar(ac.getUserId()));
+			} catch (UserNotFoundException e) {
+				// this should never happen since we found them previously
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
+			return ac;
+
+		};
+	}
+
+	/**
+	 * Maps a list of contact related account settings into a contact object.
+	 *
+	 * @param entry
+	 * @return
+	 * @throws UserNotFoundException
+	 */
+	protected AccountContact mapAccountContact(
+			Entry<Long, List<AccountSetting>> entry) {
+		AccountContact ac = new AccountContact();
+
+		Long userId = entry.getKey();
+		Optional<AccountSetting> address = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.address.name())).findFirst();
+		Optional<AccountSetting> email = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.email.name())).findFirst();
+		Optional<AccountSetting> phoneNumber = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.phoneNumber.name())).findFirst();
+		Optional<AccountSetting> twitter = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.twitter.name())).findFirst();
+		Optional<AccountSetting> linkedIn = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.linkedIn.name())).findFirst();
+
+		Optional<AccountSetting> firstName = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.firstName.name())).findFirst();
+
+		Optional<AccountSetting> middleName = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.middleName.name())).findFirst();
+
+		Optional<AccountSetting> lastName = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.lastName.name())).findFirst();
+
+		Optional<AccountSetting> siteUrl = entry
+				.getValue()
+				.stream()
+				.filter(as -> as.getName().equalsIgnoreCase(
+						AccountSettingsEnum.siteUrl.name())).findFirst();
+
+		ac.setUserId(userId);
+
+		if (address.isPresent())
+			ac.setAddress(address.get().getValue());
+
+		if (email.isPresent())
+			ac.setEmail(email.get().getValue());
+		else
+			try {
+				ac.setEmail(this.userService.getUser(userId).getUsername());
+			} catch (UserNotFoundException e) {
+				logger.severe(ExceptionUtils.getStackTrace(e));
+				NewRelic.noticeError(e);
+			}
+
+		if (phoneNumber.isPresent())
+			ac.setPhoneNumber(phoneNumber.get().getValue());
+
+		if (twitter.isPresent())
+			ac.setTwitter(twitter.get().getValue());
+
+		if (linkedIn.isPresent())
+			ac.setLinkedIn(linkedIn.get().getValue());
+
+		if (firstName.isPresent())
+			ac.setFirstName(firstName.get().getValue());
+
+		if (middleName.isPresent())
+			ac.setMiddleName(middleName.get().getValue());
+
+		if (lastName.isPresent())
+			ac.setLastName(lastName.get().getValue());
+
+		if (siteUrl.isPresent())
+			ac.setSiteUrl(siteUrl.get().getValue());
+
+		return ac;
 	}
 
 }

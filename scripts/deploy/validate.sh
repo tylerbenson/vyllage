@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 result=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/status-local)
 

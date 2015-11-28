@@ -27,9 +27,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -45,6 +45,7 @@ import user.common.UserOrganizationRole;
 import user.common.constants.AccountSettingsEnum;
 import user.common.web.AccountContact;
 import user.common.web.UserInfo;
+import util.web.constants.AccountUrlConstants;
 import accounts.model.Email;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
@@ -55,6 +56,7 @@ import accounts.model.account.settings.AccountSetting;
 import accounts.repository.EmailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.service.AccountSettingsService;
+import accounts.service.ConfirmationEmailService;
 import accounts.service.DocumentLinkService;
 import accounts.service.UserService;
 import accounts.service.contactSuggestion.UserContactSuggestionService;
@@ -94,6 +96,8 @@ public class AccountController {
 
 	private final ObjectMapper mapper;
 
+	private final ConfirmationEmailService confirmationEmailService;
+
 	@Inject
 	public AccountController(
 			final Environment environment,
@@ -101,6 +105,7 @@ public class AccountController {
 			final DocumentLinkService documentLinkService,
 			final UserContactSuggestionService userContactSuggestionService,
 			final AccountSettingsService accountSettingsService,
+			final ConfirmationEmailService confirmationEmailService,
 			final EmailRepository emailRepository,
 			@Qualifier(value = "accounts.emailBuilder") final EmailBuilder emailBuilder,
 			final TextEncryptor encryptor,
@@ -111,6 +116,7 @@ public class AccountController {
 		this.documentLinkService = documentLinkService;
 		this.userContactSuggestionService = userContactSuggestionService;
 		this.accountSettingsService = accountSettingsService;
+		this.confirmationEmailService = confirmationEmailService;
 		this.emailRepository = emailRepository;
 		this.emailBuilder = emailBuilder;
 		this.encryptor = encryptor;
@@ -123,7 +129,11 @@ public class AccountController {
 			return null;
 		}
 
-		return new UserInfo(user);
+		UserInfo userInfo = new UserInfo(user);
+		userInfo.setEmailConfirmed(confirmationEmailService
+				.isEmailConfirmed(user.getUserId()));
+
+		return userInfo;
 	}
 
 	@RequestMapping(value = "roles", method = RequestMethod.GET, produces = "application/json")
@@ -191,10 +201,8 @@ public class AccountController {
 				.filter(u -> !excludedIdsCopy.contains(u.getUserId()))
 				.collect(Collectors.toList());
 
-		return userService.getAccountContacts(
-				request,
-				users.stream().map(u -> u.getUserId())
-						.collect(Collectors.toList()));
+		return accountSettingsService.getAccountContacts(request, users
+				.stream().map(u -> u.getUserId()).collect(Collectors.toList()));
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.DELETE,
@@ -205,13 +213,13 @@ public class AccountController {
 
 		userService.delete(request, user.getUserId());
 
-		return "user-deleted";
+		return AccountUrlConstants.USER_DELETED;
 	}
 
 	@RequestMapping(value = "reset-password", method = RequestMethod.GET)
 	public String getResetPassword(Model model) {
 		model.addAttribute("resetPasswordForm", new ResetPasswordForm());
-		return "reset-password";
+		return AccountUrlConstants.RESET_PASSWORD;
 	}
 
 	@RequestMapping(value = "reset-password", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded;charset=UTF-8")
@@ -221,7 +229,7 @@ public class AccountController {
 
 		// validate email and return error if not in the database.
 		if (!isEmailValid(resetPassword))
-			return "reset-password";
+			return AccountUrlConstants.RESET_PASSWORD;
 
 		// If submit success:
 		// generate a new password reset link (similar to document share link)
@@ -248,10 +256,10 @@ public class AccountController {
 
 		// Link should log the user in and direct them to the password change
 		// page.
-		return "reset-password-success";
+		return AccountUrlConstants.RESET_PASSWORD_SUCCESS;
 	}
 
-	@RequestMapping(value = "/reset-password-change", method = RequestMethod.GET)
+	@RequestMapping(value = "reset-password-change", method = RequestMethod.GET)
 	public String resetPassword(
 			@RequestParam(value = "resetPassword", required = true) String resetPassword,
 			Model model) throws JsonParseException, JsonMappingException,
@@ -272,10 +280,10 @@ public class AccountController {
 
 		model.addAttribute("changePasswordForm", new ChangePasswordForm());
 
-		return "reset-password-change";
+		return AccountUrlConstants.RESET_PASSWORD_CHANGE;
 	}
 
-	@RequestMapping(value = "/reset-password-change", method = RequestMethod.POST)
+	@RequestMapping(value = "reset-password-change", method = RequestMethod.POST)
 	@PreAuthorize("isAuthenticated()")
 	public String postResetPassword(HttpServletRequest request,
 			ChangePasswordForm form, Model model) throws ServletException {
@@ -283,14 +291,14 @@ public class AccountController {
 		if (!form.isValid()) {
 			form.setError(true);
 			model.addAttribute("changePasswordForm", form);
-			return "reset-password-change";
+			return AccountUrlConstants.RESET_PASSWORD_CHANGE;
 		}
 
 		userService.changePassword(form.getNewPassword());
 
 		request.logout();
 
-		return "password-change-success";
+		return AccountUrlConstants.PASSWORD_CHANGE_SUCCESS;
 	}
 
 	@RequestMapping(value = "reset-password-forced", method = RequestMethod.GET)
@@ -299,7 +307,7 @@ public class AccountController {
 		logger.info("Reset password was forced.");
 		model.addAttribute("changePasswordForm", new ChangePasswordForm());
 
-		return "reset-password-forced";
+		return AccountUrlConstants.RESET_PASSWORD_FORCED;
 	}
 
 	@RequestMapping(value = "reset-password-forced", method = RequestMethod.POST)
@@ -313,7 +321,7 @@ public class AccountController {
 		if (!form.isValid()) {
 			form.setError(true);
 			model.addAttribute("changePasswordForm", form);
-			return "reset-password-forced";
+			return AccountUrlConstants.RESET_PASSWORD_FORCED;
 		}
 
 		userService.forcedPasswordChange(user.getUserId(), user.getUsername(),
@@ -321,7 +329,7 @@ public class AccountController {
 
 		request.logout();
 
-		return "password-change-success";
+		return AccountUrlConstants.PASSWORD_CHANGE_SUCCESS;
 	}
 
 	protected void sendResetPasswordEmail(String email, String encodedString,
@@ -356,7 +364,7 @@ public class AccountController {
 			HttpServletRequest request,
 			@RequestParam(value = "userIds", required = true) final List<Long> userIds) {
 
-		return userService.getAccountContacts(request, userIds);
+		return accountSettingsService.getAccountContacts(request, userIds);
 	}
 
 	@RequestMapping(value = "ping", method = RequestMethod.GET)
@@ -422,7 +430,7 @@ public class AccountController {
 
 		userService.changeEmail(user, changeEmailLink.getNewEmail());
 
-		return "email-change-success";
+		return AccountUrlConstants.EMAIL_CHANGE_SUCCESS;
 	}
 
 	@RequestMapping(value = "{userId}/can-request-feedback", method = RequestMethod.GET)
@@ -454,4 +462,13 @@ public class AccountController {
 				&& !noPhoneNumber;
 
 	}
+
+	@RequestMapping(value = "{userId}/email-confirmed", method = RequestMethod.GET)
+	public @ResponseBody Boolean emailConfirmed(
+			@PathVariable(value = "userId") Long userId) {
+
+		return confirmationEmailService.isEmailConfirmed(userId);
+
+	}
+
 }

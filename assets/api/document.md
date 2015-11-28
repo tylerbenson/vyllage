@@ -64,38 +64,11 @@ Returns
 {"resume":[0, 1, 2, n]}
 ```
 
-# Returns all the document permissions the currently logged in user has
-## GET /document/permissions
-This endpoint is intended for internal use.
-
-```
-	[
-		{
-			"documentId":0,
-			"userId":3,
-			"dateCreated":"2015-07-15T21:18:38",
-			"lastModified":"2015-07-15T21:18:38",
-			"expirationDate":null,
-			"allowGuestComments":true
-		}
-	]
-```
-
-# Creates new permission for the document and user
-## POST document/{documentId}/permissions/user/{userId}
-+ Body 
-```
-	{
-		"userId":36,
-		"documentId":903,
-		"allowGuestComments":true
-	}
+# Returns the last modification date of the user's document.
+## GET /document/user/{userId}/modified-date
++ Parameters
+	++ userId (string, `1`) - The id of the user.
 	
-```
+Returns: the number of milliseconds since the epoch of 1970-01-01T00:00:00Z.
+	
 
-+ Response 200
-
-
-# Revokes access to a document for the given user
-## DELETE document/{documentId}/permissions/user/{userId}
-+ Response 200

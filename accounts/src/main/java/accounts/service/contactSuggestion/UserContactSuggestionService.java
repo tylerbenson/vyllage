@@ -2,8 +2,10 @@ package accounts.service.contactSuggestion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -17,6 +19,7 @@ import user.common.User;
 import user.common.constants.RolesEnum;
 import accounts.repository.UserOrganizationRoleRepository;
 import accounts.service.AccountSettingsService;
+import accounts.service.DocumentService;
 
 @Service
 public class UserContactSuggestionService {
@@ -26,14 +29,16 @@ public class UserContactSuggestionService {
 	@Inject
 	public UserContactSuggestionService(DSLContext sql,
 			UserOrganizationRoleRepository userOrganizationRoleRepository,
-			AccountSettingsService accountSettingsService) {
+			AccountSettingsService accountSettingsService,
+			DocumentService documentService) {
 
 		roleToSelector.put(RolesEnum.GUEST, new GuestContactSelector(sql,
 				userOrganizationRoleRepository));
 
-		roleToSelector
-				.put(RolesEnum.STUDENT, new CurrentStudentContactSelector(sql,
-						userOrganizationRoleRepository, accountSettingsService));
+		roleToSelector.put(RolesEnum.STUDENT,
+				new CurrentStudentContactSelector(sql,
+						userOrganizationRoleRepository, accountSettingsService,
+						documentService));
 
 		roleToSelector.put(RolesEnum.ALUMNI, new AlumniContactSelector(sql,
 				userOrganizationRoleRepository));
@@ -89,7 +94,7 @@ public class UserContactSuggestionService {
 
 		users = backfill(user, users, limit);
 
-		return users;
+		return new HashSet<User>(users).stream().collect(Collectors.toList());
 	}
 
 	/**

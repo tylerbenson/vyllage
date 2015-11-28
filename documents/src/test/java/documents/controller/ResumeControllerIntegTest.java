@@ -1,6 +1,5 @@
 package documents.controller;
 
-import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -8,19 +7,20 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.http.entity.ContentType;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,19 +49,17 @@ import user.common.web.AccountContact;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 
 import documents.ApplicationTestConfig;
 import documents.model.Comment;
 import documents.model.Document;
 import documents.model.DocumentHeader;
-import documents.model.UserNotification;
 import documents.model.constants.DocumentTypeEnum;
 import documents.model.constants.SectionType;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
-import documents.repository.CommentRepository;
 import documents.repository.ElementNotFoundException;
-import documents.repository.UserNotificationRepository;
 import documents.services.DocumentService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -78,9 +76,6 @@ public class ResumeControllerIntegTest {
 	@Inject
 	private DocumentService documentService;
 
-	@Inject
-	private UserNotificationRepository userNotificationRepository;
-
 	// this is a mock from the mock beans configuration
 	@Inject
 	private RestTemplate restTemplate;
@@ -89,13 +84,16 @@ public class ResumeControllerIntegTest {
 	private WebApplicationContext wContext;
 
 	@Inject
-	private CommentRepository commentRepository;
-
-	private ObjectMapper mapper = new ObjectMapper();
+	private ObjectMapper mapper;
 
 	@Before
 	public void setUp() throws Exception {
 		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
+	}
+
+	@After
+	public void after() {
+		RestAssuredMockMvc.reset();
 	}
 
 	@Test
@@ -103,9 +101,13 @@ public class ResumeControllerIntegTest {
 			NoSuchMethodException, SecurityException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 
-		Document document = generateDocument();
+		Long userId = 1245L;
 
-		generateAndLoginUser();
+		Document document = generateDocument();
+		document.setUserId(userId);
+
+		User generateAndLoginUser = generateAndLoginUser();
+		when(generateAndLoginUser.getUserId()).thenReturn(userId);
 
 		document = documentService.saveDocument(document);
 
@@ -351,6 +353,9 @@ public class ResumeControllerIntegTest {
 			ElementNotFoundException {
 		Long documentId = 0L;
 
+		User user = generateAndLoginUser();
+		when(user.getUserId()).thenReturn(0L);
+
 		controller.deleteSection(documentId, 99999L);
 	}
 
@@ -409,7 +414,7 @@ public class ResumeControllerIntegTest {
 								+ "/comment")).andExpect(status().isOk())
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 		@SuppressWarnings("unchecked")
 		List<Comment> list = mapper.readValue(mvcResult.getResponse()
@@ -443,7 +448,7 @@ public class ResumeControllerIntegTest {
 								+ "/comment")).andExpect(status().isOk())
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 		@SuppressWarnings("unchecked")
 		List<Comment> list = mapper.readValue(mvcResult.getResponse()
@@ -474,283 +479,6 @@ public class ResumeControllerIntegTest {
 						mapper.writeValueAsString(comment))).andExpect(
 				status().isNotFound());
 
-	}
-
-	@Test(expected = ElementNotFoundException.class)
-	public void testCommentDeleteOwnComment() throws Exception {
-		Long documentId = 0L;
-		Long sectionId = 129L;
-		Long sectionVersion = 1L;
-		Long userId = 3L;
-
-		Comment comment = new Comment();
-		comment.setCommentId(null);
-		comment.setAvatarUrl(null);
-		comment.setCommentText("My own comment on another document.");
-		comment.setOtherCommentId(null);
-		comment.setLastModified(null);
-		comment.setSectionId(129L);
-		comment.setSectionVersion(sectionVersion);
-		comment.setUserId(userId);
-		comment.setUserName(null);
-
-		User user = generateAndLoginUser();
-		when(user.getUserId()).thenReturn(userId);
-
-		MvcResult mvcResult = mockMvc
-				.perform(
-						post(
-								"/resume/" + documentId + "/section/"
-										+ sectionId + "/comment").contentType(
-								ContentType.APPLICATION_JSON.toString())
-								.content(mapper.writeValueAsString(comment)))
-				.andExpect(status().isOk()).andReturn();
-
-		Comment savedComment = mapper.readValue(mvcResult.getResponse()
-				.getContentAsString(), Comment.class);
-
-		mockMvc.perform(
-				delete(
-						"/resume/" + documentId + "/section/" + sectionId
-								+ "/comment/" + savedComment.getCommentId())
-						.contentType(ContentType.APPLICATION_JSON.toString())
-						.content(mapper.writeValueAsString(savedComment)))
-				.andExpect(status().isAccepted());
-
-		commentRepository.get(savedComment.getCommentId());
-
-	}
-
-	@Test(expected = ElementNotFoundException.class)
-	public void testCommentDeleteOwnCommentFromOwnDocument() throws Exception {
-		Long documentId = 0L;
-		Long sectionId = 129L;
-		Long sectionVersion = 1L;
-		Long userId = 0L;
-
-		Comment comment = new Comment();
-		comment.setCommentId(null);
-		comment.setAvatarUrl(null);
-		comment.setCommentText("My own comment on my own document.");
-		comment.setOtherCommentId(null);
-		comment.setLastModified(null);
-		comment.setSectionId(129L);
-		comment.setSectionVersion(sectionVersion);
-		comment.setUserId(userId);
-		comment.setUserName(null);
-
-		User user = generateAndLoginUser();
-		when(user.getUserId()).thenReturn(userId);
-
-		MvcResult mvcResult = mockMvc
-				.perform(
-						post(
-								"/resume/" + documentId + "/section/"
-										+ sectionId + "/comment").contentType(
-								ContentType.APPLICATION_JSON.toString())
-								.content(mapper.writeValueAsString(comment)))
-				.andExpect(status().isOk()).andReturn();
-
-		Comment savedComment = mapper.readValue(mvcResult.getResponse()
-				.getContentAsString(), Comment.class);
-
-		mockMvc.perform(
-				delete(
-						"/resume/" + documentId + "/section/" + sectionId
-								+ "/comment/" + savedComment.getCommentId())
-						.contentType(ContentType.APPLICATION_JSON.toString())
-						.content(mapper.writeValueAsString(savedComment)))
-				.andExpect(status().isAccepted());
-
-		commentRepository.get(savedComment.getCommentId());
-
-	}
-
-	@Test
-	public void testDocumentOwnerDeletesAnotherUserComment() throws Exception {
-		Long documentId = 0L;
-		Long sectionId = 129L;
-		Long sectionVersion = 1L;
-		Long userId = 0L;
-		Long anotherUserId = 3L;
-
-		Comment comment = new Comment();
-		comment.setCommentId(null);
-		comment.setAvatarUrl(null);
-		comment.setCommentText("Another user Comment.");
-		comment.setOtherCommentId(null);
-		comment.setLastModified(null);
-		comment.setSectionId(129L);
-		comment.setSectionVersion(sectionVersion);
-		comment.setUserId(anotherUserId);
-		comment.setUserName(null);
-
-		User user = generateAndLoginUser();
-		when(user.getUserId()).thenReturn(userId);
-
-		// we cannot access the other projects so we don't send any
-		// notifications, just save one instead
-		userNotificationRepository.save(new UserNotification(userId));
-
-		MvcResult mvcResult = mockMvc
-				.perform(
-						post(
-								"/resume/" + documentId + "/section/"
-										+ sectionId + "/comment").contentType(
-								ContentType.APPLICATION_JSON.toString())
-								.content(mapper.writeValueAsString(comment)))
-				.andExpect(status().isOk()).andReturn();
-
-		Comment savedComment = mapper.readValue(mvcResult.getResponse()
-				.getContentAsString(), Comment.class);
-
-		mockMvc.perform(
-				delete(
-						"/resume/" + documentId + "/section/" + sectionId
-								+ "/comment/" + savedComment.getCommentId())
-						.contentType(ContentType.APPLICATION_JSON.toString())
-						.content(mapper.writeValueAsString(savedComment)))
-				.andExpect(status().isAccepted());
-
-	}
-
-	@Test
-	public void testCommentDeleteOwnCommentReferencingAnotherComment()
-			throws Exception {
-
-		// create first comment
-		Long documentId = 0L;
-		Long sectionId = 129L;
-		Long sectionVersion = 1L;
-		Long userId = 0L;
-
-		Comment comment = new Comment();
-		comment.setCommentId(null);
-		comment.setAvatarUrl(null);
-		comment.setCommentText("My own comment on my own document");
-		comment.setOtherCommentId(null);
-		comment.setLastModified(null);
-		comment.setSectionId(129L);
-		comment.setSectionVersion(sectionVersion);
-		comment.setUserId(userId);
-		comment.setUserName(null);
-
-		User user = generateAndLoginUser();
-		when(user.getUserId()).thenReturn(userId);
-
-		MvcResult mvcResult = mockMvc
-				.perform(
-						post(
-								"/resume/" + documentId + "/section/"
-										+ sectionId + "/comment").contentType(
-								ContentType.APPLICATION_JSON.toString())
-								.content(mapper.writeValueAsString(comment)))
-				.andExpect(status().isOk()).andReturn();
-
-		Comment savedComment = mapper.readValue(mvcResult.getResponse()
-				.getContentAsString(), Comment.class);
-
-		assertTrue(savedComment != null);
-
-		// create second comment referencing the previous one
-
-		Comment referencingComment = new Comment();
-		referencingComment.setCommentId(null);
-		referencingComment.setAvatarUrl(null);
-		referencingComment.setCommentText("Referencing comment.");
-		referencingComment.setOtherCommentId(savedComment.getCommentId());
-		referencingComment.setLastModified(null);
-		referencingComment.setSectionId(129L);
-		referencingComment.setSectionVersion(sectionVersion);
-		referencingComment.setUserId(userId);
-		referencingComment.setUserName(null);
-
-		MvcResult mvcReferencingResult = mockMvc
-				.perform(
-						post(
-								"/resume/" + documentId + "/section/"
-										+ sectionId + "/comment")
-								.contentType(
-										ContentType.APPLICATION_JSON.toString())
-								.content(
-										mapper.writeValueAsString(referencingComment)))
-				.andExpect(status().isOk()).andReturn();
-
-		Comment savedReferencingComment = mapper.readValue(mvcReferencingResult
-				.getResponse().getContentAsString(), Comment.class);
-
-		assertTrue(savedReferencingComment != null);
-		assertTrue("Referencing comment.".equals(savedReferencingComment
-				.getCommentText()));
-
-		// delete the referencing comment
-		mockMvc.perform(
-				delete(
-						"/resume/" + documentId + "/section/" + sectionId
-								+ "/comment/"
-								+ savedReferencingComment.getCommentId())
-						.contentType(ContentType.APPLICATION_JSON.toString())
-						.content(
-								mapper.writeValueAsString(savedReferencingComment)))
-				.andExpect(status().isAccepted());
-
-		// get all comments
-		@SuppressWarnings("unchecked")
-		ResponseEntity<AccountContact[]> response = mock(ResponseEntity.class);
-
-		when(
-				restTemplate.exchange(Mockito.anyString(),
-						Mockito.eq(HttpMethod.GET), Mockito.any(),
-						Mockito.eq(AccountContact[].class))).thenReturn(
-				response);
-
-		when(response.getBody()).thenReturn(null);
-
-		MvcResult mvcAllComments = mockMvc
-				.perform(
-						get("/resume/" + documentId + "/section/" + sectionId
-								+ "/comment")).andExpect(status().isOk())
-				.andExpect(content().string(containsString("[deleted]")))
-				.andReturn();
-
-		assertTrue(mvcAllComments != null);
-
-		@SuppressWarnings("unchecked")
-		List<Comment> list = mapper.readValue(mvcAllComments.getResponse()
-				.getContentAsString(), List.class);
-
-		assertFalse(list == null);
-		assertFalse(list.isEmpty());
-
-		// this doesn't work, the list is actually a LinkedHashMap
-		// assertTrue(list.stream().anyMatch(
-		// c -> c.isDeleted() == true
-		// && "[deleted]".equals(c.getCommentText())));
-
-	}
-
-	@Test
-	public void testSetCommentData() {
-		Long userId = 0L;
-		Long sectionId = 129L;
-
-		Comment comment = new Comment();
-		comment.setCommentId(null);
-		comment.setAvatarUrl(null);
-		comment.setCommentText("My own comment.");
-		comment.setOtherCommentId(null);
-		comment.setLastModified(null);
-		comment.setSectionId(null);
-		comment.setSectionVersion(0L);
-		comment.setUserId(null);
-		comment.setUserName(null);
-
-		User user = generateAndLoginUser();
-		when(user.getUserId()).thenReturn(userId);
-		when(user.getFirstName()).thenReturn("firstName");
-		when(user.getLastName()).thenReturn("lastName");
-
-		controller.setCommentData(sectionId, comment, user);
 	}
 
 	@Test(expected = AccessDeniedException.class)
@@ -812,7 +540,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType("application/pdf"))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -830,7 +558,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType("application/pdf"))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -845,7 +573,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -862,7 +590,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -879,7 +607,7 @@ public class ResumeControllerIntegTest {
 				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
 				.andReturn();
 
-		assertTrue(mvcResult != null);
+		assertNotNull(mvcResult);
 
 	}
 
@@ -901,6 +629,69 @@ public class ResumeControllerIntegTest {
 
 		assertFalse(result.isEmpty());
 
+	}
+
+	@Test
+	public void hasGraduatedTrue() throws Exception {
+
+		Long userId = 0L;
+		Long documentId = 0L;
+
+		EducationSection documentSection = new EducationSection();
+		documentSection.setDocumentId(documentId);
+		documentSection.setEndDate(LocalDate.now());
+
+		mockMvc.perform(
+				post("/resume/" + documentId + "/section").content(
+						documentSection.asJSON()).contentType(
+						MediaType.APPLICATION_JSON_VALUE))
+				//
+				.andExpect(status().isOk())
+				.andExpect(
+						content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andReturn();
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						get("/resume/has-graduated").param("userId",
+								userId.toString()).contentType(
+								MediaType.APPLICATION_JSON_VALUE))
+				//
+				.andExpect(status().isOk())
+				.andExpect(
+						content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andReturn();
+
+		assertNotNull(mvcResult);
+
+		Boolean hasGraduated = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), Boolean.class);
+
+		assertTrue(hasGraduated);
+	}
+
+	@Test
+	public void hasGraduatedFalseNoSections() throws Exception {
+
+		Long userId = 8L;
+
+		MvcResult mvcResult = mockMvc
+				.perform(
+						get("/resume/has-graduated").param("userId",
+								userId.toString()).contentType(
+								MediaType.APPLICATION_JSON_VALUE))
+				//
+				.andExpect(status().isOk())
+				.andExpect(
+						content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andReturn();
+
+		assertNotNull(mvcResult);
+
+		Boolean hasGraduated = mapper.readValue(mvcResult.getResponse()
+				.getContentAsString(), Boolean.class);
+
+		assertFalse(hasGraduated);
 	}
 
 	private User generateAndLoginUser() {

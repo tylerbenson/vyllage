@@ -2,10 +2,8 @@ package documents.controller;
 
 import static com.jayway.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,17 +12,12 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.env.Environment;
 
-import user.common.User;
-import documents.files.pdf.ResumeExportService;
-import documents.model.Comment;
 import documents.model.Document;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
-import documents.repository.DocumentAccessRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
-import documents.services.NotificationService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ResumeControllerTest {
@@ -62,22 +55,13 @@ public class ResumeControllerTest {
 
 	private AccountService accountService = Mockito.mock(AccountService.class);
 
-	private NotificationService notificationService = Mockito
-			.mock(NotificationService.class);
-
-	private ResumeExportService resumePdfService = Mockito
-			.mock(ResumeExportService.class);
-
-	private DocumentAccessRepository documentAccessRepository = Mockito
-			.mock(DocumentAccessRepository.class);;
-
 	private Environment environment = Mockito.mock(Environment.class);
 
 	@Before
 	public void setUp() {
 		controller = new ResumeController(documentService, accountService,
-				notificationService, resumePdfService,
-				documentAccessRepository, environment);
+
+		environment);
 	}
 
 	// resume/0/section/124
@@ -145,58 +129,6 @@ public class ResumeControllerTest {
 				.get("/resume/0/section/" + documentSectionId).then()
 				.assertThat().statusCode(404);
 
-	}
-
-	@Test
-	public void testCanDeleteAllComments() {
-		Long commentId = 1L;
-		Long userId = 1L;
-		Long otherUserId = 52L;
-
-		Comment comment = comments(5L).get(0);
-		comment.setCommentId(commentId);
-
-		comment.setUserId(otherUserId);
-
-		User user = Mockito.mock(User.class);
-
-		Mockito.when(user.getUserId()).thenReturn(userId);
-
-		Document document = new Document();
-		document.setUserId(userId);
-
-		assertTrue(controller.canDeleteComment(commentId, comment, user,
-				document));
-	}
-
-	@Test
-	public void testCanDeleteOwnComment() {
-		Long commentId = 1L;
-		Long userId = 1L;
-		Long otherUserId = 52L;
-
-		Comment comment = comments(5L).get(0);
-		comment.setCommentId(commentId);
-		comment.setUserId(userId);
-
-		User user = Mockito.mock(User.class);
-
-		Mockito.when(user.getUserId()).thenReturn(userId);
-
-		Document document = new Document();
-		document.setUserId(otherUserId);
-
-		assertTrue(controller.canDeleteComment(commentId, comment, user,
-				document));
-	}
-
-	private List<Comment> comments(Long sectionId) {
-		Comment comment = new Comment();
-		comment.setUserId(0L);
-		comment.setSectionId(sectionId);
-		comment.setCommentText("test");
-
-		return Arrays.asList(comment);
 	}
 
 }

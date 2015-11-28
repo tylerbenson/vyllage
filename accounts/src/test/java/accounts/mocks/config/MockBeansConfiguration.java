@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import accounts.config.BeansConfiguration;
@@ -34,5 +35,10 @@ public class MockBeansConfiguration {
 	public EmailBuilder emailBuilder(SpringTemplateEngine templateEngine,
 			Environment environment) {
 		return Mockito.mock(EmailBuilder.class, new SelfReturningAnswer());
+	}
+
+	@Bean
+	public RestTemplate restTemplate() {
+		return Mockito.mock(RestTemplate.class);
 	}
 }

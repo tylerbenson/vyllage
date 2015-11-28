@@ -17,6 +17,7 @@ var PubSub = require('pubsub-js');
 var Alert = require('../../alert');
 var uniq = require('lodash.uniq');
 var ReactAutolink = require('react-autolink');
+var classnames = require('classnames');
 
 var urlParams = {};
 
@@ -25,6 +26,7 @@ var Banner = React.createClass({
   getInitialState: function () {
     return {
       editMode: false,
+      emailVerified : false,
       lastScroll: {
         scrollY: window.scrollY,
         timestamp: new Date(),
@@ -71,13 +73,19 @@ var Banner = React.createClass({
     });
 
     urlParams = args;
-    
+
     if('edit-banner' in urlParams) {
       this.setState({'editMode': true});
     }
     if('type' in urlParams ){
       actions.postSection(urlParams);
       window.location.hash = ' ';
+    }
+  },
+  componentDidMount : function() {
+    var emailVerifiedMeta = document.getElementById('meta_userInfo_email_confirmed');
+    if( emailVerifiedMeta ){
+      this.setState({ 'emailVerified' : emailVerifiedMeta.content });
     }
   },
   onScroll: function(){
@@ -247,7 +255,10 @@ var Banner = React.createClass({
     var isReadOnly = (!header.owner) || (header.owner && !this.state.editMode);
     var name = (header.firstName ? header.firstName : '') + ' '
              + (header.lastName ? header.lastName : '');
-
+    var detailClasses = classnames({
+      'edit-mode': this.state.editMode,
+      'detail': true
+    });
 
     return (
       <section className={(header.owner?'':'guest ') + 'banner'} ref="banner">
@@ -284,7 +295,21 @@ var Banner = React.createClass({
           </div>
           {(header.owner?
           <div className="contact">
-            <div className='detail'>
+            {
+              this.state.editMode ?
+                <div className="reminder">
+                  <i className="ion-information-circled"></i>
+                  <span>Your contact details are kept confidential.</span>
+                </div>
+              : null
+            }
+            { this.state.editMode && this.state.emailVerified == 'false' ? 
+            <div className="reminder">
+              <i className="ion-android-warning"></i>
+              <span>Please verify your email.</span>
+            </div> : null
+            }
+            <div className={detailClasses}>
               <i className="ion-email"></i>
               <input
                 required
@@ -300,7 +325,7 @@ var Banner = React.createClass({
               />
               <p className='error'>{emailSetting.errorMessage}</p>
             </div>
-            <div className='detail'>
+            <div className={detailClasses}>
               <i className="ion-ios-telephone"></i>
               <input
                 required
@@ -315,7 +340,7 @@ var Banner = React.createClass({
               />
               <p className='error'>{phoneNumberSetting.errorMessage}</p>
             </div>
-            <div className='detail'>
+            <div className={detailClasses}>
               <i className="ion-link"></i>
               { isReadOnly && fields.siteUrl ? this.autolink(fields.siteUrl, { target: "_blank" }) :
                 <input

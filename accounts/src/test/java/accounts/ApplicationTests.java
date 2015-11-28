@@ -1,5 +1,7 @@
 package accounts;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ public class ApplicationTests {
 	@Test
 	public void contextLoads() {
 		System.out.println(env.getRequiredProperty("jooq.sql.dialect"));
+		assertNotNull(env.getRequiredProperty("jooq.sql.dialect"));
 	}
 
 }

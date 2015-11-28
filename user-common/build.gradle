@@ -10,15 +10,8 @@ dependencies {
     compile 'org.springframework.social:spring-social-facebook:2.0.1.RELEASE'
     compile 'org.springframework.social:spring-social-facebook-web:2.0.1.RELEASE'
     compile 'org.springframework.social:spring-social-google:1.0.0.RELEASE'
-
-    compile 'org.springframework.security:spring-security-core:3.2.8.RELEASE'
-    compile 'org.springframework.security:spring-security-web:3.2.8.RELEASE'
-//	compile 'org.springframework:spring-core:4.1.6.RELEASE'
-    compile 'org.springframework:spring-tx:4.1.8.RELEASE'
-//	compile 'org.springframework:spring-web:4.1.6.RELEASE'
+    compile 'org.springframework.social:spring-social-twitter:1.1.0.RELEASE'
 
     compile "javax.servlet:javax.servlet-api:3.1.0"
-//	compile("org.springframework.boot:spring-boot-starter-security")
-//	compile("org.springframework.boot:spring-boot-starter-web")
 
 }

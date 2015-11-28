@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 /usr/bin/supervisorctl start vyllage
 
