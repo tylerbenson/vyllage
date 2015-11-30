@@ -71,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/status", //
 						"/status-*", //
 						"/css/**", //
+						"/fonts/**", //
 						"/images/**", //
 						"/javascript/**").permitAll();
 

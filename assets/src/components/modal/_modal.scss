@@ -108,11 +108,37 @@
   }
 
   .content {
+    color: $text-color;
     font-weight: 400;
     padding: 0.5em 0 !important;
 
-    * {
+    h1, h2, h3, h4, h5, h6 {
+      color: $alternate-color-2;
+    }
+
+    p {
+      color: darken($secondary-color, 10%);
+      font-size: 1em;
+    }
+
+    input {
       color: $text-color;
+    }
+
+    a {
+      color: $primary-color;
+
+      &.forgot {
+        display: inline-block;
+        font-size: 0.8em;
+        margin: 0.75em 0;
+        text-decoration: none;
+        text-transform: uppercase;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
 
     .subheading {
