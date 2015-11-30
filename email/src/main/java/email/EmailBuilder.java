@@ -23,6 +23,7 @@ public class EmailBuilder {
 
 	private Map<String, Object> additionalVariables = new HashMap<>();
 
+	@SuppressWarnings("unused")
 	private EmailBuilder() {
 	}
 

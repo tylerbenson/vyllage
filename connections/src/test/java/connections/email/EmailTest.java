@@ -22,7 +22,7 @@ public class EmailTest {
 	private MailService service;
 
 	// Replace this with your account to see the email.
-	private String to = "no-reply@vyllage.com";
+	private String to = "chief@vyllage.com";
 
 	@Test
 	public void test() {
@@ -32,7 +32,7 @@ public class EmailTest {
 	// Uncomment to test, sends real emails
 	// @Test
 	// public void simpleTextTest() throws EmailException {
-	// String from = "no-reply@vyllage.com";
+	// String from = "chief@vyllage.com";
 	// String subject = "TestMail";
 	// String msg = "This is a test mail ... :-)";
 	// String userName = "user";
@@ -46,7 +46,7 @@ public class EmailTest {
 	//
 	// @Test
 	// public void htmlTest() throws EmailException {
-	// String from = "no-reply@vyllage.com";
+	// String from = "chief@vyllage.com";
 	// String subject = "TestMail";
 	// String msg = "This is a test mail ... :-)";
 	// String userName = "user";

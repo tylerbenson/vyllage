@@ -11,13 +11,13 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 public class MailService {
 
 	// @Value("${email.host}")
-	private String hostName = "smtp.zoho.com";
+	private String hostName = "smtp.gmail.com";
 
 	// @Value("${email.port}")
-	private int port = 465;
+	private int port = 587;
 
 	// @Value("${email.userName}")
-	private String userName = "no-reply@vyllage.com";
+	private String userName = "chief@vyllage.com";
 
 	// @Value("${email.password}")
 	private String password = "vyllage15";

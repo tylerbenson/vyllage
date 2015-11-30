@@ -123,7 +123,7 @@ public class NotificationService {
 			@NotNull AccountContact accountContact, @NotNull Comment comment) {
 		return emailBuilder
 				.from(environment.getProperty("email.from",
-						"no-reply@vyllage.com"))
+						"chief@vyllage.com"))
 				.fromUserName(
 						environment.getProperty("email.from.userName",
 								"Chief of Vyllage"))

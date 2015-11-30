@@ -64,8 +64,8 @@ public class SendConfirmationEmailAfterConnectInterceptorTest {
 
 		when(environment.getProperty("vyllage.domain", "www.vyllage.com"))
 				.thenReturn("www.vyllage.com");
-		when(environment.getProperty("email.from", "no-reply@vyllage.com"))
-				.thenReturn("no-reply@vyllage.com");
+		when(environment.getProperty("email.from", "chief@vyllage.com"))
+				.thenReturn("chief@vyllage.com");
 		when(environment.getProperty("email.from.userName", "Chief of Vyllage"))
 				.thenReturn("Chief of Vyllage");
 
