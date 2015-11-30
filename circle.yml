@@ -14,7 +14,7 @@ test:
   override:
     - java:
       timeout: 3600
-        - export TERM="dumb"; ./gradlew --info check circlePgTest
+        export TERM="dumb"; ./gradlew --info check circlePgTest
     - npm test
 
 deployment:
