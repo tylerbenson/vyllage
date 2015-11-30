@@ -496,7 +496,7 @@ public class UserService {
 				emailBuilder
 						.to(email)
 						.from(environment.getProperty("email.from",
-								"no-reply@vyllage.com"))
+								"chief@vyllage.com"))
 						.fromUserName(
 								environment.getProperty("email.from.userName",
 										"Chief of Vyllage"))

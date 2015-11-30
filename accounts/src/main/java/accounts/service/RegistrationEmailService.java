@@ -68,7 +68,7 @@ public class RegistrationEmailService {
 			try {
 
 				String from = environment.getProperty("email.from",
-						"no-reply@vyllage.com");
+						"chief@vyllage.com");
 
 				String fromUserName = environment.getProperty(
 						"email.from.userName", "Chief of Vyllage");

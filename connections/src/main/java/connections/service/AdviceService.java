@@ -171,13 +171,13 @@ public class AdviceService {
 			throws EmailException {
 
 		String from = environment.getProperty("email.from",
-				"no-reply@vyllage.com");
+				"chief@vyllage.com");
 
 		String userFirstName = loggedInUser.getFirstName();
 
 		// default.
 		String fromUser = environment.getProperty("email.from",
-				"no-reply@vyllage.com");
+				"chief@vyllage.com");
 		String atVyllage = environment.getProperty("email.from.user");
 
 		if (userFirstName != null && !userFirstName.isEmpty()
