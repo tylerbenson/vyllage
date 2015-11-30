@@ -155,7 +155,7 @@ public class UserDetailRepositoryTest {
 				confirmationEmailService, userOrganizationRoleRepository,
 				credentialsRepository, accountSettingRepository, txManager);
 
-		String username = "email3@google.com";
+		String username = "email4@google.com";
 		UserOrganizationRole uor = new UserOrganizationRole(null, 0L,
 				RolesEnum.ALUMNI.name(), 0L);
 

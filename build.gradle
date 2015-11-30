@@ -41,7 +41,7 @@ configure(subprojects) {
 }
 
 configure(rootProject) {
-    //apply from: 'gradle/gitMetadata.gradle'
+//    apply from: 'gradle/gitMetadata.gradle'
 }
 
 
