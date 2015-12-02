@@ -98,6 +98,8 @@ configure(javaProjects) {
 
         packageThreshold 0.0, "documents/database"
         packageThreshold 0.0, ~"documents/domain/tables/.*"
+        //not right now, just an example.
+        packageThreshold 0.0, "documents/indeed"
 
         //there's no way I can test >100 branches of equals and hashcode.
         packageThreshold 0.0, "documents/model/document/sections"
