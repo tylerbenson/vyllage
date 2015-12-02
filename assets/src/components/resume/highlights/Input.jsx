@@ -20,9 +20,11 @@ var HighlightInput = React.createClass({
 		return (
 			<li className="highlight lastOne">
 				<Textarea rows="1"
-					className="flat greyarea"
+					className="flat"
 					ref="highlightInput"
 					onKeyPress={this.addHandler}
+        	onFocus={this.props.onFocus}
+        	onBlur={this.props.onBlur}
 					placeholder="Highlight at least 3 notable accomplishments achieved in this position.." />
 			</li>
 		);

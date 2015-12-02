@@ -5,7 +5,12 @@ var Highlight = React.createClass({
 		return (
 			<li className="highlight">
 				{this.props.uiEditMode ?
-				<input className="flat highlightInput" onChange={this._handleEdit} onKeyDown={this._handlePress} value={this.props.text.replace(/\n{3,}/,'\n\n')} />
+				<input className="flat highlightInput"
+					onChange={this._handleEdit}
+					onKeyDown={this._handlePress}
+        	onFocus={this.props.onFocus}
+        	onBlur={this.props.onBlur}
+					value={this.props.text.replace(/\n{3,}/,'\n\n')} />
 				: <span className="flat">{this.props.text.replace(/\n{3,}/,'\n\n')}</span> }
 			</li>
 		);

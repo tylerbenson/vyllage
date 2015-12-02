@@ -1,18 +1,24 @@
 var React = require('react');
 var Highlight = require('../highlights/Highlight');
 var HighlightInput = require('../highlights/Input');
-var Sortable = require('../../util/Sortable');
 var clone = require('clone');
+var classnames = require('classnames');
 
 var Highlights = React.createClass({
 	getInitialState: function() {
 		return {
-			highlights: this.props.highlights ? this.props.highlights : []
+			highlights: this.props.highlights ? this.props.highlights : [],
+			focused: false
 		};
 	},
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			highlights: nextProps.highlights != undefined ? nextProps.highlights : []
+		});
+	},
+	onHighlightsFocus: function(flag) {
+		this.setState({
+			focused: flag
 		});
 	},
   onHighlightDelete: function(i) {
@@ -33,41 +39,37 @@ var Highlights = React.createClass({
 	getHighlights: function() {
 		return this.state.highlights;
 	},
-
-	stop: function(e, ui){
-		var temp = [];
-    jQuery(e.target).children('li').each(function(index) {
-      var tempText= jQuery(this).text();
-      if( tempText != "")
-      	temp.push(tempText);
-    });
-  	this.setState({
-      highlights: temp
-    });
-	},
 	render: function() {
 		var uiEditMode = this.props.uiEditMode;
 		var highlights = this.state.highlights.map(function(highlight, index){
       return (
-        <Highlight key={index} text={highlight} onDelete={this.onHighlightDelete.bind(this, index)} onEdit={this.onHighlightEdit.bind(this , index)} uiEditMode={uiEditMode} />
+        <Highlight key={index}
+        	text={highlight}
+        	onDelete={this.onHighlightDelete.bind(this, index)}
+        	onEdit={this.onHighlightEdit.bind(this , index)}
+        	onFocus={this.onHighlightsFocus.bind(this, true)}
+        	onBlur={this.onHighlightsFocus.bind(this, false)}
+        	uiEditMode={uiEditMode} />
       );
     }.bind(this));
 
-    var classes = "highlights";
-    if(uiEditMode){
-    	classes += " boxed";
-    }
+    var classes = classnames({
+    	'editMode': uiEditMode,
+    	'focused': this.state.focused,
+    	'highlights': true
+    });
 
-    var config = {
-    	list : ".highlights",
-      items: "li.highlight",
-      stop: this.stop
-    };
 		return (
-			<Sortable className={classes} config={config}>
+			<ul className={classes}>
 					{this.state.highlights != undefined ? highlights : null }
-					{uiEditMode ? <HighlightInput onAdd={this.onHighlightAdd} /> : null}
-			</Sortable>
+					{uiEditMode ?
+						<HighlightInput
+							onAdd={this.onHighlightAdd}
+		        	onFocus={this.onHighlightsFocus.bind(this, true)}
+		        	onBlur={this.onHighlightsFocus.bind(this, false)}
+	        	/>
+					: null}
+			</ul>
 		);
 	},
 	onHighlightEdit : function(index , data){
