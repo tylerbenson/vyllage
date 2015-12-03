@@ -15,7 +15,6 @@
   		-fs-pdf-font-embed: embed;
   		/*src does not work*/
 	/*	src: url('/documents/fonts/Quicksand Regular.tff'); */
-        
   }
   
   @font-face {
@@ -418,14 +417,14 @@
 
             </div>
 
-            <div class="section-single border-left">
-              <h3 class="block-title" th:text="${section.organizationName}">Volunteer for Bangladesh</h3>
-              <h4 class="project-position" th:text="${section.role}">Lead UI Designer</h4>
-              <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">(jan 2015 - Present)</h5>
-              <!-- <h5 class="location" th:text="${section.location}"></h5> -->
-              <!-- <p  class="section-description"  th:text="${section.organizationDescription}"></p> -->
+<!--             <div class="section-single border-left"> -->
+<!--               <h3 class="block-title" th:text="${section.organizationName}">Volunteer for Bangladesh</h3> -->
+<!--               <h4 class="project-position" th:text="${section.role}">Lead UI Designer</h4> -->
+<!--               <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">(jan 2015 - Present)</h5> -->
+<!--               <h5 class="location" th:text="${section.location}"></h5> -->
+<!--               <p  class="section-description"  th:text="${section.organizationDescription}"></p> -->
 
-            </div>
+<!--             </div> -->
 
           </th:block>
 
@@ -443,15 +442,15 @@
 
               </div>
 
-              <div class="section-single">
-                <h3 class="block-title" th:text="${section.projectTitle}">Battlefield Headline</h3>
-                <h4 class="project-position" th:text="${section.role}">Team Leader</h4>
-                <h5 class="start-end-duration" th:if="${section.projectDate != null }" th:text="${#temporals.format(section.projectDate, 'MMM yyyy')}">(July 2015)</h5>
+<!--               <div class="section-single"> -->
+<!--                 <h3 class="block-title" th:text="${section.projectTitle}">Battlefield Headline</h3> -->
+<!--                 <h4 class="project-position" th:text="${section.role}">Team Leader</h4> -->
+<!--                 <h5 class="start-end-duration" th:if="${section.projectDate != null }" th:text="${#temporals.format(section.projectDate, 'MMM yyyy')}">(July 2015)</h5> -->
 
-                <!-- <h5 class="location" th:text="${section.author}"></h5> -->
-                <p class="section-description" th:text="${section.projectDescription}">I must explain to you how all this mistaken idea</p>
+<!--                 <h5 class="location" th:text="${section.author}"></h5> -->
+<!--                 <p class="section-description" th:text="${section.projectDescription}">I must explain to you how all this mistaken idea</p> -->
 
-              </div>
+<!--               </div> -->
             </div>
 
           </th:block>
@@ -467,15 +466,15 @@
 
               </div>
 
-              <div class="education-single">
-                <h3 class="block-title small-font" th:text="${section.role}">B.Sc(Hons) CS</h3>
-                <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">(2010 - 2014)</h5>
-                <h5 class="location" th:text="${section.location}"></h5>
-                <p class="section-description" th:text="${section.organizationName}">Khulna University, Khulna Bangladesh </p>
+<!--               <div class="education-single"> -->
+<!--                 <h3 class="block-title small-font" th:text="${section.role}">B.Sc(Hons) CS</h3> -->
+<!--                 <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">(2010 - 2014)</h5> -->
+<!--                 <h5 class="location" th:text="${section.location}"></h5> -->
+<!--                 <p class="section-description" th:text="${section.organizationName}">Khulna University, Khulna Bangladesh </p> -->
 
 
 
-              </div>
+<!--               </div> -->
             </div>
           </th:block>
 
@@ -520,14 +519,14 @@
                 </div>
               </div>
 
-              <div class="section-single">
-                <div class="" th:each="reference : ${section.references}">
-                  <h3 class="block-title small-font ucase" th:text="${reference.firstName} + ' '  + ${reference.lastName} + '.'">John Smith</h3>
-                  <p class="section-description" th:text="${reference.description} + '.'">Lead Desiner</p>
+<!--               <div class="section-single"> -->
+<!--                 <div class="" th:each="reference : ${section.references}"> -->
+<!--                   <h3 class="block-title small-font ucase" th:text="${reference.firstName} + ' '  + ${reference.lastName} + '.'">John Smith</h3> -->
+<!--                   <p class="section-description" th:text="${reference.description} + '.'">Lead Desiner</p> -->
 <!--                   <p class="section-description" th:text="${reference.jobDescription}">Apple Inc, USA</p> -->
 
-                </div>
-              </div>
+<!--                 </div> -->
+<!--               </div> -->
             </div>
 
           </th:block>
