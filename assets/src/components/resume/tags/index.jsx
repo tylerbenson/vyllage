@@ -19,13 +19,13 @@ var resumeActions = require('../actions');
 var cloneDeep = require('clone');
 var FeatureToggle = require('../../util/FeatureToggle');
 var TagSuggestions = require('../../tags');
-require('jquery-ui/autocomplete');
+
 
 
 var Tags = React.createClass({
   getInitialState: function() {
     return {
-      tags: this.props.section.tags,
+      tags: this.props.section.tags == undefined ? [] : this.props.section.tags ,
       uiEditMode: this.props.section.newSection,
       error : false
     };
@@ -69,8 +69,6 @@ var Tags = React.createClass({
     }
     var section = this.props.section;
     section.tags = tags;
-    actions.putSection(section);
-
     if( this.validateSection( section ) == false ){
       actions.putSection(section);
       this.setState({
@@ -116,27 +114,18 @@ var Tags = React.createClass({
   onTagAdd: function(e) {
     var self = this;
     var suggestions = [];
+    var temp = [];
     if( this.props.section.type == "SkillsSection"){
       suggestions = TagSuggestions.skills;
     }else{
       suggestions = TagSuggestions.careerInterest;
     }
-    jQuery(e.target).autocomplete({
-      source: suggestions,
-      select: function( event, ui ) {
-        if( ui.item != undefined ){
-          var temp = self.state.tags.slice();          
-          temp.push(ui.item.value);
-          self.setState({
-            tags: temp
-          });
-          ui.item.value = "";
-        }
-      }
-    });
 
     if(e.which === 13 ) {
-      var temp = this.state.tags.slice();
+      temp = this.state.tags.slice();
+      if( temp == undefined || temp.length < 1){
+        temp = [];
+      }
       temp.push(e.target.value);
       this.setState({
         tags: temp
@@ -155,7 +144,6 @@ var Tags = React.createClass({
   render: function () {
     var uiEditMode = this.state.uiEditMode;
     var content = this.state.tags instanceof Array ? this.state.tags.join(', ') : '';
-
     var tags = this.state.tags.map(function(tag, index){
       return (
         <Tag key={index} text={tag} onDelete={this.onTagDelete.bind(this, index)} uiEditMode={uiEditMode} />
@@ -192,8 +180,8 @@ var Tags = React.createClass({
           { this.state.uiEditMode == undefined || this.state.uiEditMode == false ? <div className="tags content">{tags}</div> :
           <Sortable config={config} className="tags content move-tag">
             {tags}
-            {this.state.uiEditMode ? <TagInput className={(tags.length < 1 ? "error " : "") + "inline flat"} onKeyPress={this.onTagAdd} /> : null}
-            { tags.length < 1 ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }
+            {this.state.uiEditMode ? <TagInput type={this.props.section.type} className={(this.state.tags.length < 1 ? "error " : "") + "inline flat"} onKeyPress={this.onTagAdd} /> : null}
+            { this.state.tags.length < 1 ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }
           </Sortable> }
 
 
