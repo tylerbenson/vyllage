@@ -615,7 +615,7 @@ public class ResumeControllerIntegTest {
 	public void getAvailableStyles() throws Exception {
 
 		MvcResult mvcResult = mockMvc
-				.perform(get("/resume/file/pdf/styles"))
+				.perform(get("/resume/file/pdf/templates"))
 				.andExpect(status().isOk())
 				.andExpect(
 						content().contentType(MediaType.APPLICATION_JSON_VALUE))
