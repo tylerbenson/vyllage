@@ -152,10 +152,10 @@ public class UserDetailRepositoryTest {
 	@Test()
 	public void testCreatesUserDoesNotSendConfirmationEmail() {
 		UserDetailRepository repo = new UserDetailRepository(sql,
-				userOrganizationRoleRepository, credentialsRepository,
-				accountSettingRepository, txManager, confirmationEmailService);
+				confirmationEmailService, userOrganizationRoleRepository,
+				credentialsRepository, accountSettingRepository, txManager);
 
-		String username = "email3@google.com";
+		String username = "email4@google.com";
 		UserOrganizationRole uor = new UserOrganizationRole(null, 0L,
 				RolesEnum.ALUMNI.name(), 0L);
 

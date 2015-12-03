@@ -17,6 +17,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import org.apache.http.entity.ContentType;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,6 +46,7 @@ import user.common.web.AccountContact;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 
 import documents.ApplicationTestConfig;
 import documents.model.Document;
@@ -62,7 +64,8 @@ public class ReferenceNotificationIntegrationTest {
 
 	private MockMvc mockMvc;
 
-	private ObjectMapper mapper = new ObjectMapper();
+	@Inject
+	private ObjectMapper mapper;
 
 	@Inject
 	private WebApplicationContext wContext;
@@ -78,6 +81,11 @@ public class ReferenceNotificationIntegrationTest {
 	public void setUp() throws Exception {
 		mockMvc = MockMvcBuilders.webAppContextSetup(wContext).build();
 
+	}
+
+	@After
+	public void after() {
+		RestAssuredMockMvc.reset();
 	}
 
 	@Test
@@ -113,7 +121,6 @@ public class ReferenceNotificationIntegrationTest {
 		when(user2.getUserId()).thenReturn(otherUserId);
 
 		// load reference requests
-
 		// for account contact in the other project
 		mockRestTemplate();
 

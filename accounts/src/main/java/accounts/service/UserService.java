@@ -3,13 +3,9 @@ package accounts.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -19,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import lombok.NonNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.security.access.AccessDeniedException;
@@ -34,18 +30,16 @@ import org.springframework.util.Assert;
 import user.common.Organization;
 import user.common.User;
 import user.common.UserOrganizationRole;
-import user.common.constants.AccountSettingsEnum;
 import user.common.constants.OrganizationEnum;
 import user.common.constants.RolesEnum;
-import user.common.web.AccountContact;
 import accounts.model.account.AccountNames;
 import accounts.model.account.ChangeEmailLink;
 import accounts.model.account.settings.AccountSetting;
 import accounts.model.account.settings.Privacy;
 import accounts.model.form.RegisterForm;
 import accounts.model.link.DocumentLinkRequest;
+import accounts.repository.AccountSettingRepository;
 import accounts.repository.OrganizationRepository;
-import accounts.repository.RoleRepository;
 import accounts.repository.UserDetailRepository;
 import accounts.repository.UserNotFoundException;
 import accounts.repository.UserOrganizationRoleRepository;
@@ -62,52 +56,60 @@ import email.EmailBuilder;
 public class UserService {
 	private final Logger logger = Logger.getLogger(UserService.class.getName());
 
-	@Autowired
-	private DocumentService documentService;
+	private final DocumentService documentService;
 
-	@Autowired
-	private OrganizationRepository organizationRepository;
+	private final RegistrationEmailService registrationEmailService;
 
-	@Autowired
-	private UserOrganizationRoleRepository userOrganizationRoleRepository;
+	private final ExecutorService executorService;
 
-	@Autowired
-	private RoleRepository roleRepository;
+	private final OrganizationRepository organizationRepository;
 
-	@Autowired
-	private UserDetailRepository userRepository;
+	private final UserOrganizationRoleRepository userOrganizationRoleRepository;
 
-	@Autowired
-	private RandomPasswordGenerator randomPasswordGenerator;
+	private final UserDetailRepository userRepository;
 
-	@Autowired
-	@Qualifier(value = "accounts.emailBuilder")
-	private EmailBuilder emailBuilder;
+	private final AccountSettingRepository accountSettingRepository;
 
-	@Autowired
-	private Environment environment;
+	private final RandomPasswordGenerator randomPasswordGenerator;
 
-	@Autowired
-	@Qualifier(value = "accounts.ExecutorService")
-	private ExecutorService executorService;
+	private final EmailBuilder emailBuilder;
 
-	@Autowired
-	private AccountSettingsService accountSettingsService;
+	private final Environment environment;
 
-	@Autowired
-	private ObjectMapper mapper;
+	private final ObjectMapper mapper;
 
-	@Autowired
-	private TextEncryptor encryptor;
+	private final TextEncryptor encryptor;
 
-	@Autowired
+	@Inject
 	private SignInUtil signInUtil;
 
 	@Inject
-	private RegistrationEmailService registrationEmailService;
+	public UserService(
+			DocumentService documentService,
+			RegistrationEmailService registrationEmailService,
+			@Qualifier(value = "accounts.ExecutorService") ExecutorService executorService,
+			OrganizationRepository organizationRepository,
+			UserOrganizationRoleRepository userOrganizationRoleRepository,
+			UserDetailRepository userRepository,
+			AccountSettingRepository accountSettingRepository,
+			RandomPasswordGenerator randomPasswordGenerator,
+			@Qualifier(value = "accounts.emailBuilder") EmailBuilder emailBuilder,
+			final Environment environment, final ObjectMapper mapper,
+			final TextEncryptor encryptor) {
+		this.documentService = documentService;
+		this.registrationEmailService = registrationEmailService;
+		this.executorService = executorService;
+		this.organizationRepository = organizationRepository;
+		this.userOrganizationRoleRepository = userOrganizationRoleRepository;
+		this.userRepository = userRepository;
+		this.accountSettingRepository = accountSettingRepository;
+		this.randomPasswordGenerator = randomPasswordGenerator;
+		this.emailBuilder = emailBuilder;
+		this.environment = environment;
+		this.mapper = mapper;
+		this.encryptor = encryptor;
 
-	// TODO: add constructor and solve cycle between UserService and
-	// AccountSettingsService
+	}
 
 	public User getUser(Long userId) throws UserNotFoundException {
 		return userRepository.get(userId);
@@ -184,174 +186,6 @@ public class UserService {
 	public void forcedPasswordChange(Long userId, String userName,
 			String newPassword) {
 		userRepository.forcedPasswordChange(userId, userName, newPassword);
-	}
-
-	/**
-	 * Returns account contact information for several users.
-	 *
-	 * @param request
-	 */
-	public List<AccountContact> getAccountContacts(HttpServletRequest request,
-			@NonNull List<Long> userIds) {
-
-		if (userIds.isEmpty())
-			return Collections.emptyList();
-
-		// getting settings
-		List<AccountSetting> accountSettings = accountSettingsService
-				.getAccountSettings(userIds);
-
-		// mapping settings by user
-		Map<Long, List<AccountSetting>> map = accountSettings.stream().collect(
-				Collectors.groupingBy((AccountSetting as) -> as.getUserId(),
-						Collectors.mapping((AccountSetting as) -> as,
-								Collectors.toList())));
-
-		// generating account contact
-		List<AccountContact> accountContacts = map.entrySet().stream()
-				.map(e -> this.mapAccountContact(e)).map(addAvatarUrl())
-				.map(addIsAdvisor()).collect(Collectors.toList());
-
-		// getting taglines
-		Map<String, String> taglines = documentService
-				.getDocumentHeaderTagline(request, accountContacts.stream()
-						.map(ac -> ac.getUserId()).collect(Collectors.toList()));
-
-		// adding taglines to each user
-		if (taglines != null && !taglines.isEmpty())
-			accountContacts.forEach(ac -> ac.setTagline(taglines.getOrDefault(
-					ac.getUserId().toString(), "")));
-
-		return accountContacts;
-	}
-
-	private Function<? super AccountContact, ? extends AccountContact> addIsAdvisor() {
-		return ac -> {
-
-			boolean isAdvisor = userRepository.userHasRoles(ac.getUserId(),
-					Arrays.asList(RolesEnum.ADVISOR));
-
-			ac.setAdvisor(isAdvisor);
-
-			return ac;
-		};
-	}
-
-	private Function<? super AccountContact, ? extends AccountContact> addAvatarUrl() {
-		return ac -> {
-
-			try {
-				ac.setAvatarUrl(this.accountSettingsService.getAvatar(ac
-						.getUserId()));
-			} catch (UserNotFoundException e) {
-				// this should never happen since we found them previously
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
-			}
-			return ac;
-
-		};
-	}
-
-	/**
-	 * Maps a list of contact related account settings into a contact object.
-	 *
-	 * @param entry
-	 * @return
-	 * @throws UserNotFoundException
-	 */
-	protected AccountContact mapAccountContact(
-			Entry<Long, List<AccountSetting>> entry) {
-		AccountContact ac = new AccountContact();
-
-		Long userId = entry.getKey();
-		Optional<AccountSetting> address = entry
-				.getValue()
-				.stream()
-				.filter(as -> as.getName().equalsIgnoreCase(
-						AccountSettingsEnum.address.name())).findFirst();
-		Optional<AccountSetting> email = entry
-				.getValue()
-				.stream()
-				.filter(as -> as.getName().equalsIgnoreCase(
-						AccountSettingsEnum.email.name())).findFirst();
-		Optional<AccountSetting> phoneNumber = entry
-				.getValue()
-				.stream()
-				.filter(as -> as.getName().equalsIgnoreCase(
-						AccountSettingsEnum.phoneNumber.name())).findFirst();
-		Optional<AccountSetting> twitter = entry
-				.getValue()
-				.stream()
-				.filter(as -> as.getName().equalsIgnoreCase(
-						AccountSettingsEnum.twitter.name())).findFirst();
-		Optional<AccountSetting> linkedIn = entry
-				.getValue()
-				.stream()
-				.filter(as -> as.getName().equalsIgnoreCase(
-						AccountSettingsEnum.linkedIn.name())).findFirst();
-
-		Optional<AccountSetting> firstName = entry
-				.getValue()
-				.stream()
-				.filter(as -> as.getName().equalsIgnoreCase(
-						AccountSettingsEnum.firstName.name())).findFirst();
-
-		Optional<AccountSetting> middleName = entry
-				.getValue()
-				.stream()
-				.filter(as -> as.getName().equalsIgnoreCase(
-						AccountSettingsEnum.middleName.name())).findFirst();
-
-		Optional<AccountSetting> lastName = entry
-				.getValue()
-				.stream()
-				.filter(as -> as.getName().equalsIgnoreCase(
-						AccountSettingsEnum.lastName.name())).findFirst();
-
-		Optional<AccountSetting> siteUrl = entry
-				.getValue()
-				.stream()
-				.filter(as -> as.getName().equalsIgnoreCase(
-						AccountSettingsEnum.siteUrl.name())).findFirst();
-
-		ac.setUserId(userId);
-
-		if (address.isPresent())
-			ac.setAddress(address.get().getValue());
-
-		if (email.isPresent())
-			ac.setEmail(email.get().getValue());
-		else
-			try {
-				ac.setEmail(this.getUser(userId).getUsername());
-			} catch (UserNotFoundException e) {
-				logger.severe(ExceptionUtils.getStackTrace(e));
-				NewRelic.noticeError(e);
-			}
-
-		if (phoneNumber.isPresent())
-			ac.setPhoneNumber(phoneNumber.get().getValue());
-
-		if (twitter.isPresent())
-			ac.setTwitter(twitter.get().getValue());
-
-		if (linkedIn.isPresent())
-			ac.setLinkedIn(linkedIn.get().getValue());
-
-		if (firstName.isPresent())
-			ac.setFirstName(firstName.get().getValue());
-
-		if (middleName.isPresent())
-			ac.setMiddleName(middleName.get().getValue());
-
-		if (lastName.isPresent())
-			ac.setLastName(lastName.get().getValue());
-
-		if (siteUrl.isPresent())
-			ac.setSiteUrl(siteUrl.get().getValue());
-
-		return ac;
 	}
 
 	/**
@@ -662,7 +496,7 @@ public class UserService {
 				emailBuilder
 						.to(email)
 						.from(environment.getProperty("email.from",
-								"no-reply@vyllage.com"))
+								"chief@vyllage.com"))
 						.fromUserName(
 								environment.getProperty("email.from.userName",
 										"Chief of Vyllage"))
@@ -686,10 +520,10 @@ public class UserService {
 	}
 
 	public void changeEmail(@NonNull User user, @NonNull String email) {
-		Assert.isTrue(!email.isEmpty());
+		Assert.isTrue(!StringUtils.isBlank(email));
 
-		Optional<AccountSetting> accountSetting = accountSettingsService
-				.getAccountSetting(user, "newEmail");
+		Optional<AccountSetting> accountSetting = accountSettingRepository.get(
+				user.getUserId(), "newEmail");
 
 		if (!accountSetting.isPresent())
 			throw new AccessDeniedException("Invalid link provided.");
@@ -709,7 +543,11 @@ public class UserService {
 				"receiveAdvice", String.valueOf(receiveAdvice), Privacy.PRIVATE
 						.name().toLowerCase());
 
-		this.accountSettingsService.setAccountSetting(newUser, setting);
+		accountSettingRepository.set(setting);
+	}
+
+	public boolean userHasRoles(Long userId, List<RolesEnum> roles) {
+		return userRepository.userHasRoles(userId, roles);
 	}
 
 }

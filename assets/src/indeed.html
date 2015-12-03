@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <base href="." th:href="@{/}" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link href='//fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css' />
+  <th:block th:replace="fragment-header :: header ('Vyllage | Link Stats')">
+  </th:block>
+</head>
+
+<body>
+  <div id='container'>
+    <header>
+      <div class="content">
+        <div class="logo">
+          <img src="images/logo-white.png" alt="Vyllage" />
+          <span>Vyllage</span>
+        </div>
+        <span class="page-title">Indeed</span>
+      </div>
+    </header>
+    <div class="section content">
+      <label th:text="${response.query}"></label>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              Job Title
+            </th>
+            <th>
+              Company
+            </th>
+            <th>
+              Location
+            </th>
+            <th>
+              Description
+            </th>
+            <th>
+              Created
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="r : ${response.results}">
+            <td th:text="${r.jobtitle}"></td>
+            <td th:text="${r.company}"></td>
+            <td th:text="${r.formattedLocationFull}"></td>
+            <td th:utext="${r.snippet}"></td>
+            <td th:text="${r.formattedRelativeTime}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id='footer'></div>
+  <th:block th:replace="fragment-footer :: footer">
+  </th:block>
+</body>
+
+</html>

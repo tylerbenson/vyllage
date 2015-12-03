@@ -4,6 +4,7 @@ var path = require('path');
 
 module.exports = {
   entry: {
+    'homepage.js': './src/homepage.jsx',
     'resume.js': './src/resume.jsx',
     'getFeedback.js': './src/getFeedback.jsx',
     'settings.js': './src/settings.jsx',
