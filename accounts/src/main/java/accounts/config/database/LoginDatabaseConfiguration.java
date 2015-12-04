@@ -1,4 +1,6 @@
-package documents;
+package accounts.config.database;
+
+import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
@@ -20,11 +22,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
-import documents.database.ExceptionTranslator;
-import documents.database.SpringTransactionProvider;
-
 @Configuration
-public class EditorDatabaseConfiguration {
+public class LoginDatabaseConfiguration {
 
 	@Autowired
 	private DataSource dataSource;
@@ -38,7 +37,8 @@ public class EditorDatabaseConfiguration {
 	}
 
 	@Bean
-	public DataSourceTransactionManager transactionManager(DataSource dataSource) {
+	public DataSourceTransactionManager transactionManager(DataSource dataSource)
+			throws SQLException {
 		return new DataSourceTransactionManager(dataSource);
 	}
 
@@ -77,5 +77,4 @@ public class EditorDatabaseConfiguration {
 						.getRequiredProperty("jooq.sql.dialect")))
 				.set(new Settings().withRenderNameStyle(RenderNameStyle.LOWER));
 	}
-
 }

@@ -8,7 +8,9 @@ import org.springframework.context.annotation.PropertySource;
 import util.profiles.Profiles;
 
 @Profile({ Profiles.DEV, Profiles.PROD })
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = { "documents.configuration",
+		"documents.controller", "documents.repository", "documents.services",
+		"documents.indeed" })
 @PropertySource("classpath:/documents/application-${profile}.properties")
 public class Application {
 

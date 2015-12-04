@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -17,7 +18,8 @@ import util.profiles.Profiles;
 @ComponentScan(basePackageClasses = { connections.Application.class,
 		documents.Application.class, accounts.Application.class,
 		Application.class })
-@EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class })
+@EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class,
+		RepositoryRestMvcAutoConfiguration.class })
 public class Application implements CommandLineRunner {
 	private static final Logger logger = Logger.getLogger(Application.class
 			.getName());
