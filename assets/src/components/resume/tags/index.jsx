@@ -180,7 +180,7 @@ var Tags = React.createClass({
           { this.state.uiEditMode == undefined || this.state.uiEditMode == false ? <div className="tags content">{tags}</div> :
           <Sortable config={config} className="tags content move-tag">
             {tags}
-            {this.state.uiEditMode ? <TagInput type={this.props.section.type} className={(this.state.tags.length < 1 ? "error " : "") + "inline flat"} onKeyPress={this.onTagAdd} /> : null}
+            {this.state.uiEditMode ? <TagInput type={this.props.section.type} className={(this.state.tags.length < 1 ? "error " : "") + "inline flat"} onSelect={this._handleOnSelect.bind(this)} onKeyPress={this.onTagAdd} /> : null}
             { this.state.tags.length < 1 ? <p className='error'><i className='ion-android-warning'></i>Required field.</p> : null }
           </Sortable> }
 
@@ -190,6 +190,16 @@ var Tags = React.createClass({
           {this.state.uiEditMode ? <ConfirmUnload onDiscardChanges={this.cancelHandler} /> : null}
       </div>
     );
+  },
+  _handleOnSelect : function(tag){
+    var temp = this.state.tags.slice();
+    if( temp == undefined || temp.length < 1){
+      temp = [];
+    }
+    temp.push(tag);
+    this.setState({
+      tags: temp
+    });
   },
   _saveSuggestionHandler : function(){
    var tags = [];

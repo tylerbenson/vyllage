@@ -4,15 +4,19 @@ require('jquery-ui/autocomplete');
 
 var TagInput = React.createClass({
 	componentDidMount: function() {
+		var self = this;
 		this.refs.tagInput.getDOMNode().focus();
 		jQuery( this.refs.tagInput.getDOMNode() ).autocomplete({
       source: this.props.type == 'SkillsSection' ? TagSuggestions.skills : TagSuggestions.careerInterest ,
 			select: function( event, ui ) {
 				jQuery(ui.item).remove();
 			},
-			appendTo: ".dummy"
+			appendTo: ".dummy",
+			select: function( event, ui ) {
+				self.props.onSelect(ui.item.value);
+				ui.item.value = "";
+	    }
     });
-
 	},
 	render: function() {
 		return (
