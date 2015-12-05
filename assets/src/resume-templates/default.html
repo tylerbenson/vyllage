@@ -1,0 +1,273 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="author" th:content="${header.firstName + ' ' + header.lastName}" />
+  <meta name="keywords" content="Keyword1, Keyword2, This is one phrase, This is another" />
+  <meta name="subject" th:content="Resume" />
+  <meta name="title" th:content="${header.firstName + ' resume'}" />
+  <style th:fragment="default" type="text/css" media="print" rel="stylesheet">
+  html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  /*clearfix*/
+  
+  .cf:before,
+  .cf:after {
+    content: " ";
+    /* 1 */
+    display: table;
+    /* 2 */
+  }
+  
+  .cf:after {
+    clear: both;
+  }
+  
+  .cf {
+    zoom: 1;
+  }
+  
+  body {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  
+  .header {
+    border-bottom: #ddd solid 1px;
+    font-family: "Helvetica", "Arial", sans-serif;
+    padding-bottom: 8pt;
+    text-align: left;
+  }
+  
+  .info {
+    float: left;
+    width: 62%;
+  }
+  
+  .info em {
+    color: #666;
+    font-style: normal;
+  }
+  
+  .info p {
+    margin-top: 5pt;
+  }
+  
+  .contact {
+    float: left;
+    width: 38%;
+    margin-top: -10px;
+  }
+  
+  .contact div {
+    clear: both;
+    margin: 8px 0;
+  }
+  
+  .contact img {
+    margin-right: 15px;
+  }
+  
+  .contact p {
+    display: inline-block;
+    margin: 0;
+  }
+  
+  .sections {
+    clear: both;
+  }
+  
+  p {
+    margin: 1pt 0;
+  }
+  
+  h1 {
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 16pt;
+    margin: 0;
+    text-transform: uppercase;
+  }
+  
+  h2 {
+    color: #888;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 9pt;
+    margin: 16pt 0 4pt 0;
+    text-align: left;
+    text-transform: uppercase;
+  }
+  
+  h3 {
+    display: inline-block;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 12pt;
+    margin: 0;
+    text-transform: uppercase;
+  }
+  
+  h4 {
+    display: inline-block;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 12pt;
+    margin: 0;
+  }
+  
+  h5 {
+    color: #888;
+    display: inline-block;
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 12pt;
+    border-left: #eee solid 2px;
+    margin: 0;
+    padding-left: 8pt;
+  }
+  
+  .subsection {
+    padding: 8pt 12pt;
+  }
+  
+  ul {
+    margin: 8pt 0 -4pt 0;
+    padding: 0;
+    list-style-position: inside;
+  }
+  
+  li {
+    margin: 2pt 0 0 0;
+  }
+  
+  @page {
+    counter-reset: page 1;
+    margin: 40pt;
+  }
+  </style>
+</head>
+
+<body>
+  <div class="header cf">
+    <div class="info">
+      <div>
+        <h1 th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '') + ' ' + (header.lastName != null ? header.lastName : '')}">Names!</h1>
+      </div>
+      <div>
+        <em th:text="${header.tagline}">This is my tagline</em>
+      </div>
+      <div>
+        <p th:text="${header.address}">Casa 123</p>
+      </div>
+    </div>
+    <div class="contact">
+      <div class="cf" th:if="${header.email != null}">
+        <img src="/documents/images/mail-icon.png" />
+        <p th:text="${header.email}"> abcd@abcd.com</p>
+      </div>
+      <div th:if="${header.phoneNumber != null}">
+        <img src="/documents/images/phone-icon.png" />
+        <p th:text="${header.phoneNumber}">(555)1234-56789</p>
+      </div>
+      <div th:if="${header.siteUrl != null}">
+        <img src="/documents/images/web-icon.png" />
+        <p th:text="${header.siteUrl}">@abcd</p>
+      </div>
+    </div>
+  </div>
+  <!-- loop over the sections -->
+  <div class="sections">
+    <th:block th:each="section : ${sections}">
+      <th:block th:switch="${section.type}">
+
+        <th:block th:case="'SummarySection'">
+          <h2>Objective</h2>
+          <p th:text="${section.description}"></p>
+        </th:block>
+
+        <th:block th:case="'EducationSection'">
+          <h2 th:text="${section.title}"></h2>
+          <h3 th:text="${section.organizationName}"></h3>
+          <h5 class="location" th:text="${section.location}"></h5>
+          <p th:text="${section.organizationDescription}"></p>
+          <div class="subsection">
+            <h4 class="role" th:text="${section.role}"></h4>
+            <h5 th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</h5>
+            <p th:text="${section.roleDescription}"></p>
+            <ul>
+              <th:block th:each="high : ${section.highlights}">
+                <li th:text="${high}"></li>
+              </th:block>
+            </ul>
+          </div>
+        </th:block>
+
+        <th:block th:case="'JobExperienceSection'">
+          <h2 th:text="${section.title}"></h2>
+          <h3 th:text="${section.organizationName}"></h3>
+          <h5 class="location" th:text="${section.location}"></h5>
+          <p th:text="${section.organizationDescription}"></p>
+          <div class="subsection">
+            <h4 class="role" th:text="${section.role}"></h4>
+            <h5 th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">StartDate - EndDate</h5>
+            <p th:text="${section.roleDescription}"></p>
+            <ul>
+              <th:block th:each="high : ${section.highlights}">
+                <li th:text="${high}"></li>
+              </th:block>
+            </ul>
+          </div>
+        </th:block>
+
+        <th:block th:case="'ProjectsSection'">
+          <h2 th:text="${section.title}"></h2>
+          <h3 th:text="${section.projectTitle}"></h3>
+          <p th:text="${section.projectDescription}"></p>
+          <div class="subsection">
+            <h4 class="role" th:text="${section.role}"></h4>
+            <h5 th:if="${section.projectDate != null }" th:text="${#temporals.format(section.projectDate, 'MMM yyyy')}">ProjectDate</h5>
+            <p th:text="${section.roleDescription}"></p>
+          </div>
+        </th:block>
+
+        <th:block th:case="'SkillsSection'">
+          <h2 th:text="${section.title}">
+          </h2>
+          <p th:utext="${#strings.listJoin(section.tags,', ')}"></p>
+        </th:block>
+
+        <th:block th:case="'CareerInterestsSection'">
+          <h2 th:text="${section.title}">
+          </h2>
+          <p th:utext="${#strings.listJoin(section.tags,', ')}"></p>
+        </th:block>
+
+        <th:block th:case="'PersonalReferencesSection'">
+          <h2 th:text="${section.title}">
+          </h2>
+          <div class="subsection" th:each="reference : ${section.references}">
+            <p th:text="${reference.firstName} + ' '  + ${reference.lastName} + '.'"></p>
+            <p th:text="${reference.description}"></p>
+          </div>
+        </th:block>
+
+        <th:block th:case="'ProfessionalReferencesSection'">
+          <h2 th:text="${section.title}">
+          </h2>
+          <div class="subsection" th:each="reference : ${section.references}">
+            <p th:text="${reference.firstName} + ' '  + ${reference.lastName} + '.'"></p>
+            <p th:text="${reference.description} + '.'"></p>
+          </div>
+        </th:block>
+      </th:block>
+    </th:block>
+  </div>
+</body>
+
+</html>
