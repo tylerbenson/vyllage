@@ -7,26 +7,25 @@
   <meta name="keywords" content="Keyword1, Keyword2, This is one phrase, This is another" />
   <meta name="subject" th:content="Resume" />
   <meta name="title" th:content="${header.firstName + ' resume'}" />
-<!--   <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'></link> -->
+  <!--   <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'></link> -->
   <style type="text/css" media="print" rel="stylesheet">
+  @font-face {
+    font-family: "Quicksand", sans-serif;
+    -fs-pdf-font-embed: embed;
+    /*src does not work*/
+    /*	src: url('/documents/fonts/Quicksand Regular.tff'); */
+  }
 
   @font-face {
-  		font-family: "Quicksand", sans-serif;
-  		-fs-pdf-font-embed: embed;
-  		/*src does not work*/
-	/*	src: url('/documents/fonts/Quicksand Regular.tff'); */
+    font-family: 'Merriweather', serif;
+    -fs-pdf-font-embed: embed;
+    /*  src: url('/documents/fonts/Merriweather 300.ttf'); */
   }
-  
+
   @font-face {
-        font-family: 'Merriweather', serif;
-        -fs-pdf-font-embed: embed;
-	/*  src: url('/documents/fonts/Merriweather 300.ttf'); */
-  }
-  
-  @font-face {
-        font-family: 'Source Sans Pro Light', sans-serif;
-        -fs-pdf-font-embed: embed;
-	/*  src: url('/documents/fonts/Source Sans Pro 300.ttf'); */
+    font-family: 'Source Sans Pro Light', sans-serif;
+    -fs-pdf-font-embed: embed;
+    /*  src: url('/documents/fonts/Source Sans Pro 300.ttf'); */
   }
 
   html {
@@ -35,7 +34,7 @@
     -ms-text-size-adjust: 100%;
   }
   /*clearfix*/
-  
+
   .cf:before,
   .cf:after {
     content: " ";
@@ -43,23 +42,23 @@
     display: table;
     /* 2 */
   }
-  
+
   .cf:after {
     clear: both;
   }
-  
+
   .cf {
     zoom: 1;
   }
-  
+
   body {
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     line-height: 1.42857143;
     color: #333;
     background-color: #fff;
   }
-  
+
   .header {
     font-family: "Helvetica", "Arial", sans-serif;
     padding-bottom: 8pt;
@@ -68,51 +67,51 @@
     padding: 30px 30px 23px;
     width: 100%;
   }
-  
+
   .info {
     float: left;
     width: 62%;
   }
-  
+
   .info em {
     color: #fff;
     font-style: normal;
     font-size: 15px;
     text-transform: uppercase;
   }
-  
+
   .info p {
     margin-top: 5pt;
   }
-  
+
   .contact {
     float: left;
     width: 38%;
     margin-top: -10px;
   }
-  
+
   .contact div {
     clear: both;
     margin: 8px 0;
   }
-  
+
   .contact img {
     margin-right: 15px;
   }
-  
+
   .contact p {
     display: inline-block;
     margin: 0;
   }
-  
+
   .sections {
     clear: both;
   }
-  
+
   p {
     margin: 1pt 0;
   }
-  
+
   h1 {
     font-family: "Helvetica", "Arial", sans-serif;
     font-size: 16pt;
@@ -120,7 +119,7 @@
     text-transform: uppercase;
     color: #fff;
   }
-  
+
   h2 {
     color: #888;
     font-family: "Helvetica", "Arial", sans-serif;
@@ -129,21 +128,21 @@
     text-align: left;
     text-transform: uppercase;
   }
-  
+
   h3 {
     display: inline-block;
     font-family: "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
-  
+
   h4 {
     display: inline-block;
     font-family: "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
-  
+
   h5 {
     color: #888;
     display: inline-block;
@@ -151,24 +150,24 @@
     font-size: 12pt;
     margin: 0;
   }
-  
+
   .subsection {
     padding: 8pt 12pt;
   }
   /* *****************************
 	style added for resume one
 ******************************* */
-  
+
   * {
     box-sizing: border-box;
   }
-  
+
   *:before,
   *:after {
     box-sizing: border-box;
   }
   /* header style */
-  
+
   .username {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 30px;
@@ -177,7 +176,7 @@
     padding-bottom: 10px;
     padding-top: 20px;
   }
-  
+
   .content-single {
     position: relative;
     padding-left: 30px;
@@ -186,19 +185,19 @@
     font-size: 13px;
     padding-bottom: 7px;
   }
-  
+
   .content-single img {
     position: absolute;
     left: 0;
     top: 4px;
     width: 15px;
   }
-  
+
   .content-single img.custom-width {
     width: 12px;
   }
   /* content style */
-  
+
   .main-content {
     position: relative;
     padding: 30px;
@@ -206,19 +205,19 @@
     width: 100%;
     display: block;
   }
-  
+
   .objective-section {
     position: relative;
     padding-right: 40px;
     margin-bottom: 20px;
   }
-  
+
   .resume-one-main-cotent {
     position: relative;
     width: 100%;
     padding-right: 20px;
   }
-  
+
   .section-title {
     font-size: 21px;
     color: #34495e;
@@ -230,52 +229,53 @@
 .section-title.mb10 { margin-bottom: 10px !important; }
 .section-title.mt45 { margin-top: 45px; }
 .section-title.pb15 { padding-bottom: 15px !important; }*/
-  
+
   .section-single .section-title {
     margin-top: 0;
   }
-  
+
   .section-description {
     color: #333333;
     font-family: Arial, Helvetica, sans-serif;
     line-height: 20px;
     font-size: 14px;
-    margin: 0;
+    margin: -3px 0 10px 0;
     padding-top: 7px;
   }
-  
+
+  .section-description.light {
+    color: #444;
+  }
+
   .section-description ul {
     padding: 0;
     margin: 0;
   }
-  
+
   .section-description ul li {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     list-style: none;
     position: relative;
-    padding-left: 15px;
+    margin: 5px;
   }
-  
+
   .section-description ul li:before {
     /* For a round bullet */
     content: '\2022';
     /* For a square bullet */
     /*content:'\25A0';*/
-    display: block;
-    position: absolute;
-    max-width: 0;
-    max-height: 0;
-    left: 0;
-    top: -2px;
+    margin-right: 8px;
+    position: relative;
+    top: 3px;
     color: #34495e;
-    font-size: 24px;
+    font-size: 26px;
   }
-  
+
   .section-description.pt0 {
     padding-top: 0;
   }
-  
+
   .section-single {
     position: relative;
     background-color: #f9f9f9;
@@ -283,13 +283,13 @@
     margin-bottom: 15px;
     margin-right: 55px;
   }
-  
+
   .section-single.border-left {
     padding-left: 25px;
     padding-bottom: 25px;
     border-left: 4px solid #34495e;
   }
-  
+
   .block-title {
     display: block;
     font-size: 18px;
@@ -298,15 +298,19 @@
     color: #34495e;
     margin: 0;
   }
-  
+
+  .references .block-title {
+    margin-bottom: -10px;
+  }
+
   .block-title.small-font {
     font-size: 15px;
   }
-  
+
   .block-title.small-font.ucase {
     text-transform: uppercase;
   }
-  
+
   .project-position {
     font-size: 15px;
     color: #333333;
@@ -315,40 +319,56 @@
     margin: 0;
     display: block;
   }
-  
-  h5.start-end-duration {
+
+  h5.start-end-duration,
+  h5.location {
     color: #666;
     border: 0;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 100;
     margin: 0;
   }
-  
+
+  h5.location {
+    border-left: #ccc solid 1px;
+    display: inline-block;
+    margin-left: -10px;
+    padding-left: 10px;
+  }
+
   .project-section {
     position: relative;
     margin-bottom: 30px;
   }
-  
+
   .project-section .section-single {
     margin-bottom: 0;
     padding-bottom: 10px;
   }
-  
-  .referance-section .section-single {
+
+  .reference-section .section-single {
     margin-bottom: 0;
     padding-bottom: 10px;
   }
-  
+
+  .reference {
+    margin-bottom: 15px;
+  }
+
+  .reference:last-child {
+    margin-bottom: 5px;
+  }
+
   .section-single .education-single {
     margin-bottom: 30px;
   }
-  
+
   .section-single .education-single:last-child {
     margin-bottom: 0;
   }
   /* asde style */
   /* end style for resume one */
-  
+
   @page {
     counter-reset: page 1;
     margin: 25pt;
@@ -399,7 +419,7 @@
 
           <th:block th:case="'SummarySection'">
             <div class="objective-section">
-              <h2 class="section-title " th:text="${section.title}">Objectives</h2>
+              <h2 class="section-title">Objective</h2>
               <p class="section-description" th:text="${section.description}">I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will
                 give you a complete account.</p>
             </div>
@@ -408,23 +428,28 @@
 
           <th:block th:case="'JobExperienceSection'">
             <h2 class="section-title" th:text="${section.title}">Experience</h2>
-            <div class="section-single border-left">
+            <div class="section-single">
               <h3 class="block-title" th:text="${section.organizationName}">ABC Engineers</h3>
               <h4 class="project-position" th:text="${section.role}">Lead UI Designer</h4>
               <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">(jan 2015 - Present)</h5>
               <!-- <h5 class="location" th:text="${section.location}"></h5> -->
               <p class="section-description" th:text="${section.organizationDescription}">I must explain to you how all this mistaken idea of denouncing pleasure and.</p>
-
+              <p class="light section-description" th:text="${section.roleDescription}"></p>
+              <ul class="light section-description">
+                <th:block th:each="high : ${section.highlights}">
+                  <li th:text="${high}"></li>
+                </th:block>
+              </ul>
             </div>
 
-<!--             <div class="section-single border-left"> -->
-<!--               <h3 class="block-title" th:text="${section.organizationName}">Volunteer for Bangladesh</h3> -->
-<!--               <h4 class="project-position" th:text="${section.role}">Lead UI Designer</h4> -->
-<!--               <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">(jan 2015 - Present)</h5> -->
-<!--               <h5 class="location" th:text="${section.location}"></h5> -->
-<!--               <p  class="section-description"  th:text="${section.organizationDescription}"></p> -->
+            <!--             <div class="section-single border-left"> -->
+            <!--               <h3 class="block-title" th:text="${section.organizationName}">Volunteer for Bangladesh</h3> -->
+            <!--               <h4 class="project-position" th:text="${section.role}">Lead UI Designer</h4> -->
+            <!--               <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">(jan 2015 - Present)</h5> -->
+            <!--               <h5 class="location" th:text="${section.location}"></h5> -->
+            <!--               <p  class="section-description"  th:text="${section.organizationDescription}"></p> -->
 
-<!--             </div> -->
+            <!--             </div> -->
 
           </th:block>
 
@@ -442,15 +467,15 @@
 
               </div>
 
-<!--               <div class="section-single"> -->
-<!--                 <h3 class="block-title" th:text="${section.projectTitle}">Battlefield Headline</h3> -->
-<!--                 <h4 class="project-position" th:text="${section.role}">Team Leader</h4> -->
-<!--                 <h5 class="start-end-duration" th:if="${section.projectDate != null }" th:text="${#temporals.format(section.projectDate, 'MMM yyyy')}">(July 2015)</h5> -->
+              <!--               <div class="section-single"> -->
+              <!--                 <h3 class="block-title" th:text="${section.projectTitle}">Battlefield Headline</h3> -->
+              <!--                 <h4 class="project-position" th:text="${section.role}">Team Leader</h4> -->
+              <!--                 <h5 class="start-end-duration" th:if="${section.projectDate != null }" th:text="${#temporals.format(section.projectDate, 'MMM yyyy')}">(July 2015)</h5> -->
 
-<!--                 <h5 class="location" th:text="${section.author}"></h5> -->
-<!--                 <p class="section-description" th:text="${section.projectDescription}">I must explain to you how all this mistaken idea</p> -->
+              <!--                 <h5 class="location" th:text="${section.author}"></h5> -->
+              <!--                 <p class="section-description" th:text="${section.projectDescription}">I must explain to you how all this mistaken idea</p> -->
 
-<!--               </div> -->
+              <!--               </div> -->
             </div>
 
           </th:block>
@@ -459,22 +484,27 @@
             <h2 class="section-title" th:text="${section.title}">Education</h2>
             <div class="section-single">
               <div class="education-single">
-                <h3 class="block-title small-font" th:text="${section.role}">B.Sc(Hons) CS</h3>
+                <h3 class="block-title" th:text="${section.role}">B.Sc(Hons) CS</h3>
                 <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">(2010 - 2014)</h5>
                 <h5 class="location" th:text="${section.location}"></h5>
                 <p class="section-description" th:text="${section.organizationName}">Khulna University, Khulna Bangladesh </p>
-
+                <p class="light section-description" th:text="${section.roleDescription}"></p>
+                <ul class="light section-description">
+                  <th:block th:each="high : ${section.highlights}">
+                    <li th:text="${high}"></li>
+                  </th:block>
+                </ul>
               </div>
 
-<!--               <div class="education-single"> -->
-<!--                 <h3 class="block-title small-font" th:text="${section.role}">B.Sc(Hons) CS</h3> -->
-<!--                 <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">(2010 - 2014)</h5> -->
-<!--                 <h5 class="location" th:text="${section.location}"></h5> -->
-<!--                 <p class="section-description" th:text="${section.organizationName}">Khulna University, Khulna Bangladesh </p> -->
+              <!--               <div class="education-single"> -->
+              <!--                 <h3 class="block-title small-font" th:text="${section.role}">B.Sc(Hons) CS</h3> -->
+              <!--                 <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">(2010 - 2014)</h5> -->
+              <!--                 <h5 class="location" th:text="${section.location}"></h5> -->
+              <!--                 <p class="section-description" th:text="${section.organizationName}">Khulna University, Khulna Bangladesh </p> -->
 
 
 
-<!--               </div> -->
+              <!--               </div> -->
             </div>
           </th:block>
 
@@ -482,12 +512,9 @@
           <th:block th:case="'SkillsSection'">
             <h2 class="section-title" th:text="${section.title}">Skills</h2>
             <div class="section-single">
-              <p class="section-description" th:utext="${#strings.listJoin(section.tags,', ')} + ' .'">
+              <p class="section-description">
                 <ul th:each="tag : ${section.tags}">
-                  <li th:text="${tag}">Web Design</li>
-                  <li th:text="${tag}">Mobile Development</li>
-                  <li th:text="${tag}">React</li>
-                  <li th:text="${tag}">Angular</li>
+                  <li th:text="${tag}"></li>
                 </ul>
               </p>
             </div>
@@ -497,10 +524,9 @@
             <h2 class="section-title" th:text="${section.title}">Interests</h2>
 
             <div class="section-single">
-              <p class="section-description" th:utext="${#strings.listJoin(section.tags,', ')} + ' .'">
+              <p class="section-description">
                 <ul th:each="tag : ${section.tags}">
-                  <li th:text="${tag}">Music</li>
-                  <li th:text="${tag}">Photography</li>
+                  <li th:text="${tag}"></li>
                 </ul>
               </p>
             </div>
@@ -509,24 +535,24 @@
 
           <th:block th:case="'PersonalReferencesSection'">
             <h2 class="section-title" th:text="${section.title}">References</h2>
-            <div class="referance-section">
+            <div class="reference-section">
               <div class="section-single">
-                <div class="" th:each="reference : ${section.references}">
-                  <h3 class="block-title small-font ucase" th:text="${reference.firstName} + ' '  + ${reference.lastName} + '.'">John Smith</h3>
-                  <p class="section-description" th:text="${reference.description}">Lead Desiner</p>
-<!--                   <p class="section-description" th:text="${reference.jobDescription}">Apple Inc, USA</p> -->
+                <div class="reference" th:each="reference : ${section.references}">
+                  <h3 class="block-title small-font ucase" th:text="${reference.firstName} + ' '  + ${reference.lastName}">John Smith</h3>
+                  <p class="section-description" th:text="${reference.description}">Lead Designer</p>
+                  <!--                   <p class="section-description" th:text="${reference.jobDescription}">Apple Inc, USA</p> -->
 
                 </div>
               </div>
 
-<!--               <div class="section-single"> -->
-<!--                 <div class="" th:each="reference : ${section.references}"> -->
-<!--                   <h3 class="block-title small-font ucase" th:text="${reference.firstName} + ' '  + ${reference.lastName} + '.'">John Smith</h3> -->
-<!--                   <p class="section-description" th:text="${reference.description} + '.'">Lead Desiner</p> -->
-<!--                   <p class="section-description" th:text="${reference.jobDescription}">Apple Inc, USA</p> -->
+              <!--               <div class="section-single"> -->
+              <!--                 <div class="" th:each="reference : ${section.references}"> -->
+              <!--                   <h3 class="block-title small-font ucase" th:text="${reference.firstName} + ' '  + ${reference.lastName}">John Smith</h3> -->
+              <!--                   <p class="section-description" th:text="${reference.description} + '.'">Lead Designer</p> -->
+              <!--                   <p class="section-description" th:text="${reference.jobDescription}">Apple Inc, USA</p> -->
 
-<!--                 </div> -->
-<!--               </div> -->
+              <!--                 </div> -->
+              <!--               </div> -->
             </div>
 
           </th:block>
