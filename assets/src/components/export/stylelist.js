@@ -24,7 +24,7 @@ var ResumeStyleList = React.createClass({
 				'&height=' + (THUMB_HEIGHT) +
 				'&width=' + (THUMB_WIDTH);
 
-			var link = '/resume/'+ documentId +'/file/pdf?style=' + pdfStyle;
+			var link = '/resume/'+ documentId +'/file/pdf?template=' + pdfStyle;
 
 			return (
 				<a href={link} onClick={this._handleActive.bind(this, pdfStyle )} target="_blank" key={index} className={classes} >
