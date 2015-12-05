@@ -46,6 +46,8 @@ var assign = require('lodash.assign');
   'mergeAdvice',
   'publishMergeAdvice',
   'toggleEdits',
+  'editAdvice',
+  'publishEditedAdvices',
   'putSectionForAdvice',
   'publishSectionForAdvice',
   // Ui
@@ -320,7 +322,7 @@ var assign = require('lodash.assign');
       .send(advice)
       .end(function (err, res) {
         if( res.status == 200){
-          EditorActions.publishDeleteAdvice(section , res.body);
+       //   EditorActions.publishDeleteAdvice(section , res.body);
         }
       });
   } 
@@ -357,6 +359,20 @@ var assign = require('lodash.assign');
   }
 
 
+
+  EditorActions.editAdvice.preEmit = function( advice , section){
+    request
+      .put('/resume/'+documentId+'/section/'+section.sectionId+'/advice/'+advice.sectionAdviceId)
+      .set( tokenHeader, tokenValue)
+      .send(advice)
+      .end(function (err, res) {
+        if( res.status == 200){
+          if(res.body){
+            //EditorActions.publishEditedAdvices(res.body);
+          }
+        }
+      });
+  } 
 
 
   module.exports = EditorActions;

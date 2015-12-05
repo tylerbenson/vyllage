@@ -6,12 +6,28 @@ var Diff = require('../../diff/react-diff');
 var AcceptBtn = require('../../buttons/accept');
 var DeclineBtn = require('../../buttons/decline');
 var EditBtn = require('../../buttons/edit');
+var SaveBtn = require('../../buttons/save');
+var CancelBtn = require('../../buttons/cancel');
+var Textarea = require('react-textarea-autosize');
+var clone = require('clone');
+var findindex = require('lodash.findindex');
 
 var Advices = React.createClass({
+  getInitialState: function() {
+    return {
+      editAdviceMode : false
+    };
+  },
+  componentWillReceiveProps: function(nextProps) {
+    if(nextProps){
+      this.setState({advices : clone(nextProps.section.advices) });
+    }
+  },
   render: function () {
     var section = this.props.section || {};
+    var user_id = parseInt(document.getElementById('meta_userInfo_user').content);
 
-    if( this.props.section.advices !== undefined ){
+    if( this.state.advices !== undefined ){
       var showHighlights = function( highlight ,index){
         return(
           <li className="highlight"><Diff key={index} inputA={section.highlights[index]} inputB={highlight} type="words" /></li>
@@ -24,14 +40,13 @@ var Advices = React.createClass({
         )
       }.bind(this);
 
-      var adviceList = this.props.section.advices.map(function(advice ,index){
+      var adviceList = this.state.advices.map(function(advice ,index){
         if(section.type === 'EducationSection' || section.type === 'JobExperienceSection') {
           var startDateA = section.startDate ? section.startDate : '';
           var startDateB = advice.documentSection.startDate ? advice.documentSection.startDate : '';
           var endDateA = section.endDate ? section.endDate : section.isCurrent ? 'Present' : '';
           var endDateB = advice.documentSection.endDate ? advice.documentSection.endDate : advice.documentSection.isCurrent ? 'Present' : '';
         }
-
         if( advice.status == 'pending' ) {
         return <div key={index} className='comment'>
                 <div className='advice-content'>
@@ -40,6 +55,20 @@ var Advices = React.createClass({
                       <DeclineBtn onClick={this._cancelHandler.bind(this, advice)} />
                     </div> : null }
 
+                    { advice.userId == user_id && this.state.editAdviceMode ==false ?<div className="actions"> 
+                      <EditBtn onClick={this._editHandler.bind(this,advice)} />
+                      <button 
+                        className='inverted small icon delete'
+                        onClick={this._deleteHandler.bind(this, advice)}
+                        >
+                        <i className='ion-trash-a'></i>
+                      </button>
+                    </div> : <div className="actions">
+                      <SaveBtn onClick={this.saveHandler.bind(this, advice )}/>
+                      <CancelBtn onClick={this.cancelHandler.bind(this,advice)}/>
+                    </div>
+                    }
+
                   <div className='wrapper'>
                     <div className='info'>
                       <div className="author">{advice.userName?advice.userName:'Vyllage User'}</div>
@@ -47,27 +76,39 @@ var Advices = React.createClass({
                         {moment(advice.lastModified).isValid() ? moment.utc(advice.lastModified).fromNow(): ''}
                       </div>
                     </div>
-                    <div className="message">
-                      { section.type === 'SummarySection' ? <div>
-                        <Diff inputA={section.description} inputB={advice.documentSection.description} type="words" />
-                      </div>: null}
+                    { this.state.editAdviceMode == false ? 
+                      <div className="message">
+                        { section.type === 'SummarySection' ? <div>
+                          <Diff inputA={section.description} inputB={advice.documentSection.description} type="words" />
+                        </div>: null}
 
-                      { section.type === 'EducationSection' || section.type === 'JobExperienceSection' ? <div>
-                        <h2><Diff inputA={section.organizationName} inputB={advice.documentSection.organizationName} type="words" /></h2>
-                        <Diff inputA={section.organizationDescription} inputB={advice.documentSection.organizationDescription} type="words" />
-                        <h3><Diff inputA={section.role} inputB={advice.documentSection.role} type="words" /></h3>
-                        <Diff inputA={section.roleDescription} inputB={advice.documentSection.roleDescription} type="words" /> <br/>
-                        <Diff className="start date" inputA={startDateA} inputB={startDateB} type="words" /> -
-                        <Diff className="end date" inputA={endDateA} inputB={endDateB} type="words" />
-                        <Diff inputA={section.location} inputB={advice.documentSection.location} type="words" />
-                        <ul className="highlights">{advice.documentSection.highlights != undefined ? advice.documentSection.highlights.map(showHighlights) : null }</ul>
-                      </div>: null}
+                        { section.type === 'EducationSection' || section.type === 'JobExperienceSection' ? <div>
+                          <h2><Diff inputA={section.organizationName} inputB={advice.documentSection.organizationName} type="words" /></h2>
+                          <Diff inputA={section.organizationDescription} inputB={advice.documentSection.organizationDescription} type="words" />
+                          <h3><Diff inputA={section.role} inputB={advice.documentSection.role} type="words" /></h3>
+                          <Diff inputA={section.roleDescription} inputB={advice.documentSection.roleDescription} type="words" /> <br/>
+                          <Diff className="start date" inputA={startDateA} inputB={startDateB} type="words" /> -
+                          <Diff className="end date" inputA={endDateA} inputB={endDateB} type="words" />
+                          <Diff inputA={section.location} inputB={advice.documentSection.location} type="words" />
+                          <ul className="highlights">{advice.documentSection.highlights != undefined ? advice.documentSection.highlights.map(showHighlights) : null }</ul>
+                        </div>: null}
 
-                      { section.type === 'SkillsSection' || section.type === 'CareerInterestsSection' ? <div>
-                        <div className="tags">{advice.documentSection.tags != undefined ? advice.documentSection.tags.map(showTags) : null}</div>
-                      </div>: null}
-
-                    </div>
+                        { section.type === 'SkillsSection' || section.type === 'CareerInterestsSection' ? <div>
+                          <div className="tags">{advice.documentSection.tags != undefined ? advice.documentSection.tags.map(showTags) : null}</div>
+                        </div>: null}
+                      </div> : 
+                      <div> 
+                        <Textarea
+                          ref='description'
+                          className="flat"
+                          rows="1"
+                          autoComplete="off"
+                          placeholder="Tell us more.."
+                          value={advice.documentSection.description}
+                          onChange={this._handleChange.bind(this, advice ,'description')}
+                        ></Textarea>
+                      </div> 
+                    }
 
                   </div>
                 </div>
@@ -79,7 +120,7 @@ var Advices = React.createClass({
     if (section.showEdits) {
       return (
         <div className='comments'>
-          { this.props.section.advices.length > 0 ?  adviceList : null }
+          { this.state.advices.length > 0 ?  adviceList : null }
         </div>
       );
     } else {
@@ -95,8 +136,35 @@ var Advices = React.createClass({
     actions.deleteAdvice(advice , this.props.section );
   },
   _editHandler : function( advice ){
-
+    this.setState({'editAdviceMode' : true });
+  },
+  _handleChange : function(advice,key,e){
+    var advices = clone(this.state.advices);
+    if( key == 'description'){
+      var index = findindex( advices, { sectionAdviceId : advice.sectionAdviceId });
+      advices[index].documentSection.description = e.target.value;
+    }
+    this.setState({ 'advices' : advices });
+  },
+  _deleteHandler: function(advice){
+    var advices = clone(this.state.advices);
+    var index = findindex( this.props.section.advices, { sectionAdviceId : advice.sectionAdviceId });
+    advices.splice(index, 1);
+    advice.status = 'rejected';
+    actions.deleteAdvice(advice , this.props.section );
+    this.setState({ 'advices' : advices });
+  },
+  saveHandler : function(advice){
+    actions.editAdvice(advice , this.props.section );
+    this.setState({'editAdviceMode' : false });
+  },
+  cancelHandler : function(advice){
+    var advices = clone(this.state.advices);
+    var index = findindex( this.props.section.advices, { sectionAdviceId : advice.sectionAdviceId });
+    advices[index] = clone(this.props.section.advices[index]);
+    this.setState({ 'advices' : advices ,'editAdviceMode' : false });
   }
+
 });
 
 module.exports = Advices;
