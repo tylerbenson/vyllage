@@ -2,6 +2,7 @@ var React = require('react');
 
 var Highlight = React.createClass({
 	render: function() {
+		var val = this.props.text ? this.props.text.replace(/\n{3,}/,'\n\n') : '';
 		return (
 			<li className="highlight">
 				{this.props.uiEditMode ?
@@ -10,8 +11,8 @@ var Highlight = React.createClass({
 					onKeyDown={this._handlePress}
         	onFocus={this.props.onFocus}
         	onBlur={this.props.onBlur}
-					value={this.props.text.replace(/\n{3,}/,'\n\n')} />
-				: <span className="flat">{this.props.text.replace(/\n{3,}/,'\n\n')}</span> }
+					value={val} />
+				: <span className="flat">{val}</span> }
 			</li>
 		);
 	},
