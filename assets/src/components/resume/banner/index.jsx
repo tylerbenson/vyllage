@@ -89,7 +89,10 @@ var Banner = React.createClass({
     }
   },
   onScroll: function(){
-    this.handleScroll();
+    var header = this.props.header || {};
+    if(header.owner) {
+      this.handleScroll();
+    }
   },
   getRefValue: function(ref) {
     return this.refs[ref].getDOMNode().value;
@@ -303,7 +306,7 @@ var Banner = React.createClass({
                 </div>
               : null
             }
-            { this.state.editMode && this.state.emailVerified == 'false' ? 
+            { this.state.editMode && this.state.emailVerified == 'false' ?
             <div className="reminder">
               <i className="ion-android-warning"></i>
               <span>Please verify your email.</span>
