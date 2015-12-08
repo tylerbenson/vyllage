@@ -10,7 +10,7 @@ var Highlight = React.createClass({
 					onKeyDown={this._handlePress}
         	onFocus={this.props.onFocus}
         	onBlur={this.props.onBlur}
-					value={this.props.text.replace(/\n{3,}/,'\n\n')} />
+					value={this.props.text ? this.props.text.replace(/\n{3,}/,'\n\n') : ''} />
 				: <span className="flat">{this.props.text.replace(/\n{3,}/,'\n\n')}</span> }
 			</li>
 		);
