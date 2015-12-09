@@ -193,10 +193,10 @@ public class ResumeExportService {
 		callback.setSharedContext(renderer.getSharedContext());
 		renderer.getSharedContext().setUserAgentCallback(callback);
 		try {
+			renderer.getFontResolver().addFont("/documents/fonts/Lato 700.ttf",
+					true);
 			renderer.getFontResolver().addFont(
-					"/documents/fonts/Latto 700.ttf", true);
-			renderer.getFontResolver().addFont(
-					"/documents/fonts/Latto regular.ttf", true);
+					"/documents/fonts/Lato regular.ttf", true);
 
 			renderer.getFontResolver().addFont("/documents/fonts/Lora 700.ttf",
 					true);
