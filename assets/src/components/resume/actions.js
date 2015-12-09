@@ -81,7 +81,7 @@ var assign = require('lodash.assign');
 
 
 
-  // Get document id 
+  // Get document id
   EditorActions.getDocumentId.preEmit = function(){
 
     var url = urlTemplate
@@ -115,7 +115,7 @@ var assign = require('lodash.assign');
   }
 
 
-  // Get all sections with header 
+  // Get all sections with header
   EditorActions.getAllSections.preEmit = function(){
     var header;
     var headerUrl = urlTemplate
@@ -146,7 +146,7 @@ var assign = require('lodash.assign');
 
 
 
-  // Get Comments 
+  // Get Comments
   EditorActions.getComments.preEmit = function( sectionId ){
     var url = urlTemplate
                 .parse(endpoints.resumeComments)
@@ -163,7 +163,7 @@ var assign = require('lodash.assign');
   }
 
 
-  // Get Advices 
+  // Get Advices
   EditorActions.getAdvices.preEmit = function( sectionId ){
     request
       .get('/resume/'+documentId+'/section/'+sectionId+'/advice')
@@ -178,10 +178,10 @@ var assign = require('lodash.assign');
 
   // section edit
   EditorActions.putSection.preEmit = function( data ){
-
-    if( data.newSection ){
+    if(data.newSection) {
       EditorActions.postNewSection( data );
-    }else{
+    }
+    else {
       var url = urlTemplate
                 .parse(endpoints.resumeSection)
                 .expand({
@@ -191,11 +191,12 @@ var assign = require('lodash.assign');
 
       request
         .put(url)
-        .set(this.tokenHeader, this.tokenValue)
+        .set(tokenHeader, tokenValue)
         .send(omit(data, ['uiEditMode', 'showComments', 'comments', 'newSection', 'isSupported','advices','showEdits']))
         .end(function (err, res) {
-          if(res.body)
+          if(res.body) {
             EditorActions.publishSection( data , res.body );
+          }
         });
     }
   }
@@ -214,7 +215,7 @@ var assign = require('lodash.assign');
       .end(function (err, res) {
         if(res.body)
         EditorActions.publishNewSection(res.body);
-      });   
+      });
   }
 
 
@@ -289,7 +290,7 @@ var assign = require('lodash.assign');
       .send(comment)
       .end(function (err, res) {
          if(res.status == 202){
-          EditorActions.publishDeleteComment( comment , sectionId );  
+          EditorActions.publishDeleteComment( comment , sectionId );
          }
       });
 
@@ -323,7 +324,7 @@ var assign = require('lodash.assign');
           EditorActions.publishDeleteAdvice(section , res.body);
         }
       });
-  } 
+  }
 
 
   EditorActions.putSectionForAdvice.preEmit = function( data , section , advice ){
