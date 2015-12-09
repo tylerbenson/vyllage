@@ -194,11 +194,41 @@ public class ResumeExportService {
 		renderer.getSharedContext().setUserAgentCallback(callback);
 		try {
 			renderer.getFontResolver().addFont(
-					"/documents/fonts/Merriweather 300.ttf", true);
+					"/documents/fonts/Latto 700.ttf", true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Latto regular.ttf", true);
+
+			renderer.getFontResolver().addFont("/documents/fonts/Lora 700.ttf",
+					true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Lora regular.ttf", true);
+
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Merriweather 700.ttf", true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Merriweather regular.ttf", true);
+
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Montserrat regular.ttf", true);
+
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Open Sans 700.ttf", true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Open Sans regular.ttf", true);
+
 			renderer.getFontResolver().addFont(
 					"/documents/fonts/Quicksand Regular.ttf", true);
+
 			renderer.getFontResolver().addFont(
-					"/documents/fonts/Source Sans Pro 300.ttf", true);
+					"/documents/fonts/Roboto 700.ttf", true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Roboto regular.ttf", true);
+
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Source Sans Pro 700.ttf", true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Source Sans Pro regular.ttf", true);
+
 		} catch (DocumentException | IOException e) {
 			logger.severe(e.getMessage());
 			NewRelic.noticeError(e);
