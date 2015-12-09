@@ -7,8 +7,22 @@
   <meta name="keywords" content="Keyword1, Keyword2, This is one phrase, This is another" />
   <meta name="subject" th:content="Resume" />
   <meta name="title" th:content="${header.firstName + ' resume'}" />
-
   <style th:fragment="resumetwo" type="text/css" media="print" rel="stylesheet">
+
+  @font-face {
+    font-family: 'Merriweather', serif;
+    font-weight: 400;
+    -fs-pdf-font-embed: embed;
+    /*  src: url('/documents/fonts/Merriweather regular.ttf'); */
+  }
+
+  @font-face {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    -fs-pdf-font-embed: embed;
+    /*  src: url('/documents/fonts/Open Sans regular.ttf'); */
+  }
+
   html {
     font-size: 100%;
     -webkit-text-size-adjust: 100%;
@@ -33,7 +47,7 @@
   }
 
   body {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 13pt;
     line-height: 1.42857143;
     color: #333;
@@ -50,7 +64,7 @@
 }*/
 
   .header {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     padding-bottom: 8pt;
     text-align: left;
     background-color: #34495e;
@@ -65,6 +79,7 @@
 
   .info em {
     color: #fff;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-style: normal;
     font-size: 15px;
     text-transform: uppercase;
@@ -76,6 +91,7 @@
 
   .contact {
     float: left;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     width: 38%;
     margin-top: -10px;
   }
@@ -103,7 +119,7 @@
   }
 
   h1 {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 16pt;
     margin: 0;
     text-transform: uppercase;
@@ -112,7 +128,7 @@
 
   h2 {
     color: #888;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 9pt;
     margin: 16pt 0 4pt 0;
     text-align: left;
@@ -121,14 +137,14 @@
 
   h3 {
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 12pt;
     margin: 0;
   }
 
   h4 {
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 12pt;
     margin: 0;
   }
@@ -136,7 +152,7 @@
   h5 {
     color: #888;
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 12pt;
     margin: 0;
   }
@@ -169,7 +185,7 @@ li {
   }
 
   .header {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     text-align: left;
     background-color: #fff;
     position: relative;
@@ -196,11 +212,9 @@ li {
   }
 
   .username {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 35px;
+    font-size: 28px;
     line-height: 35px;
     font-weight: 500;
-    padding-bottom: 5px;
     padding-top: 10px;
     color: #333333;
   }
@@ -246,7 +260,7 @@ li {
     word-wrap: break-word;
   }
 
-  .resume-one-main-cotent {
+  .resume-one-main-content {
     position: relative;
     width: 98%;
     padding-right: 20px;
@@ -255,7 +269,7 @@ li {
   .section-title {
     font-size: 21px;
     color: #333333;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     margin-top: 5px;
     display: block;
@@ -264,9 +278,9 @@ li {
 
   .section-description {
     color: #666666;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 20px;
-    font-size: 14px;
+    font-family: "Merriweather", "Georgia", "Times", serif;
+    line-height: 21px;
+    font-size: 13px;
     margin: 0;
     padding-top: 7px;
   }
@@ -282,7 +296,7 @@ li {
   }
 
   .section-description ul li {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 14px;
     list-style: none;
     position: relative;
@@ -370,7 +384,7 @@ li {
     width: 85px;
     height: 85px;
     color: #666666;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 11pt;
     text-align: center;
   }
@@ -413,7 +427,6 @@ li {
   .reference .section-description {
     padding-top: 0;
   }
-
   /* education content */
 
   .education-single {
@@ -436,7 +449,7 @@ li {
       <div>
         <h1 class="username">
           <strong th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '')}">Hassanur</strong>
-          <span th:text="${(header.lastName != null ? header.lastName : '')}">Rakib</span>
+          <strong th:text="${(header.lastName != null ? header.lastName : '')}">Rakib</strong>
         </h1>
       </div>
       <div>
@@ -468,7 +481,7 @@ li {
   <div class="main-content cf">
     <!-- loop over the sections -->
 
-    <div class="sections resume-one-main-cotent">
+    <div class="sections resume-one-main-content">
 
 
       <th:block th:each="section : ${sections}">

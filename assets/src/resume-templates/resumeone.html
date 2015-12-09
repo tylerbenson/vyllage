@@ -7,25 +7,20 @@
   <meta name="keywords" content="Keyword1, Keyword2, This is one phrase, This is another" />
   <meta name="subject" th:content="Resume" />
   <meta name="title" th:content="${header.firstName + ' resume'}" />
-  <!--   <link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet' type='text/css'></link> -->
   <style type="text/css" media="print" rel="stylesheet">
+
   @font-face {
-    font-family: "Quicksand", sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     -fs-pdf-font-embed: embed;
-    /*src does not work*/
-    /*	src: url('/documents/fonts/Quicksand Regular.tff'); */
+    /*  src: url('/documents/fonts/Open Sans regular.ttf'); */
   }
 
   @font-face {
-    font-family: 'Merriweather', serif;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
     -fs-pdf-font-embed: embed;
-    /*  src: url('/documents/fonts/Merriweather 300.ttf'); */
-  }
-
-  @font-face {
-    font-family: 'Source Sans Pro Light', sans-serif;
-    -fs-pdf-font-embed: embed;
-    /*  src: url('/documents/fonts/Source Sans Pro 300.ttf'); */
+    /*  src: url('/documents/fonts/Montserrat regular.ttf'); */
   }
 
   html {
@@ -52,7 +47,7 @@
   }
 
   body {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     line-height: 1.42857143;
     color: #333;
@@ -60,7 +55,7 @@
   }
 
   .header {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     padding-bottom: 8pt;
     text-align: left;
     background-color: #34495e;
@@ -113,7 +108,7 @@
   }
 
   h1 {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 16pt;
     margin: 0;
     text-transform: uppercase;
@@ -121,9 +116,9 @@
   }
 
   h2 {
-    color: #888;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Montserrat", "Helvetica", "Arial", sans-serif;
     font-size: 9pt;
+    font-weight: 400;
     margin: 16pt 0 4pt 0;
     text-align: left;
     text-transform: uppercase;
@@ -131,14 +126,14 @@
 
   h3 {
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
 
   h4 {
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
@@ -146,7 +141,7 @@
   h5 {
     color: #888;
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
@@ -169,12 +164,12 @@
   /* header style */
 
   .username {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 30px;
     line-height: 35px;
     font-weight: 100;
     padding-bottom: 10px;
-    padding-top: 20px;
+    padding-top: 10px;
   }
 
   .content-single {
@@ -212,7 +207,7 @@
     margin-bottom: 20px;
   }
 
-  .resume-one-main-cotent {
+  .resume-one-main-content {
     position: relative;
     width: 100%;
     padding-right: 20px;
@@ -221,9 +216,9 @@
   .section-title {
     font-size: 21px;
     color: #34495e;
-    font-weight: 600;
+    font-weight: 400;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-top: 10px;
   }
   /*.section-title.mb15 { margin-bottom: 15px; }
 .section-title.mb10 { margin-bottom: 10px !important; }
@@ -236,8 +231,8 @@
 
   .section-description {
     color: #333333;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 20px;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+    line-height: 22px;
     font-size: 14px;
     margin: -3px 0 10px 0;
     padding-top: 7px;
@@ -253,7 +248,7 @@
   }
 
   .section-description ul li {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 14px;
     list-style: none;
     position: relative;
@@ -413,7 +408,7 @@
   </div>
   <div class="main-content cf">
     <!-- loop over the sections -->
-    <div class="sections resume-one-main-cotent">
+    <div class="sections resume-one-main-content">
       <th:block th:each="section : ${sections}">
         <th:block th:switch="${section.type}">
 

@@ -7,8 +7,22 @@
   <meta name="keywords" content="Keyword1, Keyword2, This is one phrase, This is another" />
   <meta name="subject" th:content="Resume" />
   <meta name="title" th:content="${header.firstName + ' resume'}" />
-
   <style th:fragment="resumetwo" type="text/css" media="print" rel="stylesheet">
+
+  @font-face {
+    font-family: 'Roboto', serif;
+    font-weight: 400;
+    -fs-pdf-font-embed: embed;
+    /*  src: url('/documents/fonts/Roboto regular.ttf'); */
+  }
+
+  @font-face {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    -fs-pdf-font-embed: embed;
+    /*  src: url('/documents/fonts/Lato regular.ttf'); */
+  }
+
   html {
     font-size: 100%;
     -webkit-text-size-adjust: 100%;
@@ -33,7 +47,7 @@
   }
 
   body {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     line-height: 1.42857143;
     color: #333;
@@ -58,7 +72,7 @@
   }
 
   h1 {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 16pt;
     margin: 0;
     text-transform: uppercase;
@@ -67,7 +81,7 @@
 
   h2 {
     color: #888;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Lato", "Helvetica", "Arial", sans-serif;
     font-size: 9pt;
     margin: 16pt 0 4pt 0;
     text-align: left;
@@ -76,14 +90,14 @@
 
   h3 {
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
 
   h4 {
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
@@ -91,7 +105,7 @@
   h5 {
     color: #888;
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
@@ -124,7 +138,7 @@ li {
   }
 
   .header {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     text-align: left;
     background-color: #fff;
     padding: 20px 20px 15px;
@@ -163,12 +177,12 @@ li {
   }
 
   .username {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Lato", "Helvetica", "Arial", sans-serif;
     font-size: 25px;
     line-height: 35px;
     font-weight: 100;
     padding-bottom: 5px;
-    padding-top: 20px;
+    padding-top: 10px;
     color: #333333;
   }
 
@@ -195,7 +209,6 @@ li {
     width: 80%;
     margin-top: -5px;
   }
-
   /* content style */
 
   .main-content {
@@ -214,16 +227,16 @@ li {
     word-wrap: break-word;
   }
 
-  .resume-one-main-cotent {
+  .resume-one-main-content {
     position: relative;
     width: 100%;
     padding-right: 50px;
   }
 
   .section-title {
-    font-size: 23px;
+    font-size: 18px;
     color: #f8b243;
-    font-weight: 600;
+    font-weight: 400;
     text-transform: uppercase;
     margin: 10px 0 0 0;
     display: block;
@@ -232,7 +245,7 @@ li {
 
   .section-description {
     color: #333333;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     line-height: 20px;
     font-size: 14px;
     margin: 0;
@@ -250,7 +263,7 @@ li {
 
   .section-description ul li {
     display: inline-block;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     float: left;
     font-size: 12pt;
     list-style: none;
@@ -281,7 +294,7 @@ li {
 
   .block-title {
     display: block;
-    font-size: 20px;
+    font-size: 18px;
     text-transform: normal;
     color: #2c2d2d;
     margin: 0;
@@ -320,7 +333,6 @@ li {
     margin-left: -10px;
     padding-left: 10px;
   }
-
   /* experience section */
 
   .experience-section {
@@ -329,6 +341,7 @@ li {
   /* project section */
 
   .project-section {
+    clear: both;
     position: relative;
     width: 100%;
     display: inline-block;
@@ -346,7 +359,6 @@ li {
   .project-section .section-description {
     margin: -5px 0 10px 0;
   }
-
   /* reference section*/
 
   .reference-section {
@@ -368,7 +380,6 @@ li {
   .reference .section-description {
     padding-top: 0;
   }
-
   /* education content */
 
   .education-section {
@@ -388,7 +399,7 @@ li {
   }
 
   .sidebar-address {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     width: 100%;
     display: inline-block;
   }
@@ -446,7 +457,7 @@ li {
   <div class="main-content cf">
     <!-- loop over the sections -->
 
-    <div class="sections resume-one-main-cotent">
+    <div class="sections resume-one-main-content">
       <th:block th:each="section : ${sections}">
         <th:block th:switch="${section.type}">
           <th:block th:case="'ProjectsSection'">

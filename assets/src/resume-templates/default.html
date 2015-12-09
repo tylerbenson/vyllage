@@ -8,6 +8,21 @@
   <meta name="subject" th:content="Resume" />
   <meta name="title" th:content="${header.firstName + ' resume'}" />
   <style th:fragment="default" type="text/css" media="print" rel="stylesheet">
+
+  @font-face {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    -fs-pdf-font-embed: embed;
+    /*  src: url('/documents/fonts/Open Sans regular.ttf'); */
+  }
+
+  @font-face {
+    font-family: 'Lora', serif;
+    font-weight: 400;
+    -fs-pdf-font-embed: embed;
+    /*  src: url('/documents/fonts/Lora regular.ttf'); */
+  }
+
   html {
     font-size: 100%;
     -webkit-text-size-adjust: 100%;
@@ -32,7 +47,7 @@
   }
 
   body {
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: "Lora", "Georgia", "Times New Roman", Times, serif;
     font-size: 12pt;
     line-height: 1.42857143;
     color: #333;
@@ -44,7 +59,7 @@
 
   .header {
     border-bottom: #ddd solid 1px;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     padding-bottom: 8pt;
     text-align: left;
   }
@@ -88,11 +103,13 @@
   }
 
   p {
+    font-size: 14px;
+    line-height: 21px;
     margin: 1pt 0;
   }
 
   h1 {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 16pt;
     margin: 0;
     text-transform: uppercase;
@@ -100,7 +117,7 @@
 
   h2 {
     color: #888;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 9pt;
     margin: 16pt 0 4pt 0;
     text-align: left;
@@ -109,7 +126,7 @@
 
   h3 {
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
     text-transform: uppercase;
@@ -117,7 +134,7 @@
 
   h4 {
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
@@ -125,7 +142,7 @@
   h5 {
     color: #888;
     display: inline-block;
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     border-left: #eee solid 2px;
     margin: 0;

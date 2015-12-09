@@ -68,7 +68,7 @@ public class ResumeExportService {
 	 * Generates a thumbnail of the resume in PNG using the selected style. <br>
 	 * http://stackoverflow.com/questions/4929813/convert-pdf-to-thumbnail-image
 	 * -in-java?lq=1
-	 * 
+	 *
 	 * @param resumeHeader
 	 * @param sections
 	 * @param templateName
@@ -217,9 +217,6 @@ public class ResumeExportService {
 					"/documents/fonts/Open Sans regular.ttf", true);
 
 			renderer.getFontResolver().addFont(
-					"/documents/fonts/Quicksand Regular.ttf", true);
-
-			renderer.getFontResolver().addFont(
 					"/documents/fonts/Roboto 700.ttf", true);
 			renderer.getFontResolver().addFont(
 					"/documents/fonts/Roboto regular.ttf", true);
@@ -243,7 +240,7 @@ public class ResumeExportService {
 	/**
 	 * Generates a key based on the hash of the resume header, sections and
 	 * style name.
-	 * 
+	 *
 	 * @param resumeHeader
 	 * @param sections
 	 * @param styleName
