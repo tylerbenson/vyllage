@@ -1,6 +1,7 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import de.undercouch.gradle.tasks.download.Download
 
 def vJavaLang = '1.8'
 def gradleDir = "${rootProject.rootDir}/gradle"
@@ -29,6 +30,7 @@ buildscript {
         classpath 'com.palantir:jacoco-coverage:0.3.0'
         classpath 'com.google.guava:guava:18.0' // Used by palantir jacoco-coverage but not properly declared.
         classpath 'com.diffplug.gradle.spotless:spotless:1.1'
+        classpath 'de.undercouch:gradle-download-task:2.0.0' // task to download stuff
     }
 }
 
@@ -42,6 +44,25 @@ configure(subprojects) {
 
 configure(rootProject) {
 //    apply from: 'gradle/gitMetadata.gradle'
+    //from https://github.com/michel-kraemer/gradle-download-task
+    apply plugin: 'de.undercouch.download'
+    def newrelicVersion = "3.23.0"
+
+    task downloadZipFile(type: Download) {
+        src "https://download.newrelic.com/newrelic/java-agent/newrelic-api/${newrelicVersion}/newrelic-java-${newrelicVersion}.zip"
+        dest new File("${rootProject.rootDir}/newrelic", "newrelic-java-${newrelicVersion}.zip")
+        overwrite false
+        onlyIfNewer true
+    }
+
+    task downloadAndUnzipFile(dependsOn: downloadZipFile, type: Copy) {
+        from zipTree(downloadZipFile.dest)
+        into "${rootProject.rootDir}/" //newrelic directory is already in the zip.
+        include "**/newrelic.jar"
+        rename {String fileName ->
+            fileName = "newrelic-agent-${newrelicVersion}.jar"
+        }
+    }
 }
 
 
@@ -50,7 +71,6 @@ configure(javaProjects) {
     apply plugin: 'com.palantir.jacoco-coverage'
     apply plugin: 'jacoco'
     apply plugin: 'findbugs'
-
 
     jacoco {
         toolVersion = "0.7.4.201502262128"
