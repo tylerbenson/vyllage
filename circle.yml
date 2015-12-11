@@ -12,7 +12,7 @@ dependencies:
 
 test:
   override:
-    - (export TERM="dumb"; ./gradlew check circlePgTest):
+    - (export TERM="dumb"; ./gradlew check circlePgTest copyNewRelic):
         timeout: 3600
     - npm test
 

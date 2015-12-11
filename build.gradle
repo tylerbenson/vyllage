@@ -42,6 +42,23 @@ configure(subprojects) {
 
 configure(rootProject) {
 //    apply from: 'gradle/gitMetadata.gradle'
+
+    repositories {
+      mavenCentral()
+    }
+
+    configurations {
+      newRelic
+    }
+
+    dependencies {
+      newRelic "com.newrelic.agent.java:newrelic-agent:3.23.0"
+    }
+
+    task copyNewRelic(type: Copy) {
+      from configurations.newRelic
+      into "${rootProject.rootDir}/newrelic"
+    }
 }
 
 
@@ -50,7 +67,6 @@ configure(javaProjects) {
     apply plugin: 'com.palantir.jacoco-coverage'
     apply plugin: 'jacoco'
     apply plugin: 'findbugs'
-
 
     jacoco {
         toolVersion = "0.7.4.201502262128"
