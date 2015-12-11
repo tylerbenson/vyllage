@@ -44,24 +44,23 @@ configure(subprojects) {
 
 configure(rootProject) {
 //    apply from: 'gradle/gitMetadata.gradle'
-    //from https://github.com/michel-kraemer/gradle-download-task
-    apply plugin: 'de.undercouch.download'
-    def newrelicVersion = "3.23.0"
 
-    task downloadZipFile(type: Download) {
-        src "https://download.newrelic.com/newrelic/java-agent/newrelic-api/${newrelicVersion}/newrelic-java-${newrelicVersion}.zip"
-        dest new File("${rootProject.rootDir}/newrelic", "newrelic-java-${newrelicVersion}.zip")
-        overwrite false
-        onlyIfNewer true
+    apply plugin: "java"
+    repositories {
+      mavenCentral()
     }
 
-    task downloadAndUnzipFile(dependsOn: downloadZipFile, type: Copy) {
-        from zipTree(downloadZipFile.dest)
-        into "${rootProject.rootDir}/" //newrelic directory is already in the zip.
-        include "**/newrelic.jar"
-        rename {String fileName ->
-            fileName = "newrelic-agent-${newrelicVersion}.jar"
-        }
+    configurations {
+      newRelic
+    }
+
+    dependencies {
+      newRelic "com.newrelic.agent.java:newrelic-agent:3.23.0"
+    }
+
+    task copyNewRelic(type: Copy) {
+      from configurations.newRelic
+      into "${rootProject.rootDir}/newrelic"
     }
 }
 
