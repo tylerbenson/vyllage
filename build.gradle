@@ -43,7 +43,6 @@ configure(subprojects) {
 configure(rootProject) {
 //    apply from: 'gradle/gitMetadata.gradle'
 
-    apply plugin: "java"
     repositories {
       mavenCentral()
     }
