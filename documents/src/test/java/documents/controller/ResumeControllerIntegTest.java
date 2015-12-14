@@ -552,7 +552,7 @@ public class ResumeControllerIntegTest {
 		MvcResult mvcResult = mockMvc
 				.perform(
 						get("/resume/" + documentId + "/file/pdf").param(
-								"templateName", "resumeone"))
+								"templateName", "standard"))
 
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/pdf"))
@@ -585,7 +585,7 @@ public class ResumeControllerIntegTest {
 		MvcResult mvcResult = mockMvc
 				.perform(
 						get("/resume/" + documentId + "/file/png").param(
-								"templateName", "resumeone"))
+								"templateName", "standard"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.IMAGE_PNG_VALUE))
 				.andReturn();

@@ -54,7 +54,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String templateName = "resumeone";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -83,7 +83,7 @@ public class ResumeExportServiceTest {
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 
-		String templateName = "resumeone";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -113,7 +113,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String templateName = "resumeone";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -131,7 +131,7 @@ public class ResumeExportServiceTest {
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 
-		String templateName = "resumeone";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -147,7 +147,7 @@ public class ResumeExportServiceTest {
 			throws DocumentException {
 		ResumeExportService service = new ResumeExportService(templateEngine);
 
-		String templateName = "resumeone";
+		String templateName = "standard";
 
 		DocumentHeader resumeHeader = null;
 		List<DocumentSection> sections = null;
@@ -162,7 +162,7 @@ public class ResumeExportServiceTest {
 	public void testGeneratePDFDocumentNullSections() throws DocumentException {
 		ResumeExportService service = new ResumeExportService(templateEngine);
 
-		String templateName = "resumeone";
+		String templateName = "standard";
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 		List<DocumentSection> sections = null;
@@ -210,7 +210,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String templateName = "resumeone";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -242,7 +242,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String templateName = "resumeone";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -272,7 +272,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String templateName = "resumeone";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -304,7 +304,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String templateName = "resumeone";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
