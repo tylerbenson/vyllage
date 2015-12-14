@@ -60,7 +60,7 @@ public class FileController {
 			pdfTemplates.addAll(Arrays.asList(this.environment.getProperty(
 					"pdf.templates").split(",")));
 		else
-			pdfTemplates.add("default");
+			pdfTemplates.add("standard");
 	}
 
 	@RequestMapping(value = "/file/pdf/templates", method = RequestMethod.GET, produces = "application/json")
@@ -77,7 +77,7 @@ public class FileController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "template", required = false, defaultValue = "default") final String templateName,
+			@RequestParam(value = "template", required = false, defaultValue = "standard") final String templateName,
 			@AuthenticationPrincipal User user)
 			throws ElementNotFoundException, DocumentException, IOException {
 
@@ -124,7 +124,7 @@ public class FileController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "style", required = false, defaultValue = "default") final String styleName,
+			@RequestParam(value = "style", required = false, defaultValue = "standard") final String styleName,
 			@RequestParam(value = "width", required = false, defaultValue = "64") final int width,
 			@RequestParam(value = "height", required = false, defaultValue = "98") final int height,
 			@AuthenticationPrincipal User user)

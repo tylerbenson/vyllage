@@ -8,28 +8,27 @@
   <meta name="subject" th:content="Resume" />
   <meta name="title" th:content="${header.firstName + ' resume'}" />
   <style th:fragment="resumetwo" type="text/css" media="print" rel="stylesheet">
-
   @font-face {
-    font-family: 'Roboto', serif;
+    font-family: 'Merriweather', serif;
     font-weight: 400;
     -fs-pdf-font-embed: embed;
-    /*  src: url('/documents/fonts/Roboto regular.ttf'); */
+    /*  src: url('/documents/fonts/Merriweather regular.ttf'); */
   }
-
+  
   @font-face {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     -fs-pdf-font-embed: embed;
-    /*  src: url('/documents/fonts/Lato regular.ttf'); */
+    /*  src: url('/documents/fonts/Open Sans regular.ttf'); */
   }
-
+  
   html {
     font-size: 100%;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
   }
   /*clearfix*/
-
+  
   .cf:before,
   .cf:after {
     content: " ";
@@ -37,18 +36,18 @@
     display: table;
     /* 2 */
   }
-
+  
   .cf:after {
     clear: both;
   }
-
+  
   .cf {
     zoom: 1;
   }
-
+  
   body {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    font-size: 12pt;
+    font-family: "Merriweather", "Georgia", "Times", serif;
+    font-size: 13pt;
     line-height: 1.42857143;
     color: #333;
     background-color: #fff;
@@ -62,54 +61,101 @@
 	display: inline-block;
 	margin: 0;
 }*/
-
+  
+  .header {
+    font-family: "Merriweather", "Georgia", "Times", serif;
+    padding-bottom: 8pt;
+    text-align: left;
+    background-color: #34495e;
+    padding: 20px 30px 15px 15px;
+    width: 100%;
+  }
+  
+  .info {
+    float: left;
+    width: 62%;
+  }
+  
+  .info em {
+    color: #fff;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+    font-style: normal;
+    font-size: 15px;
+    text-transform: uppercase;
+  }
+  
+  .info p {
+    margin-top: 5pt;
+  }
+  
+  .contact {
+    float: left;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+    width: 38%;
+    margin-top: -10px;
+  }
+  
+  .contact div {
+    clear: both;
+    margin: 8px 0;
+  }
+  
+  .contact img {
+    margin-right: 15px;
+  }
+  
+  .contact p {
+    display: inline-block;
+    margin: 0;
+  }
+  
   .sections {
     clear: both;
   }
-
+  
   p {
     margin: 1pt 0;
   }
-
+  
   h1 {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 16pt;
     margin: 0;
     text-transform: uppercase;
     color: #fff;
   }
-
+  
   h2 {
     color: #888;
-    font-family: "Lato", "Helvetica", "Arial", sans-serif;
+    font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 9pt;
     margin: 16pt 0 4pt 0;
     text-align: left;
     text-transform: uppercase;
   }
-
+  
   h3 {
     display: inline-block;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 12pt;
     margin: 0;
   }
-
+  
   h4 {
     display: inline-block;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 12pt;
     margin: 0;
   }
-
+  
   h5 {
     color: #888;
     display: inline-block;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     font-size: 12pt;
     margin: 0;
   }
-
+  
   .subsection {
     padding: 8pt 12pt;
   }
@@ -125,173 +171,163 @@ li {
   /* *****************************
 	style added for resume one
 ******************************* */
-
+  
   * {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
   }
-
+  
   *:before,
   *:after {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
   }
-
+  
   .header {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: "Merriweather", "Georgia", "Times", serif;
     text-align: left;
     background-color: #fff;
-    padding: 20px 20px 15px;
-    width: 100%;
     position: relative;
   }
-
-  .info {
-    width: 38%;
-    float: left;
-  }
-
+  
   .info em {
     color: #333333;
     font-style: normal;
     font-size: 15px;
     text-transform: uppercase;
   }
-
+  
   .info p {
     margin-top: 5pt;
   }
-
-  .contact {
-    width: 58%;
-    float: left;
-  }
-
+  
   .contact div {
     margin: 8px 0;
   }
   /* header style */
-
+  
   .info {
     text-align: left;
   }
-
+  
   .username {
-    font-family: "Lato", "Helvetica", "Arial", sans-serif;
-    font-size: 25px;
+    font-size: 28px;
     line-height: 35px;
-    font-weight: 100;
-    padding-bottom: 5px;
+    font-weight: 500;
     padding-top: 10px;
     color: #333333;
   }
-
+  
   .content-single {
     position: relative;
+    padding-left: 25px;
     color: #333333;
     font-size: 14px;
   }
-
+  
   .content-single img {
-    display: inline-block;
-    float: left;
-    margin-right: 10px;
+    position: absolute;
+    left: 0;
+    top: 4px;
     width: 15px;
   }
-
+  
+  .content-single img.mail-icon {
+    top: 8px;
+  }
+  
   .content-single img.custom-width {
     width: 12px;
-  }
-
-  .content-single p {
-    display: inline-block;
-    float: left;
-    width: 80%;
-    margin-top: -5px;
+    left: 2px;
   }
   /* content style */
-
+  
   .main-content {
     position: relative;
     background-color: #fff;
-    padding: 20px 40px 20px 20px;
+    padding: 10px;
     width: 100%;
     display: block;
   }
-
+  
   .objective-section-content {
     position: relative;
     padding-bottom: 20px;
-    border-bottom: 1px solid #252626;
+    border-bottom: 1px solid #f4f4f4;
     display: block;
+    margin-bottom: 20px;
     word-wrap: break-word;
   }
-
+  
   .resume-one-main-content {
     position: relative;
-    width: 100%;
-    padding-right: 50px;
+    width: 98%;
+    padding-right: 20px;
   }
-
+  
   .section-title {
-    font-size: 18px;
-    color: #f8b243;
-    font-weight: 400;
+    font-size: 21px;
+    color: #333333;
+    font-weight: 700;
     text-transform: uppercase;
-    margin: 10px 0 0 0;
+    margin-top: 5px;
     display: block;
     width: 100%;
   }
-
+  
   .section-description {
-    color: #333333;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    line-height: 20px;
-    font-size: 14px;
+    color: #666666;
+    font-family: "Merriweather", "Georgia", "Times", serif;
+    line-height: 21px;
+    font-size: 13px;
     margin: 0;
     padding-top: 7px;
   }
-
+  
   .section-description.light {
+    color: #444;
     width: 93%;
   }
-
+  
   .section-description ul {
     padding: 0;
     margin: 0;
   }
-
+  
   .section-description ul li {
-    display: inline-block;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    float: left;
-    font-size: 12pt;
+    font-family: "Merriweather", "Georgia", "Times", serif;
+    font-size: 14px;
     list-style: none;
-    margin-bottom: 20px;
+    position: relative;
+    padding-left: 15px;
+    padding-top: 0;
+    margin-top: 0;
+    margin-right: 5px;
+    display: inline-block;
+    color: #333333;
   }
-
+  
   .section-description ul li:before {
     /* For a round bullet */
     content: '\2022';
     /* For a square bullet */
     /*content:'\25A0';*/
-    margin-right: 8px;
-    position: relative;
-    top: 3px;
-    color: #333;
-    font-size: 26px;
+    display: block;
+    position: absolute;
+    max-width: 0;
+    max-height: 0;
+    left: 0;
+    top: -2px;
+    color: #333333;
+    font-size: 24px;
   }
-
+  
   .section-single {
     position: relative;
     padding: 10pt 0pt 0pt 0pt;
     margin-bottom: 15px;
   }
-
-  .section-single.tags {
-    margin: -15px 0 -5px 0;
-  }
-
+  
   .block-title {
     display: block;
     font-size: 18px;
@@ -299,124 +335,105 @@ li {
     color: #2c2d2d;
     margin: 0;
   }
-
+  
   .block-title.small-font {
     font-size: 15px;
   }
-
+  
   .block-title.small-font.ucase {
     text-transform: uppercase;
   }
-
+  
   .project-position {
-    font-size: 17px;
+    font-size: 15px;
     color: #333333;
     font-weight: 100;
     padding-top: 5px;
     margin: 0;
     display: block;
-    font-weight: 500;
   }
-
+  
   h5.start-end-duration,
   h5.location {
-    color: #333333;
+    color: #666;
     border: 0;
     font-size: 14px;
     font-weight: 100;
     margin: 0;
   }
-
-  h5.location {
-    border-left: #ccc solid 1px;
-    display: inline-block;
-    margin-left: -10px;
-    padding-left: 10px;
-  }
   /* experience section */
-
+  
   .experience-section {
     position: relative;
   }
-  /* project section */
-
-  .project-section {
-    clear: both;
+  
+  .experience-section .section-single,
+  .project-section .section-single,
+  .education-single {
     position: relative;
-    width: 100%;
-    display: inline-block;
+    padding-left: 120px;
   }
-
-  .project-section .section-title {
-    margin-bottom: 25px;
+  
+  .experience-section .section-single .start-end-duration,
+  .education-single .start-end-duration,
+  .project-section .section-single .start-end-duration {
+    position: absolute;
+    left: 0;
+    top: 15px;
+    width: 85px;
+    height: 85px;
+    color: #666666;
+    font-family: "Merriweather", "Georgia", "Times", serif;
+    font-size: 11pt;
+    text-align: center;
   }
-
-  .project-section .section-single {
-    width: 100%;
-    padding: 0 10px 0 0px;
+  
+  .project-section .section-single .start-end-duration {
+    top: 25px;
   }
-
-  .project-section .section-description {
-    margin: -5px 0 10px 0;
+  
+  .experience-section .section-single .start-end-duration span {
+    position: relative;
+    top: 7px;
+  }
+  /* project section */
+  
+  .project-section {
+    position: relative;
+  }
+  
+  .project-section .block-title {
+    margin-top: 0;
   }
   /* reference section*/
-
+  
   .reference-section {
     position: relative;
     width: 100%;
-    display: inline-block;
+    display: block;
   }
-
+  
   .reference-section .section-single {
+    width: 32%;
     float: left;
-    width: 40%;
     padding-right: 20px;
   }
-
+  
   .reference {
     margin-bottom: 15px;
   }
-
+  
   .reference .section-description {
     padding-top: 0;
   }
   /* education content */
-
-  .education-section {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-  }
-
+  
   .education-single {
-    margin-bottom: 15px;
+    margin-bottom: 30px;
   }
   /* asde style */
-
-  .sidebar {
-    position: relative;
-    width: 100%;
-  }
-
-  .sidebar-address {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    width: 100%;
-    display: inline-block;
-  }
-
-  .sidebar-address .section-title {
-    margin-bottom: 10px;
-  }
-
-  .sidebar-address .content-single {
-    float: left;
-    font-size: 15px;
-    width: 45%;
-    margin-right: 2%;
-    margin-bottom: 3%;
-  }
   /* end style for resume one */
-
+  
   @page {
     counter-reset: page 1;
     margin: 25pt;
@@ -430,49 +447,50 @@ li {
     <div class="info">
       <div>
         <h1 class="username">
-          <span th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '')}">Hassanur</span>
-          <span th:text="${(header.lastName != null ? header.lastName : '')}">Rakib</span>
+          <strong th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '')}">Hassanur</strong>
+          <strong th:text="${(header.lastName != null ? header.lastName : '')}">Rakib</strong>
         </h1>
       </div>
       <div>
-        <em th:text="${header.tagline}">Graphics Designer</em>
+        <em th:text="${header.tagline}">
+          <strong>Graphics</strong> Designer</em>
       </div>
-    </div>
 
-    <div class="contact cf">
-      <div class="objective-section-content">
-        <th:block th:each="section : ${sections}">
-          <th:block th:switch="${section.type}">
-            <th:block th:case="'SummarySection'">
-              <div class="objective-section">
-                <p class="section-description pt0" th:text="${section.description}">I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I
-                  will give you a complete account of the system.</p>
-              </div>
-            </th:block>
-          </th:block>
-        </th:block>
+    </div>
+    <div class="contact">
+      <div class="content-single">
+        <img class="custom-width" src="/documents/images/marker-dark.png" />
+        <p th:text="${header.address}">121 King Street, Melbourne Victoria 3000 Australia</p>
+      </div>
+      <div class="cf content-single" th:if="${header.email != null}">
+        <img src="/documents/images/mail-icon-dark.png" />
+        <p th:text="${header.email}">mail@submail.com</p>
+      </div>
+      <div class="content-single" th:if="${header.phoneNumber != null}">
+        <img src="/documents/images/phone-icon-dark.png" />
+        <p th:text="${header.phoneNumber}">(555)1234-56789</p>
+      </div>
+      <div class="content-single" th:if="${header.siteUrl != null and !header.siteUrl.isEmpty()}">
+        <img src="/documents/images/web-icon-dark.png" />
+        <p th:text="${header.siteUrl}">www.mywebsite.com</p>
       </div>
     </div>
   </div>
+
   <div class="main-content cf">
     <!-- loop over the sections -->
 
     <div class="sections resume-one-main-content">
+
+
       <th:block th:each="section : ${sections}">
         <th:block th:switch="${section.type}">
-          <th:block th:case="'ProjectsSection'">
-            <div class="project-section">
-              <h2 class="section-title" th:text="${section.title}">Projects</h2>
-              <div class="section-single">
-                <h3 class="block-title" th:text="${section.projectTitle}">Save Humanity</h3>
-                <h5 class="start-end-duration" th:if="${section.projectDate != null }" th:text="${#temporals.format(section.projectDate, 'MMM yyyy') }">July 2015 - Present |
-                  <span th:if="${section.projectlocation">Khulna, Bangladesh</span>
-                </h5>
-                <p class="section-description" th:text="${section.projectDescription}">These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled
-                  and when nothing prevents our being able to do what we like best.</p>
-                <!-- <h5 class="location" th:text="${section.author}"></h5> -->
-                <h4 class="role" th:text="${section.role}"></h4>
-                <p class="section-description" th:text="${section.roleDescription}"></p>
+          <th:block th:case="'SummarySection'">
+            <div class="objective-section-content">
+              <h2 class="section-title">Objective</h2>
+              <div class="objective-section">
+                <p class="section-description pt0" th:text="${section.description}">I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I
+                  will give you a complete account of the system.</p>
               </div>
             </div>
           </th:block>
@@ -482,8 +500,8 @@ li {
               <h2 class="section-title" th:text="${section.title}">Experience</h2>
               <div class="section-single">
                 <h3 class="block-title" th:text="${section.organizationName}">ABC Engineers</h3>
-                <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">jan 2015 - Present |
-                  <span th:if="${section.projectlocation">Khulna, Bangladesh</span>
+                <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">
+                  <span>jan 2015 - Present</span>
                 </h5>
                 <h4 class="project-position" th:text="${section.role}">Lead UI Designer</h4>
                 <!-- <h5 class="location" th:text="${section.location}"></h5> -->
@@ -499,13 +517,14 @@ li {
 
           </th:block>
 
-
           <th:block th:case="'EducationSection'">
             <h2 class="section-title" th:text="${section.title}">Education</h2>
-            <div class="section-single education-section">
+            <div class="section-single">
               <div class="education-single">
                 <h3 class="block-title small-font" th:text="${section.role}">B.Sc(Hons) CS</h3>
-                <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">2010 - 2014</h5>
+                <h5 class="start-end-duration" th:if="${section.startDate != null }" th:text="${#temporals.format(section.startDate, 'MMM yyyy') + ' - ' +  (section.endDate != null ? #temporals.format(section.endDate, 'MMM yyyy') : 'Present') }">
+                  <span>2010 - 2014</span>
+                </h5>
                 <h5 class="location" th:text="${section.location}"></h5>
                 <p class="section-description" th:text="${section.organizationName}">Khulna University, Khulna Bangladesh </p>
                 <p class="light section-description" th:text="${section.roleDescription}"></p>
@@ -518,21 +537,41 @@ li {
             </div>
           </th:block>
 
+          <th:block th:case="'ProjectsSection'">
+            <div class="project-section">
+              <h2 class="section-title" th:text="${section.title}">Projects</h2>
+              <div class="section-single">
+                <h3 class="block-title" th:text="${section.projectTitle}">Save Humanity</h3>
+                <h5 class="start-end-duration" th:if="${section.projectDate != null }" th:text="${#temporals.format(section.projectDate, 'MMM yyyy')}">(July 2013 - July 2014)</h5>
+                <h4 class="project-position" th:text="${section.role}">Team Leader</h4>
 
-          <th:block th:case="'SkillsSection'">
 
-            <div class="tags section-single cf">
-              <h2 class="section-title" th:text="${section.title}">Skills</h2>
-              <p class="section-description">
-                <ul th:each="tag : ${section.tags}">
-                  <li th:text="${tag}"></li>
-                </ul>
-              </p>
+
+                <!-- <h5 class="location" th:text="${section.author}"></h5> -->
+                <p class="section-description" th:text="${section.projectDescription}">These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled
+                  and when nothing prevents our being able to do what we like best.</p>
+
+              </div>
+
+              <div class="section-single">
+                <h3 class="block-title" th:text="${section.projectTitle}">Save Humanity</h3>
+                <h5 class="start-end-duration" th:if="${section.projectDate != null }" th:text="${#temporals.format(section.projectDate, 'MMM yyyy')  }">(July 2013 - July 2014)</h5>
+                <h4 class="project-position" th:text="${section.role}">Team Leader</h4>
+
+
+
+                <p class="section-description" th:text="${section.projectDescription}">hese cases are perfectly simple and easy to distinguish. In a free hour, when our power of .</p>
+
+              </div>
             </div>
           </th:block>
 
+
+
+
+
           <th:block th:case="'CareerInterestsSection'">
-            <div class="tags section-single cf">
+            <div class="section-single">
               <h2 class="section-title" th:text="${section.title}">Interests</h2>
               <p class="section-description">
                 <ul th:each="tag : ${section.tags}">
@@ -542,8 +581,17 @@ li {
             </div>
           </th:block>
 
+          <th:block th:case="'SkillsSection'">
 
-
+            <div class="section-single">
+              <h2 class="section-title" th:text="${section.title}">Skills</h2>
+              <p class="section-description">
+                <ul th:each="tag : ${section.tags}">
+                  <li th:text="${tag}"></li>
+                </ul>
+              </p>
+            </div>
+          </th:block>
 
           <th:block th:case="'PersonalReferencesSection'">
             <h2 class="section-title" th:text="${section.title}">References</h2>
@@ -557,32 +605,10 @@ li {
               </div>
             </div>
           </th:block>
+
+
         </th:block>
       </th:block>
-    </div>
-
-    <div class="sidebar">
-      <div class="sidebar-address">
-
-        <h2 class="section-title">Contact Details</h2>
-
-        <div class="cf content-single">
-          <img class="custom-width" src="/documents/images/marker-yellow.png" />
-          <p th:text="${header.address}">121 King Street, Melbourne Victoria 3000 Australia</p>
-        </div>
-        <div class="cf cf content-single" th:if="${header.email != null}">
-          <img class="mail-icon" src="/documents/images/mail-icon-yellow.png" />
-          <p th:text="${header.email}">mail@submail.com</p>
-        </div>
-        <div class="cf content-single" th:if="${header.phoneNumber != null}">
-          <img src="/documents/images/phone-icon-yellow.png" />
-          <p th:text="${header.phoneNumber}">(555)1234-56789</p>
-        </div>
-        <div class="cf content-single" th:if="${header.siteUrl != null and !header.siteUrl.isEmpty()}">
-          <img src="/documents/images/web-icon-yellow.png" />
-          <p th:text="${header.siteUrl}">www.mywebsite.com</p>
-        </div>
-      </div>
     </div>
   </div>
 </body>

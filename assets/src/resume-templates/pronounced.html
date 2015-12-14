@@ -8,28 +8,27 @@
   <meta name="subject" th:content="Resume" />
   <meta name="title" th:content="${header.firstName + ' resume'}" />
   <style th:fragment="resumetwo" type="text/css" media="print" rel="stylesheet">
-
   @font-face {
     font-family: 'Open Sans', serif;
     font-weight: 400;
     -fs-pdf-font-embed: embed;
     /*  src: url('/documents/fonts/Open Sans regular.ttf'); */
   }
-
+  
   @font-face {
     font-family: 'Lato', sans-serif;
     font-weight: 700;
     -fs-pdf-font-embed: embed;
     /*  src: url('/documents/fonts/Lato 700.ttf'); */
   }
-
+  
   html {
     font-size: 100%;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
   }
   /*clearfix*/
-
+  
   .cf:before,
   .cf:after {
     content: " ";
@@ -37,15 +36,15 @@
     display: table;
     /* 2 */
   }
-
+  
   .cf:after {
     clear: both;
   }
-
+  
   .cf {
     zoom: 1;
   }
-
+  
   body {
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
@@ -62,15 +61,15 @@
 	display: inline-block;
 	margin: 0;
 }*/
-
+  
   .sections {
     clear: both;
   }
-
+  
   p {
     margin: 1pt 0;
   }
-
+  
   h1 {
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 16pt;
@@ -78,7 +77,7 @@
     text-transform: uppercase;
     color: #fff;
   }
-
+  
   h2 {
     color: #888;
     font-family: "Lato", "Helvetica", "Arial", sans-serif;
@@ -87,21 +86,21 @@
     text-align: left;
     text-transform: uppercase;
   }
-
+  
   h3 {
     display: inline-block;
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
-
+  
   h4 {
     display: inline-block;
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
-
+  
   h5 {
     color: #888;
     display: inline-block;
@@ -109,7 +108,7 @@
     font-size: 12pt;
     margin: 0;
   }
-
+  
   .subsection {
     padding: 8pt 12pt;
   }
@@ -125,18 +124,18 @@ li {
   /* *****************************
 	style added for resume one
 ******************************* */
-
+  
   * {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
   }
-
+  
   *:before,
   *:after {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
   }
-
+  
   .header {
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     text-align: left;
@@ -145,23 +144,23 @@ li {
     width: 100%;
     position: relative;
   }
-
+  
   .info {
     width: 27%;
     float: left;
   }
-
+  
   .info em {
     color: #666666;
     font-style: normal;
     font-size: 15px;
     text-transform: uppercase;
   }
-
+  
   .info p {
     margin-top: 5pt;
   }
-
+  
   .contact {
     position: relative;
     width: 70%;
@@ -170,27 +169,27 @@ li {
     border-bottom: 1px solid #ddd;
     padding-bottom: 40px;
   }
-
+  
   .contact .objective-section-content {
     width: 55%;
     float: left;
     margin: 0;
   }
-
+  
   .contact .objective-section-content .section-description {
     padding-top: 0 !important;
     margin-top: 0;
   }
-
+  
   .contact div {
     margin: 8px 0;
   }
   /* header style */
-
+  
   .info {
     text-align: left;
   }
-
+  
   .username {
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 24px;
@@ -199,7 +198,7 @@ li {
     padding-bottom: 5px;
     color: #333333;
   }
-
+  
   .content-single {
     position: relative;
     padding-left: 25px;
@@ -209,24 +208,24 @@ li {
     float: right;
     margin-top: 20px;
   }
-
+  
   .content-single img {
     position: absolute;
     left: 0;
     top: 4px;
     width: 15px;
   }
-
+  
   .content-single img.mail-icon {
     top: 8px;
   }
-
+  
   .content-single img.custom-width {
     width: 12px;
     left: 2px;
   }
   /* content style */
-
+  
   .main-content {
     position: relative;
     background-color: #fff;
@@ -234,40 +233,40 @@ li {
     width: 100%;
     display: block;
   }
-
+  
   .objective-section-content {
     position: relative;
     word-wrap: break-word;
     padding: 0;
     margin: 0;
   }
-
+  
   .resume-one-main-content {
     position: relative;
     width: 100%;
     padding-right: 10px;
     margin-top: 20px;
   }
-
+  
   .resume-one-main-content .section-title {
     width: 27%;
     float: left;
     padding-top: 0;
     margin: 0;
   }
-
+  
   .resume-one-main-content .section-body {
     width: 65%;
     float: left;
     margin-left: 10px;
     margin-bottom: 30px;
   }
-
+  
   .resume-one-main-content .section-body .section-single:first-child {
     margin-top: 0;
     padding-top: 0;
   }
-
+  
   .section-title {
     position: relative;
     font-size: 21px;
@@ -277,7 +276,7 @@ li {
     display: block;
     padding-left: 20px;
   }
-
+  
   .section-title:before {
     content: "";
     position: absolute;
@@ -288,7 +287,7 @@ li {
     background: #e74c3c;
     display: block;
   }
-
+  
   .section-description {
     color: #666;
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
@@ -297,16 +296,16 @@ li {
     margin: 0;
     padding-top: 7px;
   }
-
+  
   .section-description.light {
     width: 92%;
   }
-
+  
   .section-description ul {
     padding: 0;
     margin: 0;
   }
-
+  
   .section-description ul li {
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 14px;
@@ -319,18 +318,18 @@ li {
     display: inline-block;
     color: #666;
   }
-
+  
   .sidebar .section-description li {
     display: block;
     margin-bottom: 6px;
   }
-
+  
   .section-single {
     position: relative;
     padding: 0;
     margin-bottom: 15px;
   }
-
+  
   .block-title {
     display: block;
     font-size: 18px;
@@ -338,15 +337,15 @@ li {
     color: #2c2d2d;
     margin: 0;
   }
-
+  
   .block-title.small-font {
     font-size: 15px;
   }
-
+  
   .block-title.small-font.ucase {
     text-transform: uppercase;
   }
-
+  
   .project-position {
     font-size: 15px;
     color: #333333;
@@ -356,7 +355,7 @@ li {
     display: block;
     font-weight: 500;
   }
-
+  
   h5.start-end-duration,
   h5.location {
     color: #666;
@@ -365,7 +364,7 @@ li {
     font-weight: 100;
     margin: 0;
   }
-
+  
   h5.location {
     border-left: #ccc solid 1px;
     display: inline-block;
@@ -373,85 +372,85 @@ li {
     padding-left: 10px;
   }
   /* experience section */
-
+  
   .experience-section {
     position: relative;
   }
   /* project section */
-
+  
   .project-section {
     position: relative;
     width: 100%;
   }
-
+  
   .project-section .section-title {
     margin-bottom: 10px;
   }
-
+  
   .project-section .section-single {
     width: 100%;
     padding: 0 10px 0 0px;
   }
   /* reference section*/
-
+  
   .reference-section {
     position: relative;
     width: 100%;
     display: block;
   }
-
+  
   .reference-section .section-single {
     padding-top: 0;
   }
-
+  
   .reference-section .section-single {
     float: left;
     width: 45%;
   }
-
+  
   .reference {
     margin-bottom: 15px;
   }
-
+  
   .reference .section-description {
     padding-top: 0;
   }
-
+  
   .education-content {
     position: relative;
   }
-
+  
   .education-content .section-title {
     padding-top: 0;
   }
   /* education content */
-
+  
   .education-single {
     margin-bottom: 30px;
   }
-
+  
   .education-single .start-end-duration {
     font-size: 13px;
     font-weight: bold;
     color: #333;
   }
   /* asde style */
-
+  
   .sidebar {
     position: relative;
     width: 100%;
   }
-
+  
   .sidebar-address {
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     padding-top: 20px;
   }
-
+  
   .sidebar-address .content-single {
     margin: 13px 0;
     font-size: 15px;
   }
-
+  
   .footer-address {
     position: relative;
     width: 100%;
@@ -462,14 +461,14 @@ li {
     padding: 0;
     text-align: center;
   }
-
+  
   .footer-address .content-single {
     display: inline-block;
     width: 25%;
     text-align: left;
   }
   /* end style for resume one */
-
+  
   @page {
     counter-reset: page 1;
     margin: 25pt;

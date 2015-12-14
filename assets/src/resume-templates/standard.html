@@ -8,28 +8,27 @@
   <meta name="subject" th:content="Resume" />
   <meta name="title" th:content="${header.firstName + ' resume'}" />
   <style th:fragment="default" type="text/css" media="print" rel="stylesheet">
-
   @font-face {
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     -fs-pdf-font-embed: embed;
     /*  src: url('/documents/fonts/Open Sans regular.ttf'); */
   }
-
+  
   @font-face {
     font-family: 'Lora', serif;
     font-weight: 400;
     -fs-pdf-font-embed: embed;
     /*  src: url('/documents/fonts/Lora regular.ttf'); */
   }
-
+  
   html {
     font-size: 100%;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
   }
   /*clearfix*/
-
+  
   .cf:before,
   .cf:after {
     content: " ";
@@ -37,15 +36,15 @@
     display: table;
     /* 2 */
   }
-
+  
   .cf:after {
     clear: both;
   }
-
+  
   .cf {
     zoom: 1;
   }
-
+  
   body {
     font-family: "Lora", "Georgia", "Times New Roman", Times, serif;
     font-size: 12pt;
@@ -56,65 +55,65 @@
     padding-left: 5px;
     padding-right: 5px;
   }
-
+  
   .header {
     border-bottom: #ddd solid 1px;
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     padding-bottom: 8pt;
     text-align: left;
   }
-
+  
   .info {
     float: left;
     width: 62%;
   }
-
+  
   .info em {
     color: #666;
     font-style: normal;
   }
-
+  
   .info p {
     margin-top: 5pt;
   }
-
+  
   .contact {
     float: left;
     width: 38%;
     margin-top: -10px;
   }
-
+  
   .contact div {
     clear: both;
     margin: 8px 0;
   }
-
+  
   .contact img {
     margin-right: 15px;
   }
-
+  
   .contact p {
     display: inline-block;
     margin: 0;
   }
-
+  
   .sections {
     clear: both;
   }
-
+  
   p {
     font-size: 14px;
     line-height: 21px;
     margin: 1pt 0;
   }
-
+  
   h1 {
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 16pt;
     margin: 0;
     text-transform: uppercase;
   }
-
+  
   h2 {
     color: #888;
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
@@ -123,7 +122,7 @@
     text-align: left;
     text-transform: uppercase;
   }
-
+  
   h3 {
     display: inline-block;
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
@@ -131,14 +130,14 @@
     margin: 0;
     text-transform: uppercase;
   }
-
+  
   h4 {
     display: inline-block;
     font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
     font-size: 12pt;
     margin: 0;
   }
-
+  
   h5 {
     color: #888;
     display: inline-block;
@@ -148,21 +147,21 @@
     margin: 0;
     padding-left: 8pt;
   }
-
+  
   .subsection {
     padding: 8pt 12pt;
   }
-
+  
   ul {
     margin: 8pt 0 -4pt 0;
     padding: 0;
     list-style-position: inside;
   }
-
+  
   li {
     margin: 2pt 0 0 0;
   }
-
+  
   @page {
     counter-reset: page 1;
     margin: 40pt;
