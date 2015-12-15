@@ -75,7 +75,7 @@ public class CustomSocialConfiguration extends SocialConfigurerAdapter {
 	 * Since we don't need videos right now I'll remove the field.
 	 */
 	@PostConstruct
-	private void init() {
+	private void facebookWorkaround() {
 		// hack for the facebook login
 		try {
 			String[] fieldsToMap = { "id", "about", "age_range", "address",
