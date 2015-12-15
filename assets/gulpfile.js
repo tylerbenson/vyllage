@@ -62,6 +62,11 @@ gulp.task('copy-html', function () {
     .pipe(gulp.dest('public'));
 });
 
+gulp.task('copy-resume-templates', function () {
+	  return gulp.src(['src/resume-templates/*.html'])
+	    .pipe(gulp.dest('public'));
+	});
+
 gulp.task('copy-fonts', function () {
   return gulp.src(['bower_components/ionicons/fonts/*'])
     .pipe(gulp.dest('public/fonts'));
@@ -72,7 +77,7 @@ gulp.task('copy-robots', function () {
 	    .pipe(gulp.dest('public'));
 	});
 
-gulp.task('copy', ['copy-images', 'copy-html', 'copy-fonts', 'copy-robots']);
+gulp.task('copy', ['copy-images', 'copy-html', 'copy-resume-templates', 'copy-fonts', 'copy-robots']);
 
 gulp.task('styles', function () {
   return gulp.src(['src/**/*.scss'])

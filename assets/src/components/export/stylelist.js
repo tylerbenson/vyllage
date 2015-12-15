@@ -5,7 +5,6 @@ var viewport = require('viewport-dimensions');
 var ExportAction = require('./exportAction');
 var classnames = require('classnames');
 var configs = require('../configs');
-var MAX_WIDTH = configs.breakpoints.largePortrait;
 
 var ResumeStyleList = React.createClass({
 	render: function(){
@@ -24,34 +23,22 @@ var ResumeStyleList = React.createClass({
 				'&height=' + (THUMB_HEIGHT) +
 				'&width=' + (THUMB_WIDTH);
 
-			var link = '/resume/'+ documentId +'/file/pdf?style=' + pdfStyle;
+			var link = '/resume/'+ documentId +'/file/pdf?template=' + pdfStyle;
 
 			return (
-				<a href={link} onClick={this._handleActive.bind(this, pdfStyle )} target="_blank" key={index} className={classes} >
+				<a href={link} target="_blank" key={index} className={classes} >
 					<img src={url} className="style-thumbnail" />
 					{pdfStyle}
 				</a>
 			);
 		}.bind(this));
 
-		var classes = classnames({
-			'style-list': true,
-			'mobile': viewport.width() < MAX_WIDTH
-		});
-
 		return (
-			<div className={classes}>
+			<div className="mobile style-list">
 				{styleThumbnails}
 			</div>
 		);
-	},
-	_handleActive : function(activeStyle, e){
-		if(viewport.width() >= MAX_WIDTH) {
-			ExportAction.changeActive(activeStyle);
-			e.preventDefault();
-		}
 	}
-
 });
 
 module.exports = ResumeStyleList;

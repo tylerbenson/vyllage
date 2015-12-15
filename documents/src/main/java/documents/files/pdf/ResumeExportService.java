@@ -59,19 +59,19 @@ public class ResumeExportService {
 	public ByteArrayOutputStream generatePDFDocument(
 			@NonNull final DocumentHeader resumeHeader,
 			@NonNull final List<DocumentSection> sections,
-			@NonNull final String styleName) throws DocumentException {
+			@NonNull final String templateName) throws DocumentException {
 
-		return this.getCachedDocument(resumeHeader, sections, styleName);
+		return this.getCachedDocument(resumeHeader, sections, templateName);
 	}
 
 	/**
 	 * Generates a thumbnail of the resume in PNG using the selected style. <br>
 	 * http://stackoverflow.com/questions/4929813/convert-pdf-to-thumbnail-image
 	 * -in-java?lq=1
-	 * 
+	 *
 	 * @param resumeHeader
 	 * @param sections
-	 * @param styleName
+	 * @param templateName
 	 * @param width
 	 * @param height
 	 * @return
@@ -79,7 +79,7 @@ public class ResumeExportService {
 	 */
 	public ByteArrayOutputStream generatePNGDocument(
 			final DocumentHeader resumeHeader,
-			final List<DocumentSection> sections, final String styleName,
+			final List<DocumentSection> sections, final String templateName,
 			int width, int height) throws DocumentException {
 
 		if (width == 0 || height == 0) {
@@ -90,7 +90,7 @@ public class ResumeExportService {
 		final ByteArrayOutputStream imageByteArrayOutputStream = new ByteArrayOutputStream();
 
 		final ByteArrayOutputStream pdfBytes = this.getCachedDocument(
-				resumeHeader, sections, styleName);
+				resumeHeader, sections, templateName);
 
 		try {
 
@@ -138,9 +138,10 @@ public class ResumeExportService {
 
 	protected ByteArrayOutputStream getCachedDocument(
 			final DocumentHeader resumeHeader,
-			final List<DocumentSection> sections, final String styleName) {
+			final List<DocumentSection> sections, final String templateName) {
 
-		final String key = this.getCacheKey(resumeHeader, sections, styleName);
+		final String key = this.getCacheKey(resumeHeader, sections,
+				templateName);
 
 		ByteArrayOutputStream pdfBytes = null;
 
@@ -150,7 +151,7 @@ public class ResumeExportService {
 							() -> {
 
 								final ITextRenderer renderer = preparePDF(
-										resumeHeader, sections, styleName);
+										resumeHeader, sections, templateName);
 
 								ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -172,19 +173,17 @@ public class ResumeExportService {
 	}
 
 	protected ITextRenderer preparePDF(DocumentHeader resumeHeader,
-			List<DocumentSection> sections, String styleName) {
+			List<DocumentSection> sections, String templateName) {
 		Context ctx = new Context();
 
 		format(resumeHeader);
-
-		ctx.setVariable("styleName", styleName);
 
 		ctx.setVariable("header", resumeHeader);
 
 		ctx.setVariable("sections", sections.stream().sorted(sortSections())
 				.collect(Collectors.toList()));
 
-		String htmlContent = templateEngine.process("pdf-resume", ctx);
+		String htmlContent = templateEngine.process(templateName, ctx);
 
 		ITextRenderer renderer = new ITextRenderer();
 		renderer.setDocumentFromString(htmlContent);
@@ -193,6 +192,45 @@ public class ResumeExportService {
 				renderer.getOutputDevice(), Resource.class);
 		callback.setSharedContext(renderer.getSharedContext());
 		renderer.getSharedContext().setUserAgentCallback(callback);
+		try {
+			renderer.getFontResolver().addFont("/documents/fonts/Lato 700.ttf",
+					true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Lato regular.ttf", true);
+
+			renderer.getFontResolver().addFont("/documents/fonts/Lora 700.ttf",
+					true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Lora regular.ttf", true);
+
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Merriweather 700.ttf", true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Merriweather regular.ttf", true);
+
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Montserrat regular.ttf", true);
+
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Open Sans 700.ttf", true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Open Sans regular.ttf", true);
+
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Roboto 700.ttf", true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Roboto regular.ttf", true);
+
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Source Sans Pro 700.ttf", true);
+			renderer.getFontResolver().addFont(
+					"/documents/fonts/Source Sans Pro regular.ttf", true);
+
+		} catch (DocumentException | IOException e) {
+			logger.severe(e.getMessage());
+			NewRelic.noticeError(e);
+		}
+
 		renderer.setDocumentFromString(htmlContent);
 
 		renderer.layout();
@@ -202,7 +240,7 @@ public class ResumeExportService {
 	/**
 	 * Generates a key based on the hash of the resume header, sections and
 	 * style name.
-	 * 
+	 *
 	 * @param resumeHeader
 	 * @param sections
 	 * @param styleName

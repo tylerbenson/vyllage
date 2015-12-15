@@ -54,7 +54,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String styleName = "default";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -71,7 +71,7 @@ public class ResumeExportServiceTest {
 		sections.add(s1);
 
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePDFDocument(resumeHeader, sections, styleName);
+				.generatePDFDocument(resumeHeader, sections, templateName);
 
 		assertNotNull(byteArrayOutputStream);
 
@@ -83,7 +83,7 @@ public class ResumeExportServiceTest {
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 
-		String styleName = "default";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -100,7 +100,7 @@ public class ResumeExportServiceTest {
 		sections.add(s1);
 
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePDFDocument(resumeHeader, sections, styleName);
+				.generatePDFDocument(resumeHeader, sections, templateName);
 
 		assertNotNull(byteArrayOutputStream);
 
@@ -113,12 +113,12 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String styleName = "default";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePDFDocument(resumeHeader, sections, styleName);
+				.generatePDFDocument(resumeHeader, sections, templateName);
 
 		assertNotNull(byteArrayOutputStream);
 
@@ -131,12 +131,12 @@ public class ResumeExportServiceTest {
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 
-		String styleName = "default";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePDFDocument(resumeHeader, sections, styleName);
+				.generatePDFDocument(resumeHeader, sections, templateName);
 
 		assertNotNull(byteArrayOutputStream);
 
@@ -147,12 +147,12 @@ public class ResumeExportServiceTest {
 			throws DocumentException {
 		ResumeExportService service = new ResumeExportService(templateEngine);
 
-		String styleName = "default";
+		String templateName = "standard";
 
 		DocumentHeader resumeHeader = null;
 		List<DocumentSection> sections = null;
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePDFDocument(resumeHeader, sections, styleName);
+				.generatePDFDocument(resumeHeader, sections, templateName);
 
 		assertNotNull(byteArrayOutputStream);
 
@@ -162,12 +162,12 @@ public class ResumeExportServiceTest {
 	public void testGeneratePDFDocumentNullSections() throws DocumentException {
 		ResumeExportService service = new ResumeExportService(templateEngine);
 
-		String styleName = "default";
+		String templateName = "standard";
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 		List<DocumentSection> sections = null;
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePDFDocument(resumeHeader, sections, styleName);
+				.generatePDFDocument(resumeHeader, sections, templateName);
 
 		assertNotNull(byteArrayOutputStream);
 
@@ -180,7 +180,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String styleName = null;
+		String templateName = null;
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -197,7 +197,7 @@ public class ResumeExportServiceTest {
 		sections.add(s1);
 
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePDFDocument(resumeHeader, sections, styleName);
+				.generatePDFDocument(resumeHeader, sections, templateName);
 
 		assertNotNull(byteArrayOutputStream);
 
@@ -210,7 +210,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String styleName = "default";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -227,7 +227,8 @@ public class ResumeExportServiceTest {
 		sections.add(s1);
 
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePNGDocument(resumeHeader, sections, styleName, 64, 98);
+				.generatePNGDocument(resumeHeader, sections, templateName, 64,
+						98);
 
 		assertNotNull(byteArrayOutputStream);
 
@@ -241,7 +242,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String styleName = "default";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -258,7 +259,7 @@ public class ResumeExportServiceTest {
 		sections.add(s1);
 
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePNGDocument(resumeHeader, sections, styleName, 0, 0);
+				.generatePNGDocument(resumeHeader, sections, templateName, 0, 0);
 
 		assertNotNull(byteArrayOutputStream);
 
@@ -271,7 +272,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String styleName = "default";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -288,7 +289,8 @@ public class ResumeExportServiceTest {
 		sections.add(s1);
 
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePNGDocument(resumeHeader, sections, styleName, 0, 98);
+				.generatePNGDocument(resumeHeader, sections, templateName, 0,
+						98);
 
 		assertNotNull(byteArrayOutputStream);
 
@@ -302,7 +304,7 @@ public class ResumeExportServiceTest {
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
 
-		String styleName = "default";
+		String templateName = "standard";
 
 		List<DocumentSection> sections = new ArrayList<>();
 
@@ -319,7 +321,8 @@ public class ResumeExportServiceTest {
 		sections.add(s1);
 
 		ByteArrayOutputStream byteArrayOutputStream = service
-				.generatePNGDocument(resumeHeader, sections, styleName, 64, 0);
+				.generatePNGDocument(resumeHeader, sections, templateName, 64,
+						0);
 
 		assertNotNull(byteArrayOutputStream);
 

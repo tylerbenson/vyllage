@@ -22,24 +22,24 @@
 This endpoint is not intended for consumption from the UI. Only admins can use this endpoint.
 
 # Returns a PDF file conversion of the selected document
-## GET /resume/{documentId}/file/pdf?style=styleName
+## GET /resume/{documentId}/file/pdf?template=templateName
 + Parameters
 	++ documentId (string, `1`) - The id of the document.
-	++ styleName (string, `1`) - Style to use in the pdf. Optional parameter. 
+	++ templateName (string, `1`) - Template to use in the pdf. Optional parameter. 
 + Response 200 (application/pdf)
 
 
 # Returns a PNG file conversion of the selected document
-## GET /resume/{documentId}/file/png?style=styleName&width=width&height=height
+## GET /resume/{documentId}/file/png?template=templateName&width=width&height=height
 + Parameters
 	++ documentId (string, `1`) - The id of the document.
-	++ styleName (string, `1`) - Style to use in the pdf. Optional parameter. 
+	++ templateName (string, `1`) - Style to use in the pdf. Optional parameter. 
 	++ width (int, `1`) - The width of the image.
 	++ height (int, `1`) - The height of the image.
 + Response 200 (image/png)
 
 # Get pdf styles
-## GET /resume/file/pdf/styles
+## GET /resume/file/pdf/templates
 Returns
 ```
 {"default","narrow"}

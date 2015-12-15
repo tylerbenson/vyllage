@@ -34,7 +34,7 @@ ExportAction.checkForOwner.preEmit = function(){
 
 ExportAction.getAllResumeStyle.preEmit = function(){
 	request
-      .get('/resume/file/pdf/styles')
+      .get('/resume/file/pdf/templates')
       .set('Accept', 'application/json')
       .end(function (err, res) {
 				if( res.body.length ){

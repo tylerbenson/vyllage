@@ -42,31 +42,31 @@ import documents.services.aspect.CheckReadAccess;
 public class FileController {
 	private final DocumentService documentService;
 
-	private final ResumeExportService resumePdfService;
+	private final ResumeExportService resumeExportService;
 
 	private final Environment environment;
 
-	private List<String> pdfStyles = new LinkedList<>();
+	private List<String> pdfTemplates = new LinkedList<>();
 
 	@Inject
 	public FileController(final DocumentService documentService,
-			final ResumeExportService resumePdfService,
+			final ResumeExportService resumeExportService,
 			final Environment environment) {
 		this.documentService = documentService;
-		this.resumePdfService = resumePdfService;
+		this.resumeExportService = resumeExportService;
 		this.environment = environment;
 
-		if (environment.containsProperty("pdf.styles"))
-			pdfStyles.addAll(Arrays.asList(this.environment.getProperty(
-					"pdf.styles").split(",")));
+		if (environment.containsProperty("pdf.templates"))
+			pdfTemplates.addAll(Arrays.asList(this.environment.getProperty(
+					"pdf.templates").split(",")));
 		else
-			pdfStyles.add("default");
+			pdfTemplates.add("standard");
 	}
 
-	@RequestMapping(value = "/file/pdf/styles", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/file/pdf/templates", method = RequestMethod.GET, produces = "application/json")
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody List<String> getPdfStyles() {
-		return this.pdfStyles;
+	public @ResponseBody List<String> getPdfTemplateNames() {
+		return this.pdfTemplates;
 	}
 
 	@Trace
@@ -77,7 +77,7 @@ public class FileController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "style", required = false, defaultValue = "default") final String styleName,
+			@RequestParam(value = "template", required = false, defaultValue = "standard") final String templateName,
 			@AuthenticationPrincipal User user)
 			throws ElementNotFoundException, DocumentException, IOException {
 
@@ -87,11 +87,11 @@ public class FileController {
 		List<DocumentSection> documentSections = documentService
 				.getDocumentSections(documentId);
 
-		String style = styleName != null && !styleName.isEmpty()
-				&& this.pdfStyles.contains(styleName) ? styleName
-				: this.pdfStyles.get(0);
+		String style = templateName != null && !templateName.isEmpty()
+				&& this.pdfTemplates.contains(templateName) ? templateName
+				: this.pdfTemplates.get(0);
 
-		copyPDF(response, resumePdfService.generatePDFDocument(resumeHeader,
+		copyPDF(response, resumeExportService.generatePDFDocument(resumeHeader,
 				documentSections, style));
 		response.setStatus(HttpStatus.OK.value());
 		response.flushBuffer();
@@ -113,7 +113,7 @@ public class FileController {
 
 		response.setContentType("application/pdf");
 		response.setHeader("Content-Disposition", "attachment; filename="
-				+ "report.pdf");
+				+ "resume.pdf");
 	}
 
 	@Trace
@@ -124,7 +124,7 @@ public class FileController {
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable final Long documentId,
-			@RequestParam(value = "style", required = false, defaultValue = "default") final String styleName,
+			@RequestParam(value = "style", required = false, defaultValue = "standard") final String styleName,
 			@RequestParam(value = "width", required = false, defaultValue = "64") final int width,
 			@RequestParam(value = "height", required = false, defaultValue = "98") final int height,
 			@AuthenticationPrincipal User user)
@@ -137,10 +137,10 @@ public class FileController {
 				.getDocumentSections(documentId);
 
 		String style = styleName != null && !styleName.isEmpty()
-				&& this.pdfStyles.contains(styleName) ? styleName
-				: this.pdfStyles.get(0);
+				&& this.pdfTemplates.contains(styleName) ? styleName
+				: this.pdfTemplates.get(0);
 
-		copyPNG(response, resumePdfService.generatePNGDocument(resumeHeader,
+		copyPNG(response, resumeExportService.generatePNGDocument(resumeHeader,
 				documentSections, style, width, height));
 		response.setStatus(HttpStatus.OK.value());
 		response.flushBuffer();
@@ -162,7 +162,7 @@ public class FileController {
 
 		response.setContentType(MediaType.IMAGE_PNG_VALUE);
 		response.setHeader("Content-Disposition", "attachment; filename="
-				+ "report.png");
+				+ "resume.png");
 	}
 
 }

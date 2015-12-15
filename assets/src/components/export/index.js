@@ -5,7 +5,6 @@ var viewport = require('viewport-dimensions');
 var ExportStore = require('./exportStore');
 var ExportAction = require('./exportAction');
 var ResumeStyleList = require('./stylelist');
-var PdfStyleRender = require('./pdfrender');
 var OnResize = require('react-window-mixins').OnResize;
 var configs = require('../configs');
 var MAX_WIDTH = configs.breakpoints.largePortrait;
@@ -49,7 +48,6 @@ module.exports = React.createClass({
 				<div className="style-list-container">
 					<div className="content">
 						{styleList}
-				    {this.state.viewportWidth >= MAX_WIDTH ? <PdfStyleRender active={this.state.activeStyle} /> : null}
 			    </div>
 		    </div>
 	    </div>

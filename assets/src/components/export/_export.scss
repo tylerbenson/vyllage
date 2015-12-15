@@ -44,6 +44,10 @@
 
     &.mobile {
       @include column(1);
+      float: none;
+      margin: auto;
+      max-width: $large-portrait;
+      text-align: center;
       .pdf-thumb {
         img {
           border-color: lighten($secondary-color, 20%) !important;
@@ -52,7 +56,6 @@
     }
 
     .pdf-thumb {
-      float: left;
       cursor: pointer;
       display: inline-block;
       margin: 0.5em;
@@ -86,16 +89,6 @@
         font-weight: bold;
         text-transform: uppercase;
       }
-    }
-  }
-
-  .live-preview {
-    @include column(4/5);
-
-    .pdfrender {
-      height: 100%;
-      min-height: 640px;
-      width: 100%;
     }
   }
 }
