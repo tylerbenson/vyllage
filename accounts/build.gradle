@@ -19,7 +19,7 @@ dependencies {
     compile 'org.apache.commons:commons-csv:1.1'
     compile 'com.rometools:rome:1.5.1'
 
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     compile 'org.springframework.session:spring-session:1.0.2.RELEASE'
 
