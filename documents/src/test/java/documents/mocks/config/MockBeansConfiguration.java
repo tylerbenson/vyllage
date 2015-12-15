@@ -8,7 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import documents.BeansConfiguration;
+import documents.configuration.BeansConfiguration;
 import documents.mocks.SelfReturningAnswer;
 import email.EmailBuilder;
 
