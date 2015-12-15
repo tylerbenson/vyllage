@@ -3,6 +3,8 @@ package site;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -67,6 +69,7 @@ import org.springframework.boot.autoconfigure.velocity.VelocityAutoConfiguration
 import org.springframework.boot.autoconfigure.web.EmbeddedServletContainerAutoConfiguration;
 import org.springframework.boot.autoconfigure.websocket.WebSocketMessagingAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.env.Environment;
 
 import util.profiles.Profiles;
 
@@ -124,13 +127,18 @@ public class Application implements CommandLineRunner {
 	private static final Logger logger = Logger.getLogger(Application.class
 			.getName());
 
+	@Inject
+	static Environment environment;
+
 	public static void main(String[] args) {
 		SpringApplication application = new SpringApplication(Application.class);
-
+		assert environment != null;
 		// https://github.com/jOOQ/jOOQ/issues/4019
 		System.setProperty("org.jooq.no-logo", Boolean.TRUE.toString());
 
 		System.setProperty("spring.profiles.default", Profiles.DEV);
+
+		System.setProperty("java.security.egd", "file:/dev/./urandom");
 
 		if (Application.class.getResource("Application.class").getProtocol()
 				.equals("file")) {

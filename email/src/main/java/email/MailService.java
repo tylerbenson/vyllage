@@ -17,7 +17,7 @@ public class MailService {
 	private int port = 587;
 
 	// @Value("${email.userName}")
-	private String userName = "chief@vyllage.com";
+	private String userName = "chief@delbenson.com";
 
 	// @Value("${email.password}")
 	private String password = "vyllage15";
