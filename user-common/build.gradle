@@ -7,8 +7,8 @@ dependencies {
     compile 'org.springframework.social:spring-social-config'
     compile 'org.springframework.social:spring-social-web'
     compile 'org.springframework.social:spring-social-security'
-    compile 'org.springframework.social:spring-social-facebook:2.0.1.RELEASE'
-    compile 'org.springframework.social:spring-social-facebook-web:2.0.1.RELEASE'
+    compile 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'
+    compile 'org.springframework.social:spring-social-facebook-web:2.0.3.RELEASE'
     compile 'org.springframework.social:spring-social-google:1.0.0.RELEASE'
     compile 'org.springframework.social:spring-social-twitter:1.1.0.RELEASE'
 

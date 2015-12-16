@@ -217,9 +217,9 @@ configure(javaProjects) {
 
 
             def spring = '4.2.3.RELEASE'
-            def springSocial = '1.1.2.RELEASE'
+            def springSocial = '1.1.4.RELEASE'
             def springSecurity = '4.0.3.RELEASE'
-            def jackson = '2.5.4'
+            def jackson = '2.5.5'
             def aspectjrt = '1.8.7'
 
             // force certain versions of dependencies (including transitive)

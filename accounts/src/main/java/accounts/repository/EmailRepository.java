@@ -44,7 +44,7 @@ public class EmailRepository {
 	public Email save(Email email) {
 
 		EmailsRecord result = sql.fetchOne(EMAILS,
-				EMAILS.EMAIL.eq(email.getEmail()));
+				EMAILS.EMAIL_ID.eq(email.getEmailId()));
 
 		if (result == null) {
 			EmailsRecord newRecord = sql.newRecord(EMAILS, email);

@@ -23,7 +23,7 @@ dependencies {
     compile 'org.xhtmlrenderer:flying-saucer-core:9.0.7'
     compile 'org.xhtmlrenderer:flying-saucer-pdf:9.0.7'
 
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     //https://github.com/thymeleaf/thymeleaf-extras-java8time
     compile 'org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE'

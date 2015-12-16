@@ -16,7 +16,7 @@ dependencies {
 
     compile 'org.apache.commons:commons-lang3:3.3.2'
 
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.4'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     compile("org.springframework.boot:spring-boot-starter-security")
 //    compile("org.springframework.boot:spring-boot-starter-aop")
