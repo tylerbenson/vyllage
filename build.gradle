@@ -43,8 +43,6 @@ configure(subprojects) {
 configure(rootProject) {
 //    apply from: 'gradle/gitMetadata.gradle'
 
-    apply plugin: 'application'
-
     repositories {
       mavenCentral()
     }
@@ -60,18 +58,6 @@ configure(rootProject) {
     task copyNewRelic(type: Copy) {
       from configurations.newRelic
       into "${rootProject.rootDir}/newrelic"
-    }
-
-    task vyllageStartScripts(type: CreateStartScripts) {
-        mainClassName = "site.Application"
-        applicationName = "vyllage"
-        outputDir = new File(project.buildDir, 'scripts')
-        classpath = jar.outputs.files + project.configurations.runtime
-    }
-
-    applicationDistribution.into("bin") {
-        from(startScripts)
-        fileMode = 0755
     }
 }
 
@@ -309,6 +295,7 @@ configure(javaProjects) {
 }
 
 configure(bootProjects) {
+    apply plugin: 'application'
     apply plugin: 'spring-boot'
 
     ext {
@@ -334,6 +321,19 @@ configure(bootProjects) {
 
     version = "0.0.1-SNAPSHOT" //commitId
 
+    applicationDistribution.from("${rootProject.rootDir}/scripts/") {
+        include('**/appspec.yml')
+        into "/"
+        includeEmptyDirs = false
+    }
+    applicationDistribution.from("${rootProject.rootDir}/scripts") {
+        exclude('**/appspec.yml')
+        into "/scripts"
+        includeEmptyDirs = false
+    }
+    applicationDistribution.from("${rootProject.rootDir}/newrelic") {
+        into "/newrelic"
+    }
 }
 
 configure(dbProjects) {
