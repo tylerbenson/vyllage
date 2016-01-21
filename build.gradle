@@ -351,7 +351,7 @@ configure(dbProjects) {
         user = 'sa'
         password = ''
         schemas = ["${project.name.toUpperCase()}"]
-        locations = ["classpath:${project.name}/db/h2/migration"]
+        locations = ["filesystem:$buildDir/resources/main/${project.name}/db/h2/migration"]
     }
 
     flywayMigrate.inputs.dir 'src/main/resources/${project.name}/db/'
