@@ -53,6 +53,7 @@ var Tags = React.createClass({
         tags.push(tag);
       }
     }
+
     this.setState({tags: tags});
   },
   saveHandler: function(e) {
@@ -60,16 +61,23 @@ var Tags = React.createClass({
     var tagRef = this.refs.tags.getDOMNode();
 
     jQuery(tagRef).find('.tag').each(function(index) {
-      if( jQuery(this).attr("rel") )
-        tags.push(jQuery(this).attr("rel") );
+      if( jQuery(this).attr("rel") ) {
+         tags.push(jQuery(this).attr("rel") );
+      }
     });
+    //this is always empty?
     var temp_value = jQuery(tagRef).find('input').val();
     if( temp_value.length > 0 ){
       tags.push(temp_value);
     }
+
     var section = this.props.section;
     section.tags = tags;
-    actions.putSection(section);
+
+    //This probably should not be here since 
+    //there's a validation later that also saves 
+    //the new section data.
+    //actions.putSection(section);
 
     if( this.validateSection( section ) == false ){
       actions.putSection(section);
@@ -125,7 +133,7 @@ var Tags = React.createClass({
       source: suggestions,
       select: function( event, ui ) {
         if( ui.item != undefined ){
-          var temp = self.state.tags.slice();          
+          var temp = self.state.tags.slice();        
           temp.push(ui.item.value);
           self.setState({
             tags: temp
