@@ -107,6 +107,9 @@ public class DocumentService {
 	public DocumentSection saveDocumentSection(
 			@NonNull final DocumentSection documentSection) {
 
+		if (!documentSection.isValid())
+			return documentSection;
+
 		logger.info(documentSection.toString());
 		DocumentSection savedSection = null;
 

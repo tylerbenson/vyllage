@@ -48,6 +48,15 @@ public class CareerInterestsSection extends DocumentSection implements
 			this.tags.removeAll(other.getTags());
 			this.tags.addAll(other.getTags());
 		}
+	}
 
+	@Override
+	public boolean isValid() {
+		boolean valid = getTags() != null && !getTags().isEmpty();
+
+		if (!valid)
+			setError("Please add at least one Career Interest.");
+
+		return valid;
 	}
 }
