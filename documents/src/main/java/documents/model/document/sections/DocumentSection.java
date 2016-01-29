@@ -28,7 +28,7 @@ import documents.model.constants.Visibility;
 
 @ToString
 @EqualsAndHashCode
-@JsonIgnoreProperties(value = { "documentId" })
+@JsonIgnoreProperties(value = { "documentId", "valid" })
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
 		@Type(value = AchievementsSection.class, name = "AchievementsSection"),
@@ -55,6 +55,8 @@ public abstract class DocumentSection {
 	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
 	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
 	private LocalDateTime lastModified;
+
+	private String error;
 
 	public DocumentSection() {
 		super();
@@ -174,4 +176,15 @@ public abstract class DocumentSection {
 		return mapper.writeValueAsString(this);
 	}
 
+	public boolean isValid() {
+		return true;
+	}
+
+	public String getError() {
+		return this.error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
 }

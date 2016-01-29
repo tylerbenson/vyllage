@@ -50,4 +50,14 @@ public class SkillsSection extends DocumentSection implements Mergeable {
 
 	}
 
+	@Override
+	public boolean isValid() {
+		boolean valid = getTags() != null && !getTags().isEmpty();
+
+		if (!valid)
+			setError("Please add at least one Skill.");
+
+		return valid;
+	}
+
 }

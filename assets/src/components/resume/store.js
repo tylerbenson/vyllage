@@ -71,6 +71,12 @@ module.exports = Reflux.createStore({
 
     PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout});
   },
+  notifyError: function(error) {
+	  var message = <span>  {error} </span>;
+	  var timeout = 8000;
+
+	  PubSub.publish('banner-alert', {isOpen: true, message: message, timeout: timeout}); 
+  },
   /*End of Notifications*/
 
   /* Helper functions */
@@ -204,7 +210,13 @@ module.exports = Reflux.createStore({
       this.resume.sections[index].comments = data.comments;
     }
     this.resume.all_section = this.doProcessSection( this.resume.sections, this.resume.header.owner);
-    this.remindToShare();
+
+    //don't show if it contains errors
+    if(section.error == null)
+    	this.remindToShare();
+    else{
+    	this.notifyError(section.error);
+    }
     this.trigger(this.resume);
   },
 
