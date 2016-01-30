@@ -427,4 +427,4 @@ configure(dbProjects) {
     }
 }
 
-task stage(dependsOn: [':site:build'])
+task stage(dependsOn: [':site:installDist'])
