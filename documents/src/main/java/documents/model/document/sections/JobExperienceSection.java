@@ -12,4 +12,9 @@ public class JobExperienceSection extends EducationSection {
 		// super(); nope
 		this.setType(SectionType.JOB_EXPERIENCE_SECTION.type());
 	}
+
+	@Override
+	public String asTxt() {
+		return super.asTxt().replace("Education", "Job Experience");
+	}
 }

@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jooq.tools.StringUtils;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -51,6 +50,7 @@ import documents.model.document.sections.EducationSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
+import documents.services.RezcoreService;
 import documents.services.aspect.CheckReadAccess;
 import documents.services.aspect.CheckWriteAccess;
 
@@ -65,11 +65,14 @@ public class ResumeController {
 
 	private final AccountService accountService;
 
+	private final RezcoreService rezcoreService;
+
 	@Inject
-	public ResumeController(final DocumentService documentService,
-			final AccountService accountService, final Environment environment) {
+	public ResumeController(DocumentService documentService,
+			AccountService accountService, RezcoreService rezcoreService) {
 		this.documentService = documentService;
 		this.accountService = accountService;
+		this.rezcoreService = rezcoreService;
 
 	}
 
@@ -417,6 +420,20 @@ public class ResumeController {
 
 		} catch (ElementNotFoundException e) {
 			return false;
+		}
+	}
+
+	// just to test
+	@RequestMapping(value = "{documentId}/txt", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody String getText(@PathVariable final Long documentId) {
+
+		try {
+			return rezcoreService.getRezcoreAnalysis(documentService
+					.getDocumentSections(documentId));
+
+		} catch (ElementNotFoundException e) {
+			// no sections, return [].
+			return Collections.emptyList().toString();
 		}
 	}
 

@@ -1,6 +1,7 @@
 package documents.model.document.sections;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -110,6 +111,14 @@ public class CareerInterestsSectionTest {
 
 		assertTrue("Tags not merged correctly. Expected: " + expected
 				+ " got: " + section.getTags(), section.getTags() == null);
+	}
+
+	@Test
+	public void testAsText() {
+		CareerInterestsSection section = new CareerInterestsSection();
+		section.setTags(Lists.newArrayList("one", "two", "Java"));
+		System.out.println(section.asTxt());
+		assertNotNull(section.asTxt());
 	}
 
 }

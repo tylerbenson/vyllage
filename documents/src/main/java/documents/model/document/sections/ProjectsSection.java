@@ -1,7 +1,7 @@
 package documents.model.document.sections;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -88,6 +88,26 @@ public class ProjectsSection extends DocumentSection {
 
 	public void setRoleDescription(String roleDescription) {
 		this.roleDescription = roleDescription;
+	}
+
+	@Override
+	public String asTxt() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Projects");
+		sb.append("\n");
+
+		if (this.getProjectDate() != null) {
+			DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+			sb.append(this.getProjectDate().format(formatter)).append(" ");
+		}
+
+		sb.append(this.getProjectTitle()).append(" ");
+		sb.append(this.getProjectDescription()).append("\n");
+
+		sb.append(this.getRole()).append(" ");
+		sb.append(this.getRoleDescription()).append("\n");
+
+		return sb.append("\n").toString();
 	}
 
 }

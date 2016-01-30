@@ -1,6 +1,7 @@
 package documents.model.document.sections;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -113,6 +114,32 @@ public class EducationSection extends DocumentSection {
 
 	public void setHighlights(List<String> highlights) {
 		this.highlights = highlights;
+	}
+
+	@Override
+	public String asTxt() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Education");
+		sb.append("\n");
+
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+
+		if (this.getStartDate() != null)
+			sb.append(this.getStartDate().format(formatter));
+
+		if (this.getStartDate() != null && this.getEndDate() != null)
+			sb.append(" to ").append(this.getEndDate().format(formatter));
+		else
+			sb.append(" ");
+
+		sb.append(this.getOrganizationName()).append(" ");
+		sb.append(this.getOrganizationDescription()).append(" ");
+		sb.append(this.getLocation()).append("\n\n");
+
+		sb.append(this.getRole()).append("\n");
+		sb.append(this.getRoleDescription());
+
+		return sb.append("\n").toString();
 	}
 
 }
