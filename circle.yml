@@ -12,7 +12,7 @@ dependencies:
 
 test:
   override:
-    - (export TERM="dumb"; ./gradlew check circlePgTest copyNewRelic):
+    - (export TERM="dumb"; ./gradlew check circlePgTest copyNewRelic installDist):
         timeout: 3600
     - npm test
 
@@ -21,6 +21,7 @@ deployment:
     branch: master
     codedeploy:
       vyllage:
+        # application_root: /site/build/install/site
         application_root: /deployment
         region: us-west-2
         revision_location:
