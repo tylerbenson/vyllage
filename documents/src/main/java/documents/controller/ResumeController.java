@@ -425,11 +425,12 @@ public class ResumeController {
 
 	// just to test
 	@RequestMapping(value = "{documentId}/txt", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody String getText(@PathVariable final Long documentId) {
+	public @ResponseBody String getText(HttpServletRequest request,
+			@PathVariable final Long documentId) {
 
 		try {
-			return rezcoreService.getRezcoreAnalysis(documentService
-					.getDocumentSections(documentId));
+			return rezcoreService.getRezcoreAnalysis(request,
+					documentService.getDocumentSections(documentId));
 
 		} catch (ElementNotFoundException e) {
 			// no sections, return [].
