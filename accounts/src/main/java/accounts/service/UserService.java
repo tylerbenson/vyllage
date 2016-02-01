@@ -21,6 +21,8 @@ import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -79,9 +81,6 @@ public class UserService {
 	private final ObjectMapper mapper;
 
 	private final TextEncryptor encryptor;
-
-	@Inject
-	private SignInUtil signInUtil;
 
 	@Inject
 	public UserService(
@@ -534,7 +533,10 @@ public class UserService {
 		userRepository.changeEmail(user, email);
 
 		// to set the new name
-		signInUtil.signIn(email);
+		Authentication auth = new UsernamePasswordAuthenticationToken(user,
+				user.getPassword(), user.getAuthorities());
+
+		SecurityContextHolder.getContext().setAuthentication(auth);
 	}
 
 	private void createReceiveAdviceSetting(boolean receiveAdvice, User newUser) {
