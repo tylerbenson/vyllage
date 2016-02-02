@@ -1,9 +1,9 @@
-package documents.services;
+package documents.services.rezscore;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,10 +14,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
+import documents.services.AccountService;
 
 @Service
-public class RezcoreService {
+public class RezscoreService {
+
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger.getLogger(AccountService.class
+			.getName());
 
 	private static final int PORT = 80;
 	private static final String HOST = "rezscore.com";
@@ -27,13 +33,13 @@ public class RezcoreService {
 	private static final String API_KEY = "75ccf8";
 
 	@Inject
-	public RezcoreService(RestTemplate restTemplate) {
+	public RezscoreService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 
-	public String getRezcoreAnalysis(HttpServletRequest request,
+	public String getRezcoreAnalysis(DocumentHeader documentHeader,
 			List<DocumentSection> documentSections) {
-		HttpEntity<String> header = assembleHeader(request);
+		HttpEntity<String> header = assembleHeader();
 		StringBuilder sb = new StringBuilder();
 		String resume = null;
 
@@ -42,6 +48,8 @@ public class RezcoreService {
 				s2.getSectionPosition()));
 
 		// create txt
+		sb.append(documentHeader.asTxt()).append("\n");
+
 		for (DocumentSection documentSection : documentSections) {
 			sb.append(documentSection.asTxt());
 			sb.append("\n");
@@ -49,18 +57,17 @@ public class RezcoreService {
 
 		resume = sb.toString();
 
-		if (resume == null)
-			return "";
+		// logger.info(resume);
 
 		String url = getUrl(resume);
 
-		ResponseEntity<String> responseEntity = restTemplate.exchange(url,
-				HttpMethod.GET, header, String.class);
+		ResponseEntity<Rezscore> responseEntity = restTemplate.exchange(url,
+				HttpMethod.GET, header, Rezscore.class);
 
 		if (responseEntity == null)
 			return "";
 
-		return responseEntity.getBody();
+		return responseEntity.getBody().toString();
 	}
 
 	protected String getUrl(String resume) {
@@ -72,7 +79,7 @@ public class RezcoreService {
 		return builder.build().toUriString();
 	}
 
-	protected HttpEntity<String> assembleHeader(HttpServletRequest request) {
+	protected HttpEntity<String> assembleHeader() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.TEXT_PLAIN);
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);

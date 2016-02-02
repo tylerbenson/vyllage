@@ -50,9 +50,9 @@ import documents.model.document.sections.EducationSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
-import documents.services.RezcoreService;
 import documents.services.aspect.CheckReadAccess;
 import documents.services.aspect.CheckWriteAccess;
+import documents.services.rezscore.RezscoreService;
 
 @Controller
 @RequestMapping("resume")
@@ -65,11 +65,11 @@ public class ResumeController {
 
 	private final AccountService accountService;
 
-	private final RezcoreService rezcoreService;
+	private final RezscoreService rezcoreService;
 
 	@Inject
 	public ResumeController(DocumentService documentService,
-			AccountService accountService, RezcoreService rezcoreService) {
+			AccountService accountService, RezscoreService rezcoreService) {
 		this.documentService = documentService;
 		this.accountService = accountService;
 		this.rezcoreService = rezcoreService;
@@ -426,10 +426,12 @@ public class ResumeController {
 	// just to test
 	@RequestMapping(value = "{documentId}/txt", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody String getText(HttpServletRequest request,
-			@PathVariable final Long documentId) {
+			@PathVariable final Long documentId,
+			@AuthenticationPrincipal User user) {
 
 		try {
-			return rezcoreService.getRezcoreAnalysis(request,
+			return rezcoreService.getRezcoreAnalysis(documentService
+					.getDocumentHeader(request, documentId, user),
 					documentService.getDocumentSections(documentId));
 
 		} catch (ElementNotFoundException e) {
