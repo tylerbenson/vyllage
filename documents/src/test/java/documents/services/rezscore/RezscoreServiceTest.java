@@ -49,10 +49,14 @@ public class RezscoreServiceTest {
 		SkillsSection ds = new SkillsSection();
 		ds.setTags(Lists.newArrayList("one", "two", "Java"));
 
-		String analysis = rezscoreService.getRezcoreAnalysis(dh,
+		RezscoreResult analysis = rezscoreService.getRezcoreAnalysis(dh,
 				Arrays.asList(ds));
 
 		assertNotNull(analysis);
+
+		assertNotNull(analysis.getResume());
+
+		assertNotNull(analysis.getRezscore());
 	}
 
 }

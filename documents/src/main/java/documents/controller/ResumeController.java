@@ -52,6 +52,7 @@ import documents.services.AccountService;
 import documents.services.DocumentService;
 import documents.services.aspect.CheckReadAccess;
 import documents.services.aspect.CheckWriteAccess;
+import documents.services.rezscore.RezscoreResult;
 import documents.services.rezscore.RezscoreService;
 
 @Controller
@@ -425,7 +426,7 @@ public class ResumeController {
 
 	// just to test
 	@RequestMapping(value = "{documentId}/txt", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody String getText(HttpServletRequest request,
+	public @ResponseBody RezscoreResult getText(HttpServletRequest request,
 			@PathVariable final Long documentId,
 			@AuthenticationPrincipal User user) {
 
@@ -435,8 +436,7 @@ public class ResumeController {
 					documentService.getDocumentSections(documentId));
 
 		} catch (ElementNotFoundException e) {
-			// no sections, return [].
-			return Collections.emptyList().toString();
+			return null;
 		}
 	}
 

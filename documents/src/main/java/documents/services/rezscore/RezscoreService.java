@@ -1,18 +1,26 @@
 package documents.services.rezscore;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.newrelic.api.agent.NewRelic;
 
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
@@ -21,7 +29,6 @@ import documents.services.AccountService;
 @Service
 public class RezscoreService {
 
-	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(AccountService.class
 			.getName());
 
@@ -32,16 +39,20 @@ public class RezscoreService {
 	// TODO: get key from environment.
 	private static final String API_KEY = "75ccf8";
 
+	private final Cache<String, RezscoreResult> results;
+
 	@Inject
 	public RezscoreService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
+
+		results = CacheBuilder.newBuilder().maximumSize(10)
+				.expireAfterAccess(15, TimeUnit.MINUTES).build();
 	}
 
-	public String getRezcoreAnalysis(DocumentHeader documentHeader,
+	public RezscoreResult getRezcoreAnalysis(DocumentHeader documentHeader,
 			List<DocumentSection> documentSections) {
 		HttpEntity<String> header = assembleHeader();
 		StringBuilder sb = new StringBuilder();
-		String resume = null;
 
 		// sort by position
 		documentSections.sort((s1, s2) -> s1.getSectionPosition().compareTo(
@@ -55,19 +66,39 @@ public class RezscoreService {
 			sb.append("\n");
 		}
 
-		resume = sb.toString();
+		final String resume = sb.toString();
 
 		// logger.info(resume);
 
 		String url = getUrl(resume);
 
-		ResponseEntity<Rezscore> responseEntity = restTemplate.exchange(url,
-				HttpMethod.GET, header, Rezscore.class);
+		// ResponseEntity<Rezscore> responseEntity = restTemplate.exchange(url,
+		// HttpMethod.GET, header, Rezscore.class);
 
-		if (responseEntity == null)
-			return "";
+		RezscoreResult rezscoreResult = null;
 
-		return responseEntity.getBody().toString();
+		try {
+			rezscoreResult = results
+					.get(resume,
+							() -> {
+
+								ResponseEntity<Rezscore> responseEntity = restTemplate
+										.exchange(url, HttpMethod.GET, header,
+												Rezscore.class);
+
+								Rezscore body = responseEntity.getBody();
+								RezscoreResult result = new RezscoreResult(
+										resume, body);
+								results.put(resume, result);
+
+								return result;
+							});
+		} catch (RestClientException | ExecutionException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+
+		return rezscoreResult;
 	}
 
 	protected String getUrl(String resume) {
