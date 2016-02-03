@@ -1,7 +1,7 @@
 package documents.services.rezscore;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,7 +80,7 @@ public class RezscoreServiceTest {
 		Optional<RezscoreResult> analysis = rezscoreService
 				.getRezscoreAnalysis(dh, Arrays.asList(ds));
 
-		assertTrue(!analysis.isPresent());
+		assertFalse(analysis.isPresent());
 
 	}
 
@@ -96,7 +96,7 @@ public class RezscoreServiceTest {
 		Optional<RezscoreResult> analysis = rezscoreService
 				.getRezscoreAnalysis(dh, null);
 
-		assertTrue(!analysis.isPresent());
+		assertFalse(analysis.isPresent());
 
 	}
 
@@ -112,7 +112,7 @@ public class RezscoreServiceTest {
 		Optional<RezscoreResult> analysis = rezscoreService
 				.getRezscoreAnalysis(dh, new ArrayList<>());
 
-		assertTrue(!analysis.isPresent());
+		assertFalse(analysis.isPresent());
 
 	}
 
