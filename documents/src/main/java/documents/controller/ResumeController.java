@@ -431,10 +431,12 @@ public class ResumeController {
 			@AuthenticationPrincipal User user) {
 
 		try {
-			return rezcoreService.getRezcoreAnalysis(documentService
-					.getDocumentHeader(request, documentId, user),
-					documentService.getDocumentSections(documentId));
-
+			return rezcoreService
+					.getRezcoreAnalysis(
+							documentService.getDocumentHeader(request,
+									documentId, user),
+							documentService.getDocumentSections(documentId))
+					.get();
 		} catch (ElementNotFoundException e) {
 			return null;
 		}

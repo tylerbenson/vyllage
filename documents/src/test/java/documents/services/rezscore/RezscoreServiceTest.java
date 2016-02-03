@@ -1,8 +1,11 @@
 package documents.services.rezscore;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,16 +50,64 @@ public class RezscoreServiceTest {
 		dh.setLastName("last");
 
 		SkillsSection ds = new SkillsSection();
+		ds.setDocumentId(42L);
 		ds.setTags(Lists.newArrayList("one", "two", "Java"));
 
-		RezscoreResult analysis = rezscoreService.getRezcoreAnalysis(dh,
-				Arrays.asList(ds));
+		Optional<RezscoreResult> analysis = rezscoreService.getRezcoreAnalysis(
+				dh, Arrays.asList(ds));
 
-		assertNotNull(analysis);
+		assertNotNull(analysis.get());
 
-		assertNotNull(analysis.getResume());
+		assertNotNull(analysis.get().getResume());
 
-		assertNotNull(analysis.getRezscore());
+		assertNotNull(analysis.get().getRezscore());
+	}
+
+	@Test
+	public void testNullHeader() {
+		DocumentHeader dh = null;
+
+		SkillsSection ds = new SkillsSection();
+		ds.setDocumentId(42L);
+		ds.setTags(Lists.newArrayList("one", "two", "Java"));
+
+		Optional<RezscoreResult> analysis = rezscoreService.getRezcoreAnalysis(
+				dh, Arrays.asList(ds));
+
+		assertTrue(!analysis.isPresent());
+
+	}
+
+	@Test
+	public void testNullDocumentSections() {
+		DocumentHeader dh = new DocumentHeader();
+
+		dh.setAddress("address");
+		dh.setEmail("email@email.com");
+		dh.setFirstName("Name");
+		dh.setLastName("last");
+
+		Optional<RezscoreResult> analysis = rezscoreService.getRezcoreAnalysis(
+				dh, null);
+
+		assertTrue(!analysis.isPresent());
+
+	}
+
+	@Test
+	public void testEmptyDocumentSections() {
+		DocumentHeader dh = new DocumentHeader();
+
+		dh.setAddress("address");
+		dh.setEmail("email@email.com");
+		dh.setFirstName("Name");
+		dh.setLastName("last");
+
+		Optional<RezscoreResult> analysis = rezscoreService.getRezcoreAnalysis(
+				dh, new ArrayList<>());
+
+		assertTrue(!analysis.isPresent());
+
 	}
 
 }

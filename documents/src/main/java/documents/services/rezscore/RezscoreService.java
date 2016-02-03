@@ -1,9 +1,11 @@
 package documents.services.rezscore;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -39,7 +41,7 @@ public class RezscoreService {
 	// TODO: get key from environment.
 	private static final String API_KEY = "75ccf8";
 
-	private final Cache<String, RezscoreResult> results;
+	private final Cache<Long, RezscoreResult> results;
 
 	@Inject
 	public RezscoreService(RestTemplate restTemplate) {
@@ -49,10 +51,19 @@ public class RezscoreService {
 				.expireAfterAccess(15, TimeUnit.MINUTES).build();
 	}
 
-	public RezscoreResult getRezcoreAnalysis(DocumentHeader documentHeader,
+	public Optional<RezscoreResult> getRezcoreAnalysis(
+			DocumentHeader documentHeader,
 			List<DocumentSection> documentSections) {
 		HttpEntity<String> header = assembleHeader();
 		StringBuilder sb = new StringBuilder();
+
+		if (documentHeader == null || documentSections == null
+				|| documentSections.isEmpty())
+			return Optional.empty();
+
+		final Long documentId = documentSections.stream()
+				.map(ds -> ds.getDocumentId()).collect(Collectors.toList())
+				.get(0);
 
 		// sort by position
 		documentSections.sort((s1, s2) -> s1.getSectionPosition().compareTo(
@@ -72,14 +83,12 @@ public class RezscoreService {
 
 		String url = getUrl(resume);
 
-		// ResponseEntity<Rezscore> responseEntity = restTemplate.exchange(url,
-		// HttpMethod.GET, header, Rezscore.class);
-
 		RezscoreResult rezscoreResult = null;
 
+		// get from cache
 		try {
 			rezscoreResult = results
-					.get(resume,
+					.get(documentId,
 							() -> {
 
 								ResponseEntity<Rezscore> responseEntity = restTemplate
@@ -89,7 +98,7 @@ public class RezscoreService {
 								Rezscore body = responseEntity.getBody();
 								RezscoreResult result = new RezscoreResult(
 										resume, body);
-								results.put(resume, result);
+								results.put(documentId, result);
 
 								return result;
 							});
@@ -98,7 +107,7 @@ public class RezscoreService {
 			NewRelic.noticeError(e);
 		}
 
-		return rezscoreResult;
+		return Optional.ofNullable(rezscoreResult);
 	}
 
 	protected String getUrl(String resume) {
