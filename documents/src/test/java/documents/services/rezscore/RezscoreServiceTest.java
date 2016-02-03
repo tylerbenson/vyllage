@@ -53,7 +53,7 @@ public class RezscoreServiceTest {
 		ds.setDocumentId(42L);
 		ds.setTags(Lists.newArrayList("one", "two", "Java"));
 
-		Optional<RezscoreResult> analysis = rezscoreService.getRezcoreAnalysis(
+		Optional<RezscoreResult> analysis = rezscoreService.getRezscoreAnalysis(
 				dh, Arrays.asList(ds));
 
 		assertNotNull(analysis.get());
@@ -71,7 +71,7 @@ public class RezscoreServiceTest {
 		ds.setDocumentId(42L);
 		ds.setTags(Lists.newArrayList("one", "two", "Java"));
 
-		Optional<RezscoreResult> analysis = rezscoreService.getRezcoreAnalysis(
+		Optional<RezscoreResult> analysis = rezscoreService.getRezscoreAnalysis(
 				dh, Arrays.asList(ds));
 
 		assertTrue(!analysis.isPresent());
@@ -87,7 +87,7 @@ public class RezscoreServiceTest {
 		dh.setFirstName("Name");
 		dh.setLastName("last");
 
-		Optional<RezscoreResult> analysis = rezscoreService.getRezcoreAnalysis(
+		Optional<RezscoreResult> analysis = rezscoreService.getRezscoreAnalysis(
 				dh, null);
 
 		assertTrue(!analysis.isPresent());
@@ -103,7 +103,7 @@ public class RezscoreServiceTest {
 		dh.setFirstName("Name");
 		dh.setLastName("last");
 
-		Optional<RezscoreResult> analysis = rezscoreService.getRezcoreAnalysis(
+		Optional<RezscoreResult> analysis = rezscoreService.getRezscoreAnalysis(
 				dh, new ArrayList<>());
 
 		assertTrue(!analysis.isPresent());

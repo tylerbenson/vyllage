@@ -432,7 +432,7 @@ public class ResumeController {
 
 		try {
 			return rezcoreService
-					.getRezcoreAnalysis(
+					.getRezscoreAnalysis(
 							documentService.getDocumentHeader(request,
 									documentId, user),
 							documentService.getDocumentSections(documentId))

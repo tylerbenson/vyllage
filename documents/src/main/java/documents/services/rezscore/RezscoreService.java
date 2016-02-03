@@ -51,7 +51,7 @@ public class RezscoreService {
 				.expireAfterAccess(15, TimeUnit.MINUTES).build();
 	}
 
-	public Optional<RezscoreResult> getRezcoreAnalysis(
+	public Optional<RezscoreResult> getRezscoreAnalysis(
 			DocumentHeader documentHeader,
 			List<DocumentSection> documentSections) {
 		HttpEntity<String> header = assembleHeader();
