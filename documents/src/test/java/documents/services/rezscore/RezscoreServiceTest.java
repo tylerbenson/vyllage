@@ -2,6 +2,7 @@ package documents.services.rezscore;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,12 +59,12 @@ public class RezscoreServiceTest {
 		dh.setLastName("last");
 
 		SkillsSection ds1 = new SkillsSection();
-		ds1.setDocumentId(42L);
+		ds1.setDocumentId(40L);
 		ds1.setTags(Lists.newArrayList("one", "two", "Java"));
 		ds1.setSectionPosition(1L);
 
 		SkillsSection ds2 = new SkillsSection();
-		ds2.setDocumentId(42L);
+		ds2.setDocumentId(40L);
 		ds2.setTags(Lists.newArrayList("test1", "test2", "test3"));
 		ds2.setSectionPosition(2L);
 
@@ -96,16 +97,25 @@ public class RezscoreServiceTest {
 		ds2.setTags(Lists.newArrayList("test1", "test2", "test3"));
 		ds2.setSectionPosition(2L);
 
-		rezscoreService.getRezscoreAnalysis(dh, Arrays.asList(ds1, ds2));
-
-		Optional<RezscoreResult> analysis = rezscoreService
+		Optional<RezscoreResult> analysis1 = rezscoreService
 				.getRezscoreAnalysis(dh, Arrays.asList(ds1, ds2));
 
-		assertNotNull(analysis.get());
+		Optional<RezscoreResult> analysis2 = rezscoreService
+				.getRezscoreAnalysis(dh, Arrays.asList(ds1, ds2));
 
-		assertNotNull(analysis.get().getResume());
+		assertNotNull(analysis1.get());
 
-		assertNotNull(analysis.get().getRezscore());
+		assertNotNull(analysis1.get().getResume());
+
+		assertNotNull(analysis1.get().getRezscore());
+
+		assertNotNull(analysis2.get());
+
+		assertNotNull(analysis2.get().getResume());
+
+		assertNotNull(analysis2.get().getRezscore());
+
+		assertTrue(analysis1.get().equals(analysis2.get()));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -129,12 +139,12 @@ public class RezscoreServiceTest {
 		dh.setLastName("last");
 
 		SkillsSection ds1 = new SkillsSection();
-		ds1.setDocumentId(42L);
+		ds1.setDocumentId(44L);
 		ds1.setTags(Lists.newArrayList("one", "two", "Java"));
 		ds1.setSectionPosition(1L);
 
 		SkillsSection ds2 = new SkillsSection();
-		ds2.setDocumentId(42L);
+		ds2.setDocumentId(44L);
 		ds2.setTags(Lists.newArrayList("test1", "test2", "test3"));
 		ds2.setSectionPosition(2L);
 
@@ -149,7 +159,7 @@ public class RezscoreServiceTest {
 		DocumentHeader dh = null;
 
 		SkillsSection ds = new SkillsSection();
-		ds.setDocumentId(42L);
+		ds.setDocumentId(46L);
 		ds.setTags(Lists.newArrayList("one", "two", "Java"));
 
 		Optional<RezscoreResult> analysis = rezscoreService
