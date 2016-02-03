@@ -1,11 +1,19 @@
 package documents.services.rezscore.result;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotNull;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
-public class RezscoreResult {
+@EqualsAndHashCode
+public class RezscoreResult implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4324359553068600705L;
 	private final String resume;
 	private final Rezscore rezscore;
 

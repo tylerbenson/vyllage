@@ -1,16 +1,25 @@
 package documents.services.rezscore.result;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
 @XmlRootElement(name = "text", namespace = "")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Text {
+@EqualsAndHashCode
+public class Text implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 304385698994711573L;
 
 	@XmlElement(name = "binlink")
 	private String binLink;

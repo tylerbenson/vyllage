@@ -2,8 +2,6 @@ package documents.services.rezscore;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -16,41 +14,38 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.newrelic.api.agent.NewRelic;
 
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
-import documents.services.AccountService;
 import documents.services.rezscore.result.Rezscore;
 import documents.services.rezscore.result.RezscoreResult;
 
 @Service
 public class RezscoreService {
 
-	private final Logger logger = Logger.getLogger(AccountService.class
+	private final Logger logger = Logger.getLogger(RezscoreService.class
 			.getName());
 
 	private static final int PORT = 80;
 	private static final String HOST = "rezscore.com";
+
 	private final RestTemplate restTemplate;
 
 	// TODO: get key from environment.
 	private static final String API_KEY = "75ccf8";
 
-	private final Cache<Long, RezscoreResult> results;
+	private RedisCache<String, RezscoreResult> redisCache;
 
 	@Inject
-	public RezscoreService(RestTemplate restTemplate) {
+	public RezscoreService(RestTemplate restTemplate,
+			RedisCache<String, RezscoreResult> redisCache) {
 		this.restTemplate = restTemplate;
+		this.redisCache = redisCache;
 
-		results = CacheBuilder.newBuilder().maximumSize(10)
-				.expireAfterAccess(15, TimeUnit.MINUTES).build();
 	}
 
 	public Optional<RezscoreResult> getRezscoreAnalysis(
@@ -91,8 +86,8 @@ public class RezscoreService {
 
 		RezscoreResult rezscoreResult = null;
 		try {
-			rezscoreResult = results
-					.get(documentId,
+			rezscoreResult = redisCache
+					.get(getKey(documentId),
 							() -> {
 
 								ResponseEntity<Rezscore> responseEntity = restTemplate
@@ -100,17 +95,24 @@ public class RezscoreService {
 												Rezscore.class);
 
 								Rezscore body = responseEntity.getBody();
+
 								RezscoreResult result = new RezscoreResult(
 										resume, body);
-								results.put(documentId, result);
+
+								redisCache.put(getKey(documentId), result);
 
 								return result;
 							});
-		} catch (RestClientException | ExecutionException e) {
+		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
 		}
+
 		return rezscoreResult;
+	}
+
+	protected String getKey(final Long documentId) {
+		return HOST + ":docId:" + documentId;
 	}
 
 	/**

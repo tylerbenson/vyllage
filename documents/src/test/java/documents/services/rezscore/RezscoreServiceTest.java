@@ -7,10 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,9 +26,9 @@ import com.google.common.collect.Lists;
 import documents.ApplicationTestConfig;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.SkillsSection;
+import documents.services.rezscore.result.Rezscore;
 import documents.services.rezscore.result.RezscoreResult;
 
-// @RunWith(MockitoJUnitRunner.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
@@ -33,12 +37,15 @@ public class RezscoreServiceTest {
 
 	private RezscoreService rezscoreService;
 
+	// not the mock
 	private RestTemplate restTemplate = new RestTemplate();
+
+	@Inject
+	private RedisCache<String, RezscoreResult> redisCache;
 
 	@Before
 	public void setUp() {
-
-		rezscoreService = new RezscoreService(restTemplate);
+		rezscoreService = new RezscoreService(restTemplate, redisCache);
 	}
 
 	@Test
@@ -68,6 +75,73 @@ public class RezscoreServiceTest {
 		assertNotNull(analysis.get().getResume());
 
 		assertNotNull(analysis.get().getRezscore());
+	}
+
+	@Test
+	public void testCache() {
+		DocumentHeader dh = new DocumentHeader();
+
+		dh.setAddress("address");
+		dh.setEmail("email@email.com");
+		dh.setFirstName("Name");
+		dh.setLastName("last");
+
+		SkillsSection ds1 = new SkillsSection();
+		ds1.setDocumentId(42L);
+		ds1.setTags(Lists.newArrayList("one", "two", "Java"));
+		ds1.setSectionPosition(1L);
+
+		SkillsSection ds2 = new SkillsSection();
+		ds2.setDocumentId(42L);
+		ds2.setTags(Lists.newArrayList("test1", "test2", "test3"));
+		ds2.setSectionPosition(2L);
+
+		rezscoreService.getRezscoreAnalysis(dh, Arrays.asList(ds1, ds2));
+
+		Optional<RezscoreResult> analysis = rezscoreService
+				.getRezscoreAnalysis(dh, Arrays.asList(ds1, ds2));
+
+		assertNotNull(analysis.get());
+
+		assertNotNull(analysis.get().getResume());
+
+		assertNotNull(analysis.get().getRezscore());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testResponseException() {
+		DocumentHeader dh = new DocumentHeader();
+
+		RestTemplate restTemplate2 = Mockito.mock(RestTemplate.class);
+
+		Mockito.when(
+				restTemplate2.exchange(Mockito.anyString(),
+						Mockito.eq(HttpMethod.GET), Mockito.anyObject(),
+						Mockito.eq(Rezscore.class))).thenThrow(Exception.class);
+
+		RezscoreService rezscoreService2 = new RezscoreService(restTemplate2,
+				redisCache);
+
+		dh.setAddress("address");
+		dh.setEmail("email@email.com");
+		dh.setFirstName("Name");
+		dh.setLastName("last");
+
+		SkillsSection ds1 = new SkillsSection();
+		ds1.setDocumentId(42L);
+		ds1.setTags(Lists.newArrayList("one", "two", "Java"));
+		ds1.setSectionPosition(1L);
+
+		SkillsSection ds2 = new SkillsSection();
+		ds2.setDocumentId(42L);
+		ds2.setTags(Lists.newArrayList("test1", "test2", "test3"));
+		ds2.setSectionPosition(2L);
+
+		Optional<RezscoreResult> analysis = rezscoreService2
+				.getRezscoreAnalysis(dh, Arrays.asList(ds1, ds2));
+
+		assertFalse(analysis.isPresent());
 	}
 
 	@Test

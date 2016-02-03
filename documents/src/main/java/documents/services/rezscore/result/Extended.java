@@ -1,16 +1,25 @@
 package documents.services.rezscore.result;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
 @XmlRootElement(name = "extended", namespace = "")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Extended {
+@EqualsAndHashCode
+public class Extended implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9187090770913890649L;
 
 	@XmlElement(name = "unix_fail")
 	private String unix_fail;

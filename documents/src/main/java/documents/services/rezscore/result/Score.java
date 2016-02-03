@@ -1,16 +1,26 @@
 package documents.services.rezscore.result;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @ToString
 @XmlRootElement(name = "score", namespace = "")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Score {
+@EqualsAndHashCode
+public class Score implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5085944045195976170L;
+
 	@XmlElement(name = "grade")
 	private String grade;
 
