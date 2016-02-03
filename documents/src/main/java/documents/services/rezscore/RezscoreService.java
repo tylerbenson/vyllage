@@ -27,6 +27,8 @@ import com.newrelic.api.agent.NewRelic;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
 import documents.services.AccountService;
+import documents.services.rezscore.result.Rezscore;
+import documents.services.rezscore.result.RezscoreResult;
 
 @Service
 public class RezscoreService {

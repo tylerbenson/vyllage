@@ -52,8 +52,8 @@ import documents.services.AccountService;
 import documents.services.DocumentService;
 import documents.services.aspect.CheckReadAccess;
 import documents.services.aspect.CheckWriteAccess;
-import documents.services.rezscore.RezscoreResult;
 import documents.services.rezscore.RezscoreService;
+import documents.services.rezscore.result.RezscoreResult;
 
 @Controller
 @RequestMapping("resume")

@@ -1,4 +1,4 @@
-package documents.services.rezscore;
+package documents.services.rezscore.result;
 
 import javax.validation.constraints.NotNull;
 

@@ -22,6 +22,7 @@ import com.google.common.collect.Lists;
 import documents.ApplicationTestConfig;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.SkillsSection;
+import documents.services.rezscore.result.RezscoreResult;
 
 // @RunWith(MockitoJUnitRunner.class)
 @RunWith(SpringJUnit4ClassRunner.class)
