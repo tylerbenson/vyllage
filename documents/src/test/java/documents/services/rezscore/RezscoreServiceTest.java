@@ -30,8 +30,17 @@ import com.google.common.collect.Lists;
 import documents.ApplicationTestConfig;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.SkillsSection;
+import documents.services.rezscore.result.Advice;
+import documents.services.rezscore.result.Extended;
+import documents.services.rezscore.result.File;
+import documents.services.rezscore.result.Industry;
+import documents.services.rezscore.result.Language;
 import documents.services.rezscore.result.Rezscore;
 import documents.services.rezscore.result.RezscoreResult;
+import documents.services.rezscore.result.Score;
+import documents.services.rezscore.result.Text;
+import documents.services.rezscore.result.Tip;
+import documents.services.rezscore.result.Word;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
@@ -62,6 +71,24 @@ public class RezscoreServiceTest {
 						Mockito.eq(HttpMethod.GET), Mockito.anyObject(),
 						Mockito.eq(Rezscore.class))).thenReturn(response);
 		Rezscore rezscore = new Rezscore();
+		Advice advice = new Advice();
+		advice.setTip(new Tip());
+
+		Language language = new Language();
+		language.setWord(new Word());
+
+		File file = new File();
+		file.setSize(0L);
+
+		rezscore.setAdvice(advice);
+		rezscore.setExtended(new Extended());
+
+		rezscore.setFile(file);
+		rezscore.setIndustry(new Industry());
+		rezscore.setLanguage(language);
+		rezscore.setScore(new Score());
+
+		rezscore.setText(new Text());
 
 		when(response.getBody()).thenReturn(rezscore);
 

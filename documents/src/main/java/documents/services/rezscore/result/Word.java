@@ -42,7 +42,7 @@ public class Word implements Serializable {
 		return val;
 	}
 
-	public void setVal(long val) {
+	public void setVal(Long val) {
 		this.val = val;
 	}
 
