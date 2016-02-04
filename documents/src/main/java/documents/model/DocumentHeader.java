@@ -3,6 +3,8 @@ package documents.model;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import org.jooq.tools.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @ToString
@@ -148,6 +150,32 @@ public class DocumentHeader {
 			return true;
 		} else
 			return false;
+	}
+
+	public String asTxt() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(this.getFirstName());
+
+		if (!StringUtils.isEmpty(this.getMiddleName()))
+			sb.append(" ").append(this.getMiddleName());
+
+		if (!StringUtils.isEmpty(this.getLastName()))
+			sb.append(" ").append(this.getLastName());
+
+		sb.append("\n");
+
+		if (!StringUtils.isEmpty(this.getAddress()))
+			sb.append(this.getAddress()).append("\n");
+
+		if (!StringUtils.isEmpty(this.getPhoneNumber()))
+			sb.append(this.getPhoneNumber()).append("\n");
+
+		sb.append(this.getEmail()).append("\n");
+
+		// TODO: should we include social networks here?
+
+		return sb.toString();
 	}
 
 }

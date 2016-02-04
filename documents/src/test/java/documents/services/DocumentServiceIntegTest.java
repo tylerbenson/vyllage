@@ -1,5 +1,8 @@
 package documents.services;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -87,23 +90,23 @@ public class DocumentServiceIntegTest {
 		List<DocumentSection> resumeSections = service
 				.getDocumentSections(documentId);
 
-		Assert.assertNotNull(resumeSections);
+		assertNotNull(resumeSections);
 
 		// 129 Summary and always goes first
-		Assert.assertTrue(resumeSections.stream().anyMatch(
+		assertTrue(resumeSections.stream().anyMatch(
 				rs -> rs.getSectionId().equals(129L)
 						&& rs.getSectionPosition().equals(1L)));
 
-		Assert.assertTrue(resumeSections.stream().anyMatch(
+		assertTrue(resumeSections.stream().anyMatch(
 				rs -> rs.getSectionId().equals(126L)
 						&& rs.getSectionPosition().equals(2L)));
-		Assert.assertTrue(resumeSections.stream().anyMatch(
+		assertTrue(resumeSections.stream().anyMatch(
 				rs -> rs.getSectionId().equals(131L)
 						&& rs.getSectionPosition().equals(3L)));
-		Assert.assertTrue(resumeSections.stream().anyMatch(
+		assertTrue(resumeSections.stream().anyMatch(
 				rs -> rs.getSectionId().equals(128L)
 						&& rs.getSectionPosition().equals(4L)));
-		Assert.assertTrue(resumeSections.stream().anyMatch(
+		assertTrue(resumeSections.stream().anyMatch(
 				rs -> rs.getSectionId().equals(130L)
 						&& rs.getSectionPosition().equals(5L)));
 

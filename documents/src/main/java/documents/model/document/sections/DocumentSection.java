@@ -187,4 +187,6 @@ public abstract class DocumentSection {
 	public void setError(String error) {
 		this.error = error;
 	}
+
+	public abstract String asTxt();
 }

@@ -60,4 +60,16 @@ public class SkillsSection extends DocumentSection implements Mergeable {
 		return valid;
 	}
 
+	@Override
+	public String asTxt() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Skills");
+		sb.append("\n\n");
+
+		for (String tag : tags)
+			sb.append("* " + tag).append(".\n");
+
+		return sb.toString();
+	}
+
 }

@@ -23,4 +23,10 @@ public class PersonalReferencesSection extends DocumentSection {
 		this.references = references;
 	}
 
+	@Override
+	public String asTxt() {
+		// we don't need this for rezcore
+		return "";
+	}
+
 }

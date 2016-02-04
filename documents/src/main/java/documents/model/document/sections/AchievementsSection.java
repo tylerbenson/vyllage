@@ -13,4 +13,9 @@ public class AchievementsSection extends DocumentSection {
 		this.setType(SectionType.ACHIEVEMENTS_SECTION.type());
 	}
 
+	@Override
+	public String asTxt() {
+		return "";
+	}
+
 }

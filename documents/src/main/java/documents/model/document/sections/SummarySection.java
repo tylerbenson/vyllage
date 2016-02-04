@@ -44,4 +44,12 @@ public class SummarySection extends DocumentSection implements Mergeable {
 			this.description += LINE_SEPARATOR + other.getDescription();
 
 	}
+
+	@Override
+	public String asTxt() {
+		if (this.description != null)
+			return "Summary" + "\n" + this.description + "\n";
+		else
+			return "";
+	}
 }

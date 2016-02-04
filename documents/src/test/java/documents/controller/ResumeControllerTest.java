@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.core.env.Environment;
 
 import documents.model.Document;
 import documents.model.document.sections.DocumentSection;
@@ -18,6 +17,7 @@ import documents.model.document.sections.EducationSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
+import documents.services.rezscore.RezscoreService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ResumeControllerTest {
@@ -55,13 +55,12 @@ public class ResumeControllerTest {
 
 	private AccountService accountService = Mockito.mock(AccountService.class);
 
-	private Environment environment = Mockito.mock(Environment.class);
+	private RezscoreService rezcoreService = Mockito.mock(RezscoreService.class);
 
 	@Before
 	public void setUp() {
 		controller = new ResumeController(documentService, accountService,
-
-		environment);
+				rezcoreService);
 	}
 
 	// resume/0/section/124

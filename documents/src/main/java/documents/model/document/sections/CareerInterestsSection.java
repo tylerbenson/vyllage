@@ -59,4 +59,16 @@ public class CareerInterestsSection extends DocumentSection implements
 
 		return valid;
 	}
+
+	@Override
+	public String asTxt() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Career Interests");
+		sb.append("\n\n");
+
+		for (String tag : tags)
+			sb.append("* " + tag).append(".\n");
+
+		return sb.toString();
+	}
 }
