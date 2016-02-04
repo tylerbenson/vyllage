@@ -112,6 +112,8 @@ public class RezscoreService {
 	}
 
 	protected String getKey(final Long documentId) {
+		// FIXME: this alone is not enough, it will prevent adding changed
+		// resumes for 2 weeks...
 		return HOST + ":docId:" + documentId;
 	}
 
