@@ -3,6 +3,8 @@ package documents.services.rezscore;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -38,8 +41,9 @@ public class RezscoreServiceTest {
 
 	private RezscoreService rezscoreService;
 
-	// not the mock
-	private RestTemplate restTemplate = new RestTemplate();
+	// replace with new RestTemplate() to test real endpoint
+	@Inject
+	private RestTemplate restTemplate;
 
 	@Inject
 	private RedisCache<String, RezscoreResult> redisCache;
@@ -47,6 +51,20 @@ public class RezscoreServiceTest {
 	@Before
 	public void setUp() {
 		rezscoreService = new RezscoreService(restTemplate, redisCache);
+
+		// comment this to test real endpoint
+
+		@SuppressWarnings("unchecked")
+		ResponseEntity<Rezscore> response = mock(ResponseEntity.class);
+
+		when(
+				restTemplate.exchange(Mockito.anyString(),
+						Mockito.eq(HttpMethod.GET), Mockito.anyObject(),
+						Mockito.eq(Rezscore.class))).thenReturn(response);
+		Rezscore rezscore = new Rezscore();
+
+		when(response.getBody()).thenReturn(rezscore);
+
 	}
 
 	@Test
@@ -123,9 +141,9 @@ public class RezscoreServiceTest {
 	public void testResponseException() {
 		DocumentHeader dh = new DocumentHeader();
 
-		RestTemplate restTemplate2 = Mockito.mock(RestTemplate.class);
+		RestTemplate restTemplate2 = mock(RestTemplate.class);
 
-		Mockito.when(
+		when(
 				restTemplate2.exchange(Mockito.anyString(),
 						Mockito.eq(HttpMethod.GET), Mockito.anyObject(),
 						Mockito.eq(Rezscore.class))).thenThrow(Exception.class);
