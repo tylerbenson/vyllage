@@ -46,6 +46,8 @@ public class IndeedResult {
 
 	private String formattedRelativeTime;
 
+	private String noUniqueUrl;
+
 	public String getJobtitle() {
 		return jobtitle;
 	}
@@ -196,6 +198,14 @@ public class IndeedResult {
 
 	public void setFormattedRelativeTime(String formattedRelativeTime) {
 		this.formattedRelativeTime = formattedRelativeTime;
+	}
+
+	public String getNoUniqueUrl() {
+		return noUniqueUrl;
+	}
+
+	public void setNoUniqueUrl(String noUniqueUrl) {
+		this.noUniqueUrl = noUniqueUrl;
 	}
 
 }

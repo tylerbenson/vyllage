@@ -86,23 +86,26 @@ public class RezscoreService {
 
 		RezscoreResult rezscoreResult = null;
 		try {
-			rezscoreResult = redisCache
-					.get(getKey(documentId),
-							() -> {
+			rezscoreResult = redisCache.get(
+					getKey(documentId),
+					() -> {
 
-								ResponseEntity<Rezscore> responseEntity = restTemplate
-										.exchange(url, HttpMethod.GET, header,
-												Rezscore.class);
+						RezscoreResult result = getRezscoreAnalysis(resume,
+								header, url);
 
-								Rezscore body = responseEntity.getBody();
+						redisCache.put(getKey(documentId), result);
 
-								RezscoreResult result = new RezscoreResult(
-										resume, body);
+						return result;
+					});
 
-								redisCache.put(getKey(documentId), result);
+			// changed?
+			if (!rezscoreResult.getResume().equals(resume)) {
+				rezscoreResult = getRezscoreAnalysis(resume, header, url);
 
-								return result;
-							});
+				// update the cache
+				redisCache.put(getKey(documentId), rezscoreResult);
+			}
+
 		} catch (Exception e) {
 			logger.severe(ExceptionUtils.getStackTrace(e));
 			NewRelic.noticeError(e);
@@ -111,9 +114,18 @@ public class RezscoreService {
 		return rezscoreResult;
 	}
 
+	protected RezscoreResult getRezscoreAnalysis(final String resume,
+			HttpEntity<String> header, String url) {
+		ResponseEntity<Rezscore> responseEntity = restTemplate.exchange(url,
+				HttpMethod.GET, header, Rezscore.class);
+
+		Rezscore body = responseEntity.getBody();
+
+		RezscoreResult result = new RezscoreResult(resume, body);
+		return result;
+	}
+
 	protected String getKey(final Long documentId) {
-		// FIXME: this alone is not enough, it will prevent adding changed
-		// resumes for 2 weeks...
 		return HOST + ":docId:" + documentId;
 	}
 
