@@ -58,6 +58,7 @@ configure(rootProject) {
     task copyNewRelic(type: Copy) {
       from configurations.newRelic
       into "${rootProject.rootDir}/newrelic"
+      rename 'newrelic-agent-.*.jar', 'newrelic.jar'
     }
 }
 
