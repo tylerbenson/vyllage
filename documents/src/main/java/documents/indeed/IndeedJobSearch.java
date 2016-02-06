@@ -1,6 +1,7 @@
 package documents.indeed;
 
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -24,6 +25,10 @@ import com.google.common.collect.ImmutableList;
 
 @Service
 public class IndeedJobSearch {
+
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger.getLogger(IndeedJobSearch.class
+			.getName());
 
 	private static final String key = "1758907727091006";
 
@@ -87,10 +92,13 @@ public class IndeedJobSearch {
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
 
-		ResponseEntity<IndeedResponse> responseEntity = rest.exchange(url
-				+ query + latlong + sentUserIp + sentUserAgent + startAt
-				+ format + "&psf=advsrch" + v, HttpMethod.GET, entity,
-				IndeedResponse.class);
+		String finalUrl = url + query + latlong + sentUserIp + sentUserAgent
+				+ startAt + format + "&psf=advsrch" + v;
+
+		// logger.info(finalUrl);
+
+		ResponseEntity<IndeedResponse> responseEntity = rest.exchange(finalUrl,
+				HttpMethod.GET, entity, IndeedResponse.class);
 
 		Assert.notNull(responseEntity);
 		// System.out.println(responseEntity.getBody());
@@ -108,16 +116,18 @@ public class IndeedJobSearch {
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
 
-		ResponseEntity<String> responseEntity = rest.exchange(url + q + latlong
-				+ userIp + userAgent + format + v, HttpMethod.GET, entity,
-				String.class);
+		String finalUrl = url + q + latlong + userIp + userAgent + format + v;
+		// logger.info(finalUrl);
+
+		ResponseEntity<String> responseEntity = rest.exchange(finalUrl,
+				HttpMethod.GET, entity, String.class);
 
 		Assert.notNull(responseEntity);
 		// System.out.println(responseEntity.getBody());
 		return responseEntity.getBody();
 	}
 
-	public IndeedResponse search() {
+	public IndeedResponse searchJson() {
 		// example
 		final String q = "&q=Java";
 		final String userIp = "&userip=1.2.3.4";
@@ -128,9 +138,11 @@ public class IndeedJobSearch {
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<Object> entity = new HttpEntity<Object>(null, headers);
 
-		ResponseEntity<IndeedResponse> responseEntity = rest.exchange(url + q
-				+ latlong + userIp + userAgent + format + v, HttpMethod.GET,
-				entity, IndeedResponse.class);
+		String finalUrl = url + q + latlong + userIp + userAgent + format + v;
+		// logger.info(finalUrl);
+
+		ResponseEntity<IndeedResponse> responseEntity = rest.exchange(finalUrl,
+				HttpMethod.GET, entity, IndeedResponse.class);
 
 		Assert.notNull(responseEntity);
 		// System.out.println(responseEntity.getBody());

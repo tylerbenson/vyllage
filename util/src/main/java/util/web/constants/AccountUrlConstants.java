@@ -31,4 +31,6 @@ public interface AccountUrlConstants {
 	public final String ADMIN_USER_ORGANIZATION_MANAGEMENT = "admin-user-organization-management";
 
 	public final String ADMIN_BATCH_ACCOUNT_CREATION = "admin-batch-account-creation";
+
+	public final String ADMIN_USER_SAME_ORGANIZATION = "/admin/user/same-organization";
 }

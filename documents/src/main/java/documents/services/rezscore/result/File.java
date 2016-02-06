@@ -22,7 +22,7 @@ public class File implements Serializable {
 	private static final long serialVersionUID = -5000992129761553127L;
 
 	@XmlElement(name = "size")
-	private Long size = 0L;
+	private Double size;
 
 	@XmlElement(name = "encoding")
 	private String encoding;
@@ -36,11 +36,11 @@ public class File implements Serializable {
 	public File() {
 	}
 
-	public long getSize() {
+	public Double getSize() {
 		return size;
 	}
 
-	public void setSize(Long size) {
+	public void setSize(Double size) {
 		this.size = size;
 	}
 

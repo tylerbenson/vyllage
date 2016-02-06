@@ -448,7 +448,7 @@ public class AdminUserController {
 		return response;
 	}
 
-	@RequestMapping(value = "/user/sameOrganization", method = RequestMethod.GET)
+	@RequestMapping(value = AccountUrlConstants.ADMIN_USER_SAME_ORGANIZATION, method = RequestMethod.GET)
 	// @PreAuthorize("hasAuthority('ADMIN')")
 	public @ResponseBody boolean sameOrganization(
 			@RequestParam Long firstUserId, @RequestParam Long secondUserId,

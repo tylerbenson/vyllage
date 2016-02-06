@@ -25,55 +25,55 @@ public class Extended implements Serializable {
 	private String unix_fail;
 
 	@XmlElement(name = "kincaid_score")
-	private Long kincaid_score;
+	private Double kincaid_score;
 
 	@XmlElement(name = "ari_score")
-	private Long ari_score;
+	private Double ari_score;
 
 	@XmlElement(name = "colman_liau_score")
-	private Long colman_liau_score;
+	private Double colman_liau_score;
 
 	@XmlElement(name = "flesch_index")
 	private String flesch_index;
 
 	@XmlElement(name = "fog_index")
-	private Long fog_index;
+	private Double fog_index;
 
 	@XmlElement(name = "lix_score")
-	private Long lix_score;
+	private Double lix_score;
 
 	@XmlElement(name = "lix_school_year")
-	private Long lix_school_year;
+	private Double lix_school_year;
 
 	@XmlElement(name = "smog_grading")
-	private Long smog_grading;
+	private Double smog_grading;
 
 	@XmlElement(name = "passive_sentence_pct")
-	private Long passive_sentence_pct;
+	private Double passive_sentence_pct;
 
 	@XmlElement(name = "avg_syllables")
-	private Long avg_syllables;
+	private Double avg_syllables;
 
 	@XmlElement(name = "sentence_length")
-	private Long sentence_length;
+	private Double sentence_length;
 
 	@XmlElement(name = "short_sentence_pct")
-	private Long short_sentence_pct;
+	private Double short_sentence_pct;
 
 	@XmlElement(name = "short_sentence_max")
-	private Long short_sentence_max;
+	private Double short_sentence_max;
 
-	@XmlElement(name = "long_sentence_pct")
-	private Long long_sentence_pct;
+	@XmlElement(name = "Double_sentence_pct")
+	private Double Double_sentence_pct;
 
-	@XmlElement(name = "long_sentence_min")
-	private Long long_sentence_min;
+	@XmlElement(name = "Double_sentence_min")
+	private Double Double_sentence_min;
 
 	@XmlElement(name = "wordcount")
-	private Long wordcount;
+	private Double wordcount;
 
 	@XmlElement(name = "avg_syllable_dev")
-	private Long avg_syllable_dev;
+	private Double avg_syllable_dev;
 
 	@XmlElement(name = "is_resume_pct")
 	private Boolean is_resume_pct;
@@ -88,28 +88,28 @@ public class Extended implements Serializable {
 	private Boolean has_references;
 
 	@XmlElement(name = "years_experience")
-	private Long years_experience;
+	private Double years_experience;
 
 	@XmlElement(name = "is_working")
-	private Long is_working;
+	private Double is_working;
 
 	@XmlElement(name = "pct_buzzwords")
-	private Long pct_buzzwords;
+	private Double pct_buzzwords;
 
 	@XmlElement(name = "pct_numbers")
-	private Long pct_numbers;
+	private Double pct_numbers;
 
 	@XmlElement(name = "pct_whitespace")
-	private Long pct_whitespace;
+	private Double pct_whitespace;
 
 	@XmlElement(name = "pct_adverbs")
-	private Long pct_adverbs;
+	private Double pct_adverbs;
 
 	@XmlElement(name = "count_raw")
-	private Long count_raw;
+	private Double count_raw;
 
 	@XmlElement(name = "count_nf")
-	private Long count_nf;
+	private Double count_nf;
 
 	public Extended() {
 	}
@@ -122,27 +122,27 @@ public class Extended implements Serializable {
 		this.unix_fail = unix_fail;
 	}
 
-	public Long getKincaid_score() {
+	public Double getKincaid_score() {
 		return kincaid_score;
 	}
 
-	public void setKincaid_score(Long kincaid_score) {
+	public void setKincaid_score(Double kincaid_score) {
 		this.kincaid_score = kincaid_score;
 	}
 
-	public Long getAri_score() {
+	public Double getAri_score() {
 		return ari_score;
 	}
 
-	public void setAri_score(Long ari_score) {
+	public void setAri_score(Double ari_score) {
 		this.ari_score = ari_score;
 	}
 
-	public Long getColman_liau_score() {
+	public Double getColman_liau_score() {
 		return colman_liau_score;
 	}
 
-	public void setColman_liau_score(Long colman_liau_score) {
+	public void setColman_liau_score(Double colman_liau_score) {
 		this.colman_liau_score = colman_liau_score;
 	}
 
@@ -154,107 +154,107 @@ public class Extended implements Serializable {
 		this.flesch_index = flesch_index;
 	}
 
-	public Long getFog_index() {
+	public Double getFog_index() {
 		return fog_index;
 	}
 
-	public void setFog_index(Long fog_index) {
+	public void setFog_index(Double fog_index) {
 		this.fog_index = fog_index;
 	}
 
-	public Long getLix_score() {
+	public Double getLix_score() {
 		return lix_score;
 	}
 
-	public void setLix_score(Long lix_score) {
+	public void setLix_score(Double lix_score) {
 		this.lix_score = lix_score;
 	}
 
-	public Long getLix_school_year() {
+	public Double getLix_school_year() {
 		return lix_school_year;
 	}
 
-	public void setLix_school_year(Long lix_school_year) {
+	public void setLix_school_year(Double lix_school_year) {
 		this.lix_school_year = lix_school_year;
 	}
 
-	public Long getSmog_grading() {
+	public Double getSmog_grading() {
 		return smog_grading;
 	}
 
-	public void setSmog_grading(Long smog_grading) {
+	public void setSmog_grading(Double smog_grading) {
 		this.smog_grading = smog_grading;
 	}
 
-	public Long getPassive_sentence_pct() {
+	public Double getPassive_sentence_pct() {
 		return passive_sentence_pct;
 	}
 
-	public void setPassive_sentence_pct(Long passive_sentence_pct) {
+	public void setPassive_sentence_pct(Double passive_sentence_pct) {
 		this.passive_sentence_pct = passive_sentence_pct;
 	}
 
-	public Long getAvg_syllables() {
+	public Double getAvg_syllables() {
 		return avg_syllables;
 	}
 
-	public void setAvg_syllables(Long avg_syllables) {
+	public void setAvg_syllables(Double avg_syllables) {
 		this.avg_syllables = avg_syllables;
 	}
 
-	public Long getSentence_length() {
+	public Double getSentence_length() {
 		return sentence_length;
 	}
 
-	public void setSentence_length(Long sentence_length) {
+	public void setSentence_length(Double sentence_length) {
 		this.sentence_length = sentence_length;
 	}
 
-	public Long getShort_sentence_pct() {
+	public Double getShort_sentence_pct() {
 		return short_sentence_pct;
 	}
 
-	public void setShort_sentence_pct(Long short_sentence_pct) {
+	public void setShort_sentence_pct(Double short_sentence_pct) {
 		this.short_sentence_pct = short_sentence_pct;
 	}
 
-	public Long getShort_sentence_max() {
+	public Double getShort_sentence_max() {
 		return short_sentence_max;
 	}
 
-	public void setShort_sentence_max(Long short_sentence_max) {
+	public void setShort_sentence_max(Double short_sentence_max) {
 		this.short_sentence_max = short_sentence_max;
 	}
 
-	public Long getLong_sentence_pct() {
-		return long_sentence_pct;
+	public Double getDouble_sentence_pct() {
+		return Double_sentence_pct;
 	}
 
-	public void setLong_sentence_pct(Long long_sentence_pct) {
-		this.long_sentence_pct = long_sentence_pct;
+	public void setDouble_sentence_pct(Double Double_sentence_pct) {
+		this.Double_sentence_pct = Double_sentence_pct;
 	}
 
-	public Long getLong_sentence_min() {
-		return long_sentence_min;
+	public Double getDouble_sentence_min() {
+		return Double_sentence_min;
 	}
 
-	public void setLong_sentence_min(Long long_sentence_min) {
-		this.long_sentence_min = long_sentence_min;
+	public void setDouble_sentence_min(Double Double_sentence_min) {
+		this.Double_sentence_min = Double_sentence_min;
 	}
 
-	public Long getWordcount() {
+	public Double getWordcount() {
 		return wordcount;
 	}
 
-	public void setWordcount(Long wordcount) {
+	public void setWordcount(Double wordcount) {
 		this.wordcount = wordcount;
 	}
 
-	public Long getAvg_syllable_dev() {
+	public Double getAvg_syllable_dev() {
 		return avg_syllable_dev;
 	}
 
-	public void setAvg_syllable_dev(Long avg_syllable_dev) {
+	public void setAvg_syllable_dev(Double avg_syllable_dev) {
 		this.avg_syllable_dev = avg_syllable_dev;
 	}
 
@@ -290,67 +290,67 @@ public class Extended implements Serializable {
 		this.has_references = has_references;
 	}
 
-	public Long getYears_experience() {
+	public Double getYears_experience() {
 		return years_experience;
 	}
 
-	public void setYears_experience(Long years_experience) {
+	public void setYears_experience(Double years_experience) {
 		this.years_experience = years_experience;
 	}
 
-	public Long getIs_working() {
+	public Double getIs_working() {
 		return is_working;
 	}
 
-	public void setIs_working(Long is_working) {
+	public void setIs_working(Double is_working) {
 		this.is_working = is_working;
 	}
 
-	public Long getPct_buzzwords() {
+	public Double getPct_buzzwords() {
 		return pct_buzzwords;
 	}
 
-	public void setPct_buzzwords(Long pct_buzzwords) {
+	public void setPct_buzzwords(Double pct_buzzwords) {
 		this.pct_buzzwords = pct_buzzwords;
 	}
 
-	public Long getPct_numbers() {
+	public Double getPct_numbers() {
 		return pct_numbers;
 	}
 
-	public void setPct_numbers(Long pct_numbers) {
+	public void setPct_numbers(Double pct_numbers) {
 		this.pct_numbers = pct_numbers;
 	}
 
-	public Long getPct_whitespace() {
+	public Double getPct_whitespace() {
 		return pct_whitespace;
 	}
 
-	public void setPct_whitespace(Long pct_whitespace) {
+	public void setPct_whitespace(Double pct_whitespace) {
 		this.pct_whitespace = pct_whitespace;
 	}
 
-	public Long getPct_adverbs() {
+	public Double getPct_adverbs() {
 		return pct_adverbs;
 	}
 
-	public void setPct_adverbs(Long pct_adverbs) {
+	public void setPct_adverbs(Double pct_adverbs) {
 		this.pct_adverbs = pct_adverbs;
 	}
 
-	public Long getCount_raw() {
+	public Double getCount_raw() {
 		return count_raw;
 	}
 
-	public void setCount_raw(Long count_raw) {
+	public void setCount_raw(Double count_raw) {
 		this.count_raw = count_raw;
 	}
 
-	public Long getCount_nf() {
+	public Double getCount_nf() {
 		return count_nf;
 	}
 
-	public void setCount_nf(Long count_nf) {
+	public void setCount_nf(Double count_nf) {
 		this.count_nf = count_nf;
 	}
 

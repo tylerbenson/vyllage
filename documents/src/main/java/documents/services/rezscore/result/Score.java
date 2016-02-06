@@ -31,28 +31,28 @@ public class Score implements Serializable {
 	private String gradeBlurb;
 
 	@XmlElement(name = "percentile")
-	private Long percentile;
+	private Double percentile;
 
 	@XmlElement(name = "percentile_suffix")
-	private Long percentileSuffix;
+	private Double percentileSuffix;
 
 	@XmlElement(name = "normal_img")
 	private String normalImg;
 
 	@XmlElement(name = "brevity_score")
-	private Long brevityScore;
+	private Double brevityScore;
 
 	@XmlElement(name = "impact_score")
-	private Long impactScore;
+	private Double impactScore;
 
 	@XmlElement(name = "depth_score")
-	private Long depthScore;
+	private Double depthScore;
 
 	@XmlElement(name = "email")
-	private Long email;
+	private Double email;
 
 	@XmlElement(name = "phone")
-	private Long phone;
+	private Double phone;
 
 	@XmlElement(name = "job_keywords")
 	private String jobKeywords;
@@ -87,19 +87,19 @@ public class Score implements Serializable {
 		this.gradeBlurb = gradeBlurb;
 	}
 
-	public Long getPercentile() {
+	public Double getPercentile() {
 		return percentile;
 	}
 
-	public void setPercentile(Long percentile) {
+	public void setPercentile(Double percentile) {
 		this.percentile = percentile;
 	}
 
-	public Long getPercentileSuffix() {
+	public Double getPercentileSuffix() {
 		return percentileSuffix;
 	}
 
-	public void setPercentileSuffix(Long percentileSuffix) {
+	public void setPercentileSuffix(Double percentileSuffix) {
 		this.percentileSuffix = percentileSuffix;
 	}
 
@@ -111,43 +111,43 @@ public class Score implements Serializable {
 		this.normalImg = normalImg;
 	}
 
-	public Long getBrevityScore() {
+	public Double getBrevityScore() {
 		return brevityScore;
 	}
 
-	public void setBrevityScore(Long brevityScore) {
+	public void setBrevityScore(Double brevityScore) {
 		this.brevityScore = brevityScore;
 	}
 
-	public Long getImpactScore() {
+	public Double getImpactScore() {
 		return impactScore;
 	}
 
-	public void setImpactScore(Long impactScore) {
+	public void setImpactScore(Double impactScore) {
 		this.impactScore = impactScore;
 	}
 
-	public Long getDepthScore() {
+	public Double getDepthScore() {
 		return depthScore;
 	}
 
-	public void setDepthScore(Long depthScore) {
+	public void setDepthScore(Double depthScore) {
 		this.depthScore = depthScore;
 	}
 
-	public Long getEmail() {
+	public Double getEmail() {
 		return email;
 	}
 
-	public void setEmail(Long email) {
+	public void setEmail(Double email) {
 		this.email = email;
 	}
 
-	public Long getPhone() {
+	public Double getPhone() {
 		return phone;
 	}
 
-	public void setPhone(Long phone) {
+	public void setPhone(Double phone) {
 		this.phone = phone;
 	}
 

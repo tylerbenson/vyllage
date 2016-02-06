@@ -25,7 +25,7 @@ public class Word implements Serializable {
 	private String string;
 
 	@XmlElement(name = "val")
-	private Long val;
+	private Double val;
 
 	public Word() {
 	}
@@ -38,11 +38,11 @@ public class Word implements Serializable {
 		this.string = string;
 	}
 
-	public Long getVal() {
+	public Double getVal() {
 		return val;
 	}
 
-	public void setVal(Long val) {
+	public void setVal(Double val) {
 		this.val = val;
 	}
 

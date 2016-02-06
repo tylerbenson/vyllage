@@ -78,7 +78,6 @@ public class RezscoreServiceTest {
 		language.setWord(new Word());
 
 		File file = new File();
-		file.setSize(0L);
 
 		rezscore.setAdvice(advice);
 		rezscore.setExtended(new Extended());
@@ -134,12 +133,12 @@ public class RezscoreServiceTest {
 
 		SkillsSection ds1 = new SkillsSection();
 		ds1.setDocumentId(42L);
-		ds1.setTags(Lists.newArrayList("one", "two", "Java"));
+		ds1.setTags(Lists.newArrayList("ReactJS", "two", "Java"));
 		ds1.setSectionPosition(1L);
 
 		SkillsSection ds2 = new SkillsSection();
 		ds2.setDocumentId(42L);
-		ds2.setTags(Lists.newArrayList("test1", "test2", "test3"));
+		ds2.setTags(Lists.newArrayList("Sr Java Developer", "Vaadin", "test3"));
 		ds2.setSectionPosition(2L);
 
 		Optional<RezscoreResult> analysis1 = rezscoreService
@@ -161,6 +160,52 @@ public class RezscoreServiceTest {
 		assertNotNull(analysis2.get().getRezscore());
 
 		assertTrue(analysis1.get().equals(analysis2.get()));
+	}
+
+	@Test
+	public void testChangedCache() {
+		DocumentHeader dh = new DocumentHeader();
+
+		dh.setAddress("address");
+		dh.setEmail("email@email.com");
+		dh.setFirstName("Name");
+		dh.setLastName("last");
+
+		SkillsSection ds1 = new SkillsSection();
+		ds1.setDocumentId(42L);
+		ds1.setTags(Lists.newArrayList("ReactJS", "two", "Java"));
+		ds1.setSectionPosition(1L);
+
+		SkillsSection ds2 = new SkillsSection();
+		ds2.setDocumentId(42L);
+		ds2.setTags(Lists.newArrayList("Sr Java Developer", "Vaadin", "test3"));
+		ds2.setSectionPosition(2L);
+
+		Optional<RezscoreResult> analysis1 = rezscoreService
+				.getRezscoreAnalysis(dh, Arrays.asList(ds1, ds2));
+
+		// changed
+		dh.setAddress("another address");
+
+		Optional<RezscoreResult> analysis2 = rezscoreService
+				.getRezscoreAnalysis(dh, Arrays.asList(ds1, ds2));
+
+		assertNotNull(analysis1.get());
+
+		assertNotNull(analysis1.get().getResume());
+
+		assertNotNull(analysis1.get().getRezscore());
+
+		assertNotNull(analysis2.get());
+
+		assertNotNull(analysis2.get().getResume());
+
+		assertNotNull(analysis2.get().getRezscore());
+
+		assertFalse(analysis1.get().getResume()
+				.equals(analysis2.get().getResume()));
+
+		assertFalse(analysis1.get().equals(analysis2.get()));
 	}
 
 	@SuppressWarnings("unchecked")

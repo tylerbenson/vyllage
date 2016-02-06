@@ -21,7 +21,7 @@ public class RedisProdCacheConfiguration {
 	public RedisConnectionFactory redisConnectionFactory() {
 		JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
 		jedisConnectionFactory.setPort(6379);
-		jedisConnectionFactory.setUsePool(true);
+		// jedisConnectionFactory.setUsePool(true);
 		return jedisConnectionFactory;
 	}
 

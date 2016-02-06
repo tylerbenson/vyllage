@@ -25,19 +25,19 @@ public class Industry implements Serializable {
 	private String firstIndustryMatch;
 
 	@XmlElement(name = "first_industry_conf")
-	private Long firstIndustryConf;
+	private Double firstIndustryConf;
 
 	@XmlElement(name = "second_industry_match")
 	private String secondIndustryMatch;
 
 	@XmlElement(name = "second_industry_conf")
-	private Long secondIndustryConf;
+	private Double secondIndustryConf;
 
 	@XmlElement(name = "second_industry_match")
 	private String thirdIndustryMatch;
 
 	@XmlElement(name = "third_industry_match")
-	private Long thirdIndustryConf;
+	private Double thirdIndustryConf;
 
 	public Industry() {
 	}
@@ -50,11 +50,11 @@ public class Industry implements Serializable {
 		this.firstIndustryMatch = firstIndustryMatch;
 	}
 
-	public Long getFirstIndustryConf() {
+	public Double getFirstIndustryConf() {
 		return firstIndustryConf;
 	}
 
-	public void setFirstIndustryConf(Long firstIndustryConf) {
+	public void setFirstIndustryConf(Double firstIndustryConf) {
 		this.firstIndustryConf = firstIndustryConf;
 	}
 
@@ -66,11 +66,11 @@ public class Industry implements Serializable {
 		this.secondIndustryMatch = secondIndustryMatch;
 	}
 
-	public Long getSecondIndustryConf() {
+	public Double getSecondIndustryConf() {
 		return secondIndustryConf;
 	}
 
-	public void setSecondIndustryConf(Long secondIndustryConf) {
+	public void setSecondIndustryConf(Double secondIndustryConf) {
 		this.secondIndustryConf = secondIndustryConf;
 	}
 
@@ -82,11 +82,11 @@ public class Industry implements Serializable {
 		this.thirdIndustryMatch = thirdIndustryMatch;
 	}
 
-	public Long getThirdIndustryConf() {
+	public Double getThirdIndustryConf() {
 		return thirdIndustryConf;
 	}
 
-	public void setThirdIndustryConf(Long thirdIndustryConf) {
+	public void setThirdIndustryConf(Double thirdIndustryConf) {
 		this.thirdIndustryConf = thirdIndustryConf;
 	}
 }
