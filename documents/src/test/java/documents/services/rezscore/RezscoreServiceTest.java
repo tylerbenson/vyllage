@@ -78,7 +78,6 @@ public class RezscoreServiceTest {
 		language.setWord(new Word());
 
 		File file = new File();
-		file.setSize(0L);
 
 		rezscore.setAdvice(advice);
 		rezscore.setExtended(new Extended());
