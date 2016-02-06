@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import user.common.web.AccountContact;
+import util.web.constants.AccountUrlConstants;
 import documents.model.AccountNames;
 import documents.model.LinkPermissions;
 
@@ -29,14 +30,18 @@ public class AccountService {
 	private final Logger logger = Logger.getLogger(AccountService.class
 			.getName());
 
-	@Autowired
 	private RestTemplate restTemplate;
 
 	@Value("${accounts.host:localhost}")
-	private final String ACCOUNTS_HOST = null;
+	private final String ACCOUNTS_HOST = "localhost";
 
 	@Value("${accounts.port:8080}")
-	private final Integer ACCOUNTS_PORT = null;
+	private final Integer ACCOUNTS_PORT = 8080;
+
+	@Inject
+	public AccountService(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
 
 	public List<AccountNames> getNamesForUsers(HttpServletRequest request,
 			List<Long> userIds) {
@@ -96,7 +101,7 @@ public class AccountService {
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 
 		builder.scheme("http").port(ACCOUNTS_PORT).host(ACCOUNTS_HOST)
-				.path("/admin/user/sameOrganization");
+				.path(AccountUrlConstants.ADMIN_USER_SAME_ORGANIZATION);
 
 		builder.queryParam("firstUserId", firstUserId).queryParam(
 				"secondUserId", secondUserId);
