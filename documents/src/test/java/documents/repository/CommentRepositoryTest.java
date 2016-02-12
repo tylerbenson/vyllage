@@ -1,6 +1,9 @@
 package documents.repository;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +26,8 @@ public class CommentRepositoryTest {
 	public void testRetrieveExistingComment() throws ElementNotFoundException {
 		Comment comment = repository.get(0L);
 
-		Assert.assertNotNull("Comment is null.", comment);
-		Assert.assertTrue(comment.getCommentId().equals(0L));
+		assertNotNull("Comment is null.", comment);
+		assertTrue(comment.getCommentId().equals(0L));
 	}
 
 	@Test
@@ -36,10 +39,10 @@ public class CommentRepositoryTest {
 		comment1 = repository.save(comment1);
 		comment2 = repository.save(comment2);
 
-		Assert.assertNotNull("Comment1 is null.", comment1);
-		Assert.assertNotNull("Comment2 is null.", comment2);
-		Assert.assertNotNull("Expected id ", comment1.getCommentId());
-		Assert.assertNotNull("Expected id ", comment2.getCommentId());
+		assertNotNull("Comment1 is null.", comment1);
+		assertNotNull("Comment2 is null.", comment2);
+		assertNotNull("Expected id ", comment1.getCommentId());
+		assertNotNull("Expected id ", comment2.getCommentId());
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -53,7 +56,7 @@ public class CommentRepositoryTest {
 
 		comment = repository.get(id);
 
-		Assert.assertNull("Comment is not null.", comment);
+		assertNull("Comment is not null.", comment);
 	}
 
 	private Comment generateComment() {
