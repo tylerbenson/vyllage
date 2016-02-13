@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import user.common.User;
-import documents.indeed.IndeedJobSearch;
-import documents.indeed.IndeedResponse;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
+import documents.services.indeed.IndeedJobSearch;
+import documents.services.indeed.IndeedResponse;
 import documents.services.rezscore.RezscoreService;
 import documents.services.rezscore.result.RezscoreResult;
 

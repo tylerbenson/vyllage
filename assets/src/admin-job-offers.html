@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <base href="." th:href="@{/}" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <th:block th:replace="fragment-header :: header ('Vyllage Admin | Job Offers Management')">
+  </th:block>
+</head>
+
+<body class="admin">
+	<header>
+		<div class="content">
+		    <div class="logo">
+		      <img src="images/logo-white.png" alt="Vyllage" />
+		      <span>Vyllage</span>
+		    </div>
+		    <span class="page-title">Job Offers Management</span>
+		</div>
+    </header>
+	<div id="container">
+		 <div class="section content">
+		 	<table>
+          		<thead>
+          			<tr>
+          				<th>
+          					Company
+          				</th>
+          				<th>
+          					Role
+          				</th>
+						<th>
+							Salary
+						</th>       
+						<th>
+							Location
+						</th> 
+						<th>
+							Remote
+						</th>  
+						<th>
+							Relocation
+						</th>			
+          			</tr>
+          		</thead>
+          		<tbody>
+          			<tr th:each="job : ${jobOffers}">
+          				<td	th:text="${job.company}">
+          				</td>
+          				<td	th:text="${job.role}">
+          				</td>
+          				<td	th:text="${job.salary}">
+          				</td>
+          				<td	th:text="${job.location}">
+          				</td>
+          				<td	th:text="${job.remote} == true ? 'Yes' : 'No'">
+          				</td>
+          				<td	th:text="${job.requiresRelocation} == true ? 'Yes' : 'No'">
+          				</td>
+          			</tr>
+          		</tbody>
+          	</table>
+		 </div>
+	</div>
+</body>
+
+</html>

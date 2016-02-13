@@ -1,12 +1,9 @@
-package documents.indeed;
+package documents.services.indeed;
 
 import lombok.ToString;
 
 @ToString
 public class IndeedResult {
-
-	public IndeedResult() {
-	}
 
 	private String jobtitle;
 

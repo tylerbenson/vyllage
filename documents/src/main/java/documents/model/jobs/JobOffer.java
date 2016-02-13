@@ -1,22 +1,34 @@
 package documents.model.jobs;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.validation.constraints.NotNull;
 
 import lombok.ToString;
-import documents.indeed.JobType;
+import documents.domain.tables.records.JobOffersRecord;
 
 @ToString
 public class JobOffer {
 
 	private Long jobOfferId;
 
+	/**
+	 * User that created the job offer.
+	 */
 	private Long userId;
+
+	/**
+	 * Vyllage Organization owning the job offer.
+	 */
+	private Long organizationId;
 
 	private JobType jobType;
 
 	private JobExperience jobExperience;
 
-	private Double salary;
+	private BigDecimal salary;
 
 	private String location;
 
@@ -28,6 +40,36 @@ public class JobOffer {
 	private LocalDateTime dateCreated;
 
 	private LocalDateTime lastModified;
+
+	private String company;
+	
+	private String role;
+
+	private String description;
+
+	private List<JobReponsibility> jobResponsibilities;
+
+	public JobOffer() {
+
+	}
+
+	public JobOffer(@NotNull JobOffersRecord record) {
+		this.dateCreated = record.getDateCreated().toLocalDateTime();
+		this.jobExperience = JobExperience.valueOf(record.getJobExperience());
+		this.jobOfferId = record.getJobOfferId();
+		this.jobType = JobType.valueOf(record.getJobType());
+		this.lastModified = record.getLastModified().toLocalDateTime();
+		this.location = record.getLocation();
+		this.remote = record.getRemote();
+		this.requiresRelocation = record.getRequiresRelocation();
+		this.salary = record.getSalary();
+		this.userId = record.getUserId();
+		this.organizationId = record.getOrganizationId();
+		this.company = record.getCompany();
+		this.role = record.getRole();
+		this.description = record.getDescription();
+
+	}
 
 	public Long getJobOfferId() {
 		return jobOfferId;
@@ -43,6 +85,14 @@ public class JobOffer {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public Long getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(Long organizationId) {
+		this.organizationId = organizationId;
 	}
 
 	public JobType getJobType() {
@@ -61,11 +111,11 @@ public class JobOffer {
 		this.jobExperience = experience;
 	}
 
-	public Double getSalary() {
+	public BigDecimal getSalary() {
 		return salary;
 	}
 
-	public void setSalary(Double salary) {
+	public void setSalary(BigDecimal salary) {
 		this.salary = salary;
 	}
 
@@ -107,6 +157,38 @@ public class JobOffer {
 
 	public void setLastModified(LocalDateTime lastModified) {
 		this.lastModified = lastModified;
+	}
+
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<JobReponsibility> getJobResponsibilities() {
+		return jobResponsibilities;
+	}
+
+	public void setJobResponsibilities(List<JobReponsibility> jobResponsibilities) {
+		this.jobResponsibilities = jobResponsibilities;
 	}
 
 }
