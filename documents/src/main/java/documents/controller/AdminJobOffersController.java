@@ -7,9 +7,9 @@ import javax.inject.Inject;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import user.common.User;
 import user.common.UserOrganizationRole;
@@ -17,18 +17,17 @@ import documents.model.jobs.JobOffer;
 import documents.services.job.JobService;
 
 @Controller
-public class JobOffersController {
+public class AdminJobOffersController {
 
 	private final JobService jobService;
 
 	@Inject
-	public JobOffersController(JobService jobService) {
+	public AdminJobOffersController(JobService jobService) {
 		this.jobService = jobService;
 	}
 
-	@RequestMapping(value = "job-offers", method = RequestMethod.GET)
-	public @ResponseBody List<JobOffer> jobOffers(
-			@AuthenticationPrincipal User user) {
+	@RequestMapping(value = "admin/job-offers", method = RequestMethod.GET)
+	public String jobOffers(@AuthenticationPrincipal User user, Model model) {
 		List<JobOffer> allByOrganizations = new ArrayList<>();
 
 		user.getAuthorities()
@@ -40,6 +39,9 @@ public class JobOffersController {
 											.getOrganizationId()));
 						});
 
-		return allByOrganizations;
+		model.addAttribute("jobOffers", allByOrganizations);
+
+		return "admin-job-offers";
 	}
+	
 }
