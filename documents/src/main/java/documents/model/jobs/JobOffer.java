@@ -9,6 +9,9 @@ import javax.validation.constraints.NotNull;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import org.jooq.tools.StringUtils;
+
 import documents.domain.tables.records.JobOffersRecord;
 
 @ToString
@@ -49,6 +52,8 @@ public class JobOffer {
 	private String role;
 
 	private String description;
+
+	private String error;
 
 	private List<JobReponsibility> jobResponsibilities = new ArrayList<>();
 
@@ -193,6 +198,29 @@ public class JobOffer {
 	public void setJobResponsibilities(
 			List<JobReponsibility> jobResponsibilities) {
 		this.jobResponsibilities = jobResponsibilities;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public boolean isValid() {
+		boolean someBlank = StringUtils.isBlank(this.company)
+				|| StringUtils.isBlank(this.description)
+				|| StringUtils.isBlank(this.location)
+				|| StringUtils.isBlank(this.role);
+
+		boolean missingEnums = this.jobExperience == null
+				|| this.jobType == null;
+
+		if (someBlank || missingEnums)
+			setError("Please complete required fields.");
+
+		return !someBlank && !missingEnums;
 	}
 
 }

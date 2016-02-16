@@ -17,22 +17,40 @@
 			<form action="#" th:action="@{/admin/job-offer-edit}" method="POST"
 				th:object="${jobOffer}">
 
-				<label>Company</label> <input type="text" th:field="*{company}" />
+				<label id="company">Company <span class="error"> * </span></label> 
+				<input type="text" th:field="*{company}" />
 
-				<label>Role</label> <input type="text" th:field="*{role}" /> <label>Salary</label>
-				<input type="text" th:field="*{salary}" /> <label>Location</label>
-				<input type="text" th:field="*{location}" /> <label>Job
-					Type</label> <select id='jobType' name='jobType' th:field="*{jobType}">
+				<label>Role <span class="error"> * </span> </label> 
+				<input type="text" th:field="*{role}" /> 
+				
+				<label>Salary</label>
+				<input type="text" th:field="*{salary}" /> 
+				
+				<label>Location <span class="error"> * </span> </label>
+				<input type="text" th:field="*{location}" /> 
+				
+				<label>Job Type</label> 
+				<select id='jobType' name='jobType' th:field="*{jobType}">
 					<option th:each="jt : ${jobTypes}" th:value="${jt}"
 						th:text="${jt.value}">Some Type</option>
-				</select> <label>Experience</label> <select id='jobExperience'
-					name='jobExperience' th:field="*{jobExperience}">
+				</select>
+				
+				<label>Experience</label> 
+				<select id='jobExperience' name='jobExperience' th:field="*{jobExperience}">
 					<option th:each="je : ${jobExperiences}" th:value="${je}"
 						th:text="${je.value}">Some Type</option>
-				</select> <label>Remote</label> <input type="checkbox" th:field="*{remote}" />
+				</select> 
+				
+				<label>Remote  
+					<input type="checkbox" th:field="*{remote}" />
+				</label> 
+				
 
-				<label>Requires Relocation</label> <input type="checkbox"
-					th:field="*{requiresRelocation}" /> <label>Description</label>
+				<label>Requires Relocation
+					<input type="checkbox" th:field="*{requiresRelocation}" /> 
+				</label> 
+					
+				<label>Description <span class="error"> * </span> </label>
 				<textarea rows="10" th:field="*{description}"></textarea>
 
 				<label
@@ -45,9 +63,9 @@
 					th:field="*{userId}" /> <input type="hidden"
 					th:field="*{organizationId}" />
 
-				<button type="submit" class="pull right padded send-btn">
-					Submit</button>
-
+				<button type="submit" class="pull right padded send-btn">Submit</button>
+				<span class="error" th:if="*{error} != null" th:text="*{error}"></span>
+				
 			</form>
 		</div>
 	</div>

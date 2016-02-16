@@ -24,6 +24,7 @@ import documents.services.job.JobService;
 @RequestMapping(value = "admin")
 public class AdminJobOffersController {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger
 			.getLogger(AdminJobOffersController.class.getName());
 
@@ -66,9 +67,7 @@ public class AdminJobOffersController {
 
 		model.addAttribute("jobOffer", jobOffer);
 
-		model.addAttribute("jobTypes", JobType.values());
-
-		model.addAttribute("jobExperiences", JobExperience.values());
+		addSelects(model);
 
 		return "admin-job-offer-edit";
 	}
@@ -82,22 +81,32 @@ public class AdminJobOffersController {
 
 		model.addAttribute("jobOffer", jobOffer);
 
-		model.addAttribute("jobTypes", JobType.values());
-
-		model.addAttribute("jobExperiences", JobExperience.values());
+		addSelects(model);
 
 		return "admin-job-offer-edit";
 	}
 
 	@RequestMapping(value = "job-offer-edit", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
 	public String editJobOfferPost(@AuthenticationPrincipal User user,
-			JobOffer jobOffer) {
+			JobOffer jobOffer, Model model) {
 
+		if (jobOffer.isValid()) {
+			jobService.save(user, jobOffer);
+			return "redirect:/admin/job-offers";
+		}
 		// TODO: handle job responsibilities
 
-		logger.info(jobOffer.toString());
-		jobService.save(user, jobOffer);
+		model.addAttribute("jobOffer", jobOffer);
 
-		return "redirect:/admin/job-offers";
+		addSelects(model);
+
+		return "admin-job-offer-edit";
+
+	}
+
+	protected void addSelects(Model model) {
+		model.addAttribute("jobTypes", JobType.values());
+
+		model.addAttribute("jobExperiences", JobExperience.values());
 	}
 }
