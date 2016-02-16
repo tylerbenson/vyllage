@@ -40,6 +40,7 @@ public class JobService {
 	public JobOffer save(User user, JobOffer jobOffer) {
 		if (jobOffer.getOrganizationId() == null) {
 			// save the first one for now.
+			// TODO: add select when the user has more than one organization.
 			UserOrganizationRole uor = (UserOrganizationRole) user
 					.getAuthorities().iterator().next();
 

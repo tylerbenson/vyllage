@@ -58,8 +58,23 @@ public class AdminJobOffersController {
 		return "admin-job-offers";
 	}
 
+	@RequestMapping(value = "job-offer-create", method = RequestMethod.GET)
+	public String createJobOffer(Model model) {
+		// TODO: handle job responsibilities
+
+		JobOffer jobOffer = new JobOffer();
+
+		model.addAttribute("jobOffer", jobOffer);
+
+		model.addAttribute("jobTypes", JobType.values());
+
+		model.addAttribute("jobExperiences", JobExperience.values());
+
+		return "admin-job-offer-edit";
+	}
+
 	@RequestMapping(value = "job-offer-edit/{jobOfferId}", method = RequestMethod.GET)
-	public String editJobOffer(@PathVariable Long jobOfferId, Model model) {
+	public String editJobOfferGet(@PathVariable Long jobOfferId, Model model) {
 
 		JobOffer jobOffer = jobService.get(jobOfferId);
 
@@ -75,14 +90,14 @@ public class AdminJobOffersController {
 	}
 
 	@RequestMapping(value = "job-offer-edit", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
-	public String saveJobOffer(@AuthenticationPrincipal User user,
-			JobOffer jobOffer, Model model) {
+	public String editJobOfferPost(@AuthenticationPrincipal User user,
+			JobOffer jobOffer) {
 
 		// TODO: handle job responsibilities
 
 		logger.info(jobOffer.toString());
 		jobService.save(user, jobOffer);
 
-		return "redirect:/admin/job-offer-edit/" + jobOffer.getJobOfferId();
+		return "redirect:/admin/job-offers";
 	}
 }
