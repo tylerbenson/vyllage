@@ -2,6 +2,7 @@ package documents.model.jobs;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -42,12 +43,12 @@ public class JobOffer {
 	private LocalDateTime lastModified;
 
 	private String company;
-	
+
 	private String role;
 
 	private String description;
 
-	private List<JobReponsibility> jobResponsibilities;
+	private List<JobReponsibility> jobResponsibilities = new ArrayList<>();
 
 	public JobOffer() {
 
@@ -187,7 +188,8 @@ public class JobOffer {
 		return jobResponsibilities;
 	}
 
-	public void setJobResponsibilities(List<JobReponsibility> jobResponsibilities) {
+	public void setJobResponsibilities(
+			List<JobReponsibility> jobResponsibilities) {
 		this.jobResponsibilities = jobResponsibilities;
 	}
 

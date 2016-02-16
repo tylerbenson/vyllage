@@ -30,7 +30,13 @@
           				</th>
 						<th>
 							Salary
-						</th>       
+						</th>
+						<th>
+							Job Type
+						</th>  
+						<th>
+							Experience
+						</th>        
 						<th>
 							Location
 						</th> 
@@ -39,6 +45,9 @@
 						</th>  
 						<th>
 							Relocation
+						</th>
+						<th>
+							Edit
 						</th>			
           			</tr>
           		</thead>
@@ -46,15 +55,22 @@
           			<tr th:each="job : ${jobOffers}">
           				<td	th:text="${job.company}">
           				</td>
-          				<td	th:text="${job.role}">
+          				<td th:text="${job.role}">
           				</td>
           				<td	th:text="${job.salary}">
+          				</td>
+          				<td	th:text="${job.jobType.getValue()}">
+          				</td>
+          				<td	th:text="${job.jobExperience.getValue()}">
           				</td>
           				<td	th:text="${job.location}">
           				</td>
           				<td	th:text="${job.remote} == true ? 'Yes' : 'No'">
           				</td>
           				<td	th:text="${job.requiresRelocation} == true ? 'Yes' : 'No'">
+          				</td>
+          				<td>
+          					<a th:href="@{/admin/job-offer-edit/{jobOfferId}(jobOfferId=${job.jobOfferId})}"> Edit </a>
           				</td>
           			</tr>
           		</tbody>
