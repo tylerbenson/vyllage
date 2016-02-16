@@ -1,73 +1,72 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <base href="." th:href="@{/}" />
-  <link rel="stylesheet" href="css/admin.css" />
-  <th:block th:replace="fragment-header :: header ('Vyllage Admin | Job Offers Management')">
-  </th:block>
+<base href="." th:href="@{/}" />
+<link rel="stylesheet" href="css/admin.css" />
+<th:block
+	th:replace="fragment-header :: header ('Vyllage Admin | Job Offers Management')">
+</th:block>
 </head>
 
 <body class="admin">
-	<header>
-		<div class="content">
-		    <div class="logo">
-		      <img src="images/logo-white.png" alt="Vyllage" />
-		      <span>Vyllage</span>
-		    </div>
-		    <span class="page-title">Job Offers Management</span>
-		</div>
-    </header>
 	<div id="container">
-		 <div class="section content" >
-		 	
-		 	<form action="#" th:action="@{/admin/job-offer-edit}" method="POST" th:object="${jobOffer}">
-		 	
-			 	<label>Company</label>
-			 	<input type="text" th:field="*{company}" />
-			 	
-			 	<label>Role</label>
-			 	<input type="text" th:field="*{role}" />
-			 	
-			 	<label>Salary</label>
-			 	<input type="text" th:field="*{salary}" />
-			 	
-			 	<label>Location</label>
-			 	<input type="text" th:field="*{location}" />
-			 	
-			 	<label>Job Type</label>
-			 	<select id='jobType' name='jobType' th:field="*{jobType}">
-		          <option th:each="jt : ${jobTypes}" th:value="${jt}" th:text="${jt.value}">Some Type</option>
-		        </select>
-		        
-		        <label>Experience</label>
-			 	<select id='jobExperience' name='jobExperience' th:field="*{jobExperience}">
-		          <option th:each="je : ${jobExperiences}" th:value="${je}" th:text="${je.value}">Some Type</option>
-		        </select>
-		        
-			 	<label>Remote</label>
-			 	<input type="checkbox" th:field="*{remote}" />
-			 	
-			 	<label>Requires Relocation</label>
-			 	<input type="checkbox" th:field="*{requiresRelocation}" />
-			 	
-			 	<label>Description</label>
-			 	<textarea  rows="10" th:field="*{description}" ></textarea>
-			 	
-			 	<label th:if="${jobOffer.dateCreated != null and jobOffer.lastModified != null}" th:text="'Created ' + *{#temporals.format(dateCreated)} + ' - ' + 'Last Modified ' + *{#temporals.format(lastModified)}"></label>
-			 	
-			 	<input type="hidden" th:field="*{dateCreated}" />
-			 	
-			 	<input type="hidden" th:field="*{lastModified}" />
-			 	
-			 	<input type="hidden" th:field="*{jobOfferId}" />
-			 	<input type="hidden" th:field="*{userId}" />
-			 	<input type="hidden" th:field="*{organizationId}" />
-			 	
-			 	<button type="submit" class="pull right padded send-btn"> Submit </button>
-			 	
-		 	</form>
-		 </div>
+		<header th:replace="adminHeader :: header('Job Offers Management')">
+		</header>
+		<div class="section content">
+
+			<form action="#" th:action="@{/admin/job-offer-edit}" method="POST"
+				th:object="${jobOffer}">
+
+				<label>Company</label> <input type="text" th:field="*{company}" />
+
+				<label>Role</label> <input type="text" th:field="*{role}" /> <label>Salary</label>
+				<input type="text" th:field="*{salary}" /> <label>Location</label>
+				<input type="text" th:field="*{location}" /> <label>Job
+					Type</label> <select id='jobType' name='jobType' th:field="*{jobType}">
+					<option th:each="jt : ${jobTypes}" th:value="${jt}"
+						th:text="${jt.value}">Some Type</option>
+				</select> <label>Experience</label> <select id='jobExperience'
+					name='jobExperience' th:field="*{jobExperience}">
+					<option th:each="je : ${jobExperiences}" th:value="${je}"
+						th:text="${je.value}">Some Type</option>
+				</select> <label>Remote</label> <input type="checkbox" th:field="*{remote}" />
+
+				<label>Requires Relocation</label> <input type="checkbox"
+					th:field="*{requiresRelocation}" /> <label>Description</label>
+				<textarea rows="10" th:field="*{description}"></textarea>
+
+				<label
+					th:if="${jobOffer.dateCreated != null and jobOffer.lastModified != null}"
+					th:text="'Created ' + *{#temporals.format(dateCreated)} + ' - ' + 'Last Modified ' + *{#temporals.format(lastModified)}"></label>
+
+				<input type="hidden" th:field="*{dateCreated}" /> <input
+					type="hidden" th:field="*{lastModified}" /> <input type="hidden"
+					th:field="*{jobOfferId}" /> <input type="hidden"
+					th:field="*{userId}" /> <input type="hidden"
+					th:field="*{organizationId}" />
+
+				<button type="submit" class="pull right padded send-btn">
+					Submit</button>
+
+			</form>
+		</div>
 	</div>
+	<footer>
+		<div class="content">
+			<a href="/" class="logo"> <img src="/images/logo-orange.png"
+				alt="Vyllage" />
+			</a>
+			<nav>
+				<ul>
+					<li><a href="/careers">Careers</a></li>
+					<li><a href="/privacy">Privacy</a></li>
+					<li><a href="/contact">Contact Us</a></li>
+				</ul>
+			</nav>
+		</div>
+	</footer>
+	<th:block th:replace="fragment-footer :: footer">
+  	</th:block>
 </body>
 
 </html>

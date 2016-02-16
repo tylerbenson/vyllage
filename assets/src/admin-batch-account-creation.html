@@ -10,7 +10,7 @@
 
 <body class="admin">
   <div id="container">
-    <header th:replace="adminHeader :: header">
+    <header th:replace="adminHeader :: header('Batch Account Creation')">
     </header>
     <div class="section content">
       <form name="adminForm" class="container" action="#" th:action="@{/admin/user/batch/createBatch}" th:object="${batchAccount}"
