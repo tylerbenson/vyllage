@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import documents.domain.tables.records.JobOffersRecord;
 
 @ToString
+@EqualsAndHashCode
 public class JobOffer {
 
 	private Long jobOfferId;

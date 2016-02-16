@@ -54,8 +54,11 @@ public class JobOffersRepository {
 
 			newRecord.setCompany(jobOffer.getCompany());
 			newRecord.setDescription(jobOffer.getDescription());
+
 			newRecord.setJobExperience(jobOffer.getJobExperience().name());
+
 			newRecord.setJobType(jobOffer.getJobType().name());
+
 			newRecord.setLocation(jobOffer.getLocation());
 			newRecord.setOrganizationId(jobOffer.getOrganizationId());
 			newRecord.setRemote(jobOffer.isRemote());
@@ -83,8 +86,11 @@ public class JobOffersRepository {
 
 			existingRecord.setCompany(jobOffer.getCompany());
 			existingRecord.setDescription(jobOffer.getDescription());
+
 			existingRecord.setJobExperience(jobOffer.getJobExperience().name());
+
 			existingRecord.setJobType(jobOffer.getJobType().name());
+
 			existingRecord.setLocation(jobOffer.getLocation());
 			existingRecord.setOrganizationId(jobOffer.getOrganizationId());
 			existingRecord.setRemote(jobOffer.isRemote());
