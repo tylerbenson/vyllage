@@ -13,10 +13,3 @@ create table if not exists DOCUMENTS.job_offers(
   	remote boolean,
   	date_created timestamp not null,
   	last_modified timestamp not null);
-
-create table if not exists DOCUMENTS.job_responsibility(
-	job_responsibility_id bigserial primary key,
-	job_offer_id bigint not null,
-	description varchar(4096),
-  	date_created timestamp not null,
-  	last_modified timestamp not null);

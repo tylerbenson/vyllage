@@ -61,7 +61,6 @@ public class AdminJobOffersController {
 
 	@RequestMapping(value = "job-offer-create", method = RequestMethod.GET)
 	public String createJobOffer(Model model) {
-		// TODO: handle job responsibilities
 
 		JobOffer jobOffer = new JobOffer();
 
@@ -76,8 +75,6 @@ public class AdminJobOffersController {
 	public String editJobOfferGet(@PathVariable Long jobOfferId, Model model) {
 
 		JobOffer jobOffer = jobService.get(jobOfferId);
-
-		// TODO: handle job responsibilities
 
 		model.addAttribute("jobOffer", jobOffer);
 
@@ -94,7 +91,6 @@ public class AdminJobOffersController {
 			jobService.save(user, jobOffer);
 			return "redirect:/admin/job-offers";
 		}
-		// TODO: handle job responsibilities
 
 		model.addAttribute("jobOffer", jobOffer);
 
