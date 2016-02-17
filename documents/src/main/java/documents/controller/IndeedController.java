@@ -32,6 +32,11 @@ import documents.services.indeed.IndeedResponse;
 import documents.services.rezscore.RezscoreService;
 import documents.services.rezscore.result.RezscoreResult;
 
+/**
+ * Indeed controller, just for testing indeed.
+ * 
+ * @author uh
+ */
 @Controller
 public class IndeedController {
 	@SuppressWarnings("unused")

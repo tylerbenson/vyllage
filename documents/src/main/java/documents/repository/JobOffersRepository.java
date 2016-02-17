@@ -134,4 +134,15 @@ public class JobOffersRepository {
 				.into(JobOffer.class);
 	}
 
+	public List<JobOffer> getSiteWideJobOffers() {
+
+		Result<JobOffersRecord> result = sql.fetch(JOB_OFFERS,
+				JOB_OFFERS.SITE_WIDE.eq(true));
+
+		if (result.isEmpty())
+			return Collections.emptyList();
+
+		return result.stream().map(JobOffer::new).collect(Collectors.toList());
+	}
+
 }

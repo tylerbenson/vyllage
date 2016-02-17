@@ -2,15 +2,23 @@ package documents.model.jobs;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-import javax.validation.constraints.NotNull;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
-import org.jooq.tools.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import util.dateSerialization.DocumentLocalDateTimeDeserializer;
+import util.dateSerialization.DocumentLocalDateTimeSerializer;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import documents.domain.tables.records.JobOffersRecord;
+import documents.services.indeed.IndeedResult;
 
 @ToString
 @EqualsAndHashCode
@@ -41,8 +49,12 @@ public class JobOffer {
 
 	private boolean remote;
 
+	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
+	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
 	private LocalDateTime dateCreated;
 
+	@JsonSerialize(using = DocumentLocalDateTimeSerializer.class)
+	@JsonDeserialize(using = DocumentLocalDateTimeDeserializer.class)
 	private LocalDateTime lastModified;
 
 	private String company;
@@ -59,12 +71,14 @@ public class JobOffer {
 
 	}
 
-	public JobOffer(@NotNull JobOffersRecord record) {
+	public JobOffer(@NonNull JobOffersRecord record) {
 		this.dateCreated = record.getDateCreated().toLocalDateTime();
-		this.jobExperience = JobExperience.valueOf(record.getJobExperience());
-		this.jobOfferId = record.getJobOfferId();
-		this.jobType = JobType.valueOf(record.getJobType());
 		this.lastModified = record.getLastModified().toLocalDateTime();
+
+		this.jobExperience = JobExperience.valueOf(record.getJobExperience());
+		this.jobType = JobType.valueOf(record.getJobType());
+
+		this.jobOfferId = record.getJobOfferId();
 		this.location = record.getLocation();
 		this.remote = record.getRemote();
 		this.requiresRelocation = record.getRequiresRelocation();
@@ -76,6 +90,92 @@ public class JobOffer {
 		this.description = record.getDescription();
 		this.siteWide = record.getSiteWide();
 
+	}
+
+	public JobOffer(@NonNull IndeedResult result) {
+
+		this.dateCreated = getIndeedDate(result);
+		// same
+		this.lastModified = this.dateCreated;
+
+		this.company = result.getCompany();
+		this.role = result.getJobtitle();
+		this.description = result.getSnippet();
+
+		this.location = getIndeedLocation(result);
+
+		// hmm, these are not present.
+		this.remote = false;
+		this.requiresRelocation = false;
+		this.salary = new BigDecimal(0);
+
+		// just in case we do something with this one on the frontend too.
+		this.siteWide = false;
+
+	}
+
+	/**
+	 * Parses the indeed date created into LocalDateTime.
+	 * 
+	 * @param result
+	 * @return date created
+	 */
+	protected LocalDateTime getIndeedDate(IndeedResult result) {
+		// from indeed xml response : "date": "Wed, 25 Nov 2015 08:29:28 GMT"
+		String YYYY_MM_DD = "E, dd MMM yyyy HH:mm:ss z";
+
+		// thre's no way to know if it's null, it could be recent or from a long
+		// time ago.
+		if (StringUtils.isBlank(result.getDate()))
+			return null;
+
+		try {
+			return LocalDateTime.parse(result.getDate(),
+					DateTimeFormatter.ofPattern(YYYY_MM_DD));
+		} catch (DateTimeParseException e) {
+			// date stays null.
+		}
+
+		return null;
+	}
+
+	/**
+	 * Creates a full location based on city, state and county fields. <br/>
+	 * If they are not present tries with FormattedLocation and
+	 * FormattedLocationFull
+	 * 
+	 * @param result
+	 * @return
+	 */
+	protected String getIndeedLocation(IndeedResult result) {
+		String location = result.getCity() + ", " + result.getState() + ", "
+				+ result.getCountry();
+
+		if (StringUtils.isBlank(location))
+			location = result.getFormattedLocation();
+
+		if (StringUtils.isBlank(location))
+			location = result.getFormattedLocationFull();
+		return location;
+	}
+
+	/**
+	 * Checks if the fields Company, Description, Location, Role, Job
+	 * Experience, Job Type are present.
+	 * 
+	 * @return true | false
+	 */
+	public boolean isValid() {
+		boolean someBlank = StringUtils.isAnyBlank(this.company,
+				this.description, this.location, this.role);
+
+		boolean missingEnums = this.jobExperience == null
+				|| this.jobType == null;
+
+		if (someBlank || missingEnums)
+			setError("Please complete required fields.");
+
+		return !someBlank && !missingEnums;
 	}
 
 	public Long getJobOfferId() {
@@ -204,21 +304,6 @@ public class JobOffer {
 
 	public void setError(String error) {
 		this.error = error;
-	}
-
-	public boolean isValid() {
-		boolean someBlank = StringUtils.isBlank(this.company)
-				|| StringUtils.isBlank(this.description)
-				|| StringUtils.isBlank(this.location)
-				|| StringUtils.isBlank(this.role);
-
-		boolean missingEnums = this.jobExperience == null
-				|| this.jobType == null;
-
-		if (someBlank || missingEnums)
-			setError("Please complete required fields.");
-
-		return !someBlank && !missingEnums;
 	}
 
 }

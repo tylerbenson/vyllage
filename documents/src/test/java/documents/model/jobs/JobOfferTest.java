@@ -1,9 +1,14 @@
 package documents.model.jobs;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.jooq.tools.StringUtils;
 import org.junit.Test;
+
+import documents.services.indeed.IndeedResult;
 
 public class JobOfferTest {
 
@@ -159,5 +164,64 @@ public class JobOfferTest {
 		jobOffer.setRole("");
 
 		assertFalse(jobOffer.isValid());
+	}
+
+	@Test
+	public void testIndeedResultToJobOfferOk() {
+		IndeedResult result = new IndeedResult();
+		result.setCity("Bangor");
+		result.setCompany("SevenBar Aviation");
+		result.setCountry("US");
+		result.setDate("Wed, 25 Nov 2015 08:29:28 GMT");
+		result.setJobtitle("Line Pilot - First Officer");
+		result.setState("ME");
+		result.setSnippet("We’re hiring a Line <b>Pilot</b> for our Bangor, Maine team based at BGR. Communicates effectively to the Chief <b>Pilot</b>, "
+				+ "Base Manager, and other crew members regarding...,");
+		result.setFormattedLocationFull("Bangor, ME");
+
+		JobOffer jobOffer = new JobOffer(result);
+
+		assertFalse(StringUtils.isBlank(jobOffer.getCompany()));
+		assertFalse(StringUtils.isBlank(jobOffer.getDescription()));
+		assertFalse(StringUtils.isBlank(jobOffer.getLocation()));
+		assertFalse(StringUtils.isBlank(jobOffer.getRole()));
+		assertNotNull(jobOffer.getDateCreated());
+		assertNotNull(jobOffer.getLastModified());
+	}
+
+	@Test
+	public void testIndeedResultToJobOfferDateIsNullOnParseNotError() {
+		IndeedResult result = new IndeedResult();
+		result.setCity("Bangor");
+		result.setCompany("SevenBar Aviation");
+		result.setCountry("US");
+		result.setDate(null);
+		result.setJobtitle("Line Pilot - First Officer");
+		result.setState("ME");
+		result.setSnippet("We’re hiring a Line <b>Pilot</b> for our Bangor, Maine team based at BGR. Communicates effectively to the Chief <b>Pilot</b>, "
+				+ "Base Manager, and other crew members regarding...,");
+
+		JobOffer jobOffer = new JobOffer(result);
+
+		assertNull(jobOffer.getDateCreated());
+		assertNull(jobOffer.getLastModified());
+	}
+
+	@Test
+	public void testIndeedResultToJobOfferDateIsWrongFormatOnParseNotError() {
+		IndeedResult result = new IndeedResult();
+		result.setCity("Bangor");
+		result.setCompany("SevenBar Aviation");
+		result.setCountry("US");
+		result.setDate("Wed, 25 Nov 2015 GMT");
+		result.setJobtitle("Line Pilot - First Officer");
+		result.setState("ME");
+		result.setSnippet("We’re hiring a Line <b>Pilot</b> for our Bangor, Maine team based at BGR. Communicates effectively to the Chief <b>Pilot</b>, "
+				+ "Base Manager, and other crew members regarding...,");
+
+		JobOffer jobOffer = new JobOffer(result);
+
+		assertNull(jobOffer.getDateCreated());
+		assertNull(jobOffer.getLastModified());
 	}
 }

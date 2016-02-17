@@ -1,6 +1,7 @@
 package documents.services.job;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -10,6 +11,7 @@ import user.common.User;
 import user.common.UserOrganizationRole;
 import documents.model.jobs.JobOffer;
 import documents.repository.JobOffersRepository;
+import documents.services.indeed.IndeedResponse;
 
 @Service
 public class JobService {
@@ -50,5 +52,14 @@ public class JobService {
 		jobOffer.setUserId(user.getUserId());
 
 		return this.save(jobOffer);
+	}
+
+	public List<JobOffer> getSiteWideJobOffers() {
+		return this.jobOffersRepository.getSiteWideJobOffers();
+	}
+
+	public List<JobOffer> parseIndeedResponse(IndeedResponse indeedResponse) {
+		return indeedResponse.getResults().stream().map(JobOffer::new)
+				.collect(Collectors.toList());
 	}
 }
