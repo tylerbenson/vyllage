@@ -44,7 +44,7 @@ import documents.services.rezscore.result.RezscoreResult;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
-public class JobOffersControllerIntegTest {
+public class JobOpeningsControllerIntegTest {
 
 	// mock.
 	@Inject
@@ -87,7 +87,7 @@ public class JobOffersControllerIntegTest {
 
 		User user = generateAndLoginUser();
 
-		JobOffersController controller = new JobOffersController(jobService,
+		JobOpeningsController controller = new JobOpeningsController(jobService,
 				indeedJobSearch, documentService, rezscoreService);
 
 		List<JobOffer> jobOffers = controller.jobOffers(request, documentId,

@@ -38,7 +38,7 @@ import documents.services.rezscore.result.RezscoreResult;
  * @author uh
  */
 @Controller
-public class JobOffersController {
+public class JobOpeningsController {
 
 	private final JobService jobService;
 	private final IndeedJobSearch indeedJobSearch;
@@ -46,7 +46,7 @@ public class JobOffersController {
 	private final RezscoreService rezscoreService;
 
 	@Inject
-	public JobOffersController(JobService jobService,
+	public JobOpeningsController(JobService jobService,
 			IndeedJobSearch indeedJobSearch, DocumentService documentService,
 			RezscoreService rezscoreService) {
 		this.jobService = jobService;
