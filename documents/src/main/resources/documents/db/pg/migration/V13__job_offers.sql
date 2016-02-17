@@ -9,7 +9,8 @@ create table if not exists DOCUMENTS.job_offers(
 	company varchar(50),
 	role varchar(75),
   	description varchar(4096),
-  	requires_relocation boolean,
-  	remote boolean,
+  	requires_relocation boolean not null,
+  	remote boolean not null,
+  	site_wide boolean not null,
   	date_created timestamp not null,
   	last_modified timestamp not null);

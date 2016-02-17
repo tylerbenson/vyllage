@@ -23,6 +23,7 @@ import documents.model.jobs.JobOffer;
 @Repository
 public class JobOffersRepository {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(JobOffersRepository.class
 			.getName());
 
@@ -36,7 +37,7 @@ public class JobOffersRepository {
 	public List<JobOffer> getAll() {
 		Result<JobOffersRecord> all = sql.fetch(JOB_OFFERS);
 
-		logger.info("Returning job offers: \n" + all);
+		// logger.info("Returning job offers: \n" + all);
 
 		if (all.isEmpty())
 			return Collections.emptyList();
@@ -63,6 +64,7 @@ public class JobOffersRepository {
 			newRecord.setOrganizationId(jobOffer.getOrganizationId());
 			newRecord.setRemote(jobOffer.isRemote());
 			newRecord.setRequiresRelocation(jobOffer.isRequiresRelocation());
+			newRecord.setSiteWide(jobOffer.isSiteWide());
 			newRecord.setRole(jobOffer.getRole());
 			newRecord.setSalary(jobOffer.getSalary());
 			newRecord.setUserId(jobOffer.getUserId());
@@ -96,6 +98,7 @@ public class JobOffersRepository {
 			existingRecord.setRemote(jobOffer.isRemote());
 			existingRecord.setRequiresRelocation(jobOffer
 					.isRequiresRelocation());
+			existingRecord.setSiteWide(jobOffer.isSiteWide());
 			existingRecord.setRole(jobOffer.getRole());
 			existingRecord.setSalary(jobOffer.getSalary());
 			existingRecord.setUserId(jobOffer.getUserId());
@@ -117,7 +120,7 @@ public class JobOffersRepository {
 		Result<JobOffersRecord> all = sql.fetch(JOB_OFFERS,
 				JOB_OFFERS.ORGANIZATION_ID.eq(organizationId));
 
-		logger.info("Returning job offers: \n" + all);
+		// logger.info("Returning job offers: \n" + all);
 
 		if (all.isEmpty())
 			return Collections.emptyList();

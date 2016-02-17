@@ -51,6 +51,8 @@ public class JobOffer {
 
 	private String description;
 
+	private boolean siteWide;
+
 	private String error;
 
 	public JobOffer() {
@@ -72,6 +74,7 @@ public class JobOffer {
 		this.company = record.getCompany();
 		this.role = record.getRole();
 		this.description = record.getDescription();
+		this.siteWide = record.getSiteWide();
 
 	}
 
@@ -185,6 +188,14 @@ public class JobOffer {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isSiteWide() {
+		return siteWide;
+	}
+
+	public void setSiteWide(boolean siteWide) {
+		this.siteWide = siteWide;
 	}
 
 	public String getError() {
