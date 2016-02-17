@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import util.dateSerialization.DocumentLocalDateTimeDeserializer;
 import util.dateSerialization.DocumentLocalDateTimeSerializer;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -22,6 +23,7 @@ import documents.services.indeed.IndeedResult;
 
 @ToString
 @EqualsAndHashCode
+@JsonIgnoreProperties(value = { "error", "userId", "jobOfferId", "valid" })
 public class JobOffer {
 
 	private Long jobOfferId;
