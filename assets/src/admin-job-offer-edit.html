@@ -29,13 +29,13 @@
 				<label>Location <span class="error"> * </span> </label>
 				<input type="text" th:field="*{location}" /> 
 				
-				<label>Job Type</label> 
+				<label>Job Type <span class="error"> * </span></label> 
 				<select id='jobType' name='jobType' th:field="*{jobType}">
 					<option th:each="jt : ${jobTypes}" th:value="${jt}"
 						th:text="${jt.value}">Some Type</option>
 				</select>
 				
-				<label>Experience</label> 
+				<label>Experience <span class="error"> * </span></label> 
 				<select id='jobExperience' name='jobExperience' th:field="*{jobExperience}">
 					<option th:each="je : ${jobExperiences}" th:value="${je}"
 						th:text="${je.value}">Some Type</option>

@@ -114,6 +114,57 @@ public class JobOffer {
 		// just in case we do something with this one on the frontend too.
 		this.siteWide = false;
 
+		this.jobExperience = getIndeedJobExperience(result);
+		this.jobType = getIndeedJobType(result);
+
+	}
+
+	protected JobExperience getIndeedJobExperience(IndeedResult result) {
+
+		if (result.getSnippet() == null)
+			return null;
+
+		String snippet = result.getSnippet().toLowerCase().toLowerCase();
+
+		// worth a try I suppose...
+		if (snippet.contains(JobExperience.fresh_graduate.name())
+				|| snippet.contains(JobExperience.fresh_graduate.getValue()
+						.toLowerCase()))
+			return JobExperience.fresh_graduate;
+
+		return null;
+
+	}
+
+	protected JobType getIndeedJobType(IndeedResult result) {
+
+		if (result.getSnippet() == null)
+			return null;
+
+		String snippet = result.getSnippet().toLowerCase().toLowerCase();
+
+		if (snippet.contains(JobType.contract.name())
+				|| snippet.contains(JobType.contract.getValue().toLowerCase()))
+			return JobType.contract;
+
+		if (snippet.contains(JobType.fulltime.name())
+				|| snippet.contains(JobType.fulltime.getValue().toLowerCase()))
+			return JobType.fulltime;
+
+		if (snippet.contains(JobType.internship.name())
+				|| snippet
+						.contains(JobType.internship.getValue().toLowerCase()))
+			return JobType.internship;
+
+		if (snippet.contains(JobType.parttime.name())
+				|| snippet.contains(JobType.parttime.getValue().toLowerCase()))
+			return JobType.parttime;
+
+		if (snippet.contains(JobType.temporary.name())
+				|| snippet.contains(JobType.temporary.getValue().toLowerCase()))
+			return JobType.temporary;
+
+		return null;
 	}
 
 	/**

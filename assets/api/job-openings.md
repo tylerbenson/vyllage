@@ -39,3 +39,5 @@
   }
 ]
 ``` 
+
+Note: JobType and JobExperience are determined by checking the content of the description, they may or may not be null. For custom job offers they will always be present since they are mandatory fields. 
