@@ -10,11 +10,11 @@ import jobs.services.indeed.IndeedResult;
 import org.jooq.tools.StringUtils;
 import org.junit.Test;
 
-public class JobOfferTest {
+public class JobOpeningTest {
 
 	@Test
 	public void testOk() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany("Vyllage");
 		jobOffer.setDescription("description");
@@ -28,7 +28,7 @@ public class JobOfferTest {
 
 	@Test
 	public void testCompanyNull() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany(null);
 		jobOffer.setDescription("description");
@@ -42,7 +42,7 @@ public class JobOfferTest {
 
 	@Test
 	public void testCompanyEmpty() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany("");
 		jobOffer.setDescription("description");
@@ -56,7 +56,7 @@ public class JobOfferTest {
 
 	@Test
 	public void testDescriptionNull() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany("Vyllage");
 		jobOffer.setDescription(null);
@@ -70,7 +70,7 @@ public class JobOfferTest {
 
 	@Test
 	public void testDescriptionEmpty() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany("Vyllage");
 		jobOffer.setDescription(" ");
@@ -84,7 +84,7 @@ public class JobOfferTest {
 
 	@Test
 	public void testJobExperienceNull() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany("Vyllage");
 		jobOffer.setDescription("description");
@@ -98,7 +98,7 @@ public class JobOfferTest {
 
 	@Test
 	public void testJobTypeNull() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany("Vyllage");
 		jobOffer.setDescription("description");
@@ -112,7 +112,7 @@ public class JobOfferTest {
 
 	@Test
 	public void testLocationNull() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany("Vyllage");
 		jobOffer.setDescription("description");
@@ -126,7 +126,7 @@ public class JobOfferTest {
 
 	@Test
 	public void testLocationEmpty() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany("Vyllage");
 		jobOffer.setDescription("description");
@@ -140,7 +140,7 @@ public class JobOfferTest {
 
 	@Test
 	public void testRoleNull() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany("Vyllage");
 		jobOffer.setDescription("description");
@@ -154,7 +154,7 @@ public class JobOfferTest {
 
 	@Test
 	public void testRoleEmpty() {
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOffer = new JobOpening();
 
 		jobOffer.setCompany("Vyllage");
 		jobOffer.setDescription("description");
@@ -179,7 +179,7 @@ public class JobOfferTest {
 				+ "Base Manager, and other crew members regarding...,");
 		result.setFormattedLocationFull("Bangor, ME");
 
-		JobOffer jobOffer = new JobOffer(result);
+		JobOpening jobOffer = new JobOpening(result);
 
 		assertFalse(StringUtils.isBlank(jobOffer.getCompany()));
 		assertFalse(StringUtils.isBlank(jobOffer.getDescription()));
@@ -201,7 +201,7 @@ public class JobOfferTest {
 		result.setSnippet("We’re hiring a Line <b>Pilot</b> for our Bangor, Maine team based at BGR. Communicates effectively to the Chief <b>Pilot</b>, "
 				+ "Base Manager, and other crew members regarding...,");
 
-		JobOffer jobOffer = new JobOffer(result);
+		JobOpening jobOffer = new JobOpening(result);
 
 		assertNull(jobOffer.getDateCreated());
 		assertNull(jobOffer.getLastModified());
@@ -219,7 +219,7 @@ public class JobOfferTest {
 		result.setSnippet("We’re hiring a Line <b>Pilot</b> for our Bangor, Maine team based at BGR. Communicates effectively to the Chief <b>Pilot</b>, "
 				+ "Base Manager, and other crew members regarding...,");
 
-		JobOffer jobOffer = new JobOffer(result);
+		JobOpening jobOffer = new JobOpening(result);
 
 		assertNull(jobOffer.getDateCreated());
 		assertNull(jobOffer.getLastModified());
@@ -238,7 +238,7 @@ public class JobOfferTest {
 				+ "Base Manager, and other crew members regarding...,");
 		result.setFormattedLocationFull("Bangor, ME");
 
-		JobOffer jobOffer = new JobOffer(result);
+		JobOpening jobOffer = new JobOpening(result);
 
 		assertFalse(StringUtils.isBlank(jobOffer.getCompany()));
 		assertFalse(StringUtils.isBlank(jobOffer.getDescription()));
@@ -262,7 +262,7 @@ public class JobOfferTest {
 				+ "Base Manager, and other crew members regarding...,");
 		result.setFormattedLocationFull("Bangor, ME");
 
-		JobOffer jobOffer = new JobOffer(result);
+		JobOpening jobOffer = new JobOpening(result);
 
 		assertFalse(StringUtils.isBlank(jobOffer.getCompany()));
 		assertFalse(StringUtils.isBlank(jobOffer.getDescription()));
@@ -286,7 +286,7 @@ public class JobOfferTest {
 				+ "Base Manager, and other crew members regarding...,");
 		result.setFormattedLocationFull("Bangor, ME");
 
-		JobOffer jobOffer = new JobOffer(result);
+		JobOpening jobOffer = new JobOpening(result);
 
 		assertFalse(StringUtils.isBlank(jobOffer.getCompany()));
 		assertFalse(StringUtils.isBlank(jobOffer.getDescription()));

@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import jobs.model.JobOffer;
-import jobs.repository.JobOffersRepository;
+import jobs.model.JobOpening;
+import jobs.repository.JobOpeningRepository;
 import jobs.services.indeed.IndeedResponse;
 
 import org.springframework.stereotype.Service;
@@ -17,50 +17,50 @@ import user.common.UserOrganizationRole;
 @Service
 public class JobService {
 
-	private final JobOffersRepository jobOffersRepository;
+	private final JobOpeningRepository jobOpeningRepository;
 
 	@Inject
-	public JobService(JobOffersRepository jobOffersRepository) {
-		this.jobOffersRepository = jobOffersRepository;
+	public JobService(JobOpeningRepository jobOpeningRepository) {
+		this.jobOpeningRepository = jobOpeningRepository;
 	}
 
-	public List<JobOffer> getAll() {
-		return jobOffersRepository.getAll();
+	public List<JobOpening> getAll() {
+		return jobOpeningRepository.getAll();
 	}
 
-	public List<JobOffer> getAllByOrganization(Long organizationId) {
-		return jobOffersRepository.getAllByOrganization(organizationId);
+	public List<JobOpening> getAllByOrganization(Long organizationId) {
+		return jobOpeningRepository.getAllByOrganization(organizationId);
 	}
 
-	public JobOffer save(JobOffer jobOffer) {
-		return this.jobOffersRepository.save(jobOffer);
+	public JobOpening save(JobOpening jobOpening) {
+		return this.jobOpeningRepository.save(jobOpening);
 	}
 
-	public JobOffer get(Long jobOfferId) {
-		return this.jobOffersRepository.get(jobOfferId);
+	public JobOpening get(Long jobOpeningId) {
+		return this.jobOpeningRepository.get(jobOpeningId);
 	}
 
-	public JobOffer save(User user, JobOffer jobOffer) {
-		if (jobOffer.getOrganizationId() == null) {
+	public JobOpening save(User user, JobOpening jobOpening) {
+		if (jobOpening.getOrganizationId() == null) {
 			// save the first one for now.
 			// TODO: add select when the user has more than one organization.
 			UserOrganizationRole uor = (UserOrganizationRole) user
 					.getAuthorities().iterator().next();
 
-			jobOffer.setOrganizationId(uor.getOrganizationId());
+			jobOpening.setOrganizationId(uor.getOrganizationId());
 		}
 
-		jobOffer.setUserId(user.getUserId());
+		jobOpening.setUserId(user.getUserId());
 
-		return this.save(jobOffer);
+		return this.save(jobOpening);
 	}
 
-	public List<JobOffer> getSiteWideJobOffers() {
-		return this.jobOffersRepository.getSiteWideJobOffers();
+	public List<JobOpening> getSiteWideJobOpenings() {
+		return this.jobOpeningRepository.getSiteWideJobOpenings();
 	}
 
-	public List<JobOffer> parseIndeedResponse(IndeedResponse indeedResponse) {
-		return indeedResponse.getResults().stream().map(JobOffer::new)
+	public List<JobOpening> parseIndeedResponse(IndeedResponse indeedResponse) {
+		return indeedResponse.getResults().stream().map(JobOpening::new)
 				.collect(Collectors.toList());
 	}
 }

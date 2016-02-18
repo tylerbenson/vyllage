@@ -7,7 +7,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import jobs.model.JobOffer;
+import jobs.model.JobOpening;
 import jobs.services.JobService;
 import jobs.services.indeed.IndeedJobSearch;
 import jobs.services.indeed.IndeedResponse;
@@ -32,30 +32,31 @@ import user.common.UserOrganizationRole;
  * @author uh
  */
 @Controller
-public class JobOpeningsController {
+public class JobOpeningController {
 
 	private final JobService jobService;
 	private final IndeedJobSearch indeedJobSearch;
 	private final RezscoreService rezscoreService;
 
 	@Inject
-	public JobOpeningsController(JobService jobService,
+	public JobOpeningController(JobService jobService,
 			IndeedJobSearch indeedJobSearch, RezscoreService rezscoreService) {
 		this.jobService = jobService;
 		this.indeedJobSearch = indeedJobSearch;
 		this.rezscoreService = rezscoreService;
 	}
 
-	@RequestMapping(value = "/resume/{documentId}/job-offers", method = RequestMethod.GET)
-	public @ResponseBody List<JobOffer> jobOffers(HttpServletRequest request,
-			@PathVariable Long documentId, @AuthenticationPrincipal User user) {
+	@RequestMapping(value = "/resume/{documentId}/job-openings", method = RequestMethod.GET)
+	public @ResponseBody List<JobOpening> jobOpenings(
+			HttpServletRequest request, @PathVariable Long documentId,
+			@AuthenticationPrincipal User user) {
 
-		List<JobOffer> all = this.getJobOffersByOrganization(user);
+		List<JobOpening> all = this.getJobOpeningsByOrganization(user);
 
-		// get site wide job offers.
-		all.addAll(this.jobService.getSiteWideJobOffers());
+		// get site wide job openings.
+		all.addAll(this.jobService.getSiteWideJobOpenings());
 
-		// get indeed job offers.
+		// get indeed job openings.
 		List<String> queries = getQueries(request, documentId, user);
 
 		long start = 0;
@@ -73,8 +74,8 @@ public class JobOpeningsController {
 	 * @param user
 	 * @param all
 	 */
-	protected List<JobOffer> getJobOffersByOrganization(@NonNull User user) {
-		List<JobOffer> all = new ArrayList<>();
+	protected List<JobOpening> getJobOpeningsByOrganization(@NonNull User user) {
+		List<JobOpening> all = new ArrayList<>();
 
 		// get our job offers by organization first.
 		// first organization for now

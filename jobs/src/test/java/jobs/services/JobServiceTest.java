@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 import jobs.ApplicationTestConfig;
 import jobs.model.JobExperience;
-import jobs.model.JobOffer;
+import jobs.model.JobOpening;
 import jobs.model.JobType;
 
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class JobServiceTest {
 
 	@Test
 	public void testGetAll() {
-		List<JobOffer> list = service.getAll();
+		List<JobOpening> list = service.getAll();
 
 		assertNotNull(list);
 		assertFalse(list.isEmpty());
@@ -46,7 +46,7 @@ public class JobServiceTest {
 	@Test
 	public void testGetAllByOrganization() {
 		Long organizationId = 1L;
-		List<JobOffer> list = service.getAllByOrganization(organizationId);
+		List<JobOpening> list = service.getAllByOrganization(organizationId);
 
 		assertNotNull(list);
 		assertFalse(list.isEmpty());
@@ -55,7 +55,7 @@ public class JobServiceTest {
 	@Test
 	public void testGetAllByOrganizationReturnsEmpty() {
 		Long organizationId = 52L;
-		List<JobOffer> list = service.getAllByOrganization(organizationId);
+		List<JobOpening> list = service.getAllByOrganization(organizationId);
 
 		assertNotNull(list);
 		assertTrue(list.isEmpty());
@@ -64,9 +64,9 @@ public class JobServiceTest {
 	@Test
 	public void testSave() {
 
-		JobOffer jobOffer = create();
+		JobOpening jobOffer = create();
 
-		JobOffer jobOffer2 = service.save(jobOffer);
+		JobOpening jobOffer2 = service.save(jobOffer);
 
 		assertNotNull(jobOffer2);
 		assertTrue(jobOffer2.equals(jobOffer));
@@ -75,7 +75,7 @@ public class JobServiceTest {
 	@Test
 	public void testSaveWithUser() {
 
-		JobOffer jobOffer = create();
+		JobOpening jobOffer = create();
 
 		jobOffer.setCompany("Vyllage1");
 
@@ -92,7 +92,7 @@ public class JobServiceTest {
 				username, enabled, accountNonExpired, credentialsNonExpired,
 				accountNonLocked, Arrays.asList(uor), null, null);
 
-		JobOffer jobOffer2 = service.save(user, jobOffer);
+		JobOpening jobOffer2 = service.save(user, jobOffer);
 
 		assertNotNull(jobOffer2);
 		assertTrue(jobOffer2.equals(jobOffer));
@@ -104,7 +104,7 @@ public class JobServiceTest {
 	@Test
 	public void testSaveWithUserButOrganizationMissing() {
 
-		JobOffer jobOffer = create();
+		JobOpening jobOffer = create();
 
 		jobOffer.setCompany("Vyllage2");
 		jobOffer.setOrganizationId(null);
@@ -122,7 +122,7 @@ public class JobServiceTest {
 				username, enabled, accountNonExpired, credentialsNonExpired,
 				accountNonLocked, Arrays.asList(uor), null, null);
 
-		JobOffer jobOffer2 = service.save(user, jobOffer);
+		JobOpening jobOffer2 = service.save(user, jobOffer);
 
 		assertNotNull(jobOffer2);
 		assertTrue(jobOffer2.equals(jobOffer));
@@ -131,8 +131,8 @@ public class JobServiceTest {
 				.equals(uor.getOrganizationId()));
 	}
 
-	private JobOffer create() {
-		JobOffer offer = new JobOffer();
+	private JobOpening create() {
+		JobOpening offer = new JobOpening();
 
 		offer.setCompany("Vyllage");
 
