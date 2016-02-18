@@ -10,7 +10,7 @@
 
 <body class="admin">
   <div id="container">
-    <header th:replace="adminHeader :: header">
+    <header th:replace="adminHeader :: header('Account Management')">
     </header>
     <div class="section content">
       <form name="adminForm" class="container" action="#" th:action="@{/admin/users}" th:object="${adminUsersForm}" method="GET"

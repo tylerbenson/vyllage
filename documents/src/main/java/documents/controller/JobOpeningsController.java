@@ -3,7 +3,6 @@ package documents.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -14,68 +13,91 @@ import lombok.NonNull;
 import org.jooq.tools.StringUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import user.common.User;
+import user.common.UserOrganizationRole;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.EducationSection;
+import documents.model.jobs.JobOffer;
 import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 import documents.services.indeed.IndeedJobSearch;
 import documents.services.indeed.IndeedResponse;
+import documents.services.job.JobService;
 import documents.services.rezscore.RezscoreService;
 import documents.services.rezscore.result.RezscoreResult;
 
 /**
- * Indeed controller, just for testing indeed.
+ * Handles custom job offers and indeed job offers.
  * 
  * @author uh
  */
 @Controller
-public class IndeedController {
-	@SuppressWarnings("unused")
-	private final Logger logger = Logger.getLogger(IndeedController.class
-			.getName());
+public class JobOpeningsController {
 
+	private final JobService jobService;
 	private final IndeedJobSearch indeedJobSearch;
 	private final DocumentService documentService;
 	private final RezscoreService rezscoreService;
 
 	@Inject
-	public IndeedController(IndeedJobSearch indeedJobSearch,
-			DocumentService documentService, RezscoreService rezscoreService) {
+	public JobOpeningsController(JobService jobService,
+			IndeedJobSearch indeedJobSearch, DocumentService documentService,
+			RezscoreService rezscoreService) {
+		this.jobService = jobService;
 		this.indeedJobSearch = indeedJobSearch;
 		this.documentService = documentService;
 		this.rezscoreService = rezscoreService;
 	}
 
-	@RequestMapping(value = "/resume/{documentId}/jobs", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody IndeedResponse getJobs(HttpServletRequest request,
+	@RequestMapping(value = "/resume/{documentId}/job-offers", method = RequestMethod.GET)
+	public @ResponseBody List<JobOffer> jobOffers(HttpServletRequest request,
 			@PathVariable Long documentId, @AuthenticationPrincipal User user)
 			throws ElementNotFoundException {
 
+		List<JobOffer> all = this.getJobOffersByOrganization(user);
+
+		// get site wide job offers.
+		all.addAll(this.jobService.getSiteWideJobOffers());
+
+		// get indeed job offers.
 		List<String> queries = getQueries(request, documentId, user);
 
 		long start = 0;
-		return indeedJobSearch.search(queries, getIpAddress(request),
-				request.getHeader("User-Agent"), start);
+		IndeedResponse indeedResponse = indeedJobSearch.search(queries,
+				getIpAddress(request), request.getHeader("User-Agent"), start);
+
+		all.addAll(this.jobService.parseIndeedResponse(indeedResponse));
+
+		return all;
 	}
 
-	@RequestMapping(value = "/resume/{documentId}/jobs", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody IndeedResponse jobsPage(HttpServletRequest request,
-			@PathVariable Long documentId, @RequestParam long start,
-			@AuthenticationPrincipal User user) throws ElementNotFoundException {
+	/**
+	 * Returns custom jobs offers according to the user's organizations.
+	 * 
+	 * @param user
+	 * @param all
+	 */
+	protected List<JobOffer> getJobOffersByOrganization(@NonNull User user) {
+		List<JobOffer> all = new ArrayList<>();
 
-		List<String> queries = getQueries(request, documentId, user);
+		// get our job offers by organization first.
+		// first organization for now
+		user.getAuthorities()
+				.stream()
+				.forEach(
+						ga -> {
+							all.addAll(this.jobService
+									.getAllByOrganization(((UserOrganizationRole) ga)
+											.getOrganizationId()));
+						});
 
-		return indeedJobSearch.search(queries, getIpAddress(request),
-				request.getHeader("User-Agent"), start);
+		return all;
 	}
 
 	protected List<String> getQueries(@NonNull HttpServletRequest request,
@@ -142,17 +164,4 @@ public class IndeedController {
 
 		return ipAddress;
 	}
-
-	@RequestMapping(value = "/indeed/xml-example", method = RequestMethod.GET, produces = "application/xml")
-	public @ResponseBody String XMLgetJobs() {
-		return indeedJobSearch.searchXML();
-	}
-
-	@RequestMapping(value = "/indeed/html-example", method = RequestMethod.GET)
-	public String HtmlGetJobs(Model model) {
-
-		model.addAttribute("response", indeedJobSearch.searchJson());
-		return "indeed";
-	}
-
 }

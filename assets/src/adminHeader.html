@@ -1,10 +1,10 @@
-<header th:fragment="header">
+<header th:fragment="header (title)">
   <div class="content">
     <div class="logo">
       <img src="images/logo-white.png" alt="Vyllage" />
       <span>Vyllage</span>
     </div>
-    <span class="page-title">Account Management</span>
+    <span class="page-title" th:text="${title != null ? title : 'Account Management'}">Account Management</span>
 
     <div class="content">
       <a th:href="@{/admin/users}"> Users </a> &nbsp; |
@@ -12,6 +12,7 @@
       <a th:href="@{/admin/users/roles}"> Users Role Editor </a> &nbsp;|
       <a th:href="@{/admin/user/batch}"> Batch Account </a> &nbsp;|
       <a th:href="@{/admin/lti/keys}"> LTI Link </a> &nbsp;|
+      <a th:href="@{/admin/job-offers}"> Job Offer Management </a> &nbsp;|
       <a th:href="@{/togglz}"> Togglz </a>
     </div>
   </div>

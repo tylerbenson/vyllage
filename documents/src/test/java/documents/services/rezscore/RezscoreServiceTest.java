@@ -160,6 +160,7 @@ public class RezscoreServiceTest {
 		assertNotNull(analysis2.get().getRezscore());
 
 		assertTrue(analysis1.get().equals(analysis2.get()));
+		assertTrue(analysis1.get().hashCode() == analysis2.get().hashCode());
 	}
 
 	@Test

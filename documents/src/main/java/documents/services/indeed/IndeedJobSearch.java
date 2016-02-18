@@ -1,4 +1,4 @@
-package documents.indeed;
+package documents.services.indeed;
 
 import java.util.List;
 import java.util.logging.Logger;
