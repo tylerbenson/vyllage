@@ -10,10 +10,8 @@ import org.springframework.core.env.Environment;
 
 /**
  * Since we're running multiple applications in the same JVM, we need to
- * initialize each apps database separately.
- *
- * TODO: It'd be nice if we could do this more programmatically with less hard
- * coding.
+ * initialize each apps database separately. TODO: It'd be nice if we could do
+ * this more programmatically with less hard coding.
  */
 @Configuration
 public class FlywayConfig {
@@ -56,6 +54,15 @@ public class FlywayConfig {
 		flyway.setDataSource(this.dataSource);
 		flyway.setLocations(env.getRequiredProperty("flyway.togglz"));
 		flyway.setSchemas("togglz");
+		return flyway;
+	}
+
+	@Bean(initMethod = "migrate")
+	public Flyway flywayJobs() {
+		Flyway flyway = new Flyway();
+		flyway.setDataSource(this.dataSource);
+		flyway.setLocations(env.getRequiredProperty("flyway.jobs"));
+		flyway.setSchemas("jobs");
 		return flyway;
 	}
 }

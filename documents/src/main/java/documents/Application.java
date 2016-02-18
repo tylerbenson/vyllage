@@ -68,8 +68,7 @@ import util.profiles.Profiles;
 
 @Profile({ Profiles.DEV, Profiles.PROD })
 @SpringBootApplication(scanBasePackages = { "documents.configuration",
-		"documents.controller", "documents.repository", "documents.services",
-		"documents.indeed" })
+		"documents.controller", "documents.repository", "documents.services" })
 @PropertySource("classpath:/documents/application-${profile}.properties")
 @EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class,
 		RepositoryRestMvcAutoConfiguration.class,

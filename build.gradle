@@ -5,9 +5,9 @@ import java.nio.file.Paths;
 def vJavaLang = '1.8'
 def gradleDir = "${rootProject.rootDir}/gradle"
 ext.javascriptProjects = [ project(':assets') ]
-ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections'), project(':email'), project(':user-common'), project(':togglz'), project(':util') , project(':oauth-provider') ]
-ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') , project(':oauth-provider')  ]
-ext.dbProjects = [ project(':accounts'), project(':documents'), project(':togglz') ]
+ext.javaProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections'), project(':email'), project(':user-common'), project(':togglz'), project(':util') , project(':oauth-provider') , project(':jobs') ]
+ext.bootProjects = [ project(':accounts'), project(':documents'), project(':site'), project(':connections') , project(':oauth-provider') , project(':jobs') ]
+ext.dbProjects = [ project(':accounts'), project(':documents'), project(':togglz') , project(':jobs') ]
 
 wrapper.gradleVersion = '2.8'
 

@@ -147,6 +147,55 @@ public class FileController {
 
 	}
 
+	@RequestMapping(value = "{documentId}/file/txt", method = RequestMethod.GET)
+	public @ResponseBody String getResume(HttpServletRequest request,
+			@PathVariable final Long documentId,
+			@AuthenticationPrincipal User user) throws ElementNotFoundException {
+
+		DocumentHeader documentHeader = documentService.getDocumentHeader(
+				request, documentId, user);
+		List<DocumentSection> documentSections = documentService
+				.getDocumentSections(documentId);
+
+		// sort by position
+		sortSections(documentSections);
+
+		return createTxtResume(documentHeader, documentSections);
+	}
+
+	/**
+	 * Sort sections by sectionPosition.
+	 * 
+	 * @param documentSections
+	 */
+	protected void sortSections(List<DocumentSection> documentSections) {
+		documentSections.sort((s1, s2) -> s1.getSectionPosition().compareTo(
+				s2.getSectionPosition()));
+	}
+
+	/**
+	 * Creates a plain text resume based on the document header and document
+	 * sections.
+	 * 
+	 * @param documentHeader
+	 * @param documentSections
+	 * @return plain text resume
+	 */
+	protected String createTxtResume(DocumentHeader documentHeader,
+			List<DocumentSection> documentSections) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(documentHeader.asTxt()).append("\n");
+
+		for (DocumentSection documentSection : documentSections) {
+			sb.append(documentSection.asTxt());
+			sb.append("\n");
+		}
+
+		final String resume = sb.toString();
+		return resume;
+	}
+
 	/**
 	 * Writes the PNG thumbnail to the response.
 	 *
