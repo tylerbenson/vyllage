@@ -24,7 +24,7 @@
 				<input type="text" th:field="*{role}" /> 
 				
 				<label>Salary</label>
-				<input type="text" th:field="*{salary}" /> 
+				<input type="number" step="1" min="0" th:field="*{salary}" /> 
 				
 				<label>Location <span class="error"> * </span> </label>
 				<input type="text" th:field="*{location}" /> 
