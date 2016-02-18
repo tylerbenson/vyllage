@@ -8,7 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import jobs.ApplicationTestConfig;
-import jobs.model.JobOffer;
+import jobs.model.JobOpening;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,14 +19,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ApplicationTestConfig.class)
 @WebAppConfiguration
-public class JobOffersRepositoryTest {
+public class JobOpeningRepositoryTest {
 
 	@Inject
-	private JobOffersRepository repository;
+	private JobOpeningRepository repository;
 
 	@Test
 	public void testGetAll() {
-		List<JobOffer> list = repository.getAll();
+		List<JobOpening> list = repository.getAll();
 
 		assertNotNull(list);
 		assertFalse(list.isEmpty());

@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import jobs.ApplicationTestConfig;
-import jobs.model.JobOffer;
+import jobs.model.JobOpening;
 import jobs.services.JobService;
 import jobs.services.indeed.IndeedJobSearch;
 import jobs.services.indeed.IndeedResponse;
@@ -83,10 +83,10 @@ public class JobOpeningsControllerIntegTest {
 
 		User user = generateAndLoginUser();
 
-		JobOpeningsController controller = new JobOpeningsController(
+		JobOpeningController controller = new JobOpeningController(
 				jobService, indeedJobSearch, rezscoreService);
 
-		List<JobOffer> jobOffers = controller.jobOffers(request, documentId,
+		List<JobOpening> jobOffers = controller.jobOpenings(request, documentId,
 				user);
 
 		assertNotNull(jobOffers);

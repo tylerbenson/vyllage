@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import jobs.model.JobExperience;
-import jobs.model.JobOffer;
+import jobs.model.JobOpening;
 import jobs.model.JobType;
 import jobs.services.JobService;
 
@@ -23,22 +23,22 @@ import user.common.UserOrganizationRole;
 
 @Controller
 @RequestMapping(value = "admin")
-public class AdminJobOffersController {
+public class AdminJobOpeningController {
 
 	@SuppressWarnings("unused")
 	private final Logger logger = Logger
-			.getLogger(AdminJobOffersController.class.getName());
+			.getLogger(AdminJobOpeningController.class.getName());
 
 	private final JobService jobService;
 
 	@Inject
-	public AdminJobOffersController(JobService jobService) {
+	public AdminJobOpeningController(JobService jobService) {
 		this.jobService = jobService;
 	}
 
-	@RequestMapping(value = "job-offers", method = RequestMethod.GET)
-	public String jobOffers(@AuthenticationPrincipal User user, Model model) {
-		List<JobOffer> allByOrganizations = new ArrayList<>();
+	@RequestMapping(value = "job-openings", method = RequestMethod.GET)
+	public String jobopening(@AuthenticationPrincipal User user, Model model) {
+		List<JobOpening> allByOrganizations = new ArrayList<>();
 
 		if (user.isVyllageAdmin())
 			user.getAuthorities().stream().forEach(ga -> {
@@ -55,49 +55,49 @@ public class AdminJobOffersController {
 												.getOrganizationId()));
 							});
 
-		model.addAttribute("jobOffers", allByOrganizations);
+		model.addAttribute("jobOpenings", allByOrganizations);
 
-		return "admin-job-offers";
+		return "admin-job-opening";
 	}
 
-	@RequestMapping(value = "job-offer-create", method = RequestMethod.GET)
-	public String createJobOffer(Model model) {
+	@RequestMapping(value = "job-opening-create", method = RequestMethod.GET)
+	public String createJobopening(Model model) {
 
-		JobOffer jobOffer = new JobOffer();
+		JobOpening jobOpening = new JobOpening();
 
-		model.addAttribute("jobOffer", jobOffer);
+		model.addAttribute("jobOpening", jobOpening);
 
 		addSelects(model);
 
-		return "admin-job-offer-edit";
+		return "admin-job-opening-edit";
 	}
 
-	@RequestMapping(value = "job-offer-edit/{jobOfferId}", method = RequestMethod.GET)
-	public String editJobOfferGet(@PathVariable Long jobOfferId, Model model) {
+	@RequestMapping(value = "job-opening-edit/{jobOpeningId}", method = RequestMethod.GET)
+	public String editJobOpeningGet(@PathVariable Long jobOpeningId, Model model) {
 
-		JobOffer jobOffer = jobService.get(jobOfferId);
+		JobOpening jobOpening = jobService.get(jobOpeningId);
 
-		model.addAttribute("jobOffer", jobOffer);
+		model.addAttribute("jobOpening", jobOpening);
 
 		addSelects(model);
 
-		return "admin-job-offer-edit";
+		return "admin-job-opening-edit";
 	}
 
-	@RequestMapping(value = "job-offer-edit", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
-	public String editJobOfferPost(@AuthenticationPrincipal User user,
-			JobOffer jobOffer, Model model) {
+	@RequestMapping(value = "job-opening-edit", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+	public String editJobOpeningPost(@AuthenticationPrincipal User user,
+			JobOpening jobOpening, Model model) {
 
-		if (jobOffer.isValid()) {
-			jobService.save(user, jobOffer);
-			return "redirect:/admin/job-offers";
+		if (jobOpening.isValid()) {
+			jobService.save(user, jobOpening);
+			return "redirect:/admin/job-openings";
 		}
 
-		model.addAttribute("jobOffer", jobOffer);
+		model.addAttribute("jobOpening", jobOpening);
 
 		addSelects(model);
 
-		return "admin-job-offer-edit";
+		return "admin-job-opening-edit";
 
 	}
 

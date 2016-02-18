@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import jobs.domain.tables.records.JobOffersRecord;
+import jobs.domain.tables.records.JobOpeningRecord;
 import jobs.services.indeed.IndeedResult;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -23,9 +23,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @ToString
 @EqualsAndHashCode
 @JsonIgnoreProperties(value = { "error", "userId", "jobOfferId", "valid" })
-public class JobOffer {
+public class JobOpening {
 
-	private Long jobOfferId;
+	private Long jobOpeningId;
 
 	/**
 	 * User that created the job offer.
@@ -68,18 +68,18 @@ public class JobOffer {
 
 	private String error;
 
-	public JobOffer() {
+	public JobOpening() {
 
 	}
 
-	public JobOffer(@NonNull JobOffersRecord record) {
+	public JobOpening(@NonNull JobOpeningRecord record) {
 		this.dateCreated = record.getDateCreated().toLocalDateTime();
 		this.lastModified = record.getLastModified().toLocalDateTime();
 
 		this.jobExperience = JobExperience.valueOf(record.getJobExperience());
 		this.jobType = JobType.valueOf(record.getJobType());
 
-		this.jobOfferId = record.getJobOfferId();
+		this.jobOpeningId = record.getJobOpeningId();
 		this.location = record.getLocation();
 		this.remote = record.getRemote();
 		this.requiresRelocation = record.getRequiresRelocation();
@@ -93,7 +93,7 @@ public class JobOffer {
 
 	}
 
-	public JobOffer(@NonNull IndeedResult result) {
+	public JobOpening(@NonNull IndeedResult result) {
 
 		this.dateCreated = getIndeedDate(result);
 		// same
@@ -230,12 +230,12 @@ public class JobOffer {
 		return !someBlank && !missingEnums;
 	}
 
-	public Long getJobOfferId() {
-		return jobOfferId;
+	public Long getJobOpeningId() {
+		return jobOpeningId;
 	}
 
-	public void setJobOfferId(Long jobOfferId) {
-		this.jobOfferId = jobOfferId;
+	public void setJobOpeningId(Long jobOfferId) {
+		this.jobOpeningId = jobOfferId;
 	}
 
 	public Long getUserId() {

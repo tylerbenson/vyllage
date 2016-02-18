@@ -1,6 +1,6 @@
 package jobs.repository;
 
-import static jobs.domain.tables.JobOffers.JOB_OFFERS;
+import static jobs.domain.tables.JobOpening.JOB_OPENING;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -13,45 +13,45 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
-import jobs.domain.tables.records.JobOffersRecord;
-import jobs.model.JobOffer;
+import jobs.domain.tables.records.JobOpeningRecord;
+import jobs.model.JobOpening;
 
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class JobOffersRepository {
+public class JobOpeningRepository {
 
 	@SuppressWarnings("unused")
-	private final Logger logger = Logger.getLogger(JobOffersRepository.class
+	private final Logger logger = Logger.getLogger(JobOpeningRepository.class
 			.getName());
 
 	private DSLContext sql;
 
 	@Inject
-	public JobOffersRepository(DSLContext sql) {
+	public JobOpeningRepository(DSLContext sql) {
 		this.sql = sql;
 	}
 
-	public List<JobOffer> getAll() {
-		Result<JobOffersRecord> all = sql.fetch(JOB_OFFERS);
+	public List<JobOpening> getAll() {
+		Result<JobOpeningRecord> all = sql.fetch(JOB_OPENING);
 
 		// logger.info("Returning job offers: \n" + all);
 
 		if (all.isEmpty())
 			return Collections.emptyList();
 
-		return all.stream().map(JobOffer::new).collect(Collectors.toList());
+		return all.stream().map(JobOpening::new).collect(Collectors.toList());
 	}
 
-	public JobOffer save(@NotNull JobOffer jobOffer) {
+	public JobOpening save(@NotNull JobOpening jobOffer) {
 
-		JobOffersRecord existingRecord = sql.fetchOne(JOB_OFFERS,
-				JOB_OFFERS.JOB_OFFER_ID.eq(jobOffer.getJobOfferId()));
+		JobOpeningRecord existingRecord = sql.fetchOne(JOB_OPENING,
+				JOB_OPENING.JOB_OPENING_ID.eq(jobOffer.getJobOpeningId()));
 
 		if (existingRecord == null) {
-			JobOffersRecord newRecord = sql.newRecord(JOB_OFFERS);
+			JobOpeningRecord newRecord = sql.newRecord(JOB_OPENING);
 
 			newRecord.setCompany(jobOffer.getCompany());
 			newRecord.setDescription(jobOffer.getDescription());
@@ -76,7 +76,7 @@ public class JobOffersRepository {
 
 			newRecord.store();
 
-			jobOffer.setJobOfferId(newRecord.getJobOfferId());
+			jobOffer.setJobOpeningId(newRecord.getJobOpeningId());
 
 			jobOffer.setDateCreated(newRecord.getDateCreated()
 					.toLocalDateTime());
@@ -115,34 +115,36 @@ public class JobOffersRepository {
 		return jobOffer;
 	}
 
-	public List<JobOffer> getAllByOrganization(@NotNull Long organizationId) {
+	public List<JobOpening> getAllByOrganization(@NotNull Long organizationId) {
 
-		Result<JobOffersRecord> all = sql.fetch(JOB_OFFERS,
-				JOB_OFFERS.ORGANIZATION_ID.eq(organizationId));
+		Result<JobOpeningRecord> all = sql.fetch(JOB_OPENING,
+				JOB_OPENING.ORGANIZATION_ID.eq(organizationId));
 
 		// logger.info("Returning job offers: \n" + all);
 
 		if (all.isEmpty())
 			return Collections.emptyList();
 
-		return all.stream().map(JobOffer::new).collect(Collectors.toList());
+		return all.stream().map(JobOpening::new).collect(Collectors.toList());
 
 	}
 
-	public JobOffer get(Long jobOfferId) {
-		return sql.fetchOne(JOB_OFFERS, JOB_OFFERS.JOB_OFFER_ID.eq(jobOfferId))
-				.into(JobOffer.class);
+	public JobOpening get(Long jobOfferId) {
+		return sql.fetchOne(JOB_OPENING,
+				JOB_OPENING.JOB_OPENING_ID.eq(jobOfferId)).into(
+				JobOpening.class);
 	}
 
-	public List<JobOffer> getSiteWideJobOffers() {
+	public List<JobOpening> getSiteWideJobOpenings() {
 
-		Result<JobOffersRecord> result = sql.fetch(JOB_OFFERS,
-				JOB_OFFERS.SITE_WIDE.eq(true));
+		Result<JobOpeningRecord> result = sql.fetch(JOB_OPENING,
+				JOB_OPENING.SITE_WIDE.eq(true));
 
 		if (result.isEmpty())
 			return Collections.emptyList();
 
-		return result.stream().map(JobOffer::new).collect(Collectors.toList());
+		return result.stream().map(JobOpening::new)
+				.collect(Collectors.toList());
 	}
 
 }
