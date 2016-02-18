@@ -73,7 +73,7 @@ import util.profiles.Profiles;
 @SpringBootApplication
 @ComponentScan(basePackageClasses = { connections.Application.class,
 		documents.Application.class, accounts.Application.class,
-		Application.class })
+		jobs.Application.class, Application.class })
 @EnableAutoConfiguration(exclude = { HypermediaAutoConfiguration.class,
 		RepositoryRestMvcAutoConfiguration.class,
 		ActiveMQAutoConfiguration.class,

@@ -17,7 +17,6 @@ import documents.model.document.sections.EducationSection;
 import documents.repository.ElementNotFoundException;
 import documents.services.AccountService;
 import documents.services.DocumentService;
-import documents.services.rezscore.RezscoreService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ResumeControllerTest {
@@ -55,12 +54,9 @@ public class ResumeControllerTest {
 
 	private AccountService accountService = Mockito.mock(AccountService.class);
 
-	private RezscoreService rezcoreService = Mockito.mock(RezscoreService.class);
-
 	@Before
 	public void setUp() {
-		controller = new ResumeController(documentService, accountService,
-				rezcoreService);
+		controller = new ResumeController(documentService, accountService);
 	}
 
 	// resume/0/section/124

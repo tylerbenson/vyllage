@@ -9,6 +9,7 @@ import util.profiles.Profiles;
 @PropertySource("classpath:/connections/application-prod.properties")
 @PropertySource("classpath:/documents/application-prod.properties")
 @PropertySource("classpath:/accounts/application-prod.properties")
+@PropertySource("classpath:/jobs/application-prod.properties")
 @Configuration(value = "site.PropertyConfigProd")
 @Profile(Profiles.PROD)
 public class PropertyConfigProd {
