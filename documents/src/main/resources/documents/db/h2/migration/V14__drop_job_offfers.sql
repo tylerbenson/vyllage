@@ -1,0 +1,1 @@
+drop table DOCUMENTS.job_offers;

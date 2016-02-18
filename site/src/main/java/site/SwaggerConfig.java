@@ -16,7 +16,7 @@ import util.profiles.Profiles;
 
 import com.google.common.base.Predicate;
 
-@Configuration(value = "accounts.config.SwaggerConfig")
+@Configuration(value = "site.config.SwaggerConfig")
 @EnableSwagger2
 @Profile(Profiles.DEV)
 public class SwaggerConfig {
@@ -63,6 +63,16 @@ public class SwaggerConfig {
 
 	protected Predicate<String> ltiPaths() {
 		return regex("/lti/.*");
+	}
+
+	@Bean
+	public Docket jobsApi() {
+		return new Docket(DocumentationType.SWAGGER_2).groupName("jobs")
+				.select().paths(jobsPaths()).build().apiInfo(apiInfo());
+	}
+
+	protected Predicate<String> jobsPaths() {
+		return regex("/resume/.*");
 	}
 
 	@Bean
