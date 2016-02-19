@@ -18,6 +18,11 @@ dependencies {
     //https://java.net/projects/pdf-renderer
     compile 'org.swinglabs:pdf-renderer:1.0.5'
 
+    //http://www.docx4java.org
+    compile ("org.docx4j:docx4j:3.2.2") {
+         exclude group: "org.slf4j"
+    }
+
     compile 'org.apache.commons:commons-lang3:3.3.2'
 
     compile 'org.xhtmlrenderer:flying-saucer-core:9.0.7'
