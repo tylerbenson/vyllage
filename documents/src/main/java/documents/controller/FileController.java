@@ -7,11 +7,16 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,11 +33,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import user.common.User;
 
 import com.lowagie.text.DocumentException;
+import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 
 import documents.files.pdf.ResumeExportService;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
+import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 import documents.services.aspect.CheckReadAccess;
@@ -40,6 +47,10 @@ import documents.services.aspect.CheckReadAccess;
 @Controller
 @RequestMapping("resume")
 public class FileController {
+
+	private final Logger logger = Logger.getLogger(FileController.class
+			.getName());
+
 	private final DocumentService documentService;
 
 	private final ResumeExportService resumeExportService;
@@ -148,7 +159,7 @@ public class FileController {
 	}
 
 	@RequestMapping(value = "{documentId}/file/txt", method = RequestMethod.GET)
-	public @ResponseBody String getResume(HttpServletRequest request,
+	public @ResponseBody String resumeTxt(HttpServletRequest request,
 			@PathVariable final Long documentId,
 			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
@@ -161,6 +172,57 @@ public class FileController {
 		sortSections(documentSections);
 
 		return createTxtResume(documentHeader, documentSections);
+	}
+
+	@RequestMapping(value = "{documentId}/file/docx", method = RequestMethod.GET)
+	public void resumeDocx(HttpServletRequest request,
+			HttpServletResponse response, @PathVariable final Long documentId,
+			@AuthenticationPrincipal User user, String templateName)
+			throws ElementNotFoundException {
+
+		DocumentHeader documentHeader = documentService.getDocumentHeader(
+				request, documentId, user);
+		List<DocumentSection> documentSections = documentService
+				.getDocumentSections(documentId);
+
+		// sort by position
+
+		String style = templateName != null && !templateName.isEmpty()
+				&& this.pdfTemplates.contains(templateName) ? templateName
+				: this.pdfTemplates.get(0);
+
+		ByteArrayOutputStream docxDocument = resumeExportService
+				.generateDOCXDocument(documentHeader, documentSections, style);
+
+		try {
+			copyDOCX(response, docxDocument);
+			response.setStatus(HttpStatus.OK.value());
+			response.flushBuffer();
+		} catch (IOException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+
+	}
+
+	/**
+	 * Copies the generated .docx into the response.
+	 * 
+	 * @param response
+	 * @param docxDocument
+	 * @throws IOException
+	 */
+	protected void copyDOCX(HttpServletResponse response,
+			ByteArrayOutputStream docxDocument) throws IOException {
+
+		InputStream in = new ByteArrayInputStream(docxDocument.toByteArray());
+		FileCopyUtils.copy(in, response.getOutputStream());
+
+		// http://stackoverflow.com/questions/4212861/what-is-a-correct-mime-type-for-docx-pptx-etc
+
+		response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ "resume.docx");
 	}
 
 	/**

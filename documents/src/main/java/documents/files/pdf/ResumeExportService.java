@@ -22,6 +22,10 @@ import javax.inject.Inject;
 import lombok.NonNull;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.docx4j.XmlUtils;
+import org.docx4j.convert.in.xhtml.XHTMLImporterImpl;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.NumberingDefinitionsPart;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -47,12 +51,12 @@ public class ResumeExportService {
 
 	private final TemplateEngine templateEngine;
 
-	private Cache<String, ByteArrayOutputStream> pdfs;
+	private Cache<String, ByteArrayOutputStream> docs;
 
 	@Inject
 	public ResumeExportService(final TemplateEngine templateEngine) {
 		this.templateEngine = templateEngine;
-		pdfs = CacheBuilder.newBuilder().maximumSize(10)
+		docs = CacheBuilder.newBuilder().maximumSize(10)
 				.expireAfterAccess(15, TimeUnit.MINUTES).build();
 	}
 
@@ -137,21 +141,23 @@ public class ResumeExportService {
 	}
 
 	protected ByteArrayOutputStream getCachedDocument(
-			final DocumentHeader resumeHeader,
-			final List<DocumentSection> sections, final String templateName) {
+			final DocumentHeader documentHeader,
+			final List<DocumentSection> documentSections,
+			final String templateName) {
 
-		final String key = this.getCacheKey(resumeHeader, sections,
+		final String key = this.getCacheKey(documentHeader, documentSections,
 				templateName);
 
 		ByteArrayOutputStream pdfBytes = null;
 
 		try {
-			pdfBytes = pdfs
+			pdfBytes = docs
 					.get(key,
 							() -> {
 
 								final ITextRenderer renderer = preparePDF(
-										resumeHeader, sections, templateName);
+										documentHeader, documentSections,
+										templateName);
 
 								ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -159,7 +165,7 @@ public class ResumeExportService {
 								renderer.finishPDF();
 								out.flush();
 
-								pdfs.put(key, out);
+								docs.put(key, out);
 
 								return out;
 							});
@@ -174,16 +180,9 @@ public class ResumeExportService {
 
 	protected ITextRenderer preparePDF(DocumentHeader resumeHeader,
 			List<DocumentSection> sections, String templateName) {
-		Context ctx = new Context();
 
-		format(resumeHeader);
-
-		ctx.setVariable("header", resumeHeader);
-
-		ctx.setVariable("sections", sections.stream().sorted(sortSections())
-				.collect(Collectors.toList()));
-
-		String htmlContent = templateEngine.process(templateName, ctx);
+		String htmlContent = generateHTMLDocument(resumeHeader, sections,
+				templateName);
 
 		ITextRenderer renderer = new ITextRenderer();
 		renderer.setDocumentFromString(htmlContent);
@@ -237,6 +236,21 @@ public class ResumeExportService {
 		return renderer;
 	}
 
+	protected String generateHTMLDocument(DocumentHeader resumeHeader,
+			List<DocumentSection> sections, String templateName) {
+		Context ctx = new Context();
+
+		format(resumeHeader);
+
+		ctx.setVariable("header", resumeHeader);
+
+		ctx.setVariable("sections", sections.stream().sorted(sortSections())
+				.collect(Collectors.toList()));
+
+		String htmlContent = templateEngine.process(templateName, ctx);
+		return htmlContent;
+	}
+
 	/**
 	 * Generates a key based on the hash of the resume header, sections and
 	 * style name.
@@ -281,6 +295,64 @@ public class ResumeExportService {
 	protected Comparator<? super DocumentSection> sortSections() {
 		return (s1, s2) -> s1.getSectionPosition().compareTo(
 				s2.getSectionPosition());
+	}
+
+	public ByteArrayOutputStream generateDOCXDocument(
+			DocumentHeader documentHeader,
+			List<DocumentSection> documentSections, String templateName) {
+
+		final String key = this.getCacheKey(documentHeader, documentSections,
+				templateName);
+
+		ByteArrayOutputStream docxBytes = null;
+
+		try {
+			docxBytes = docs
+					.get(key,
+							() -> {
+
+								String htmlContent = generateHTMLDocument(
+										documentHeader, documentSections,
+										templateName);
+
+								WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
+										.createPackage();
+
+								NumberingDefinitionsPart ndp = new NumberingDefinitionsPart();
+								wordMLPackage.getMainDocumentPart()
+										.addTargetPart(ndp);
+								ndp.unmarshalDefaultNumbering();
+
+								XHTMLImporterImpl xHTMLImporter = new XHTMLImporterImpl(
+										wordMLPackage);
+								xHTMLImporter.setHyperlinkStyle("Hyperlink");
+
+								wordMLPackage
+										.getMainDocumentPart()
+										.getContent()
+										.addAll(xHTMLImporter.convert(
+												htmlContent, "/"));
+
+								// logger.info(XmlUtils.marshaltoString(
+								// wordMLPackage.getMainDocumentPart()
+								// .getJaxbElement(), true, true));
+
+								ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+								wordMLPackage.save(out);
+								out.flush();
+
+								docs.put(key, out);
+
+								return out;
+							});
+
+		} catch (ExecutionException e) {
+			logger.severe(ExceptionUtils.getStackTrace(e));
+			NewRelic.noticeError(e);
+		}
+
+		return docxBytes;
 	}
 
 }
