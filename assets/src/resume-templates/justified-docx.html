@@ -441,8 +441,7 @@ li {
     <div class="info">
       <div>
         <h1 class="username">
-          <strong th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '')}">Hassanur</strong>
-          <strong th:text="${(header.lastName != null ? header.lastName : '')}">Rakib</strong>
+          <strong th:text="${(header.firstName != null ? header.firstName : '') + ' ' + (header.middleName != null ? header.middleName : '') + ' ' + (header.lastName != null ? header.lastName : '')}">Hassanur</strong>
         </h1>
       </div>
       <div>
