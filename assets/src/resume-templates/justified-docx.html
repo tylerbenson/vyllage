@@ -47,7 +47,7 @@
 /*     line-height: 1.42857143; */
     color: #333;
     background-color: #fff;
-/*     position: relative; */
+    position: relative; 
   }
   /*.contact img {
 	margin-right: 15px;
@@ -120,7 +120,7 @@
 
   h1 {
     font-family: "Merriweather", "Georgia", "Times", serif;
-    font-size: 16pt;
+    font-size: 12pt;
     margin: 0;
     text-transform: uppercase;
     color: #fff;
@@ -213,9 +213,9 @@ li {
 
   .content-single {
     position: relative;
-    padding-left: 25px;
+    padding-left: 10px;
     color: #333333;
-    font-size: 14px;
+    font-size: 8px;
   }
 
   .content-single img {
@@ -223,7 +223,7 @@ li {
     left: 0;
     top: 4px;
     width: 15px;
-  }
+  }	
 
   .content-single img.mail-icon {
     top: 8px;
@@ -453,19 +453,19 @@ li {
     </div>
     <div class="contact">
       <div class="content-single">
-        <img class="custom-width" src="/images/marker-dark.png" />
+<!--         <img class="custom-width" src="/images/marker-dark.png" /> -->
         <p th:text="${header.address}">121 King Street, Melbourne Victoria 3000 Australia</p>
       </div>
       <div class="cf content-single" th:if="${header.email != null}">
-        <img class="contact" src="/images/mail-icon-dark.png" />
+<!--         <img class="contact" src="/images/mail-icon-dark.png" /> -->
         <p th:text="${header.email}">mail@submail.com</p>
       </div>
       <div class="content-single" th:if="${header.phoneNumber != null}">
-        <img class="contact" src="/images/phone-icon-dark.png" />
+<!--         <img class="contact" src="/images/phone-icon-dark.png" /> -->
         <p th:text="${header.phoneNumber}">(555)1234-56789</p>
       </div>
       <div class="content-single" th:if="${header.siteUrl != null and !header.siteUrl.isEmpty()}">
-        <img class="contact" src="/images/web-icon-dark.png" />
+<!--         <img class="contact" src="/images/web-icon-dark.png" /> -->
         <p th:text="${header.siteUrl}">www.mywebsite.com</p>
       </div>
     </div>

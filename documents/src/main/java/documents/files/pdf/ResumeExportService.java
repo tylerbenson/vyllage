@@ -150,7 +150,7 @@ public class ResumeExportService {
 			final String templateName) {
 
 		final String key = this.getCacheKey(documentHeader, documentSections,
-				templateName);
+				templateName, ".pdf");
 
 		ByteArrayOutputStream pdfBytes = null;
 
@@ -265,7 +265,7 @@ public class ResumeExportService {
 	 * @return
 	 */
 	private String getCacheKey(DocumentHeader resumeHeader,
-			List<DocumentSection> sections, String styleName) {
+			List<DocumentSection> sections, String styleName, String extension) {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(resumeHeader.hashCode()).append("-");
@@ -273,7 +273,7 @@ public class ResumeExportService {
 		if (!sections.isEmpty())
 			sb.append(sections.hashCode()).append("-");
 
-		sb.append(styleName);
+		sb.append(styleName).append(extension);
 
 		return sb.toString();
 	}
@@ -306,7 +306,7 @@ public class ResumeExportService {
 			List<DocumentSection> documentSections, String templateName) {
 
 		final String key = this.getCacheKey(documentHeader, documentSections,
-				templateName);
+				templateName, ".docx");
 
 		ByteArrayOutputStream docxBytes = null;
 
