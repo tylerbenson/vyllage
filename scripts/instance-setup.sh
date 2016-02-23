@@ -27,6 +27,11 @@ pip install awscli
 echo '*** Installing jq ***'
 apt-get install jq
 
+echo '*** Installing Free Fonts ***'
+apt-get install free-fonts
+apt-get install fonts-freefonts-otf
+apt-get install fonts-freefonts-ttf
+
 echo '*** Init environment ***'
 echo "JAVA_HOME='/usr/lib/jvm/java-8-oracle/jre/'" >> /etc/environment
 source /etc/environment

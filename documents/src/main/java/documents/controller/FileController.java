@@ -174,11 +174,15 @@ public class FileController {
 		return createTxtResume(documentHeader, documentSections);
 	}
 
-	@RequestMapping(value = "{documentId}/file/docx", method = RequestMethod.GET)
-	public void resumeDocx(HttpServletRequest request,
-			HttpServletResponse response, @PathVariable final Long documentId,
-			@AuthenticationPrincipal User user, String templateName)
-			throws ElementNotFoundException {
+	@Trace
+	@CheckReadAccess
+	@RequestMapping(value = "{documentId}/file/docx", method = RequestMethod.GET, produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+	public void resumeDocx(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable final Long documentId,
+			@RequestParam(value = "style", required = false, defaultValue = "justified-docx") final String styleName,
+			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
 		DocumentHeader documentHeader = documentService.getDocumentHeader(
 				request, documentId, user);
@@ -187,8 +191,8 @@ public class FileController {
 
 		// sort by position
 
-		String style = templateName != null && !templateName.isEmpty()
-				&& this.pdfTemplates.contains(templateName) ? templateName
+		String style = styleName != null && !styleName.isEmpty()
+				&& this.pdfTemplates.contains(styleName) ? styleName
 				: this.pdfTemplates.get(0);
 
 		ByteArrayOutputStream docxDocument = resumeExportService
@@ -221,8 +225,8 @@ public class FileController {
 		// http://stackoverflow.com/questions/4212861/what-is-a-correct-mime-type-for-docx-pptx-etc
 
 		response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-		response.setHeader("Content-Disposition", "attachment; filename="
-				+ "resume.docx");
+		response.setHeader("Content-Disposition",
+				"attachment; filename=\"resume.docx\"");
 	}
 
 	/**
