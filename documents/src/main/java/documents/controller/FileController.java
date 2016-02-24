@@ -13,8 +13,9 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +31,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import user.common.User;
 
 import com.lowagie.text.DocumentException;
-import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 
 import documents.files.ResumeExportService;
@@ -44,6 +44,7 @@ import documents.services.aspect.CheckReadAccess;
 @RequestMapping("resume")
 public class FileController {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(FileController.class
 			.getName());
 
@@ -173,7 +174,7 @@ public class FileController {
 	@Trace
 	@CheckReadAccess
 	@RequestMapping(value = "{documentId}/file/docx", method = RequestMethod.GET, produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-	public void resumeDocx(
+	public HttpEntity<byte[]> resumeDocx(
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable final Long documentId,
@@ -192,35 +193,18 @@ public class FileController {
 		ByteArrayOutputStream docxDocument = resumeExportService
 				.generateDOCXDocument(documentHeader, documentSections, style);
 
-		try {
-			copyDOCX(response, docxDocument);
-			response.setStatus(HttpStatus.OK.value());
-			response.flushBuffer();
-		} catch (IOException e) {
-			logger.severe(ExceptionUtils.getStackTrace(e));
-			NewRelic.noticeError(e);
-		}
-
-	}
-
-	/**
-	 * Copies the generated .docx into the response.
-	 * 
-	 * @param response
-	 * @param docxDocument
-	 * @throws IOException
-	 */
-	protected void copyDOCX(HttpServletResponse response,
-			ByteArrayOutputStream docxDocument) throws IOException {
-
-		InputStream in = new ByteArrayInputStream(docxDocument.toByteArray());
-		FileCopyUtils.copy(in, response.getOutputStream());
+		HttpHeaders responseHeaders = new HttpHeaders();
 
 		// http://stackoverflow.com/questions/4212861/what-is-a-correct-mime-type-for-docx-pptx-etc
-
-		response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-		response.setHeader("Content-Disposition",
+		responseHeaders
+				.add("Content-Type",
+						"application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+		responseHeaders.add("Content-Disposition",
 				"attachment; filename=\"resume.docx\"");
+
+		return new HttpEntity<byte[]>(docxDocument.toByteArray(),
+				responseHeaders);
+
 	}
 
 	/**
