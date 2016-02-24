@@ -32,32 +32,6 @@ public class DOCXDocumentGenerator {
 			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage
 					.createPackage();
 
-			// MainDocumentPart document = wordMLPackage
-			// .getMainDocumentPart();
-			// ObjectFactory factory =
-			// org.docx4j.jaxb.Context
-			// .getWmlObjectFactory();
-			// Convert all styles to use a font that I know
-			// is on my system
-			// Styles styles = document
-			// .getStyleDefinitionsPart()
-			// .getJaxbElement();
-			// for (org.docx4j.wml.Style s :
-			// styles.getStyle()) {
-			// RPr rPr = s.getRPr();
-			// if (rPr == null) {
-			// rPr = factory.createRPr();
-			// s.setRPr(rPr);
-			// }
-			//
-			// RFonts rf = rPr.getRFonts();
-			// if (rf == null) {
-			// rf = factory.createRFonts();
-			// rPr.setRFonts(rf);
-			// }
-			//
-			// rf.setAscii("Arial");
-			// }
 			PhysicalFonts
 					.addPhysicalFonts(
 							"Merriweather",
