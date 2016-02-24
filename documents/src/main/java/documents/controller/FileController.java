@@ -12,11 +12,8 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBException;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,10 +33,9 @@ import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 
-import documents.files.pdf.ResumeExportService;
+import documents.files.ResumeExportService;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
-import documents.repository.DocumentSectionRepository;
 import documents.repository.ElementNotFoundException;
 import documents.services.DocumentService;
 import documents.services.aspect.CheckReadAccess;
