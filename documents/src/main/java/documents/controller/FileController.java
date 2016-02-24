@@ -185,8 +185,6 @@ public class FileController {
 		List<DocumentSection> documentSections = documentService
 				.getDocumentSections(documentId);
 
-		// sort by position
-
 		String style = styleName != null && !styleName.isEmpty()
 				&& this.pdfTemplates.contains(styleName) ? styleName
 				: this.pdfTemplates.get(0);

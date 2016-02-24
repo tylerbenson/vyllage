@@ -322,4 +322,33 @@ public class ResumeExportServiceTest {
 		assertNotNull(byteArrayOutputStream);
 
 	}
+
+	@Test
+	public void testGenerateDOCXDocument() {
+
+		DocumentHeader resumeHeader = new DocumentHeader();
+		resumeHeader.setPhoneNumber("1234567899");
+
+		String templateName = "standard";
+
+		List<DocumentSection> sections = new ArrayList<>();
+
+		SkillsSection s1 = new SkillsSection();
+		s1.setDocumentId(0L);
+		s1.setLastModified(LocalDateTime.now());
+		s1.setNumberOfComments(1);
+		s1.setSectionId(1L);
+		s1.setSectionVersion(1L);
+		s1.setTitle("Skills");
+		s1.setType("SkillsSection");
+		s1.setTags(Arrays.asList("Skill1", "Skill2"));
+
+		sections.add(s1);
+
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generateDOCXDocument(resumeHeader, sections, templateName);
+
+		assertNotNull(byteArrayOutputStream);
+
+	}
 }
