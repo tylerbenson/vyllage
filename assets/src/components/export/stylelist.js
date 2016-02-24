@@ -18,12 +18,21 @@ var ResumeStyleList = React.createClass({
 				'active': this.props.active === pdfStyle
 			});
 
-			var url = '/resume/' + documentId +'/file/png' +
+			var url;
+			var link;
+			
+			//hmm...
+			if(pdfStyle === 'justified-docx') {
+				link = '/resume/'+ documentId +'/file/docx';
+				url = '/images/document-1920.png';
+			}
+			else{
+				link = '/resume/'+ documentId +'/file/pdf?template=' + pdfStyle;
+				url = '/resume/' + documentId +'/file/png' +
 				'?style=' + pdfStyle +
 				'&height=' + (THUMB_HEIGHT) +
 				'&width=' + (THUMB_WIDTH);
-
-			var link = '/resume/'+ documentId +'/file/pdf?template=' + pdfStyle;
+			}
 
 			return (
 				<a href={link} target="_blank" key={index} className={classes} >
