@@ -1,4 +1,4 @@
-package documents.files.pdf;
+package documents.files;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -7,11 +7,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.thymeleaf.TemplateEngine;
@@ -20,17 +18,21 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import com.lowagie.text.DocumentException;
 
+import documents.files.docx.DOCXDocumentGenerator;
+import documents.files.html.HTMLDocumentGenerator;
+import documents.files.pdf.PDFDocumentGenerator;
+import documents.files.png.PNGDocumentGenerator;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
 import documents.model.document.sections.SkillsSection;
 
 public class ResumeExportServiceTest {
 
-	private final String FORMATTED_NUMBER = "(123) 456-7899";
-
 	// Unfortunately Thymeleaf TemplateEngine can't be mocked, the process
 	// method is final.
 	private TemplateEngine templateEngine = new TemplateEngine();
+
+	private ResumeExportService service;
 
 	@Before
 	public void setUp() {
@@ -45,11 +47,14 @@ public class ResumeExportServiceTest {
 		templateEngine.setTemplateResolver(templateResolver);
 		templateEngine.addDialect(new LayoutDialect());
 		templateEngine.addDialect(new SpringStandardDialect());
+
+		service = new ResumeExportService(new HTMLDocumentGenerator(
+				templateEngine), new PDFDocumentGenerator(),
+				new PNGDocumentGenerator(), new DOCXDocumentGenerator());
 	}
 
 	@Test
 	public void testGeneratePDFDocument() throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
@@ -79,7 +84,6 @@ public class ResumeExportServiceTest {
 
 	@Test
 	public void testGeneratePDFDocumentEmptyHeader() throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 
@@ -108,7 +112,6 @@ public class ResumeExportServiceTest {
 
 	@Test
 	public void testGeneratePDFDocumentEmptySections() throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
@@ -127,7 +130,6 @@ public class ResumeExportServiceTest {
 	@Test
 	public void testGeneratePDFDocumentEmptySectionsAndHeader()
 			throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 
@@ -145,7 +147,6 @@ public class ResumeExportServiceTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testGeneratePDFDocumentNullSectionsAndHeader()
 			throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		String templateName = "standard";
 
@@ -160,7 +161,6 @@ public class ResumeExportServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGeneratePDFDocumentNullSections() throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		String templateName = "standard";
 
@@ -175,7 +175,6 @@ public class ResumeExportServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGeneratePDFDocumentNullStyle() throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
@@ -205,7 +204,6 @@ public class ResumeExportServiceTest {
 
 	@Test
 	public void testGeneratePNGDocument() throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
@@ -237,7 +235,6 @@ public class ResumeExportServiceTest {
 	@Test
 	public void testGeneratePNGDocumentWithZeroWidthHeight()
 			throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
@@ -267,7 +264,6 @@ public class ResumeExportServiceTest {
 
 	@Test
 	public void testGeneratePNGDocumentWithZeroWidth() throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
@@ -299,7 +295,6 @@ public class ResumeExportServiceTest {
 	@Test
 	public void testGeneratePNGDocumentWithZeroHeight()
 			throws DocumentException {
-		ResumeExportService service = new ResumeExportService(templateEngine);
 
 		DocumentHeader resumeHeader = new DocumentHeader();
 		resumeHeader.setPhoneNumber("1234567899");
@@ -329,40 +324,31 @@ public class ResumeExportServiceTest {
 	}
 
 	@Test
-	public void testFormat() {
-
-		ResumeExportService service = new ResumeExportService(templateEngine);
+	public void testGenerateDOCXDocument() {
 
 		DocumentHeader resumeHeader = new DocumentHeader();
-
 		resumeHeader.setPhoneNumber("1234567899");
-		service.format(resumeHeader);
 
-		Assert.assertEquals(FORMATTED_NUMBER, resumeHeader.getPhoneNumber());
-	}
+		String templateName = "standard";
 
-	@Test
-	public void testSortSections() {
-		ResumeExportService service = new ResumeExportService(templateEngine);
+		List<DocumentSection> sections = new ArrayList<>();
 
 		SkillsSection s1 = new SkillsSection();
+		s1.setDocumentId(0L);
+		s1.setLastModified(LocalDateTime.now());
+		s1.setNumberOfComments(1);
+		s1.setSectionId(1L);
+		s1.setSectionVersion(1L);
+		s1.setTitle("Skills");
+		s1.setType("SkillsSection");
+		s1.setTags(Arrays.asList("Skill1", "Skill2"));
 
-		s1.setSectionPosition(2L);
+		sections.add(s1);
 
-		SkillsSection s2 = new SkillsSection();
+		ByteArrayOutputStream byteArrayOutputStream = service
+				.generateDOCXDocument(resumeHeader, sections, templateName);
 
-		s2.setSectionPosition(1L);
+		assertNotNull(byteArrayOutputStream);
 
-		List<SkillsSection> skills = new ArrayList<>();
-
-		skills.add(s1);
-		skills.add(s2);
-
-		List<SkillsSection> sortedSkills = skills.stream()
-				.sorted(service.sortSections()).collect(Collectors.toList());
-
-		Assert.assertEquals(s1, sortedSkills.get(1));
-		Assert.assertEquals(s2, sortedSkills.get(0));
 	}
-
 }

@@ -1,4 +1,4 @@
-package documents.files.pdf;
+package documents.files;
 
 import java.util.Locale;
 

@@ -7,12 +7,15 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +33,7 @@ import user.common.User;
 import com.lowagie.text.DocumentException;
 import com.newrelic.api.agent.Trace;
 
-import documents.files.pdf.ResumeExportService;
+import documents.files.ResumeExportService;
 import documents.model.DocumentHeader;
 import documents.model.document.sections.DocumentSection;
 import documents.repository.ElementNotFoundException;
@@ -40,6 +43,11 @@ import documents.services.aspect.CheckReadAccess;
 @Controller
 @RequestMapping("resume")
 public class FileController {
+
+	@SuppressWarnings("unused")
+	private final Logger logger = Logger.getLogger(FileController.class
+			.getName());
+
 	private final DocumentService documentService;
 
 	private final ResumeExportService resumeExportService;
@@ -148,7 +156,7 @@ public class FileController {
 	}
 
 	@RequestMapping(value = "{documentId}/file/txt", method = RequestMethod.GET)
-	public @ResponseBody String getResume(HttpServletRequest request,
+	public @ResponseBody String resumeTxt(HttpServletRequest request,
 			@PathVariable final Long documentId,
 			@AuthenticationPrincipal User user) throws ElementNotFoundException {
 
@@ -161,6 +169,42 @@ public class FileController {
 		sortSections(documentSections);
 
 		return createTxtResume(documentHeader, documentSections);
+	}
+
+	@Trace
+	@CheckReadAccess
+	@RequestMapping(value = "{documentId}/file/docx", method = RequestMethod.GET, produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+	public HttpEntity<byte[]> resumeDocx(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@PathVariable final Long documentId,
+			@RequestParam(value = "style", required = false, defaultValue = "justified-docx") final String styleName,
+			@AuthenticationPrincipal User user) throws ElementNotFoundException {
+
+		DocumentHeader documentHeader = documentService.getDocumentHeader(
+				request, documentId, user);
+		List<DocumentSection> documentSections = documentService
+				.getDocumentSections(documentId);
+
+		String style = styleName != null && !styleName.isEmpty()
+				&& this.pdfTemplates.contains(styleName) ? styleName
+				: this.pdfTemplates.get(0);
+
+		ByteArrayOutputStream docxDocument = resumeExportService
+				.generateDOCXDocument(documentHeader, documentSections, style);
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+
+		// http://stackoverflow.com/questions/4212861/what-is-a-correct-mime-type-for-docx-pptx-etc
+		responseHeaders
+				.add("Content-Type",
+						"application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+		responseHeaders.add("Content-Disposition",
+				"attachment; filename=\"resume.docx\"");
+
+		return new HttpEntity<byte[]>(docxDocument.toByteArray(),
+				responseHeaders);
+
 	}
 
 	/**
