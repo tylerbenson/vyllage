@@ -1,94 +1,101 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<base href="." th:href="@{/}" />
-<link rel="stylesheet" href="css/admin.css" />
-<th:block
-	th:replace="fragment-header :: header ('Vyllage Admin | Job Openings Management')">
-</th:block>
+  <base href="." th:href="@{/}" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <th:block th:replace="fragment-header :: header ('Vyllage Admin | Job Openings Management')">
+  </th:block>
 </head>
 
 <body class="admin">
-	<div id="container">
-		<header th:replace="adminHeader :: header('Job Openings Management')">
-		</header>
-		<div class="section content">
+  <div id="container">
+    <header th:replace="adminHeader :: header('Job Openings Management')">
+    </header>
+    <div class="section content">
 
-			<form action="#" th:action="@{/admin/job-opening-edit}" method="POST"
-				th:object="${jobOpening}">
+      <form action="#" th:action="@{/admin/job-opening-edit}" method="POST" th:object="${jobOpening}">
 
-				<label id="company">Company <span class="error"> * </span></label> 
-				<input type="text" th:field="*{company}" />
+        <label id="company">Company
+          <span class="error"> * </span>
+        </label>
+        <input type="text" th:field="*{company}" />
 
-				<label>Role <span class="error"> * </span> </label> 
-				<input type="text" th:field="*{role}" /> 
-				
-				<label>Salary</label>
-				<input type="number" step="1" min="0" th:field="*{salary}" /> 
-				
-				<label>Location <span class="error"> * </span> </label>
-				<input type="text" th:field="*{location}" /> 
-				
-				<label>Job Type <span class="error"> * </span></label> 
-				<select id='jobType' name='jobType' th:field="*{jobType}">
-					<option th:each="jt : ${jobTypes}" th:value="${jt}"
-						th:text="${jt.value}">Some Type</option>
-				</select>
-				
-				<label>Experience <span class="error"> * </span></label> 
-				<select id='jobExperience' name='jobExperience' th:field="*{jobExperience}">
-					<option th:each="je : ${jobExperiences}" th:value="${je}"
-						th:text="${je.value}">Some Type</option>
-				</select> 
-				
-				<label>Remote  
-					<input type="checkbox" th:field="*{remote}" />
-				</label> 
-				
+        <label>Role
+          <span class="error"> * </span>
+        </label>
+        <input type="text" th:field="*{role}" />
 
-				<label>Requires Relocation
-					<input type="checkbox" th:field="*{requiresRelocation}" /> 
-				</label>
-				
-				<label title="This job offer will be available to all users.">Site wide
-					<input type="checkbox" th:field="*{siteWide}" /> 
-				</label> 
-					
-				<label>Description <span class="error"> * </span> </label>
-				<textarea rows="10" th:field="*{description}"></textarea>
+        <label>Salary</label>
+        <input type="number" step="1" min="0" th:field="*{salary}" />
 
-				<label
-					th:if="${jobOpening.dateCreated != null and jobOpening.lastModified != null}"
-					th:text="'Created ' + *{#temporals.format(dateCreated)} + ' - ' + 'Last Modified ' + *{#temporals.format(lastModified)}"></label>
+        <label>Location
+          <span class="error"> * </span>
+        </label>
+        <input type="text" th:field="*{location}" />
 
-				<input type="hidden" th:field="*{dateCreated}" /> <input
-					type="hidden" th:field="*{lastModified}" /> <input type="hidden"
-					th:field="*{jobOpeningId}" /> <input type="hidden"
-					th:field="*{userId}" /> <input type="hidden"
-					th:field="*{organizationId}" />
+        <label>Job Type
+          <span class="error"> * </span>
+        </label>
+        <select id='jobType' name='jobType' th:field="*{jobType}">
+          <option th:each="jt : ${jobTypes}" th:value="${jt}" th:text="${jt.value}">Some Type</option>
+        </select>
 
-				<button type="submit" class="pull right padded send-btn">Submit</button>
-				<span class="error" th:if="*{error} != null" th:text="*{error}"></span>
-				
-			</form>
-		</div>
-	</div>
-	<footer>
-		<div class="content">
-			<a href="/" class="logo"> <img src="/images/logo-orange.png"
-				alt="Vyllage" />
-			</a>
-			<nav>
-				<ul>
-					<li><a href="/careers">Careers</a></li>
-					<li><a href="/privacy">Privacy</a></li>
-					<li><a href="/contact">Contact Us</a></li>
-				</ul>
-			</nav>
-		</div>
-	</footer>
-	<th:block th:replace="fragment-footer :: footer">
-  	</th:block>
+        <label>Experience
+          <span class="error"> * </span>
+        </label>
+        <select id='jobExperience' name='jobExperience' th:field="*{jobExperience}">
+          <option th:each="je : ${jobExperiences}" th:value="${je}" th:text="${je.value}">Some Type</option>
+        </select>
+
+        <label>Remote
+          <input type="checkbox" th:field="*{remote}" />
+        </label>
+
+
+        <label>Requires Relocation
+          <input type="checkbox" th:field="*{requiresRelocation}" />
+        </label>
+
+        <label title="This job offer will be available to all users.">Site wide
+          <input type="checkbox" th:field="*{siteWide}" />
+        </label>
+
+        <label>Description
+          <span class="error"> * </span>
+        </label>
+        <textarea rows="10" th:field="*{description}"></textarea>
+
+        <label th:if="${jobOpening.dateCreated != null and jobOpening.lastModified != null}" th:text="'Created ' + *{#temporals.format(dateCreated)} + ' - ' + 'Last Modified ' + *{#temporals.format(lastModified)}"></label>
+
+        <input type="hidden" th:field="*{dateCreated}" />
+        <input type="hidden" th:field="*{lastModified}" />
+        <input type="hidden" th:field="*{jobOpeningId}" />
+        <input type="hidden" th:field="*{userId}" />
+        <input type="hidden" th:field="*{organizationId}" />
+
+        <button type="submit" class="pull right padded send-btn">Submit</button>
+        <span class="error" th:if="*{error} != null" th:text="*{error}"></span>
+
+      </form>
+    </div>
+  </div>
+  <footer>
+    <div class="content">
+      <a href="/" class="logo">
+        <img src="/images/logo-orange.png" alt="Vyllage" />
+      </a>
+      <nav>
+        <ul>
+          <li><a href="/careers">Careers</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+  <th:block th:replace="fragment-footer :: footer">
+  </th:block>
 </body>
 
 </html>
