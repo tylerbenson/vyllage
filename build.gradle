@@ -38,10 +38,12 @@ repositories {
 
 configure(subprojects) {
     apply plugin: 'eclipse'
+    apply plugin: 'idea'
 }
 
 configure(rootProject) {
 //    apply from: 'gradle/gitMetadata.gradle'
+    apply plugin: 'idea'
 
     repositories {
       mavenCentral()
